@@ -29,7 +29,7 @@ def classify(
                 skill.name,
                 skill.description,
                 " ".join(skill.headings),
-                skill.path.parent.as_posix(),
+                skill.source_path,
             )
         )
     )
@@ -182,18 +182,64 @@ def _rule_matches(
     tokens: Set[str],
 ) -> bool:
     return bool(_matched_phrases(exact_phrases, padded_text)) or bool(
-        set(rule_tokens) & tokens
+        _matched_rule_tokens(rule_tokens, tokens)
     )
 
 
 def _matched_phrases(
     exact_phrases: Iterable[str], padded_text: str
 ) -> List[str]:
+    text_tokens = padded_text.split()
     return sorted(
         phrase
         for phrase in exact_phrases
-        if f" {_normalize(phrase)} " in padded_text
+        if _contains_phrase(text_tokens, _normalize(phrase).split())
     )
+
+
+def _contains_phrase(text_tokens: List[str], phrase_tokens: List[str]) -> bool:
+    width = len(phrase_tokens)
+    if not width:
+        return False
+    return any(
+        all(
+            expected in _inflection_variants(actual)
+            for expected, actual in zip(phrase_tokens, text_tokens[start : start + width])
+        )
+        for start in range(len(text_tokens) - width + 1)
+    )
+
+
+def _matched_rule_tokens(
+    rule_tokens: Iterable[str], text_tokens: Set[str]
+) -> Set[str]:
+    expected = set(rule_tokens)
+    return {
+        rule_token
+        for actual in text_tokens
+        for rule_token in expected & _inflection_variants(actual)
+    }
+
+
+def _inflection_variants(token: str) -> Set[str]:
+    variants = {token}
+    if len(token) > 3 and token.endswith("ies"):
+        variants.add(f"{token[:-3]}y")
+    if len(token) > 3 and token.endswith("es"):
+        variants.update((token[:-2], token[:-1]))
+    elif len(token) > 3 and token.endswith("s"):
+        variants.add(token[:-1])
+    if len(token) > 5 and token.endswith("ing"):
+        _add_verb_bases(variants, token[:-3])
+    if len(token) > 4 and token.endswith("ed"):
+        _add_verb_bases(variants, token[:-2])
+    return variants
+
+
+def _add_verb_bases(variants: Set[str], base: str) -> None:
+    variants.update((base, f"{base}e"))
+    if len(base) > 2 and base[-1] == base[-2]:
+        variants.add(base[:-1])
 
 
 def _normalize(value: str) -> str:

@@ -79,6 +79,7 @@ class ParsedSkill:
     description: str
     text: str
     headings: Tuple[str, ...]
+    source_path: str
     raw_bytes: bytes = field(repr=False)
     skill_md_hash: str
 

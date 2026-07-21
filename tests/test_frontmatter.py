@@ -55,6 +55,36 @@ class FrontmatterTests(unittest.TestCase):
             self.assertIn("\ufffd", parsed.text)
             self.assertEqual(raw, parsed.raw_bytes)
 
+    def test_records_repo_relative_skill_directory_as_source_path(self):
+        with tempfile.TemporaryDirectory() as directory:
+            repository = Path(directory) / "repository"
+            skill_directory = repository / "catalog" / "deployment" / "helper"
+            skill_directory.mkdir(parents=True)
+            path = skill_directory / "SKILL.md"
+            path.write_text(
+                "---\nname: helper\ndescription: Handle a routine workflow.\n---\n",
+                encoding="utf-8",
+            )
+
+            parsed = parse_skill(path, source_root=repository)
+
+            self.assertEqual("catalog/deployment/helper", parsed.source_path)
+
+    def test_rejects_source_path_outside_explicit_root(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            repository = root / "repository"
+            repository.mkdir()
+            outside = root / "outside" / "SKILL.md"
+            outside.parent.mkdir()
+            outside.write_text(
+                "---\nname: helper\ndescription: Handle a routine workflow.\n---\n",
+                encoding="utf-8",
+            )
+
+            with self.assertRaises(SkillParseError):
+                parse_skill(outside, source_root=repository)
+
 
 if __name__ == "__main__":
     unittest.main()

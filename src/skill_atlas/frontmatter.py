@@ -3,7 +3,7 @@
 import hashlib
 import re
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 import yaml
 
@@ -17,7 +17,7 @@ class SkillParseError(ValueError):
     """Raised when a SKILL.md file lacks valid required metadata."""
 
 
-def parse_skill(path: Path) -> ParsedSkill:
+def parse_skill(path: Path, source_root: Optional[Path] = None) -> ParsedSkill:
     """Parse one SKILL.md from a single, read-only byte snapshot."""
 
     raw_bytes = path.read_bytes()
@@ -48,6 +48,7 @@ def parse_skill(path: Path) -> ParsedSkill:
 
     name = _required_metadata_string(metadata, "name", path)
     description = _required_metadata_string(metadata, "description", path)
+    source_path = _stable_source_path(path, source_root)
     text = raw_bytes.decode("utf-8", errors="replace")
     body = b"".join(lines[closing_index + 1 :]).decode(
         "utf-8", errors="replace"
@@ -59,6 +60,7 @@ def parse_skill(path: Path) -> ParsedSkill:
         description=description,
         text=text,
         headings=tuple(match.group(1).strip() for match in HEADING.finditer(body)),
+        source_path=source_path,
         raw_bytes=raw_bytes,
         skill_md_hash=hashlib.sha256(raw_bytes).hexdigest(),
     )
@@ -71,3 +73,13 @@ def _required_metadata_string(
     if not isinstance(value, str) or not value.strip():
         raise SkillParseError(f"{name} must be a non-empty string: {path}")
     return value.strip()
+
+
+def _stable_source_path(path: Path, source_root: Optional[Path]) -> str:
+    if source_root is None:
+        return path.parent.name
+    try:
+        relative_path = path.resolve().relative_to(source_root.resolve())
+    except ValueError as error:
+        raise SkillParseError(f"Skill path is outside source root: {path}") from error
+    return relative_path.parent.as_posix()

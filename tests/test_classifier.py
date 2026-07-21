@@ -98,11 +98,56 @@ class ClassifierTests(unittest.TestCase):
         self.assertEqual(0.0, result.confidence)
         self.assertTrue(result.needs_review)
 
+    def test_classification_ignores_machine_checkout_ancestors(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            results = []
+            for checkout in ("plain-checkout", "deployment-security-checkout"):
+                skill_directory = root / checkout / "skills" / "helper"
+                skill_directory.mkdir(parents=True)
+                path = skill_directory / "SKILL.md"
+                path.write_text(
+                    "---\nname: helper\ndescription: Handle a routine workflow.\n---\n",
+                    encoding="utf-8",
+                )
+                results.append(
+                    classify(
+                        parse_skill(path),
+                        self.taxonomy,
+                        SourceSpec.for_test("https://github.com/test/source"),
+                    )
+                )
+
+        self.assertEqual(results[0], results[1])
+
+    def test_repo_relative_source_path_remains_classification_evidence(self):
+        with tempfile.TemporaryDirectory() as directory:
+            repository = Path(directory) / "repository"
+            skill_directory = repository / "catalog" / "deployment" / "helper"
+            skill_directory.mkdir(parents=True)
+            path = skill_directory / "SKILL.md"
+            path.write_text(
+                "---\nname: helper\ndescription: Handle a routine workflow.\n---\n",
+                encoding="utf-8",
+            )
+
+            result = classify(
+                parse_skill(path, source_root=repository),
+                self.taxonomy,
+                SourceSpec.for_test("https://github.com/test/source"),
+            )
+
+        self.assertEqual("C08", result.primary_category)
+        self.assertEqual("R3", result.risk_level)
+
     def test_credentials_deployment_and_external_writes_are_at_least_r3(self):
         for description in (
             "Rotate credentials for an application.",
             "Perform a production deployment.",
             "Write updates to an external account.",
+            "Writes changes to external accounts.",
+            "Publishes customer content.",
+            "Deploying services to production.",
         ):
             with self.subTest(description=description):
                 result = self.classify_text("operations", description)
@@ -114,6 +159,9 @@ class ClassifierTests(unittest.TestCase):
             "Provide legal advice for a contract decision.",
             "Make an investment decision using financial data.",
             "Plan vulnerability exploitation for an offensive security engagement.",
+            "Makes medical diagnostic decisions for patients.",
+            "Makes legal decisions for clients.",
+            "Makes financial decisions for investors.",
         ):
             with self.subTest(description=description):
                 result = self.classify_text("decision-support", description)
