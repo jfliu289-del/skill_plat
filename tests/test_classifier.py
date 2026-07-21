@@ -102,22 +102,26 @@ class ClassifierTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             results = []
+            source_paths = []
             for checkout in ("plain-checkout", "deployment-security-checkout"):
-                skill_directory = root / checkout / "skills" / "helper"
-                skill_directory.mkdir(parents=True)
-                path = skill_directory / "SKILL.md"
+                checkout_root = root / checkout
+                checkout_root.mkdir()
+                path = checkout_root / "SKILL.md"
                 path.write_text(
                     "---\nname: helper\ndescription: Handle a routine workflow.\n---\n",
                     encoding="utf-8",
                 )
+                parsed = parse_skill(path)
+                source_paths.append(parsed.source_path)
                 results.append(
                     classify(
-                        parse_skill(path),
+                        parsed,
                         self.taxonomy,
                         SourceSpec.for_test("https://github.com/test/source"),
                     )
                 )
 
+        self.assertEqual([".", "."], source_paths)
         self.assertEqual(results[0], results[1])
 
     def test_repo_relative_source_path_remains_classification_evidence(self):

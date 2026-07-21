@@ -20,6 +20,7 @@ class SkillParseError(ValueError):
 def parse_skill(path: Path, source_root: Optional[Path] = None) -> ParsedSkill:
     """Parse one SKILL.md from a single, read-only byte snapshot."""
 
+    source_path = _stable_source_path(path, source_root)
     raw_bytes = path.read_bytes()
     lines = raw_bytes.splitlines(keepends=True)
     if not lines or lines[0].rstrip(b"\r\n") != b"---":
@@ -48,7 +49,6 @@ def parse_skill(path: Path, source_root: Optional[Path] = None) -> ParsedSkill:
 
     name = _required_metadata_string(metadata, "name", path)
     description = _required_metadata_string(metadata, "description", path)
-    source_path = _stable_source_path(path, source_root)
     text = raw_bytes.decode("utf-8", errors="replace")
     body = b"".join(lines[closing_index + 1 :]).decode(
         "utf-8", errors="replace"
@@ -77,9 +77,9 @@ def _required_metadata_string(
 
 def _stable_source_path(path: Path, source_root: Optional[Path]) -> str:
     if source_root is None:
-        return path.parent.name
+        return "."
     try:
-        relative_path = path.resolve().relative_to(source_root.resolve())
+        relative_directory = path.resolve().parent.relative_to(source_root.resolve())
     except ValueError as error:
         raise SkillParseError(f"Skill path is outside source root: {path}") from error
-    return relative_path.parent.as_posix()
+    return relative_directory.as_posix()

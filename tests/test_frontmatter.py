@@ -2,6 +2,7 @@ import hashlib
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from skill_atlas.frontmatter import SkillParseError, parse_skill
 
@@ -78,12 +79,31 @@ class FrontmatterTests(unittest.TestCase):
             outside = root / "outside" / "SKILL.md"
             outside.parent.mkdir()
             outside.write_text(
-                "---\nname: helper\ndescription: Handle a routine workflow.\n---\n",
+                "not frontmatter\n",
                 encoding="utf-8",
             )
 
-            with self.assertRaises(SkillParseError):
+            with self.assertRaisesRegex(SkillParseError, "outside source root"):
                 parse_skill(outside, source_root=repository)
+
+    def test_rejects_escaping_symlink_before_reading(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            repository = root / "repository"
+            repository.mkdir()
+            outside = root / "outside" / "SKILL.md"
+            outside.parent.mkdir()
+            outside.write_text("not frontmatter\n", encoding="utf-8")
+            symlink = repository / "SKILL.md"
+            symlink.symlink_to(outside)
+
+            with patch.object(
+                Path,
+                "read_bytes",
+                side_effect=AssertionError("out-of-root path was read"),
+            ):
+                with self.assertRaisesRegex(SkillParseError, "outside source root"):
+                    parse_skill(symlink, source_root=repository)
 
 
 if __name__ == "__main__":
