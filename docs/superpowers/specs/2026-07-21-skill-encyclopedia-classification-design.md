@@ -28,7 +28,7 @@ Agent Skill 生态已经从少量编程提示扩展为覆盖办公文档、科�
 
 - 调研 40 多个官方、社区和垂直 Skill 仓库；
 - 抽查 8 个代表仓库中的 787 个实际 SKILL.md；
-- 分析 [Awesome OpenClaw Skills](https://github.com/VoltAgent/awesome-openclaw-skills) 调研快照中的 5,382 个条目；
+- 分析 [Awesome OpenClaw Skills](https://github.com/VoltAgent/awesome-openclaw-skills) 固定快照的 30 个分类文件；分类头部名义合计 5,382，但实际解析为 5,180 条、5,177 个唯一链接，因此后续统计必须以固定 commit 的实际解析结果为准；
 - 对比 Skill、Agent、Command、Rule、Prompt、Plugin、MCP、Tool 和 Workflow 等相邻形态；
 - 重点检查分类噪声、重复搬运、兼容性声明、依赖披露和供应链风险。
 
