@@ -183,6 +183,10 @@ git commit -m "feat: define skill catalog taxonomy and sources"
 ### Task 2: Frontmatter Parsing and Classification
 
 **Files:**
+- Modify: `config/taxonomy.json`
+- Modify: `src/skill_atlas/models.py`
+- Modify: `src/skill_atlas/config.py`
+- Modify: `tests/test_config.py`
 - Create: `src/skill_atlas/frontmatter.py`
 - Create: `src/skill_atlas/classifier.py`
 - Create: `tests/fixtures/skills/code-review/SKILL.md`
@@ -268,6 +272,8 @@ Expected: FAIL because classification is absent.
 - [ ] **Step 7: Implement weighted rules**
 
 Build searchable text from name, description, headings, and source path. Score exact phrases before tokens; use source defaults only when text evidence is weak. Resolve ties by exact-phrase score then stable category ID. Set `needs_review=true` when confidence is below `0.55` or the normalized top-two difference is below `0.08`. Credentials, publishing, deployment, or external-account writes are at least R3; medical, legal, financial, and offensive-security decisions are R4.
+
+Store controlled vocabularies, category exact phrases/tokens, cross-tag rules, and risk cues in `config/taxonomy.json`; load them through typed taxonomy models. The classifier module applies rules but does not own a second hard-coded taxonomy.
 
 - [ ] **Step 8: Run GREEN and commit**
 
