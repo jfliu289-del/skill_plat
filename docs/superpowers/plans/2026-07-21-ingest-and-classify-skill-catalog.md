@@ -17,6 +17,7 @@
 - Never execute upstream scripts, Git hooks, installers, tests, submodules, or binaries.
 - Pin every imported source to a commit SHA and record its repository URL and original relative path.
 - Copy the complete Skill folder except Git internals and unsafe symlinks; record every exclusion.
+- Complete means every nested script, reference, asset, template, image, hidden resource, and other file beneath the Skill root; do not build `SKILL.md`-only entries.
 - Keep exact duplicate source variants, but group them by content hash in `reports/duplicates.json`.
 - Treat awesome lists and registries as discovery indexes, not as owners of linked Skills.
 - Record unknown/restrictive licenses explicitly; never imply redistribution permission without evidence.
@@ -412,6 +413,21 @@ class MaterializeTests(unittest.TestCase):
         self.assertEqual(["C06"], data["classification"]["secondary_categories"])
         self.assertEqual(self.record.commit, data["provenance"]["commit"])
         self.assertRegex(data["integrity"]["content_hash"], r"^[0-9a-f]{64}$")
+
+    def test_copies_the_complete_nested_skill_bundle(self):
+        expected = {
+            "scripts/run.py": b"print('run')\n",
+            "references/api.md": b"# API\n",
+            "assets/template.bin": b"\x00\x01template",
+            ".skill-resource": b"hidden resource\n",
+        }
+        for relative, payload in expected.items():
+            path = self.source_skill / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(payload)
+        result = materialize(self.record, self.output, self.classification)
+        for relative, payload in expected.items():
+            self.assertEqual(payload, (self.output / result.relative_path / relative).read_bytes())
 
     def test_escaping_symlink_is_excluded(self):
         link = self.source_skill / "references/escape"
