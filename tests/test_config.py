@@ -1,4 +1,5 @@
 import json
+import re
 import tempfile
 import unittest
 from collections import Counter
@@ -99,7 +100,7 @@ class ConfigTests(unittest.TestCase):
         archive = next(item for item in sources if item.id == "openclaw/skills")
         record = SkillRecord(
             source=archive,
-            repository=archive.id,
+            repository=archive.url,
             commit="0" * 40,
             source_path="skills/alice/calendar",
             skill_root=ROOT,
@@ -115,6 +116,51 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(
             {"type": "boolean"},
             provenance["properties"]["registry_archive_mirror"],
+        )
+
+    def test_registry_archive_mirror_cannot_be_downgraded_on_skill_record(self):
+        sources = load_sources(ROOT / "config/sources.json")
+        archive = next(item for item in sources if item.id == "openclaw/skills")
+        record = SkillRecord(
+            source=archive,
+            repository=archive.url,
+            commit="0" * 40,
+            source_path="skills/alice/calendar",
+            skill_root=ROOT,
+            name="calendar",
+            registry_archive_mirror=False,
+        )
+        self.assertTrue(record.registry_archive_mirror)
+
+        regular = next(item for item in sources if item.id == "anthropics/skills")
+        regular_record = SkillRecord(
+            source=regular,
+            repository=regular.url,
+            commit="0" * 40,
+            source_path="skills/example",
+            skill_root=ROOT,
+            name="example",
+        )
+        self.assertFalse(regular_record.registry_archive_mirror)
+
+    def test_schema_requires_true_mirror_marker_for_openclaw_repository(self):
+        schema = json.loads(
+            (ROOT / "schemas/skill-atlas.schema.json").read_text(encoding="utf-8")
+        )
+        provenance = schema["properties"]["provenance"]
+        repository_url = "https://github.com/openclaw/skills"
+        self.assertIsNotNone(
+            re.fullmatch(provenance["properties"]["repository"]["pattern"], repository_url)
+        )
+
+        mirror_rule = provenance["allOf"][1]
+        self.assertEqual(
+            {"properties": {"repository": {"const": repository_url}}},
+            mirror_rule["if"],
+        )
+        self.assertEqual(
+            {"properties": {"registry_archive_mirror": {"const": True}}},
+            mirror_rule["then"],
         )
 
     def test_schema_requires_review_without_license_and_evidence(self):

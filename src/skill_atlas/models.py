@@ -65,7 +65,9 @@ class SkillRecord:
     registry_archive_mirror: Optional[bool] = None
 
     def __post_init__(self) -> None:
-        if self.registry_archive_mirror is None:
+        if self.source.registry_archive_mirror:
+            self.registry_archive_mirror = True
+        elif self.registry_archive_mirror is None:
             self.registry_archive_mirror = self.source.registry_archive_mirror
 
 
