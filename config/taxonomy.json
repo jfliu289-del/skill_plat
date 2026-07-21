@@ -1,6 +1,196 @@
 {
   "schema_version": "1.0",
   "taxonomy_version": "2026-07-21",
+  "controlled_vocabularies": {
+    "tasks": [
+      "analyze", "automate", "build", "communicate", "debug", "deploy",
+      "design", "learn", "manage", "market", "operate", "plan", "research",
+      "review", "secure", "teach", "test", "write"
+    ],
+    "stages": ["create", "deliver", "discover", "learn", "operate", "plan", "validate"],
+    "artifacts": [
+      "code", "configuration", "data", "document", "image", "message", "model",
+      "paper", "presentation", "report", "repository", "spreadsheet", "video", "website"
+    ],
+    "domains": [
+      "ai", "business", "creative", "education", "finance", "health",
+      "infrastructure", "legal", "marketing", "productivity", "science",
+      "security", "software"
+    ],
+    "audiences": [
+      "business", "creator", "data-professional", "developer", "educator", "general",
+      "marketer", "researcher", "security-professional", "student"
+    ]
+  },
+  "scoring": {
+    "exact_phrase_weight": 4.0,
+    "token_weight": 1.0,
+    "source_default_weight": 1.0,
+    "weak_text_threshold": 4.0,
+    "strong_evidence_score": 8.0,
+    "secondary_score_ratio": 0.2,
+    "confidence_threshold": 0.55,
+    "ambiguity_threshold": 0.08,
+    "fallback_category": "C00"
+  },
+  "cross_tag_rules": [
+    {
+      "id": "review",
+      "tokens": ["review"],
+      "tasks": ["review"],
+      "stages": ["validate"]
+    },
+    {
+      "id": "code-review",
+      "exact_phrases": ["code review", "pull request", "reviewing code"],
+      "artifacts": ["code"],
+      "domains": ["software"],
+      "audiences": ["developer"]
+    },
+    {
+      "id": "testing",
+      "tokens": ["test", "testing", "coverage"],
+      "tasks": ["test"],
+      "stages": ["validate"],
+      "artifacts": ["code"],
+      "domains": ["software"],
+      "audiences": ["developer"]
+    },
+    {
+      "id": "debugging",
+      "tokens": ["debug", "defect"],
+      "tasks": ["debug"],
+      "stages": ["validate"],
+      "artifacts": ["code"],
+      "domains": ["software"],
+      "audiences": ["developer"]
+    },
+    {
+      "id": "academic-research",
+      "exact_phrases": ["literature review", "research paper", "peer reviewed"],
+      "tokens": ["academic", "citation", "literature", "paper", "scholarly"],
+      "tasks": ["research"],
+      "stages": ["discover", "create", "validate"],
+      "artifacts": ["paper"],
+      "domains": ["science"],
+      "audiences": ["researcher"]
+    },
+    {
+      "id": "search",
+      "exact_phrases": ["web search", "source discovery"],
+      "tokens": ["browse", "find", "search", "sources"],
+      "tasks": ["research"],
+      "stages": ["discover"]
+    },
+    {
+      "id": "browser-automation",
+      "exact_phrases": ["application automation", "browser automation", "device automation"],
+      "tokens": ["automate", "automation", "browser", "click", "navigate"],
+      "tasks": ["automate"],
+      "stages": ["operate"],
+      "artifacts": ["website"]
+    },
+    {
+      "id": "software-development",
+      "exact_phrases": ["software development", "write code"],
+      "tokens": ["api", "code", "coding", "implementation", "programming"],
+      "tasks": ["build"],
+      "stages": ["create"],
+      "artifacts": ["code"],
+      "domains": ["software"],
+      "audiences": ["developer"]
+    },
+    {
+      "id": "writing",
+      "exact_phrases": ["content writing", "technical writing"],
+      "tokens": ["edit", "rewrite", "write", "writing"],
+      "tasks": ["write"],
+      "stages": ["create"],
+      "artifacts": ["document"]
+    },
+    {
+      "id": "data-analysis",
+      "exact_phrases": ["data analysis", "statistical analysis"],
+      "tokens": ["analytics", "analyze", "data", "statistics"],
+      "tasks": ["analyze"],
+      "stages": ["validate"],
+      "artifacts": ["data", "report"],
+      "audiences": ["data-professional"]
+    },
+    {
+      "id": "design",
+      "tokens": ["creative", "design", "image", "video"],
+      "tasks": ["design"],
+      "stages": ["create"],
+      "domains": ["creative"],
+      "audiences": ["creator"]
+    },
+    {
+      "id": "security",
+      "tokens": ["compliance", "privacy", "security", "threat", "vulnerability"],
+      "tasks": ["secure"],
+      "stages": ["validate"],
+      "domains": ["security"],
+      "audiences": ["security-professional"]
+    },
+    {
+      "id": "education",
+      "tokens": ["course", "education", "lesson", "student", "teach", "teaching"],
+      "tasks": ["teach"],
+      "stages": ["learn"],
+      "domains": ["education"],
+      "audiences": ["educator", "student"]
+    },
+    {
+      "id": "marketing-sales",
+      "tokens": ["campaign", "customer", "growth", "marketing", "sales"],
+      "tasks": ["market"],
+      "stages": ["deliver"],
+      "domains": ["business", "marketing"],
+      "audiences": ["business", "marketer"]
+    },
+    {
+      "id": "planning",
+      "tokens": ["plan", "planning", "roadmap", "strategy"],
+      "tasks": ["plan"],
+      "stages": ["plan"]
+    },
+    {
+      "id": "deployment",
+      "tokens": ["deploy", "deployment", "infrastructure"],
+      "tasks": ["deploy", "operate"],
+      "stages": ["deliver", "operate"],
+      "artifacts": ["configuration"],
+      "domains": ["infrastructure"],
+      "audiences": ["developer"]
+    },
+    {
+      "id": "agent-management",
+      "exact_phrases": ["agent management", "skill management"],
+      "tokens": ["agent", "plugin", "skill"],
+      "tasks": ["manage"],
+      "stages": ["operate"]
+    }
+  ],
+  "risk_cues": [
+    {
+      "level": "R3",
+      "exact_phrases": [
+        "account records", "external account", "external customer account",
+        "production deployment", "write to an account"
+      ],
+      "tokens": ["credential", "credentials", "deploy", "deployment", "publish", "publishing"]
+    },
+    {
+      "level": "R4",
+      "exact_phrases": [
+        "diagnostic decision", "financial advice", "financial decision", "investment decision",
+        "legal advice", "legal decision", "medical advice", "medical decision", "medical treatment",
+        "offensive security", "trading decision", "vulnerability exploitation"
+      ],
+      "tokens": ["diagnosis", "exploit"]
+    }
+  ],
   "groups": {
     "A": {
       "slug": "information-content-creation",
@@ -43,102 +233,142 @@
     "C00": {
       "slug": "skill-agent-management",
       "name": "Skill and Agent Management",
-      "name_zh": "Skill 与 Agent 管理"
+      "name_zh": "Skill 与 Agent 管理",
+      "exact_phrases": ["agent management", "agent skill", "multi agent", "skill catalog", "skill management"],
+      "tokens": ["agent", "orchestration", "plugin", "prompt", "skill"]
     },
     "C01": {
       "slug": "search-research-knowledge-acquisition",
       "name": "Search, Research, and Knowledge Acquisition",
-      "name_zh": "搜索、调研与知识获取"
+      "name_zh": "搜索、调研与知识获取",
+      "exact_phrases": ["desk research", "fact finding", "knowledge acquisition", "source discovery", "web search"],
+      "tokens": ["browse", "find", "lookup", "research", "search", "sources"]
     },
     "C02": {
       "slug": "writing-language-communication",
       "name": "Writing, Language, and Communication",
-      "name_zh": "写作、语言与沟通"
+      "name_zh": "写作、语言与沟通",
+      "exact_phrases": ["content writing", "copy editing", "technical writing", "translate text", "written communication"],
+      "tokens": ["communication", "edit", "language", "rewrite", "translate", "write", "writing"]
     },
     "C03": {
       "slug": "documents-office-deliverables",
       "name": "Documents and Office Deliverables",
-      "name_zh": "文档与办公成果"
+      "name_zh": "文档与办公成果",
+      "exact_phrases": ["excel spreadsheet", "office document", "pdf document", "powerpoint presentation", "word document"],
+      "tokens": ["document", "docx", "office", "pdf", "presentation", "slides", "spreadsheet"]
     },
     "C04": {
       "slug": "data-analysis-decision-intelligence",
       "name": "Data Analysis and Decision Intelligence",
-      "name_zh": "数据分析与决策情报"
+      "name_zh": "数据分析与决策情报",
+      "exact_phrases": ["business intelligence", "data analysis", "data visualization", "decision intelligence", "statistical analysis"],
+      "tokens": ["analytics", "analyze", "chart", "dashboard", "data", "metrics", "statistics"]
     },
     "C05": {
       "slug": "design-creative-media",
       "name": "Design and Creative Media",
-      "name_zh": "设计与创意媒体"
+      "name_zh": "设计与创意媒体",
+      "exact_phrases": ["creative media", "graphic design", "image generation", "user interface design", "video editing"],
+      "tokens": ["animation", "audio", "creative", "design", "illustration", "image", "video"]
     },
     "C06": {
       "slug": "software-design-development",
       "name": "Software Design and Development",
-      "name_zh": "软件设计与开发"
+      "name_zh": "软件设计与开发",
+      "exact_phrases": ["application development", "code generation", "software design", "software development", "write code"],
+      "tokens": ["api", "backend", "code", "coding", "developer", "frontend", "implementation", "programming"]
     },
     "C07": {
       "slug": "debugging-testing-quality",
       "name": "Debugging, Testing, and Quality",
-      "name_zh": "调试、测试与质量"
+      "name_zh": "调试、测试与质量",
+      "exact_phrases": ["code review", "debugging code", "pull request", "reviewing code", "software testing", "test coverage"],
+      "tokens": ["debug", "defect", "lint", "quality", "review", "test", "testing"]
     },
     "C08": {
       "slug": "git-delivery-infrastructure",
       "name": "Git, Delivery, and Infrastructure",
-      "name_zh": "Git、交付与基础设施"
+      "name_zh": "Git、交付与基础设施",
+      "exact_phrases": ["continuous delivery", "continuous integration", "git workflow", "infrastructure as code", "version control"],
+      "tokens": ["cd", "ci", "deploy", "deployment", "git", "github", "kubernetes", "repository", "terraform"]
     },
     "C09": {
       "slug": "security-privacy-compliance",
       "name": "Security, Privacy, and Compliance",
-      "name_zh": "安全、隐私与合规"
+      "name_zh": "安全、隐私与合规",
+      "exact_phrases": ["compliance assessment", "privacy review", "security audit", "threat modeling", "vulnerability assessment"],
+      "tokens": ["audit", "compliance", "privacy", "secure", "security", "threat", "vulnerability"]
     },
     "C10": {
       "slug": "ai-machine-learning-intelligent-systems",
       "name": "AI, Machine Learning, and Intelligent Systems",
-      "name_zh": "AI、机器学习与智能系统"
+      "name_zh": "AI、机器学习与智能系统",
+      "exact_phrases": ["artificial intelligence", "language model", "machine learning", "model training", "neural network"],
+      "tokens": ["ai", "embedding", "inference", "llm", "ml", "model", "training"]
     },
     "C11": {
       "slug": "product-project-team-collaboration",
       "name": "Product, Project, and Team Collaboration",
-      "name_zh": "产品、项目与团队协作"
+      "name_zh": "产品、项目与团队协作",
+      "exact_phrases": ["product management", "project management", "roadmap planning", "sprint planning", "team collaboration"],
+      "tokens": ["collaboration", "product", "project", "roadmap", "sprint", "stakeholder", "team"]
     },
     "C12": {
       "slug": "strategy-entrepreneurship-management-decisions",
       "name": "Strategy, Entrepreneurship, and Management Decisions",
-      "name_zh": "战略、创业与管理决策"
+      "name_zh": "战略、创业与管理决策",
+      "exact_phrases": ["business strategy", "competitive strategy", "decision making", "management decision", "startup strategy"],
+      "tokens": ["decision", "entrepreneurship", "leadership", "management", "market", "startup", "strategy"]
     },
     "C13": {
       "slug": "business-functions-professional-services",
       "name": "Business Functions and Professional Services",
-      "name_zh": "企业职能与专业服务"
+      "name_zh": "企业职能与专业服务",
+      "exact_phrases": ["business operations", "financial operations", "human resources", "legal services", "professional services"],
+      "tokens": ["accounting", "business", "finance", "hr", "legal", "operations", "procurement", "recruiting"]
     },
     "C14": {
       "slug": "marketing-sales-customer-growth",
       "name": "Marketing, Sales, and Customer Growth",
-      "name_zh": "营销、销售与客户增长"
+      "name_zh": "营销、销售与客户增长",
+      "exact_phrases": ["customer growth", "customer relationship management", "digital marketing", "lead generation", "sales enablement"],
+      "tokens": ["campaign", "crm", "customer", "growth", "lead", "marketing", "sales", "seo"]
     },
     "C15": {
       "slug": "scientific-academic-research",
       "name": "Scientific and Academic Research",
-      "name_zh": "科学与学术研究"
+      "name_zh": "科学与学术研究",
+      "exact_phrases": ["academic research", "literature review", "peer reviewed", "research paper", "scholarly sources", "scientific research"],
+      "tokens": ["academic", "citation", "experiment", "literature", "paper", "scholarly", "scientific", "study"]
     },
     "C16": {
       "slug": "education-learning-training",
       "name": "Education, Learning, and Training",
-      "name_zh": "教育、学习与培训"
+      "name_zh": "教育、学习与培训",
+      "exact_phrases": ["course design", "education training", "learning objective", "lesson plan", "teaching material"],
+      "tokens": ["course", "education", "learning", "lesson", "student", "teach", "teaching", "training"]
     },
     "C17": {
       "slug": "personal-productivity-knowledge-career",
       "name": "Personal Productivity, Knowledge, and Career",
-      "name_zh": "个人效率、知识与职业"
+      "name_zh": "个人效率、知识与职业",
+      "exact_phrases": ["career development", "knowledge management", "note taking", "personal productivity", "time management"],
+      "tokens": ["career", "knowledge", "notes", "obsidian", "personal", "productivity", "resume", "schedule"]
     },
     "C18": {
       "slug": "life-health-physical-world",
       "name": "Life, Health, and the Physical World",
-      "name_zh": "生活、健康与实体世界"
+      "name_zh": "生活、健康与实体世界",
+      "exact_phrases": ["fitness plan", "health advice", "home automation", "physical world", "travel planning"],
+      "tokens": ["exercise", "fitness", "food", "health", "home", "medical", "travel", "wellness"]
     },
     "C19": {
       "slug": "application-browser-device-automation",
       "name": "Application, Browser, and Device Automation",
-      "name_zh": "应用、浏览器与设备自动化"
+      "name_zh": "应用、浏览器与设备自动化",
+      "exact_phrases": ["application automation", "browser automation", "browser interactions", "crm application", "device automation", "user interface automation"],
+      "tokens": ["automate", "automation", "browser", "click", "crm", "desktop", "device", "navigate"]
     }
   }
 }

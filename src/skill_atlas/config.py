@@ -5,7 +5,15 @@ import re
 from pathlib import Path
 from typing import Any, Dict, List
 
-from .models import Category, CategoryGroup, SourceSpec, Taxonomy
+from .models import (
+    Category,
+    CategoryGroup,
+    ClassificationScoring,
+    CrossTagRule,
+    RiskCue,
+    SourceSpec,
+    Taxonomy,
+)
 
 
 SOURCE_MODES = {"direct", "index", "archive", "reference"}
@@ -29,21 +37,26 @@ def load_taxonomy(path: Path) -> Taxonomy:
     if not isinstance(category_data, dict) or not isinstance(group_data, dict):
         raise ValueError("taxonomy categories and groups must be objects")
 
-    categories = {
-        category_id: Category(
+    categories = {}
+    for category_id, item in category_data.items():
+        if not isinstance(item, dict):
+            raise ValueError(f"taxonomy category {category_id} must be an object")
+        categories[category_id] = Category(
             id=category_id,
-            slug=item["slug"],
-            name=item["name"],
-            name_zh=item["name_zh"],
-            keywords=tuple(item.get("keywords", [])),
+            slug=_required_string(item, "slug"),
+            name=_required_string(item, "name"),
+            name_zh=_required_string(item, "name_zh"),
+            keywords=_unique_string_tuple(item, "keywords", required=False),
+            exact_phrases=_unique_string_tuple(item, "exact_phrases"),
+            tokens=_unique_string_tuple(item, "tokens"),
         )
-        for category_id, item in category_data.items()
-    }
 
     groups = {}
     routed = []
     for group_id, item in group_data.items():
-        category_ids = item["categories"]
+        if not isinstance(item, dict):
+            raise ValueError(f"taxonomy group {group_id} must be an object")
+        category_ids = _string_list(item, "categories", [])
         try:
             group_categories = tuple(categories[category_id] for category_id in category_ids)
         except KeyError as error:
@@ -51,9 +64,9 @@ def load_taxonomy(path: Path) -> Taxonomy:
         routed.extend(category_ids)
         groups[group_id] = CategoryGroup(
             id=group_id,
-            slug=item["slug"],
-            name=item["name"],
-            name_zh=item["name_zh"],
+            slug=_required_string(item, "slug"),
+            name=_required_string(item, "name"),
+            name_zh=_required_string(item, "name_zh"),
             categories=group_categories,
         )
 
@@ -62,11 +75,104 @@ def load_taxonomy(path: Path) -> Taxonomy:
     if set(routed) != set(categories):
         raise ValueError("every category must be routed by exactly one group")
 
+    vocabulary_data = data.get("controlled_vocabularies")
+    if not isinstance(vocabulary_data, dict):
+        raise ValueError("controlled_vocabularies must be an object")
+    vocabularies = {
+        name: _unique_string_tuple(vocabulary_data, name)
+        for name in ("tasks", "stages", "artifacts", "domains", "audiences")
+    }
+
+    scoring_data = data.get("scoring")
+    if not isinstance(scoring_data, dict):
+        raise ValueError("scoring must be an object")
+    scoring = ClassificationScoring(
+        exact_phrase_weight=_positive_number(scoring_data, "exact_phrase_weight"),
+        token_weight=_positive_number(scoring_data, "token_weight"),
+        source_default_weight=_positive_number(scoring_data, "source_default_weight"),
+        weak_text_threshold=_positive_number(scoring_data, "weak_text_threshold"),
+        strong_evidence_score=_positive_number(scoring_data, "strong_evidence_score"),
+        secondary_score_ratio=_unit_number(scoring_data, "secondary_score_ratio"),
+        confidence_threshold=_unit_number(scoring_data, "confidence_threshold"),
+        ambiguity_threshold=_unit_number(scoring_data, "ambiguity_threshold"),
+        fallback_category=_required_string(scoring_data, "fallback_category"),
+    )
+    if scoring.fallback_category not in categories:
+        raise ValueError("scoring.fallback_category must name a taxonomy category")
+
+    cross_tag_rules = _load_cross_tag_rules(data, vocabularies)
+    risk_cues = _load_risk_cues(data)
+
     return Taxonomy(
         version=data["taxonomy_version"],
         groups=groups,
         categories=categories,
+        scoring=scoring,
+        cross_tag_rules=cross_tag_rules,
+        risk_cues=risk_cues,
+        **vocabularies,
     )
+
+
+def _load_cross_tag_rules(
+    data: Dict[str, Any], vocabularies: Dict[str, tuple]
+) -> tuple:
+    raw_rules = data.get("cross_tag_rules")
+    if not isinstance(raw_rules, list) or not raw_rules:
+        raise ValueError("cross_tag_rules must be a non-empty list")
+
+    rules = []
+    for item in raw_rules:
+        if not isinstance(item, dict):
+            raise ValueError("each cross-tag rule must be an object")
+        exact_phrases = _unique_string_tuple(item, "exact_phrases", required=False)
+        tokens = _unique_string_tuple(item, "tokens", required=False)
+        if not exact_phrases and not tokens:
+            raise ValueError("each cross-tag rule must define phrases or tokens")
+        tags = {
+            name: _unique_string_tuple(item, name, required=False)
+            for name in ("tasks", "stages", "artifacts", "domains", "audiences")
+        }
+        for name, values in tags.items():
+            unknown = set(values) - set(vocabularies[name])
+            if unknown:
+                raise ValueError(
+                    f"cross-tag rule contains unknown {name}: {sorted(unknown)}"
+                )
+        rules.append(
+            CrossTagRule(
+                id=_required_string(item, "id"),
+                exact_phrases=exact_phrases,
+                tokens=tokens,
+                **tags,
+            )
+        )
+    ids = [rule.id for rule in rules]
+    if len(ids) != len(set(ids)):
+        raise ValueError("cross-tag rule ids must be unique")
+    return tuple(rules)
+
+
+def _load_risk_cues(data: Dict[str, Any]) -> tuple:
+    raw_cues = data.get("risk_cues")
+    if not isinstance(raw_cues, list) or not raw_cues:
+        raise ValueError("risk_cues must be a non-empty list")
+
+    cues = []
+    for item in raw_cues:
+        if not isinstance(item, dict):
+            raise ValueError("each risk cue must be an object")
+        level = _required_string(item, "level")
+        if level not in {"R1", "R2", "R3", "R4"}:
+            raise ValueError(f"unsupported risk level: {level}")
+        exact_phrases = _unique_string_tuple(item, "exact_phrases", required=False)
+        tokens = _unique_string_tuple(item, "tokens", required=False)
+        if not exact_phrases and not tokens:
+            raise ValueError("each risk cue must define phrases or tokens")
+        cues.append(
+            RiskCue(level=level, exact_phrases=exact_phrases, tokens=tokens)
+        )
+    return tuple(cues)
 
 
 def load_sources(path: Path) -> List[SourceSpec]:
@@ -163,3 +269,35 @@ def _string_list(item: Dict[str, Any], name: str, default: List[str]) -> List[st
     ):
         raise ValueError(f"{name} must be a list of non-empty strings")
     return list(value)
+
+
+def _unique_string_tuple(
+    item: Dict[str, Any], name: str, required: bool = True
+) -> tuple:
+    value = item.get(name)
+    if value is None and not required:
+        return ()
+    if not isinstance(value, list) or any(
+        not isinstance(entry, str) or not entry.strip() for entry in value
+    ):
+        raise ValueError(f"{name} must be a list of non-empty strings")
+    normalized = tuple(entry.strip().lower() for entry in value)
+    if required and not normalized:
+        raise ValueError(f"{name} must not be empty")
+    if len(normalized) != len(set(normalized)):
+        raise ValueError(f"{name} entries must be unique")
+    return normalized
+
+
+def _positive_number(item: Dict[str, Any], name: str) -> float:
+    value = item.get(name)
+    if type(value) not in (int, float) or value <= 0:
+        raise ValueError(f"{name} must be a positive number")
+    return float(value)
+
+
+def _unit_number(item: Dict[str, Any], name: str) -> float:
+    value = _positive_number(item, name)
+    if value > 1:
+        raise ValueError(f"{name} must be no greater than 1")
+    return value

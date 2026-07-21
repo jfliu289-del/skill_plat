@@ -12,6 +12,8 @@ class Category:
     name: str
     name_zh: str
     keywords: Tuple[str, ...] = ()
+    exact_phrases: Tuple[str, ...] = ()
+    tokens: Tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -24,10 +26,61 @@ class CategoryGroup:
 
 
 @dataclass(frozen=True)
+class ClassificationScoring:
+    exact_phrase_weight: float
+    token_weight: float
+    source_default_weight: float
+    weak_text_threshold: float
+    strong_evidence_score: float
+    secondary_score_ratio: float
+    confidence_threshold: float
+    ambiguity_threshold: float
+    fallback_category: str
+
+
+@dataclass(frozen=True)
+class CrossTagRule:
+    id: str
+    exact_phrases: Tuple[str, ...] = ()
+    tokens: Tuple[str, ...] = ()
+    tasks: Tuple[str, ...] = ()
+    stages: Tuple[str, ...] = ()
+    artifacts: Tuple[str, ...] = ()
+    domains: Tuple[str, ...] = ()
+    audiences: Tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class RiskCue:
+    level: str
+    exact_phrases: Tuple[str, ...] = ()
+    tokens: Tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
 class Taxonomy:
     version: str
     groups: Dict[str, CategoryGroup]
     categories: Dict[str, Category]
+    tasks: Tuple[str, ...]
+    stages: Tuple[str, ...]
+    artifacts: Tuple[str, ...]
+    domains: Tuple[str, ...]
+    audiences: Tuple[str, ...]
+    scoring: ClassificationScoring
+    cross_tag_rules: Tuple[CrossTagRule, ...]
+    risk_cues: Tuple[RiskCue, ...]
+
+
+@dataclass(frozen=True)
+class ParsedSkill:
+    path: Path
+    name: str
+    description: str
+    text: str
+    headings: Tuple[str, ...]
+    raw_bytes: bytes = field(repr=False)
+    skill_md_hash: str
 
 
 @dataclass

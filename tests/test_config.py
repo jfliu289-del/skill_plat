@@ -78,6 +78,32 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(EXPECTED_ROUTING, actual)
         self.assertEqual({f"C{i:02d}" for i in range(20)}, set(taxonomy.categories))
 
+    def test_taxonomy_loads_typed_controlled_vocabularies_and_rules(self):
+        taxonomy = load_taxonomy(ROOT / "config/taxonomy.json")
+
+        for vocabulary in (
+            taxonomy.tasks,
+            taxonomy.stages,
+            taxonomy.artifacts,
+            taxonomy.domains,
+            taxonomy.audiences,
+        ):
+            self.assertIsInstance(vocabulary, tuple)
+            self.assertTrue(vocabulary)
+            self.assertEqual(len(vocabulary), len(set(vocabulary)))
+
+        self.assertEqual(20, len(taxonomy.categories))
+        for category in taxonomy.categories.values():
+            self.assertTrue(category.exact_phrases)
+            self.assertTrue(category.tokens)
+
+        self.assertTrue(taxonomy.cross_tag_rules)
+        self.assertTrue(taxonomy.risk_cues)
+        self.assertEqual(
+            {"R3", "R4"},
+            {cue.level for cue in taxonomy.risk_cues},
+        )
+
     def test_sources_match_frozen_inventory_urls_modes_and_counts(self):
         sources = load_sources(ROOT / "config/sources.json")
         actual = {item.id: (item.url, item.mode) for item in sources}
