@@ -41,6 +41,7 @@ class SourceSpec:
     default_categories: List[str] = field(default_factory=list)
     inventory_skill_count_hint: Optional[int] = None
     redistribution_review: bool = True
+    registry_archive_mirror: bool = False
     index_source_id: Optional[str] = None
 
     @classmethod
@@ -58,8 +59,14 @@ class SkillRecord:
     name: str
     description: str = ""
     license: Optional[str] = None
+    license_evidence: List[str] = field(default_factory=list)
     skill_md_hash: Optional[str] = None
     redistribution_review: bool = True
+    registry_archive_mirror: Optional[bool] = None
+
+    def __post_init__(self) -> None:
+        if self.registry_archive_mirror is None:
+            self.registry_archive_mirror = self.source.registry_archive_mirror
 
 
 @dataclass

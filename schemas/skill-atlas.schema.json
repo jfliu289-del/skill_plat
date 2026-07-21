@@ -33,7 +33,8 @@
         "commit",
         "source_path",
         "license",
-        "redistribution_review"
+        "redistribution_review",
+        "registry_archive_mirror"
       ],
       "properties": {
         "repository": {
@@ -49,12 +50,37 @@
           "minLength": 1
         },
         "license": {
-          "type": ["string", "null"]
+          "type": ["string", "null"],
+          "minLength": 1
+        },
+        "license_evidence": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
         },
         "redistribution_review": {
           "type": "boolean"
+        },
+        "registry_archive_mirror": {
+          "type": "boolean"
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "redistribution_review": {"const": false}
+            }
+          },
+          "then": {
+            "required": ["license_evidence"],
+            "properties": {
+              "license": {"type": "string", "minLength": 1},
+              "license_evidence": {"minItems": 1}
+            }
+          }
+        }
+      ]
     },
     "classification": {
       "type": "object",

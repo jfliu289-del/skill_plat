@@ -1,6 +1,7 @@
 """Load versioned taxonomy and source manifests."""
 
 import json
+import re
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -8,6 +9,9 @@ from .models import Category, CategoryGroup, SourceSpec, Taxonomy
 
 
 SOURCE_MODES = {"direct", "index", "archive", "reference"}
+GITHUB_REPOSITORY_URL = re.compile(
+    r"https://github[.]com/(?P<repository>[A-Za-z0-9][A-Za-z0-9-]*/[A-Za-z0-9_.-]+)"
+)
 
 
 def _read_object(path: Path) -> Dict[str, Any]:
@@ -71,28 +75,91 @@ def load_sources(path: Path) -> List[SourceSpec]:
     if not isinstance(raw_sources, list):
         raise ValueError("sources must be a list")
 
-    sources = [
-        SourceSpec(
-            id=item["id"],
-            url=item["url"],
-            mode=item["mode"],
-            ref=item.get("ref"),
-            include_paths=list(item.get("include_paths", ["."])),
-            exclude_paths=list(item.get("exclude_paths", [".git"])),
-            default_categories=list(item.get("default_categories", [])),
-            inventory_skill_count_hint=item.get("inventory_skill_count_hint"),
-            redistribution_review=item.get("redistribution_review", True),
-            index_source_id=item.get("index_source_id"),
+    source_defaults = data.get("source_defaults", {})
+    if not isinstance(source_defaults, dict):
+        raise ValueError("source_defaults must be an object")
+    default_archive_mirror = source_defaults.get("registry_archive_mirror", False)
+    if type(default_archive_mirror) is not bool:
+        raise ValueError("source_defaults.registry_archive_mirror must be a boolean")
+
+    sources = []
+    for item in raw_sources:
+        if not isinstance(item, dict):
+            raise ValueError("each source must be an object")
+
+        source_id = _required_string(item, "id")
+        url = _required_string(item, "url")
+        mode = _required_string(item, "mode")
+        ref = _optional_string(item, "ref")
+        index_source_id = _optional_string(item, "index_source_id")
+        include_paths = _string_list(item, "include_paths", ["."])
+        exclude_paths = _string_list(item, "exclude_paths", [".git"])
+        default_categories = _string_list(item, "default_categories", [])
+
+        inventory_hint = item.get("inventory_skill_count_hint")
+        if inventory_hint is not None and (
+            type(inventory_hint) is not int or inventory_hint < 0
+        ):
+            raise ValueError("inventory_skill_count_hint must be a non-negative integer or null")
+
+        redistribution_review = item.get("redistribution_review", True)
+        if type(redistribution_review) is not bool:
+            raise ValueError("redistribution_review must be a boolean")
+
+        registry_archive_mirror = item.get(
+            "registry_archive_mirror", default_archive_mirror
         )
-        for item in raw_sources
-    ]
+        if type(registry_archive_mirror) is not bool:
+            raise ValueError("registry_archive_mirror must be a boolean")
+
+        sources.append(
+            SourceSpec(
+                id=source_id,
+                url=url,
+                mode=mode,
+                ref=ref,
+                include_paths=include_paths,
+                exclude_paths=exclude_paths,
+                default_categories=default_categories,
+                inventory_skill_count_hint=inventory_hint,
+                redistribution_review=redistribution_review,
+                registry_archive_mirror=registry_archive_mirror,
+                index_source_id=index_source_id,
+            )
+        )
 
     ids = [source.id for source in sources]
     if len(ids) != len(set(ids)):
         raise ValueError("source ids must be unique")
     for source in sources:
-        if not source.url.startswith("https://github.com/"):
+        match = GITHUB_REPOSITORY_URL.fullmatch(source.url)
+        if match is None or match.group("repository") != source.id:
             raise ValueError(f"source {source.id} is not an HTTPS GitHub repository")
         if source.mode not in SOURCE_MODES:
             raise ValueError(f"source {source.id} has unsupported mode {source.mode}")
+        if source.registry_archive_mirror and source.mode != "archive":
+            raise ValueError("registry archive mirrors must use archive mode")
     return sources
+
+
+def _required_string(item: Dict[str, Any], name: str) -> str:
+    value = item.get(name)
+    if not isinstance(value, str) or not value:
+        raise ValueError(f"{name} must be a non-empty string")
+    return value
+
+
+def _optional_string(item: Dict[str, Any], name: str) -> Any:
+    value = item.get(name)
+    if value is not None and (not isinstance(value, str) or not value):
+        raise ValueError(f"{name} must be a non-empty string or null")
+    return value
+
+
+def _string_list(item: Dict[str, Any], name: str, default: List[str]) -> List[str]:
+    value = item.get(name, default)
+    if not isinstance(value, list) or any(
+        not isinstance(entry, str) or not entry for entry in value
+    ):
+        raise ValueError(f"{name} must be a list of non-empty strings")
+    return list(value)
