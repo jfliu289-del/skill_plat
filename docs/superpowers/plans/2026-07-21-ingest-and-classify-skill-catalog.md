@@ -395,7 +395,7 @@ git commit -m "feat: safely synchronize and discover skill sources"
 
 **Interfaces:**
 - `catalog_path(record, classification, taxonomy) -> Path`
-- `materialize(record, destination_root, classification) -> ImportResult`
+- `materialize(record, destination_root, classification, taxonomy) -> ImportResult`
 - `cluster_duplicates(results) -> dict[str, list[str]]`
 - Path: `skills/<group-id>-<slug>/<category-id>-<slug>/<owner>/<repo>/<source-parent-key>/<original-skill-directory>/`
 
@@ -405,7 +405,7 @@ git commit -m "feat: safely synchronize and discover skill sources"
 class MaterializeTests(unittest.TestCase):
     def test_routes_and_preserves_skill_md(self):
         before = (self.source_skill / "SKILL.md").read_bytes()
-        result = materialize(self.record, self.output, self.classification)
+        result = materialize(self.record, self.output, self.classification, self.taxonomy)
         self.assertEqual(
             Path("skills/B-software-systems-automation/C07-debugging-testing-quality/acme/tools/reviews/reviewing-code"),
             result.relative_path,
@@ -413,7 +413,7 @@ class MaterializeTests(unittest.TestCase):
         self.assertEqual(before, (self.output / result.relative_path / "SKILL.md").read_bytes())
 
     def test_sidecar_contains_cross_tags_and_integrity(self):
-        result = materialize(self.record, self.output, self.classification)
+        result = materialize(self.record, self.output, self.classification, self.taxonomy)
         data = json.loads((self.output / result.relative_path / "skill-atlas.json").read_text())
         self.assertEqual("C07", data["classification"]["primary_category"])
         self.assertEqual(["C06"], data["classification"]["secondary_categories"])
@@ -431,7 +431,7 @@ class MaterializeTests(unittest.TestCase):
             path = self.source_skill / relative
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_bytes(payload)
-        result = materialize(self.record, self.output, self.classification)
+        result = materialize(self.record, self.output, self.classification, self.taxonomy)
         for relative, payload in expected.items():
             self.assertEqual(payload, (self.output / result.relative_path / relative).read_bytes())
 
@@ -439,7 +439,7 @@ class MaterializeTests(unittest.TestCase):
         link = self.source_skill / "references/escape"
         link.parent.mkdir(exist_ok=True)
         link.symlink_to("../../../../secret")
-        result = materialize(self.record, self.output, self.classification)
+        result = materialize(self.record, self.output, self.classification, self.taxonomy)
         self.assertIn("references/escape", result.excluded_paths)
 ```
 
