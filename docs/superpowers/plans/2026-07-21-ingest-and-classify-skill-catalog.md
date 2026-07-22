@@ -470,7 +470,10 @@ git commit -m "feat: materialize catalog skills with provenance tags"
 ### Task 5: CLI, Atomic Builds, and Validation
 
 **Files:**
+- Modify: `src/skill_atlas/models.py`
+- Modify: `src/skill_atlas/git_sources.py`
 - Create: `src/skill_atlas/validate.py`
+- Create: `src/skill_atlas/pipeline.py`
 - Create: `src/skill_atlas/cli.py`
 - Create: `src/skill_atlas/__main__.py`
 - Test: `tests/test_validate.py`
@@ -507,7 +510,7 @@ Expected: FAIL.
 
 - [ ] **Step 3: Implement validator**
 
-Check one sidecar per Skill, schema conformance, group/category path consistency, controlled vocabularies, 40-character commit SHA, integrity hashes, central-record paths, and duplicate-cluster consistency. Write stable JSON with failures and counts.
+Check one root sidecar per Skill, schema conformance, group/category path consistency, controlled vocabularies, 40-character commit SHA, `SKILL.md` hash, `hash_materialized_skill` content hash, central-record paths, and duplicate-cluster consistency. Reject global catalog path collisions under both Unicode NFC normalization and case folding so builds are portable across the current macOS filesystem and case-sensitive filesystems. Write stable JSON with failures and counts.
 
 - [ ] **Step 4: Write failing end-to-end local CLI test**
 
@@ -531,7 +534,9 @@ Expected: FAIL.
 
 - [ ] **Step 6: Implement orchestration**
 
-`sync` resolves direct sources and expands indexes into a unique source graph. `build` writes into a sibling staging directory and atomically replaces the previous generated tree only after reports are complete. `validate` is read-only. `report --summary` prints imported, duplicate, parse-failure, inaccessible, unknown-license, unsafe-symlink, and low-confidence counts. `all` returns nonzero for direct-source or validation failures; inaccessible index-derived sources remain unresolved without blocking unrelated sources.
+`sync` resolves configured sources and expands indexes into a unique source graph with index provenance. Configured `index` and `reference` repositories are never materialized as catalog Skills; `reference` sources are inspection-only, and index-derived tree paths may use sparse checkout but must still retain each selected Skill bundle completely. The source lock records source id, URL, mode, selected paths, provenance, and immutable commit without machine-specific absolute paths. Locked synchronization checks out the recorded commit instead of silently advancing to a new HEAD.
+
+`build` writes `skills`, `licenses`, and reports into a sibling staging tree, checks all case-folded/NFC paths for collisions, validates the staged result, and replaces the previous generated tree only after structural validation succeeds. `validate` is read-only. `report --summary` prints imported, duplicate, parse-failure, inaccessible, unknown-license, unsafe-symlink, and low-confidence counts. `all` continues past individual inaccessible or malformed sources so unrelated Skills are retained, but returns nonzero for configured direct-source failures or validation failures. Index-derived failures remain explicit unresolved records without blocking unrelated sources.
 
 - [ ] **Step 7: Run full GREEN and commit**
 
