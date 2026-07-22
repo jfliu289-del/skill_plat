@@ -1,20 +1,30 @@
 """Deterministic, containment-safe Skill and index discovery."""
 
 from dataclasses import dataclass, field
+import hashlib
 import json
 import os
 from pathlib import Path, PurePosixPath
 import re
-import tempfile
 from typing import Dict, Iterable, Iterator, List, Optional, Set, Tuple
 from urllib.parse import unquote, urlsplit
+
+from .models import (
+    RegistryClaim,
+    RegistryDiscovery,
+    RegistryIndexEntry,
+)
 
 
 _INDEX_FILE_SUFFIXES = {"", ".md", ".markdown", ".txt"}
 _HTTPS_URL = re.compile(r"https://[^\s<>\[\]()\"'`]+")
+_MARKDOWN_LINK = re.compile(
+    r"(?<!!)\[(?P<label>[^\]\r\n]+)\]\((?P<url>https://[^\s<>()]+)\)"
+)
 _GITHUB_OWNER = re.compile(r"[A-Za-z0-9][A-Za-z0-9-]*")
 _GITHUB_REPOSITORY = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]*")
-_OPENCLAW_COMPONENT = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]*")
+_CLAWHUB_COMPONENT = re.compile(r"[a-z0-9][a-z0-9_.-]*")
+_CLAWHUB_INDEX_SOURCE_ID = "VoltAgent/awesome-openclaw-skills"
 
 
 class DiscoverySecurityError(ValueError):
@@ -117,69 +127,189 @@ def parse_github_tree_url(url: str) -> Optional[Tuple[str, str]]:
 
 
 def discover_openclaw_archive_paths(index_root: Path) -> List[str]:
-    """Map strict ClawSkills/ClawHub links to the OpenClaw archive layout."""
+    """Return legacy archive paths without modifying the checked-out index."""
 
-    archive_paths: Set[str] = set()
-    unresolved: Dict[Tuple[str, str], Dict[str, str]] = {}
-    for index_path, url in _index_urls(index_root):
-        parsed_path, is_openclaw_candidate = _parse_openclaw_url(url)
-        if parsed_path is not None:
-            archive_paths.add(parsed_path)
-        elif is_openclaw_candidate:
-            unresolved[(url, index_path)] = {
-                "index_path": index_path,
-                "reason": "malformed_openclaw_skill_url",
-                "url": url,
+    discovery = discover_clawhub_claims(index_root)
+    return sorted(
+        {
+            f"skills/{claim.claimed_owner}/{claim.claimed_slug}"
+            for claim in discovery.claims
+            if claim.claimed_owner is not None
+        }
+    )
+
+
+def discover_clawhub_claims(index_root: Path) -> RegistryDiscovery:
+    """Read a frozen index into immutable, deterministic ClawHub claims."""
+
+    grouped: Dict[
+        Tuple[str, Optional[str], Optional[str]], Set[RegistryIndexEntry]
+    ] = {}
+    unresolved: Dict[str, Dict[str, object]] = {}
+    for path, index_path in _index_files(index_root):
+        text = path.read_text(encoding="utf-8", errors="replace")
+        markdown_url_spans: List[Tuple[int, int]] = []
+        for match in _MARKDOWN_LINK.finditer(text):
+            label = match.group("label")
+            url = match.group("url")
+            markdown_url_spans.append(match.span("url"))
+            if not _is_clawhub_candidate(url):
+                continue
+            parsed = _parse_clawhub_claim(label, url)
+            if parsed is None:
+                _add_unresolved(
+                    unresolved,
+                    {
+                        "index_path": index_path,
+                        "label": label,
+                        "reason": "malformed-clawhub-link",
+                        "source_id": _CLAWHUB_INDEX_SOURCE_ID,
+                        "url": url,
+                    },
+                )
+                continue
+            claimed_slug, claimed_owner, legacy_id = parsed
+            key = (claimed_slug, claimed_owner, legacy_id)
+            grouped.setdefault(key, set()).add(
+                RegistryIndexEntry(index_path, label, url)
+            )
+
+        for match in _HTTPS_URL.finditer(text):
+            if any(
+                start <= match.start() and match.end() <= end
+                for start, end in markdown_url_spans
+            ):
+                continue
+            url = match.group(0).rstrip(".,;:!?")
+            if _is_clawhub_candidate(url):
+                _add_unresolved(
+                    unresolved,
+                    {
+                        "index_path": index_path,
+                        "reason": "missing-markdown-label",
+                        "source_id": _CLAWHUB_INDEX_SOURCE_ID,
+                        "url": url,
+                    },
+                )
+
+    claims = []
+    for key in sorted(
+        grouped,
+        key=lambda item: (item[0], item[1] or "", item[2] or ""),
+    ):
+        claimed_slug, claimed_owner, legacy_id = key
+        claims.append(
+            RegistryClaim(
+                claimed_slug=claimed_slug,
+                claimed_owner=claimed_owner,
+                legacy_id=legacy_id,
+                index_entries=tuple(sorted(grouped[key])),
+            )
+        )
+    return RegistryDiscovery(
+        claims=tuple(claims),
+        unresolved=tuple(unresolved[key] for key in sorted(unresolved)),
+    )
+
+
+def registry_claim_id(claim: RegistryClaim) -> str:
+    """Hash exactly the immutable, audited fields of a registry claim."""
+
+    payload = {
+        "claimed_owner": claim.claimed_owner,
+        "claimed_slug": claim.claimed_slug,
+        "index_entries": [
+            {
+                "index_path": entry.index_path,
+                "label": entry.label,
+                "url": entry.url,
             }
-
-    unresolved_path = (
-        index_root / "unresolved.json"
-        if index_root.is_dir()
-        else index_root.parent / "unresolved.json"
-    )
-    _write_json_atomically(
-        unresolved_path,
-        {"unresolved": [unresolved[key] for key in sorted(unresolved)]},
-    )
-    return sorted(archive_paths)
-
-
-def _write_json_atomically(path: Path, payload: object) -> None:
-    resolved_parent = path.parent.resolve()
-    if path.parent.is_symlink() or path.is_symlink():
-        raise DiscoverySecurityError("report target must not be a symlink")
-    if path.exists() and not path.is_file():
-        raise DiscoverySecurityError("report target must be a regular file")
-    if path.resolve(strict=False).parent != resolved_parent:
-        raise DiscoverySecurityError("report target escapes its output directory")
-
-    serialized = json.dumps(
+            for entry in sorted(claim.index_entries)
+        ],
+        "legacy_id": claim.legacy_id,
+    }
+    canonical = json.dumps(
         payload,
         ensure_ascii=False,
-        indent=2,
+        separators=(",", ":"),
         sort_keys=True,
-    ) + "\n"
-    temporary_path: Optional[Path] = None
+    ).encode("utf-8")
+    return hashlib.sha256(canonical).hexdigest()
+
+
+def _add_unresolved(
+    unresolved: Dict[str, Dict[str, object]], item: Dict[str, object]
+) -> None:
+    canonical_item = dict(sorted(item.items()))
+    key = json.dumps(
+        canonical_item,
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    )
+    unresolved[key] = canonical_item
+
+
+def _is_clawhub_candidate(url: str) -> bool:
     try:
-        with tempfile.NamedTemporaryFile(
-            mode="w",
-            encoding="utf-8",
-            dir=path.parent,
-            prefix=".unresolved-",
-            suffix=".tmp",
-            delete=False,
-        ) as handle:
-            temporary_path = Path(handle.name)
-            handle.write(serialized)
-            handle.flush()
-            os.fsync(handle.fileno())
-        if path.is_symlink():
-            raise DiscoverySecurityError("report target must not be a symlink")
-        os.replace(temporary_path, path)
-        temporary_path = None
-    finally:
-        if temporary_path is not None:
-            temporary_path.unlink(missing_ok=True)
+        parsed = urlsplit(url)
+    except ValueError:
+        return False
+    return parsed.scheme == "https" and parsed.netloc in {
+        "clawskills.sh",
+        "clawhub.ai",
+    }
+
+
+def _parse_clawhub_claim(
+    label: str, url: str
+) -> Optional[Tuple[str, Optional[str], Optional[str]]]:
+    if _CLAWHUB_COMPONENT.fullmatch(label) is None:
+        return None
+    try:
+        parsed = urlsplit(url)
+    except ValueError:
+        return None
+    if (
+        parsed.scheme != "https"
+        or parsed.netloc not in {"clawskills.sh", "clawhub.ai"}
+        or parsed.query
+        or parsed.fragment
+    ):
+        return None
+    decoded_path = unquote(parsed.path)
+    if (
+        not decoded_path.startswith("/")
+        or "\\" in decoded_path
+        or "\x00" in decoded_path
+    ):
+        return None
+    relative_path = decoded_path[1:]
+    if relative_path.endswith("/"):
+        relative_path = relative_path[:-1]
+    parts = relative_path.split("/") if relative_path else []
+    if not parts or any(
+        not part
+        or part in {".", ".."}
+        or _CLAWHUB_COMPONENT.fullmatch(part) is None
+        for part in parts
+    ):
+        return None
+
+    if parsed.netloc == "clawskills.sh":
+        if len(parts) != 2 or parts[0] != "skills":
+            return None
+        return label, None, parts[1]
+
+    if len(parts) == 2:
+        owner, slug = parts
+    elif len(parts) == 3 and parts[1] == "skills":
+        owner, _, slug = parts
+    else:
+        return None
+    if label != slug:
+        return None
+    return slug, owner, None
 
 
 def _parse_github_url(url: str) -> Optional[Tuple[str, str]]:
@@ -222,36 +352,6 @@ def _parse_github_url(url: str) -> Optional[Tuple[str, str]]:
     except DiscoverySecurityError:
         return None
     return repository_url, tree_path
-
-
-def _parse_openclaw_url(url: str) -> Tuple[Optional[str], bool]:
-    parsed = urlsplit(url)
-    if parsed.scheme != "https" or parsed.netloc not in {"clawskills.sh", "clawhub.ai"}:
-        return None, False
-    decoded_path = unquote(parsed.path)
-    if "\\" in decoded_path or "\x00" in decoded_path:
-        return None, True
-    parts = decoded_path.strip("/").split("/") if decoded_path.strip("/") else []
-
-    if parsed.netloc == "clawskills.sh":
-        candidate = bool(parts and parts[0] == "skills")
-        skill_parts = parts[1:] if len(parts) == 3 and parts[0] == "skills" else []
-    elif parsed.netloc == "clawhub.ai":
-        candidate = bool(parts)
-        skill_parts = parts if len(parts) == 2 else []
-    else:
-        return None, False
-
-    if parsed.query or parsed.fragment:
-        return None, candidate
-
-    if (
-        len(skill_parts) == 2
-        and all(_OPENCLAW_COMPONENT.fullmatch(part) for part in skill_parts)
-        and all(part not in {".", ".."} for part in skill_parts)
-    ):
-        return f"skills/{skill_parts[0]}/{skill_parts[1]}", True
-    return None, candidate
 
 
 def _index_urls(index_root: Path) -> Iterator[Tuple[str, str]]:

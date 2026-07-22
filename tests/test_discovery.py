@@ -1,15 +1,17 @@
-import json
 import tempfile
 import unittest
+from dataclasses import replace
 from pathlib import Path
 
 from skill_atlas.discovery import (
     DiscoverySecurityError,
+    discover_clawhub_claims,
     discover_github_targets,
-    discover_openclaw_archive_paths,
     discover_skill_roots,
     parse_github_tree_url,
+    registry_claim_id,
 )
+from skill_atlas.models import RegistryClaim, RegistryIndexEntry
 
 
 class DiscoveryTests(unittest.TestCase):
@@ -61,23 +63,70 @@ class DiscoveryTests(unittest.TestCase):
         )
         return index
 
-    def make_openclaw_index(self) -> Path:
-        index = self.tempdir / "openclaw-index"
-        index.mkdir()
-        (index / "README.md").write_text(
+    def make_clawhub_index(self) -> Path:
+        index = self.tempdir / "clawhub-index"
+        categories = index / "categories"
+        categories.mkdir(parents=True)
+        (categories / "research.md").write_text(
             "\n".join(
                 [
-                    "[Calendar](https://clawskills.sh/skills/alice/calendar)",
-                    "https://clawhub.ai/bob/research",
-                    "https://clawskills.sh/skills/alice/calendar",
-                    "https://clawskills.sh/skills/alice",
-                    "https://clawhub.ai/bob/research/extra",
-                    "https://clawhub.ai/carol/writing?source=index",
+                    "[arxiv-search-collector](https://clawskills.sh/skills/xukp20-arxiv-search-collector)",
+                    "[arxiv-search-collector](https://clawskills.sh/skills/xukp20-arxiv-search-collector)",
+                ]
+            ),
+            encoding="utf-8",
+        )
+        (categories / "productivity.md").write_text(
+            "\n".join(
+                [
+                    "[calendar](https://clawhub.ai/alice/calendar)",
+                    "[calendar](https://clawhub.ai/alice/skills/calendar)",
+                    "[calendar](https://clawhub.ai/alice/calendar)",
                 ]
             ),
             encoding="utf-8",
         )
         return index
+
+    def make_malformed_clawhub_index(self) -> Path:
+        index = self.tempdir / "malformed-clawhub-index"
+        index.mkdir()
+        (index / "README.md").write_text(
+            "\n".join(
+                [
+                    "[not-calendar](https://clawhub.ai/Alice/calendar?source=index#fragment)",
+                    "https://clawhub.ai/alice/calendar",
+                ]
+            ),
+            encoding="utf-8",
+        )
+        return index
+
+    def snapshot_tree(self, root: Path):
+        return tuple(
+            (path.relative_to(root).as_posix(), path.read_bytes())
+            for path in sorted(root.rglob("*"))
+            if path.is_file()
+        )
+
+    def valid_claim(self) -> RegistryClaim:
+        return RegistryClaim(
+            claimed_slug="calendar",
+            claimed_owner="alice",
+            legacy_id=None,
+            index_entries=(
+                RegistryIndexEntry(
+                    "categories/productivity.md",
+                    "calendar",
+                    "https://clawhub.ai/alice/calendar",
+                ),
+                RegistryIndexEntry(
+                    "README.md",
+                    "calendar",
+                    "https://clawhub.ai/alice/skills/calendar",
+                ),
+            ),
+        )
 
     def test_finds_only_exact_uppercase_skill_md_without_following_symlinks(self):
         repository = self.make_skill_repository()
@@ -122,50 +171,126 @@ class DiscoveryTests(unittest.TestCase):
             parse_github_tree_url("https://github.com/a/b/tree/main/%2e%2e/etc")
         )
 
-    def test_maps_openclaw_links_and_records_malformed_links(self):
-        index = self.make_openclaw_index()
+    def test_discovers_legacy_and_canonical_claims_without_modifying_index(self):
+        index = self.make_clawhub_index()
+        before = self.snapshot_tree(index)
 
-        paths = discover_openclaw_archive_paths(index)
+        discovery = discover_clawhub_claims(index)
 
+        self.assertEqual(before, self.snapshot_tree(index))
         self.assertEqual(
-            ["skills/alice/calendar", "skills/bob/research"],
-            paths,
+            [
+                ("arxiv-search-collector", None, "xukp20-arxiv-search-collector"),
+                ("calendar", "alice", None),
+            ],
+            [
+                (item.claimed_slug, item.claimed_owner, item.legacy_id)
+                for item in discovery.claims
+            ],
         )
         self.assertEqual(
-            {
-                "unresolved": [
-                    {
-                        "index_path": "README.md",
-                        "reason": "malformed_openclaw_skill_url",
-                        "url": "https://clawhub.ai/bob/research/extra",
-                    },
-                    {
-                        "index_path": "README.md",
-                        "reason": "malformed_openclaw_skill_url",
-                        "url": "https://clawhub.ai/carol/writing?source=index",
-                    },
-                    {
-                        "index_path": "README.md",
-                        "reason": "malformed_openclaw_skill_url",
-                        "url": "https://clawskills.sh/skills/alice",
-                    },
-                ]
-            },
-            json.loads((index / "unresolved.json").read_text(encoding="utf-8")),
+            (
+                RegistryIndexEntry(
+                    "categories/research.md",
+                    "arxiv-search-collector",
+                    "https://clawskills.sh/skills/xukp20-arxiv-search-collector",
+                ),
+            ),
+            discovery.claims[0].index_entries,
+        )
+        self.assertEqual(
+            (
+                RegistryIndexEntry(
+                    "categories/productivity.md",
+                    "calendar",
+                    "https://clawhub.ai/alice/calendar",
+                ),
+                RegistryIndexEntry(
+                    "categories/productivity.md",
+                    "calendar",
+                    "https://clawhub.ai/alice/skills/calendar",
+                ),
+            ),
+            discovery.claims[1].index_entries,
+        )
+        self.assertEqual((), discovery.unresolved)
+
+    def test_records_label_mismatch_query_fragment_and_malformed_components(self):
+        discovery = discover_clawhub_claims(
+            self.make_malformed_clawhub_index()
         )
 
-    def test_unresolved_report_refuses_symlink_without_rewriting_external_target(self):
-        index = self.make_openclaw_index()
-        external_report = self.tempdir / "external-unresolved.json"
-        original = b'{"outside": true}\n'
-        external_report.write_bytes(original)
-        (index / "unresolved.json").symlink_to(external_report)
+        self.assertEqual(
+            ["malformed-clawhub-link", "missing-markdown-label"],
+            sorted(item["reason"] for item in discovery.unresolved),
+        )
+        self.assertTrue(
+            all(
+                item["source_id"] == "VoltAgent/awesome-openclaw-skills"
+                for item in discovery.unresolved
+            )
+        )
 
-        with self.assertRaises(DiscoverySecurityError):
-            discover_openclaw_archive_paths(index)
+    def test_rejects_unsafe_or_noncanonical_clawhub_components(self):
+        invalid_urls = [
+            "https://clawhub.ai/alice/calendar?source=index",
+            "https://clawhub.ai/alice/calendar#fragment",
+            "https://clawhub.ai/alice/%5Ccalendar",
+            "https://clawhub.ai/alice/%00calendar",
+            "https://clawhub.ai/alice/../calendar",
+            "https://clawhub.ai/alice/%2e%2e",
+            "https://clawhub.ai/alice/%252e%252e",
+            "https://clawhub.ai/Alice/calendar",
+        ]
+        for offset, url in enumerate(invalid_urls):
+            with self.subTest(url=url):
+                index = self.tempdir / f"invalid-{offset}.md"
+                index.write_text(f"[calendar]({url})\n", encoding="utf-8")
+                discovery = discover_clawhub_claims(index)
+                self.assertEqual((), discovery.claims)
+                self.assertEqual(
+                    ["malformed-clawhub-link"],
+                    [item["reason"] for item in discovery.unresolved],
+                )
 
-        self.assertEqual(original, external_report.read_bytes())
-        self.assertTrue((index / "unresolved.json").is_symlink())
+    def test_claim_id_is_stable_and_changes_with_any_audited_claim_field(self):
+        claim = self.valid_claim()
+        reordered = replace(claim, index_entries=tuple(reversed(claim.index_entries)))
+        self.assertEqual(registry_claim_id(claim), registry_claim_id(reordered))
+
+        changed_entries = {
+            "claimed_slug": replace(claim, claimed_slug="calendar-two"),
+            "claimed_owner": replace(claim, claimed_owner="bob"),
+            "legacy_id": replace(claim, legacy_id="alice-calendar"),
+            "index_path": replace(
+                claim,
+                index_entries=(
+                    replace(claim.index_entries[0], index_path="README.md"),
+                    claim.index_entries[1],
+                ),
+            ),
+            "label": replace(
+                claim,
+                index_entries=(
+                    replace(claim.index_entries[0], label="calendar-two"),
+                    claim.index_entries[1],
+                ),
+            ),
+            "url": replace(
+                claim,
+                index_entries=(
+                    replace(
+                        claim.index_entries[0],
+                        url="https://clawhub.ai/alice/skills/calendar",
+                    ),
+                    claim.index_entries[1],
+                ),
+            ),
+        }
+        original_id = registry_claim_id(claim)
+        for field, changed in changed_entries.items():
+            with self.subTest(field=field):
+                self.assertNotEqual(original_id, registry_claim_id(changed))
 
 
 if __name__ == "__main__":

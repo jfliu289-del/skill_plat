@@ -1,6 +1,7 @@
 """Load versioned taxonomy and source manifests."""
 
 import json
+import math
 import re
 from pathlib import Path
 from pathlib import PurePosixPath
@@ -12,12 +13,29 @@ from .models import (
     ClassificationScoring,
     CrossTagRule,
     RiskCue,
+    RegistrySpec,
     SourceSpec,
     Taxonomy,
 )
 
 
 SOURCE_MODES = {"direct", "index", "archive", "reference"}
+REGISTRY_FIELDS = {
+    "schema_version",
+    "id",
+    "base_url",
+    "index_source_id",
+    "non_suspicious_only",
+    "request_timeout_seconds",
+    "max_workers",
+    "max_attempts",
+    "max_download_bytes",
+    "max_github_archive_bytes",
+    "max_uncompressed_bytes",
+    "max_github_uncompressed_bytes",
+    "max_files",
+    "max_compression_ratio",
+}
 GITHUB_REPOSITORY_URL = re.compile(
     r"https://github[.]com/(?P<repository>[A-Za-z0-9][A-Za-z0-9-]*/[A-Za-z0-9_.-]+)"
 )
@@ -253,6 +271,52 @@ def load_sources(path: Path) -> List[SourceSpec]:
     return sources
 
 
+def load_registry(path: Path) -> RegistrySpec:
+    data = _read_object(path)
+    actual_fields = set(data)
+    if actual_fields != REGISTRY_FIELDS:
+        missing = sorted(REGISTRY_FIELDS - actual_fields)
+        unknown = sorted(actual_fields - REGISTRY_FIELDS)
+        raise ValueError(
+            f"registry fields must match exactly; missing={missing}, unknown={unknown}"
+        )
+    if data["schema_version"] != "1.0":
+        raise ValueError("registry schema_version must be 1.0")
+    if data["id"] != "clawhub":
+        raise ValueError("registry id must be clawhub")
+    if data["base_url"] != "https://clawhub.ai":
+        raise ValueError("registry base_url must be the official ClawHub URL")
+    index_source_id = _required_string(data, "index_source_id")
+    if data["non_suspicious_only"] is not True:
+        raise ValueError("registry must enable non_suspicious_only")
+
+    return RegistrySpec(
+        id="clawhub",
+        base_url="https://clawhub.ai",
+        index_source_id=index_source_id,
+        non_suspicious_only=True,
+        request_timeout_seconds=_positive_finite_number(
+            data, "request_timeout_seconds"
+        ),
+        max_workers=_bounded_positive_integer(data, "max_workers", 64),
+        max_attempts=_bounded_positive_integer(data, "max_attempts", 10),
+        max_download_bytes=_positive_integer(data, "max_download_bytes"),
+        max_github_archive_bytes=_positive_integer(
+            data, "max_github_archive_bytes"
+        ),
+        max_uncompressed_bytes=_positive_integer(
+            data, "max_uncompressed_bytes"
+        ),
+        max_github_uncompressed_bytes=_positive_integer(
+            data, "max_github_uncompressed_bytes"
+        ),
+        max_files=_positive_integer(data, "max_files"),
+        max_compression_ratio=_positive_integer(
+            data, "max_compression_ratio"
+        ),
+    )
+
+
 def _required_string(item: Dict[str, Any], name: str) -> str:
     value = item.get(name)
     if not isinstance(value, str) or not value:
@@ -324,6 +388,35 @@ def _positive_number(item: Dict[str, Any], name: str) -> float:
     if type(value) not in (int, float) or value <= 0:
         raise ValueError(f"{name} must be a positive number")
     return float(value)
+
+
+def _positive_finite_number(item: Dict[str, Any], name: str) -> float:
+    value = item.get(name)
+    if type(value) not in (int, float) or value <= 0:
+        raise ValueError(f"{name} must be a positive finite number")
+    try:
+        numeric_value = float(value)
+    except OverflowError as error:
+        raise ValueError(f"{name} must be a positive finite number") from error
+    if not math.isfinite(numeric_value):
+        raise ValueError(f"{name} must be a positive finite number")
+    return numeric_value
+
+
+def _positive_integer(item: Dict[str, Any], name: str) -> int:
+    value = item.get(name)
+    if type(value) is not int or value <= 0:
+        raise ValueError(f"{name} must be a positive integer")
+    return value
+
+
+def _bounded_positive_integer(
+    item: Dict[str, Any], name: str, maximum: int
+) -> int:
+    value = _positive_integer(item, name)
+    if value > maximum:
+        raise ValueError(f"{name} must be no greater than {maximum}")
+    return value
 
 
 def _unit_number(item: Dict[str, Any], name: str) -> float:

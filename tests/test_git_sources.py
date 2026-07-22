@@ -241,6 +241,22 @@ class GitSourceTests(unittest.TestCase):
         )
         self.assertNotEqual(0, symbolic_ref.returncode)
 
+    def test_empty_cache_checks_out_exact_commit_ref_detached(self):
+        remote, first = make_local_fixture_repository(self.tempdir)
+        (remote / "SECOND.txt").write_text("second\n", encoding="utf-8")
+        second = _commit_all(remote, "second")
+        self.assertNotEqual(first, second)
+        source = SourceSpec.for_test(remote.as_uri())
+        source.ref = first
+
+        resolved = sync_source(source, self.cache)
+
+        self.assertEqual(first, resolved.commit)
+        self.assertEqual(
+            "", _git("branch", "--show-current", cwd=resolved.checkout)
+        )
+        self.assertFalse((resolved.checkout / "SECOND.txt").exists())
+
     def test_locked_sync_checks_out_exact_commit_without_advancing_to_remote_head(self):
         remote, locked_sha = make_local_fixture_repository(self.tempdir)
         source = SourceSpec.for_test(remote.as_uri())

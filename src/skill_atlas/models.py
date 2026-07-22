@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Union
 
 
 @dataclass(frozen=True)
@@ -101,6 +101,63 @@ class SourceSpec:
     @classmethod
     def for_test(cls, url: str) -> "SourceSpec":
         return cls(id="test/source", url=url, mode="direct")
+
+
+@dataclass(frozen=True)
+class RegistrySpec:
+    id: str
+    base_url: str
+    index_source_id: str
+    non_suspicious_only: bool
+    request_timeout_seconds: float
+    max_workers: int
+    max_attempts: int
+    max_download_bytes: int
+    max_github_archive_bytes: int
+    max_uncompressed_bytes: int
+    max_github_uncompressed_bytes: int
+    max_files: int
+    max_compression_ratio: int
+
+
+@dataclass(frozen=True, order=True)
+class RegistryIndexEntry:
+    index_path: str
+    label: str
+    url: str
+
+
+@dataclass(frozen=True)
+class RegistryClaim:
+    claimed_slug: str
+    claimed_owner: Optional[str]
+    legacy_id: Optional[str]
+    index_entries: Tuple[RegistryIndexEntry, ...]
+
+
+@dataclass(frozen=True)
+class RegistryDiscovery:
+    claims: Tuple[RegistryClaim, ...]
+    unresolved: Tuple[Dict[str, object], ...]
+
+
+@dataclass(frozen=True)
+class GitSkillOrigin:
+    repository: str
+    commit: str
+    source_path: str
+    source_id: str
+    default_categories: Tuple[str, ...]
+    registry_archive_mirror: bool
+
+
+@dataclass(frozen=True)
+class RegistrySkillOrigin:
+    provenance: "RegistryProvenance"
+    source_id: str = "clawhub"
+
+
+SkillOrigin = Union[GitSkillOrigin, RegistrySkillOrigin]
 
 
 @dataclass

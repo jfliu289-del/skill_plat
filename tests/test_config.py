@@ -1,11 +1,10 @@
 import json
-import re
 import tempfile
 import unittest
 from collections import Counter
 from pathlib import Path
 
-from skill_atlas.config import load_sources, load_taxonomy
+from skill_atlas.config import load_registry, load_sources, load_taxonomy
 from skill_atlas.models import SkillRecord
 
 
@@ -51,8 +50,6 @@ danielrosehill/Useful-AI-Agent-Skills ComposioHQ/awesome-claude-skills
 sickn33/agentic-awesome-skills InternScience/Awesome-Scientific-Skills
 """.split()
 
-ARCHIVE_SOURCES = ["openclaw/skills"]
-
 REFERENCE_SOURCES = [
     "agentskills/agentskills",
     "openclaw/clawhub",
@@ -63,12 +60,23 @@ REFERENCE_SOURCES = [
 EXPECTED_SOURCES = {
     **{source_id: "direct" for source_id in DIRECT_SOURCES},
     **{source_id: "index" for source_id in INDEX_SOURCES},
-    **{source_id: "archive" for source_id in ARCHIVE_SOURCES},
     **{source_id: "reference" for source_id in REFERENCE_SOURCES},
 }
 
 
 class ConfigTests(unittest.TestCase):
+    def setUp(self):
+        self.temporary_directory = tempfile.TemporaryDirectory()
+        self.tempdir = Path(self.temporary_directory.name)
+
+    def tearDown(self):
+        self.temporary_directory.cleanup()
+
+    def write_registry(self, payload):
+        path = self.tempdir / "clawhub.json"
+        path.write_text(json.dumps(payload), encoding="utf-8")
+        return path
+
     def test_taxonomy_has_exact_six_group_routing(self):
         taxonomy = load_taxonomy(ROOT / "config/taxonomy.json")
         actual = {
@@ -111,19 +119,34 @@ class ConfigTests(unittest.TestCase):
             source_id: (f"https://github.com/{source_id}", mode)
             for source_id, mode in EXPECTED_SOURCES.items()
         }
-        self.assertEqual(81, len(sources))
+        self.assertEqual(80, len(sources))
+        self.assertNotIn("openclaw/skills", {item.id for item in sources})
         self.assertEqual(expected, actual)
         self.assertEqual(
-            Counter({"direct": 68, "index": 8, "archive": 1, "reference": 4}),
+            Counter({"direct": 68, "index": 8, "reference": 4}),
             Counter(item.mode for item in sources),
         )
+        index = next(
+            item for item in sources
+            if item.id == "VoltAgent/awesome-openclaw-skills"
+        )
+        self.assertEqual(
+            "6afb5d4e3e6f36ff181a33b3b6f88054348bc70a",
+            index.ref,
+        )
 
-    def test_registry_archive_mirror_flows_from_source_to_skill_record_and_schema(self):
-        sources = load_sources(ROOT / "config/sources.json")
-        mirror_ids = {item.id for item in sources if item.registry_archive_mirror}
-        self.assertEqual({"openclaw/skills"}, mirror_ids)
-
-        archive = next(item for item in sources if item.id == "openclaw/skills")
+    def test_generic_archive_mirror_flows_from_source_to_skill_record_and_schema(self):
+        archive = load_sources(
+            self._write_sources(
+                {
+                    "id": "owner/archive",
+                    "url": "https://github.com/owner/archive",
+                    "mode": "archive",
+                    "include_paths": ["skills/alice/calendar"],
+                    "registry_archive_mirror": True,
+                }
+            )
+        )[0]
         record = SkillRecord(
             source=archive,
             repository=archive.url,
@@ -144,9 +167,18 @@ class ConfigTests(unittest.TestCase):
             provenance["properties"]["registry_archive_mirror"],
         )
 
-    def test_registry_archive_mirror_cannot_be_downgraded_on_skill_record(self):
-        sources = load_sources(ROOT / "config/sources.json")
-        archive = next(item for item in sources if item.id == "openclaw/skills")
+    def test_generic_archive_mirror_cannot_be_downgraded_on_skill_record(self):
+        archive = load_sources(
+            self._write_sources(
+                {
+                    "id": "owner/archive",
+                    "url": "https://github.com/owner/archive",
+                    "mode": "archive",
+                    "include_paths": ["skills/alice/calendar"],
+                    "registry_archive_mirror": True,
+                }
+            )
+        )[0]
         record = SkillRecord(
             source=archive,
             repository=archive.url,
@@ -158,7 +190,15 @@ class ConfigTests(unittest.TestCase):
         )
         self.assertTrue(record.registry_archive_mirror)
 
-        regular = next(item for item in sources if item.id == "anthropics/skills")
+        regular = load_sources(
+            self._write_sources(
+                {
+                    "id": "owner/regular",
+                    "url": "https://github.com/owner/regular",
+                    "mode": "direct",
+                }
+            )
+        )[0]
         regular_record = SkillRecord(
             source=regular,
             repository=regular.url,
@@ -169,25 +209,55 @@ class ConfigTests(unittest.TestCase):
         )
         self.assertFalse(regular_record.registry_archive_mirror)
 
-    def test_schema_requires_true_mirror_marker_for_openclaw_repository(self):
-        schema = json.loads(
-            (ROOT / "schemas/skill-atlas.schema.json").read_text(encoding="utf-8")
-        )
-        provenance = schema["properties"]["provenance"]
-        repository_url = "https://github.com/openclaw/skills"
-        self.assertIsNotNone(
-            re.fullmatch(provenance["properties"]["repository"]["pattern"], repository_url)
-        )
+    def test_clawhub_registry_is_separate_strict_and_safe_by_default(self):
+        registry = load_registry(ROOT / "config/clawhub.json")
 
-        mirror_rule = provenance["allOf"][1]
+        self.assertEqual("clawhub", registry.id)
+        self.assertEqual("https://clawhub.ai", registry.base_url)
         self.assertEqual(
-            {"properties": {"repository": {"const": repository_url}}},
-            mirror_rule["if"],
+            "VoltAgent/awesome-openclaw-skills", registry.index_source_id
         )
-        self.assertEqual(
-            {"properties": {"registry_archive_mirror": {"const": True}}},
-            mirror_rule["then"],
-        )
+        self.assertTrue(registry.non_suspicious_only)
+        self.assertEqual(55 * 1024 * 1024, registry.max_download_bytes)
+        self.assertEqual(10_000, registry.max_files)
+        self.assertEqual(200, registry.max_compression_ratio)
+
+    def test_registry_rejects_nonofficial_base_url_and_unsafe_limits(self):
+        payload = json.loads((ROOT / "config/clawhub.json").read_text())
+        payload["base_url"] = "https://mirror.example"
+        with self.assertRaisesRegex(ValueError, "official ClawHub"):
+            load_registry(self.write_registry(payload))
+
+        invalid_values = {
+            "non_suspicious_only": False,
+            "request_timeout_seconds": float("inf"),
+            "max_workers": 65,
+            "max_attempts": 0,
+            "max_download_bytes": 0,
+            "max_github_archive_bytes": True,
+            "max_uncompressed_bytes": -1,
+            "max_github_uncompressed_bytes": 0,
+            "max_files": 0,
+            "max_compression_ratio": False,
+        }
+        original = json.loads((ROOT / "config/clawhub.json").read_text())
+        for field, value in invalid_values.items():
+            with self.subTest(field=field, value=value):
+                mutated = dict(original)
+                mutated[field] = value
+                with self.assertRaises(ValueError):
+                    load_registry(self.write_registry(mutated))
+
+    def test_registry_requires_exact_fields(self):
+        payload = json.loads((ROOT / "config/clawhub.json").read_text())
+        payload["unexpected"] = True
+        with self.assertRaisesRegex(ValueError, "fields"):
+            load_registry(self.write_registry(payload))
+
+        payload = json.loads((ROOT / "config/clawhub.json").read_text())
+        del payload["max_files"]
+        with self.assertRaisesRegex(ValueError, "fields"):
+            load_registry(self.write_registry(payload))
 
     def test_schema_requires_review_without_license_and_evidence(self):
         schema = json.loads(
@@ -317,6 +387,11 @@ class ConfigTests(unittest.TestCase):
             source = load_sources(path)[0]
             self.assertEqual(["."], source.include_paths)
             self.assertEqual([".git", "vendor/generated"], source.exclude_paths)
+
+    def _write_sources(self, source):
+        path = self.tempdir / "sources.json"
+        path.write_text(json.dumps({"sources": [source]}), encoding="utf-8")
+        return path
 
 
 if __name__ == "__main__":

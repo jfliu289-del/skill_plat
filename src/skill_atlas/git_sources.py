@@ -62,8 +62,11 @@ def sync_source(
     commit = _run_git(["-C", str(checkout), "rev-parse", "HEAD"]).stdout.strip()
     if re.fullmatch(r"[0-9a-fA-F]{40,64}", commit) is None:
         raise SourceSyncError("Git returned an invalid commit identifier")
-    if locked_commit is not None and commit.lower() != locked_commit:
-        raise SourceSyncError("locked synchronization did not resolve the requested commit")
+    requested_commit = locked_commit or (
+        spec.ref if _is_exact_commit(spec.ref) else None
+    )
+    if requested_commit is not None and commit.lower() != requested_commit:
+        raise SourceSyncError("Git synchronization did not resolve the requested commit")
     return ResolvedSource(source=spec, checkout=checkout, commit=commit.lower())
 
 
@@ -137,6 +140,10 @@ def _validate_locked_commit(commit: Optional[str]) -> None:
         )
 
 
+def _is_exact_commit(ref: Optional[str]) -> bool:
+    return isinstance(ref, str) and re.fullmatch(r"[0-9a-f]{40}", ref) is not None
+
+
 def _cache_name(owner: str, repository: str) -> str:
     safe_owner = _SAFE_CACHE_COMPONENT.sub("-", owner).strip(".")
     safe_repository = _SAFE_CACHE_COMPONENT.sub("-", repository).strip(".")
@@ -183,7 +190,7 @@ def _clone_checkout(
     if spec.mode == "archive":
         clone_arguments.extend(["--filter=blob:none", "--no-checkout"])
     clone_arguments.extend(["--depth", "1", "--no-recurse-submodules"])
-    if spec.ref is not None:
+    if spec.ref is not None and not _is_exact_commit(spec.ref):
         clone_arguments.extend(["--branch", spec.ref])
     clone_arguments.extend(["--", spec.url, str(checkout)])
     _run_git(clone_arguments)
@@ -191,7 +198,10 @@ def _clone_checkout(
     if spec.mode == "archive":
         _configure_sparse_checkout(checkout, include_paths)
     target = "HEAD"
-    if locked_commit is not None:
+    requested_commit = locked_commit or (
+        spec.ref if _is_exact_commit(spec.ref) else None
+    )
+    if requested_commit is not None:
         _run_git(
             [
                 "-C",
@@ -202,7 +212,7 @@ def _clone_checkout(
                 "--no-recurse-submodules",
                 "--",
                 "origin",
-                locked_commit,
+                requested_commit,
             ]
         )
         target = "FETCH_HEAD"
