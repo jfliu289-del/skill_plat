@@ -148,3 +148,45 @@ class ImportResult:
     skill_md_hash: str
     excluded_paths: List[str] = field(default_factory=list)
     sidecar_path: Optional[Path] = None
+
+
+@dataclass(frozen=True, order=True)
+class ValidationFailure:
+    """One deterministic, machine-readable catalog validation finding."""
+
+    code: str
+    path: str
+    message: str
+
+
+@dataclass
+class ValidationReport:
+    """Complete structural validation result for a materialized catalog."""
+
+    failures: List[ValidationFailure] = field(default_factory=list)
+    skill_count: int = 0
+    central_record_count: int = 0
+
+    @property
+    def valid(self) -> bool:
+        return not self.failures
+
+    def as_dict(self) -> Dict[str, object]:
+        return {
+            "central_record_count": self.central_record_count,
+            "failure_count": len(self.failures),
+            "failures": [
+                {"code": item.code, "message": item.message, "path": item.path}
+                for item in self.failures
+            ],
+            "skill_count": self.skill_count,
+            "valid": self.valid,
+        }
+
+
+@dataclass(frozen=True)
+class PathCollision:
+    """Paths that collide after portable Unicode/case normalization."""
+
+    normalized_path: str
+    paths: List[str]

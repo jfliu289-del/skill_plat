@@ -18,6 +18,7 @@ _PRODUCTION_REPOSITORY_URL = re.compile(
 )
 _SAFE_CACHE_COMPONENT = re.compile(r"[^A-Za-z0-9_.-]+")
 _SUPPORTED_MODES = {"direct", "index", "archive", "reference"}
+_TEST_SOURCE_ID = re.compile(r"test/(?P<repository>[A-Za-z0-9][A-Za-z0-9_.-]*)")
 
 
 class SourceSecurityError(ValueError):
@@ -37,10 +38,13 @@ class ResolvedSource:
     commit: str
 
 
-def sync_source(spec: SourceSpec, cache_root: Path) -> ResolvedSource:
+def sync_source(
+    spec: SourceSpec, cache_root: Path, locked_commit: Optional[str] = None
+) -> ResolvedSource:
     """Synchronize *spec* without running source-controlled hooks or submodules."""
 
     owner, repository = _validate_source(spec)
+    _validate_locked_commit(locked_commit)
     include_paths = _archive_paths(spec) if spec.mode == "archive" else []
 
     cache_root.mkdir(parents=True, exist_ok=True)
@@ -51,13 +55,15 @@ def sync_source(spec: SourceSpec, cache_root: Path) -> ResolvedSource:
         raise SourceSecurityError("source cache path escapes the cache root")
 
     if checkout.exists():
-        _update_checkout(spec, checkout, include_paths)
+        _update_checkout(spec, checkout, include_paths, locked_commit)
     else:
-        _clone_checkout(spec, checkout, include_paths)
+        _clone_checkout(spec, checkout, include_paths, locked_commit)
 
     commit = _run_git(["-C", str(checkout), "rev-parse", "HEAD"]).stdout.strip()
     if re.fullmatch(r"[0-9a-fA-F]{40,64}", commit) is None:
         raise SourceSyncError("Git returned an invalid commit identifier")
+    if locked_commit is not None and commit.lower() != locked_commit:
+        raise SourceSyncError("locked synchronization did not resolve the requested commit")
     return ResolvedSource(source=spec, checkout=checkout, commit=commit.lower())
 
 
@@ -75,8 +81,9 @@ def _validate_source(spec: SourceSpec) -> Tuple[str, str]:
         return owner, repository
 
     parsed = urlsplit(spec.url)
+    test_match = _TEST_SOURCE_ID.fullmatch(spec.id)
     if (
-        spec.id == "test/source"
+        test_match is not None
         and parsed.scheme == "file"
         and parsed.netloc in {"", "localhost"}
         and not parsed.query
@@ -85,7 +92,7 @@ def _validate_source(spec: SourceSpec) -> Tuple[str, str]:
         local_path = Path(unquote(parsed.path))
         if not local_path.is_absolute():
             raise SourceSecurityError("test file URL must contain an absolute path")
-        return "test", "source"
+        return "test", test_match.group("repository")
 
     raise SourceSecurityError("production sources must be exact HTTPS GitHub repository URLs")
 
@@ -114,6 +121,13 @@ def _validate_git_ref(ref: Optional[str]) -> None:
         )
     ):
         raise SourceSecurityError(f"unsafe Git ref: {ref!r}")
+
+
+def _validate_locked_commit(commit: Optional[str]) -> None:
+    if commit is not None and re.fullmatch(r"[0-9a-f]{40}", commit) is None:
+        raise SourceSecurityError(
+            "locked commit must be a lowercase 40-character SHA"
+        )
 
 
 def _cache_name(owner: str, repository: str) -> str:
@@ -152,7 +166,12 @@ def _validated_relative_path(value: str) -> str:
     return value
 
 
-def _clone_checkout(spec: SourceSpec, checkout: Path, include_paths: List[str]) -> None:
+def _clone_checkout(
+    spec: SourceSpec,
+    checkout: Path,
+    include_paths: List[str],
+    locked_commit: Optional[str],
+) -> None:
     clone_arguments = ["clone"]
     if spec.mode == "archive":
         clone_arguments.extend(["--filter=blob:none", "--no-checkout"])
@@ -164,10 +183,31 @@ def _clone_checkout(spec: SourceSpec, checkout: Path, include_paths: List[str]) 
 
     if spec.mode == "archive":
         _configure_sparse_checkout(checkout, include_paths)
-    _run_git(["-C", str(checkout), "checkout", "--detach", "--force", "HEAD"])
+    target = "HEAD"
+    if locked_commit is not None:
+        _run_git(
+            [
+                "-C",
+                str(checkout),
+                "fetch",
+                "--depth",
+                "1",
+                "--no-recurse-submodules",
+                "--",
+                "origin",
+                locked_commit,
+            ]
+        )
+        target = "FETCH_HEAD"
+    _run_git(["-C", str(checkout), "checkout", "--detach", "--force", target])
 
 
-def _update_checkout(spec: SourceSpec, checkout: Path, include_paths: List[str]) -> None:
+def _update_checkout(
+    spec: SourceSpec,
+    checkout: Path,
+    include_paths: List[str],
+    locked_commit: Optional[str],
+) -> None:
     git_metadata = _validated_git_metadata(checkout)
 
     configured_url = _run_git(
@@ -176,7 +216,7 @@ def _update_checkout(spec: SourceSpec, checkout: Path, include_paths: List[str])
     if configured_url != spec.url:
         raise SourceSecurityError("existing source cache has an unexpected origin URL")
 
-    requested_ref = spec.ref if spec.ref is not None else "HEAD"
+    requested_ref = locked_commit or (spec.ref if spec.ref is not None else "HEAD")
     _run_git(
         [
             "-C",

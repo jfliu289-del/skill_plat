@@ -241,6 +241,21 @@ class GitSourceTests(unittest.TestCase):
         )
         self.assertNotEqual(0, symbolic_ref.returncode)
 
+    def test_locked_sync_checks_out_exact_commit_without_advancing_to_remote_head(self):
+        remote, locked_sha = make_local_fixture_repository(self.tempdir)
+        source = SourceSpec.for_test(remote.as_uri())
+        first = sync_source(source, self.cache)
+        self.assertEqual(locked_sha, first.commit)
+
+        (remote / "NEW-HEAD.txt").write_text("newer\n", encoding="utf-8")
+        newer_sha = _commit_all(remote, "advance remote")
+        self.assertNotEqual(locked_sha, newer_sha)
+
+        resolved = sync_source(source, self.cache, locked_commit=locked_sha)
+
+        self.assertEqual(locked_sha, resolved.commit)
+        self.assertFalse((resolved.checkout / "NEW-HEAD.txt").exists())
+
     def test_rejects_git_metadata_symlinked_outside_checkout(self):
         remote, _ = make_local_fixture_repository(self.tempdir)
         source = SourceSpec.for_test(remote.as_uri())
