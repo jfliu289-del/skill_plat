@@ -141,6 +141,115 @@ class RegistryDiscovery:
     unresolved: Tuple[Dict[str, object], ...]
 
 
+@dataclass(frozen=True, order=True)
+class RegistryFile:
+    """One immutable file declared by a ClawHub version manifest."""
+
+    path: str
+    size: int
+    sha256: str
+    content_type: Optional[str]
+
+
+@dataclass(frozen=True)
+class RegistryResolution:
+    """An exact, currently public and clean ClawHub version."""
+
+    claim_id: str
+    claim: RegistryClaim
+    owner_handle: str
+    owner_id: Optional[str]
+    slug: str
+    version: str
+    published_at: int
+    canonical_url: str
+    version_metadata_sha256: str
+    files: Tuple[RegistryFile, ...]
+    security: Dict[str, object]
+
+
+@dataclass(frozen=True)
+class ResolvedRegistryLockEntry:
+    """Stable registry lock data, completed with artifact fields by Task 8."""
+
+    claim_id: str
+    status: str
+    claim: RegistryClaim
+    owner_handle: str
+    owner_id: Optional[str]
+    slug: str
+    version: str
+    published_at: int
+    canonical_url: str
+    version_metadata_sha256: str
+    files: Tuple[RegistryFile, ...]
+    security: Dict[str, object]
+    artifact_kind: Optional[str] = None
+    archive_sha256: Optional[str] = None
+    registry_meta_sha256: Optional[str] = None
+    github_handoff: Optional[Dict[str, object]] = None
+
+    @classmethod
+    def from_resolution(
+        cls, resolution: "RegistryResolution"
+    ) -> "ResolvedRegistryLockEntry":
+        return cls(
+            claim_id=resolution.claim_id,
+            status="resolved",
+            claim=resolution.claim,
+            owner_handle=resolution.owner_handle,
+            owner_id=resolution.owner_id,
+            slug=resolution.slug,
+            version=resolution.version,
+            published_at=resolution.published_at,
+            canonical_url=resolution.canonical_url,
+            version_metadata_sha256=resolution.version_metadata_sha256,
+            files=resolution.files,
+            security=resolution.security,
+        )
+
+
+@dataclass(frozen=True)
+class UnresolvedRegistryLockEntry:
+    """Stable failure record for one immutable registry claim."""
+
+    claim_id: str
+    status: str
+    claim: RegistryClaim
+    failure: Dict[str, object]
+
+
+RegistryLockEntry = Union[
+    ResolvedRegistryLockEntry,
+    UnresolvedRegistryLockEntry,
+]
+
+
+@dataclass(frozen=True)
+class RegistryResolveResult:
+    resolution: Optional[RegistryResolution]
+    unresolved_lock_entry: Optional[UnresolvedRegistryLockEntry]
+    failure: Optional[Dict[str, object]]
+    blocking: bool
+
+
+@dataclass(frozen=True)
+class RegistryGateResult:
+    allowed: bool
+    failure: Optional[Dict[str, object]]
+    blocking: bool
+    security: Optional[Dict[str, object]] = None
+
+
+@dataclass(frozen=True)
+class RegistryResolutionResult:
+    resolutions: Tuple[RegistryResolution, ...]
+    unresolved_lock_entries: Tuple[UnresolvedRegistryLockEntry, ...]
+    unresolved: Tuple[Dict[str, object], ...]
+    blocking_failures: int
+    stats: Dict[str, int]
+
+
 @dataclass(frozen=True)
 class GitSkillOrigin:
     repository: str
