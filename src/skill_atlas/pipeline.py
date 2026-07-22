@@ -253,11 +253,19 @@ def sync_source_graph(
     ]:
         provenance = sorted(provenance_by_url.get(spec.url, set()))
         if spec.mode == "archive" and not spec.include_paths:
-            outcome.unresolved.append(
-                _unresolved(spec.id, "archive-has-no-resolved-skill-paths")
+            failure = _unresolved(
+                spec.id, "archive-has-no-resolved-skill-paths"
             )
+            outcome.unresolved.append(failure)
             outcome.lock_entries.append(
-                _lock_entry(spec, None, "unresolved", provenance, is_configured)
+                _lock_entry(
+                    spec,
+                    None,
+                    "unresolved",
+                    provenance,
+                    is_configured,
+                    failure=failure,
+                )
             )
             continue
         if spec.url in resolved_by_url or spec.url in failed_urls:
@@ -570,19 +578,52 @@ def _try_sync(
     locked_commit = None
     if locked is not None:
         locked_entry = locked.get((spec.id, spec.url))
-        if locked_entry is None or locked_entry.get("status") != "resolved":
-            outcome.unresolved.append(_unresolved(spec.id, "missing-resolved-lock-entry"))
+        if locked_entry is None:
+            failure = _unresolved(spec.id, "missing-resolved-lock-entry")
+            outcome.unresolved.append(failure)
             outcome.lock_entries.append(
-                _lock_entry(spec, None, "unresolved", provenance, configured)
+                _lock_entry(
+                    spec,
+                    None,
+                    "unresolved",
+                    provenance,
+                    configured,
+                    failure=failure,
+                )
+            )
+            if configured and spec.mode == "direct":
+                outcome.configured_direct_failures += 1
+            return None
+        locked_status = locked_entry.get("status")
+        if locked_status != "resolved":
+            failure = _locked_failure(locked_entry, spec.id)
+            outcome.unresolved.append(failure)
+            outcome.lock_entries.append(
+                _lock_entry(
+                    spec,
+                    None,
+                    str(locked_status),
+                    provenance,
+                    configured,
+                    failure=failure,
+                )
             )
             if configured and spec.mode == "direct":
                 outcome.configured_direct_failures += 1
             return None
         locked_commit = locked_entry.get("commit")
         if not isinstance(locked_commit, str):
-            outcome.unresolved.append(_unresolved(spec.id, "invalid-lock-commit"))
+            failure = _unresolved(spec.id, "invalid-lock-commit")
+            outcome.unresolved.append(failure)
             outcome.lock_entries.append(
-                _lock_entry(spec, None, "unresolved", provenance, configured)
+                _lock_entry(
+                    spec,
+                    None,
+                    "unresolved",
+                    provenance,
+                    configured,
+                    failure=failure,
+                )
             )
             if configured and spec.mode == "direct":
                 outcome.configured_direct_failures += 1
@@ -590,11 +631,19 @@ def _try_sync(
     try:
         resolved = synchronizer(spec, cache_root, locked_commit=locked_commit)
     except (OSError, ValueError, RuntimeError) as error:
-        outcome.unresolved.append(
-            _unresolved(spec.id, "inaccessible", detail=type(error).__name__)
+        failure = _unresolved(
+            spec.id, "inaccessible", detail=type(error).__name__
         )
+        outcome.unresolved.append(failure)
         outcome.lock_entries.append(
-            _lock_entry(spec, None, "inaccessible", provenance, configured)
+            _lock_entry(
+                spec,
+                None,
+                "inaccessible",
+                provenance,
+                configured,
+                failure=failure,
+            )
         )
         if configured and spec.mode == "direct":
             outcome.configured_direct_failures += 1
@@ -615,12 +664,14 @@ def _lock_entry(
     status: str,
     provenance: Sequence[str],
     configured: bool,
+    failure: Optional[Dict[str, object]] = None,
 ) -> Dict[str, object]:
     return {
         "commit": commit,
         "configured": configured,
         "default_categories": sorted(set(spec.default_categories)),
         "exclude_paths": sorted(set(spec.exclude_paths)),
+        "failure": failure,
         "id": spec.id,
         "include_paths": sorted(set(spec.include_paths)),
         "index_provenance": sorted(set(provenance)),
@@ -661,8 +712,31 @@ def _read_locked_sources(path: Path) -> Dict[Tuple[str, str], Dict[str, object]]
             )
         if status != "resolved" and commit is not None:
             raise ValueError("unresolved source lock entries cannot claim a commit")
+        if status == "resolved":
+            failure = item.get("failure")
+            if failure is not None:
+                raise ValueError("resolved source lock entries cannot claim a failure")
+        else:
+            _locked_failure(item, item["id"])
         result[key] = item
     return result
+
+
+def _locked_failure(
+    entry: Dict[str, object], expected_source_id: str
+) -> Dict[str, object]:
+    failure = entry.get("failure")
+    if not isinstance(failure, dict):
+        raise ValueError(
+            "non-resolved source lock entries require failure metadata"
+        )
+    reason = failure.get("reason")
+    source_id = failure.get("source_id")
+    if not isinstance(reason, str) or not reason:
+        raise ValueError("source lock failure requires a non-empty reason")
+    if source_id != expected_source_id:
+        raise ValueError("source lock failure source_id does not match its entry")
+    return dict(failure)
 
 
 def _restore_locked_source_fields(

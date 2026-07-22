@@ -215,6 +215,63 @@ class CliTests(unittest.TestCase):
         unresolved = json.loads((self.output / "reports/unresolved.json").read_text())
         self.assertTrue(any(item["source_id"] == "test/missing" for item in unresolved["unresolved"]))
 
+    def test_locked_rebuild_preserves_nonresolved_source_reports_byte_for_byte(self):
+        missing_reference = SourceSpec(
+            id="test/missing-reference",
+            url="https://github.com/test/missing-reference",
+            mode="reference",
+        )
+        selected_sources = [self.sources[0], missing_reference]
+
+        code, _, stderr = self.run_cli("all", sources=selected_sources)
+
+        self.assertEqual(0, code, stderr)
+        report_names = (
+            "sources.lock.json",
+            "unresolved.json",
+            "summary.json",
+        )
+        before = {
+            name: (self.output / "reports" / name).read_bytes()
+            for name in report_names
+        }
+        first_lock = json.loads(before["sources.lock.json"])
+        missing_entry = next(
+            item
+            for item in first_lock["sources"]
+            if item["id"] == missing_reference.id
+        )
+        self.assertEqual("inaccessible", missing_entry["status"])
+        self.assertEqual("inaccessible", missing_entry["failure"]["reason"])
+        self.assertEqual(
+            missing_reference.id, missing_entry["failure"]["source_id"]
+        )
+
+        locked_sync_calls = []
+
+        def locked_synchronizer(spec, cache_root, locked_commit=None):
+            locked_sync_calls.append(spec.id)
+            return self.local_synchronizer(
+                spec, cache_root, locked_commit=locked_commit
+            )
+
+        code, _, stderr = self.run_cli(
+            "all",
+            "--locked",
+            sources=selected_sources,
+            synchronizer=locked_synchronizer,
+        )
+
+        self.assertEqual(0, code, stderr)
+        self.assertEqual(
+            before,
+            {
+                name: (self.output / "reports" / name).read_bytes()
+                for name in report_names
+            },
+        )
+        self.assertNotIn(missing_reference.id, locked_sync_calls)
+
     def test_collision_fails_before_publish_and_preserves_old_catalog_bytes(self):
         code, _, stderr = self.run_cli("all")
         self.assertEqual(0, code, stderr)
