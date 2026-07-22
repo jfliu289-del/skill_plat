@@ -2,7 +2,6 @@
 
 import argparse
 import json
-import os
 from pathlib import Path
 import sys
 from typing import Callable, List, Optional, Sequence
@@ -10,6 +9,7 @@ from typing import Callable, List, Optional, Sequence
 from .config import load_sources, load_taxonomy
 from .git_sources import sync_source
 from .models import SourceSpec
+from .safe_io import atomic_write_text
 from .pipeline import (
     build_catalog,
     read_summary,
@@ -38,7 +38,10 @@ def main(
             _print_json(summary)
             return 0
 
-        taxonomy = load_taxonomy(arguments.taxonomy)
+        sources_path, taxonomy_path = _config_paths(
+            arguments.config, arguments.taxonomy
+        )
+        taxonomy = load_taxonomy(taxonomy_path)
         if arguments.command == "validate":
             report = validate_catalog(root, taxonomy)
             payload = report.as_dict()
@@ -58,7 +61,7 @@ def main(
                 return 1
             return 0
 
-        sources = source_loader(arguments.config)
+        sources = source_loader(sources_path)
         if arguments.command == "sync":
             outcome = sync_source_graph(
                 sources,
@@ -102,16 +105,16 @@ def main(
         failed = (
             not built.published
             or outcome.configured_direct_failures > 0
-            or built.import_failures > 0
+            or built.blocking_import_failures > 0
             or bool(built.validation.get("failures"))
         )
         if not built.published:
             print(built.error or "catalog was not published", file=sys.stderr)
         if outcome.configured_direct_failures:
             print("one or more configured direct sources are inaccessible", file=sys.stderr)
-        if built.import_failures:
+        if built.blocking_import_failures:
             print(
-                f"{built.import_failures} Skill import failure(s) were recorded",
+                f"{built.blocking_import_failures} blocking Skill import failure(s) were recorded",
                 file=sys.stderr,
             )
         return 1 if failed else 0
@@ -125,9 +128,9 @@ def _parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command", required=True)
     for command in ("sync", "build", "validate", "report", "all"):
         subparser = subparsers.add_parser(command)
-        subparser.add_argument("--config", type=Path, default=Path("config/sources.json"))
+        subparser.add_argument("--config", type=Path, default=Path("config"))
         subparser.add_argument(
-            "--taxonomy", type=Path, default=Path("config/taxonomy.json")
+            "--taxonomy", type=Path, default=None
         )
         subparser.add_argument("--root", type=Path, default=Path("."))
         subparser.add_argument(
@@ -160,19 +163,26 @@ def _print_json(payload: object) -> None:
 
 
 def _write_json_atomically(path: Path, payload: object) -> None:
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    if path.is_symlink():
-        raise ValueError("report output must not be a symlink")
-    temporary = path.with_name(f".{path.name}.tmp")
-    temporary.write_text(
+    atomic_write_text(
+        Path(path),
         json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
-        encoding="utf-8",
     )
-    os.replace(temporary, path)
 
 
 def _locked_path(value: Optional[Path], root: Path) -> Optional[Path]:
     if value == Path("__USE_ROOT_LOCK__"):
         return root / "reports" / "sources.lock.json"
     return value
+
+
+def _config_paths(
+    config: Path, explicit_taxonomy: Optional[Path]
+) -> tuple:
+    config = Path(config)
+    if config.is_dir():
+        sources = config / "sources.json"
+        default_taxonomy = config / "taxonomy.json"
+    else:
+        sources = config
+        default_taxonomy = config.parent / "taxonomy.json"
+    return sources, explicit_taxonomy or default_taxonomy

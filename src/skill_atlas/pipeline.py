@@ -11,6 +11,7 @@ from typing import Callable, Dict, Iterable, List, Optional, Sequence, Tuple
 from urllib.parse import urlsplit
 
 from .classifier import classify
+from .config import _source_path_list
 from .discovery import (
     discover_github_targets,
     discover_openclaw_archive_paths,
@@ -25,6 +26,7 @@ from .materialize import (
     materialize,
 )
 from .models import Classification, ImportResult, SkillRecord, SourceSpec, Taxonomy
+from .safe_io import atomic_write_text
 from .validate import detect_path_collisions, validate_catalog
 
 
@@ -72,7 +74,23 @@ class BuildOutcome:
     validation: Dict[str, object]
     unresolved: List[Dict[str, object]] = field(default_factory=list)
     error: Optional[str] = None
-    import_failures: int = 0
+    blocking_import_failures: int = 0
+    nonblocking_import_failures: int = 0
+
+    @property
+    def import_failures(self) -> int:
+        return self.blocking_import_failures + self.nonblocking_import_failures
+
+
+class PublicationRecoveryError(RuntimeError):
+    """Publication failed and old generated data requires manual recovery."""
+
+    def __init__(self, recovery_path: Path, cause: BaseException):
+        self.recovery_path = recovery_path
+        super().__init__(
+            "catalog publication rollback failed; old generated data is retained at "
+            f"{recovery_path}: {cause}"
+        )
 
 
 @dataclass
@@ -93,9 +111,14 @@ def sync_source_graph(
     locked = _read_locked_sources(locked_path) if locked_path is not None else None
     outcome = SyncOutcome()
     configured = [replace(item) for item in configured_sources]
+    consumed_locked: set = set()
     if locked is not None:
         for item in configured:
-            _restore_locked_source_fields(item, locked.get((item.id, item.url)))
+            key = (item.id, item.url)
+            _restore_locked_source_fields(
+                item, locked.get(key), expected_configured=True
+            )
+            consumed_locked.add(key)
     provenance_by_url: Dict[str, set] = {item.url: set() for item in configured}
     resolved_by_url: Dict[str, SyncedSource] = {}
     failed_urls = set()
@@ -210,7 +233,18 @@ def sync_source_graph(
         )
         if locked is not None:
             _restore_locked_source_fields(
-                derived[-1], locked.get((derived[-1].id, derived[-1].url))
+                derived[-1],
+                locked.get((derived[-1].id, derived[-1].url)),
+                expected_configured=False,
+            )
+            consumed_locked.add((derived[-1].id, derived[-1].url))
+
+    if locked is not None:
+        unconsumed = sorted(set(locked) - consumed_locked)
+        if unconsumed:
+            formatted = ", ".join(f"{source_id} ({url})" for source_id, url in unconsumed)
+            raise ValueError(
+                f"source lock/config mismatch: unconsumed source entries: {formatted}"
             )
 
     for spec, is_configured in [
@@ -262,6 +296,7 @@ def sync_source_graph(
 def write_sync_reports(root: Path, outcome: SyncOutcome) -> None:
     """Atomically write the source lock and unresolved report for ``sync``."""
 
+    _validate_managed_containers(Path(root), names=("reports",))
     reports = Path(root) / "reports"
     reports.mkdir(parents=True, exist_ok=True)
     _write_json(reports / "sources.lock.json", outcome.lock_payload())
@@ -272,10 +307,13 @@ def build_catalog(root: Path, taxonomy: Taxonomy, sync: SyncOutcome) -> BuildOut
     """Build in a sibling staging tree and publish only after validation."""
 
     root = Path(root)
+    _validate_managed_containers(root)
     root.parent.mkdir(parents=True, exist_ok=True)
     unresolved = list(sync.unresolved)
     candidates: List[_Candidate] = []
     parse_failures = 0
+    blocking_import_failures = 0
+    nonblocking_import_failures = 0
 
     for synced in sync.sources:
         spec = synced.resolved.source
@@ -292,6 +330,10 @@ def build_catalog(root: Path, taxonomy: Taxonomy, sync: SyncOutcome) -> BuildOut
                 _unresolved(spec.id, "skill-discovery-failure", detail=type(error).__name__)
             )
             parse_failures += 1
+            if _is_blocking_import_source(synced):
+                blocking_import_failures += 1
+            else:
+                nonblocking_import_failures += 1
             continue
         for skill_root in skill_roots:
             source_path = skill_root.relative_to(synced.resolved.checkout).as_posix() or "."
@@ -325,6 +367,10 @@ def build_catalog(root: Path, taxonomy: Taxonomy, sync: SyncOutcome) -> BuildOut
                     )
                 )
                 parse_failures += 1
+                if _is_blocking_import_source(synced):
+                    blocking_import_failures += 1
+                else:
+                    nonblocking_import_failures += 1
 
     candidates.sort(key=lambda item: (item.record.repository, item.record.source_path))
     projected_paths = _projected_output_paths(candidates, taxonomy)
@@ -357,7 +403,8 @@ def build_catalog(root: Path, taxonomy: Taxonomy, sync: SyncOutcome) -> BuildOut
             },
             unresolved=_stable_unresolved(unresolved),
             error="portable path collision detected before materialization",
-            import_failures=parse_failures + len(collisions),
+            blocking_import_failures=blocking_import_failures + len(collisions),
+            nonblocking_import_failures=nonblocking_import_failures,
         )
 
     user_conflicts = _managed_root_user_content(root)
@@ -381,7 +428,8 @@ def build_catalog(root: Path, taxonomy: Taxonomy, sync: SyncOutcome) -> BuildOut
             },
             unresolved=_stable_unresolved(unresolved),
             error="user content inside a managed Skill root was preserved; build not published",
-            import_failures=parse_failures + len(user_conflicts),
+            blocking_import_failures=blocking_import_failures + len(user_conflicts),
+            nonblocking_import_failures=nonblocking_import_failures,
         )
 
     staging_parent = Path(
@@ -389,6 +437,7 @@ def build_catalog(root: Path, taxonomy: Taxonomy, sync: SyncOutcome) -> BuildOut
     )
     staging = staging_parent / "catalog"
     results: List[ImportResult] = []
+    preserve_staging = False
     try:
         _prepare_staging(root, staging)
         existing_paths = _relative_tree_paths(staging)
@@ -413,7 +462,10 @@ def build_catalog(root: Path, taxonomy: Taxonomy, sync: SyncOutcome) -> BuildOut
                 },
                 unresolved=_stable_unresolved(unresolved),
                 error="path collision with preserved user content",
-                import_failures=parse_failures + len(combined_collisions),
+                blocking_import_failures=(
+                    blocking_import_failures + len(combined_collisions)
+                ),
+                nonblocking_import_failures=nonblocking_import_failures,
             )
 
         for candidate in candidates:
@@ -436,7 +488,11 @@ def build_catalog(root: Path, taxonomy: Taxonomy, sync: SyncOutcome) -> BuildOut
                     )
                 )
 
-        materialization_failures = len(candidates) - len(results)
+                if _is_blocking_import_source(candidate.synced):
+                    blocking_import_failures += 1
+                else:
+                    nonblocking_import_failures += 1
+
         stable_unresolved = _stable_unresolved(unresolved)
         summary = _summary(results, stable_unresolved, parse_failures, staging)
         _write_build_reports(staging, sync, results, stable_unresolved, summary)
@@ -458,18 +514,25 @@ def build_catalog(root: Path, taxonomy: Taxonomy, sync: SyncOutcome) -> BuildOut
                 validation=validation_payload,
                 unresolved=stable_unresolved,
                 error="staging catalog failed structural validation",
-                import_failures=parse_failures + materialization_failures,
+                blocking_import_failures=blocking_import_failures,
+                nonblocking_import_failures=nonblocking_import_failures,
             )
-        _publish_generated_tree(staging, root)
+        try:
+            _publish_generated_tree(staging, root)
+        except PublicationRecoveryError:
+            preserve_staging = True
+            raise
         return BuildOutcome(
             published=True,
             summary=summary,
             validation=validation_payload,
             unresolved=stable_unresolved,
-            import_failures=parse_failures + materialization_failures,
+            blocking_import_failures=blocking_import_failures,
+            nonblocking_import_failures=nonblocking_import_failures,
         )
     finally:
-        shutil.rmtree(staging_parent, ignore_errors=True)
+        if not preserve_staging:
+            shutil.rmtree(staging_parent, ignore_errors=True)
 
 
 def read_summary(root: Path) -> Dict[str, int]:
@@ -489,6 +552,10 @@ def read_summary(root: Path) -> Dict[str, int]:
     ):
         raise ValueError("summary report has an invalid structure")
     return payload
+
+
+def _is_blocking_import_source(synced: SyncedSource) -> bool:
+    return synced.configured and synced.resolved.source.mode == "direct"
 
 
 def _try_sync(
@@ -599,13 +666,25 @@ def _read_locked_sources(path: Path) -> Dict[Tuple[str, str], Dict[str, object]]
 
 
 def _restore_locked_source_fields(
-    spec: SourceSpec, entry: Optional[Dict[str, object]]
+    spec: SourceSpec,
+    entry: Optional[Dict[str, object]],
+    expected_configured: bool,
 ) -> None:
     if entry is None:
-        return
+        raise ValueError(
+            f"source lock/config mismatch: missing entry for {spec.id}"
+        )
     mode = entry.get("mode")
     if mode not in {"direct", "index", "archive", "reference"}:
         raise ValueError("source lock entry has an invalid mode")
+    if mode != spec.mode:
+        raise ValueError(
+            f"source lock/config mode mismatch for {spec.id}: {mode} != {spec.mode}"
+        )
+    if entry.get("configured") is not expected_configured:
+        raise ValueError(
+            f"source lock/config role mismatch for {spec.id}"
+        )
     include_paths = _locked_string_list(entry, "include_paths")
     exclude_paths = _locked_string_list(entry, "exclude_paths")
     default_categories = _locked_string_list(entry, "default_categories")
@@ -618,13 +697,15 @@ def _restore_locked_source_fields(
         not isinstance(index_source_id, str) or not index_source_id
     ):
         raise ValueError("source lock index_source_id must be a string or null")
-    spec.mode = mode
     spec.include_paths = include_paths
     spec.exclude_paths = exclude_paths
     spec.default_categories = default_categories
     spec.redistribution_review = redistribution_review
     spec.registry_archive_mirror = registry_archive_mirror
-    spec.index_source_id = index_source_id
+    if index_source_id != spec.index_source_id:
+        raise ValueError(
+            f"source lock/config index role mismatch for {spec.id}"
+        )
 
 
 def _locked_string_list(entry: Dict[str, object], name: str) -> List[str]:
@@ -633,7 +714,12 @@ def _locked_string_list(entry: Dict[str, object], name: str) -> List[str]:
         not isinstance(item, str) or not item for item in value
     ):
         raise ValueError(f"source lock {name} must be an array of strings")
-    return list(value)
+    return _source_path_list(
+        {name: value},
+        name,
+        [],
+        allow_current=(name == "include_paths"),
+    )
 
 
 def _github_source_id(url: str) -> str:
@@ -721,6 +807,19 @@ def _prepare_staging(root: Path, staging: Path) -> None:
             path.unlink()
         elif path.exists():
             shutil.rmtree(path)
+
+
+def _validate_managed_containers(
+    root: Path, names: Sequence[str] = ("skills", "licenses", "reports")
+) -> None:
+    if root.is_symlink() or (root.exists() and not root.is_dir()):
+        raise ValueError("catalog root must be a real directory")
+    for name in names:
+        path = root / name
+        if path.is_symlink() or (path.exists() and not path.is_dir()):
+            raise ValueError(
+                f"managed container {name} must be a real directory"
+            )
 
 
 def _managed_root_user_content(root: Path) -> List[str]:
@@ -868,16 +967,19 @@ def _publish_generated_tree(staging: Path, root: Path) -> None:
                 moved_old.append(name)
             os.replace(staging / name, destination)
             published.append(name)
-    except OSError:
-        for name in reversed(published):
-            destination = root / name
-            failed_new = staging / f"failed-{name}"
-            if destination.exists() or destination.is_symlink():
-                os.replace(destination, failed_new)
-        for name in reversed(moved_old):
-            old = backup / name
-            if old.exists() or old.is_symlink():
-                os.replace(old, root / name)
+    except OSError as publish_error:
+        try:
+            for name in reversed(published):
+                destination = root / name
+                failed_new = staging / f"failed-{name}"
+                if destination.exists() or destination.is_symlink():
+                    os.replace(destination, failed_new)
+            for name in reversed(moved_old):
+                old = backup / name
+                if old.exists() or old.is_symlink():
+                    os.replace(old, root / name)
+        except OSError as recovery_error:
+            raise PublicationRecoveryError(backup, recovery_error) from publish_error
         raise
 
 
@@ -889,7 +991,4 @@ def _write_json(path: Path, payload: object) -> None:
 
 
 def _write_text(path: Path, text: str) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_name(f".{path.name}.tmp")
-    temporary.write_text(text, encoding="utf-8")
-    os.replace(temporary, path)
+    atomic_write_text(path, text)

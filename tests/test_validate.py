@@ -23,7 +23,9 @@ class ValidateTests(unittest.TestCase):
     def tearDown(self):
         self.temporary_directory.cleanup()
 
-    def _materialize(self, owner: str, name: str, payload: bytes = b"asset\n"):
+    def _materialize(
+        self, owner: str, name: str, payload: bytes = b"asset\n", nested=False
+    ):
         source_root = self.tempdir / "source" / owner / name
         (source_root / "assets").mkdir(parents=True)
         skill_bytes = (
@@ -35,6 +37,13 @@ class ValidateTests(unittest.TestCase):
         (source_root / "assets" / "skill-atlas.json").write_text(
             '{"upstream": true}\n', encoding="utf-8"
         )
+        if nested:
+            embedded = source_root / "references" / "embedded"
+            embedded.mkdir(parents=True)
+            (embedded / "SKILL.md").write_text(
+                "---\nname: embedded\ndescription: Embedded upstream resource.\n---\n",
+                encoding="utf-8",
+            )
         source = SourceSpec(
             id=f"{owner}/tools",
             url=f"https://github.com/{owner}/tools",
@@ -202,6 +211,58 @@ class ValidateTests(unittest.TestCase):
             ["skills/Cafe\u0301/SKILL.md", "skills/Caf\u00e9/SKILL.md"],
             collisions[1].paths,
         )
+
+    def test_nested_skill_md_inside_legal_leaf_is_bundle_content_not_an_extra_root(self):
+        result = self._materialize("acme", "outer", nested=True)
+        self._write_reports([result])
+
+        report = validate_catalog(self.catalog, self.taxonomy)
+
+        self.assertEqual([], report.failures)
+        self.assertEqual(1, report.skill_count)
+
+    @unittest.skipUnless(hasattr(Path, "symlink_to"), "requires symlink support")
+    def test_symlink_outside_any_legal_skill_root_is_a_validation_failure(self):
+        result = self._materialize("acme", "one")
+        self._write_reports([result])
+        outside = self.tempdir / "outside"
+        outside.mkdir()
+        (self.catalog / "skills" / "orphan-link").symlink_to(
+            outside, target_is_directory=True
+        )
+
+        codes = {
+            item.code for item in validate_catalog(self.catalog, self.taxonomy).failures
+        }
+
+        self.assertIn("unexpected-symlink", codes)
+
+    def test_reconstructs_and_rejects_forged_full_catalog_route(self):
+        result = self._materialize("acme", "one")
+        old_root = self.catalog / result.relative_path
+        parts = list(result.relative_path.parts)
+        parts[3] = "impostor"
+        forged_relative = Path(*parts)
+        forged_root = self.catalog / forged_relative
+        forged_root.parent.mkdir(parents=True)
+        old_root.rename(forged_root)
+        reports = self.catalog / "reports"
+        reports.mkdir()
+        sidecar = json.loads((forged_root / "skill-atlas.json").read_text())
+        (reports / "catalog.jsonl").write_text(
+            json.dumps(
+                {"catalog_path": forged_relative.as_posix(), **sidecar},
+                sort_keys=True,
+            )
+            + "\n"
+        )
+        (reports / "duplicates.json").write_text('{"duplicates": {}}\n')
+
+        codes = {
+            item.code for item in validate_catalog(self.catalog, self.taxonomy).failures
+        }
+
+        self.assertIn("catalog-path-mismatch", codes)
 
 
 if __name__ == "__main__":

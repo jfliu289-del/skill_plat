@@ -3,13 +3,22 @@
 import hashlib
 import json
 from collections import defaultdict
+import os
 from pathlib import Path
 import re
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 import unicodedata
 
-from .materialize import SIDECAR_NAME, hash_materialized_skill
-from .models import PathCollision, Taxonomy, ValidationFailure, ValidationReport
+from .materialize import SIDECAR_NAME, catalog_path, hash_materialized_skill
+from .models import (
+    Classification,
+    PathCollision,
+    SkillRecord,
+    SourceSpec,
+    Taxonomy,
+    ValidationFailure,
+    ValidationReport,
+)
 
 
 _COMMIT = re.compile(r"^[0-9a-f]{40}$")
@@ -110,7 +119,7 @@ def validate_catalog(root: Path, taxonomy: Taxonomy) -> ValidationReport:
             continue
         sidecars[relative_skill] = payload
         _validate_sidecar(payload, sidecar_relative, taxonomy, failures)
-        _validate_route(payload, relative_skill, taxonomy, failures)
+        _validate_route(payload, skill_root, relative_skill, taxonomy, failures)
         _validate_hashes(payload, skill_root, relative_skill, failures)
 
     central_records = _validate_central_catalog(root, sidecars, failures)
@@ -130,9 +139,32 @@ def _discover_materialized_skills(
             ValidationFailure("missing-skills-root", "skills", "skills root is missing")
         )
         return []
+    skill_documents = []
+    symlinks = []
+    for current, directory_names, file_names in os.walk(
+        skills_root, topdown=True, followlinks=False
+    ):
+        current_path = Path(current)
+        retained_directories = []
+        for name in sorted(directory_names):
+            child = current_path / name
+            if child.is_symlink():
+                symlinks.append(child)
+            else:
+                retained_directories.append(name)
+        directory_names[:] = retained_directories
+        for name in sorted(file_names):
+            path = current_path / name
+            if path.is_symlink():
+                symlinks.append(path)
+            if name == "SKILL.md":
+                skill_documents.append(path)
+
     roots = []
-    for path in sorted(skills_root.rglob("SKILL.md"), key=lambda item: item.as_posix()):
+    non_root_documents = []
+    for path in sorted(skill_documents, key=lambda item: item.as_posix()):
         relative = path.relative_to(catalog_root).as_posix()
+        parent_parts = path.parent.relative_to(catalog_root).parts
         if path.is_symlink() or not path.is_file():
             failures.append(
                 ValidationFailure(
@@ -140,8 +172,38 @@ def _discover_materialized_skills(
                 )
             )
             continue
-        roots.append(path.parent)
+        if len(parent_parts) == 7 and parent_parts[0] == "skills":
+            roots.append(path.parent)
+        else:
+            non_root_documents.append(path)
+
+    for path in non_root_documents:
+        if not any(_is_lexically_within(path, root) for root in roots):
+            failures.append(
+                ValidationFailure(
+                    "unexpected-skill-md",
+                    path.relative_to(catalog_root).as_posix(),
+                    "SKILL.md is outside every fixed catalog leaf",
+                )
+            )
+    for path in sorted(symlinks, key=lambda item: item.as_posix()):
+        if not any(_is_lexically_within(path, root) for root in roots):
+            failures.append(
+                ValidationFailure(
+                    "unexpected-symlink",
+                    path.relative_to(catalog_root).as_posix(),
+                    "symlink is outside every fixed catalog Skill leaf",
+                )
+            )
     return roots
+
+
+def _is_lexically_within(path: Path, root: Path) -> bool:
+    try:
+        path.relative_to(root)
+    except ValueError:
+        return False
+    return True
 
 
 def _all_relative_paths(root: Path) -> List[str]:
@@ -309,7 +371,11 @@ def _string_array(
 
 
 def _validate_route(
-    payload: Dict[str, object], relative_skill: str, taxonomy: Taxonomy, failures: List[ValidationFailure]
+    payload: Dict[str, object],
+    skill_root: Path,
+    relative_skill: str,
+    taxonomy: Taxonomy,
+    failures: List[ValidationFailure],
 ) -> None:
     parts = Path(relative_skill).parts
     classification = payload.get("classification")
@@ -326,6 +392,57 @@ def _validate_route(
         _failure(failures, "group-path-mismatch", relative_skill, f"expected taxonomy group path {expected_group}")
     if parts[2] != expected_category:
         _failure(failures, "category-path-mismatch", relative_skill, f"expected taxonomy category path {expected_category}")
+    provenance = payload.get("provenance")
+    if not isinstance(provenance, dict):
+        return
+    repository = provenance.get("repository")
+    source_path = provenance.get("source_path")
+    commit = provenance.get("commit")
+    if not all(isinstance(value, str) for value in (repository, source_path, commit)):
+        return
+    try:
+        repository_parts = repository.removeprefix("https://github.com/").split("/")
+        if len(repository_parts) != 2:
+            raise ValueError("invalid repository")
+        source = SourceSpec(
+            id=f"{repository_parts[0]}/{repository_parts[1]}",
+            url=repository,
+            mode="direct",
+            registry_archive_mirror=bool(
+                provenance.get("registry_archive_mirror", False)
+            ),
+        )
+        record = SkillRecord(
+            source=source,
+            repository=repository,
+            commit=commit,
+            source_path=source_path,
+            skill_root=skill_root,
+            name=skill_root.name,
+            registry_archive_mirror=bool(
+                provenance.get("registry_archive_mirror", False)
+            ),
+        )
+        expected = catalog_path(
+            record,
+            Classification(primary_category=category_id),
+            taxonomy,
+        ).as_posix()
+    except (TypeError, ValueError) as error:
+        _failure(
+            failures,
+            "catalog-path-mismatch",
+            relative_skill,
+            f"cannot reconstruct catalog path from provenance: {error}",
+        )
+        return
+    if expected != relative_skill:
+        _failure(
+            failures,
+            "catalog-path-mismatch",
+            relative_skill,
+            f"provenance reconstructs to {expected}",
+        )
 
 
 def _validate_hashes(payload: Dict[str, object], skill_root: Path, relative_skill: str, failures: List[ValidationFailure]) -> None:

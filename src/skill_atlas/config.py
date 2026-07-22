@@ -3,6 +3,7 @@
 import json
 import re
 from pathlib import Path
+from pathlib import PurePosixPath
 from typing import Any, Dict, List
 
 from .models import (
@@ -198,8 +199,12 @@ def load_sources(path: Path) -> List[SourceSpec]:
         mode = _required_string(item, "mode")
         ref = _optional_string(item, "ref")
         index_source_id = _optional_string(item, "index_source_id")
-        include_paths = _string_list(item, "include_paths", ["."])
-        exclude_paths = _string_list(item, "exclude_paths", [".git"])
+        include_paths = _source_path_list(
+            item, "include_paths", ["."], allow_current=True
+        )
+        exclude_paths = _source_path_list(
+            item, "exclude_paths", [".git"], allow_current=False
+        )
         default_categories = _string_list(item, "default_categories", [])
 
         inventory_hint = item.get("inventory_skill_count_hint")
@@ -269,6 +274,31 @@ def _string_list(item: Dict[str, Any], name: str, default: List[str]) -> List[st
     ):
         raise ValueError(f"{name} must be a list of non-empty strings")
     return list(value)
+
+
+def _source_path_list(
+    item: Dict[str, Any],
+    name: str,
+    default: List[str],
+    allow_current: bool,
+) -> List[str]:
+    values = _string_list(item, name, default)
+    for value in values:
+        if allow_current and value == ".":
+            continue
+        path = PurePosixPath(value)
+        if (
+            value != value.strip()
+            or "\\" in value
+            or "\x00" in value
+            or "\n" in value
+            or "\r" in value
+            or path.is_absolute()
+            or path.as_posix() != value
+            or any(part in {"", ".", ".."} for part in path.parts)
+        ):
+            raise ValueError(f"{name} contains an unsafe noncanonical path: {value!r}")
+    return values
 
 
 def _unique_string_tuple(

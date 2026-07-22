@@ -102,6 +102,18 @@ def _validate_git_ref(ref: Optional[str]) -> None:
         return
     forbidden = set(" ~^:?*[\\")
     components = ref.split("/") if isinstance(ref, str) else []
+    has_forbidden_character = isinstance(ref, str) and any(
+        character in forbidden
+        or ord(character) < 32
+        or ord(character) == 127
+        for character in ref
+    )
+    has_invalid_component = any(
+        not component
+        or component.startswith(".")
+        or component.endswith(".lock")
+        for component in components
+    )
     if (
         not isinstance(ref, str)
         or not ref
@@ -112,13 +124,8 @@ def _validate_git_ref(ref: Optional[str]) -> None:
         or ".." in ref
         or "@{" in ref
         or "//" in ref
-        or any(character in forbidden or ord(character) < 32 or ord(character) == 127 for character in ref)
-        or any(
-            not component
-            or component.startswith(".")
-            or component.endswith(".lock")
-            for component in components
-        )
+        or has_forbidden_character
+        or has_invalid_component
     ):
         raise SourceSecurityError(f"unsafe Git ref: {ref!r}")
 

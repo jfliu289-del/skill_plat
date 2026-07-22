@@ -271,6 +271,53 @@ class ConfigTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     load_sources(path)
 
+    def test_rejects_noncanonical_include_and_exclude_paths(self):
+        invalid_fields = [
+            {"include_paths": ["/absolute"]},
+            {"include_paths": ["../outside"]},
+            {"include_paths": ["skills/../outside"]},
+            {"include_paths": ["skills\\windows"]},
+            {"include_paths": ["skills\x00hidden"]},
+            {"include_paths": ["skills/"]},
+            {"exclude_paths": ["../outside"]},
+            {"exclude_paths": ["/absolute"]},
+            {"exclude_paths": ["vendor\\windows"]},
+        ]
+        for invalid in invalid_fields:
+            with self.subTest(invalid=invalid), tempfile.TemporaryDirectory() as directory:
+                source = {
+                    "id": "owner/repo",
+                    "url": "https://github.com/owner/repo",
+                    "mode": "direct",
+                    **invalid,
+                }
+                path = Path(directory) / "sources.json"
+                path.write_text(json.dumps({"sources": [source]}), encoding="utf-8")
+                with self.assertRaises(ValueError):
+                    load_sources(path)
+
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "sources.json"
+            path.write_text(
+                json.dumps(
+                    {
+                        "sources": [
+                            {
+                                "id": "owner/repo",
+                                "url": "https://github.com/owner/repo",
+                                "mode": "direct",
+                                "include_paths": ["."],
+                                "exclude_paths": [".git", "vendor/generated"],
+                            }
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            source = load_sources(path)[0]
+            self.assertEqual(["."], source.include_paths)
+            self.assertEqual([".git", "vendor/generated"], source.exclude_paths)
+
 
 if __name__ == "__main__":
     unittest.main()
