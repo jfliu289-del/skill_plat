@@ -14,7 +14,6 @@ from .classifier import classify
 from .config import _source_path_list
 from .discovery import (
     discover_github_targets,
-    discover_openclaw_archive_paths,
     discover_skill_roots,
 )
 from .frontmatter import parse_skill
@@ -170,41 +169,6 @@ def sync_source_graph(
                 paths.update(target.include_paths)
             provenance_by_url.setdefault(target.url, set()).update(
                 f"{index_id}:{path}" for path in target.provenance
-            )
-
-    for archive in [item for item in import_sources if item.mode == "archive"]:
-        if not archive.index_source_id:
-            continue
-        index = resolved_indexes.get(archive.index_source_id)
-        if index is None:
-            outcome.unresolved.append(
-                _unresolved(
-                    archive.id,
-                    "archive-index-unavailable",
-                    index_source_id=archive.index_source_id,
-                )
-            )
-            continue
-        try:
-            paths = discover_openclaw_archive_paths(index.checkout)
-            archive.include_paths = sorted(set(archive.include_paths) | set(paths))
-            provenance_by_url.setdefault(archive.url, set()).add(
-                f"{archive.index_source_id}:openclaw-registry-links"
-            )
-            unresolved_file = index.checkout / "unresolved.json"
-            if unresolved_file.is_file():
-                payload = json.loads(unresolved_file.read_text(encoding="utf-8"))
-                for item in payload.get("unresolved", []):
-                    if isinstance(item, dict):
-                        outcome.unresolved.append(
-                            {
-                                **item,
-                                "source_id": archive.index_source_id,
-                            }
-                        )
-        except (OSError, ValueError, json.JSONDecodeError) as error:
-            outcome.unresolved.append(
-                _unresolved(archive.id, "archive-index-discovery-failure", detail=type(error).__name__)
             )
 
     configured_by_url = {item.url: item for item in configured}

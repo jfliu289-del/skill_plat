@@ -170,6 +170,67 @@ class CliTests(unittest.TestCase):
         self.assertFalse(any("checkout" in entry for entry in lock["sources"]))
         self.assertIn('"imported": 3', stdout)
 
+    def test_pipeline_does_not_expand_archive_from_legacy_clawhub_index_files(self):
+        archive = self.tempdir / "archive"
+        _initialize_repository(archive)
+        _make_skill(archive, "skills/static/selected", "selected")
+        _make_skill(archive, "skills/legacy/legacy-extra", "legacy-extra")
+        _commit(archive, "archive Skills")
+        self.local_repositories["test/archive"] = archive
+
+        (self.index / "README.md").write_text(
+            "[legacy-extra](https://clawhub.ai/legacy/legacy-extra)\n",
+            encoding="utf-8",
+        )
+        (self.index / "unresolved.json").write_text(
+            json.dumps(
+                {
+                    "unresolved": [
+                        {
+                            "reason": "legacy-index-record",
+                            "url": "https://clawhub.ai/legacy/missing",
+                        }
+                    ]
+                }
+            ),
+            encoding="utf-8",
+        )
+        _commit(self.index, "legacy ClawHub index files")
+        archive_source = SourceSpec(
+            id="test/archive",
+            url="https://github.com/test/archive",
+            mode="archive",
+            include_paths=["skills/static/selected"],
+            index_source_id="test/index",
+        )
+
+        outcome = pipeline_module.sync_source_graph(
+            [self.sources[1], archive_source],
+            self.cache,
+            synchronizer=self.local_synchronizer,
+        )
+
+        synced_archive = next(
+            item.resolved.source
+            for item in outcome.sources
+            if item.resolved.source.id == "test/archive"
+        )
+        self.assertEqual(["skills/static/selected"], synced_archive.include_paths)
+        self.assertFalse(
+            (
+                next(
+                    item.resolved.checkout
+                    for item in outcome.sources
+                    if item.resolved.source.id == "test/archive"
+                )
+                / "skills/legacy/legacy-extra/SKILL.md"
+            ).exists()
+        )
+        self.assertNotIn(
+            "legacy-index-record",
+            {item.get("reason") for item in outcome.unresolved},
+        )
+
     def test_locked_all_rebuilds_the_pinned_commit(self):
         code, _, stderr = self.run_cli("all")
         self.assertEqual(0, code, stderr)

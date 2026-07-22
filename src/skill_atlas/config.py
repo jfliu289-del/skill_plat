@@ -20,6 +20,7 @@ from .models import (
 
 
 SOURCE_MODES = {"direct", "index", "archive", "reference"}
+CLAWHUB_INDEX_SOURCE_ID = "VoltAgent/awesome-openclaw-skills"
 REGISTRY_FIELDS = {
     "schema_version",
     "id",
@@ -287,6 +288,10 @@ def load_registry(path: Path) -> RegistrySpec:
     if data["base_url"] != "https://clawhub.ai":
         raise ValueError("registry base_url must be the official ClawHub URL")
     index_source_id = _required_string(data, "index_source_id")
+    if index_source_id != CLAWHUB_INDEX_SOURCE_ID:
+        raise ValueError(
+            "registry index_source_id must be the frozen VoltAgent OpenClaw index"
+        )
     if data["non_suspicious_only"] is not True:
         raise ValueError("registry must enable non_suspicious_only")
 

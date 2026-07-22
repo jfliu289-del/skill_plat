@@ -248,6 +248,13 @@ class ConfigTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     load_registry(self.write_registry(mutated))
 
+    def test_registry_rejects_noncanonical_index_source_id(self):
+        payload = json.loads((ROOT / "config/clawhub.json").read_text())
+        payload["index_source_id"] = "owner/alternate-index"
+
+        with self.assertRaisesRegex(ValueError, "frozen VoltAgent"):
+            load_registry(self.write_registry(payload))
+
     def test_registry_requires_exact_fields(self):
         payload = json.loads((ROOT / "config/clawhub.json").read_text())
         payload["unexpected"] = True
