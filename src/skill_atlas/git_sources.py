@@ -168,8 +168,7 @@ def _clone_checkout(spec: SourceSpec, checkout: Path, include_paths: List[str]) 
 
 
 def _update_checkout(spec: SourceSpec, checkout: Path, include_paths: List[str]) -> None:
-    if not (checkout / ".git").is_dir():
-        raise SourceSecurityError("existing source cache is not a Git checkout")
+    git_metadata = _validated_git_metadata(checkout)
 
     configured_url = _run_git(
         ["-C", str(checkout), "config", "--get", "remote.origin.url"]
@@ -193,10 +192,25 @@ def _update_checkout(spec: SourceSpec, checkout: Path, include_paths: List[str])
     )
     if spec.mode == "archive":
         _configure_sparse_checkout(checkout, include_paths)
+    elif (git_metadata / "info" / "sparse-checkout").is_file():
+        _run_git(["-C", str(checkout), "sparse-checkout", "disable"])
     _run_git(
         ["-C", str(checkout), "checkout", "--detach", "--force", "FETCH_HEAD"]
     )
     _run_git(["-C", str(checkout), "clean", "-ffdx"])
+
+
+def _validated_git_metadata(checkout: Path) -> Path:
+    git_metadata = checkout / ".git"
+    if git_metadata.is_symlink() or not git_metadata.is_dir():
+        raise SourceSecurityError(
+            "source cache requires an internal .git directory; linked worktrees are unsupported"
+        )
+    try:
+        git_metadata.resolve().relative_to(checkout.resolve())
+    except ValueError as error:
+        raise SourceSecurityError("Git metadata escapes the source checkout") from error
+    return git_metadata
 
 
 def _configure_sparse_checkout(checkout: Path, include_paths: List[str]) -> None:

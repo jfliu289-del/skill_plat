@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path, PurePosixPath
 import re
+import tempfile
 from typing import Dict, Iterable, Iterator, List, Optional, Set, Tuple
 from urllib.parse import unquote, urlsplit
 
@@ -136,17 +137,49 @@ def discover_openclaw_archive_paths(index_root: Path) -> List[str]:
         if index_root.is_dir()
         else index_root.parent / "unresolved.json"
     )
-    unresolved_path.write_text(
-        json.dumps(
-            {"unresolved": [unresolved[key] for key in sorted(unresolved)]},
-            ensure_ascii=False,
-            indent=2,
-            sort_keys=True,
-        )
-        + "\n",
-        encoding="utf-8",
+    _write_json_atomically(
+        unresolved_path,
+        {"unresolved": [unresolved[key] for key in sorted(unresolved)]},
     )
     return sorted(archive_paths)
+
+
+def _write_json_atomically(path: Path, payload: object) -> None:
+    resolved_parent = path.parent.resolve()
+    if path.parent.is_symlink() or path.is_symlink():
+        raise DiscoverySecurityError("report target must not be a symlink")
+    if path.exists() and not path.is_file():
+        raise DiscoverySecurityError("report target must be a regular file")
+    if path.resolve(strict=False).parent != resolved_parent:
+        raise DiscoverySecurityError("report target escapes its output directory")
+
+    serialized = json.dumps(
+        payload,
+        ensure_ascii=False,
+        indent=2,
+        sort_keys=True,
+    ) + "\n"
+    temporary_path: Optional[Path] = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            dir=path.parent,
+            prefix=".unresolved-",
+            suffix=".tmp",
+            delete=False,
+        ) as handle:
+            temporary_path = Path(handle.name)
+            handle.write(serialized)
+            handle.flush()
+            os.fsync(handle.fileno())
+        if path.is_symlink():
+            raise DiscoverySecurityError("report target must not be a symlink")
+        os.replace(temporary_path, path)
+        temporary_path = None
+    finally:
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)
 
 
 def _parse_github_url(url: str) -> Optional[Tuple[str, str]]:

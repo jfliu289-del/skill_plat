@@ -137,6 +137,36 @@ class GitSourceTests(unittest.TestCase):
         )
         self.assertFalse((resolved.checkout / "skills/bob/research/SKILL.md").exists())
 
+    def test_archive_cache_becomes_complete_when_source_changes_to_direct(self):
+        remote, expected_sha = make_local_archive_repository(self.tempdir)
+        archive_source = SourceSpec(
+            id="test/source",
+            url=remote.as_uri(),
+            mode="archive",
+            include_paths=["skills/alice/calendar"],
+        )
+        sparse = sync_source(archive_source, self.cache)
+        self.assertFalse((sparse.checkout / "skills/bob/research/SKILL.md").exists())
+
+        direct_source = SourceSpec.for_test(remote.as_uri())
+        complete = sync_source(direct_source, self.cache)
+
+        self.assertEqual(expected_sha, complete.commit)
+        self.assertTrue((complete.checkout / "skills/bob/research/SKILL.md").is_file())
+        sparse_state = subprocess.run(
+            [
+                "git",
+                "-C",
+                str(complete.checkout),
+                "sparse-checkout",
+                "list",
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        self.assertNotEqual(0, sparse_state.returncode)
+
     def test_rejects_non_https_production_source(self):
         source = SourceSpec(id="bad/repo", url="http://example.com/repo", mode="direct")
 
@@ -210,6 +240,36 @@ class GitSourceTests(unittest.TestCase):
             text=True,
         )
         self.assertNotEqual(0, symbolic_ref.returncode)
+
+    def test_rejects_git_metadata_symlinked_outside_checkout(self):
+        remote, _ = make_local_fixture_repository(self.tempdir)
+        source = SourceSpec.for_test(remote.as_uri())
+        resolved = sync_source(source, self.cache)
+        git_metadata = resolved.checkout / ".git"
+        external_metadata = self.tempdir / "external-git-metadata"
+        git_metadata.rename(external_metadata)
+        git_metadata.symlink_to(external_metadata, target_is_directory=True)
+        fetch_head_existed = (external_metadata / "FETCH_HEAD").exists()
+
+        with self.assertRaises(SourceSecurityError):
+            sync_source(source, self.cache)
+
+        self.assertEqual(
+            fetch_head_existed,
+            (external_metadata / "FETCH_HEAD").exists(),
+        )
+
+    def test_rejects_linked_worktree_git_metadata_file(self):
+        remote, _ = make_local_fixture_repository(self.tempdir)
+        source = SourceSpec.for_test(remote.as_uri())
+        resolved = sync_source(source, self.cache)
+        git_metadata = resolved.checkout / ".git"
+        external_metadata = self.tempdir / "linked-worktree-metadata"
+        git_metadata.rename(external_metadata)
+        git_metadata.write_text(f"gitdir: {external_metadata}\n", encoding="utf-8")
+
+        with self.assertRaises(SourceSecurityError):
+            sync_source(source, self.cache)
 
 
 if __name__ == "__main__":

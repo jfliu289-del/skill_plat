@@ -154,6 +154,19 @@ class DiscoveryTests(unittest.TestCase):
             json.loads((index / "unresolved.json").read_text(encoding="utf-8")),
         )
 
+    def test_unresolved_report_refuses_symlink_without_rewriting_external_target(self):
+        index = self.make_openclaw_index()
+        external_report = self.tempdir / "external-unresolved.json"
+        original = b'{"outside": true}\n'
+        external_report.write_bytes(original)
+        (index / "unresolved.json").symlink_to(external_report)
+
+        with self.assertRaises(DiscoverySecurityError):
+            discover_openclaw_archive_paths(index)
+
+        self.assertEqual(original, external_report.read_bytes())
+        self.assertTrue((index / "unresolved.json").is_symlink())
+
 
 if __name__ == "__main__":
     unittest.main()
