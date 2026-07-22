@@ -9,7 +9,6 @@ from pathlib import Path, PurePosixPath
 import re
 import shutil
 import stat
-import tempfile
 from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple
 from urllib.parse import urlsplit
 
@@ -114,6 +113,7 @@ def materialize(
     )
     normalized_provenance = _normalized_provenance(record)
     source_root = _validated_source_root(record.skill_root)
+    source_root_mode = stat.S_IMODE(source_root.lstat().st_mode)
     entries, initial_exclusions = _collect_source_entries(source_root)
 
     skill_entry = next(
@@ -130,18 +130,27 @@ def materialize(
     destination_resolved = destination_root.resolve()
     target = destination_root / relative_path
     _require_destination_containment(target, destination_resolved)
-    if _lexists(target):
-        raise MaterializationError(f"catalog target already exists: {relative_path}")
-
-    stage = Path(tempfile.mkdtemp(prefix=".materialize-", dir=destination_root))
-    committed = False
+    _make_safe_parent_directories(
+        destination_root, relative_path.parent, destination_resolved
+    )
+    _require_destination_containment(target, destination_resolved)
+    reserved = False
+    complete = False
     try:
-        content_hash, excluded_paths = _copy_and_hash_entries(
-            entries, stage, initial_exclusions
+        try:
+            target.mkdir(mode=0o700)
+        except FileExistsError as error:
+            raise MaterializationError(
+                f"catalog target already exists: {relative_path}"
+            ) from error
+        reserved = True
+        excluded_paths = _copy_entries(
+            entries, target, initial_exclusions
         )
-        copied_skill_hash = _hash_regular_file(stage / "SKILL.md")
+        copied_skill_hash = _hash_regular_file(target / "SKILL.md")
         if copied_skill_hash != actual_skill_hash:
             raise MaterializationError("copied SKILL.md bytes failed integrity check")
+        content_hash = hash_materialized_skill(target)
 
         sidecar = {
             "schema_version": SCHEMA_VERSION,
@@ -155,19 +164,12 @@ def materialize(
                 "excluded_paths": excluded_paths,
             },
         }
-        _write_sidecar(stage / SIDECAR_NAME, sidecar)
-
-        _make_safe_parent_directories(
-            destination_root, relative_path.parent, destination_resolved
-        )
-        _require_destination_containment(target, destination_resolved)
-        if _lexists(target):
-            raise MaterializationError(f"catalog target already exists: {relative_path}")
-        os.rename(stage, target)
-        committed = True
+        _write_sidecar(target / SIDECAR_NAME, sidecar)
+        os.chmod(target, source_root_mode)
+        complete = True
     finally:
-        if not committed and _lexists(stage):
-            shutil.rmtree(stage)
+        if reserved and not complete:
+            _remove_reserved_target(target)
 
     return ImportResult(
         record=record,
@@ -192,6 +194,36 @@ def cluster_duplicates(results: Iterable[ImportResult]) -> Dict[str, List[str]]:
         for content_hash, paths in sorted(grouped.items())
         if len(paths) > 1
     }
+
+
+def hash_materialized_skill(skill_root: Path) -> str:
+    """Recompute the retained upstream bundle hash from a materialized Skill."""
+
+    root = _validated_source_root(skill_root)
+    entries = _collect_materialized_entries(root)
+    digest = hashlib.sha256()
+    digest.update(_HASH_FORMAT)
+    for entry in entries:
+        _hash_field(digest, entry.relative.encode("utf-8"))
+        _hash_field(digest, entry.kind.encode("ascii"))
+        _hash_field(digest, f"{entry.mode:04o}".encode("ascii"))
+        if entry.kind == "file":
+            _hash_regular_entry(entry, digest)
+        elif entry.kind == "symlink":
+            try:
+                current_target = os.readlink(entry.source)
+            except OSError as error:
+                raise MaterializationSecurityError(
+                    f"cannot read materialized symlink: {entry.relative}"
+                ) from error
+            if current_target != entry.link_target:
+                raise MaterializationSecurityError(
+                    f"materialized symlink changed while hashing: {entry.relative}"
+                )
+            _hash_field(digest, os.fsencode(current_target))
+        else:
+            _hash_field(digest, b"")
+    return digest.hexdigest()
 
 
 def _repository_parts(record: SkillRecord) -> Tuple[str, str]:
@@ -243,8 +275,10 @@ def _source_path_parts(value: str) -> Tuple[str, ...]:
 def _source_parent_key(parts: Sequence[str]) -> str:
     if not parts:
         return "_root"
-    if len(parts) == 1 and parts[0] != "_root" and not parts[0].startswith(
-        "_encoded-"
+    if (
+        len(parts) == 1
+        and parts[0] not in {"_root", "_root-skill"}
+        and not parts[0].startswith("_encoded-")
     ):
         return parts[0]
     encoded = base64.urlsafe_b64encode("/".join(parts).encode("utf-8")).decode(
@@ -392,7 +426,7 @@ def _collect_source_entries(root: Path) -> Tuple[List[_SourceEntry], Set[str]]:
         for child in children:
             relative_path = parent / child.name
             relative = relative_path.as_posix()
-            if child.name == SIDECAR_NAME:
+            if not parent.parts and child.name == SIDECAR_NAME:
                 raise MaterializationError(
                     f"upstream Skill already contains {SIDECAR_NAME}: {relative}"
                 )
@@ -446,6 +480,73 @@ def _collect_source_entries(root: Path) -> Tuple[List[_SourceEntry], Set[str]]:
     return sorted(entries, key=lambda entry: entry.relative), excluded
 
 
+def _collect_materialized_entries(root: Path) -> List[_SourceEntry]:
+    entries: List[_SourceEntry] = []
+
+    def visit(directory: Path, parent: PurePosixPath) -> None:
+        try:
+            children = sorted(os.scandir(directory), key=lambda item: item.name)
+        except OSError as error:
+            raise MaterializationError(
+                f"cannot enumerate materialized Skill directory: {directory}"
+            ) from error
+        for child in children:
+            relative_path = parent / child.name
+            relative = relative_path.as_posix()
+            try:
+                metadata = child.stat(follow_symlinks=False)
+            except OSError as error:
+                raise MaterializationError(
+                    f"cannot inspect materialized Skill entry: {relative}"
+                ) from error
+            if not parent.parts and child.name == SIDECAR_NAME:
+                if not stat.S_ISREG(metadata.st_mode):
+                    raise MaterializationSecurityError(
+                        "generated root sidecar must be a regular file"
+                    )
+                continue
+            if child.name == ".git":
+                raise MaterializationSecurityError(
+                    f"materialized Skill contains Git internals: {relative}"
+                )
+            _safe_component(child.name, "materialized entry")
+            mode = stat.S_IMODE(metadata.st_mode)
+            source = Path(child.path)
+            if stat.S_ISDIR(metadata.st_mode):
+                entries.append(_SourceEntry(source, relative, "directory", mode))
+                visit(source, relative_path)
+            elif stat.S_ISREG(metadata.st_mode):
+                entries.append(_SourceEntry(source, relative, "file", mode))
+            elif stat.S_ISLNK(metadata.st_mode):
+                try:
+                    link_target = os.readlink(source)
+                except OSError as error:
+                    raise MaterializationSecurityError(
+                        f"cannot read materialized symlink: {relative}"
+                    ) from error
+                if not _is_safe_source_symlink(source, link_target, root):
+                    raise MaterializationSecurityError(
+                        f"materialized Skill contains an unsafe symlink: {relative}"
+                    )
+                entries.append(
+                    _SourceEntry(
+                        source,
+                        relative,
+                        "symlink",
+                        mode,
+                        link_target=link_target,
+                        copy_symlink=True,
+                    )
+                )
+            else:
+                raise MaterializationSecurityError(
+                    f"materialized Skill contains a special entry: {relative}"
+                )
+
+    visit(root, PurePosixPath())
+    return sorted(entries, key=lambda entry: entry.relative)
+
+
 def _is_safe_source_symlink(path: Path, target: str, root: Path) -> bool:
     if (
         not target
@@ -476,46 +577,37 @@ def _special_kind(mode: int) -> str:
     return "special"
 
 
-def _copy_and_hash_entries(
+def _copy_entries(
     entries: Sequence[_SourceEntry],
-    stage: Path,
+    target: Path,
     initial_exclusions: Set[str],
-) -> Tuple[str, List[str]]:
-    digest = hashlib.sha256()
-    digest.update(_HASH_FORMAT)
+) -> List[str]:
     excluded = set(initial_exclusions)
     directories: List[Tuple[Path, int]] = []
     symlinks: List[Tuple[str, Path]] = []
+    target_root = target.resolve()
 
     for entry in entries:
-        destination = stage / PurePosixPath(entry.relative)
-        _require_destination_containment(destination, stage.resolve())
-        _hash_field(digest, entry.relative.encode("utf-8"))
-        _hash_field(digest, entry.kind.encode("ascii"))
-        _hash_field(digest, f"{entry.mode:04o}".encode("ascii"))
+        destination = target / PurePosixPath(entry.relative)
+        _require_destination_containment(destination, target_root)
 
         if entry.kind == "directory":
             destination.mkdir()
             directories.append((destination, entry.mode))
-            _hash_field(digest, b"")
         elif entry.kind == "file":
-            _copy_regular_and_hash(entry, destination, digest)
+            _copy_regular(entry, destination)
         elif entry.kind == "symlink":
-            target_bytes = os.fsencode(entry.link_target or "")
-            _hash_field(digest, target_bytes)
             if entry.copy_symlink:
                 os.symlink(entry.link_target, destination)
                 symlinks.append((entry.relative, destination))
             else:
                 excluded.add(entry.relative)
         else:
-            _hash_field(digest, b"")
             excluded.add(entry.relative)
 
     for directory, mode in reversed(directories):
         os.chmod(directory, mode)
 
-    stage_root = stage.resolve()
     changed = True
     while changed:
         changed = False
@@ -524,18 +616,16 @@ def _copy_and_hash_entries(
                 continue
             try:
                 resolved = link.resolve(strict=True)
-                resolved.relative_to(stage_root)
+                resolved.relative_to(target_root)
             except (OSError, RuntimeError, ValueError):
                 link.unlink()
                 excluded.add(relative)
                 changed = True
 
-    return digest.hexdigest(), sorted(excluded)
+    return sorted(excluded)
 
 
-def _copy_regular_and_hash(
-    entry: _SourceEntry, destination: Path, digest: "hashlib._Hash"
-) -> None:
+def _copy_regular(entry: _SourceEntry, destination: Path) -> None:
     flags = os.O_RDONLY
     if hasattr(os, "O_CLOEXEC"):
         flags |= os.O_CLOEXEC
@@ -554,7 +644,10 @@ def _copy_regular_and_hash(
             raise MaterializationSecurityError(
                 f"Skill file changed type while copying: {entry.relative}"
             )
-        _hash_length(digest, metadata.st_size)
+        if stat.S_IMODE(metadata.st_mode) != entry.mode:
+            raise MaterializationSecurityError(
+                f"Skill file changed mode while copying: {entry.relative}"
+            )
         copied = 0
         with os.fdopen(descriptor, "rb", closefd=False) as source, destination.open(
             "xb"
@@ -564,13 +657,50 @@ def _copy_regular_and_hash(
                 if not chunk:
                     break
                 output.write(chunk)
-                digest.update(chunk)
                 copied += len(chunk)
         if copied != metadata.st_size:
             raise MaterializationError(
                 f"Skill file changed size while copying: {entry.relative}"
             )
         os.chmod(destination, stat.S_IMODE(metadata.st_mode))
+    finally:
+        os.close(descriptor)
+
+
+def _hash_regular_entry(entry: _SourceEntry, digest: "hashlib._Hash") -> None:
+    flags = os.O_RDONLY
+    if hasattr(os, "O_CLOEXEC"):
+        flags |= os.O_CLOEXEC
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+    try:
+        descriptor = os.open(entry.source, flags)
+    except OSError as error:
+        raise MaterializationSecurityError(
+            f"cannot safely hash materialized file: {entry.relative}"
+        ) from error
+    try:
+        metadata = os.fstat(descriptor)
+        if (
+            not stat.S_ISREG(metadata.st_mode)
+            or stat.S_IMODE(metadata.st_mode) != entry.mode
+        ):
+            raise MaterializationSecurityError(
+                f"materialized file changed while hashing: {entry.relative}"
+            )
+        _hash_length(digest, metadata.st_size)
+        hashed = 0
+        with os.fdopen(descriptor, "rb", closefd=False) as handle:
+            while True:
+                chunk = handle.read(1024 * 1024)
+                if not chunk:
+                    break
+                digest.update(chunk)
+                hashed += len(chunk)
+        if hashed != metadata.st_size:
+            raise MaterializationError(
+                f"materialized file changed size while hashing: {entry.relative}"
+            )
     finally:
         os.close(descriptor)
 
@@ -652,6 +782,28 @@ def _write_sidecar(path: Path, payload: object) -> None:
     with path.open("xb") as handle:
         handle.write(serialized)
     os.chmod(path, 0o644)
+
+
+def _remove_reserved_target(path: Path) -> None:
+    """Remove only the target directory exclusively reserved by this import."""
+
+    if not _lexists(path):
+        return
+    if path.is_symlink() or not path.is_dir():
+        raise MaterializationSecurityError(
+            "reserved catalog target changed type before cleanup"
+        )
+    os.chmod(path, 0o700)
+    for current, directory_names, _ in os.walk(
+        path, topdown=True, followlinks=False
+    ):
+        current_path = Path(current)
+        os.chmod(current_path, 0o700)
+        for name in directory_names:
+            child = current_path / name
+            if not child.is_symlink():
+                os.chmod(child, 0o700)
+    shutil.rmtree(path)
 
 
 def _lexists(path: Path) -> bool:

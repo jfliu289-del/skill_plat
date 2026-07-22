@@ -1,11 +1,14 @@
 import hashlib
 import json
 import os
+import stat
 import tempfile
 import unittest
 from dataclasses import replace
 from pathlib import Path
+from unittest import mock
 
+import skill_atlas.materialize as materialize_module
 from skill_atlas.config import load_taxonomy
 from skill_atlas.materialize import (
     MaterializationError,
@@ -228,6 +231,29 @@ class MaterializeTests(unittest.TestCase):
             materialize(self.record, self.output, self.classification, self.taxonomy)
         self.assertEqual(b"keep", sentinel.read_bytes())
 
+    def test_nested_skill_atlas_named_resource_is_preserved_and_hashed(self):
+        nested = self.source_skill / "references" / "skill-atlas.json"
+        nested.parent.mkdir()
+        nested.write_bytes(b'{"upstream": true}\n')
+
+        result = materialize(
+            self.record, self.output, self.classification, self.taxonomy
+        )
+        target = self.output / result.relative_path
+
+        self.assertEqual(b'{"upstream": true}\n', (target / "references" / "skill-atlas.json").read_bytes())
+        self.assertEqual(
+            result.content_hash,
+            materialize_module.hash_materialized_skill(target),
+        )
+        (target / "references" / "skill-atlas.json").write_bytes(
+            b'{"upstream": false}\n'
+        )
+        self.assertNotEqual(
+            result.content_hash,
+            materialize_module.hash_materialized_skill(target),
+        )
+
     def test_rejects_unsafe_or_inconsistent_routing_inputs(self):
         bad_path = SkillRecord(
             **{**self.record.__dict__, "source_path": "../reviewing-code"}
@@ -279,6 +305,126 @@ class MaterializeTests(unittest.TestCase):
         self.assertNotEqual(root, top_level)
         self.assertTrue(multi.parts[-2].startswith("_encoded-m-"))
         self.assertNotEqual(multi, similar)
+
+    def test_root_route_cannot_collide_with_legal_reserved_source_path(self):
+        root_record = SkillRecord(
+            **{**self.record.__dict__, "source_path": "."}
+        )
+        reserved_root = self.tempdir / "checkout" / "_root-skill" / "_repository-root"
+        reserved_root.mkdir(parents=True)
+        (reserved_root / "SKILL.md").write_bytes(self.skill_bytes)
+        reserved_record = SkillRecord(
+            **{
+                **self.record.__dict__,
+                "source_path": "_root-skill/_repository-root",
+                "skill_root": reserved_root,
+            }
+        )
+
+        root_path = catalog_path(root_record, self.classification, self.taxonomy)
+        reserved_path = catalog_path(
+            reserved_record, self.classification, self.taxonomy
+        )
+
+        self.assertNotEqual(root_path, reserved_path)
+        self.assertEqual("_root-skill", root_path.parts[-2])
+        self.assertTrue(reserved_path.parts[-2].startswith("_encoded-s-"))
+
+    def test_hash_is_independently_recomputed_from_materialized_bundle(self):
+        script = self.source_skill / "scripts" / "run.py"
+        script.parent.mkdir()
+        script.write_bytes(b"print('run')\n")
+        script.chmod(0o755)
+        (self.source_skill / "empty-directory").mkdir()
+
+        result = materialize(
+            self.record, self.output, self.classification, self.taxonomy
+        )
+        target = self.output / result.relative_path
+
+        self.assertEqual(
+            result.content_hash,
+            materialize_module.hash_materialized_skill(target),
+        )
+        sidecar = target / "skill-atlas.json"
+        sidecar.write_bytes(sidecar.read_bytes() + b" \n")
+        self.assertEqual(
+            result.content_hash,
+            materialize_module.hash_materialized_skill(target),
+        )
+
+    @unittest.skipUnless(hasattr(os, "symlink"), "requires symlink support")
+    def test_different_excluded_dangling_targets_have_the_same_materialized_hash(self):
+        references = self.source_skill / "references"
+        references.mkdir()
+        link = references / "missing"
+        link.symlink_to("first-missing-target")
+        first = materialize(
+            self.record, self.output / "one", self.classification, self.taxonomy
+        )
+        first_root = self.output / "one" / first.relative_path
+
+        link.unlink()
+        link.symlink_to("second-missing-target")
+        second = materialize(
+            self.record, self.output / "two", self.classification, self.taxonomy
+        )
+        second_root = self.output / "two" / second.relative_path
+
+        self.assertEqual(["references/missing"], first.excluded_paths)
+        self.assertEqual(first.excluded_paths, second.excluded_paths)
+        self.assertEqual(first.content_hash, second.content_hash)
+        self.assertEqual(first.content_hash, materialize_module.hash_materialized_skill(first_root))
+        self.assertEqual(second.content_hash, materialize_module.hash_materialized_skill(second_root))
+
+    def test_materialization_does_not_use_replacing_rename_for_publication(self):
+        with mock.patch(
+            "skill_atlas.materialize.os.rename",
+            side_effect=AssertionError("replacing rename must not publish a Skill"),
+        ):
+            result = materialize(
+                self.record, self.output, self.classification, self.taxonomy
+            )
+
+        self.assertTrue((self.output / result.relative_path / "SKILL.md").is_file())
+
+    def test_preserves_skill_root_directory_mode(self):
+        self.source_skill.chmod(0o750)
+
+        result = materialize(
+            self.record, self.output, self.classification, self.taxonomy
+        )
+
+        copied_mode = stat.S_IMODE((self.output / result.relative_path).stat().st_mode)
+        self.assertEqual(0o750, copied_mode)
+
+    def test_failure_removes_reserved_target_even_with_read_only_nested_directory(self):
+        locked = self.source_skill / "references"
+        locked.mkdir()
+        (locked / "guide.md").write_bytes(b"guide\n")
+        locked.chmod(0o555)
+        target = self.output / catalog_path(
+            self.record, self.classification, self.taxonomy
+        )
+
+        try:
+            with mock.patch(
+                "skill_atlas.materialize._write_sidecar",
+                side_effect=MaterializationError("injected sidecar failure"),
+            ):
+                with self.assertRaises(MaterializationError):
+                    materialize(
+                        self.record,
+                        self.output,
+                        self.classification,
+                        self.taxonomy,
+                    )
+            self.assertFalse(target.exists())
+        finally:
+            locked.chmod(0o755)
+            copied_locked = target / "references"
+            if copied_locked.exists():
+                copied_locked.chmod(0o755)
 
     def test_skill_md_hash_mismatch_fails_before_creating_output(self):
         mismatched = SkillRecord(
