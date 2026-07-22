@@ -396,6 +396,7 @@ git commit -m "feat: safely synchronize and discover skill sources"
 **Interfaces:**
 - `catalog_path(record, classification, taxonomy) -> Path`
 - `materialize(record, destination_root, classification, taxonomy) -> ImportResult`
+- `hash_materialized_skill(skill_root) -> str`
 - `cluster_duplicates(results) -> dict[str, list[str]]`
 - Path: `skills/<group-id>-<slug>/<category-id>-<slug>/<owner>/<repo>/<source-parent-key>/<original-skill-directory>/`
 
@@ -451,7 +452,7 @@ Expected: FAIL.
 
 - [ ] **Step 3: Implement safe deterministic copy**
 
-Copy paths lexicographically. Never follow symlinks; accept one only if its resolved target remains inside the Skill root, otherwise exclude it. Hash relative path, file mode, and bytes for every upstream file before sidecar creation. Serialize sidecars as sorted, two-space UTF-8 JSON with a final newline. Keep duplicate variants and cluster by content hash.
+Copy paths lexicographically. Never follow symlinks; accept one only if its resolved target remains inside the Skill root, otherwise exclude it. Hash the relative path, entry type, file mode, bytes, and safe link target of every retained upstream entry before sidecar creation; excluded entries are recorded but do not enter `content_hash`, so `hash_materialized_skill` can recompute it from the catalog while ignoring only the generated root sidecar. Serialize sidecars as sorted, two-space UTF-8 JSON with a final newline. Keep duplicate variants and cluster by content hash.
 
 - [ ] **Step 4: Run GREEN and commit**
 
