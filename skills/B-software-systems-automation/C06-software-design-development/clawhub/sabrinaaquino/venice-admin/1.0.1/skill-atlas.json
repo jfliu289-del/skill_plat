@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C17:token:notes",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a9b6c6ec2190e1d1aa70d57e0ce0fe8cd929990ee99b8b89b3e7ee33953b0200",
+    "content_hash": "0744fff9a9557f6c967fe31142cd76f8f24e013023d764da4ffdc95e596a3ae6",
+    "precanonical_content_hash": "717eabeaa676a216e5d006ab23966006fd805996e27cc8414466deab6b859dc8",
+    "skill_md_hash": "1b6bf649ae9d5c61cd44ffa61dde7be3774bf9fedf630781c139803a6419c596",
+    "version_metadata_sha256": "8a38b6c8881fa49859bec2c186ba3380ddca89a7295ad4ec68cc019c40493ab0"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sabrinaaquino/skills/venice-admin",
+    "claim_id": "cefce05e313e645220c10bf3cefb567c94ef601f46e10b9b1a398f8869559c6d",
+    "index_entries": [
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "venice-admin",
+        "url": "https://clawskills.sh/skills/sabrinaaquino-venice-admin"
+      }
+    ],
+    "owner_handle": "sabrinaaquino",
+    "owner_id": "s176sgak20rjttz924kthg3ad98857mj",
+    "published_at": 1771549691809,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779940098772,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779940098772,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill requires VENICE_API_KEY as an Admin API key and uses it for Venice balance, billing usage, and API-key listing; this is sensitive but clearly matches the stated purpose and observed GET-only code paths.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are explicit user-invoked commands, and the artifacts do not show hidden execution, prompt overrides, account mutation, destructive commands, or unrelated data collection.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill discloses uv as the runner and automatic PEP 723 installation of httpx; the dependency is not pinned, which is a supply-chain note but not purpose-mismatched behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Admin credential and network access to api.venice.ai are proportionate for the documented admin endpoints, but users should treat the credential and returned billing/API-key metadata as sensitive.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background persistence, privilege escalation, startup hooks, or durable memory are present; usage export writes only when the documented --output option is supplied.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The environment variable, Venice network access, and optional output file are disclosed and aligned with the account-admin workflow; the missing explicit permission model is a caution, not enough for Review by itself.\n[VirusTotal code_insight output-path concern] expected: usage.py can write usage results to a user-specified file via --output, but this is documented CLI export behavior and not hidden or automatic; users should choose export paths carefully to avoid overwriting files.",
+          "guidance": "Install only if you are comfortable giving the agent access to a Venice Admin API key. Use a dedicated key when possible, avoid shared shells or logs, review exported usage files before sharing them, and rotate the key if the environment is no longer trusted.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed Venice AI admin helper that reads account balance, usage, and API-key metadata, with sensitive but purpose-aligned admin-key access.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779940047484,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: venice-admin\nVersion: 1.0.1\n\nThe skill bundle appears to be designed for its stated purpose of Venice AI account administration. However, the `scripts/usage.py` script includes an `--output` argument that allows writing the usage history to an arbitrary file path specified by the user. While this is a common feature, the `Path(output_file).resolve()` call means an agent, if susceptible to prompt injection, could be instructed to write data to sensitive system files (e.g., `/etc/passwd`, `~/.ssh/authorized_keys`) or other unintended locations. This capability represents a file write vulnerability that could be exploited via prompt injection, classifying the skill as suspicious rather than benign, despite the lack of clear malicious intent within the skill's code itself.",
+          "checkedAt": 1779165583985,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "249e4d59dfcfc641b4813cb0148c3b7d4e5767b4a7338094e9dc1c5298879735",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/249e4d59dfcfc641b4813cb0148c3b7d4e5767b4a7338094e9dc1c5298879735"
+    },
+    "slug": "venice-admin",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

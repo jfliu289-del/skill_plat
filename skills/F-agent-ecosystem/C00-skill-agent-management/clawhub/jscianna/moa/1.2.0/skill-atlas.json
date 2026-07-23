@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:research",
+      "category:C06:token:api",
+      "category:C10:token:model",
+      "category:C12:token:market",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C06",
+      "C10",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "420d1563b7d799c37c91e1db526c8825d9f81c13acd5091890213e113e1e3d67",
+    "content_hash": "5b3c2056bcf23a8b1ce30e48e329f08abed9a8524c3bc429f017cea6a365bab4",
+    "precanonical_content_hash": "f26744086e956e4030e2d96129b18b7f73f096d5a73e0c7e8979942d7a9ff42f",
+    "skill_md_hash": "feb8eedf65db771a81ed2aa0d0c8b68187e8078917ac888b9d723bd600293fc7",
+    "version_metadata_sha256": "3e5ef51b34b47629cb90302a84c794bf75c7f493c3da23872fa91293d78d4a87"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jscianna/skills/moa",
+    "claim_id": "9e7a94d0cdbc14b0fff3704fa497162ccd0510cc9008c8e2fbaf0609c58db1e8",
+    "index_entries": [
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "moa",
+        "url": "https://clawskills.sh/skills/jscianna-moa"
+      }
+    ],
+    "owner_handle": "jscianna",
+    "owner_id": "s173n9vq0jeacw80bqwxmdym2d884hea",
+    "published_at": 1771649529883,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943799019,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943799019,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose, manifest, and scripts align around querying multiple OpenRouter-hosted models and aggregating their answers; external prompt transmission and paid usage are core to that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The main entrypoint only acts on a supplied prompt, but users should understand that the prompt and intermediate model responses are sent externally and no built-in redaction or consent gate is present.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is simple skill placement plus an OPENROUTER_API_KEY, but the artifact depends on axios without a package manifest and includes a non-entry demo script that would run a hard-coded paid query if manually executed.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading OPENROUTER_API_KEY and sending it as an Authorization bearer token to the OpenRouter chat completions endpoint is proportionate for the stated integration; no unrelated credential destinations were found.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts show no persistence, background worker, filesystem mutation, privilege escalation, credential storage, or destructive behavior.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: SkillSpector's privacy concern is valid as user guidance because prompts are sent to OpenRouter and downstream models, but this is the disclosed core function rather than hidden or purpose-mismatched behavior.\n[suspicious.env_credential_access] expected: The static scan finding is expected for an OpenRouter API integration: both scripts read OPENROUTER_API_KEY and use it only for OpenRouter API requests.",
+          "guidance": "Install only if you are comfortable sending prompt contents to OpenRouter and potentially multiple model providers, and with several model calls being billed per query. Use a dedicated API key with spending limits, avoid confidential or regulated data unless the provider terms fit your needs, and use the documented scripts/moa.js entrypoint rather than running scripts/moa-paid.js directly.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it sends prompts to OpenRouter models for a synthesized answer, with expected API-key and billing implications.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943763210,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: moa\nVersion: 1.2.0\n\nThe OpenClaw skill 'moa' is designed to orchestrate multiple LLM calls via OpenRouter. Its code (scripts/moa.js, scripts/moa-paid.js) and documentation (SKILL.md, manifest.json) consistently show its purpose: taking a user prompt, sending it to various LLMs on openrouter.ai using a user-provided OPENROUTER_API_KEY, and then synthesizing the results. There is no evidence of malicious intent, such as unauthorized data exfiltration, arbitrary code execution, persistence mechanisms, or prompt injection attempts against the OpenClaw agent itself. All network calls are directed to the expected OpenRouter API endpoint, and the API key is used for legitimate authentication.",
+          "checkedAt": 1779165837220,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a498ea735aa4606ccb7527334ba5debee754d62c79399783d26407865b6d00e0",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a498ea735aa4606ccb7527334ba5debee754d62c79399783d26407865b6d00e0"
+    },
+    "slug": "moa",
+    "source_type": "clawhub",
+    "version": "1.2.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

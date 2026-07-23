@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "website"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.875,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C09:phrase:security audit",
+      "category:C09:token:secure",
+      "category:C09:token:security",
+      "category:C09:token:vulnerability",
+      "cross-tag:browser-automation",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "build",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8b9e65297b993925454761a533461a0da7ee2cfbf350eee3c28eb31511bcc142",
+    "content_hash": "d816d8ffd62cd9e248f98defb708ca3b5088388590d6f1be214dda336bee0ba1",
+    "precanonical_content_hash": "0e2d84a2f702c81d88d93131946e82c614aa0371ad84b0f9a03018aa738f1d94",
+    "skill_md_hash": "ebd9d666eccfd55cb529dd8fc16fd9121557afc897fee2263326afd472057d62",
+    "version_metadata_sha256": "3a09a2b77478bf926b4efbe59f31d5d79763d4abe0baae2d67d68de58a5e37da"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/1999azzar/skills/security-guardian",
+    "claim_id": "e3da6aea22e9ecb831ef7af102dcb1fbe86c5131841f6d46c45f0020ff52c610",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "security-guardian",
+        "url": "https://clawskills.sh/skills/1999azzar-security-guardian"
+      }
+    ],
+    "owner_handle": "1999azzar",
+    "owner_id": "s17bnq7bcwrm6mwmx7ryseen81885fxg",
+    "published_at": 1771261194936,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971390821,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971390821,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is scanning project files for hardcoded secrets and Docker images for HIGH/CRITICAL Trivy findings; the included scripts directly implement those functions.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The secret scanner recursively reads user-specified paths and includes a --force override for blocked roots, so use should stay scoped to intended project directories.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no automatic installer or package-fetch step in the artifact, but container scanning depends on a separately installed Trivy binary and the workflow references a mema-vault skill for remediation.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Project file scanning and local Trivy execution are proportionate to a security audit skill, and the secret scanner reports finding type, file, and line rather than printing secret values.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The scripts do not create persistence, background workers, elevated privileges, network exfiltration, or automatic mutation; remediation is documented as a user-directed follow-up.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight shell injection claim] unexpected: The claim is not supported by the artifact: scan_container.sh quotes \"$IMAGE_NAME\" when passing it to trivy, so shell metacharacters in the image name are not reinterpreted as commands.\n[SkillSpector clean result] expected: SkillSpector reported no issues; local review also found the scripts aligned with the security-scanning purpose.\n[Static scan clean result] expected: The platform static scan reported no suspicious patterns, consistent with the artifact review.",
+          "guidance": "Install only if you are comfortable with a tool that recursively reads selected project files looking for secrets. Keep scans limited to intended repositories, avoid --force on system paths, install Trivy from a trusted source, and review any follow-up vaulting or code changes before applying them.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This security-auditing skill is coherent and purpose-aligned, with no artifact-backed evidence of command injection, exfiltration, persistence, or hidden behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971350056,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: security-guardian\nVersion: 1.1.0\n\nThe skill is classified as suspicious due to a shell injection vulnerability in `scripts/scan_container.sh`. The script directly passes the `$IMAGE_NAME` argument to the `trivy` command without proper sanitization or quoting, allowing for potential arbitrary command execution if a malicious image name is provided (e.g., `myimage; rm -rf /`). While the skill's stated purpose of security auditing is benign, this critical vulnerability allows for exploitation by a malicious actor controlling the input. Other files (`SKILL.md`, `scripts/scan_secrets.py`) appear benign and well-intentioned, with `scan_secrets.py` even including good security guardrails against scanning dangerous system paths.",
+          "checkedAt": 1779164602761,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "9b4bc88d52cc83f0f857e51a074de5dc537a2aee30174edcb234ffab6f9458f7",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/9b4bc88d52cc83f0f857e51a074de5dc537a2aee30174edcb234ffab6f9458f7"
+    },
+    "slug": "security-guardian",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

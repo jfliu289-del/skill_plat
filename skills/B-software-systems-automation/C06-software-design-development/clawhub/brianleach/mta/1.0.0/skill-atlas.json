@@ -1,0 +1,152 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C01:token:sources",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C06:token:implementation",
+      "category:C09:token:privacy",
+      "category:C09:token:security",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C04",
+      "C09"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "b5ae2194b56fb2900e6c57608bc85bd12d506298ec416fd21b91da719673e908",
+    "content_hash": "1bec995e9c2d3421daa24fac19ade769e629a7a15e02751615c6e58be04b3031",
+    "precanonical_content_hash": "6cbf7fece4be69164a3ee227477419167467172093e4c5088d264f8b5566cffa",
+    "skill_md_hash": "58a4cbc4abc0f2f1253ada9fedec7ad4f330e70efeb50414012fc012843b888a",
+    "version_metadata_sha256": "2285bb8cf85fb25245def45f365ab97565f421cf42a348ab1253ec685c4d32f6"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/brianleach/skills/mta",
+    "claim_id": "05faf817d5a0ef308d0b6ec865bf3220316548dd2f366dc051a141793a2841ad",
+    "index_entries": [
+      {
+        "index_path": "categories/transportation.md",
+        "label": "mta",
+        "url": "https://clawskills.sh/skills/brianleach-mta"
+      }
+    ],
+    "owner_handle": "brianleach",
+    "owner_id": "s177mqbg7ea28w09hpmzr79wx988447d",
+    "published_at": 1771718547657,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779948097276,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779948097276,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, commands, MTA endpoints, and implementation align around subway arrivals, bus predictions, alerts, routes, and stop lookup.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are user-directed transit queries and a manual GTFS refresh command; no prompt override, autonomous background behavior, or unrelated agent control was found.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation runs a disclosed npm install for protobufjs. This is proportionate for decoding GTFS protobuf feeds, though npm lifecycle scripts are a normal third-party dependency risk.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill reads MTA_BUS_API_KEY from the environment or a local skill .env file and sends it only to documented MTA BusTime endpoints for bus features; subway and alert features use open feeds.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to a disclosed GTFS cache under ~/.mta/gtfs and a temporary ZIP during manual refresh. It invokes local unzip with fixed arguments, which is a hardening concern but not purpose-mismatched or hidden.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-2] expected: The local unzip invocation is used only by the documented refresh-gtfs command to extract public MTA static transit data into the disclosed cache directory; arguments are fixed and not shell-interpolated, though archive validation and extraction limits would improve hardening.\n[suspicious.env_credential_access] expected: The credential access is the disclosed MTA_BUS_API_KEY needed for bus API requests. The code loads a local skill .env file broadly, but artifact evidence shows only MTA_BUS_API_KEY is used in outbound requests.\n[virustotal.clean] expected: VirusTotal clean telemetry is consistent with the artifact review, but the benign verdict is based on the inspected files and scanner evidence together.",
+          "guidance": "Install only if you are comfortable with npm installing protobufjs, the skill contacting official MTA endpoints, bus commands sending your MTA BusTime API key to MTA, and the manual GTFS refresh downloading and extracting public transit data into ~/.mta/gtfs. Keep unrelated secrets out of the skill .env file.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed NYC transit lookup tool that uses MTA data, an optional bus API key, and a local GTFS cache without evidence of hidden or unrelated behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948033681,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: mta\nVersion: 1.0.0\n\nThe OpenClaw MTA skill is classified as benign. The code (`scripts/mta.mjs`) correctly sanitizes all user inputs using `encodeURIComponent()` before incorporating them into API calls, preventing URL injection. File operations are confined to `~/.mta/gtfs/` for caching public GTFS data, and the `execFileSync` command for `unzip` uses a safe array-based argument list with controlled paths, mitigating shell injection risks. All network requests are directed to official MTA API endpoints (`api-endpoint.mta.info`, `bustime.mta.info`, `web.mta.info`). The `SKILL.md` and other documentation files contain no prompt injection attempts or instructions for the AI agent to perform unauthorized actions. The skill's stated purpose, security claims, and code implementation are consistent and demonstrate no malicious intent or significant vulnerabilities.",
+          "checkedAt": 1779166078132,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "5585e59cbe7979674ca347002ae001ed56c2fd33b822d8a6f8ea0b961ca161e5",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/5585e59cbe7979674ca347002ae001ed56c2fd33b822d8a6f8ea0b961ca161e5"
+    },
+    "slug": "mta",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

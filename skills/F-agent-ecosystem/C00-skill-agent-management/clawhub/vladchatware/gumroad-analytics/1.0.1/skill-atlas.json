@@ -1,0 +1,150 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "business",
+      "data-professional",
+      "marketer"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "business",
+      "marketing"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:analytics",
+      "category:C11:token:product",
+      "category:C14:token:sales",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:marketing-sales",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C04",
+      "C11",
+      "C14",
+      "C17"
+    ],
+    "stages": [
+      "deliver",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "market"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "6f6c8e12590f41dc1c053e7eec39d408b43e04de22e2afd70ce8c8e0e39b460b",
+    "content_hash": "ff86bad6cca2f0a05df526a1372190e9559eb372acadacc9e983dcbe0d868bfc",
+    "precanonical_content_hash": "2c769ce8864be69d5e354230814ac7457d9fd7b62edb4bca86e7c55614a5c147",
+    "skill_md_hash": "792d4f1a8bcc508865bfc4bdbe1d7860cf81af07336d5ef10736c994c15318b3",
+    "version_metadata_sha256": "06842773027cef1118a680b91701bff9f95a563e9859422a9b963bb61c7d07fe"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/vladchatware/skills/gumroad-analytics",
+    "claim_id": "a0e3f60651dc004f079201ecf1a01da1282278715e28004322d5db22a16183eb",
+    "index_entries": [
+      {
+        "index_path": "categories/git-and-github.md",
+        "label": "gumroad-analytics",
+        "url": "https://clawskills.sh/skills/vladchatware-gumroad-analytics"
+      }
+    ],
+    "owner_handle": "vladchatware",
+    "owner_id": "s17fjyazgt45j6jm24a6nfz9p186mq8s",
+    "published_at": 1772426895052,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972258663,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972258663,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "Fetching Gumroad sales and product data requires a Gumroad access token and exposes business analytics to the local agent, but that capability directly matches the stated analytics purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions disclose the credential file, required tools, run command, optional --store-raw mode, and output paths; no prompt injection, hidden endpoint, or unrelated behavior was found.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The bundle contains SKILL.md and one local shell script, with no remote installer, dependency bootstrapper, or background setup mechanism.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use of curl, python3, date, the Gumroad API, and the configured credentials file is proportionate for collecting Gumroad metrics.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script creates local files under memory/metrics/gumroad; default output is summary-only, while raw sales and raw products are saved only with --store-raw.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill does use shell execution, file reads, file writes, and network access, but the artifacts disclose the needed binaries, credential path, Gumroad API use, and output locations sufficiently for this purpose.\n[SDI-1] expected: With --store-raw, the products response is stored as raw product data; this is locally persistent sensitive business data, but it is opt-in and the file is explicitly named raw-products.\n[SDI-4] expected: The script's completion message could be clearer that only sales are redacted, but SKILL.md separately states sales raw output is redacted and lists the products file as raw.\n[SQP-2] expected: There is no interactive confirmation before raw storage, but --store-raw is an explicit user-selected mode and the documentation advises avoiding it unless raw data is needed.",
+          "guidance": "Install this only if you want an agent to read your Gumroad sales and product data. Keep the Gumroad token file private, use a dedicated or revocable token if possible, and avoid --store-raw unless you are comfortable retaining detailed Gumroad API responses locally.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it fetches Gumroad analytics, saves local summaries, and only stores raw API data when the user explicitly asks for it.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972228625,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 45,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: gumroad-analytics\nVersion: 1.0.1\n\nThe skill bundle is benign. It fetches Gumroad analytics data, processes it, and stores summaries locally in the designated 'memory' directory. Credentials are read from a specified local file (`~/.config/gumroad/credentials.json`). The `SKILL.md` instructions are clear and do not contain prompt injection attempts. The `fetch_metrics.sh` script uses `curl` to interact with the legitimate Gumroad API (`api.gumroad.com`) and includes a Python script to redact PII (email, name) from raw sales data before optional storage, demonstrating a privacy-conscious design. No evidence of data exfiltration to unauthorized endpoints, persistence mechanisms, or other malicious behaviors was found.",
+          "checkedAt": 1779164757384,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "0551a9d7f67430c7cdf45fef7f2f88ee629bf9defa40d9dd841b7cff906255d8",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0551a9d7f67430c7cdf45fef7f2f88ee629bf9defa40d9dd841b7cff906255d8"
+    },
+    "slug": "gumroad-analytics",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

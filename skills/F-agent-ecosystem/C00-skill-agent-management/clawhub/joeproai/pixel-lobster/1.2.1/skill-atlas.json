@@ -1,0 +1,131 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.175,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C10:token:ai",
+      "category:C17:token:notes",
+      "category:C19:token:desktop",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10",
+      "C17",
+      "C19"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "25e3f1be835a17745782b7e6d5252a3a93760d95cfc7315610acf202e961887c",
+    "content_hash": "7302f5a4e56db90df1b03f58ef2c4ecda8a952f70f659d1c1b79392e21a4a0fc",
+    "precanonical_content_hash": "21a7884d32d0f2abe12cae20a0aa5125c83d3a263a2db07686a2a78cdf8368e4",
+    "skill_md_hash": "9afe7429885cb8c1bbd6150a95150a34406291b4d7f8ee86ba7f68974412c2fe",
+    "version_metadata_sha256": "ece04dc6efdb00a29e6240839f6b68366606823d9f5abf4bf3541ba9a0bc6831"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/joeproai/skills/pixel-lobster",
+    "claim_id": "e25a7f82d6e68b5b0af2e655bb642b573f50d33ea14f83cbb0787133711627aa",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "pixel-lobster",
+        "url": "https://clawskills.sh/skills/joeproai-pixel-lobster"
+      }
+    ],
+    "owner_handle": "joeproai",
+    "owner_id": "s178a8ypxf167skfhyzkymds4h83ygv9",
+    "published_at": 1772040135022,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779949027631,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779949027631,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The Electron overlay, local TTS envelope polling, and optional system-audio analysis fit the lip-sync avatar purpose; system audio capture is sensitive but disclosed and disabled by default.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill explains install, configuration, launch, and that system mode captures all audio output; it does not provide an in-app consent/status UI for that optional mode.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The helper script runs npm install on first launch and then starts Electron with npx; this is disclosed, but the Electron dependency is semver-ranged and there is no lockfile in the artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The app creates an always-on-top full-screen transparent overlay, registers F8/F9/F12 shortcuts, polls a configured TTS endpoint, and optionally captures loopback audio; these are proportionate to the stated desktop avatar use.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No autostart, background daemon, credential access, destructive action, data exfiltration, or privilege escalation mechanism was found; behavior appears limited to the running Electron process.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SDI-2] expected: System-audio capture is a disclosed optional feature for reacting to all audio, not hidden default behavior; users should leave the default TTS mode unless they want broad audio analysis.\n[SQP-2] expected: The permission handler and automatic loopback capture occur only when audioMode is set to system; this is sensitive and lacks an in-app indicator, but it is purpose-aligned and user-configured.\n[suspicious.install_untrusted_source] expected: The flagged URL is the documented localhost TTS endpoint, not an install source or URL shortener.\n[VirusTotal code_insight suspicious] expected: The telemetry flags screen/audio capture and local fetch behavior; artifact review found those capabilities disclosed and no evidence of persistence, exfiltration, or unauthorized remote control.",
+          "guidance": "Install only if you are comfortable running a local Electron app and fetching its npm dependency. Keep audioMode set to tts for the narrowest behavior. Enable system mode only if you intentionally want the lobster to react to all desktop audio, including private calls, media, and notifications.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This appears to be a legitimate local desktop avatar skill, with an optional mode that can listen to all desktop audio while it is running.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948982223,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: pixel-lobster\nVersion: 1.2.1\n\nThe skill is an Electron application designed to provide a desktop overlay that lip-syncs to audio. It is classified as 'suspicious' due to its use of high-risk capabilities, specifically screen and audio capture (via `desktopCapturer` and `navigator.mediaDevices.getDisplayMedia` in `app/main.js` and `app/preload.js`) and local network requests (via `fetch` in `app/lobster.html`). While these capabilities are integral to the skill's stated purpose (e.g., 'system audio' mode), they represent a significant attack surface if the skill were compromised or misconfigured. No evidence of intentional malicious behavior such as data exfiltration, persistence, or unauthorized remote control was found, and the Electron app follows security best practices like `contextIsolation`.",
+          "checkedAt": 1779166197499,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "ff6a87881cac67ae08971a0888760dff30b919d83d99f33ad397b482be3a08e3",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ff6a87881cac67ae08971a0888760dff30b919d83d99f33ad397b482be3a08e3"
+    },
+    "slug": "pixel-lobster",
+    "source_type": "clawhub",
+    "version": "1.2.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

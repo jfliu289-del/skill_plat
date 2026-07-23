@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "cross-tag:data-analysis",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e2a24820088cf0fee6f4b5d595e7ff5764b887040614e457e550ecec0690d0e6",
+    "content_hash": "87ec492f5a6ed81a0496a61f913d5a3e2dd92bf647c7c973b6929819a2bcd220",
+    "precanonical_content_hash": "c47ddf84956b4bb077fb483a997d6088f779c5d3ac7093af7ed880f7e2f72d96",
+    "skill_md_hash": "3a2afe2014b41163d4cbe7551ce6c45fb3db3029961a6fd69879608d1885b334",
+    "version_metadata_sha256": "3fb79eed43fff929901b2ddc99c1578bb0199c2018db46cd817e732ef18eaa9f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/iclems/skills/airfrance-afkl",
+    "claim_id": "c298f774b03d457e7d4b609f88ce03df3750dccb9c029a62e9b089c30482ac6f",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "airfrance-afkl",
+        "url": "https://clawskills.sh/skills/iclems-airfrance-afkl"
+      },
+      {
+        "index_path": "categories/transportation.md",
+        "label": "airfrance-afkl",
+        "url": "https://clawskills.sh/skills/iclems-airfrance-afkl"
+      }
+    ],
+    "owner_handle": "iclems",
+    "owner_id": "s171xn9tff2br4yfmebfk37k71885px7",
+    "published_at": 1769655571857,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783649216547,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783649216547,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe flight-status lookup, proactive monitoring, previous-flight tracking, and aircraft/cabin enrichment; the scripts implement those same capabilities.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use is scoped by user-supplied carrier, flight number, origin, date, and optional previous-flight depth, with user-directed cron-style polling guidance for monitoring.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No package installer hooks, hidden setup steps, or automatic execution mechanisms were found; users manually provide AFKL credentials and run the scripts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill reads documented AFKL API credentials, calls the AFKL Open Data API, and optionally queries Planespotters with aircraft registration for enrichment; this is proportionate, though users should know that tail numbers may be shared with a third party.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The scripts write local state/cache files for throttling, change detection, and aircraft lookup caching, and the docs suggest user-created cron polling; there is no hidden autostart, privilege escalation, or unrelated persistence.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal/code_insight] expected: Reported file writes, third-party API calls, cron guidance, and a host-specific state fallback are real, but they support disclosed monitoring, caching, and credential lookup behavior rather than hidden or unrelated activity.\n[SDI-1] expected: Aircraft-intelligence enrichment is not a separate capability creep finding here because the skill description, README, and references explicitly include tail-number/cabin recency analysis using public sources.\n[SDI-2] expected: The Planespotters lookup sends aircraft registrations for public aircraft metadata; this expands the network boundary but is tied to the documented enrichment feature and does not send AFKL credentials.\n[E1] expected: The external transmission to api.planespotters.net is artifact-supported, but the transmitted value is the aircraft registration used for best-effort enrichment, not arbitrary local data or secrets.\n[suspicious.env_credential_access] expected: AFKL_API_KEY, AFKL_API_SECRET, and state-dir credential files are documented inputs and are used as authentication headers for AFKL API calls.\n[suspicious.potential_exfiltration] expected: The sensitive-looking file reads are limited to documented AFKL credential files and are sent only to the AFKL provider API as intended authentication material.",
+          "guidance": "Install only if you are comfortable providing an AFKL API key and allowing watched flight/aircraft details to be stored in local state/cache files. Use a dedicated API key, protect any credential files, set an explicit private state directory, and remove any cron job after the monitoring window ends. Expect aircraft registrations to be sent to Planespotters when enrichment runs.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent Air France/KLM flight tracker whose credentials, polling, local state, and aircraft-enrichment behavior are disclosed and aligned with flight monitoring.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783649189932,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: airfrance-afkl\nVersion: 1.0.1\n\nThe skill is classified as suspicious due to several high-risk capabilities, even though they appear to be used for the stated purpose. It performs file system write operations for state and cache management (e.g., `fs.writeFileSync` in `afkl_watch_flight.mjs`, `aircraft_intel.mjs`), makes external network calls to a third-party API (`api.planespotters.net` in `afkl_watch_flight.mjs` and `aircraft_intel.mjs`) for data enrichment, and its `SKILL.md` instructions suggest setting up cron jobs for persistence, which is a significant capability. While these actions are aligned with the skill's flight tracking and monitoring purpose, they represent capabilities that could be abused if the skill's logic were altered or if external dependencies were compromised. Additionally, `afkl_http.mjs` includes a hardcoded fallback path (`/home/cwehrung/clawd/state`) for the state directory, which is unusual for a generic skill.",
+          "checkedAt": 1779160245395,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "c1a151ed5a5c63716b43f42ca3451086fa921c00ed4b778fa5b9dbd28f406ee6",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/c1a151ed5a5c63716b43f42ca3451086fa921c00ed4b778fa5b9dbd28f406ee6"
+    },
+    "slug": "airfrance-afkl",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

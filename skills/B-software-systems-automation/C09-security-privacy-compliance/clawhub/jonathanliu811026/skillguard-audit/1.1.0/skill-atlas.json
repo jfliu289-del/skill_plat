@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.465,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C09:token:audit",
+      "category:C09:token:privacy",
+      "category:C09:token:security",
+      "cross-tag:agent-management",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "3dde222b427b63934676caca30981bda132db1b91fee3a31b556fe6ec19b9468",
+    "content_hash": "be824bc6c389b6b027ae627f534e20d1be73cff148c5bc6489da1cf85fb80c49",
+    "precanonical_content_hash": "9e3b79cfa8e6fc0cae3b031849be53ccc4478e3d50a4d11be851e8dafd191a06",
+    "skill_md_hash": "d81529f918bcd6b898af6f4fab2577f57772cc129dd1e64c7c60051a7d42ad5d",
+    "version_metadata_sha256": "3ae4c4a62e1231fc5e29de2304b66792d577f56613cec63640c6574f28d7e4a1"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jonathanliu811026/skills/skillguard-audit",
+    "claim_id": "13637325ded8cea976368fc9cbefd9577b8717517d3c90487594d4e82f5d5422",
+    "index_entries": [
+      {
+        "index_path": "categories/communication.md",
+        "label": "skillguard-audit",
+        "url": "https://clawskills.sh/skills/jonathanliu811026-skillguard-audit"
+      }
+    ],
+    "owner_handle": "jonathanliu811026",
+    "owner_id": "s176ke45ja87cazngxgkxx3evn83grd1",
+    "published_at": 1774355831515,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972739743,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972739743,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently match the stated purpose of auditing OpenClaw skills through a SkillGuard API, and the external code submission is disclosed in SKILL.md.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The documented audit workflow is user-invoked; safe-install.sh also installs a user-named skill after SAFE/LOW_RISK results and supports an explicit --force bypass, which is relevant but not hidden automatic behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden install-time hooks or dependency installers were found; the skill declares curl, jq, and clawhub, matching the scripts' needs.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The tool reads only a selected ClawHub skill or user-provided local file, then sends that content to api.agentsouls.io, which is proportionate to remote audit functionality but privacy-sensitive.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "audit.sh does not persist changes, while safe-install.sh can modify the local installed skill set via clawhub install for a user-specified skill.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[TP4] expected: The installer wrapper is purpose-adjacent to pre-install auditing and is explicit in its own usage text; the mismatch is worth noting, but the artifact does not show deceptive or hidden installation behavior.\n[SDI-1] expected: --force bypasses the audit, but it is an explicit command-line option and directly states that it skips the security audit before installation.\n[SDI-2] expected: Installing after SAFE/LOW_RISK is consistent with a safe-install wrapper invoked for that purpose; users should still treat the remote verdict as advisory.\n[SQP-2] expected: audit.sh sends selected code to a third-party API without an interactive prompt, but SKILL.md prominently discloses full-source transmission and the endpoint.\n[E1] expected: External transmission of audited code is real and privacy-sensitive, but it is disclosed and central to the stated remote-audit purpose rather than hidden exfiltration.",
+          "guidance": "Install only if you are comfortable sending audited skill source or selected local files to api.agentsouls.io. Do not audit private code, secrets, or proprietary skills unless you trust that service and its retention claim. Treat safe-install.sh as an installer, avoid --force unless you already trust the target skill, and review CAUTION/UNKNOWN results manually.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill is a disclosed remote auditing tool, but users should know it uploads audited code and includes an optional installer wrapper.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972702174,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 84,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: skillguard-audit\nVersion: 1.1.0\n\nThe skill's primary function is to send the full source code of other OpenClaw skills to a remote third-party API (api.agentsouls.io) for analysis. While this behavior is explicitly disclosed in the SKILL.md privacy notice, the automated exfiltration of local or downloaded script content via audit.sh and safe-install.sh poses a significant security risk, as it could lead to the exposure of sensitive logic or hardcoded credentials contained within the audited files to an external service.",
+          "checkedAt": 1779164855661,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "e9df3be165b75f7b2d2492aee9bdb041d465e1c9375bdbec07f4edef22324f99",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e9df3be165b75f7b2d2492aee9bdb041d465e1c9375bdbec07f4edef22324f99"
+    },
+    "slug": "skillguard-audit",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

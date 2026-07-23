@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.35,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C12",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:data",
+      "category:C12:token:decision",
+      "category:C12:token:market",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "risk:R4"
+    ],
+    "risk_level": "R4",
+    "secondary_categories": [
+      "C00",
+      "C04"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a5efe28093fcb4706ad6c7f19e25a259b5c912e85ccfcc426a7373f3ceff21ba",
+    "content_hash": "9fb0f7f18e6ee29dc8a666f9be7888452f7094f38d20f030dd4471349c885d25",
+    "precanonical_content_hash": "7e9225deff079891ed9b00d2323fee0540c69f3b12feaacfc65e2e8d5b6db473",
+    "skill_md_hash": "1317f7be79f37e6e26ece63ab9f2b67b1f1443cb57495dac2e6aa2a53d3a1aff",
+    "version_metadata_sha256": "10e3b405d0443e2a664c67ff5b5d4e7305acbb4d6abd43a9096fd942485622a6"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/kenera/skills/a-share-short-decision",
+    "claim_id": "7ea5611478fafc150f6a7941ad791f7742ec4e04899085af9885face48a1d652",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "a-share-short-decision",
+        "url": "https://clawskills.sh/skills/kenera-a-share-short-decision"
+      },
+      {
+        "index_path": "categories/cli-utilities.md",
+        "label": "a-share-short-decision",
+        "url": "https://clawskills.sh/skills/kenera-a-share-short-decision"
+      }
+    ],
+    "owner_handle": "kenera",
+    "owner_id": "s170dx346jj944x30k4a83h3ss885na3",
+    "published_at": 1771041577797,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779973519399,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779973519399,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The code and documentation consistently support short-term A-share sentiment, sector, stock, capital-flow, scoring, logging, and reporting workflows. It produces actionable financial-analysis text, but it does not place trades or access brokerage accounts.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime actions are explicit CLI commands. The optimization subskill can write output files and, only with the explicit --apply-to-config flag, overwrite the skill's config.json, so users should treat that flag as state-changing.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No installer script, obfuscated setup, or hidden package-install behavior was found. The README suggests installing akshare and pandas, apparently unpinned, which is ordinary but less reproducible than pinned dependencies.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network use is through AkShare public market-data APIs and local reads of config.json, matching the stated purpose. No credential stores, browser/session data, private-file crawling, or account APIs were found.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill appends prediction logs and writes generated artifacts under data/, and scheduler.yaml defines recurring weekday analysis jobs. These behaviors are disclosed and purpose-aligned, but should be intentionally enabled in a shared or production workspace.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The filesystem I/O concern is real but proportionate: SKILL.md and subskill docs disclose data/ outputs and data/decision_log.jsonl, and artifact review found writes limited to local data/ artifacts plus config.json only when explicitly requested.\n[SQP-2] expected: The config-optimization script writes documented artifacts under data/ and can update config.json with --apply-to-config. That can affect future recommendations, but it is visible, optional, and aligned with the configuration-tuning purpose rather than hidden mutation.\n[unicode-control-chars] unexpected: The prompt-injection indicator appears consistent with text encoding/BOM-like characters in source files; no bidirectional text deception or instruction-hijacking behavior was found in the artifacts reviewed.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with artifact review, but it was not used as the sole basis for the verdict.",
+          "guidance": "Install it in an isolated environment, review or pin akshare and pandas if reproducibility matters, and enable the scheduler only if you want recurring market scans. Do not use --apply-to-config unless you intentionally want to change future screening behavior, and treat the generated recommendations as automated market research rather than personal financial advice.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent A-share market-analysis tool that writes local reports/logs and can optionally update its own config, with no evidence of deception, exfiltration, or trading-account control.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779973469096,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: a-share-short-decision\nVersion: 1.2.0\n\nThe skill is designed for A-share short-term trading decisions, leveraging `akshare` and `pandas` to fetch and process financial market data. All code and documentation (including AI agent prompts) are aligned with the stated purpose, focusing on market sentiment, sector rotation, stock scanning, and capital flow analysis. File operations are confined to local configuration files (`config.json`) and a dedicated `data/` directory for logs and generated reports. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, prompt injection attempts against the agent, or obfuscation. The `requirements.md` and `scheduler.yaml` files specify legitimate dependencies and scheduling for the OpenClaw platform, respectively. The skill appears to be a well-defined and legitimate financial analysis tool.",
+          "checkedAt": 1779163727457,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "8793134f9c53e639e787c52090ffa21c9d9b34acd00432e2851f65bb7ab93e4d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8793134f9c53e639e787c52090ffa21c9d9b34acd00432e2851f65bb7ab93e4d"
+    },
+    "slug": "a-share-short-decision",
+    "source_type": "clawhub",
+    "version": "1.2.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

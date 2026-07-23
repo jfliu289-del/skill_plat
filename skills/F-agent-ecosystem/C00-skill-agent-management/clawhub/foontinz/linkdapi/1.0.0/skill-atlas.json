@@ -1,0 +1,160 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "document",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C02:token:writing",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C02",
+      "C04",
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "research",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "34c6a58e82d3134a9a107fc48587b5dda04e98fca5efd300806285fd6cc3c304",
+    "content_hash": "c7b612e71b8a02780ec9ae81e4b3996a0fb38b5887db366baec64f29dd9729c1",
+    "precanonical_content_hash": "e31883283f203a8fe2e2db57a1482a8bbd2c125ebe23e4def18c2d61d1853220",
+    "skill_md_hash": "34a67b5284b62fe063d5f8a6e2d1e1e342eb3e12a97b7ed0c81149efef0b0cd7",
+    "version_metadata_sha256": "43698200c32cd79cd6754fd8b5b945151b1b073806129d6e1de95471296b246b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/foontinz/skills/linkdapi",
+    "claim_id": "fd5a43be98f46b88e676e21af5023a2141fdfc7871778d42613b74d0d16259bc",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "linkdapi",
+        "url": "https://clawskills.sh/skills/foontinz-linkdapi"
+      },
+      {
+        "index_path": "categories/data-and-analytics.md",
+        "label": "linkdapi",
+        "url": "https://clawskills.sh/skills/foontinz-linkdapi"
+      }
+    ],
+    "owner_handle": "foontinz",
+    "owner_id": "s176s6tfzdzqsskahp157fns05884qp9",
+    "published_at": 1769958722491,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783653602177,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783653602177,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to use the LinkdAPI Python SDK for LinkedIn profile, company, job, and search data, and the documented capabilities match that purpose. Contact-info lookup can expose email and phone data, so it is sensitive, but it is explicitly disclosed rather than hidden.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill instructs agents to create temporary Python scripts and run them with uv for one-off SDK calls. That is a local code-execution workflow, but it is clearly described and limited to using the LinkdAPI SDK for user-requested LinkedIn queries.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains only SKILL.md and no bundled executable files. Runtime use installs the unpinned linkdapi Python package through uv, so users should trust the package source before use.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill uses LINKDAPI_API_KEY from an environment variable and sends requested LinkedIn lookups to the external LinkdAPI service. This is proportionate for the integration, but returned people/contact data should be handled carefully.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, privilege escalation, background worker, hidden storage, or destructive behavior appears in the artifact. Temporary scripts are described as ephemeral, with deletion shown in the example workflow.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The concern about profile and contact data is valid as user guidance because the skill documents email and phone lookup without privacy guardrails. It does not show covert collection, automatic harvesting, exfiltration, or behavior outside the stated LinkedIn-data purpose.",
+          "guidance": "Install only if you trust LinkdAPI and the Python package it installs. Keep the API key in an environment variable, review generated scripts before running them in sensitive workspaces, and use contact-info endpoints only for legitimate, authorized purposes with minimal retention or sharing of returned personal data.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward LinkdAPI helper for LinkedIn data lookups, with privacy and dependency-trust considerations but no hidden or malicious behavior in the artifact.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783653571515,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 9,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: linkdapi\nVersion: 1.0.0\n\nThe skill is designed to interact with the LinkdAPI service for LinkedIn data. All instructions for the AI agent in SKILL.md, including the example workflow, are clearly aligned with this stated purpose. The skill correctly uses `os.getenv(\"LINKDAPI_API_KEY\")` for API key management and instructs the agent to create, run, and delete ephemeral Python scripts using `uv run`. There is no evidence of prompt injection attempts to mislead the agent, exfiltrate data, establish persistence, or execute arbitrary malicious code. The external URLs (`https://linkdapi.com/signup?ref=K_CZJSWF`, `https://linkdapi.com/docs`) are directly related to the LinkdAPI service.",
+          "checkedAt": 1779160691830,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "996ad8dd190a2fba8cc38fcc1b20e759ac9dc9d49b91c672b134cdc090dacc15",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/996ad8dd190a2fba8cc38fcc1b20e759ac9dc9d49b91c672b134cdc090dacc15"
+    },
+    "slug": "linkdapi",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

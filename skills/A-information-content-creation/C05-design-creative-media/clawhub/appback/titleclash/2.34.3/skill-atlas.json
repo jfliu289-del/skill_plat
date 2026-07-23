@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "document",
+      "report"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C02:token:write",
+      "category:C04:token:analyze",
+      "category:C05:token:creative",
+      "category:C05:token:image",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:design",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C02",
+      "C04"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "design",
+      "manage",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "fb958eba014a0f33409f74021500ed532e2a05ce1b50bb673e9c8ae2cae76bd0",
+    "content_hash": "327c4e11c9b701e38611517058680e1938eff98aed713aa607035426985a9539",
+    "precanonical_content_hash": "1b635878a822e5b77360e2d2fe592a963dfd41b74bde4c4e13dba2ea5658ad17",
+    "skill_md_hash": "2d416115cb8ffa6fd70770db0ef659ceb5413171832f19bb2693513a40df1c05",
+    "version_metadata_sha256": "00ea1f179b579c7f464044c6d34be1453f33ef395065dbaef2958f72850d45b4"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/appback/skills/titleclash",
+    "claim_id": "7e95fd3c0c0dd49eb14e2657cbcde36bd357968783e758e5395f802eb3d681b0",
+    "index_entries": [
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "titleclash",
+        "url": "https://clawskills.sh/skills/appback-titleclash"
+      }
+    ],
+    "owner_handle": "appback",
+    "owner_id": "s174bxfwyvve49fxw2ja7f3nrn884ar3",
+    "published_at": 1774238702297,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779966792852,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779966792852,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The Bash, image analysis, API calls, title generation, and title submission all fit the stated purpose of playing the TitleClash captioning game.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions are forceful and step-by-step, and they direct the agent to submit generated titles, but that posting behavior is central to the game and is not hidden.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no executable installer or bundled code beyond SKILL.md; the metadata discloses required tools such as curl and python3.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill contacts titleclash.com, uses Bash/curl and the image tool, and reads a TitleClash token; these are proportionate to fetching challenges and submitting captions.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "It may auto-register a TitleClash agent, store a service-specific token under the OpenClaw skill workspace with chmod 600, and append gameplay results to a local history file; this is disclosed and scoped to the skill.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-2] expected: The auto-registration flow creates a game agent only when no token is available or the token is invalid; this is disclosed and purpose-aligned, though users should know it creates a reusable service identity.\n[SQP-2] expected: The token is stored at a predictable skill-specific path with restrictive permissions; this is credential persistence, but it is disclosed and limited to TitleClash authentication.\n[SDI-2] expected: The history file stores challenge IDs and result metrics for future gameplay tuning; the data is low sensitivity and directly tied to the skill's game purpose.\n[SQP-2] expected: Appending results to history.jsonl creates residual local data, but the artifact explicitly shows the path and fields and does not collect broader local or private data.",
+          "guidance": "Install this only if you want an agent to play TitleClash on your behalf. Expect it to contact titleclash.com, possibly create a TitleClash agent token, store that token locally, and submit captions to the game; delete the local .token and history files if you no longer want reuse or retained gameplay records.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "TitleClash is a game skill that transparently fetches image challenges and submits captions, with disclosed local token and history storage.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779966754211,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 30,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: titleclash\nVersion: 2.34.3\n\nThe TitleClash skill is a game-oriented bundle that uses Bash and image analysis tools to participate in a captioning competition. While it utilizes high-privilege capabilities like shell execution and network access (via curl to titleclash.com), its operations are transparently documented and strictly limited to the stated purpose of managing API tokens, fetching challenges, and submitting titles. The skill manages its own credentials within a dedicated workspace directory (~/.openclaw/workspace/skills/titleclash/) and does not attempt to access sensitive system files or exfiltrate unauthorized data.",
+          "checkedAt": 1779163964555,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "3cf9c5d67527e17f3511a0349041bc29982b43823ce14b888d2bdd5f34993122",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/3cf9c5d67527e17f3511a0349041bc29982b43823ce14b888d2bdd5f34993122"
+    },
+    "slug": "titleclash",
+    "source_type": "clawhub",
+    "version": "2.34.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

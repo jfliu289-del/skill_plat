@@ -1,0 +1,124 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "5b6c05fec2b53ef3d207ab19ec54c692554dd79f4a79344ecb458a6226e7f9f5",
+    "content_hash": "989285cc265fc92758fccd87e7fc3ee90502ae2fa5a99a6baaa3499a884e126e",
+    "precanonical_content_hash": "8a69944400f70f514f579f513a2e253e24d90797a75d3e6153b6d8cb8a87237a",
+    "skill_md_hash": "a3825a8fe0c368775480762cdba18c2e841b33ac80e11e718f295428516e5de9",
+    "version_metadata_sha256": "a2fe3e5834efe9ce98c2a4bec9d963ce6551cdfbe2a1a9592d897073478608e2"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/guoqiao/skills/mlx-tts",
+    "claim_id": "032ce6c7d7cc2d3f60952b709ba761cf52e685568c29115c3bade74ac5a89b6b",
+    "index_entries": [
+      {
+        "index_path": "categories/apple-apps-and-services.md",
+        "label": "mlx-tts",
+        "url": "https://clawskills.sh/skills/guoqiao-mlx-tts"
+      }
+    ],
+    "owner_handle": "guoqiao",
+    "owner_id": "s17ffveb731pj7ry6ezhyn9hts88598a",
+    "published_at": 1770691606812,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779963625410,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779963625410,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts match the stated purpose: user text is passed to mlx_audio for speech generation, converted to an OGG file with ffmpeg, and returned as an audio path for sending to the user.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The agent instructions are limited to generating and sending the resulting voice file, but triggers such as \"Say <text>\" and \"Reply with voice message ...\" are broad enough to cause unintended activation in ordinary requests.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "install.sh uses Homebrew and uv to install ffmpeg, uv, and mlx-audio, including a forced prerelease-capable uv tool install. This is disclosed and purpose-aligned, but it changes the local environment and depends on external package sources.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The macOS Apple Silicon and Homebrew requirements fit the MLX TTS use case. Runtime file access is limited to a temporary output directory, with no credential access, broad indexing, or unrelated data collection observed.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No daemon, autostart, privilege escalation, or destructive persistence is present. Installed CLI dependencies persist as normal setup artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad voice-related triggers are relevant to TTS and disclosed, so this is a usability and unintended-invocation caution rather than evidence of hidden or malicious behavior.\n[SQP-2] expected: Dependency installation via brew and uv is expected for this local TTS tool and documented, though users should understand it installs or updates external software.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with the artifact review, but it was treated only as supporting telemetry.\n[staticScan] expected: The static scan reported no suspicious patterns, matching the simple artifact set reviewed locally.",
+          "guidance": "Install this only if you are comfortable allowing setup to install or update ffmpeg, uv, and mlx-audio from external package sources. Prefer explicit invocations like /mlx-tts when using it, and remember that text sent to the skill is rendered into an audio file and sent back through the message tool.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent local text-to-speech skill, with the main cautions that setup installs external tools and broad triggers may invoke it more easily than expected.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779963598070,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: mlx-tts\nVersion: 0.0.3\n\nThe skill bundle is designed for local Text-To-Speech functionality using MLX on Apple Silicon. The `install.sh` script uses `brew` and `uv` to install necessary dependencies (`ffmpeg`, `uv`, `mlx-audio`), which is standard for setting up a local environment. The `mlx-tts.sh` script processes user text, generates audio using `mlx_audio.tts.generate`, converts it with `ffmpeg`, and outputs the file path. The `SKILL.md` provides clear instructions for the agent to execute these scripts and handle the audio output. There is no evidence of data exfiltration, malicious execution (beyond installing legitimate tools for the stated purpose), persistence mechanisms, prompt injection attempts against the agent, or obfuscation.",
+          "checkedAt": 1779162612313,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "283b20cb1c9c60cb2d27257f81b86a3009516e1e1a9241304a81749aaa78b6d7",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/283b20cb1c9c60cb2d27257f81b86a3009516e1e1a9241304a81749aaa78b6d7"
+    },
+    "slug": "mlx-tts",
+    "source_type": "clawhub",
+    "version": "0.0.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

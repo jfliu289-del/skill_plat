@@ -1,0 +1,128 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.4167,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C05:token:animation",
+      "category:C05:token:audio",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "f1dd9ffd016fe46627d27a1717426efb3eb0de4d2a1620658d9692b5a9005b17",
+    "content_hash": "325e0f60bfd8d6ee06aaf7a101430c3f26e1a14dc523a112c4cabfcefa3742d4",
+    "precanonical_content_hash": "03d5a960898a83be1285e00a69d401a68a81bd23409b1e7b9f3ca1ee11bc87c7",
+    "skill_md_hash": "44778c5ea077ee84dacb31297adb095e0113c241f0c69570dcd859bc7ca7c317",
+    "version_metadata_sha256": "e1d25b63ecdb813b7aad2043cd1fd30e4327d63ce3ce7d5d2150aae498d13f74"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/matusvojtek/skills/her-voice",
+    "claim_id": "896451c16a091f6cb0ea02a74033f8b009fee9103282c94c2169b4ba2e6592bd",
+    "index_entries": [
+      {
+        "index_path": "categories/speech-and-transcription.md",
+        "label": "her-voice",
+        "url": "https://clawskills.sh/skills/matusvojtek-her-voice"
+      }
+    ],
+    "owner_handle": "matusvojtek",
+    "owner_id": "s17234qeb8wtkx5ay0qvd7yy5x885s1j",
+    "published_at": 1771193947073,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968778597,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968778597,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts and Swift visualizer match the stated purpose: speaking text aloud, saving audio, visualizing playback, configuring voices, and optionally using paste-to-speak in persist mode.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill asks the agent/user to run setup and speech commands and documents optional daemon use; these are broad enough to require user awareness but are directly tied to local TTS functionality.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Setup creates virtual environments, installs third-party TTS packages, may install espeak-ng through Homebrew on macOS, compiles a macOS visualizer, patches a dependency for compatibility, downloads a model, and writes config under ~/.her-voice. These side effects are substantially disclosed, though dependencies are not fully pinned.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Local files, model/cache data, audio playback, and clipboard paste-to-speak are proportionate for the feature set; clipboard text is sent only to the configured local Unix socket, but users should avoid pasting secrets into the visualizer.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The daemon is optional, local, and documented with stop/status commands; it stores PID and socket files under ~/.her-voice with owner-only permissions and does not survive reboot.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[AST4] expected: The setup subprocess and package/model download findings are valid supply-chain notes, but the behavior is disclosed and necessary for installing local TTS backends rather than evidence of hidden execution.\n[LP3] expected: Metadata only lists required binaries, while the documentation makes shell commands and ~/.her-voice writes clear; this is an under-declared metadata note, not a purpose mismatch.\n[SDI-1] expected: Clipboard-derived text is sent to the local TTS daemon when the user presses Cmd+V in persist mode; the feature is documented in controls and persist-mode instructions.\n[SDI-2] expected: Clipboard access is sensitive, but it is user-triggered by paste and fits the voice-station workflow; no artifact evidence shows external transmission.\n[SQP-2] expected: The setup side effects and uninstall deletion are user-facing and bounded to the skill's local data directory; clearer confirmation would be better, but the artifacts do not show deceptive or unbounded destructive behavior.\n[TM1] expected: The recursive deletion command targets ~/.her-voice specifically after stopping the daemon, so it is a normal uninstall instruction with data-loss risk rather than broad home-directory deletion.",
+          "guidance": "Install only if you are comfortable with setup downloading third-party TTS packages and models, creating ~/.her-voice, and optionally running a local daemon that uses significant RAM. Do not paste passwords or tokens into the visualizer, and review the uninstall command before running it because it deletes all Her Voice local data.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Her Voice is a coherent local text-to-speech skill with disclosed setup downloads, local configuration, and an optional background daemon.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968736966,
+          "issueCount": 11,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: her-voice\nVersion: 1.0.2\n\nThe OpenClaw skill bundle (version 1.0.2) is classified as benign. The code and documentation are transparent and align with the stated purpose of providing a local text-to-speech agent. Crucially, the `CHANGELOG.md` details numerous critical security fixes implemented in this version, addressing potential vulnerabilities such as local symlink attacks, buffer overflows in the Swift visualizer (via `strlcpy`), resource exhaustion, and path injection. The Python scripts (`config.py`, `daemon.py`, `speak.py`) and the Swift visualizer (`HerVoice.swift`) incorporate these fixes, demonstrating robust input validation, secure file handling (e.g., restrictive permissions, symlink checks), and safe execution practices. There is no evidence of intentional malicious behavior like data exfiltration or unauthorized remote control.",
+          "checkedAt": 1779164384530,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a0081d8a477d53c4892c45fee3bcc651a8d7623b09b5a49038fe687a3fdb54ce",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a0081d8a477d53c4892c45fee3bcc651a8d7623b09b5a49038fe687a3fdb54ce"
+    },
+    "slug": "her-voice",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

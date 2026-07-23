@@ -1,0 +1,137 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.2833,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:sources",
+      "category:C05:token:audio",
+      "category:C18:token:home",
+      "category:C19:token:device",
+      "cross-tag:agent-management",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C05",
+      "C18",
+      "C19"
+    ],
+    "stages": [
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "f963c2fc2b013bf05ef77dfa60f89e825ece82977fc3ebc9c616926b1934b181",
+    "content_hash": "cd6713be8df3c2ccffa11399b78cc8023559cd8b9de5a16bae9f6ff19ac0c3d7",
+    "precanonical_content_hash": "75fb9a49d3a7797e9d7fc09619ffeccb4b725589b9d779818d683da1647a7e1b",
+    "skill_md_hash": "835d7cc7463025d1cd4fc4f6e2496622bf4736a9290b6060313dc892a4d2c1de",
+    "version_metadata_sha256": "763abf44f924c2b1a64085a994244fd4e4c7d4f3c85031d6570677ea655661c6"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/icecat2005/skills/roomsound",
+    "claim_id": "0c3802e23ab639e588d40d537a795f8267d4b4f8b73b592fde3879c8a7205549",
+    "index_entries": [
+      {
+        "index_path": "categories/media-and-streaming.md",
+        "label": "roomsound",
+        "url": "https://clawskills.sh/skills/icecat2005-roomsound"
+      }
+    ],
+    "owner_handle": "icecat2005",
+    "owner_id": "s17ds8p7mb2sd6jb6g52ba4n6d885rg8",
+    "published_at": 1771704600465,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779947073997,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779947073997,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented capabilities are coherent with the stated purpose: YouTube audio playback, Bluetooth speaker discovery and switching, audio sink selection, and queue creation.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions are mostly bounded to audio tasks and include confirmation for disruptive speaker switching, though troubleshooting language is broad about automatic fixes.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill discloses Debian/Ubuntu package installation for yt-dlp, mpv, bluez, and pulseaudio-utils; this modifies the host but is directly tied to the skill's function.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Using bluetoothctl, wpctl, pactl, yt-dlp, and mpv is proportionate for speaker control and playback, but it can change the user's active audio devices and play network media.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "It writes a yt-dlp config file and stores speaker alias-to-MAC mappings after asking for aliases; no credential access, covert persistence, exfiltration, or destructive behavior was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The first-run package install and yt-dlp config write are real side effects, but they are disclosed in the skill metadata/instructions and are directly related to audio playback reliability.\n[SQP-2] expected: The quick-start guide's automatic troubleshooting wording is under-specified, but the artifact-backed recovery actions are limited to dependency setup, audio/Bluetooth inspection, sink switching, and yt-dlp command correction.",
+          "guidance": "Install only if you are comfortable letting the agent install local audio/Bluetooth packages, play YouTube audio, switch Bluetooth speakers or audio sinks, create ~/.config/yt-dlp/config, and remember speaker aliases/MAC addresses. Ask for confirmation before package installs or persistent config writes if you want tighter control.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "RoomSound is a disclosed audio and Bluetooth speaker-control skill, with local setup and speaker changes that fit its purpose but deserve user awareness.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779947037532,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: roomsound\nVersion: 0.1.5\n\nThe skill bundle is designed for audio playback and Bluetooth speaker control, utilizing standard tools like `yt-dlp`, `mpv`, and `bluetoothctl`. All commands executed are directly aligned with the stated purpose, and there is no evidence of data exfiltration, persistence mechanisms, or unauthorized network activity. Crucially, the `SKILL.md` file explicitly instructs the AI agent to perform input sanitization using `tr -d` on user-supplied text before interpolating it into shell commands, demonstrating a clear intent to prevent command injection vulnerabilities. File system modifications are limited to creating a user-specific `yt-dlp` configuration file, which is a standard and non-malicious operation.",
+          "checkedAt": 1779165909366,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "4f8ec340f0a8d474886ca5afe7453645633a234e98eb07437779b8e4f112be59",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4f8ec340f0a8d474886ca5afe7453645633a234e98eb07437779b8e4f112be59"
+    },
+    "slug": "roomsound",
+    "source_type": "clawhub",
+    "version": "0.1.5"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

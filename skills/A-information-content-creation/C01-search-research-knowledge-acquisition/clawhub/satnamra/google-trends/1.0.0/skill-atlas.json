@@ -1,0 +1,155 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report",
+      "website"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:research",
+      "category:C04:token:data",
+      "category:C06:token:code",
+      "category:C12:token:market",
+      "category:C19:token:browser",
+      "cross-tag:browser-automation",
+      "cross-tag:data-analysis",
+      "cross-tag:planning",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C12",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "automate",
+      "build",
+      "plan",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "2837aafa3dcb3497de68c778e2cf8eef8430d3bd5c469cdf25de3e733d8c6a3b",
+    "content_hash": "3403b779a21c21be8317f2ceb9a1c95e0e83e932d8647f8dd3f13f4fe987c522",
+    "precanonical_content_hash": "41200deb8cd8c749ea785858b1f3167055d017f8dc0a13c0825da8a6ce56a071",
+    "skill_md_hash": "29af642b067e1f5c3fd8d26f792104260ef05b6d92532af3cb60fb7d1c924d6d",
+    "version_metadata_sha256": "a0c3f982c20dc88aa4a6467ec8c0e8d78160b8674d373e76abee0338b103ae73"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/satnamra/skills/google-trends",
+    "claim_id": "f86300add084180917ef85bf597f2f35856abb7620b967a36f23cffe30daa333",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "google-trends",
+        "url": "https://clawskills.sh/skills/satnamra-google-trends"
+      }
+    ],
+    "owner_handle": "satnamra",
+    "owner_id": "s172jvg35szpfk3jmv4a0z4rfh884wq5",
+    "published_at": 1770953155874,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779973213550,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779973213550,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is trend research, and the artifacts support that by fetching Google Trends RSS data, opening Google Trends comparison URLs, and presenting public trend information.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill uses shell snippets and a helper script with user-supplied country codes and keywords in URLs; those inputs should be constrained or URL-encoded, but the quoted curl usage does not support the claimed arbitrary command execution behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains SKILL.md and a small shell helper script, with no installer, dependency bootstrap, package hook, or automatic execution path shown.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to trends.google.com and simple shell utilities are proportionate to the Google Trends monitoring purpose; no local profile stores, credentials, private files, or broad indexing are requested.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The SKILL.md includes an example cron payload for daily trend reports, but it is disclosed, user-directed, and limited to public trend data rather than hidden persistence or privilege escalation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code_insight shell-injection claim] expected: The artifact does interpolate a user-controlled GEO value into a curl URL, but it is inside a quoted argument, so shell metacharacters in the value are not reinterpreted as commands. This is an input-validation hardening issue, not artifact-backed RCE.\n[LP3] expected: Shell and outbound web access are real, but they are disclosed in the skill instructions and align with fetching public Google Trends data. The missing explicit permission metadata is a packaging/scoping note rather than a material Review concern.",
+          "guidance": "Install only if you are comfortable with the agent making public web requests to Google Trends and optionally setting up a user-approved daily report. Prefer two-letter country codes and URL-encoded keywords, and avoid passing arbitrary text directly into shell commands.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward Google Trends helper that makes public Google Trends requests and does not show hidden access, credential use, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779973181058,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: google-trends\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to a critical shell injection vulnerability found in the `trends-daily.sh` script, which is also defined in `SKILL.md`. The script directly interpolates the `$GEO` variable (derived from user input `$1`) into a `curl` command without proper sanitization. This allows for arbitrary command execution if an attacker can control the input provided to the script by the AI agent, posing a significant Remote Code Execution (RCE) risk. While the skill's stated purpose is benign, this lack of input sanitization constitutes a high-severity vulnerability.",
+          "checkedAt": 1779163659710,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "fb335ff2044153c47a87f0792834dd6b7aad749581f766c596ba60a9716f012d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/fb335ff2044153c47a87f0792834dd6b7aad749581f766c596ba60a9716f012d"
+    },
+    "slug": "google-trends",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

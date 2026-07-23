@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.4167,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C09:token:secure",
+      "category:C09:token:security",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d22fc6959a801efb5ccc1dc0e1be7674c1d18e30b70dd3590a0a060003afcc36",
+    "content_hash": "04d7aeb5c53b5db6ece5da7dd32456e8c516335dd6e9c525f910801194013e8d",
+    "precanonical_content_hash": "112a19204d844551aab3f2f66df5846e027169c1ebe4eaab38398b37f150ef5f",
+    "skill_md_hash": "4cc5157902593dd234df94230427e42cfb5a1f96ecf95fdb0d5dd1a971ff493c",
+    "version_metadata_sha256": "bf741c836f5d7304117f5434db72abb03f0eb279a7aa12ea007c6a43c920c4b3"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/zuiho-kai/skills/vault",
+    "claim_id": "158eba3e29363a37b258eaca83d15b88675f98fee3ada6c41b14cee1b464c141",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "vault",
+        "url": "https://clawskills.sh/skills/zuiho-kai-vault"
+      }
+    ],
+    "owner_handle": "zuiho-kai",
+    "owner_id": "s17bskmd0a4bpj77f9ebt48arh885sf5",
+    "published_at": 1771268305202,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971400424,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971400424,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The code matches the stated vault purpose: it encrypts stored passwords locally, lists entries, retrieves plaintext on `show`, and removes entries on `remove`; credential access is sensitive but expected for this tool.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands are documented and user-directed, though examples normalize passing secrets as command arguments and displaying retrieved secrets in command output.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No install scripts, external npm dependencies, shell execution, or network calls were found; the package uses Node built-ins.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Requiring `VAULT_MASTER_KEY` or configured `masterKey` is proportionate for encryption, but it is a highly sensitive secret and must be protected.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists an encrypted JSON vault under the user's home directory and supports deletion of entries; no background execution or privilege escalation behavior was evident.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The plaintext `show` behavior and deletion command are real, but they are disclosed core vault functions rather than hidden or unrelated behavior; users should treat output as sensitive.\n[SQP-2] expected: The documentation does show secrets being passed as command arguments, which is a usability/security weakness for a credential tool but not evidence of malicious or deceptive behavior.\n[SSD-3] expected: The examples include realistic-looking credential strings and printed output; this should be improved, but it is documentation risk within an otherwise coherent local vault.",
+          "guidance": "Install only if you want OpenClaw to manage credentials. Use a strong master key, keep the vault file private, avoid storing high-value production secrets unless you accept agent access to them, and be careful with `show` because plaintext may appear in transcripts, logs, screenshots, or terminal history.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a local encrypted password vault, but using it lets OpenClaw store, reveal, and delete credentials when commanded.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971376082,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: vault\nVersion: 1.1.2\n\nThe OpenClaw Vault skill bundle provides a secure local password storage tool using AES-256-GCM encryption. The `index.js` code correctly implements strong cryptographic practices, including scrypt for key derivation with a random 32-byte salt per password, and a random 12-byte IV per password, as detailed in `SKILL.md` and `README.md`. It explicitly requires a `VAULT_MASTER_KEY` (from environment or config) and throws an error if not set, preventing insecure operation. Data is stored locally in the user's home directory (`~/.vault/passwords.json`) and there are no external network calls, shell injections, or suspicious dependencies (`package.json` lists no dependencies). The `CHANGELOG.md` transparently documents a past critical security fix regarding fixed salt, indicating a commitment to security rather than malicious intent. All instructions in `SKILL.md` and `README.md` are benign and align with the stated purpose.",
+          "checkedAt": 1779164625773,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "3567d15e2ffd44a4779d0e51f7b86ef7a1dbb7b98ea1475b8134e5147b8adb9a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/3567d15e2ffd44a4779d0e51f7b86ef7a1dbb7b98ea1475b8134e5147b8adb9a"
+    },
+    "slug": "vault",
+    "source_type": "clawhub",
+    "version": "1.1.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

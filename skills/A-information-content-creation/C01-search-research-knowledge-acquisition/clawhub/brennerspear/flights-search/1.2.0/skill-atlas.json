@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:find",
+      "category:C01:token:search",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C13:token:business",
+      "category:C17:token:notes",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C13",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d62ed659bacaed1e7296649b1a61fe904179e9f591e32896af224dce7e995d86",
+    "content_hash": "3eef59c971e5b145650e1f92abf24a721d37bf39e6280099d0d4266b4f67c176",
+    "precanonical_content_hash": "499865fbcb7c589f0ae90b1ed0b381ca30b2e6f0b81f037870b47b20eaa8fa00",
+    "skill_md_hash": "4060498bfa3782f6e237a482709f7fe8f524a6be51614c03ba2f559fd04dcceb",
+    "version_metadata_sha256": "c2ed9b8cf11f76332c521d33a211db7b04535b6e9be20f15e5c100ddd8ba2e69"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/brennerspear/skills/flights-search",
+    "claim_id": "07d397534dcbb28a9703e64f5a435161bc4d25d94413b881fd509997f3c0b595",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "flights-search",
+        "url": "https://clawskills.sh/skills/brennerspear-flights-search"
+      }
+    ],
+    "owner_handle": "brennerspear",
+    "owner_id": "s17ebpr0c7y6bpmzatrjw5rdt583fggy",
+    "published_at": 1772048794036,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783655449643,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783655449643,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The described purpose, a bundled flights-search CLI requiring Python and uv, fits the visible instructions and does not show unrelated data access, destructive behavior, credential use, or exfiltration.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The runtime scope appears limited to using the bundled CLI for flight search tasks; no hidden prompt overrides, persistence instructions, or broad local indexing were evidenced.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "SKILL.md recommends installing uv with `curl -LsSf https://astral.sh/uv/install.sh | sh`, which is disclosed and dependency-related but executes network-fetched code if followed.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Python 3.9+ and uv are proportionate for a Python CLI helper, and the provided scanner evidence does not show requests for sensitive local files, credentials, or high-impact system authority.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No evidence was provided or found of background services, privilege escalation, automatic persistence, credential storage, or recurring execution.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SC2] expected: The external uv installer command is a real supply-chain caution, but it is plainly presented as prerequisite setup for a common Python tool and is not hidden or unrelated to the skill purpose.\n[VirusTotal code_insight] expected: VirusTotal's concern rests on the same remote installer pattern; with no engine detections and no artifact evidence of malicious behavior, this is user guidance rather than a Review-level concern.",
+          "guidance": "Before installing, consider using a package manager or the official uv installation instructions instead of piping a remote script directly into `sh`. Install only if you are comfortable with uv as a dependency and with the skill running its bundled flight-search CLI.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill appears to be a coherent flight-search helper; its main caution is a disclosed optional installer command that pipes a remote uv install script into a shell.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783655417471,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 4,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: flights-search\nVersion: 1.2.0\n\nThe `SKILL.md` file contains a prerequisite installation instruction `curl -LsSf https://astral.sh/uv/install.sh | sh`. This command directly executes a remote script, which is a significant remote code execution (RCE) vulnerability. While the stated purpose is to install a legitimate tool (`uv`), an AI agent following this instruction without proper sandboxing or validation could be compromised if the remote script or its hosting domain were malicious. This constitutes a high-risk prompt injection vector against the agent, making the skill bundle suspicious rather than benign, despite the lack of explicit malicious intent within the provided files.",
+          "checkedAt": 1779161239985,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "56060d85ef0fea31ffae73d476df7bb18f7d80e61fc329cce53ba63c593f3728",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/56060d85ef0fea31ffae73d476df7bb18f7d80e61fc329cce53ba63c593f3728"
+    },
+    "slug": "flights-search",
+    "source_type": "clawhub",
+    "version": "1.2.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

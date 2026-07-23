@@ -1,0 +1,127 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C10:token:ai",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d11a377bab4a9e194cd062adec13d3f1766f1ba16f69b90a0db9a4185a6f6e73",
+    "content_hash": "efa238ea8149b88e9d91ea82f37b6583e854beafadc4a826ce0d1ac021b0e3f9",
+    "precanonical_content_hash": "fc25e32627e8b42c33295274b96da865d1418c5425a3451ed3e74d6d4013e42d",
+    "skill_md_hash": "60669e1a0c33548ee82e4bd53bd1ea13cc9436c9cb0cb8a1a91f7c665567dd39",
+    "version_metadata_sha256": "c6f8fe5ed86a123c5f21d861ab9a2144dc25e7eb93047b5acbea749b2f7e4592"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/justinhartbiz/skills/dory-memory",
+    "claim_id": "d10adb03db1a73022fec7eadec25b889eddbe09c1e5f97751a25198ca9e487e6",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "dory-memory",
+        "url": "https://clawskills.sh/skills/justinhartbiz-dory-memory"
+      }
+    ],
+    "owner_handle": "justinhartbiz",
+    "owner_id": "s17b6mcexg4qqgbmmaq4xw7ksh884v78",
+    "published_at": 1770515052867,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783656929792,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783656929792,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The file-based memory, state files, boot sequence, and task tracking all match the stated purpose of preserving agent continuity across sessions.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill explicitly tells agents to write exact user wording to state/ACTIVE.md and later read state and memory files; this is disclosed and purpose-aligned, but users should understand that sensitive prompts could be retained.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Artifacts are Markdown instructions and templates. Setup commands are limited to mkdir -p and cp -r into the OpenClaw workspace, with no package install, hidden executable, network call, or installer script found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The requested file access is local workspace memory storage, which is proportionate for this kind of skill; there is no evidence of credential use, remote syncing, broad filesystem indexing, or exfiltration.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is explicit and central to the skill, including ACTIVE.md, USER.md, MEMORY.md, recent-work logs, and suggested AGENTS.md boot behavior; no privilege escalation, background service creation, or destructive behavior was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The concern about immediate verbatim storage in SKILL.md is artifact-supported, but it is the disclosed core mechanism of the memory system rather than hidden or unrelated behavior.\n[SSD-3] expected: The repeated concerns about storing exact user text, ACTIVE.md examples, USER.md, recent-work, daily logs, and boot-time reads reflect real privacy and retention risk, but the behavior is local, disclosed, and aligned with cross-session continuity.",
+          "guidance": "Install only in workspaces where persistent local memory is desired. Do not put passwords, API keys, regulated data, confidential client material, or sensitive personal details into tasks that will be written to these files. Periodically review or clear ACTIVE.md, USER.md, MEMORY.md, recent-work logs, and archived memory files.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a transparent local memory template, but it deliberately stores task wording and work history in files users should keep free of secrets.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783656903668,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 23,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: dory-memory\nVersion: 1.0.0\n\nThe skill implements a file-based memory system for AI agents, which inherently requires file system access and direct instructions to the agent. While the `cp -r` command in `SKILL.md` and `mkdir -p` in `references/IMPLEMENTATION-GUIDE.md` are high-risk capabilities, they are used for local setup of the workspace and are clearly aligned with the stated purpose. The strong instructions to the agent in `SKILL.md` and `references/IMPLEMENTATION-GUIDE.md` (e.g., 'IMMEDIATELY write their EXACT WORDS') are a form of prompt injection, but their objective is to ensure fidelity of user input and implement the memory system, not to subvert the agent. Furthermore, `assets/templates/LESSONS.md` and `references/ANTI-PATTERNS.md` contain explicit safety rules (e.g., 'Ask before external actions', 'trash > rm', 'Never use isolated agentTurn for social media posting') that actively promote secure and responsible agent behavior. There is no evidence of intentional harmful behavior, data exfiltration, or malicious execution.",
+          "checkedAt": 1779162146219,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a54daef03076baa556867356034ce5be0a3ec71be64d6ac2d09ccf39212f7f59",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a54daef03076baa556867356034ce5be0a3ec71be64d6ac2d09ccf39212f7f59"
+    },
+    "slug": "dory-memory",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

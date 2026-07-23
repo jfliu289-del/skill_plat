@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.2833,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:find",
+      "category:C01:token:search",
+      "category:C04:token:data",
+      "category:C07:token:quality",
+      "category:C13:token:business",
+      "category:C18:token:travel",
+      "cross-tag:data-analysis",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C07",
+      "C13",
+      "C18"
+    ],
+    "stages": [
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "3fbd026a11284329b264c753a0b5c8d1d9961f740f07083ca8b986bc6821c7ca",
+    "content_hash": "86b787db43a92bd1b149a906c5ee491549262bf568c24696d1d48d7f1d51b94d",
+    "precanonical_content_hash": "2b0a2ee2d366a906a1a0fc03abddcc9235f22c1e433cd8a51adca0086a921aeb",
+    "skill_md_hash": "3e9c8a65e5b9c0d31526400079c934edc3cca5e71bc3a9a636d40f35d1e49927",
+    "version_metadata_sha256": "6723d99689dd0eb7ef6c1ba39ca01c002b0b5f5718c39984c82bf1831a57c9ad"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/kris-hansen/skills/google-flights",
+    "claim_id": "33d7fd2a71805315707c9ca8e0ad300f6288c41ce4c2197ee9b81b0fbc8f354c",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "google-flights",
+        "url": "https://clawskills.sh/skills/kris-hansen-google-flights"
+      }
+    ],
+    "owner_handle": "kris-hansen",
+    "owner_id": "s17abb2vf02fmnvkqz9kexf3rn8676t1",
+    "published_at": 1773593176160,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967921101,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967921101,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently implement Google Flights search, filtering, connection scoring, price tracking, route watching, and alerts; no unrelated destructive, credential-harvesting, or exfiltration behavior was found.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions include user-directed commands for tracking and an optional cron job for daily route checks; this is aligned with price monitoring but creates ongoing activity if the user enables it.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Setup asks the user to create a virtual environment and install the external fast-flights package without a pinned version, which is a normal integration pattern but leaves dependency behavior dependent on the package version installed.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Flight route, date, passenger count, and preference data are used for search through the fast-flights Google Flights scraper, which is proportionate to the stated purpose.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill writes tracked flights, route-watch state, and price history under ~/clawd/memory and documents those file paths; persistence is expected for alerts, though retention and file-permission controls are limited.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The persistence concern is valid as a privacy note, but the SKILL.md documents the data files and the tracked data is directly required for price alerts.\n[SQP-2] expected: track.py stores selected routes, dates, alert thresholds, and price history locally; this is user-directed by add/check/history commands and not evidence of hidden collection.\n[SQP-2] expected: watch-route.py stores watched route state locally and can be run by an optional cron command; the behavior is disclosed and purpose-aligned, with no automatic setup shown.\n[staticScan] expected: Static scan reported no suspicious patterns, and local review did not find shell execution, credential access, deletion, or covert network exfiltration.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with artifact review, but it was treated only as supporting signal.",
+          "guidance": "Install only if you are comfortable with flight searches being handled through the fast-flights/Google Flights path and with route/date tracking history being saved locally under ~/clawd/memory. Remove tracked routes and delete those memory files when you no longer need alerts, and enable the cron example only if you want recurring background price checks.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This flight-search skill behaves as advertised, with expected local tracking files and optional scheduled checks that users should manage consciously.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967878994,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: google-flights\nVersion: 2.0.0\n\nThe skill bundle provides a functional flight search and price tracking system using the legitimate 'fast-flights' scraper library. The scripts (search.py, track.py, watch-route.py) implement standard CLI logic for searching, filtering, and persisting flight data in the expected OpenClaw memory directory (~/clawd/memory/), with no evidence of data exfiltration, malicious execution, or prompt injection.",
+          "checkedAt": 1779164170588,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "5012304f2d8fc6cc051f09f63a18b038baecc580fc0910111a23717a83715369",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/5012304f2d8fc6cc051f09f63a18b038baecc580fc0910111a23717a83715369"
+    },
+    "slug": "google-flights",
+    "source_type": "clawhub",
+    "version": "2.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

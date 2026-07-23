@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C05:token:audio",
+      "category:C06:token:api",
+      "category:C07:token:test",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:software-development",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05",
+      "C06",
+      "C07",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "80b269b8d5d9240fc7f2460efd0288dc7ecb68cfc579986fc62745783576084c",
+    "content_hash": "e9ad0dd29394e3dcf8e2ca19fccbd336acba81b175f0bb2ef1bec5b6a78b138b",
+    "precanonical_content_hash": "aa02e65b16c7c4e5427958c04320945fed3c082abd9a08c987a846681d1cec3c",
+    "skill_md_hash": "f815bdda75df59d8381bcc24c2d8309c778d262a94431bcc6b8d9cb6db518bb2",
+    "version_metadata_sha256": "fc8880adc2056cdfb4bf4c6601071eaa4408dbac9b6b3b5160bf6309d0c67ee9"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/gugic/skills/inworld-tts",
+    "claim_id": "a77dbb5d3459bbde023d3bea4c88be999a2894bc924ba4a0a902d23957902ada",
+    "index_entries": [
+      {
+        "index_path": "categories/speech-and-transcription.md",
+        "label": "inworld-tts",
+        "url": "https://clawskills.sh/skills/gugic-inworld-tts"
+      }
+    ],
+    "owner_handle": "gugic",
+    "owner_id": "s17cq7fwsz70z53tqp6dkkjpxx884eza",
+    "published_at": 1769831706102,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783653086904,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783653086904,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is cloud text-to-speech, and the script implements that by sending the caller-provided text to documented Inworld TTS endpoints and writing decoded MP3 audio to a user-chosen output file.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions are user-invoked setup and usage commands; there are no hidden role changes, autonomous actions, destructive operations, unrelated file reads, or prompt-injection behavior in the artifact text.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation is manual and disclosed with copy, chmod, and an optional global symlink to /usr/local/bin; the symlink is broader than necessary but user-directed and visible.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill needs curl, jq, base64, network access to api.inworld.ai, and an INWORLD_API_KEY, which is proportionate to its cloud TTS purpose, though submitted text leaves the local environment.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The documentation suggests optional persistent API-key storage in ~/.bashrc or ~/.clawdbot/.env. There is no background worker, auto-start behavior, privilege escalation, or unbounded persistence.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The shell script and command examples are disclosed and central to the skill’s function. The lack of richer permission metadata is a transparency note, not a Review-level concern for this small, user-invoked script.\n[SQP-2] expected: The script sends user-provided text to Inworld.ai without an explicit runtime privacy warning. The SKILL.md does disclose the Inworld API and exact endpoints, so this is guidance rather than evidence of hidden behavior.\n[E1] expected: Both streaming and non-streaming POST requests go to documented Inworld TTS endpoints and carry the text needed for speech generation. This is expected for a cloud TTS integration, not unrelated exfiltration.",
+          "guidance": "Install only if you are comfortable sending the text you choose to convert to Inworld.ai using your API key. Avoid passing secrets, private customer data, or regulated content unless your policies allow it, store the API key carefully, and skip the optional global symlink unless you need command-line access from anywhere.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward Inworld.ai text-to-speech helper, but anything converted to speech is sent to Inworld’s API.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783653059881,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 41,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: inworld-tts\nVersion: 1.0.0\n\nThe skill bundle is benign, providing text-to-speech functionality via the Inworld.ai API as described. The `SKILL.md` documentation offers clear, non-manipulative instructions for the AI agent and user, including standard API key setup. The `scripts/tts.sh` script safely constructs JSON payloads using `jq -Rs .` to prevent injection, and securely transmits the user-provided text and API key (from environment variables) only to the legitimate Inworld.ai API endpoint. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts beyond the skill's stated purpose.",
+          "checkedAt": 1779160361840,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "b290bf17f36f8d5004a8720ab4441f8f1b29c02e8dda4433927187da8aea261a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b290bf17f36f8d5004a8720ab4441f8f1b29c02e8dda4433927187da8aea261a"
+    },
+    "slug": "inworld-tts",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,124 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "754e794b6ac2bad92c51da21e0e211282b031eb9b6d2c809b261a1b195a11e07",
+    "content_hash": "64543b42674e642e464f3376164c772713a975cfed04948f5c69c73c834dd145",
+    "precanonical_content_hash": "05b3d7189cdba0518f960510def9217e3fdbf836bdfb6d14e6ef2d7745ab323d",
+    "skill_md_hash": "0f8c888069b29bccf052497af0489ae4a7d81b0ceca27091ff27a9ac11583d3d",
+    "version_metadata_sha256": "8e30cd87e0ef8a4711be229bc27f4ad39083f4d926c185b0a38e24ae59ccc1be"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/wysh3/skills/mrc-monitor",
+    "claim_id": "5e804be094fdb454b7d0848455449f20385458f9a6008c5f55649a9a41dd856b",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "mrc-monitor",
+        "url": "https://clawskills.sh/skills/wysh3-mrc-monitor"
+      }
+    ],
+    "owner_handle": "wysh3",
+    "owner_id": "s17a6rypx22h7099yyxb8aq2zn884q5r",
+    "published_at": 1770085523563,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783656062491,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783656062491,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The Firebase polling, token-status checks, and channel notifications directly support the stated canteen token monitoring purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions tell the agent to extract numbers and start monitoring from broad command patterns, so ambiguous messages containing numbers could start unintended monitoring.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No installer, package download, obfuscated setup, or hidden dependency installation is present; the bundle contains a markdown skill file and one Python script.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Outbound access is limited to a named Firebase Firestore project, and notifications are sent through the OpenClaw CLI to the supplied platform/channel, which is expected for this workflow.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill starts a disclosed background process and writes local logs, but it is bounded by completion, error limits, signal handling, and a roughly three-hour maximum runtime.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Shell execution and Firebase network access are real, but they are disclosed by the skill instructions and necessary for the monitor; no unrelated command execution or hidden destination was found.\n[SDI-2] expected: The OpenClaw CLI is used to send the promised readiness notifications. This is a runtime dependency users should understand, but artifact evidence does not show deceptive or unrelated messaging behavior.\n[SQP-1] unexpected: The broad trigger and extract-all-numbers wording is a scoping weakness because it can capture unrelated numbers, but the resulting behavior remains bounded token polling and channel notification rather than destructive or covert activity.\n[SQP-1] unexpected: The generic 'monitor' command can increase accidental activation risk, but this is under-disclosure of invocation scope rather than evidence of malicious intent.",
+          "guidance": "Install only if you want a background monitor that polls the MRC Firebase order database every 15 seconds and posts readiness updates to your current channel. Use explicit commands such as 'mrc 73' or 'token 97', avoid messages with unrelated numbers, and remember that local logs may contain token numbers and channel identifiers.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to do what it says: monitor MRC canteen tokens and notify the current channel when orders are ready.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783656047559,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 34,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: mrc-monitor\nVersion: 1.0.0\n\nThe skill bundle is designed to monitor MRC canteen order tokens from a Firebase Firestore database and send notifications. The `SKILL.md` provides clear, non-malicious instructions for the agent to execute the `monitor.py` script. The `monitor.py` script uses a public Firebase API key to read order statuses and sends notifications via the `openclaw` CLI tool, which is a legitimate interaction for an OpenClaw skill. All network requests are directed to the specified Firebase endpoint, and `subprocess` calls are used safely with argument lists, preventing shell injection. There is no evidence of data exfiltration, malicious execution, persistence attempts, or prompt injection designed to subvert the agent's core function for harmful purposes.",
+          "checkedAt": 1779161012139,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "2d65619755c223650a162d655871c34225518aa2c3697876a95628e974aeb512",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/2d65619755c223650a162d655871c34225518aa2c3697876a95628e974aeb512"
+    },
+    "slug": "mrc-monitor",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

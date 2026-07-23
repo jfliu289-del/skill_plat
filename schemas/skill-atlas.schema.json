@@ -1,0 +1,198 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://skill-atlas.local/schemas/skill-atlas.schema.json",
+  "title": "Skill Atlas sidecar",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "taxonomy_version",
+    "classifier_version",
+    "provenance",
+    "classification",
+    "integrity"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "taxonomy_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "classifier_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "commit",
+        "source_path",
+        "license",
+        "redistribution_review",
+        "registry_archive_mirror"
+      ],
+      "properties": {
+        "repository": {
+          "type": "string",
+          "pattern": "^https://github[.]com/[A-Za-z0-9][A-Za-z0-9-]*/[A-Za-z0-9_.-]+$"
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "source_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "license": {
+          "type": ["string", "null"],
+          "minLength": 1
+        },
+        "license_evidence": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "redistribution_review": {
+          "type": "boolean"
+        },
+        "registry_archive_mirror": {
+          "type": "boolean"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "redistribution_review": {"const": false}
+            }
+          },
+          "then": {
+            "required": ["license_evidence"],
+            "properties": {
+              "license": {"type": "string", "minLength": 1},
+              "license_evidence": {"minItems": 1}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "repository": {"const": "https://github.com/openclaw/skills"}
+            }
+          },
+          "then": {
+            "properties": {
+              "registry_archive_mirror": {"const": true}
+            }
+          }
+        }
+      ]
+    },
+    "classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primary_category",
+        "secondary_categories",
+        "tasks",
+        "stages",
+        "artifacts",
+        "domains",
+        "audiences",
+        "risk_level",
+        "confidence",
+        "needs_review",
+        "reasons"
+      ],
+      "properties": {
+        "primary_category": {
+          "$ref": "#/$defs/category"
+        },
+        "secondary_categories": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/category"},
+          "uniqueItems": true
+        },
+        "tasks": {
+          "$ref": "#/$defs/tags"
+        },
+        "stages": {
+          "$ref": "#/$defs/tags"
+        },
+        "artifacts": {
+          "$ref": "#/$defs/tags"
+        },
+        "domains": {
+          "$ref": "#/$defs/tags"
+        },
+        "audiences": {
+          "$ref": "#/$defs/tags"
+        },
+        "risk_level": {
+          "type": "string",
+          "pattern": "^R[0-4]$"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "needs_review": {
+          "type": "boolean"
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["content_hash", "skill_md_hash", "excluded_paths"],
+      "properties": {
+        "content_hash": {
+          "$ref": "#/$defs/sha256"
+        },
+        "skill_md_hash": {
+          "$ref": "#/$defs/sha256"
+        },
+        "excluded_paths": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    }
+  },
+  "$defs": {
+    "category": {
+      "type": "string",
+      "pattern": "^C(?:0[0-9]|1[0-9])$"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

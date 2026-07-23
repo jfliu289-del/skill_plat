@@ -1,0 +1,157 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "business",
+      "marketer"
+    ],
+    "confidence": 0.5083,
+    "domains": [
+      "business",
+      "marketing"
+    ],
+    "needs_review": true,
+    "primary_category": "C11",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C07:token:review",
+      "category:C11:phrase:sprint planning",
+      "category:C11:token:sprint",
+      "category:C12:token:management",
+      "category:C12:token:strategy",
+      "category:C14:token:customer",
+      "category:C14:token:growth",
+      "category:C14:token:lead",
+      "category:C14:token:sales",
+      "category:C17:token:notes",
+      "category:C18:token:health",
+      "cross-tag:agent-management",
+      "cross-tag:marketing-sales",
+      "cross-tag:planning",
+      "cross-tag:review"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C07",
+      "C12",
+      "C14",
+      "C17",
+      "C18"
+    ],
+    "stages": [
+      "deliver",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "market",
+      "plan",
+      "review"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "37fbf9394a246d861f216afb4c16f90fb636a73de27c774a34d2aa90d4233ba5",
+    "content_hash": "4ff6eada7d7e297f3b38694f4d24c24ff6d6b1ce76d5132749bc0e029bb8c37e",
+    "precanonical_content_hash": "8b61d72f0c3c84ff8af5f0acf64b683b837152b1a435253fd174b47b8d36e98b",
+    "skill_md_hash": "b9d128b0bc217b304cff4a3da7636f241f84e3d81d4b9714196f349657a69fe6",
+    "version_metadata_sha256": "d708caef89e7c2d89c04fecd8256e0585229bbf100d81e0b8b2cb434991fc717"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/deepseekcmo/skills/sales-rhythm-tracker",
+    "claim_id": "709dcdd65342afd4ef960063e4f2ddab742d80389c9cd1c5f89068fbbea56d47",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "sales-rhythm-tracker",
+        "url": "https://clawskills.sh/skills/deepseekcmo-sales-rhythm-tracker"
+      }
+    ],
+    "owner_handle": "deepseekcmo",
+    "owner_id": "s17ea6y31ggfbhewv14engz7fx88580w",
+    "published_at": 1771961358767,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779957069400,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779957069400,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The README, SKILL.md, and scripts consistently match the stated purpose: initialize a local sales workspace, add leads, log activity, and generate sales briefings and pipeline reviews.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The natural-language triggers are broad and the scripts replay raw pipeline notes into the agent context, so accidental invocation or prompt-like text inside lead notes is possible; this is visible and tied to the sales workflow.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is manual and transparent: copy the skill, chmod shell scripts, run the initializer, and optionally add a weekday cron job for morning briefs.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Local shell scripts and markdown files under ~/.openclaw/workspace/sales are proportionate for a local CRM skill, but the data may include sensitive customer and deal information.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persistently stores plaintext CRM records and can optionally schedule recurring morning briefs; both behaviors are disclosed and user-directed.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: Broad sales phrases and free-form lead/log commands are real, but they are documented usage patterns for a conversational sales tracker rather than hidden automatic behavior.\n[SQP-2] expected: Plaintext local storage and full pipeline output are central to the skill and disclosed, though users should treat the resulting files and agent transcripts as confidential business records.\n[VirusTotal-code_insight] unexpected: The claimed heredoc shell injection is not supported by the scripts themselves because user arguments are expanded as quoted variables and appended as text, not evaled or executed; untrusted notes can still create prompt-injection risk when later displayed to the agent.\n[staticScan] expected: The static scan reported no suspicious patterns, consistent with the artifact review.",
+          "guidance": "Install only if you are comfortable keeping customer names, deal status, activity history, and notes in local plaintext markdown files. Avoid storing secrets or regulated data, review outputs before sharing transcripts, and enable the optional cron job only if you want recurring automatic morning brief generation.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a local sales-pipeline tracker that stores customer and deal notes in plaintext files; the main risks are privacy and accidental exposure, not hidden or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779957022115,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 65,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: sales-rhythm-tracker\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to a critical shell injection vulnerability present in `scripts/add-lead.sh` and `scripts/log-activity.sh`. These scripts directly embed unsanitized user-provided arguments into markdown files via heredocs, which could allow arbitrary command execution if the OpenClaw agent passes malicious input containing shell metacharacters. Additionally, the skill's reliance on complex 'AGENT INSTRUCTIONS' within its scripts and `SKILL.md` for parsing and modifying local markdown files, while not inherently malicious, presents a significant attack surface for prompt injection against the AI agent if its input sanitization and execution guardrails are insufficient. There is no evidence of intentional data exfiltration, backdoors, or unauthorized network activity.",
+          "checkedAt": 1779166858968,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "fc0b3b33f859edca0ba0297cc61f5f69c16fde934cc1ee07db23ed8dd8f7565b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/fc0b3b33f859edca0ba0297cc61f5f69c16fde934cc1ee07db23ed8dd8f7565b"
+    },
+    "slug": "sales-rhythm-tracker",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

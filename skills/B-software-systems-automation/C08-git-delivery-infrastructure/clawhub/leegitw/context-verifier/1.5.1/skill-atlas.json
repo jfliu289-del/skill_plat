@@ -1,0 +1,157 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "configuration",
+      "data",
+      "document",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.69,
+    "domains": [
+      "infrastructure",
+      "security",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C02:token:edit",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C08:phrase:version control",
+      "category:C08:token:deploy",
+      "category:C08:token:deployment",
+      "category:C09:token:security",
+      "cross-tag:data-analysis",
+      "cross-tag:deployment",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "cross-tag:writing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [],
+    "stages": [
+      "create",
+      "deliver",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "deploy",
+      "operate",
+      "secure",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "6e3a6b4a9d07c7b2b1608088a5fcc5df5e9c2aca43dd6db1593778cbd46c737b",
+    "content_hash": "b95210a7f46fdd53d7d512753c8f19fba947b90d4555b20cbb68ec9fb762cb27",
+    "precanonical_content_hash": "23760f0a0f3e9e4bba1546b3687c986fa8f49b55d9eee03adf2678114d7ae0ba",
+    "skill_md_hash": "65a820c73f32e85139df6024d99e476e8280d36c3e302a7d3c59a77f9adf3e29",
+    "version_metadata_sha256": "84bff7ba197b6d843a502d59050f235403ca019947943d9ded677aba2f587be8"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/leegitw/skills/context-verifier",
+    "claim_id": "cc563c1e05d82bf1abd327eaf3b3ff7983ea9fac682e73bfca63a8977d680410",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "context-verifier",
+        "url": "https://clawskills.sh/skills/leegitw-context-verifier"
+      }
+    ],
+    "owner_handle": "leegitw",
+    "owner_id": "s179srg0a58h1v79wy2w7g9ymh83jxhd",
+    "published_at": 1771919826217,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779969217069,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779969217069,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is file hashing, verification, tagging, and context-packet creation; reading user-specified files and writing packet outputs is coherent with that purpose and explicitly documented.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands are explicitly invoked under /cv and the artifact repeatedly warns that arbitrary provided paths and globs can be read; the broad file-path scope is disclosed rather than hidden.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains only SKILL.md, declares no dependencies or executable scripts, and uses a standard openclaw install instruction.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Local read access to selected files and workspace-local writes to output/context-packets/ are proportionate for integrity verification; the artifact states it does not call external APIs or send file contents to models.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Context packets persist indefinitely as unencrypted local JSON, and the optional --include-content flag can store file contents; this is clearly disclosed with mitigations such as avoiding secrets and gitignoring the output directory.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code_insight suspicious telemetry] expected: The concern about arbitrary file reads and unencrypted local packet output is artifact-supported, but it is disclosed, user-directed, local-only, and central to the skill's purpose, so it does not justify Review by itself.\n[SkillSpector clean] expected: SkillSpector reported no issues, which is consistent with the artifact's lack of executables, network behavior, credential use, or hidden instructions.\n[Static scan clean] expected: Static scan found no suspicious patterns, and manual artifact review found no deception, exfiltration, destructive behavior, or automatic privileged execution.",
+          "guidance": "Install only if you want a local integrity-checking helper. Use precise paths instead of broad globs, keep output/context-packets/ out of git, delete old packets when no longer needed, and do not use --include-content on .env files, credentials, secrets, or other private data.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a transparent local file-integrity helper, but users should avoid feeding it secrets or using its content-including packet mode on sensitive files.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779969176820,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: context-verifier\nVersion: 1.5.1\n\nThe skill is designed for file integrity verification, including hashing and creating 'context packets'. While it explicitly warns against using the `--include-content` flag with sensitive files (e.g., `.env`, credentials) and claims local-only processing without external communication, the inherent capability to read arbitrary user-specified files and write their contents to an unencrypted local JSON file (`output/context-packets/`) poses a significant risk. If an agent or user ignores the explicit warnings in `SKILL.md`, this capability could lead to unintentional exposure of sensitive data on the local filesystem. This is a critical vulnerability, but the skill's transparent documentation and warnings prevent it from being classified as malicious, as there is no evidence of intentional harmful behavior by the skill itself.",
+          "checkedAt": 1779164521880,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "618118659e71e37458e4230cef0caef8b818ffbe44009576c613045e99da19fc",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/618118659e71e37458e4230cef0caef8b818ffbe44009576c613045e99da19fc"
+    },
+    "slug": "context-verifier",
+    "source_type": "clawhub",
+    "version": "1.5.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

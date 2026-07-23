@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C02:token:edit",
+      "category:C02:token:write",
+      "category:C06:token:api",
+      "category:C06:token:code",
+      "cross-tag:agent-management",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "7943383fc40e10300c1e83945b13380050f152f8a27c3738f49ab9d404d19fa3",
+    "content_hash": "841d387420ac3e165f54ed0d69312db7d6f771b87f458bcfd276c53f8886ce60",
+    "precanonical_content_hash": "65c0acae358fa7cd03115585a71a4af9ef1816f34660a371a7b2bcfb18352abf",
+    "skill_md_hash": "109ae07a2d6d2e569fc741eadc0d2808940247e1cc7fb20a8338a37818cad1aa",
+    "version_metadata_sha256": "6f3cc16591b6e713ec7161717535f9d824938164deb24b6cff9ecc77f20faa15"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/parkertoddbrooks/skills/wip-file-guard",
+    "claim_id": "5e282082fd33a44413c14e1df49e19fff85ab71d2cca5914b0dd5a0189104aaa",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "wip-file-guard",
+        "url": "https://clawskills.sh/skills/parkertoddbrooks-wip-file-guard"
+      }
+    ],
+    "owner_handle": "parkertoddbrooks",
+    "owner_id": "s17620xzyc7kfan8m36at57m6n83h8he",
+    "published_at": 1776806697219,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779948052489,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779948052489,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill intentionally intercepts Write/Edit tool calls and may deny edits to protected filenames or memory/journal-like paths; that capability matches its stated file-protection purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are limited to CLI use and Claude Code/OpenClaw hook registration, with no prompt override, hidden role-change instruction, or unrelated agent behavior found.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation is a Node-based local hook/binary with no package dependencies or install scripts, but version fields differ across metadata, package.json, SKILL.md, plugin metadata, and changelog, so users should verify the intended package/version.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The hook reads local tool-call input, including file paths and edit snippets for matched files, and uses broad patterns such as memory, journal, diary, and daily log; this is proportionate to the purpose but may affect legitimate local edits.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The guard persists only through user-configured Claude Code/OpenClaw hook settings and does not request credentials, elevated privileges, background workers, or network access.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SkillSpector clean result] expected: SkillSpector reported no issues; source review did not find artifact-backed concerns contradicting that result.\n[VirusTotal clean telemetry] expected: VirusTotal telemetry was clean and aligns with the local-source review showing no network, credential, or destructive code paths.\n[Static source review] expected: guard.mjs implements allow/deny decisions for Write/Edit hook input and otherwise exits without modifying files or sending data.\n[Version metadata mismatch] unexpected: Multiple version values appear across package and skill metadata; this is a provenance/verification note, not evidence of malicious behavior.",
+          "guidance": "Install this only if you want a persistent local hook that can stop agents from overwriting protected identity or memory files. Review the protected filenames and broad path patterns first, verify the npm package/version, and keep track of the hook configuration so you can disable it if it blocks legitimate work.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed local guard that blocks certain agent file edits to protect identity and memory files, with no evidence of hidden data access or exfiltration.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948011815,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: wip-file-guard\nVersion: 1.9.72\n\nThe wip-file-guard skill is a safety utility designed to prevent AI agents from accidentally overwriting or destructively editing critical configuration and identity files (e.g., CLAUDE.md, SOUL.md, MEMORY.md). The core logic in guard.mjs functions as a PreToolUse hook that intercepts tool calls, blocking 'Write' operations on protected files and limiting 'Edit' operations that remove significant amounts of content. The code is transparent, lacks network or exfiltration capabilities, and its behavior is strictly aligned with the stated purpose of providing technical guardrails against agent context-compaction errors.",
+          "checkedAt": 1779166027526,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "519df49479458fa8bc734b232c4d56bbff54a09be17e7f1d3cb07c7d2a8b346a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/519df49479458fa8bc734b232c4d56bbff54a09be17e7f1d3cb07c7d2a8b346a"
+    },
+    "slug": "wip-file-guard",
+    "source_type": "clawhub",
+    "version": "1.9.72"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

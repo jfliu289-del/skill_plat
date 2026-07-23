@@ -1,0 +1,133 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1ec110112f86fab3f1fe4abf3e0dda5b3ace568f72bdaa293abf860cfd31c9f9",
+    "content_hash": "e07852239378b7b6999b4bd1f6805be878266ffb71f33c6078f76e596ccd0934",
+    "precanonical_content_hash": "a9c318dbac99bc38488fcf3bae7cd9a98ca019e25912e032780898c6c3469e56",
+    "skill_md_hash": "1eb1ba50ae2f49aa17cc5958db8500a043b1221f841d06f0984df23f07406994",
+    "version_metadata_sha256": "e4585bb230db5c71547aaf3eb60e659c0f1ebb67f3f587ee3136aa542b40f5b6"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/adriano-vr/skills/ressemble",
+    "claim_id": "3e26d1a94d4d0beafc87e3e4f85455b143474e3121fd26673d71e2dbea16576b",
+    "index_entries": [
+      {
+        "index_path": "categories/speech-and-transcription.md",
+        "label": "ressemble",
+        "url": "https://clawskills.sh/skills/adriano-vr-ressemble"
+      }
+    ],
+    "owner_handle": "adriano-vr",
+    "owner_id": "s174bxwh8gdm8jgdq6864qp43n856th6",
+    "published_at": 1771954042125,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779953381019,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779953381019,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documentation and scripts consistently support the stated TTS/STT purpose: they call Resemble AI endpoints to synthesize speech from provided text and transcribe a user-selected audio file.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The scripts are user-invoked and scoped to one text input or one audio file, but tts.sh builds JSON by direct string interpolation, so quotes or special characters can break or alter the request payload.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden installer, package mutation, background setup, or persistence mechanism is present; helper docs disclose required binaries and the RESEMBLE_API_KEY environment variable.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access, a Resemble API key, local audio-file upload, and temporary MP3 output are proportionate for a cloud TTS/STT integration, though users should understand that submitted text and audio leave the local machine.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No privilege escalation, credential-store access, destructive action, broad local indexing, or long-running background worker is shown; generated audio is written under /tmp.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The third-party processing concern is real privacy guidance, but the artifacts disclose use of the Resemble AI HTTP API, production endpoints, API key, and multipart audio upload, so this is not hidden exfiltration.\n[E1] expected: The external transmission of text and the API bearer token is the core mechanism of the cloud TTS feature and matches the documented purpose.\n[VirusTotal code_insight] unexpected: The TTS JSON interpolation issue is a robustness flaw users should be aware of; the STT file path is shell-quoted and does not show command injection from shell metacharacters.",
+          "guidance": "Install only if you are comfortable sending selected text, uploaded audio, and your Resemble API key to Resemble AI. Avoid sensitive or regulated content unless that third-party processing is approved, prefer a limited API key, and expect unusual quotes or special characters in TTS text to cause malformed requests.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed Resemble AI text-to-speech and speech-to-text wrapper, with some privacy and input-handling caveats but no evidence of hidden or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779953342356,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ressemble\nVersion: 1.0.1\n\nThe skill bundle is classified as suspicious due to vulnerabilities in input handling within the shell scripts. Specifically, `scripts/tts.sh` directly interpolates user-provided text and voice UUID into a JSON payload, creating a JSON injection vulnerability if the input contains special characters. Similarly, `scripts/stt.sh` uses the user-provided audio file path directly without explicit sanitization, which could lead to issues if the path contains shell metacharacters. While these are vulnerabilities and not evidence of malicious intent, they represent a risk of unexpected behavior or potential exploitation if the agent provides crafted inputs. The scripts otherwise interact with legitimate Resemble AI API endpoints (`https://app.resemble.ai`, `https://f.cluster.resemble.ai`) for their stated purpose.",
+          "checkedAt": 1779166572275,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "8f8e859171fee4aef9668d8a9eac097a629590e4cd9936de18ccd1492842283a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8f8e859171fee4aef9668d8a9eac097a629590e4cd9936de18ccd1492842283a"
+    },
+    "slug": "ressemble",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

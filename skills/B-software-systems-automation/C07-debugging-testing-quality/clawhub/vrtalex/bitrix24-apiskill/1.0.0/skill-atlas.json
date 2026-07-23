@@ -1,0 +1,159 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "website"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.23,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C07",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C05:token:design",
+      "category:C06:token:api",
+      "category:C07:token:debug",
+      "category:C07:token:quality",
+      "category:C10:token:ai",
+      "category:C10:token:model",
+      "category:C14:token:crm",
+      "category:C19:token:automate",
+      "category:C19:token:crm",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:debugging",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C05",
+      "C06",
+      "C10",
+      "C14",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "build",
+      "debug",
+      "design",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a1bd13b4cd63a0e55b65a1c72faeadcf51a2842908f4b7d59a3fe3843d6bbdd3",
+    "content_hash": "049dcc2055e05425af8cbf72ade2a419e98cfd68c5bec19b899cf67f8418860a",
+    "precanonical_content_hash": "c7a023e409c9ba3694a87851e9a7100bcb636f8cfb9a0e09b339b1dab6c1074e",
+    "skill_md_hash": "f5d2ddda7d370419a74f4b68e79a35aadea6443e6084f832aa59229309a6c8c8",
+    "version_metadata_sha256": "4c01c38992803d1250846f9310273c7ebcdaa7ee1757c6bdd8fc8ae71eb33049"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/vrtalex/skills/bitrix24-apiskill",
+    "claim_id": "669cbca10787875603fee9132511130e7e05b5dbb295aafb83f864b63041107c",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "bitrix24-apiskill",
+        "url": "https://clawskills.sh/skills/vrtalex-bitrix24-apiskill"
+      }
+    ],
+    "owner_handle": "vrtalex",
+    "owner_id": "s1758m4naxxr2h1n6mfhaw4bv183vs2k",
+    "published_at": 1771095418045,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967478741,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967478741,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill is coherently focused on Bitrix24 REST integration for CRM, tasks, chats, events, auth, and troubleshooting; those APIs can change business records, but that capability is clearly part of the stated purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions emphasize least privilege, method allowlists, write/destructive confirmations, optional two-phase plans, idempotency, and secret handling; users still need to review methods and parameters before approving writes.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no remote installer or post-install execution path in the artifact, but it includes runnable Python helper scripts and relies on environment-provided Bitrix24 credentials for live use.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to Bitrix24 and OAuth/webhook secrets are proportionate for this integration; local audit, plan, idempotency, retry, and DLQ files may contain business data and should be protected.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The offline worker maintains local retry/DLQ state and can acknowledge Bitrix24 offline events after processing; this is disclosed and purpose-aligned, but operators should test it carefully because event clearing affects replay.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Verified that the scripts use environment credentials, local runtime files, and Bitrix24 network calls. This is expected for the advertised integration and is documented in README/SKILL guidance, with allowlists and confirmation gates for the main client.\n[SQP-2] expected: Verified that the DLQ writer stores the full event payload locally. That is useful for replay/debugging but can retain sensitive CRM or auth-related event data, so it should be treated as a security handling note rather than evidence of hidden exfiltration.",
+          "guidance": "Install only if you intend to let an agent work with your Bitrix24 account. Use least-privilege webhook/OAuth scopes, keep secrets out of chat and source control, review write/destructive plans before confirming them, avoid --allow-unlisted except for controlled testing, and protect or rotate any .runtime audit, retry, idempotency, and DLQ files. Test the offline worker on a non-production portal first, especially because it clears events after processing.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Bitrix24 integration skill with real account access, write capability, and local event files, but the behavior matches its stated purpose and includes meaningful guardrails.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967424051,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: bitrix24-apiskill\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle for Bitrix24 is designed with a strong emphasis on security and reliability. It implements numerous guardrails such as method allowlisting, explicit confirmation for write/destructive operations, two-phase execution planning, idempotency, secrets masking, audit logging, and rate limiting. The `scripts/bitrix24_client.py` and `scripts/offline_sync_worker.py` handle API interactions and event processing with robust error handling and security checks (e.g., `secure_compare` for application tokens). Documentation (`SKILL.md`, `README.md`, `references/*.md`) consistently advises on security best practices and least privilege. There is no evidence of intentional harmful behavior, data exfiltration to unauthorized endpoints, or malicious code execution. The `process_event_default` function in `offline_sync_worker.py` is a no-op placeholder, meaning the provided skill itself does not process event payloads in a risky manner.",
+          "checkedAt": 1779164076403,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "eb95f41334d6b4fc57607fcbc55039e6ef49869a67641beecbf9b9988703e9f8",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/eb95f41334d6b4fc57607fcbc55039e6ef49869a67641beecbf9b9988703e9f8"
+    },
+    "slug": "bitrix24-apiskill",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

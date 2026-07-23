@@ -1,0 +1,127 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C12",
+    "reasons": [
+      "category:C12:token:management",
+      "category:C17:token:notes",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d44868060542d9c47476592d46d1a9b94e42e6078cbb45d0fab86b66eb8c49a0",
+    "content_hash": "e60b6df9a4799bc88b7508f703c565b3afd16f396c779510d5eeb12d7a239cd4",
+    "precanonical_content_hash": "f2950beae91d432d209d7e9b664d7847bdd15c050e795a5857878f2aa4472a72",
+    "skill_md_hash": "94e6ec74badc99f82a6bbee0c13c158bed571ad17e81405f5e71b328fa73f99f",
+    "version_metadata_sha256": "7268006453dfa75c3aab1b6e09a9c1757f4f53e46193579db956f57cdc8f1e52"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/shun-dong/skills/multi-user-workspace",
+    "claim_id": "8ab4fb436f58a3e544b5cbe6f0fc03b2947552f2e896308f588218f8a7fa1b19",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "multi-user-workspace",
+        "url": "https://clawskills.sh/skills/shun-dong-multi-user-workspace"
+      }
+    ],
+    "owner_handle": "shun-dong",
+    "owner_id": "s177j28ag0kest4w0j6h4pngfd885cjn",
+    "published_at": 1770992942063,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779973790403,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779973790403,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifact: it defines per-user profiles, relationship files, and role-based sandbox guidance for multi-user OpenClaw workspaces.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill tells the assistant to derive a userId from the session key and read FRIENDS/{userId}.md plus RELATIONS/*{userId}*.md; this fits the purpose, but implementations should validate the userId against USER.md and a strict lowercase safe pattern before using it in paths.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains a single non-executable SKILL.md file with no bundled scripts, package installs, background workers, or automatic setup actions.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The administrator and guest permission examples are disclosed and purpose-aligned; the guest example uses Docker sandboxing and denies broader tools, while the administrator example intentionally has no sandbox.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill intentionally uses persistent FRIENDS/, RELATIONS/, and guest workspace directories that may contain personal notes, emails, relationship context, and user files; this is disclosed but requires local retention and access-control discipline.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code_insight] expected: The session-key-to-path concern is artifact-backed and worth hardening, but it is part of the disclosed profile lookup workflow and there is no evidence of hidden execution, exfiltration, or deception.\n[SQP-2] expected: The skill does encourage storing personal profile data, including names, roles, emails, preferences, and notes; that is central to the profile feature, though users should minimize sensitive data and control access.\n[RA2] expected: The persistent guest workspace directory is explicitly documented for isolated per-user storage; it is not a hidden background agent or automatic persistence mechanism.\n[staticScan] expected: Static scan reported no suspicious patterns, consistent with local inspection showing only one Markdown instruction file.",
+          "guidance": "Before installing, treat FRIENDS/ and RELATIONS/ as private data. Use strict userId validation such as lowercase letters, numbers, underscores, and hyphens only; match the userId to USER.md before reading any files; keep guest directories permissioned and periodically cleaned; and reserve unsandboxed administrator sessions for trusted users only.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is an instruction-only skill for managing multi-user workspace notes and sandbox examples; its sensitive behavior is disclosed and purpose-aligned, but it needs careful user ID validation and privacy handling.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779973732373,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: multi-user-workspace\nVersion: 1.0.0\n\nThe `SKILL.md` file contains instructions for the AI agent that introduce a significant path traversal vulnerability. Specifically, the agent is instructed to extract a `userId` from the session key and then use this `userId` directly in file paths (e.g., `FRIENDS/{userId}.md`, `RELATIONS/*{userId}*.md`). If an attacker can control the `userId` portion of the session key (e.g., via a crafted session ID like `agent:main:../../etc/passwd`), the agent would be instructed to read arbitrary files on the host system, leading to potential information disclosure.",
+          "checkedAt": 1779163783624,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "b89014ff8c7cf961d9e8d332a5b06fb7af8cfc8dfc1dac6f5a08500517f995f5",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b89014ff8c7cf961d9e8d332a5b06fb7af8cfc8dfc1dac6f5a08500517f995f5"
+    },
+    "slug": "multi-user-workspace",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

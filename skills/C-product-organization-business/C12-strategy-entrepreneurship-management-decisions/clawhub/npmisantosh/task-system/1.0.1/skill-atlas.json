@@ -1,0 +1,124 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C12",
+    "reasons": [
+      "category:C12:token:management",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "c8a1a035c5c77b183aa788d1d799b24765ac596e7fac51baa111a4d2081b9a74",
+    "content_hash": "89f0dd5c4271d3bba2230d4e610c1ed8551688e82383e7cc44c4a1f70c10342e",
+    "precanonical_content_hash": "104cc43c22055acb95129fdb2c9015613df44d3e178ecca0f7ff7324a862127c",
+    "skill_md_hash": "5398c2b14d8bd744cbfa66525dc5235e68bd890871be9474cbc5847fc12a244e",
+    "version_metadata_sha256": "40fd862ca3f7bae37d866d0049fdd2217545bbf70fcf6f8d34a6cbfe96449ae8"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/npmisantosh/skills/task-system",
+    "claim_id": "85e9cf98366cb657ce3ab9aa5fec4e630aa1f52c2da26e11f05d5a04f2e51697",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "task-system",
+        "url": "https://clawskills.sh/skills/npmisantosh-task-system"
+      }
+    ],
+    "owner_handle": "npmisantosh",
+    "owner_id": "s178qvj30t8nk63mhq1wrhyqvx885eby",
+    "published_at": 1771090736671,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779966796568,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779966796568,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts implement a local SQLite-backed task CLI for creating tasks, heartbeats, completion, stuck-task checks, and status output, matching the stated task-management purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The description's 'all task management needs' wording is broad, and task ID arguments are not validated before being inserted into SQLite statements; this could affect the local task database if malformed IDs are used.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The installer persistently edits shell startup configuration and may create a ~/.local/bin symlink. This is common for CLI setup, but users should notice that it affects future shells.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill stores task text and notes in a local database under ~/.openclaw and shows no network access, credential use, account authority, or broad file indexing.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "Persistence is limited to local task data plus PATH/symlink setup; no background service, privilege escalation, or automatic execution loop is shown.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[TP4] expected: Persistent PATH setup is purpose-aligned for a CLI installer, though the SKILL.md could disclose the exact ~/.bashrc.d, ~/.bashrc, and symlink side effects more clearly.\n[SQP-1] expected: The broad routing phrase is imprecise but does not add hidden capabilities beyond the documented local task-management workflow.\n[SQP-2] expected: The persistent PATH modification is real and should be user-visible, but it is installer behavior for command-line access rather than evidence of malicious persistence.\n[SQP-2] expected: The ~/.local/bin symlink is also real and persistent; it is common CLI exposure behavior, though users should check it does not overwrite an existing command unexpectedly.\n[VirusTotal code_insight SQL injection] unexpected: The task ID SQL interpolation issue is artifact-backed, but its impact is limited to the user's local task database and does not show exfiltration, privilege escalation, or intent to harm.",
+          "guidance": "Install only if you want a local SQLite task tracker and persistent command-line access. Use numeric task IDs, avoid putting secrets in task text or notes, and review/remove the added shell PATH entry or ~/.local/bin/task-system symlink if you uninstall.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a local task-tracking skill with some installer and input-validation caveats, but no evidence of deception, exfiltration, credential access, or unrelated authority.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779966740991,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 65,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: task-system\nVersion: 1.0.1\n\nThe skill is classified as suspicious due to multiple SQL injection vulnerabilities found across `scripts/complete-task.sh`, `scripts/create-task.sh`, `scripts/heartbeat.sh`, and `scripts/task-system.sh`. Specifically, the `$TASK_ID` variable is directly concatenated into SQL queries without sanitization, allowing for arbitrary SQL command injection (e.g., `1; DROP TABLE tasks;`). While some inputs like `$REQUEST` and `$NOTES` attempt basic single-quote escaping with `sed`, this method is not robust and the direct insertion of `$TASK_ID` represents a critical flaw, enabling potential database manipulation or data loss. There is no evidence of intentional malicious behavior like data exfiltration or backdoors, but these vulnerabilities pose a significant security risk.",
+          "checkedAt": 1779163950418,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "169ef7a73478de18892ec5fd171fd0591bb5705a6afcea38a52b0ebd1059343e",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/169ef7a73478de18892ec5fd171fd0591bb5705a6afcea38a52b0ebd1059343e"
+    },
+    "slug": "task-system",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

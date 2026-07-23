@@ -1,0 +1,127 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C18:token:health",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C18"
+    ],
+    "stages": [
+      "discover"
+    ],
+    "tasks": [
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ed2589d3c5ce004c4eea67b2914b016bdc8e5b4b3e51267f22b128fc9c39b616",
+    "content_hash": "1ebf7d0a69122d59af17e4fb150298baf2760911c48ecb309c2f0f32bc58d7b6",
+    "precanonical_content_hash": "eb0ce8e73f04bcdcb48b4fab06de2dd4b2abdae03c2877a821505e2ae2115dc5",
+    "skill_md_hash": "9a05b63bbf628d85ad3bf03bdeb259487836db79f8493b572b18ad2e1c8a40fe",
+    "version_metadata_sha256": "3832135c769e2aff7c63db1031dcab415f42caa06e1f73f84993e00ab2b404d2"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/rappo/skills/arr-all",
+    "claim_id": "205743c7fa729b0f59eb2e4b0482b606360986326f4ce60657b973802244db85",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "arr-all",
+        "url": "https://clawskills.sh/skills/rappo-arr-all"
+      }
+    ],
+    "owner_handle": "rappo",
+    "owner_id": "s171e6ck5anp9ed3y29g8amv75885h9y",
+    "published_at": 1770595886606,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779961460170,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779961460170,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts implement the stated search, add, remove, monitor, calendar, health, and status workflows for Radarr, Sonarr, and Lidarr. Mutating library entries is expected for this purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The documentation discloses remove commands and the optional --delete-files flag, but it does not prominently warn users that file deletion can be destructive or require a confirmation step.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No remote installer, package installation, hidden setup behavior, obfuscation, or auto-start mechanism was found. Required binaries are disclosed as curl and jq.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill reads local OpenClaw credential JSON files and sends API-key-authenticated requests to user-configured Arr service URLs, which is proportionate to this integration.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no self-persistence or background worker. Changes made through the Arr APIs persist in the user's media services, and remove operations may delete library entries or media files when requested.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The DELETE operations and optional deleteFiles parameter are real destructive capabilities, but they are disclosed and directly aligned with managing Arr libraries. The lack of confirmation is a safety caveat, not evidence of hidden or malicious behavior.\n[static-scan] expected: Static scan reported no suspicious patterns, and artifact review found no hidden destinations, credential exfiltration, prompt injection, persistence, or unrelated privileged behavior.\n[virustotal-code-insight] expected: VirusTotal telemetry was clean and consistent with the artifact review; it was treated as supporting signal only.",
+          "guidance": "Install only if you are comfortable giving an agent API access to your Radarr, Sonarr, and Lidarr instances. Keep the credential file private, verify the configured URLs point to your own services, and require explicit user confirmation before any remove command, especially when --delete-files is involved.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent media-server control skill, but it can change or remove items from configured Radarr, Sonarr, and Lidarr libraries.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779961429408,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: arr-all\nVersion: 1.0.0\n\nThe OpenClaw skill bundle is designed to manage Radarr, Sonarr, and Lidarr instances. It uses `curl` and `jq` to interact with configured API endpoints, reading API keys and URLs from `~/.openclaw/credentials/arr-all/config.json` or legacy service-specific files. All network calls are directed to these configured endpoints, and there is no evidence of data exfiltration to external, unconfigured destinations. The `SKILL.md` instructions are clear and do not contain prompt injection attempts. Temporary files are created in `/tmp` with unique names and cleaned up, which is a standard and safe practice. The code is well-structured and aligns with the stated purpose of a unified 'Arr' interface.",
+          "checkedAt": 1779162317768,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "3086147afa205484fb67e76062114936e32d3f311a6a7798a5cfff7c339780e0",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/3086147afa205484fb67e76062114936e32d3f311a6a7798a5cfff7c339780e0"
+    },
+    "slug": "arr-all",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

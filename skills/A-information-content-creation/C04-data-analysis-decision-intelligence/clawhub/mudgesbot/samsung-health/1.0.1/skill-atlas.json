@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:analyze",
+      "category:C04:token:data",
+      "category:C18:token:exercise",
+      "category:C18:token:health",
+      "cross-tag:data-analysis",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C18"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a25ec4b9f3c3050d15ff8698b55f644cd1d72fb5b1b240c9179a47fc6c5a0fd5",
+    "content_hash": "dd1809dd39d8041e7c481e481b94f150dd50048d757388defdb7f8ec287d83ff",
+    "precanonical_content_hash": "0a7658cd7a3c53074c200edbd3bb5f1456986de84b23e6f4f70b6b8fecd479a2",
+    "skill_md_hash": "2ca63e50c8c49012002219598b0412c08a22cd3f60e8a4bfb4b5ff1123586fa5",
+    "version_metadata_sha256": "430304413be57f98e50a9204e47386ae728ce923e3b50f5e97af664cf5113540"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/mudgesbot/skills/samsung-health",
+    "claim_id": "3ca6a40d2de569bd450098fac7bc839d380b12dce0d6a295ceeb89d2071a6054",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "samsung-health",
+        "url": "https://clawskills.sh/skills/mudgesbot-samsung-health"
+      }
+    ],
+    "owner_handle": "mudgesbot",
+    "owner_id": "s1783pjyv7wx62yz0a6034qgt18844an",
+    "published_at": 1771574178563,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779932732522,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779932732522,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, required Google Drive export access, gog CLI dependency, and shealth commands all align with analyzing Samsung Health Connect backups for sleep, steps, heart rate, SpO2, workouts, and reports.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions stay focused on configuring a Samsung Health backup folder, syncing data, and running local analysis commands; they do not request unrelated files, unrelated credentials, or unexpected network destinations. The skill could be clearer about privacy handling for health data.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is disclosed but relies on git clone from https://github.com/mudgesbot/samsung-health-skill.git followed by pip install -e ., which is a normal but supply-chain-sensitive pattern because it installs code outside the submitted SKILL.md artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Use of python3, a virtualenv, gog, and a per-user config file is proportionate to the purpose, but the data involved is sensitive biometric and health history from Google Drive.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill documents a local config at ~/.config/samsung-health/config.yaml and a local cloned project/virtualenv. It shows no hidden persistence, background worker, privilege escalation, destructive action, or automatic broad indexing.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: Accepted as a privacy-documentation gap, not as malicious behavior: the skill clearly needs health export data for its stated purpose, but should warn users that downloaded archives, config, and reports may contain sensitive health information.\n[VirusTotal code_insight] expected: Downgraded from suspicious to benign context: the external git clone and editable pip install are explicitly disclosed and support the CLI-based purpose; there is no artifact-backed evidence of hidden install behavior, exfiltration, or destructive action.",
+          "guidance": "Install only if you are comfortable letting a local CLI access Samsung Health backup data from the configured Google Drive account. Review the linked GitHub repository before running pip install, prefer a virtualenv or isolated machine, protect ~/.config/samsung-health/config.yaml and any downloaded Health Connect.zip files, and avoid using a Google account with broader Drive access than needed.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is coherent for analyzing Samsung Health exports, with no evidence of deception or exfiltration, but it handles sensitive health data and installs a third-party Python CLI that users should review first.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779932687032,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: samsung-health\nVersion: 1.0.1\n\nThe skill is classified as suspicious due to its installation method, which involves cloning and executing code from an external GitHub repository (https://github.com/mudgesbot/samsung-health-skill.git) via `git clone` and `pip install -e .` commands in SKILL.md. While this is a common installation pattern, it introduces a supply chain risk as the integrity and content of the remote repository are not verified within the scope of the provided files. This constitutes a 'risky capability' without clear malicious intent in the provided files, aligning with the 'suspicious' classification rather than 'benign' (due to the high-risk behavior) or 'malicious' (due to lack of direct evidence of intentional harm).",
+          "checkedAt": 1779165290681,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "f350c6b59a8adff9fdd2afa57b53063d0866870c321fa598f2867c657cea1727",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/f350c6b59a8adff9fdd2afa57b53063d0866870c321fa598f2867c657cea1727"
+    },
+    "slug": "samsung-health",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

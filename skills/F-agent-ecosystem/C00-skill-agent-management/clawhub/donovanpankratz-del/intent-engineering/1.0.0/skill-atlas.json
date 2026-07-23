@@ -1,0 +1,150 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [
+      "business",
+      "marketer"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "business",
+      "marketing"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C02:token:edit",
+      "category:C04:token:metrics",
+      "category:C07:token:quality",
+      "category:C10:token:ai",
+      "category:C14:token:customer",
+      "cross-tag:agent-management",
+      "cross-tag:marketing-sales",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C04",
+      "C07",
+      "C10",
+      "C14"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "market",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "0b6e3beae4e9b8c1fb7784eb7fcbb6017366e2620a2926771b34df7ef6ba0741",
+    "content_hash": "670b1984054b919a5590b7de09b8b9f5a2a871797a45f3944ae92f1c57b7b0a3",
+    "skill_md_hash": "7e47df1b73cffb91f6098f181807fb79659072677558c69e9d61866bbe89a1d5",
+    "version_metadata_sha256": "4a5026077bd045ccd9c9bc1568c17bed5699516f4e9e98d9a6bfe6a21af5bbb6"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/donovanpankratz-del/skills/intent-engineering",
+    "claim_id": "fc52d4a833e394e7aa1c80b81ab073fb515d7777c2519e1f316b15583485a587",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "intent-engineering",
+        "url": "https://clawskills.sh/skills/donovanpankratz-del-intent-engineering"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "donovanpankratz-del",
+    "owner_id": "s171g2r7jkvrtmp9mdgk8dk12h83fqed",
+    "published_at": 1772003176003,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779958399049,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779958399049,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifacts: it provides an INTENT.md template and a JavaScript loader that prepends intent, recent episodic memory snippets, routing decisions, and optional correction-tracker output to subagent task descriptions.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The setup is manual and user-directed, but the instructions encourage wiring the loader into all subagent spawns. Users should apply it only where sharing recent workspace context with subagents is appropriate.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses simple copy commands into the OpenClaw workspace and a Node smoke test. There is no package install, autostart, privilege escalation, hidden installer, or destructive setup step.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The loader reads workspace-local INTENT.md, memory/episodic markdown files, memory/routing-decisions.log, and optionally workspaceRoot/lib/correction-tracker.js if present. This is proportionate to the feature, bounded by small snippet limits, and shows no network access or broad filesystem indexing.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to user-created workspace files and the prompt behavior that results after manual integration. The artifacts do not request credentials, background execution, system privileges, or external data transmission.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: Verified: the loader reads recent episodic memory and routing-decision logs and injects matching excerpts into subagent context. This is privacy-relevant but purpose-aligned, disclosed in the loader comments and behavior, and bounded to workspace-local files.\n[VirusTotal telemetry] expected: The clean telemetry is consistent with artifact review: only local file reads, manual copy/setup commands, and no evidence of network calls, exfiltration, destructive operations, or hidden execution.",
+          "guidance": "Before installing, review INTENT.md and the workspace memory files because selected prior memories and routing history may be shown to subagents. Also inspect any existing lib/correction-tracker.js in the workspace, since the loader will call it if present.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent workspace-local helper for adding user-defined intent and limited recent memory context to subagent prompts.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779958360394,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: intent-engineering\nVersion: 1.0.0\n\nThe skill bundle is benign. All code and instructions align with the stated purpose of adding an intent layer to OpenClaw agents. The `SKILL.md` uses standard `cp` and `node` commands to install and test the `agent-context-loader.js` within the `$OPENCLAW_WORKSPACE`. The `agent-context-loader.js` script reads local configuration (`INTENT.md`) and agent memory/logs (`memory/episodic`, `memory/routing-decisions.log`) to construct a context string for subagents. There is no evidence of data exfiltration, unauthorized command execution, network activity, persistence mechanisms, or malicious prompt injection attempts against the agent. File system access is confined to the agent's designated workspace and memory directories.",
+          "checkedAt": 1779167014604,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "0b6e3beae4e9b8c1fb7784eb7fcbb6017366e2620a2926771b34df7ef6ba0741",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0b6e3beae4e9b8c1fb7784eb7fcbb6017366e2620a2926771b34df7ef6ba0741"
+    },
+    "slug": "intent-engineering",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

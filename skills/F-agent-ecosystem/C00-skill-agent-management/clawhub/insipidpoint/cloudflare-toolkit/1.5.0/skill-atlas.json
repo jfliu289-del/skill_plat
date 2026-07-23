@@ -1,0 +1,156 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "document",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.1417,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:find",
+      "category:C02:token:edit",
+      "category:C04:token:analytics",
+      "category:C06:token:api",
+      "category:C12:token:management",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C02",
+      "C04",
+      "C06",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "research",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4e738ecc6edb62bb16214b03c16c0f64d49ee85284fc9814e275a3d198964084",
+    "content_hash": "0953454649df4138aa15ab69298ff5130728a09cea6110aebdbce23fffd2f358",
+    "precanonical_content_hash": "2bc5c36fc807942da72279ceaf53348448fe912224422f962871900dab21ee91",
+    "skill_md_hash": "1dcf0225b1a196210c0a1a9877f8b3b5181539071ea8845adb1b5e821bf38d25",
+    "version_metadata_sha256": "73e0b12f6c37f38fd09664878c99805c4e4e0c307c98ba8e0ce4383b6df3b31b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/insipidpoint/skills/cloudflare-toolkit",
+    "claim_id": "e734321f164fe6a7bbff609dc21bf42fdebf2b35f56de6225a2a76fb8e3933ba",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "cloudflare-toolkit",
+        "url": "https://clawskills.sh/skills/insipidpoint-cloudflare-toolkit"
+      }
+    ],
+    "owner_handle": "insipidpoint",
+    "owner_id": "s178h2qw6g924cn02byka78m0h885afa",
+    "published_at": 1771241243577,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779969222475,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779969222475,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill’s Cloudflare DNS, SSL, cache, tunnel, settings, and analytics capabilities match its stated purpose, but several commands can affect production infrastructure.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The documentation tells the agent to confirm destructive operations, and the commands require explicit Cloudflare IDs or arguments; the shell script itself does not enforce confirmation flags.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No install script or external downloader is present; the bundle contains markdown plus one reviewable bash script.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Requiring curl, jq, openssl, CLOUDFLARE_API_TOKEN, and optional CLOUDFLARE_ACCOUNT_ID is proportionate for Cloudflare API administration.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background execution, local credential storage, or unrelated data access was found; privilege depends on the Cloudflare token scopes supplied by the user.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The high-impact Cloudflare authority is real, but it is disclosed and aligned with the skill’s purpose; users should rely on least-privilege tokens because there is no machine-enforced permission split inside the skill.\n[SQP-1] expected: The trigger description is broad for Cloudflare administration, but it accurately describes the bundled capabilities and includes confirmation guidance for destructive actions.\n[SQP-2] expected: DNS deletion and tunnel deletion execute directly once invoked, so the scanner’s operational risk is valid; artifact evidence still shows disclosed, purpose-matched behavior rather than hidden or deceptive behavior.\n[SQP-2] expected: Cache purge without URL arguments purges the whole zone cache, which is disclosed but easy to misuse; treat full-cache purge as requiring explicit user confirmation.",
+          "guidance": "Install only if you want an agent to manage Cloudflare resources. Use a narrowly scoped Cloudflare API token, prefer read-only scopes for inspection, and explicitly approve every DNS, SSL, tunnel, settings, import, delete, or full-cache-purge action before it runs.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed Cloudflare administration helper with powerful but purpose-matched account and DNS actions.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779969183353,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 65,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: cloudflare-toolkit\nVersion: 1.5.0\n\nThe skill bundle is classified as benign. The `scripts/cf.sh` script securely interacts with the Cloudflare API, using `jq -n --arg` for robust input sanitization to prevent shell injection into JSON payloads, and `openssl rand` for secure secret generation. All network calls are directed to the official Cloudflare API. The `SKILL.md` explicitly includes 'Safety rules' instructing the AI agent to confirm destructive operations with the user, which is a strong defense against prompt injection and demonstrates an intent for safe operation. While the skill provides powerful administrative capabilities (e.g., deleting DNS records, creating tunnels), these are aligned with its stated purpose of Cloudflare management, and the implementation lacks any evidence of vulnerabilities, data exfiltration, malicious execution, or persistence mechanisms.",
+          "checkedAt": 1779164509776,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "519b6a08ce2db7b20f9add94e0b8c0167fc186be6e0f436be7d6c2db6aaa8a80",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/519b6a08ce2db7b20f9add94e0b8c0167fc186be6e0f436be7d6c2db6aaa8a80"
+    },
+    "slug": "cloudflare-toolkit",
+    "source_type": "clawhub",
+    "version": "1.5.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

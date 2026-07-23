@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.4167,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C18",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C18:token:health",
+      "category:C18:token:home",
+      "cross-tag:agent-management",
+      "cross-tag:debugging",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "debug",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e557f6fc7c9136e833e0f37276adb7c9606683ff9cbbca89d840b04f9e1abfdb",
+    "content_hash": "72b83a99fe35fe7adb15701f90ce5741203654961cf65d153ce737eb0765f642",
+    "precanonical_content_hash": "d8a10d6ecb8cbded219f855dcd7b7452e6a4e39e80298159aa6ac45b50f10a56",
+    "skill_md_hash": "1cc9acebc9316b37f8bccdd0b6dc128888c9a507d2832c5e61ca72ec7e24df2a",
+    "version_metadata_sha256": "fc357f2d825c86dd3c2db352124b533fabda6a768c9b865eec152ea750eacfac"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/rogue-agent1/skills/port-check",
+    "claim_id": "4282e30821ee6147e97603b629ee6fdf5a10e41226b3556632ef6cdda9a7b923",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "port-check",
+        "url": "https://clawskills.sh/skills/rogue-agent1-port-check"
+      }
+    ],
+    "owner_handle": "rogue-agent1",
+    "owner_id": "s1712mz6nx5trtnxw701pn7ajd83ph8x",
+    "published_at": 1771164075254,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968140578,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968140578,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is TCP/HTTP service availability checking, and the script implements that exact behavior using nc and optional curl against supplied host:port targets.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Usage is explicit and user-directed; the artifact does not instruct automatic scanning, background execution, privilege escalation, or actions outside connectivity checks.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no installer, dependency fetch, or setup mutation; metadata discloses required nc and curl binaries.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill can make outbound connections to arbitrary user-provided targets, including local or internal addresses, which is expected for port checking but should be limited to authorized systems.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, credential handling, local data collection, elevated privileges, or long-running worker behavior is present.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The shell script and network utilities are disclosed and central to the port-checking purpose. Lack of target allowlisting and limited validation are usage-risk notes, but the artifact does not show hidden or purpose-mismatched behavior.\n[VirusTotal code_insight suspicious] expected: The SSRF/internal-network concern comes from the ability to connect to arbitrary hosts. That capability is the advertised function and is user-controlled, with no evidence of exfiltration, persistence, or deception.",
+          "guidance": "Install only if you are comfortable with a skill that runs nc and curl to test network reachability. Use it only against hosts and ports you own, administer, or have permission to check, especially when running from an environment with access to private networks.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill transparently checks user-specified network ports and does not show hidden behavior, credential access, persistence, or destructive actions.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968119716,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: port-check\nVersion: 1.0.0\n\nThe `scripts/port-check.sh` skill executes `nc` and `curl` with user-controlled `host`, `port`, and `timeout` values. While the skill's stated purpose is benign (network port checking), the direct use of powerful network utilities with unsanitized user input creates a risk of Server-Side Request Forgery (SSRF) if the agent has access to internal networks. There is no evidence of intentional malicious behavior like data exfiltration or persistence, but the lack of robust input validation for network targets makes it a high-risk capability.",
+          "checkedAt": 1779164266144,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "fda1e9b8875ccabe73ad3ececf1714043b788e96401b1c9cb67e2b50518fb953",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/fda1e9b8875ccabe73ad3ececf1714043b788e96401b1c9cb67e2b50518fb953"
+    },
+    "slug": "port-check",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

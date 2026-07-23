@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "category:C17:token:notes",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "3c501f5a7585edf97b23d468cb4edf4a103f38615cc04c67635e6ac26a3a5804",
+    "content_hash": "ba65acb81cbc2fa7a36c8c68689a5df3fa86f154c5c1eb124202bd4706bc8678",
+    "precanonical_content_hash": "bf605850c3adec7cd1dcf005eae7f810ee1b77fc266f4a37a5f0eda79b865ad0",
+    "skill_md_hash": "93f98caa6d8c6ebc93ee0f0019a3d9908440413b0d77a1568cd9b6cf33f9d8a2",
+    "version_metadata_sha256": "c3ffdff7c722b5d377e1b0a49171ecaa0cf446366de1962733c98a8020a5a06d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/shinnpuru/skills/civitai-api-art",
+    "claim_id": "d2b1088b31290dd06e7dc1d91d2866919101537b5c7bd890aeee1055a505d336",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "civitai-api-art",
+        "url": "https://clawskills.sh/skills/shinnpuru-civitai-api-art"
+      }
+    ],
+    "owner_handle": "shinnpuru",
+    "owner_id": "s17fh3v2gy2hjsbrdgpyqgqzpd885jzd",
+    "published_at": 1771124555567,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967435898,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967435898,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, README-style instructions, and script all align around submitting prompt/settings to CivitAI and downloading the generated image. Use of CIVITAI_API_TOKEN is disclosed and purpose-aligned.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The script is CLI-driven and user-invoked. The --output option is user-controlled and can overwrite a writable local file if pointed at one, but that is an expected image-save capability rather than hidden or automatic behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation asks users to install the unpinned civitai npm package. That is coherent with the SDK-based purpose, but users rely on npm package provenance outside the reviewed artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The required CivitAI token is proportionate for authenticated image generation, but it can consume account resources and sends prompts, model settings, and generation parameters to CivitAI.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background persistence, privilege escalation, broad local indexing, credential harvesting, or autonomous long-running worker behavior was found; persistence is limited to the generated output file.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[suspicious.env_credential_access] expected: The code reads CIVITAI_API_TOKEN and uses it as CivitAI SDK authentication; this is disclosed in SKILL.md and no unrelated token transmission is shown.\n[VirusTotal code_insight output-path warning] expected: The script resolves the user-supplied --output path and writes the downloaded image there. This can overwrite files the process can write, so it warrants user caution, but it is the advertised save-image behavior and is not evidence of deception by itself.\n[SkillSpector clean] expected: SkillSpector reported no issues; independent artifact review also found the main sensitive behaviors to be disclosed and purpose-aligned.",
+          "guidance": "Install only if you trust the civitai npm package and are comfortable giving this skill a CivitAI API token. Use a dedicated output directory or explicit image filename, avoid pointing --output at important files, and remember that prompts and generation settings are sent to CivitAI and may use account credits or subscription resources.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent CivitAI image-generation helper; it uses a disclosed API token and saves generated images locally, with normal care needed around output paths and npm dependency trust.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967407482,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: civitai-api-art\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to a critical arbitrary file write vulnerability in `scripts/get_illust.js`. The script uses `path.resolve()` for the `--output` argument but does not sanitize the path to prevent writing to arbitrary locations on the filesystem (e.g., `/etc/passwd` or `~/.bashrc`) if a malicious absolute path is provided by the user or a compromised agent. While the stated purpose of generating and saving images is benign, this vulnerability allows for potential system compromise or data destruction.",
+          "checkedAt": 1779164132942,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "28ef00dfca9bbc088a804635581e82581e37cde56b131bd6c2c02af2341fe904",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/28ef00dfca9bbc088a804635581e82581e37cde56b131bd6c2c02af2341fe904"
+    },
+    "slug": "civitai-api-art",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

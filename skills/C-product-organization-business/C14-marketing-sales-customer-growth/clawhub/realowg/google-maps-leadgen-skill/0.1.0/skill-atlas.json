@@ -1,0 +1,135 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.625,
+    "domains": [],
+    "needs_review": false,
+    "primary_category": "C14",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C12:token:strategy",
+      "category:C14:phrase:lead generation",
+      "category:C14:token:lead",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:planning"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C12",
+      "C17"
+    ],
+    "stages": [
+      "operate",
+      "plan"
+    ],
+    "tasks": [
+      "manage",
+      "plan"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "005cefdae015ee375140612a5b6447441ed9b969929a1ec9f0ddd1fda282b158",
+    "content_hash": "caf031a4dba646b0ff058552976804fb3824d18b66f5320f64b09b7048687884",
+    "precanonical_content_hash": "bf97d3b1a5369d85b49485e5addbbf43d1257cd8f73977dd290a21338ac5f3a5",
+    "skill_md_hash": "d419df7f0e74024cd47b0519ac132a50e3f41bb0f4297245af516e927abfe574",
+    "version_metadata_sha256": "49cdfb221a891d23fce90fcff0a115d7856b8cd050e203ab52a33f4d77189599"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/realowg/skills/google-maps-leadgen-skill",
+    "claim_id": "155d973f99cb186295592709de45ccd097f935adb671c7760e27288ae6d2065e",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "google-maps-leadgen-skill",
+        "url": "https://clawskills.sh/skills/realowg-google-maps-leadgen-skill"
+      }
+    ],
+    "owner_handle": "realowg",
+    "owner_id": "s172n4a3t56vahv3reet67r1k988480c",
+    "published_at": 1770846415576,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971349964,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971349964,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The networked Google Maps lookups, enrichment, deduplication, and CSV/XLSX export are coherent with the stated lead-generation purpose; users should expect billing/quota and contact-data handling implications.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are mostly scoped to user-requested lead generation and file delivery, but they would be safer with explicit recipient confirmation before sending exports through chat or Telegram.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden installer or automatic setup is present; the skill depends on an already configured mcporter google-maps server and optional openpyxl for XLSX output.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Calling mcporter, reading a query file, and writing an export path are proportionate to the workflow; the user or agent should choose a safe output directory.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts show no persistence, privilege escalation, credential harvesting, destructive behavior, or automatic exfiltration.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: MCP/network access and local file export are central to this skill; the lack of a formal permission manifest is a documentation gap, not hidden authority in the artifacts.\n[SQP-1] expected: The trigger wording is aligned with Google Maps lead generation and enrichment rather than unrelated generic data collection.\n[SQP-2] expected: File delivery through chat or Telegram is disclosed and conditioned on user request, but users should confirm destination and sensitivity before sending lead files.\n[VirusTotal code_insight] expected: The reported subprocess and arbitrary output path are the expected mcporter invocation and export behavior; subprocess is run without a shell and does not indicate malicious intent.\n[staticScan] expected: Static scan reported no suspicious patterns, which matches the artifact review.",
+          "guidance": "Install only if you trust the configured google-maps MCP server and can manage Google Maps API quota or billing. Store exports in a deliberate folder, do not commit API keys or lead files, and verify the recipient/channel before sending CSV or XLSX files through chat or Telegram.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it advertises: it uses a configured Google Maps MCP server to build lead lists, export files, and optionally send them when requested.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971317548,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: google-maps-leadgen-skill\nVersion: 0.1.0\n\nThe skill bundle is designed for legitimate lead generation using Google Maps APIs via an `mcporter` server. The `SKILL.md` instructions are benign and align with the stated purpose, including delivering generated files via a `message` tool. However, the `scripts/gmaps_leads_export.py` script uses `subprocess.run` to execute `mcporter` and performs file system operations (reading query files, writing output CSV/XLSX files). While these actions are necessary for the skill's functionality, the ability to write to an arbitrary `--out` path (if an AI agent is prompted to provide a malicious path) presents a vulnerability for arbitrary file write. This capability, though plausibly needed, constitutes a meaningful high-risk behavior without clear evidence of intentional malice, classifying it as suspicious.",
+          "checkedAt": 1779163311607,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "86eb5960f83c790410fafd7fb52084cd1947e72f4fa104dbcd051e8ca32f1ac2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/86eb5960f83c790410fafd7fb52084cd1947e72f4fa104dbcd051e8ca32f1ac2"
+    },
+    "slug": "google-maps-leadgen-skill",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

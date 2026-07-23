@@ -1,0 +1,148 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.69,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C02:token:edit",
+      "category:C05:phrase:video editing",
+      "category:C05:token:image",
+      "category:C05:token:video",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "category:C10:token:model",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "manage",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "0dca377585ee59d604f6fc1d97b81ed224bf07ba10191f509747c18040f5cf7e",
+    "content_hash": "a81aba7c6076c94925fe5b3a72acf2962b6320bd1a1db76d881b2f4986d5370a",
+    "precanonical_content_hash": "2db01839d625360c4921c349c4238790e947ad583d52db7ba67717618b42bfd3",
+    "skill_md_hash": "725e2766f48fabef3eeec67413da045ebc9a42bf8ebf6c0d479d9307077c94fc",
+    "version_metadata_sha256": "bec3c259621324bdcb4a26008192565fd3174840bc7872baf1d6f9c1a03bea9e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/misaka43fd/skills/mulerouter-skills",
+    "claim_id": "a96d9a65b5a3423ece74178a45dc4897e61f329b3aafbf61ba3b3751c2541e0e",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "mulerouter-skills",
+        "url": "https://clawskills.sh/skills/misaka43fd-mulerouter-skills"
+      }
+    ],
+    "owner_handle": "misaka43fd",
+    "owner_id": "s17dj0bgn7hgxqz0t47bjvqtnx884eq3",
+    "published_at": 1770636417210,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779962086940,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779962086940,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe and implement image/video generation through MuleRouter/MuleRun-compatible APIs, including text, URL, and local image inputs.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Local paths in image-related parameters are automatically read and converted to base64 before API submission; this is documented, but the warning could be more explicit and the code does not validate that the file is actually an image.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is user-directed through Python dependencies in pyproject.toml, with no hidden install scripts, persistence setup, or destructive behavior found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access, an API key, .env loading, and a configurable base URL are proportionate for this API wrapper and are documented, though users should verify the endpoint before sending media.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background workers, privilege escalation, credential harvesting, broad local indexing, or persistent modification of the user environment was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The concern about local image paths being converted and sent externally is valid privacy guidance, but it is purpose-aligned for an image/video API wrapper and is disclosed in SKILL.md.\n[SQP-2] expected: The code reads only user-supplied values in image-related parameters rather than scanning files on its own; lack of MIME/path guardrails is a documentation and safety note, not evidence of hidden exfiltration.\n[SQP-2] expected: Remote image URLs or base64 image inputs are expected for image-to-video/editing endpoints, and the receiving services are consistent with the stated MuleRouter/MuleRun API purpose.",
+          "guidance": "Install only if you are comfortable sending prompts, image URLs, and any local files you pass as image inputs to MuleRouter/MuleRun or your configured base URL. Use a dedicated API key, verify MULEROUTER_BASE_URL or MULEROUTER_SITE, and avoid providing sensitive media or non-image file paths.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed API wrapper for generating or editing media, but users should know that provided prompts, URLs, and local image files are sent to MuleRouter/MuleRun or the configured endpoint.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779962051335,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: mulerouter-skills\nVersion: 0.1.0\n\nThe skill is designed to interact with MuleRouter/MuleRun multimodal APIs for image and video generation. It reads API configuration from environment variables (`MULEROUTER_API_KEY`, `MULEROUTER_BASE_URL`, `MULEROUTER_SITE`) or a `.env` file, and makes network requests to the specified API endpoints (api.mulerouter.ai or api.mulerun.com). The `core/image.py` module includes functionality to read local image file paths and convert them to base64 for API submission, which is explicitly documented in `SKILL.md` as a feature. There is no evidence of intentional harmful behavior such as exfiltrating sensitive data to unauthorized endpoints, establishing persistence, or malicious prompt injection against the agent. All observed behaviors are aligned with the stated purpose of interacting with the multimodal APIs.",
+          "checkedAt": 1779162423857,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "6f62b19e50064db715e0beecda7968dc1a371072534e359e6ef8576b6d469c84",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6f62b19e50064db715e0beecda7968dc1a371072534e359e6ef8576b6d469c84"
+    },
+    "slug": "mulerouter-skills",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

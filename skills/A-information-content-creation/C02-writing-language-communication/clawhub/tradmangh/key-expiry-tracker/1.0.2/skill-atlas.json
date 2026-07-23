@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C02:token:edit",
+      "category:C06:token:api",
+      "category:C17:token:schedule",
+      "cross-tag:software-development",
+      "cross-tag:writing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C06",
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "665f1674873d83f7bea55416514a2972f0494b93be13c3d8f83d6643a40a8d2a",
+    "content_hash": "480aa9f1a9313a94b2378e4ba5339787eed4aee458a7331df9439e3588306b9f",
+    "skill_md_hash": "94a4d03ae7bb68347c73484263813f05150fbeacdb8c806d1ddc3adf1abdc93a",
+    "version_metadata_sha256": "d3bd902f8d91e7da03f1901ac3553e7901d071ec80a2ecaef7b8e51c2bb60518"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tradmangh/skills/key-expiry-tracker",
+    "claim_id": "2efbd6b39aefee59cfd373d0093b5aa2aaf87b99c5ec300d382f75badbe1cedc",
+    "index_entries": [
+      {
+        "index_path": "categories/communication.md",
+        "label": "key-expiry-tracker",
+        "url": "https://clawskills.sh/skills/tradmangh-key-expiry-tracker"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "tradmangh",
+    "owner_id": "s17aaegq3rafytyraeyc72bkjx83twpg",
+    "published_at": 1771340849516,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972551241,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972551241,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose is to track expiry dates for API keys, client secrets, certificates, and similar items; the script reads a local JSON inventory, parses names/types/providers/expiry timestamps, prints status, and exits nonzero when alerts exist. That capability is purpose-aligned and does not read credential values unless the user puts them in the metadata file contrary to the instructions.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "SKILL.md clearly tells the user to create and maintain ~/.openclaw/workspace/.credentials.json and shows the schema. Runtime behavior is limited to local JSON parsing and console/cron output; there are no prompt-injection instructions, role changes, network calls, or hidden unrelated actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation only runs chmod +x on the bundled script and declares required local tools bash and jq. There are no downloads, package installs, remote scripts, or obfuscated setup steps.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The filesystem permission and access to a credential-related inventory file are sensitive but proportionate for an expiry tracker. The file name may sound like it stores secrets, so users should ensure it contains only labels, providers, notes, and expiry timestamps.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill supports user-configured cron scheduling, which fits a periodic expiry checker. It does not install persistence automatically beyond the documented chmod step, and the declared STATE_FILE is unused by the script.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The script reads ~/.openclaw/workspace/.credentials.json, but SKILL.md prominently documents that exact file and explains it is a metadata-only expiry list. This is sensitive-adjacent but disclosed and central to the skill's purpose.\n[PE3] expected: The scanner treated the credentials.json path as possible credential access. Artifact review shows the script extracts name, type, provider, and expires fields only, with no credential-value extraction, network transmission, or exfiltration behavior.\n[VirusTotal code_insight] unexpected: The reported shell-injection concern is not supported by the script as written: date -d \"$EXPIRES\" passes the value as a quoted argument, and shell metacharacters inside that variable are not re-evaluated as commands. Malformed dates can affect parsing results, but the artifact does not show arbitrary command execution.",
+          "guidance": "Install only if you are comfortable maintaining a local credential expiry inventory. Keep ~/.openclaw/workspace/.credentials.json metadata-only, restrict its file permissions, and run the check manually before enabling the optional cron schedule.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill coherently checks locally stored credential expiry metadata and does not show evidence of stealing, transmitting, or modifying secrets.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972526548,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: key-expiry-tracker\nVersion: 1.0.2\n\nThe skill is classified as suspicious due to a potential shell injection vulnerability in `scripts/check-credentials.sh`. The `date -d \"$EXPIRES\"` command, while intended for date parsing, could execute arbitrary commands if the `expires` field in the `~/.openclaw/workspace/.credentials.json` file is maliciously crafted (e.g., `2026-03-15T00:00:00Z; malicious_command`). Although the skill explicitly states it does not handle credential values and the `SKILL.md` does not contain prompt injection, this vulnerability, combined with the necessary `filesystem` permission, presents a risk if the input JSON file is compromised or manipulated.",
+          "checkedAt": 1779081811293,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "665f1674873d83f7bea55416514a2972f0494b93be13c3d8f83d6643a40a8d2a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/665f1674873d83f7bea55416514a2972f0494b93be13c3d8f83d6643a40a8d2a"
+    },
+    "slug": "key-expiry-tracker",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C08:token:repository",
+      "category:C09:token:security",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C08",
+      "C09"
+    ],
+    "stages": [
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8d0b6d8ac78b8d28c13e364d142c7a54f0d9085c828905eeea9901dc2c267f05",
+    "content_hash": "692dd735f0bccc1841922840263260feb34c16eadb2edc2eca8f0387c835ba3b",
+    "precanonical_content_hash": "33a61f8226842cdba516989de3b80c9ecfd876970976bf675942635ce9fe7d75",
+    "skill_md_hash": "1016744a3b960c80ef5d1c83b9d76d4840e68d9fc2b7e5098be9374260b50272",
+    "version_metadata_sha256": "a0b0584fc862c92b8bf6fbe9359f05fb7847dc6e8abcc63d234ee63727ebb0e6"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/skywyze/skills/rlm-controller",
+    "claim_id": "326d728277b87a8a36f66694a309b4b759f519da654c23360414ac2bb95e0ba1",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "rlm-controller",
+        "url": "https://clawskills.sh/skills/skywyze-rlm-controller"
+      }
+    ],
+    "owner_handle": "skywyze",
+    "owner_id": "s17byft1qf3hsm5vzfprb76tg5885d5h",
+    "published_at": 1771091937322,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968187499,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968187499,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The advertised purpose is to process very large inputs by storing context, slicing it, generating subcall prompts, and aggregating results; the bundled scripts and documentation align with that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill uses powerful OpenClaw capabilities including read, write, exec, and sessions_spawn, but documents them and constrains them to bundled helper scripts, fixed sessions_spawn emissions, max depth 1, max 32 subcalls, and no model-generated code execution.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No runtime downloader or install-time execution was found; helper scripts are bundled. The SKILL.md discloses tool use, although no separate explicit permission manifest was present in the artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "File operations are workspace-oriented and path validation is used in the Python helpers. The cleanup script can delete retained RLM scratch files when configured with CLEAN_RETENTION=0, but its target is limited to scratch/rlm_prototype ctx and logs directories.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill intentionally persists context copies, subcall prompts, plans, and logs for traceability. Secret redaction is enabled by default, but users can disable it with --no-redact, which can leave sensitive plaintext in artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The capabilities flagged by the scanner are expected for an RLM controller and are disclosed in SKILL.md and security docs; the missing separate permission declaration is a transparency improvement, not evidence of hidden or purpose-mismatched behavior.\n[SQP-2] expected: The cleanup command is purpose-aligned artifact cleanup. The documentation's 'delete all' wording could be clearer, but the script deletes only files in the configured RLM scratch ctx and logs directories, respecting ignore rules.\n[SQP-2] expected: Writing subcall prompt files is central to the workflow, and redaction is enabled by default. The --no-redact option is a real handling risk for sensitive inputs, but it is explicit rather than hidden.",
+          "guidance": "Install only if you are comfortable with a skill that can run bundled helper scripts, write analysis artifacts, and spawn sub-agent sessions. Keep redaction enabled for sensitive repositories or logs, review generated prompts/logs before sharing them, and use cleanup carefully because CLEAN_RETENTION=0 removes retained RLM scratch artifacts.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed long-context workflow tool that writes bounded workspace artifacts and spawns limited subcalls, with no evidence of hidden exfiltration or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968117514,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: rlm-controller\nVersion: 1.2.0\n\nThe skill bundle demonstrates a strong security-first design with multiple layers of defense. Key indicators include robust path validation (`rlm_path.py`) to prevent directory traversal and ensure containment, comprehensive secret redaction (`rlm_redact.py`) for subcall prompts, and strict safelisting of allowed actions and tools (`rlm_async_spawn.py`, `rlm_emit_toolcalls.py`) to prevent arbitrary code execution or tool misuse. All scripts use explicit command arrays for `subprocess` calls, avoiding shell injection. Resource limits are enforced on slices, subcalls, and regex operations (ReDoS protection in `rlm_ctx.py`). The documentation, including a detailed `docs/security_audit_response.md`, transparently discusses design trade-offs like autonomous invocation and outlines specific code-level mitigations implemented. While the `cleanup.sh` script lacks the `rlm_path.py` validation for its environment variables, its scope is confined to designated scratch directories, and the overall design prevents it from being exploited for malicious purposes.",
+          "checkedAt": 1779163002856,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "ec913a358ffea64dc96aa0d7a928714b432d2bb66e93e4b992d7bcc31b204d76",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ec913a358ffea64dc96aa0d7a928714b432d2bb66e93e4b992d7bcc31b204d76"
+    },
+    "slug": "rlm-controller",
+    "source_type": "clawhub",
+    "version": "1.2.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,136 @@
+{
+  "classification": {
+    "artifacts": [
+      "website"
+    ],
+    "audiences": [],
+    "confidence": 0.465,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C19",
+    "reasons": [
+      "category:C01:token:find",
+      "category:C17:token:notes",
+      "category:C19:token:automate",
+      "category:C19:token:browser",
+      "category:C19:token:desktop",
+      "cross-tag:browser-automation",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C17"
+    ],
+    "stages": [
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "automate",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "825543da250e3a10524ce825aee30701bbac9ff7a68ba618f4a7a9611d968c13",
+    "content_hash": "8aec228144841772b67265406359cc120796d96d159124feba68f2b944a17b16",
+    "precanonical_content_hash": "e881cbe5987093e5dc7b7fd0d1d4f6eb9ba973b7836d3e90bd7dcc2c3ffe5e70",
+    "skill_md_hash": "f0f084ef12896c47b6dfab4b3435be2aa02f93fbb736bcc3e109b5a82d908440",
+    "version_metadata_sha256": "45fe5d85936a8017db713862c0e216ebd0b51a485c4a48908a6064b0c3a6a7e0"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/amirgu/skills/pc-master",
+    "claim_id": "8d84bcf59e9bd2ceeb20753e10040c9f089fa5c4797a71082b4ce4a429daa928",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "pc-master",
+        "url": "https://clawskills.sh/skills/amirgu-pc-master"
+      }
+    ],
+    "owner_handle": "amirgu",
+    "owner_id": "s17apz81wh0ad47zhb1rxs8jdx885ay5",
+    "published_at": 1771638354281,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943795781,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943795781,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill clearly states that it controls Windows apps, processes, screenshots, system info, and files from WSL2. Those are high-impact local capabilities, but they match the stated purpose and are not hidden.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The activation and examples are broad and include force-killing apps, PowerShell/cmd execution, screenshots, and Windows user-file access. The artifacts do not add strong confirmation guardrails, so users should keep actions explicit and reviewed.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains only markdown instructions and a reference list; there are no executable install scripts, package hooks, or hidden payload files.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Access to /mnt/c, Windows system utilities, PowerShell, and screen capture is proportionate for a Windows-control skill, but it can expose or modify live local data if used carelessly.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background service, startup modification, credential collection, privilege escalation, remote endpoint, or exfiltration behavior appears in the artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad trigger scope is real, but it is limited to requests involving Windows-host interaction and matches the skill's declared PC-control function.\n[SQP-2] expected: Screenshot capability is sensitive, but it is disclosed as an explicit user-facing command and the artifact does not instruct upload or hidden capture.\n[SQP-2] expected: Windows file access under /mnt/c/Users is powerful but expected for a file-management feature; the examples show local read/copy operations, not credential harvesting or remote transfer.\n[SQP-2] expected: Forceful task termination can cause data loss, but process control is a core disclosed feature and there is no automatic or deceptive execution path.\n[VirusTotal code_insight] expected: The telemetry flags broad cmd.exe, PowerShell, and filesystem authority; those capabilities are disclosed and purpose-aligned, with no artifact-backed exfiltration, persistence, or deception.",
+          "guidance": "Install this only if you want an agent to control your Windows host from WSL2. Review commands involving PowerShell/cmd, screenshots, force-closing applications, or files under your Windows user directories, and use precise requests so the agent does not affect private data or unsaved work unintentionally.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is an instruction-only WSL2 helper for controlling a Windows PC; its powers are broad but disclosed and aligned with that purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943763667,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 40,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: pc-master\nVersion: 1.0.0\n\nThe skill bundle is classified as suspicious due to its broad and powerful capabilities that, while aligned with its stated purpose of controlling Windows from WSL2, present significant security risks if misused or exploited via prompt injection. Key indicators include the ability to execute arbitrary Windows binaries and PowerShell commands (e.g., `cmd.exe /c \"start ...\"`, direct calls to `.exe` files, PowerShell scripts using `WScript.Shell`) and full read/write access to the Windows file system (`/mnt/c/`). While there is no explicit instruction for malicious actions like data exfiltration or persistence within `SKILL.md`, these capabilities provide a strong foundation for an attacker to perform such actions if they can inject commands or manipulate the agent's behavior.",
+          "checkedAt": 1779165818896,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "797ebac366cd19c5b7d929c30806f81cee76a9633f0690150ca841b7a556d600",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/797ebac366cd19c5b7d929c30806f81cee76a9633f0690150ca841b7a556d600"
+    },
+    "slug": "pc-master",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:orchestration",
+      "category:C00:token:skill",
+      "category:C06:token:code",
+      "category:C11:token:sprint",
+      "cross-tag:agent-management",
+      "cross-tag:planning",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C11"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "plan"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "plan"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "9735106a6abffabd556acfdbe5410ba08437b049252e0e79e602266df62f5f7b",
+    "content_hash": "de93625e1932a5ccf0da35dd2a381731e3a69aba7290a3c52ff79a9e25a7f9ae",
+    "skill_md_hash": "dff1bce7dc007d68cfc589a263ba69a63563b8c0e504fadb71c454e0b0f931ab",
+    "version_metadata_sha256": "0e0d8606049d2cb5bfcacff45287484409da4d8dfc310e58c55773cd4b4dae3f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/variable190/skills/deterministic-controller",
+    "claim_id": "c9312b2e3b9eab9b0713c92f244063ad2c183d83c0a2b237f353fb5d20fcda03",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "deterministic-controller",
+        "url": "https://clawskills.sh/skills/variable190-deterministic-controller"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "variable190",
+    "owner_id": "s1764rj21v083gp2g7j00qrsys885576",
+    "published_at": 1771436314691,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779919374560,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779919374560,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The intended capabilities include scheduled controller ticks, workspace state updates, subagent dispatch, and optional Telegram status logs; these are coherent with the deterministic controller purpose and documented throughout the artifacts.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "HEARTBEAT.md intentionally uses strict trigger-based instructions such as executing the controller contract without prior chat context; this is purpose-aligned for repeatable automation, but users should review it before arming.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill contains markdown and text templates only, with no executable scripts, no package install, and no automatic config changes. The setup prompt asks an agent to copy/edit files and create a cron job, but leaves it disabled.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Heartbeat mode may read named profile or memory files, and configured logs may leave the workspace via Telegram. These data flows are disclosed, bounded, and tied to the controller workflow.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Recurring automation is explicit and opt-in: the cron job is documented as disabled by default, heartbeat cadence starts empty, and README/SECURITY.md include arming and disarming guidance.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The cross-context message-send snippet is optional and related to the documented Telegram control-plane integration; it would benefit from stronger least-privilege wording, but it is not hidden or automatic.\n[SQP-2] expected: The setup prompt does request workspace file creation/edits and a recurring cron configuration, but this is the core setup task, is visible to the user, and requires the user to paste/run the prompt; the cron is specified as initially disabled.\n[SQP-2] expected: HEARTBEAT.md sends operational log lines to a configured Telegram group, which is a real external data flow, but README.md and SECURITY.md describe Telegram logging as optional and require the user to configure the destination.\n[VirusTotal code_insight] expected: VirusTotal flagged risk from cron, broad heartbeat reads, subagents, and Telegram egress. Artifact review confirms these are disclosed, opt-in controller features rather than hidden behavior; engine detections were otherwise all undetected.\n[staticScan.clean] expected: The static scan reported no suspicious patterns, consistent with the artifact being documentation/templates rather than executable code.",
+          "guidance": "Install only if you want an agentic project controller. Before arming it, review HEARTBEAT.md and ACTIVITIES.md, keep the cron and heartbeat disabled until ready, remove secrets from the listed memory/profile files, and enable Telegram or cross-context sending only for a trusted destination.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a transparent docs-only controller template with opt-in automation and Telegram logging, not an automatic installer or hidden data sender.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779919330885,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 30,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: deterministic-controller\nVersion: 0.1.1\n\nThe skill bundle is designed to set up a deterministic control loop for an OpenClaw agent, involving powerful capabilities such as filesystem read/write, creating a cron job for persistence (explicitly disabled by default), spawning subagents, and network egress for control-plane logging to Telegram. While the skill includes strong prompt injection defenses and extensive security documentation (`SECURITY.md`) advising on secret hygiene and opt-in features, the broad read scope for `HEARTBEAT_TICK` (e.g., `USER.md`, `SOUL.md`, `MEMORY.md`) and explicit instructions for network egress to Telegram (`HEARTBEAT.md`) present significant attack surface and risk if the operator fails to follow security best practices. These capabilities, though documented and opt-in, elevate the risk beyond benign, classifying it as suspicious due to potential vulnerabilities rather than clear malicious intent.",
+          "checkedAt": 1779164982137,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "e055ec37eeaf2de61b42e58928f6c59440d884b53b6441d354167305b0978619",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e055ec37eeaf2de61b42e58928f6c59440d884b53b6441d354167305b0978619"
+    },
+    "slug": "deterministic-controller",
+    "source_type": "clawhub",
+    "version": "0.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

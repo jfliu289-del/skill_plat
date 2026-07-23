@@ -1,0 +1,135 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.475,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "08ee40277eb29dcbccc7d8f1349daffed1ef1145a8eef96f674d7fff2528fd2b",
+    "content_hash": "099b6abdfce784eca85b7a12cae16805b12cc3c21482686caf512354cfff4df3",
+    "precanonical_content_hash": "8b3ae6a0dbb452e7abf85eb33a06071dec264fd1bb80f32b4c6b6da8faabf30e",
+    "skill_md_hash": "ff00cc0027b15988921eb778f23c22014ee85abe0f20f08b911b427be744ab71",
+    "version_metadata_sha256": "92db513a44fd0c8b0f9633dfa873a8b19c3eedad1c569a77981ac8c1f35e7cd6"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/daya0576/skills/beaverhabits",
+    "claim_id": "0305bfdd2fdb80c18f63e1e2590c2b06b431ae43008f3b38e9fe0a06024365d6",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "beaverhabits",
+        "url": "https://clawskills.sh/skills/daya0576-beaverhabits"
+      },
+      {
+        "index_path": "categories/personal-development.md",
+        "label": "beaverhabits",
+        "url": "https://clawskills.sh/skills/daya0576-beaverhabits"
+      }
+    ],
+    "owner_handle": "daya0576",
+    "owner_id": "s1760enm1zdh0kctr6n6z80zxh885739",
+    "published_at": 1771659003959,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779942955129,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779942955129,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The advertised purpose matches the documented capabilities: listing habits and marking a habit done or undone through Beaver Habits API endpoints. The write action modifies remote habit records, but that is core to the stated habit-management purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill broadly defaults habit-related queries to an authenticated overview and automatically resolves habit names to IDs. That could cause unintended reads or mistaken habit matches, but the behavior is disclosed and limited to Beaver Habits habit/completion endpoints.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact is a single markdown instruction file. It declares curl and environment variables, with no bundled executable code, install script, package dependency, background service, or hidden setup behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Requiring BEAVERHABITS_API_KEY is proportionate for an API client. The optional SERVER_URL is explicitly documented for self-hosted instances, but users must ensure it points only to a trusted Beaver Habits server because the token is sent there.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No artifact evidence shows local persistence, privilege escalation, unrelated file access, credential harvesting, background workers, or data flows outside the configured Beaver Habits API host.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The scanner correctly identifies that completion and uncompletion are persistent remote writes without an explicit confirmation instruction. This is a usability and safety note, but the write is plainly documented and is the core management function rather than hidden or purpose-mismatched behavior.\n[VirusTotal code_insight] expected: The configurable SERVER_URL can receive the API token, but the artifact discloses the setting as optional self-hosting support and defaults to beaverhabits.com. VirusTotal reports no engine detections, so this telemetry is not enough to escalate the verdict.\n[staticScan] expected: Static scan reported no suspicious patterns, which is consistent with the markdown-only artifact and the absence of executable code.",
+          "guidance": "Install only if you are comfortable giving the skill a Beaver Habits API token that can read and update your habit data. Keep SERVER_URL unset or set only to a trusted self-hosted Beaver Habits instance, and double-check habit names and dates before asking the agent to mark habits done or undone.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward Beaver Habits helper that uses your API token to read and update habit completion records.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779942921591,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: beaverhabits\nVersion: 1.0.1\n\nThe skill is designed to interact with the Beaver Habit Tracker API using `curl` and sends the `BEAVERHABITS_API_KEY` in an Authorization header. The `SERVER_URL` is configurable via an environment variable (SKILL.md), allowing the API key to be sent to an arbitrary, user-defined endpoint instead of the default `https://beaverhabits.com`. While this feature is presented for legitimate self-hosting, it represents a risky capability that could be exploited for API key exfiltration if the `SERVER_URL` is maliciously controlled or injected, even though the skill itself does not demonstrate explicit malicious intent.",
+          "checkedAt": 1779165675078,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "56dc2c80923527c5eadc643f01aa22748ceff0b6243fb17b5e36b889787d2ee0",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/56dc2c80923527c5eadc643f01aa22748ceff0b6243fb17b5e36b889787d2ee0"
+    },
+    "slug": "beaverhabits",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

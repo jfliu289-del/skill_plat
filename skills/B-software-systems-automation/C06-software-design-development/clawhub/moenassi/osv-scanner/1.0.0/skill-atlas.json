@@ -1,0 +1,194 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C09:token:vulnerability",
+      "category:C11:token:project",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09",
+      "C11"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "24058d41f4f4c6098543e592aa84277877ca94715733c2804db813b56ba3e8cd",
+    "content_hash": "55c1475c78cd6ed6b40fdac43bb9dc32aae66cced24362a323cfdd860277ffda",
+    "skill_md_hash": "a86ae037f507dc0937aab417a5ea0a244270ae4c731fddb7eb0f62585c7167ff",
+    "version_metadata_sha256": "737a4d628fb528f3ef75ebec99b448c5df642481e2c51919d475d4c0bf8ef740"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/moenassi/skills/osv-scanner",
+    "claim_id": "52362149baa63c054bbd163e83651471dd24d40b24377fd5353ced139f20ed1f",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "osv-scanner",
+        "url": "https://clawskills.sh/skills/moenassi-osv-scanner"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "moenassi",
+    "owner_id": "s17b8z0t5bff51xd0qakbn7sns885tq6",
+    "published_at": 1771509965390,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779165446135,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": [
+            {
+              "categoryId": "ASI07",
+              "categoryLabel": "Insecure Inter-Agent Communication",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The scanner sends package names, ecosystems, and versions to https://api.osv.dev/v1/query. This is disclosed and central to vulnerability scanning, but it means dependency or OS package inventory is shared with an external provider.",
+                "path": "scanner.py",
+                "snippet": "payload = {\"version\": version, \"package\": {\"name\": name, \"ecosystem\": ecosystem}} ... requests.post(url, json=payload)"
+              },
+              "recommendation": "Only scan projects or hosts where sharing package/version inventory with OSV is acceptable; use a private or offline scanner for sensitive environments.",
+              "riskBucket": "sensitive_data_protection",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "Google OSV can receive a list of the packages and versions being scanned, which may reveal details about a project or system."
+            },
+            {
+              "categoryId": "ASI05",
+              "categoryLabel": "Unexpected Code Execution",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "In OS-scan mode, the script runs fixed local shell commands to detect the Linux distribution and list installed packages. The commands are not built from user-controlled input and are purpose-aligned, but they are still local command execution.",
+                "path": "scanner.py",
+                "snippet": "subprocess.run(\"lsb_release -a | grep 'Distributor ID' | awk '{print $3}'\", shell=True, ...); subprocess.run(\"dpkg-query -W -f='${binary:Package} ${Version}\\\\n'\", shell=True, ...)"
+              },
+              "recommendation": "Use the OS-scan mode only on machines you intend to inventory, and review the command before running `python3 scanner.py os`.",
+              "riskBucket": "abnormal_behavior_control",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "Running the OS mode lets the scanner inspect the machine’s installed package list."
+            },
+            {
+              "categoryId": "ASI04",
+              "categoryLabel": "Agentic Supply Chain Vulnerabilities",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The setup instructions install dependencies without pinned versions or a lockfile. This is normal for a small Python utility, but it relies on whatever package versions are available from the package index at install time.",
+                "path": "SKILL.md",
+                "snippet": "pip install requests openpyxl"
+              },
+              "recommendation": "Install in a virtual environment and consider using pinned versions or a reviewed requirements file before relying on the scanner.",
+              "riskBucket": "abnormal_behavior_control",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "Future installs may pull different dependency versions, which can affect reproducibility or inherit upstream package risk."
+            }
+          ],
+          "checkedAt": 1777614735486,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The behavior matches the stated purpose: it reads dependency/package lists, queries the OSV API, prints results, and writes a local spreadsheet report. Users should notice that package names and versions leave the machine.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are user-directed setup and run commands; there is no evidence of prompt-injection behavior, forced autonomous execution, destructive actions, or hidden agent-control instructions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no install spec; setup is manual and asks users to install unpinned Python packages and rename the template file. This is disclosed, but users should install in a virtual environment and prefer pinned dependencies.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The optional OS scan uses fixed shell commands to identify the distribution and enumerate installed packages. That is proportionate for a vulnerability scanner, but it exposes local package inventory to the external OSV API.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No credentials, privileged account access, background persistence, startup hooks, or protected-path writes are requested. The only persistent output shown is a dated ScanResult spreadsheet in the working directory.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": null,
+          "guidance": "Before installing, make sure you are comfortable sharing scanned package names and versions with Google OSV. Run it in a virtual environment, consider pinning the Python dependencies, and use OS-scan mode only on systems you intend to inventory.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": {
+            "abnormal_behavior_control": {
+              "highestSeverity": "low",
+              "status": "note",
+              "summary": "The skill uses purpose-aligned local shell commands and unpinned setup dependencies, with no evidence of hidden, destructive, or autonomous behavior."
+            },
+            "permission_boundary": {
+              "highestSeverity": "none",
+              "status": "none",
+              "summary": "No credentials, tokens, account permissions, or delegated authority are requested or used."
+            },
+            "sensitive_data_protection": {
+              "highestSeverity": "low",
+              "status": "note",
+              "summary": "Package names and versions are sent to the OSV API as part of the disclosed vulnerability-checking workflow."
+            }
+          },
+          "status": "clean",
+          "summary": "This appears to be a normal vulnerability scanner, but it sends package/version information to Google OSV and can run local package-listing commands when used in OS-scan mode.",
+          "verdict": "benign"
+        },
+        "skillspector": null,
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: osv-scanner\nVersion: 1.0.0\n\nThe skill bundle is classified as suspicious due to two main indicators. First, the `SKILL.md` and `README.md` files contain an explicit instruction to rename `template/ScanResult.txt` to `template/ScanResult.xlsx`. The `ScanResult.txt` file is actually a ZIP archive (an XLSX file disguised with a .txt extension), which is a suspicious file manipulation pattern that could be used for evasion. Second, the `scanner.py` script utilizes `subprocess.run` with `shell=True` for executing system commands (`lsb_release`, `dpkg-query`). While the commands are hardcoded and not directly exploitable in this specific context, the use of `shell=True` is a risky capability that generally increases the attack surface for shell injection vulnerabilities if any part of the command string were to become user-controlled or untrusted.",
+          "checkedAt": 1779165446135,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "24058d41f4f4c6098543e592aa84277877ca94715733c2804db813b56ba3e8cd",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/24058d41f4f4c6098543e592aa84277877ca94715733c2804db813b56ba3e8cd"
+    },
+    "slug": "osv-scanner",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

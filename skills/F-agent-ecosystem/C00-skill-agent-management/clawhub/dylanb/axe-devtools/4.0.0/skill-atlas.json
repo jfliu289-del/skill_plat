@@ -1,0 +1,169 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "business",
+      "creator",
+      "data-professional",
+      "developer",
+      "marketer",
+      "security-professional"
+    ],
+    "confidence": 0.1321,
+    "domains": [
+      "business",
+      "creative",
+      "marketing",
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:analyze",
+      "category:C06:token:code",
+      "category:C07:token:testing",
+      "category:C09:token:compliance",
+      "category:C14:token:sales",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:design",
+      "cross-tag:marketing-sales",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C07",
+      "C09",
+      "C14",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "design",
+      "manage",
+      "market",
+      "secure",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d6126560b972da6fc7b0857ca16028bcf54ebf3648917af592248334f0b69d09",
+    "content_hash": "c575cf3eab4c28d1d9a2d370d611ccb97bdc1f90956679e4eba271ab597b602e",
+    "precanonical_content_hash": "adbe59f509b3f12a6644813a12124462b0afcbb868a60d92664e83a1b24185df",
+    "skill_md_hash": "9c572d79a4843b882641992d4581435725e91cd22d30ecb9a0c8d3e844f1ace0",
+    "version_metadata_sha256": "4d5de279030627bf87ccccc702d6a5e775c619b3684be3e41d397a2e9a8d6e59"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/dylanb/skills/axe-devtools",
+    "claim_id": "64f7082ed27350bbc4d02edfa96796d97aaa53adf6e62a2d17674f69a99c4306",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "axe-devtools",
+        "url": "https://clawskills.sh/skills/dylanb-axe-devtools"
+      }
+    ],
+    "owner_handle": "dylanb",
+    "owner_id": "s17bq5vk2t2ffgr6mhjyyd78s5885s3e",
+    "published_at": 1770908892162,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972476353,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972476353,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose, SKILL.md workflow, and axe-mcp.js script all align around scanning live web pages for accessibility issues and requesting remediation guidance.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The trigger is broad for UI development tasks, but the active commands are documented and tied to accessibility testing rather than unrelated behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no install hook, but runtime depends on Docker and the mutable dequesystems/axe-mcp-server:latest image, so users should trust or pin that container source.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "AXE_API_KEY is clearly required and passed to the container; AXE_SERVER_URL is forwarded only if already present in the environment.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The script uses docker run -i --rm with no privileged flags, host mounts, Docker socket access, background service setup, or persistent file writes.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[suspicious.dangerous_exec] expected: The child_process spawn launches Docker for the documented axe MCP workflow; arguments are passed without shell interpolation and the container is removed after execution.\n[VirusTotal/code_insight] expected: The Docker and API-key concerns are real operational risks, but artifact review shows disclosed, purpose-aligned use with no hidden escalation or exfiltration logic.\n[SQP-1] expected: The broad activation language could cause unintended use of Docker, paid credits, or network scanning, but it remains disclosed and aligned with accessibility work rather than suspicious by itself.",
+          "guidance": "Install only if Docker execution and Deque axe MCP network usage are acceptable in your environment. Use a rotatable Axe API key, consider pinning the Docker image to a version or digest, and avoid scanning confidential pages or sending sensitive HTML unless that provider data flow is approved.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed accessibility-testing wrapper that runs Deque's axe MCP server in Docker and uses an Axe API key, with no evidence of hidden persistence or unrelated data access.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972457435,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: axe-devtools\nVersion: 4.0.0\n\nThe skill is classified as suspicious due to its reliance on executing `docker run` via `child_process.spawn` in `scripts/axe-mcp.js`. While the script uses a legitimate Docker image (`dequesystems/axe-mcp-server:latest`) and passes arguments safely via JSON, the direct execution of Docker commands is a high-privilege operation. The script also passes `AXE_API_KEY` and potentially `AXE_SERVER_URL` as environment variables to the container. This creates a significant attack surface: a prompt injection against the agent could manipulate these environment variables (e.g., redirecting `AXE_SERVER_URL` to a malicious server) or potentially alter the Docker command itself, leading to unauthorized execution or data exfiltration, even though the current implementation shows no malicious intent.",
+          "checkedAt": 1779163492657,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "8a093417111361378ff066cacede336dcaf2f56f3e340f2ccf716813a4908b8c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8a093417111361378ff066cacede336dcaf2f56f3e340f2ccf716813a4908b8c"
+    },
+    "slug": "axe-devtools",
+    "source_type": "clawhub",
+    "version": "4.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

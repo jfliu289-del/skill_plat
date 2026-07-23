@@ -1,0 +1,152 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator",
+      "security-professional"
+    ],
+    "confidence": 0.5972,
+    "domains": [
+      "creative",
+      "security"
+    ],
+    "needs_review": false,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:phrase:web search",
+      "category:C01:token:search",
+      "category:C05:token:design",
+      "category:C09:token:compliance",
+      "category:C12:token:strategy",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:planning",
+      "cross-tag:search",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C05",
+      "C09",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "design",
+      "manage",
+      "plan",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "873675334708a8b1903aa2df230c524c2a52dad6b51b2d08836f1de5d6ccd442",
+    "content_hash": "f2ebde3e6f53f1c9e0c905f07a592bb6f4dd2634812823a789bd2ce6d5baffd4",
+    "precanonical_content_hash": "8dc175a88d10f3ffc995e1e57b1b4cb612be0522502a2b7069b48210acb966dc",
+    "skill_md_hash": "07c1ab27be30ff0bcd46eb16a4db06844d5cf963c2fc9b9305c03c865278ec8a",
+    "version_metadata_sha256": "66eaeca1e0990e6955fe6f5e552752180b0f91a88a7c2e13bac9665e32e09b63"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jixsonwang/skills/wechat-search-release",
+    "claim_id": "e1612c4a4a334985642d8f916946d82c5e0018775127684634482f561027a928",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "wechat-search-release",
+        "url": "https://clawskills.sh/skills/jixsonwang-wechat-search-release"
+      }
+    ],
+    "owner_handle": "jixsonwang",
+    "owner_id": "s177fgbvr8jzz3wng4sra8gvws83hdt0",
+    "published_at": 1770642594053,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779962543915,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779962543915,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifacts: the Python helper searches public WeChat Official Account articles through OpenClaw web_search and web_fetch and filters returned article URLs to mp.weixin.qq.com. Some documentation claims, such as date filters, JSON output, robots.txt enforcement, custom User-Agent use, and rate limiting, are incomplete or not clearly implemented in the script, so users should treat those as partly aspirational rather than proven safeguards.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime behavior is explicit and user-directed through a query argument and bounded options for result count and search strategy. The artifacts do not contain prompt-injection instructions, role changes, hidden agent directives, or unrelated tasks.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The requirements file uses lower-bound dependencies and no lockfile, which is weaker supply-chain hygiene for manual installs. This is not enough for Review because there is no install script, obfuscation, dependency confusion pattern, or artifact-backed malicious dependency behavior, and the main script does not directly import requests or beautifulsoup4.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network search and fetch access is proportionate to a search skill. Local filesystem access is limited to reading an optional user-specified JSON config file; there is no broad local indexing, credential access, session/profile use, or environment harvesting.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No persistence, background worker, autostart, privilege escalation, file writes, credential storage, or article-content retention is implemented in the reviewed code.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[OH1] expected: The raw query is interpolated into a fixed Sogou WeChat search URL before calling OpenClaw web_fetch. URL encoding would be better, but the host and path are fixed, the call uses argument arrays rather than a shell, and this does not show artifact-backed SSRF, exfiltration, or hidden behavior.\n[SC1] unexpected: The unpinned runtime and test dependencies are a real reproducibility and dependency-hygiene issue, but they are disclosed in requirements.txt and do not by themselves create a material Review concern for this simple helper.\n[SC4] unexpected: The dependency ranges may permit vulnerable versions of requests or pytest in some environments. This should be fixed with pinned or locked dependencies, but the reviewed script does not directly use requests, pytest is test-only, and there is no artifact evidence of credential handling or exploitation.",
+          "guidance": "Install only if you are comfortable sending your search terms to the configured OpenClaw web search/fetch providers and related public search endpoints. Avoid putting secrets, internal project names, or regulated data into queries. If running the Python helper manually, prefer an isolated environment with pinned dependencies, and do not rely on the documented robots.txt, rate-limit, date-filter, or JSON-output claims unless you verify those behaviors in your OpenClaw tooling.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a user-directed WeChat article search helper with ordinary web-query privacy and dependency hygiene cautions, but no evidence of hidden access, persistence, destructive behavior, or exfiltration.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779962508971,
+          "issueCount": 8,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: wechat-search-release\nVersion: 1.0.3\n\nThe skill is designed to search WeChat articles using OpenClaw's `web_search` and `web_fetch` tools. The `wechat_search.py` script correctly uses `subprocess.run` to invoke these specific OpenClaw tools, passing user queries as arguments, which is the intended interaction model for OpenClaw skills. The `SKILL.md` and `README.md` clearly describe the functionality, emphasize compliance, and do not contain any prompt injection attempts. There is no evidence of data exfiltration, malicious execution, persistence, or obfuscation. The behavior is clearly aligned with its stated purpose and lacks high-risk activities beyond the legitimate use of OpenClaw's own tools.",
+          "checkedAt": 1779162447250,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "12622cd573c81102bbb1c76307974ae392ea892fbed97e1f1afb749539182345",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/12622cd573c81102bbb1c76307974ae392ea892fbed97e1f1afb749539182345"
+    },
+    "slug": "wechat-search-release",
+    "source_type": "clawhub",
+    "version": "1.0.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

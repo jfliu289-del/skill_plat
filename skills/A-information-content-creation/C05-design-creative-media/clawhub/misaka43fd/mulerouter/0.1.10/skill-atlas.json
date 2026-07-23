@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.69,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C02:token:edit",
+      "category:C05:phrase:video editing",
+      "category:C05:token:image",
+      "category:C05:token:video",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "category:C10:token:model",
+      "cross-tag:design",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "034b1b1f13354de0ffb2fa47d3d56682ed5e2983ddc5249a2afb80e5229fe63b",
+    "content_hash": "3f4f52c8db7452e6c2844f6b685a36c184efeb3c76f757c3b8f31430853c2a7b",
+    "precanonical_content_hash": "956f3494143ff779878f2597e3768b228144feb0edd7fcbcd83db66b4305ccbc",
+    "skill_md_hash": "3fb992e880bf40a344de7d2b2bd96211907eea0bb96fa0b2bc5804f1ec892ab6",
+    "version_metadata_sha256": "ce00649982cbb4bdf6488f85fca633d05132cdd0fb417bb85fa4268e4b70b822"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/misaka43fd/skills/mulerouter",
+    "claim_id": "7d36671cf889c90444d92fc36a516af0e888abb15ba80c6349e79f76e7b098c8",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "mulerouter",
+        "url": "https://clawskills.sh/skills/misaka43fd-mulerouter"
+      }
+    ],
+    "owner_handle": "misaka43fd",
+    "owner_id": "s17dj0bgn7hgxqz0t47bjvqtnx884eq3",
+    "published_at": 1771340642885,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779962105939,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779962105939,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe generating and editing images/videos through MuleRouter or MuleRun APIs, and the code implements CLI wrappers that send user prompts, URLs, and selected local image files to those APIs.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions disclose required environment variables, network access, and Authorization header use. The configurable base URL and API-key CLI override are legitimate for this API wrapper but should be used carefully.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is documented as `uv sync` with a small Python dependency set. No install-time scripts, obfuscation, or unexpected executables were found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use of `.env`, environment variables, local image reads, and outbound API calls is proportionate for the stated purpose. Local image handling includes extension checks and sensitive-path blocking.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background persistence, privilege escalation, or destructive behavior was found. The main persistent artifact is an optional `.env` credential file plus normal `uv` dependency state.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The effective environment, local image read, and network capabilities are disclosed in the skill text and metadata and are coherent with an API generation skill. The custom base URL is a user-trust decision rather than hidden behavior.",
+          "guidance": "Install only if you intend to send prompts, media URLs, and selected local image files to MuleRouter/MuleRun for processing. Keep `MULEROUTER_BASE_URL` pointed at a trusted endpoint, protect any `.env` file containing the API key, and avoid passing API keys directly on the command line in shared environments.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed MuleRouter/MuleRun API wrapper for user-directed image and video generation, with expected credential, network, and media-handling behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779962069888,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: mulerouter\nVersion: 0.1.10\n\nThe OpenClaw AgentSkills skill bundle is designed to interact with the MuleRouter/MuleRun multimodal APIs for image and video generation/editing. The code demonstrates strong security practices, particularly in `core/image.py`, which implements robust validation for local file paths provided as input. This validation includes whitelisting allowed image extensions, resolving paths to prevent traversal attacks, and explicitly blocking access to sensitive system directories (`/etc`, `/proc`, `/sys`, `~/.ssh`, `~/.aws`, `.env` files, etc.). API keys are handled securely via environment variables and standard `Authorization` headers. There is no evidence of data exfiltration to unauthorized endpoints, persistence mechanisms, obfuscation, or prompt injection attempts against the agent in the documentation. The `Bash(uv run *)` permission is broad but necessary for the skill's stated purpose, and the Python scripts themselves are not malicious.",
+          "checkedAt": 1779162426778,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "9752044d72fd7e4d4711e868f4248d9e2a021a7aec8717d8c5a00dedccce6216",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/9752044d72fd7e4d4711e868f4248d9e2a021a7aec8717d8c5a00dedccce6216"
+    },
+    "slug": "mulerouter",
+    "source_type": "clawhub",
+    "version": "0.1.10"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

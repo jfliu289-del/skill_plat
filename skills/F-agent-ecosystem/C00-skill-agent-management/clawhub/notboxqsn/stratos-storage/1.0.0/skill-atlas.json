@@ -1,0 +1,119 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.0,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "fallback:C00"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "0c5c9e188b0a38d6fc966aeeb9f08540dd8eeabffbf695ef805ce0cb4f33ebeb",
+    "content_hash": "3d21aba66f7d67374b9633468d5b7c6e81d08170359e947fc16f752fbd4b23b2",
+    "precanonical_content_hash": "d7e3f33d5fa3bb304dbcf4c1ff5b8382e305a532107440fb5ae3b6a64f673d04",
+    "skill_md_hash": "4671a71082764195f2279514f637e205096c7610d3b22fac807642d8fbf48b4f",
+    "version_metadata_sha256": "746fb2eaae52510d44133b448f6fbf12066c9bb2d8acc2dff0832b4b7bba1f9d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/notboxqsn/skills/stratos-storage",
+    "claim_id": "ed19f5e9961351b29b14c9447771d1ab5105478918200a5a9f4da41ab8394fa8",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "stratos-storage",
+        "url": "https://clawskills.sh/skills/notboxqsn-stratos-storage"
+      }
+    ],
+    "owner_handle": "notboxqsn",
+    "owner_id": "s1772dp1a8212efzkdk6dsh1v5884dg1",
+    "published_at": 1770949141028,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779973011604,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779973011604,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "Uploading local files and downloading by CID are the stated purpose and are implemented by clear shell scripts using curl or ppd.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are limited to Stratos SDS operations and include user-facing controls to confirm upload paths, avoid overwrites, and verify the node or gateway.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The package declares curl and simple brew/apt install commands; it also invokes included bash scripts, which is disclosed but should be understood by users.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "STRATOS_SPFS_GATEWAY and STRATOS_NODE_DIR are proportionate for this integration, but users should trust the configured gateway before uploading sensitive files.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill does not install persistence, but setup docs describe running a Stratos node and wallet/staking steps that users should perform deliberately outside normal file transfer use.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill openly uses bash scripts for file transfer; this is purpose-aligned, though the manifest does not express shell execution as a separate permission.\n[VirusTotal code_insight] expected: The reported shell-injection concern is not supported inside the scripts, which quote user-controlled paths and hashes; agents should still pass arguments safely when invoking shell commands.\n[staticScan] expected: Static scan reported no suspicious patterns, consistent with the direct artifact review.",
+          "guidance": "Install only if you intend to use Stratos SDS. Confirm exact file paths before upload, verify STRATOS_SPFS_GATEWAY points to a trusted node, avoid uploading sensitive files accidentally, and handle wallet mnemonics, passwords, staking, and node startup steps yourself.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill is a disclosed Stratos file upload/download helper, with normal risks around sending chosen files to a configured storage gateway.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972971735,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: stratos-storage\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to a critical shell injection vulnerability. The `SKILL.md` examples suggest the AI agent might pass user-provided file paths and hashes to `scripts/upload.sh` and `scripts/download.sh` without proper quoting. This allows an attacker to achieve arbitrary command execution via prompt injection (e.g., providing `$(evil_command)` as a file path). While the scripts themselves attempt to interact with a local Stratos SDS gateway (default `http://localhost:18452`) and the `ppd` CLI for legitimate file operations, the lack of robust input sanitization at the agent-script interface creates a significant remote code execution risk.",
+          "checkedAt": 1779163623490,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "b04b2d4a30098f0266210163605257072223f09af2ab7797490b0e3d7e31dec8",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b04b2d4a30098f0266210163605257072223f09af2ab7797490b0e3d7e31dec8"
+    },
+    "slug": "stratos-storage",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

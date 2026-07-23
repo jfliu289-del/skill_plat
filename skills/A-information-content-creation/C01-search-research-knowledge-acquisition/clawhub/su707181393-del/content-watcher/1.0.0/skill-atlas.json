@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:sources",
+      "category:C07:token:test",
+      "category:C10:token:ai",
+      "cross-tag:search",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C07",
+      "C10"
+    ],
+    "stages": [
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "research",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e1d75153e1570106b24f58bd5184fa40c67afa72c639b7830c3a621e223b2b25",
+    "content_hash": "e5a498e72487e81d67128406097294a9e390c28a1c5b32d71497cfe516c076d6",
+    "precanonical_content_hash": "53a704eeb415cdfdd3b10e8910d25c199bd1d7c00ab112705d94f3bde334d5f6",
+    "skill_md_hash": "ab4e4d119f13abde38acd8dd8e1e4a6aee93c0eb3e78e52a4c602ec2e535f2c3",
+    "version_metadata_sha256": "886144064a1747e5f86f191fe0f1352f2b8f987181eca4f5f38ec12a8e91cc11"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/su707181393-del/skills/content-watcher",
+    "claim_id": "ba9382f6f661ca87d3296c6f2b5cc5bf3400ba38efb49a8b8179de5380fbc335",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "content-watcher",
+        "url": "https://clawskills.sh/skills/su707181393-del-content-watcher"
+      }
+    ],
+    "owner_handle": "su707181393-del",
+    "owner_id": "s17chxvsb9anvzr08vnbv7kt9n884zb3",
+    "published_at": 1771048871608,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974664857,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974664857,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The code implements the stated purpose: users add/list/remove sources, fetch RSS items and article pages, summarize locally, track seen URLs, and generate a Markdown digest. Documentation mentions cron, Feishu, and email integrations that are not implemented, so those claims are overstated but not harmful in the reviewed artifact.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands are manual and scoped to user-configured sources. Network requests to feeds and article links are core functionality, though users should treat untrusted feeds as capable of causing requests to URLs embedded in those feeds.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a normal npm CLI package with common dependencies and no package lifecycle install scripts found. Publisher provenance is not strongly established, but there is no artifact evidence of install-time abuse.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The tool needs network access for RSS/article fetching and local file access for config and optional digest output. It does not request credentials, read browser/session stores, or send summaries to an external AI API in the reviewed code.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The tool creates and updates ~/.config/content-watcher/config.json to store sources and seen URLs. This is disclosed and purpose-aligned, with no background daemon, privilege escalation, or implemented cron persistence.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code_insight] expected: The reported arbitrary file-write concern is the documented --output option for saving a digest to a user-supplied path. It can overwrite writable files if misused, but the artifact shows a manual export feature rather than attacker-controlled automatic writing.\n[SkillSpector] expected: SkillSpector reported no issues; this is consistent with the artifact review but was not treated as the sole basis for the verdict.\n[staticScan] expected: The supplied static scan context reported no suspicious patterns, and local inspection found no shell execution, credential access, hidden persistence, destructive deletion, or exfiltration logic.",
+          "guidance": "Install only if you trust the npm package source. Add feeds you intend to monitor, because feed contents can cause the tool to fetch linked article URLs. Use --output carefully since it writes to the exact path you provide, and expect source history and seen URLs to persist under ~/.config/content-watcher/.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Content Watcher is a straightforward RSS/article digest CLI with expected network fetching and local config storage; the file-write warning is user-directed output, not hidden or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974629631,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: content-watcher\nVersion: 1.0.0\n\nThe skill is classified as suspicious primarily due to a potential arbitrary file write vulnerability. The `bin/content-watcher.js` script's `run` command allows users to specify an output file path via `--output <file>`, which could be susceptible to path traversal (e.g., `../../../evil.sh`) if the input is not sanitized, potentially allowing an attacker to write files to arbitrary locations on the system. While the skill's core functionality involves legitimate network requests to user-provided URLs for content fetching (in `lib/rss.js` and `lib/fetch.js`), and summarization is performed locally (in `lib/summarize.js`), this file write vulnerability elevates it beyond benign. There is no clear evidence of intentional malicious behavior such as data exfiltration, persistence mechanisms, or prompt injection attempts against the OpenClaw agent.",
+          "checkedAt": 1779163909767,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "176fb41a82971d1dfce042f6b39ee6512361695d3748c1034e8693707c133e3b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/176fb41a82971d1dfce042f6b39ee6512361695d3748c1034e8693707c133e3b"
+    },
+    "slug": "content-watcher",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

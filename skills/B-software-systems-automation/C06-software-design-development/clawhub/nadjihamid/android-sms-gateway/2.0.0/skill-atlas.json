@@ -1,0 +1,152 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C06:token:code",
+      "category:C07:token:test",
+      "category:C08:token:github",
+      "category:C09:token:security",
+      "category:C17:token:notes",
+      "category:C19:token:device",
+      "cross-tag:planning",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C07",
+      "C08",
+      "C09",
+      "C17",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "plan",
+      "secure",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "eaefa879a81de8df00f528d012535fc3d6b479c40433ef49e140b44fa627f1a2",
+    "content_hash": "e57c7ba9e7b7b8208c3c8788130822eacc32aeec3ea113f4c5184d4691036fec",
+    "precanonical_content_hash": "31e5c3c5990d12a55dd7ecaa47331f5b4eb90fef7bbf107b15e2b25ea0c2165c",
+    "skill_md_hash": "152fc999a4b4cd8abb611a0e8d5663c0b0cc0f4567576da02944e7d0f9713f2a",
+    "version_metadata_sha256": "9b07c64107769a05e2a0edafa4e276adadaf78c8fabd7abca9c89242bc458a9f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/nadjihamid/skills/android-sms-gateway",
+    "claim_id": "0ebc2896f7d7a8053bf0ff7a1ca58092a3e375a97f3832b920c92368a608aece",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "android-sms-gateway",
+        "url": "https://clawskills.sh/skills/nadjihamid-android-sms-gateway"
+      }
+    ],
+    "owner_handle": "nadjihamid",
+    "owner_id": "s1732tg4c4hbxez3jxapje916d884j4h",
+    "published_at": 1771821430021,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779952162371,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779952162371,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts, references, and documentation align with the Android SMS gateway purpose: sending SMS, receiving or forwarding inbound SMS, bulk sending, status checks, cloud/private modes, and webhook management are all visible in the artifacts.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Execution is user-directed through shell scripts, with no hidden auto-run behavior, but the docs and debug/dry-run output do not consistently warn that SMS bodies, OTPs, phone numbers, and payloads may be exposed in logs or transcripts.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains markdown, package metadata, and shell scripts only; package.json has no install hooks, dependencies, or automatic execution path, and the static scan reported no suspicious patterns.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network calls, gateway credentials, local HTTP examples, optional cloud mode, and webhook URLs are proportionate for an SMS gateway, but users must choose trusted endpoints and avoid plaintext or third-party routes unless intended.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill does not create local persistence by itself; webhook registration can persist on the SMS gateway until removed, which is expected but should be configured deliberately.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Shell scripts and curl access are disclosed and necessary for the gateway integration; the lack of a granular permission declaration is a transparency note, not evidence of hidden behavior.\n[TP4] expected: Cloud mode and webhooks expand the trust boundary, but they are documented in the main skill text, references, and script names rather than concealed.\n[SDI-2] expected: The hardcoded api.sms-gate.app endpoint is used when cloud mode is selected or configured; this is a disclosed opt-in trust-boundary change, not silent exfiltration.\n[SQP-2] expected: Sensitive SMS content, webhook payloads, and credentials are inherent to this use case; the concern is valid as user guidance because warnings and redaction are incomplete.\n[E1] expected: Transmission to the configured gateway, webhook endpoint, or explicit cloud service is core functionality; the artifacts do not show covert or unrelated data transfer.\n[VirusTotal-code_insight] unexpected: I did not validate the claimed arbitrary shell command execution because curl arguments are quoted, though several scripts do build JSON or query strings without proper escaping, which can break or alter requests.",
+          "guidance": "Install only if you intentionally want an agent to send, read, or forward SMS through your Android gateway. Keep gateway credentials out of shared files, repos, shell history, and transcripts; prefer protected config files or a secrets manager. Use local/private HTTPS endpoints where possible, opt into cloud mode only if you accept that third-party trust boundary, and register webhooks only to endpoints you control because incoming SMS may include OTPs or personal data.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed Android SMS gateway tool, but it should be treated as sensitive because it can send, read, and forward real SMS messages.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779952099531,
+          "issueCount": 10,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: android-sms-gateway\nVersion: 2.0.0\n\nThe skill is designed for a legitimate purpose (Android SMS gateway). However, the shell scripts (`bulk_sms.sh`, `bulk_sms_capcom6.sh`, `send_sms.sh`, `send_sms_capcom6.sh`, `receive_sms.sh`, `register_webhook_capcom6.sh`, `check_status_capcom6.sh`) exhibit multiple critical shell injection vulnerabilities. User-controlled inputs (e.g., `--message`, `--to`, `--url`, `--since`, `--id`, `--user`, `--pass`) are directly interpolated into JSON payloads, URL query parameters, URL paths, and basic authentication strings without proper escaping. This allows for arbitrary command execution if an attacker can control the input arguments passed to these scripts. While these are severe vulnerabilities, they represent implementation flaws rather than clear evidence of intentional malicious behavior by the skill developer.",
+          "checkedAt": 1779166412485,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "f3ed2f120a56080574be0a0df3b8e541bcb9e3b5a79e3eb3afab3cf3c0083a97",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/f3ed2f120a56080574be0a0df3b8e541bcb9e3b5a79e3eb3afab3cf3c0083a97"
+    },
+    "slug": "android-sms-gateway",
+    "source_type": "clawhub",
+    "version": "2.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

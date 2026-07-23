@@ -1,0 +1,129 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C05:token:audio",
+      "category:C07:token:quality"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05",
+      "C07"
+    ],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "0405b6d69b338b26f738c8081e3d8dee3325b3704c041a0df30b8e89135fa3b7",
+    "content_hash": "cf9bcad27d2a3e8d6d872053325d4918d2d0c7a616056f93b961300ef5c5bf05",
+    "precanonical_content_hash": "f5b043789d81124c7bc633ed2d137b6273b2d98f453313fee6a76297f6d2765c",
+    "skill_md_hash": "27a22bc16dc9aa2e2bb8f0b01146be5a337775df86981b64187b3f0d596a413d",
+    "version_metadata_sha256": "9b50e1b4d6724401c2dd6c5704c919efe4b65b6994a1dc21467ef3a7ac90accc"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/hudeven/skills/chichi-speech",
+    "claim_id": "fac6c882225e20ea3ec24b7427db31a4c9d3a8b6c18467135f6ac46ac70884c6",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "chichi-speech",
+        "url": "https://clawskills.sh/skills/hudeven-chichi-speech"
+      },
+      {
+        "index_path": "categories/speech-and-transcription.md",
+        "label": "chichi-speech",
+        "url": "https://clawskills.sh/skills/hudeven-chichi-speech"
+      }
+    ],
+    "owner_handle": "hudeven",
+    "owner_id": "s17d8wg9fxt0gww9x31wvacqbd84c19q",
+    "published_at": 1770357202215,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658663596,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658663596,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The files align with the stated purpose: a FastAPI service loads a Qwen3 TTS model, creates a reusable voice-clone prompt from reference audio/text, and returns generated WAV audio. Voice cloning is clearly part of the purpose, though the documentation should add consent and impersonation warnings.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The service is user-started and documented with a localhost example, but the CLI default host is 0.0.0.0 and the /synthesize endpoint has no authentication. Users need to bind it locally unless they intentionally want network exposure.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a normal editable Python package with expected ML and web-service dependencies. Several dependencies are unpinned, which is a supply-chain hygiene issue but not evidence of malicious behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network use, model loading, and user-supplied reference audio are proportionate to a TTS/voice-cloning REST service. Review found no unrelated local indexing, credential harvesting, account access, or hidden outbound data flow.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No autostart, persistence mechanism, privilege escalation, destructive action, or broad filesystem mutation was found. The server runs when invoked, and the client writes only the requested output WAV path.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The network service and external model/reference-audio behavior are real and should be documented clearly, but they match the stated REST TTS purpose and are not hidden.\n[SQP-2] expected: Custom reference audio is core voice-cloning functionality. The absence of explicit consent, privacy, and impersonation guidance is a user-safety documentation gap, not artifact-backed malicious behavior.\n[SC4] expected: Unpinned FastAPI, uvicorn, requests, torch, and pydantic dependencies are a legitimate maintenance and supply-chain concern for a networked ML service, but the artifact uses them for expected web/API/model functions and does not show exploitation-oriented code.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with direct artifact review; it was treated only as supporting signal.\n[staticScan] expected: Static scan reported no findings, consistent with the absence of credential theft, persistence, obfuscation, destructive commands, or unrelated file access in the reviewed files.",
+          "guidance": "Install this in an isolated Python environment, expect large external ML/model downloads, and run it with --host 127.0.0.1 unless you deliberately want other machines to access it. Only use reference audio from speakers who have explicitly consented to voice cloning, and avoid using generated speech for impersonation, fraud, or misleading others. Pin and update dependencies before exposing the service beyond a trusted local machine.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent text-to-speech and voice-cloning service with operational and consent risks, but no evidence of hidden, destructive, or exfiltrating behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658642456,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: chichi-speech\nVersion: 1.0.2\n\nThe skill bundle provides a FastAPI-based text-to-speech service using the Qwen3 model. All files align with the stated purpose, including loading a pre-trained model and a reference audio file from legitimate public URLs (qianwen-res.oss-cn-beijing.aliyuncs.com). The `SKILL.md` instructions are clear and do not contain any prompt injection attempts. While the server defaults to listening on `0.0.0.0` in `src/chichi_speech/server.py` and allows specifying arbitrary `--ref-audio` URLs, these are common practices for web services and core features for voice cloning, respectively, and do not indicate intentional malicious behavior like data exfiltration or unauthorized execution.",
+          "checkedAt": 1779161762171,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "4caaec943e68fd50023d5e3fada94617323fc21ac2514a3803d20d150ebd7b04",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4caaec943e68fd50023d5e3fada94617323fc21ac2514a3803d20d150ebd7b04"
+    },
+    "slug": "chichi-speech",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C09:token:compliance",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "3c77d5b3b55b597bf23fc13d219388356720e659c96fe107c5d57623401aea24",
+    "content_hash": "b25ae536b3f134ba2b366a44549ed89fdc07de0ca193190ff90176fc71771623",
+    "precanonical_content_hash": "c90a76688ac0dd20de02b60db668746f0747ca48bf0bd2b6d97867b4b4ef8794",
+    "skill_md_hash": "26ac523ea513e601ac5bc5ca694a31ee35302af90bdae857f67a8535379e2cb3",
+    "version_metadata_sha256": "6d765fb9326f6704315c8e0ed156420615bdde6349f538edf6710bf5c988f80a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/rosasalberto/skills/didit-aml-screening",
+    "claim_id": "b14cf045a2a17766aae03e2baaefc7c768fbca7ca198a543b1e18ae46ed5ddf4",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "didit-aml-screening",
+        "url": "https://clawskills.sh/skills/rosasalberto-didit-aml-screening"
+      }
+    ],
+    "owner_handle": "rosasalberto",
+    "owner_id": "s17fenh76mn5y28mwva6bcmn0h8858fw",
+    "published_at": 1772514904139,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974674037,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974674037,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The capability is coherent with AML screening, but it necessarily handles sensitive identity data such as names, dates of birth, nationality, and document numbers.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions stay focused on Didit AML API usage, setup, parameters, responses, and the included CLI helper; the account-registration examples are setup documentation, not hidden automatic behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The artifact contains a SKILL.md file and one small Python helper script, with no install hooks, package-install scripts, obfuscated loaders, or background workers.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The DIDIT_API_KEY requirement and outbound network call to Didit's AML endpoint are proportionate for this integration; the script reads only that environment variable and user-supplied CLI fields.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The documentation discloses provider-side request saving by default and continuous monitoring on eligible plans; the skill itself does not create local persistence or elevated privileges.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code_insight] expected: The cited registration and verification POST examples are part of documented onboarding for obtaining a Didit key, and local inspection found no code path that automatically creates accounts or performs billing actions.\n[SQP-2] expected: The sensitive-data transfer concern is real, but sending selected identity fields to Didit is the disclosed core function of an AML-screening skill rather than unrelated data collection.\n[SQP-2] expected: The CLI helper posts only explicit user-supplied screening fields to Didit's AML endpoint after invocation; stronger privacy and consent warnings would be useful but the behavior is purpose-aligned.\n[staticScan] expected: Static scan reported no findings, and artifact review found no subprocess use, credential scraping, file mutation, destructive behavior, or non-Didit network destination in the helper script.",
+          "guidance": "Install only if you intend to send AML screening subjects to Didit. Protect the DIDIT_API_KEY, use environment variables or a secrets manager, confirm you have a valid legal basis or consent for screening, minimize optional identifiers such as document numbers, and review Didit's request-saving, retention, billing, and continuous-monitoring settings before using it with real people or companies.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it claims: it sends user-provided AML screening details to Didit using a Didit API key.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974625571,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: didit-aml-screening\nVersion: 1.1.0\n\nThe `SKILL.md` file contains explicit instructions for programmatic API key registration, including `POST` requests to `https://apx.didit.me/auth/v2/programmatic/register/` and `https://apx.didit.me/auth/v2/programmatic/verify-email/`. While presented as 'Getting Started' steps for a user to obtain an API key, these instructions could be interpreted by an AI agent as commands to execute, leading to unintended account creation or network calls outside the skill's primary AML screening function. This constitutes a prompt injection vulnerability against the agent. The `scripts/screen_aml.py` file, however, is benign and correctly implements the stated AML screening functionality using an existing API key.",
+          "checkedAt": 1779163915612,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "1aaadcacf68345eb5b3a073ccdf09f71ef0ac05f2970788804163bee1728f128",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1aaadcacf68345eb5b3a073ccdf09f71ef0ac05f2970788804163bee1728f128"
+    },
+    "slug": "didit-aml-screening",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

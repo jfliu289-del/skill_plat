@@ -1,0 +1,136 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C03",
+    "reasons": [
+      "category:C03:token:document",
+      "category:C03:token:pdf",
+      "category:C06:token:code",
+      "category:C17:token:notes",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "834c5bf5b1d3b92174bd9fed4fbf8f42636066158990b01bb51927b3829c36c1",
+    "content_hash": "781f6d2bf12a169cbdafd3581e7d0f0688037e4c2a72b9b1cad21f3e86c8f903",
+    "precanonical_content_hash": "c0481f01ebc34abdba1838908e9374157b8f3b3ae8128287cf088f43aed15e1d",
+    "skill_md_hash": "b21eae029467119d7071630750cac61e2440b3e064b7b067eeecf79b85a021c8",
+    "version_metadata_sha256": "ba07a096b419426530d2f5032c8eea595a737d67751997042577886d244adbf3"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/huaruoji/skills/md2pdf-xelatex",
+    "claim_id": "51c062141bad432ac182c35fdb200111a2f9d3d6cf392fff685047d2c10f50f8",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "md2pdf-xelatex",
+        "url": "https://clawskills.sh/skills/huaruoji-md2pdf-xelatex"
+      }
+    ],
+    "owner_handle": "huaruoji",
+    "owner_id": "s179m4x290mw5n7jjagy9z1cfd885tg9",
+    "published_at": 1771665398556,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943816138,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943816138,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The SKILL.md and shell script are narrowly aligned around Markdown-to-PDF conversion using Pandoc and XeLaTeX, including math and CJK support.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The conversion is user-invoked and scoped to caller-supplied input and output paths; however, Pandoc/XeLaTeX can interpret raw LaTeX, so untrusted Markdown or options may affect local PDF generation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill has no installer or background setup, but it requires external system packages such as pandoc and texlive-xetex that must be installed separately from trusted sources.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Running local PDF-generation commands and writing the requested output file is proportionate to the stated purpose; the LaTeX toolchain should not be used on untrusted documents without caution.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No credential use, network transfer, elevated privilege request, persistent process, or long-term storage is shown; the script uses a temporary directory and removes it on exit.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight] expected: The artifact does pass user-controlled values such as --toc-title into Pandoc/XeLaTeX, which is a real untrusted-input risk, but it is part of the disclosed local PDF conversion workflow rather than hidden or unrelated behavior.\n[SkillSpector] expected: SkillSpector reported no issues; artifact review supports the conclusion that the executable script is purpose-aligned and user-invoked.\n[staticScan] expected: The static scan reported no suspicious patterns, and manual inspection found no network access, credential handling, persistence, or deceptive behavior.",
+          "guidance": "Install Pandoc and TeX packages only from trusted package sources. Use this skill for Markdown files and option values you trust, because XeLaTeX/Pandoc may process raw LaTeX and can expose local-file risks when converting hostile documents.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill coherently converts Markdown to PDF locally, but users should treat Markdown and LaTeX-related options as trusted input only.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943768770,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: md2pdf-xelatex\nVersion: 1.0.0\n\nThe skill bundle is designed for a legitimate purpose (Markdown to PDF conversion). However, the `scripts/md2pdf.sh` script is vulnerable to LaTeX injection. User-controlled arguments, specifically `--toc-title`, are directly incorporated into the LaTeX header via `pandoc -V \"toc-title=$TOC_TITLE\"`. A malicious user could inject arbitrary LaTeX commands, potentially leading to arbitrary file reads or even remote code execution if the underlying XeLaTeX engine has `\\write18` enabled. This constitutes a significant vulnerability, classifying the skill as suspicious rather than benign, despite the lack of clear malicious intent within the script itself.",
+          "checkedAt": 1779165876917,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "1c3952237e9a335161f25bc180b6f6dcf29cb387e9f5f57ab1aacdf6a0816071",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1c3952237e9a335161f25bc180b6f6dcf29cb387e9f5f57ab1aacdf6a0816071"
+    },
+    "slug": "md2pdf-xelatex",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

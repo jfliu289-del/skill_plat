@@ -1,0 +1,160 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "business",
+      "data-professional",
+      "developer",
+      "marketer"
+    ],
+    "confidence": 0.375,
+    "domains": [
+      "business",
+      "marketing",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C01:token:sources",
+      "category:C04:token:analytics",
+      "category:C04:token:data",
+      "category:C04:token:metrics",
+      "category:C06:token:api",
+      "category:C11:token:project",
+      "category:C14:token:campaign",
+      "category:C19:token:device",
+      "cross-tag:data-analysis",
+      "cross-tag:marketing-sales",
+      "cross-tag:search",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C01",
+      "C06",
+      "C11",
+      "C14",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "market",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "2411114523a4ffc50a938a9981b4365d48195bdf37df364a38bbfdb486b0f790",
+    "content_hash": "4a1b60f6d96fc4a02186abef86857c3d2275c01d6851b26b15a3b0f79b0bc578",
+    "precanonical_content_hash": "ca677dd79a8f0d4de74475f1d7e32358f06bbcc3be9128fb28b8c5ef77b61a8c",
+    "skill_md_hash": "9f1d41e42cc7908bbbc7f6c6edd7bff0d078ce72bd6e99bcb524027e14391ecc",
+    "version_metadata_sha256": "efc0974a8d2aa46b7e23a7b2e1c57d89ccebee10c533decd78bd77e40db25370"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/codeninja23/skills/native-google-analytics",
+    "claim_id": "05f4c9598403ffbdba829e44c432edaf747d4e7d4acaa7c26c15de14ecbb4ba9",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "native-google-analytics",
+        "url": "https://clawskills.sh/skills/codeninja23-native-google-analytics"
+      }
+    ],
+    "owner_handle": "codeninja23",
+    "owner_id": "s173w4sv23s5bb8w4kjv1t143n842den",
+    "published_at": 1771791027190,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779950250547,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779950250547,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill coherently queries GA4 reports through Google's Analytics Data API using the analytics.readonly scope; this fits the stated purpose but gives the agent access to business analytics data for the configured property.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The runtime instructions are setup and query examples for GA4 reporting, with no hidden workflow, prompt override, unrelated data access, mutation, or destructive behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The scripts are small Python utilities; setup includes a user-run pip install for google-auth-oauthlib to generate a token, which is normal for OAuth setup but should be treated as a supply-chain step.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "GA4 property ID, OAuth client ID, client secret, and refresh token are declared and proportionate for direct OAuth-based GA4 access, but the docs under-emphasize that the secret and refresh token are sensitive.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No daemon, broad local file access, local credential store, or write authority is present; the main persistence risk is the user-held refresh token, which grants continuing read access until revoked.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: README environment-variable setup for the client secret and refresh token is expected for this OAuth flow, but it should include clearer secret-handling guidance.\n[SQP-2] expected: SKILL.md discloses the required credentials and uses the least-privilege analytics.readonly scope; the issue is a documentation gap, not hidden or purpose-mismatched behavior.\n[SQP-2] expected: ga4_auth.py prints the generated refresh token so the user can store it; this is expected setup behavior, but it can expose the token in shared terminals, logs, or recordings.",
+          "guidance": "Install only if you are comfortable letting the agent read GA4 reports for the configured property. Use a dedicated OAuth client and a Google account with minimum needed GA4 access, keep GOOGLE_CLIENT_SECRET and GOOGLE_REFRESH_TOKEN out of source control, chats, logs, CI output, screenshots, and shared terminals, and revoke or rotate the refresh token when no longer needed.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed read-only Google Analytics integration, but its OAuth secret and refresh token must be handled carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779950207861,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: native-google-analytics\nVersion: 0.1.1\n\nThe skill is designed to query Google Analytics 4 (GA4) data using the official Analytics Data API. It requires sensitive Google OAuth credentials (Client ID, Client Secret, Refresh Token) and a GA4 Property ID, which are explicitly requested as environment variables. The setup instructions in SKILL.md and README.md guide the user through obtaining these credentials via standard Google Cloud procedures and a `python3 -c` command using `google-auth-oauthlib`. The core script `scripts/ga4_query.py` uses these credentials to obtain an access token and then makes read-only API calls to `analyticsdata.googleapis.com`. There is no evidence of data exfiltration to unauthorized endpoints, arbitrary command execution, persistence mechanisms, or malicious prompt injection attempts against the agent. The input parsing for API filters constructs structured JSON and does not appear to allow for code injection.",
+          "checkedAt": 1779166298220,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a320c94d46c05ed0d101871394870f46d0b141fca08c8f5dc9790a654eab7450",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a320c94d46c05ed0d101871394870f46d0b141fca08c8f5dc9790a654eab7450"
+    },
+    "slug": "native-google-analytics",
+    "source_type": "clawhub",
+    "version": "0.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

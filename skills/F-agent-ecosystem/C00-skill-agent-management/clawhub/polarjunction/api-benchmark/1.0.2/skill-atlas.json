@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:metrics",
+      "category:C06:token:api",
+      "category:C07:token:testing",
+      "category:C10:token:llm",
+      "cross-tag:agent-management",
+      "cross-tag:software-development",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C07",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "9f7a99bbb01bc38ba721e8019d724a8068a909a46a1e56926d076da6da00c608",
+    "content_hash": "34abb7842f2120eea6a89bbdd504f649217e7b8c518637275770786a34278bbd",
+    "precanonical_content_hash": "2e600a42fe075961abde8ee407dca3c77a4aa26b3b8352fa24498faaaa009b4d",
+    "skill_md_hash": "78e909c05aaf8dc9ff0e6f992482895ab6c6ce3d51543c005612dff2dddf75b8",
+    "version_metadata_sha256": "c1dfe1bc614fef764a770fc11c7bab342e232a134065c0506a59c395fdf124e7"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/polarjunction/skills/api-benchmark",
+    "claim_id": "72fcd1fc3c0fe6a4a6577749f436e1374a07f66008b1817f1190e7315a422279",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "api-benchmark",
+        "url": "https://clawskills.sh/skills/polarjunction-api-benchmark"
+      }
+    ],
+    "owner_handle": "polarjunction",
+    "owner_id": "s179tgd9hsqkzx2cmzr833j59n8848rz",
+    "published_at": 1771534862856,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779935921942,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779935921942,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is benchmarking LLM API latency and throughput, and the code implements OpenAI/Anthropic-style preflight and streaming benchmark calls consistent with that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are scoped to listing targets, checking connectivity, and running benchmarks; custom prompts and all-target runs are user-selected options, not hidden behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No privileged installer, package mutation, background service, or automatic setup behavior is present; it is a Python script requiring the requests library.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access, configured base URLs, API keys, and prompts are proportionate for an API benchmark, but users should only run it against trusted provider endpoints because credentials and prompt text are sent there.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill reads ~/.openclaw/openclaw.json or OPENCLAW_CONFIG and may resolve API keys from environment variables, but it does not persist credentials, escalate privileges, broadly index files, or start long-running workers.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The skill does not have a separate permission declaration, but its documentation discloses the OpenCLAW config path, OPENCLAW_CONFIG, provider definitions, baseUrl, and apiKey usage; this is a documentation/guidance gap, not a Review-level concern.\n[SQP-2] expected: Prompts and authentication material being sent to third-party API providers is inherent to benchmarking configured LLM APIs; the warning could be more prominent, but the behavior is purpose-aligned and not hidden.\n[E1] expected: The external requests to configured Anthropic-style and OpenAI-style base URLs are the core benchmark mechanism. Lack of endpoint allowlisting means users must trust their config, but the artifact does not show deceptive redirection or unrelated exfiltration.",
+          "guidance": "Install only if you intend to benchmark providers listed in your OpenCLAW config. Use environment-variable API keys, avoid sensitive custom prompts, expect API usage costs, and do not run against base URLs you do not trust.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a normal API benchmarking skill, with the main caution that it sends test prompts and API keys to the endpoints the user configures.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779935886914,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: api-benchmark\nVersion: 1.0.2\n\nThe api-benchmark skill is a legitimate utility designed to measure LLM API performance (TTFT and throughput). The code in main.py correctly implements streaming requests for OpenAI and Anthropic formats, includes robust error handling with exponential backoff, and follows security best practices by supporting environment variable resolution for API keys. No evidence of data exfiltration, malicious execution, or harmful prompt injection was found; the tool's behavior is entirely consistent with its stated purpose.",
+          "checkedAt": 1779165536598,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "9f7a99bbb01bc38ba721e8019d724a8068a909a46a1e56926d076da6da00c608",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/9f7a99bbb01bc38ba721e8019d724a8068a909a46a1e56926d076da6da00c608"
+    },
+    "slug": "api-benchmark",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

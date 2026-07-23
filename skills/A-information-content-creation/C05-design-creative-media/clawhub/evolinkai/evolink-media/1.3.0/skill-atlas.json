@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.7795,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:phrase:image generation",
+      "category:C05:token:creative",
+      "category:C05:token:image",
+      "category:C05:token:video",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "category:C10:token:model",
+      "category:C12:token:management",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "62a3ef84c895ce46fd934c2c644d4ba8934d85454e3fc7922279406e0fd1f2ef",
+    "content_hash": "a6fa2a4a514c3602be39589a43dcd8ffc890cb50487a02014449981c8e5ca089",
+    "precanonical_content_hash": "3c3152a93b8a00dd3c5d5c64d56eff50f9271c76b6b5c2576de87c265b313367",
+    "skill_md_hash": "eb1b59e8dccddab2db1982d57a5eda8bae2aff17145dd118288b37056d99e696",
+    "version_metadata_sha256": "e209626973c909d930f6023df193f8e18510415688c9c3e1f512eaafbb11b8c7"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/evolinkai/skills/evolink-media",
+    "claim_id": "496a5e6ba073d5ee6cc8d1efbaf3ace8784e95827cb8cf2a4b3c2f5c262e59b6",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "evolink-media",
+        "url": "https://clawskills.sh/skills/evolinkai-evolink-media"
+      }
+    ],
+    "owner_handle": "evolinkai",
+    "owner_id": "s176k82x7tm60j2kx309p7evxs83j3z7",
+    "published_at": 1772127499249,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779957065555,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779957065555,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The upload, list, delete, and URL-ingest capabilities fit a media/file-hosting integration and are scoped to Evolink API endpoints.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The fallback curl examples use local paths, file URLs, file IDs, and an EVOLINK_API_KEY; this is purpose-aligned, but agents should quote/validate user-supplied paths and URLs before running shell commands.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No artifact-backed evidence indicates install-time scripts, hidden package installation, or automatic execution beyond skill instructions and documented API calls.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Sending media files to files-api.evolink.ai is proportionate for the skill, but it does transmit local or remote media to a third-party service.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Uploaded files reportedly become publicly accessible links for a limited retention window and can be listed or deleted through the API; no local persistence, privilege escalation, or background worker behavior is evidenced.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The public-file-hosting concern is valid user guidance, but the behavior is disclosed and aligned with a media hosting skill rather than hidden or purpose-mismatched.\n[E1] expected: External transmission is inherent to uploading files to Evolink; no evidence shows unrelated exfiltration or automatic upload of files without user direction.\n[VirusTotal code_insight] expected: The shell-injection and SSRF concerns are hypothetical risks from generic curl examples; the artifact evidence shows scoped Evolink API examples, not unsafe command construction or deception.",
+          "guidance": "Install only if you are comfortable sending selected media to Evolink and receiving public links. Do not upload secrets, confidential documents, regulated data, or private personal media unless you intend to share them, and review any generated curl command before execution.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to provide disclosed Evolink media/file-hosting workflows, with expected third-party uploads that users should treat as public sharing.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779957023727,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: evolink-media\nVersion: 1.3.0\n\nThe `SKILL.md` file explicitly instructs the AI agent to use `curl` commands for file management (upload, list, delete) with the Evolink file hosting API when MCP tools are unavailable. These `curl` commands involve parameters such as `file=@/path/to/file.jpg`, `file_url`, and `file_id`. If the agent constructs these commands using unsanitized user input, it could lead to shell injection (e.g., arbitrary local file access or command execution via `file_path`) or Server-Side Request Forgery (SSRF) via `file_url`. While the `curl` commands are intended for legitimate interaction with the skill's own service (`files-api.evolink.ai`), the direct instruction to execute shell commands with potentially user-controlled arguments introduces a significant vulnerability, classifying it as suspicious rather than benign or malicious.",
+          "checkedAt": 1779166881642,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "556c38b9f523005df15e58b6e1020473f0ff6ac2d7e076619b0c6c30b006eb8e",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/556c38b9f523005df15e58b6e1020473f0ff6ac2d7e076619b0c6c30b006eb8e"
+    },
+    "slug": "evolink-media",
+    "source_type": "clawhub",
+    "version": "1.3.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

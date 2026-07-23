@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C13:token:operations",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C13",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "5cbe9b6b31a1e43d87e3e35fab958d632ddae460cadb6ddc569356d401c557ef",
+    "content_hash": "67f33956b5fe314a57aa3d8e3d62302dd24346096ebce88a76f4d558fba602bb",
+    "precanonical_content_hash": "b875e45551472e47ba42c3e5bbdec39c250d565e726d0052a8f518dd52a42642",
+    "skill_md_hash": "d87b31c66e5bc019ef45d98778f44f5a103c15162e36fa54f0e20b1e9de24560",
+    "version_metadata_sha256": "03adffb58a137566396695a78b800d2243bf53dd3c4983a5b8ef696273b41e49"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/emilfattakhov/skills/auto-drive",
+    "claim_id": "a5aebc9e9f3b5ec5024819e18dcca68487d705f8e8d56c2c9369070c0c321a08",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "auto-drive",
+        "url": "https://clawskills.sh/skills/emilfattakhov-auto-drive"
+      }
+    ],
+    "owner_handle": "emilfattakhov",
+    "owner_id": "s173bfytsj63nttjj93m4gxm0s8857c5",
+    "published_at": 1772215994657,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779932751087,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779932751087,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The upload, download, memory-save, and chain-recall capabilities match the stated Auto-Drive permanent memory purpose, including generic file upload by user-provided path.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Activation language is broad around permanent storage, but the skill ties that behavior to Auto-Drive/Autonomys and documents that stored data is permanent and public by default.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses ordinary shell scripts and dependencies such as curl, jq, and file; setup opens the Auto-Drive dashboard and asks the user to paste an API key.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The AUTO_DRIVE_API_KEY is necessary for uploads and account checks, is disclosed, and is stored locally with restrictive file permissions.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill intentionally creates permanent remote records and local state pointers, including updates to an Auto-Drive state file and optionally MEMORY.md; this is central to the design and disclosed.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Shell execution, local config writes, network access, and file upload are expected for this skill and are documented in the setup and operation sections; I did not find hidden local manipulation.\n[TP4] expected: The broader setup, credential storage, generic upload, and CID download functions are disclosed in SKILL.md and align with the Auto-Drive storage purpose, so this does not show tool poisoning by itself.\n[SQP-1] expected: The phrase \"store permanently\" is broad, but it appears in a section about permanent immutable decentralized storage; users should still confirm exact content before uploads.\n[SQP-1] expected: The rule to use the skill for permanent immutable decentralized storage is purpose-aligned, with no evidence of automatic bulk upload or unrelated data collection.\n[SQP-2] expected: The API reference lists delete, restore, and publish endpoints, while the actual scripts do not implement publish; the main documentation states stored data is permanent and public by default.\n[SQP-2] expected: The network reference emphasizes permanence, and SKILL.md adds the needed warning not to store secrets, private keys, or sensitive personal data.",
+          "guidance": "Install only if you intentionally want files or agent memories uploaded to permanent public decentralized storage. Review each file or memory before saving, do not store secrets or sensitive personal data, protect the Auto-Drive API key, and only recall memory chains from CIDs you trust.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it uploads files or agent memories to permanent public Auto-Drive storage, with clear warnings but real privacy consequences.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779932702383,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 97,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: auto-drive\nVersion: 1.0.4\n\nThe skill bundle is classified as benign. All scripts and documentation align with the stated purpose of providing permanent, decentralized memory for an AI agent. The code demonstrates good security practices, including robust input validation, path sanitization (e.g., preventing path traversal and ensuring files are written within the home directory), and safe handling of external commands like `curl`, `jq`, and `sed`. There is no evidence of data exfiltration to unauthorized endpoints, malicious execution, persistence mechanisms, or prompt injection attempts designed to subvert the agent's core directives or steal unrelated sensitive data. The documentation explicitly warns users about the public and permanent nature of the stored data, indicating responsible disclosure of inherent risks.",
+          "checkedAt": 1779165301451,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "1a22eeb3af74617d46e8d46ab5f017860424cd6b4870000155efa122846f7fd5",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1a22eeb3af74617d46e8d46ab5f017860424cd6b4870000155efa122846f7fd5"
+    },
+    "slug": "auto-drive",
+    "source_type": "clawhub",
+    "version": "1.0.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

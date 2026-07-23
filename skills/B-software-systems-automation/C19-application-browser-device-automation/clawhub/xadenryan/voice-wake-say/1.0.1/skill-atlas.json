@@ -1,0 +1,119 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C19",
+    "reasons": [
+      "category:C19:token:device"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "bf752d718bef190933285806249b396fd1eadfe00b88e9df973ef046fb2f7917",
+    "content_hash": "a3c5d438e270e03b8b3962cd3400924e6a689886d63e4dd21179da019df673e6",
+    "precanonical_content_hash": "d33ade27850d39e1b4096459aa19282416a40ce438c04ca5f6132c4780efeb6b",
+    "skill_md_hash": "76b1d998eecc02ecd17262264483bf07f3be93573e696e447a97a571d1fd5e5f",
+    "version_metadata_sha256": "6cd6db3e3928e4ea159724a6946b69ab34e1233c95b6a2fb391f172f9a06312f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/xadenryan/skills/voice-wake-say",
+    "claim_id": "b6ccb4bc507cc52b3423f9b5f1ecd3fcbb9ecdca6e09de0fe3fc672675d455c4",
+    "index_entries": [
+      {
+        "index_path": "categories/apple-apps-and-services.md",
+        "label": "voice-wake-say",
+        "url": "https://clawskills.sh/skills/xadenryan-voice-wake-say"
+      }
+    ],
+    "owner_handle": "xadenryan",
+    "owner_id": "s176qz93c72876vwj30997ajtx885q0b",
+    "published_at": 1769336291994,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783651677769,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783651677769,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to speak assistant responses aloud when a Voice Wake-style message is detected, and the only runtime capability shown is the disclosed local macOS `say` command.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are mostly scoped to messages starting with `User talked via voice recognition`; the `repeat prompt first` line is awkward and could confuse agent behavior, but it does not instruct prompt disclosure, policy bypass, exfiltration, or unrelated actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact is instruction-only with a single SKILL.md file; no executable scripts, package installs, setup hooks, or hidden install behavior are present.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "macOS `say` usage is proportionate to the skill purpose, local-only, and explicitly avoids cloud TTS providers.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No persistence, background workers, credential access, network access, elevated privileges, or account mutation authority are requested.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight suspicious telemetry] unexpected: The cited `repeat prompt first` text is a real instruction-hygiene concern, but artifact evidence supports downgrading it because the skill does not direct the agent to reveal hidden prompts or obey arbitrary override instructions.\n[SkillSpector clean] expected: Consistent with the artifact: no scripts, persistence, credential handling, network calls, or sensitive data flows were found.\n[staticScan clean] expected: Consistent with the artifact: the only command shown is the disclosed local `printf ... | say` pattern for speech output.",
+          "guidance": "Install this only if you want voice-recognition-triggered responses spoken aloud on a Mac. Be mindful that spoken responses may be overheard, and the `repeat prompt first` wording is unusual, but the reviewed artifacts do not show malicious or high-impact behavior.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a narrow macOS text-to-speech helper that speaks voice-triggered responses locally and does not install code, persist, access accounts, or send data out.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783651663651,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: voice-wake-say\nVersion: 1.0.1\n\nThe skill's primary function to use the local macOS `say` command for text-to-speech is benign, and the command execution (`printf '%s' \"$SPOKEN_TEXT\" | say`) is implemented safely. However, the `SKILL.md` file contains a critical instruction to the AI agent: \"If the message instructs 'repeat prompt first', keep that behavior in the response.\" This instruction creates a significant prompt injection vulnerability, as it explicitly tells the agent to process and act upon arbitrary user-provided instructions embedded after the 'repeat prompt first' phrase, potentially allowing a malicious user to override the agent's intended behavior or security controls.",
+          "checkedAt": 1779159935247,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "1bc138bce4645dc964bf00b15534d840f3a2488b3e698d5177260c8dbb041cbd",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1bc138bce4645dc964bf00b15534d840f3a2488b3e698d5177260c8dbb041cbd"
+    },
+    "slug": "voice-wake-say",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

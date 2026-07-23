@@ -1,0 +1,129 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C02:token:write",
+      "category:C08:token:ci",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C08"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "c1fb547bbedbcc895907e53f2aaa8541e464d5f49281f3f6c67d5cbaea5dc143",
+    "content_hash": "3fd5fa6d2e10c3f2f39116fe229974061404f1703d0e298ee681c5c290301cbb",
+    "precanonical_content_hash": "13dd1f0536c898518fd1930f7c07c0ce21ba20a6d9d760283684060afc8aa6e2",
+    "skill_md_hash": "9e1272d8339d2c0c506b46c21975dfec0cd9616d8d45587b16c321267cf35db1",
+    "version_metadata_sha256": "05d9b035f34ec7bb112ab0371418e282635b589fb42648825bfb9515ed02e977"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/morozsm/skills/icom-7610",
+    "claim_id": "2d5120416484d4befef2d017055cb0670f31da06b2b93ac8e7587d33410a8044",
+    "index_entries": [
+      {
+        "index_path": "categories/smart-home-and-iot.md",
+        "label": "icom-7610",
+        "url": "https://clawskills.sh/skills/morozsm-icom-7610"
+      }
+    ],
+    "owner_handle": "morozsm",
+    "owner_id": "s179jzsfkyhy6k2evnpdb79kk583mbav",
+    "published_at": 1771963695873,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779954924047,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779954924047,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented capabilities match the stated purpose: controlling an Icom IC-7610 over USB/LAN, including frequency, mode, power, meters, CW/beacon use, and remote power on/off. These are real physical-device capabilities, but they are disclosed and purpose-aligned.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill includes mandatory pre-transmit checks, operator confirmation for RF transmission, power caps, SWR refusal, and beacon rules. It does allow power on/off and some tuning changes without extra confirmation, so users should keep those actions explicitly user-directed.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The install metadata declares Hamlib/rigctl via Homebrew and required local tools curl and python3; optional pyserial and wfview are documented for radio-control workflows. No hidden installer or unrelated dependency behavior was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use of local serial ports, local/LAN rigctld, and flrig XML-RPC endpoints is proportionate for transceiver control. The configured endpoints should point only to trusted local radio-control services.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts are markdown instructions with no background service, autostart, or hidden persistence. Beacon examples intentionally loop transmissions and remote power commands intentionally change device state, so those workflows need operator oversight.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The high-impact radio-control capabilities are clearly part of the skill’s purpose and the skill defines pre-transmit confirmation and refusal rules. The finding is partially valid as a caution because non-transmit state changes, including power on/off, are treated as not needing separate confirmation.\n[SQP-2] expected: Remote power on/off procedures are present and disclosed. They are purpose-aligned, but users should treat them as physical device-state changes even though the skill does not require an extra confirmation gate for them.\n[SQP-3] expected: The pre-transmit band checks are safety-oriented, but they are US/FCC-focused and do not configure jurisdiction or license class. This is a regulatory limitation rather than evidence of hidden or malicious behavior.\n[VirusTotal telemetry: eval-based retry helper] unexpected: The reference includes a shell retry helper using eval on a command string. It is example documentation rather than installed executable code, but users should avoid copying it with untrusted input.\n[VirusTotal telemetry: Telnet admin TODO] unexpected: A TODO mentions exploring a Telnet admin console, but no telnet command, admin workflow, or implementation appears in the artifacts.",
+          "guidance": "Install only if you intend to let an agent help operate this specific transceiver. Keep transmit, CW, beacon, high-power, and power-state actions under explicit operator control; verify jurisdiction, license privileges, frequency, power, and SWR before transmitting; and avoid adapting the eval-based retry helper unless it is rewritten to avoid untrusted command strings.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed ham-radio control skill, but it can change radio state and transmit, so it should be used only by an operator who understands the equipment and regulations.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779954868664,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 30,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: icom-7610\nVersion: 2.1.0\n\nThe skill is designed for legitimate ham radio control and includes robust safety checks to prevent unauthorized transmissions. However, the `rig_retry` function in `references/FULL-REFERENCE.md` uses `eval \"$1\"`, which is a shell injection vulnerability if the `$1` argument can be manipulated by a prompt injection against the AI agent. While the provided examples use hardcoded commands, this `eval` construct itself is a high-risk primitive. Additionally, the `TODO` list mentions exploring a 'Telnet CLI (port 23) — admin console', which, while not implemented, indicates an interest in a potentially insecure and privileged interface.",
+          "checkedAt": 1779083347467,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "d1022729f58ac26390275b0d8eb77acaf35c96cbe31f6c52369d7e60737ebfa3",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d1022729f58ac26390275b0d8eb77acaf35c96cbe31f6c52369d7e60737ebfa3"
+    },
+    "slug": "icom-7610",
+    "source_type": "clawhub",
+    "version": "2.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,131 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.475,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C09:token:security",
+      "cross-tag:planning",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "plan",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "5c17e186b5ef11240664c391cd49e561e3c80d8478c1fdcca7c04b0597919a01",
+    "content_hash": "66dd778cb43643407aa0e6d0e9a7c0b11b8e9a97d6713ce6564bfe598ba6c45a",
+    "precanonical_content_hash": "e0724a090d3800fac9fb57bc28a589d15e614304a186d9854c50227f8a4d45e2",
+    "skill_md_hash": "af6b2f0bb2188d9e7264bb859088d850b4cd0f1b5df5f38556a7a93507794a96",
+    "version_metadata_sha256": "1fb55fd0d8ee2382ff33d04b69f37b946d829b68f27f09cd9347764320a84e77"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/guifav/skills/firebase-auth-setup",
+    "claim_id": "586751320eb9b8bf70ed3ba055e4f57587f8569ba63db472b4a3e3b9c858cdd2",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "firebase-auth-setup",
+        "url": "https://clawskills.sh/skills/guifav-firebase-auth-setup"
+      }
+    ],
+    "owner_handle": "guifav",
+    "owner_id": "s17bdsbc0c31q1qryawma14pf5858sm5",
+    "published_at": 1774228474749,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779922410550,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779922410550,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The skill's main purpose is Firebase Authentication setup, and SKILL.md explicitly includes Supabase profile sync, custom claims, hooks, provider UI, and server token verification. These capabilities are coherent for an auth integration, though they affect security-critical login and profile flows.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The runtime instructions require planning, surveying only expected auth files, warning about lockout and sync risks, and explicitly prohibit reading .env.local or files containing real credential values.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The artifact contains only markdown and JSON with no executable install scripts. There is a version/provenance mismatch between registry metadata version 0.1.2 and claw.json version 1.1.0, plus a declared stack-scaffold dependency, so users should verify the source before production use.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The requested Firebase admin and Supabase service-role environment variables are proportionate to server-side token verification and profile sync, but they are high-impact secrets and must remain server-only.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background worker, persistence mechanism, broad indexing, or hidden data flow is present. The generated app code would use long-lived server credentials and can upsert Supabase profile records after Firebase token verification.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] expected: The Supabase sync behavior is explicitly stated in SKILL.md and the architecture section, so it is not hidden; the manifest description is narrower than the full behavior but the artifact discloses the integration.\n[SDI-2] expected: The service-role Supabase client is used in a server API route after Firebase ID-token verification to upsert the profiles table. This is privileged and should be reviewed, but it matches the documented sync purpose and is not evidence of exfiltration or deception.\n[SDI-2] expected: The Supabase environment variables in claw.json are consistent with the documented sync route. The service-role key requirement is sensitive, but it is disclosed and tied to the stated implementation.",
+          "guidance": "Install only if you actually want Firebase auth plus Supabase profile synchronization. Review generated auth, middleware, custom-claim, and API-route changes before applying them, keep Firebase private keys and Supabase service-role keys out of prompts and client code, and test in staging before production.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is an instruction-only Firebase auth setup skill that also clearly teaches Firebase-to-Supabase profile sync, but it relies on powerful server-side credentials that users should handle carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779922362319,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 30,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: firebase-auth-setup\nVersion: 0.1.2\n\nThe skill provides standard templates and instructions for configuring Firebase Authentication and syncing user profiles with Supabase in Next.js projects. It includes a mandatory security-focused planning protocol in SKILL.md that explicitly forbids the agent from reading sensitive credential files like .env.local. The implementation of the sync API route (src/app/api/auth/sync/route.ts) and auth hooks follows common development patterns without any signs of malicious intent or data exfiltration.",
+          "checkedAt": 1779165257627,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "23c3faa5b667d712aa57917c37571575935647648df1190712d2aaf292e79b6f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/23c3faa5b667d712aa57917c37571575935647648df1190712d2aaf292e79b6f"
+    },
+    "slug": "firebase-auth-setup",
+    "source_type": "clawhub",
+    "version": "0.1.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

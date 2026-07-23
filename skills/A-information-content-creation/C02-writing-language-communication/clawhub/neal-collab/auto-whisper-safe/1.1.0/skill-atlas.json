@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C02:token:language",
+      "category:C05:token:audio",
+      "category:C10:token:model",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05",
+      "C10"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "7e38e444c055dc6ccd1a08b70598981bc6e47ff0a520b94974c8b16cce7cb07b",
+    "content_hash": "8d2cc19f4b5bc67b82dcc383ca2d2ca04a134705859b1147a666f7740caf7c0f",
+    "precanonical_content_hash": "90ac538f943cf73f7c2efc3db4148d72591004063beba3c7eb43e730863b8cc8",
+    "skill_md_hash": "1e0cde4c959229de605c96e29e15916a2322ede9f5d9114037be6f051b6f165e",
+    "version_metadata_sha256": "235d4d80da5f979a43e0389a81316ab3cc80064ddd7160c7d1635180dfe9a3b6"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/neal-collab/skills/auto-whisper-safe",
+    "claim_id": "54dc080cc790221b936bb1cdb31ec2d72eb85233b3a64e577e81e5c687d7e661",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "auto-whisper-safe",
+        "url": "https://clawskills.sh/skills/neal-collab-auto-whisper-safe"
+      },
+      {
+        "index_path": "categories/speech-and-transcription.md",
+        "label": "auto-whisper-safe",
+        "url": "https://clawskills.sh/skills/neal-collab-auto-whisper-safe"
+      }
+    ],
+    "owner_handle": "neal-collab",
+    "owner_id": "s17achmbjtfvd00nvx6jr36ww588403z",
+    "published_at": 1771049905485,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974649130,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974649130,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose and script behavior align: it takes a user-provided audio file, checks duration with ffprobe, optionally chunks with ffmpeg, runs Whisper, and writes a transcript.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The optional BOOTSTRAP guidance tells agents to always transcribe received audio automatically; that is disclosed and purpose-aligned, but deployments should only enable it where automatic media processing is intended.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation guidance uses standard package managers for openai-whisper and ffmpeg, with no custom downloader, obfuscated installer, or suspicious install-time behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The only environment variables are WHISPER_MODEL and WHISPER_LANG, both relevant to transcription; the script help text has a minor mismatch about the default language, but the code and docs otherwise show an English default.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill does not request credentials, install persistence, start background workers, modify other skills, or use network exfiltration; it creates temporary chunk files and removes them on exit, then writes the requested transcript output.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[skillspector-report] expected: The current SkillSpector report supplied in the workspace lists no issues.\n[SQP-1] expected: Older metadata flagged the always-transcribe BOOTSTRAP example; artifact review shows it is optional integration guidance, disclosed, and tied directly to the transcription purpose rather than hidden runtime behavior.\n[SQP-2] expected: Audio transcription can expose private spoken content, but the artifacts show local file processing only and no unrelated collection or exfiltration.\n[SQP-3] expected: The language default is configurable and documented as English; the remaining concern is reliability and deployment control, not a security mismatch.",
+          "guidance": "Install this if you want local Whisper-based transcription. Be careful before adding the always-transcribe BOOTSTRAP rule: voice messages and generated transcripts may contain sensitive personal or third-party information, so enable automatic transcription only in contexts where users expect it and transcript storage is acceptable.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward local audio transcription skill, with privacy considerations if automatic voice-message transcription is enabled.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974611818,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: auto-whisper-safe\nVersion: 1.1.0\n\nThe skill bundle provides a RAM-safe voice transcription utility. The `SKILL.md` instructions guide the OpenClaw agent to use the `transcribe.sh` script for audio files, which is a direct and intended use of the skill without any prompt injection attempts to subvert agent behavior. The `transcribe.sh` script itself demonstrates good security practices, including proper quoting of all user-controlled inputs (e.g., `$AUDIO_FILE`, `$OUTPUT_DIR`) when passed to `ffmpeg` and `whisper` commands, thereby preventing shell injection vulnerabilities. It also securely handles temporary files using `mktemp -d` and ensures cleanup with a `trap` command. No evidence of data exfiltration, malicious execution, persistence mechanisms, or obfuscation was found.",
+          "checkedAt": 1779163909358,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "7e38e444c055dc6ccd1a08b70598981bc6e47ff0a520b94974c8b16cce7cb07b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/7e38e444c055dc6ccd1a08b70598981bc6e47ff0a520b94974c8b16cce7cb07b"
+    },
+    "slug": "auto-whisper-safe",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,155 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report",
+      "website"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C04:token:analytics",
+      "category:C04:token:statistics",
+      "category:C06:token:api",
+      "category:C07:token:review",
+      "category:C17:token:notes",
+      "cross-tag:browser-automation",
+      "cross-tag:data-analysis",
+      "cross-tag:review",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C06",
+      "C07",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "automate",
+      "build",
+      "research",
+      "review"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8015efbdfe4b61755b870e754925f734ea20f50a7ede13f8e257b44200008a99",
+    "content_hash": "0f3c20ecfdc81dbdb99258460b3eed6b669cba92c5fbb6d7a6b548da798d6f36",
+    "precanonical_content_hash": "17a1ac004eca7ca9773a4d4fe2c03a97cb6889e1884833c02d4e6d5961da43ad",
+    "skill_md_hash": "529d694e33ce4aca9919a22dd35550b7f251130f25ced6c9daf14c1567e1c45a",
+    "version_metadata_sha256": "4323ddec48a95b2286d96c136bd8b0a05c21fcb1c59b787b200568edb5bb3054"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/f-liva/skills/ryot",
+    "claim_id": "a33772e4727ba1c53db4f1734745b9b9e3e85bffdc6711f06c5bd58fc1df500c",
+    "index_entries": [
+      {
+        "index_path": "categories/marketing-and-sales.md",
+        "label": "ryot",
+        "url": "https://clawskills.sh/skills/f-liva-ryot"
+      }
+    ],
+    "owner_handle": "f-liva",
+    "owner_id": "s172qzhaaqgbcj367wdz5xwjjx84m22g",
+    "published_at": 1771876805048,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779942940667,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779942940667,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill's capabilities match its stated Ryot purpose: search, progress tracking, reviews, collections, analytics, calendar views, bulk episode marking, and automated reports. Some commands can modify Ryot account data, but that is central to the stated media-tracking function.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Most actions are explicit command examples. The documentation is broad around using the API script and should be read carefully for state-changing actions such as marking media complete, adding reviews, creating collections, and bulk episode updates.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No package installer, remote download, obfuscated payload, or automatic execution was found. The automation setup is a user-run shell script.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The scripts read a local Ryot config containing the user’s Ryot URL and API token, then send GraphQL requests to that configured instance. This is proportionate for a Ryot integration, but users should protect that config file.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The optional setup script creates three recurring OpenClaw cron jobs for reports, but it prompts for a WhatsApp number, allows skipping, supports dry-run, asks for confirmation, and prints list/remove commands.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-2] expected: The WhatsApp delivery and scheduled automation are explicitly part of the skill description and quick start, and the setup script requires interactive input and confirmation. This is a persistence and data-sharing note, not hidden behavior.\n[SDI-2] expected: The local API-token config is disclosed in frontmatter and setup instructions and is necessary for Ryot API access. The artifact does not show unrelated credential access or token exfiltration.\n[SQP-1] expected: The instruction to use the Ryot API script is broad, but the surrounding documentation is Ryot-specific and gives concrete command examples. Users should still confirm before state-changing commands.\n[SQP-2] expected: The setup script creates persistent scheduled reports, but it is optional, describes the jobs before creation, supports dry-run, and provides removal commands. The disclosure could be stronger, but the behavior is not concealed.\n[VirusTotal code_insight] expected: The reported cron creation is real and purpose-aligned for automated reports. The WhatsApp number is quoted as a command argument in the shell script, so the artifact does not show direct shell command injection.\n[staticScan] expected: Static scan reported no suspicious findings, consistent with direct artifact review.",
+          "guidance": "Install only if you are comfortable giving the skill a Ryot API token and letting it update your tracker data. Protect `/home/node/clawd/config/ryot.json`, confirm media IDs and episode ranges before bulk updates, and run the automation setup only if you want recurring reports sent to the WhatsApp number you provide.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This Ryot skill is a disclosed media-tracker integration with expected API-token use, account updates, and optional scheduled WhatsApp reports.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779942896074,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ryot\nVersion: 1.2.0\n\nThe skill is classified as suspicious due to the `scripts/setup-automation.sh` script. This script creates persistent cron jobs using the `openclaw cron add` command, a high-privilege action. It also directly incorporates user-provided input (`WHATSAPP_NUMBER`) into the `--to` argument of this command. While the stated purpose of setting up automated reports is benign, the capability to create persistent scheduled tasks and the direct use of unsanitized user input in a command argument for a powerful internal command represents a potential vulnerability (e.g., command injection if `openclaw cron add` is not robustly sanitizing its arguments). This constitutes a risky capability without clear evidence of intentional malicious behavior.",
+          "checkedAt": 1779165659181,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "cb0f5130b50bcf32da9771cd280abdb4d27b818c37783e8bf7b8e17cd8c9734b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/cb0f5130b50bcf32da9771cd280abdb4d27b818c37783e8bf7b8e17cd8c9734b"
+    },
+    "slug": "ryot",
+    "source_type": "clawhub",
+    "version": "1.2.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,148 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C09:token:secure",
+      "category:C09:token:security",
+      "category:C12:token:management",
+      "cross-tag:data-analysis",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "62ddd1cd6a47c29bc22268ad47a321b32db846ee07f8ceeab9850de945c021f6",
+    "content_hash": "c70d4e9da409bc0b2726a444a4178033f95f87f1e1a1f5ba1e1ee86c3e237fde",
+    "precanonical_content_hash": "c43fbc5484d148defab4f26d72040968a39e108941aa04b017d88c1b051965d8",
+    "skill_md_hash": "7b7b2c92729f374abb19fc4a1b417306a6bd6207ff84abfefe2412818cccdb87",
+    "version_metadata_sha256": "f708d77e57254c2c8ab1d2f01c12c7eed0f256a2bf478a7a2afda7eacd91de09"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/cyberash-dev/skills/claude-usage-cli",
+    "claim_id": "575ca9b609b8e422b104c4b9b6b22ddd8e8b03c5b39cc5967253ee07c1f3f5cd",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "claude-usage-cli",
+        "url": "https://clawskills.sh/skills/cyberash-dev-claude-usage-cli"
+      }
+    ],
+    "owner_handle": "cyberash-dev",
+    "owner_id": "s176yqa5a6eagme0n69vzybevs85ndz6",
+    "published_at": 1771012440345,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971015224,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971015224,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, installation instructions, commands, network use, and credential handling all align around querying Anthropic usage and cost reports.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill clearly discloses use of an Anthropic Admin API key, macOS Keychain storage, Anthropic API network calls, JSON/table output, and removal commands; no hidden or unrelated runtime instructions were found.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses a global npm package and an optional source install path, which is a normal supply-chain consideration but is disclosed and purpose-aligned. The skill is also marked deprecated in favor of another tool.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "macOS, Node.js, outbound access to api.anthropic.com, and access to organization usage/cost data are proportionate to the documented reporting purpose.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "Persistence is limited, as described, to a macOS Keychain credential entry with a documented remove-key command; no background service, privilege escalation, destructive action, or broad local indexing appears in the artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code_insight] expected: The telemetry flagged supply-chain and API-key handling risk from installing a third-party npm CLI. That is a real user consideration, but the artifact discloses the behavior and it fits the usage-reporting purpose; no artifact-backed exfiltration or deception was found.\n[SkillSpector clean result] expected: SkillSpector reported no issues. This supports the benign assessment but was not treated as decisive.\n[Static scan clean result] expected: The static scan and local artifact review found only markdown/json skill files and no executable scripts or hidden install logic.",
+          "guidance": "Install only if you trust the npm package and publisher, preferably audit the linked source first because the skill is deprecated and handles an Anthropic Admin API key. Use the narrowest available Admin API permissions, confirm it only contacts Anthropic, and remove or revoke the key when you stop using it.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed, deprecated CLI helper for viewing Anthropic usage and cost data, with the main risk being trust in the third-party npm package that handles an Admin API key.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779970980865,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: claude-usage-cli\nVersion: 0.2.0\n\nThe skill instructs the agent to install an external Node.js package (`claude-usage-cli`) via `npm install -g`. While the `SKILL.md` provides a public GitHub link for the source code and makes strong claims about security (macOS Keychain storage, no plaintext storage, only connects to `api.anthropic.com`, read-only API key scope), the act of installing an external package from npm introduces a supply chain risk. The installed package, which handles sensitive Anthropic Admin API keys and makes network requests, could potentially deviate from its stated benign purpose or be compromised, leading to unauthorized data access or exfiltration, despite the `SKILL.md`'s claims. This constitutes a risky capability without clear malicious intent in the `SKILL.md` itself, thus classifying it as suspicious.",
+          "checkedAt": 1779163261136,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "f6dfcf114a7795fee805d33555c08640f110c8f130f7176a84418917289c368b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/f6dfcf114a7795fee805d33555c08640f110c8f130f7176a84418917289c368b"
+    },
+    "slug": "claude-usage-cli",
+    "source_type": "clawhub",
+    "version": "0.2.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

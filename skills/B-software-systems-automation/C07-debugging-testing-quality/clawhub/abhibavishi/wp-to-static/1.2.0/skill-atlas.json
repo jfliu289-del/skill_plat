@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "configuration"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "infrastructure",
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C07",
+    "reasons": [
+      "category:C07:token:test",
+      "category:C08:token:deploy",
+      "category:C09:token:security",
+      "category:C10:token:model",
+      "cross-tag:deployment",
+      "cross-tag:security",
+      "cross-tag:testing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C08",
+      "C09",
+      "C10"
+    ],
+    "stages": [
+      "deliver",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "deploy",
+      "operate",
+      "secure",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "82315a2d69ed713fb422c0b944e327651f1aac6e53ea9434337a90bc05a652ae",
+    "content_hash": "993a7fd0a4a89880b2d9387ce9bd95ae0e50c78122d65248d6a066af613acf81",
+    "precanonical_content_hash": "f023b66ff43f7f396c1a3c0d2a5b06d9810690854b43c3072aed181c4a4d7f24",
+    "skill_md_hash": "4e0dd49bb6cd4b1558380e9fa4032946fd8bf045e2adcaed126efb93105efe3b",
+    "version_metadata_sha256": "d714f65f891b374afa83eeee9d5ec485ebae49cc4777e66dfb6fb632c6bb44e1"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/abhibavishi/skills/wp-to-static",
+    "claim_id": "03e1a9780b2890b45c692fbd3256e3bef940fe4335b711e7328b2d0742504d5b",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "wp-to-static",
+        "url": "https://clawskills.sh/skills/abhibavishi-wp-to-static"
+      }
+    ],
+    "owner_handle": "abhibavishi",
+    "owner_id": "s17cthr513m32pdbakkn7nmdtx86sp1k",
+    "published_at": 1770900510796,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972460056,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972460056,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The SSH, rsync, filesystem, GitHub CLI, and Cloudflare Wrangler capabilities directly fit the stated purpose of converting a WordPress site into a static Cloudflare Pages deployment.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The runtime instructions are specific and safety-oriented: validate prerequisites, preserve SSH host key checking, avoid logging credentials, exclude PHP/config/database files, scrub temporary build output, and wait for user confirmation before deployment.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The artifact is a single SKILL.md with normal OpenClaw metadata and no bundled executables, hidden installer, obfuscation, or automatic dependency installation.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill requires sensitive access to a WordPress server plus authenticated GitHub and Cloudflare sessions, but that authority is expected for a migration and deployment workflow and is clearly disclosed.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to user-directed outputs such as ./public, a GitHub repository, and a Cloudflare Pages project; no background worker, credential storage, or unrelated persistence is evident.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal clean telemetry] expected: VirusTotal reported no malicious or suspicious detections; this supports but does not determine the benign verdict.\n[SkillSpector clean telemetry] expected: SkillSpector reported no issues, and artifact inspection found no prompt-injection, hidden persistence, exfiltration, or destructive behavior.\n[Static scan clean] expected: Static scan reported no suspicious patterns, consistent with the single documented skill file and disclosed migration workflow.\n[High-privilege migration workflow] expected: SSH, rsync, GitHub repository creation, and Cloudflare deployment are sensitive, but they are central to the stated purpose and paired with explicit user checks and secret-exclusion steps.",
+          "guidance": "Install only if you intend to let the agent access the target WordPress server and use your authenticated GitHub and Cloudflare CLIs. Keep the repository private unless you deliberately choose otherwise, preview the generated static site, and verify ./public contains no PHP, wp-config, .env, SQL dumps, or other secrets before approving deployment.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill uses powerful website migration access, but its behavior is disclosed, purpose-aligned, and includes safeguards against leaking WordPress secrets.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972437598,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: wp-to-static\nVersion: 1.2.0\n\nThe skill bundle is designed for a complex, high-privilege operation (migrating a WordPress site via SSH to static hosting). Despite requiring extensive permissions (SSH, file system, network access), the `SKILL.md` demonstrates an exceptionally strong focus on security. It explicitly defines and enforces numerous security best practices, including using `ssh-agent`, strict host key checking, comprehensive exclusion of sensitive files during rsync, multiple verification steps to prevent data leakage or accidental commits, and clear 'Safety Rules' for the agent. The instructions are transparent, directly align with the stated purpose, and include `disable-model-invocation: true`. There is no evidence of intentional malicious behavior, data exfiltration, persistence, or obfuscation.",
+          "checkedAt": 1779163456511,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "85970e5ada6d7003152fe6e79fdbbdf57722073bb840660aabe9f734532bea4f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/85970e5ada6d7003152fe6e79fdbbdf57722073bb840660aabe9f734532bea4f"
+    },
+    "slug": "wp-to-static",
+    "source_type": "clawhub",
+    "version": "1.2.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

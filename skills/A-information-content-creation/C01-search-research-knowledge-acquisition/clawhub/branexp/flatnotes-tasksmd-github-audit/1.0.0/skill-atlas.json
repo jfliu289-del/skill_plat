@@ -1,0 +1,155 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.1321,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:sources",
+      "category:C04:token:data",
+      "category:C06:token:code",
+      "category:C08:token:github",
+      "category:C09:token:audit",
+      "category:C11:token:project",
+      "category:C17:token:notes",
+      "cross-tag:data-analysis",
+      "cross-tag:planning",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C08",
+      "C09",
+      "C11",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "plan",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "2c2f1e1b0fd6e59bd0823bb823d5efb3838fdfbad00554c9d8c11ae869ef6806",
+    "content_hash": "8e626a264941740e616e4f36b9578e4748d9c103d5f930070f733bf6ee82e4e3",
+    "precanonical_content_hash": "6cdafe665c4c9a2ab27712b73e368325917ec1148b5e09e684ef0998e9472be9",
+    "skill_md_hash": "8be4c053bf97d73413750894ec6b006b83d02aae58c6ee4cdf6c146c4b4135d0",
+    "version_metadata_sha256": "b7ee67fe418bd82331de1c29cffd8938af3b310febe81df627eaa9884796416b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/branexp/skills/flatnotes-tasksmd-github-audit",
+    "claim_id": "0fa1697542032b9722237cf72a529208a80b86f4ba896c9e9e33703d5e309dcb",
+    "index_entries": [
+      {
+        "index_path": "categories/git-and-github.md",
+        "label": "flatnotes-tasksmd-github-audit",
+        "url": "https://clawskills.sh/skills/branexp-flatnotes-tasksmd-github-audit"
+      }
+    ],
+    "owner_handle": "branexp",
+    "owner_id": "s17f35ypf03tpcqeq92yw31pzx885fkc",
+    "published_at": 1770408249546,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783657896956,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783657896956,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is auditing Tasks.md and Flatnotes against GitHub, and the artifacts implement that by reading those markdown stores, querying PR metadata with the GitHub CLI, and producing drift reports.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The quick-start describes report-only mode while including --write, but artifact review shows --write only creates the disclosed Markdown and JSON reports under tmp and does not modify source notes or task boards.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains SKILL.md and one bundled Node script, with no installer hook, dependency bootstrap, post-install action, or automatic execution mechanism.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill reads local Tasks.md and Flatnotes directories and may use the user's authenticated gh session; this is expected for the audit purpose, but generated reports can include private task, project, path, and PR details.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background worker, startup hook, credential capture, privilege escalation, deletion, or source-file mutation is present; persistence is limited to optional report files in tmp.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[suspicious.dangerous_exec] expected: The script uses child_process.execFile to run gh auth status and gh pr list for read-oriented GitHub reconciliation; it does not use shell interpolation and the behavior matches the disclosed purpose.\n[SQP-2] expected: A prior advisory concern about --write being shown beside 'report-only' is downgraded because the script's --write path only writes the two disclosed report artifacts and source changes are gated in the instructions.\n[SkillSpector current scan] expected: The supplied current SkillSpector report found no issues and completed coverage across both artifacts.\n[VirusTotal telemetry] expected: VirusTotal reported the skill clean; this is consistent with artifact review but was not used as the sole basis for the verdict.",
+          "guidance": "Before running it, confirm TASKS_ROOT and FLATNOTES_ROOT point only to directories you intend to audit, check which GitHub account gh is authenticated as, and treat the generated tmp reports as private because they may contain task titles, project names, local paths, and PR details.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward audit tool that reads local task and note files, checks GitHub PR status, and writes report files without hidden persistence or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783657844094,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: flatnotes-tasksmd-github-audit\nVersion: 1.0.0\n\nThe OpenClaw skill is designed to audit local markdown files (Tasks.md, Flatnotes) against GitHub as a source of truth. All file system operations (reading configuration/data files, writing reports to `tmp/`) and external command executions (`gh` CLI for GitHub PR data) are directly and transparently aligned with its stated purpose. There is no evidence of data exfiltration, malicious execution, persistence, obfuscation, or prompt injection intended to subvert the agent's behavior beyond the skill's legitimate function. The `SKILL.md` even includes guardrails for applying fixes, requiring explicit user consent for write operations.",
+          "checkedAt": 1779161913196,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "9d3c55c3a10fa8234bcb48df9a927ae7af2b55dd0e7a2814f58e24a9534800cf",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/9d3c55c3a10fa8234bcb48df9a927ae7af2b55dd0e7a2814f58e24a9534800cf"
+    },
+    "slug": "flatnotes-tasksmd-github-audit",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

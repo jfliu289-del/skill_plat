@@ -1,0 +1,151 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.1321,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C02:token:language",
+      "category:C07:token:test",
+      "category:C10:token:ai",
+      "category:C11:token:project",
+      "category:C12:token:management",
+      "category:C13:token:operations",
+      "cross-tag:agent-management",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C07",
+      "C10",
+      "C11",
+      "C12",
+      "C13"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "0adf05f4b7bea6c3a3a163c2f881bee1a30bbbe3230aa606ba394f015e40c709",
+    "content_hash": "29fc43ebcbae08eb5cb4bca4d5a155380106ee364ceafe958bda3e336f0dca22",
+    "precanonical_content_hash": "66ec8a41586d949a40846509a274ba5e4df0ee614a1d0a0fdd0ef0c6f742c5bf",
+    "skill_md_hash": "5488810aa99f32dc90bf758cb65eb6b0da664acc250230b00a03a75f3fdf1b31",
+    "version_metadata_sha256": "8ef9dff928c17aeec404bcb763d17ac4bbae36b42076bc5fa313c5d80d50fd7d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/azzgo/skills/aria2-json-rpc",
+    "claim_id": "1fe735ab570ba420dc0d66d428f6c285f43695d786bd1fa1eb05785e7fe94260",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "aria2-json-rpc",
+        "url": "https://clawskills.sh/skills/azzgo-aria2-json-rpc"
+      },
+      {
+        "index_path": "categories/cli-utilities.md",
+        "label": "aria2-json-rpc",
+        "url": "https://clawskills.sh/skills/azzgo-aria2-json-rpc"
+      }
+    ],
+    "owner_handle": "azzgo",
+    "owner_id": "s178tx7j9wp5emdjc3y71wbfah884c35",
+    "published_at": 1770273051710,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783654540827,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783654540827,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose and code match: Python helpers load aria2 RPC configuration, send JSON-RPC or WebSocket requests, add URI/torrent/metalink downloads, query status, pause/resume/remove tasks, and manage aria2 options.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The docs disclose mutating operations, including remove, purge, pause-all, resume-all, and option changes, but they do not consistently require confirmation or explain operational impact. This is a user-control caveat, not hidden behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No auto-run install hooks, hidden setup commands, or forced package installation were found. Optional WebSocket support is disclosed as requiring a separately installed dependency.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to a configured aria2 RPC endpoint, local reads of torrent/metalink files, environment-variable config overrides, and config file reads/writes are proportionate to managing aria2. Plain HTTP/ws is acceptable for localhost-style setups but risky for remote or untrusted networks.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill can persist aria2 RPC settings, including a secret token, in the skill directory or ~/.config/aria2-skill/config.json, but no hidden background persistence, privilege escalation, credential harvesting, or unrelated data access was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The cited shell execution, file read/write, environment access, and network access are real, but they are disclosed and necessary for an aria2 RPC integration. This supports clearer permission documentation rather than a Review verdict by itself.\n[SQP-2] expected: Download-triggering methods such as addUri, addTorrent, and addMetalink are core aria2 functions. They should be used with user-selected URLs/files and trusted download directories, but the behavior is purpose-aligned.\n[SQP-2] expected: Remove and purge operations are normal download-manager controls and are visibly documented. The missing confirmation guidance is a safety caveat, not evidence of automatic deletion or deception.\n[SQP-2] expected: Torrent file ingestion and resulting tracker/peer network activity are expected for an aria2 torrent helper. Users should confirm the torrent path and source before use.\n[SQP-2] expected: The WebSocket client can use insecure ws:// and injects the aria2 secret into RPC parameters, which matches aria2 authentication behavior. This should be limited to localhost or trusted private networks; no exfiltration or hidden credential use was found.",
+          "guidance": "Install this only if you want an agent to manage your aria2 instance. Keep the RPC secret private, prefer localhost or TLS-protected remote RPC, review URLs and torrent/metalink files before adding them, and require confirmation before remove, purge, pause-all, resume-all, or global option changes.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill transparently lets an agent control an aria2 download manager, with expected risks around starting, stopping, and monitoring downloads.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783654499051,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 32,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: aria2-json-rpc\nVersion: 0.1.0\n\nThe skill is designed to interact with the aria2 download manager via JSON-RPC. It provides Python scripts for configuration and RPC calls, and comprehensive documentation for AI agents. While the skill involves network communication (to aria2 RPC) and local file access (for adding torrent/metalink files), these capabilities are directly aligned with its stated purpose. The documentation (SKILL.md, execution-guide.md, troubleshooting.md) explicitly instructs AI agents to use the provided Python scripts and strongly discourages manual JSON-RPC construction or arbitrary shell commands, mitigating prompt injection risks. There is no evidence of intentional malicious behavior such as data exfiltration, persistence, or unauthorized remote control.",
+          "checkedAt": 1779161442748,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "f4e9e658655e8a5d554632a22b3fc70426d00968571d095454a817f85598dd90",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/f4e9e658655e8a5d554632a22b3fc70426d00968571d095454a817f85598dd90"
+    },
+    "slug": "aria2-json-rpc",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,128 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.4167,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C02:token:language",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "3cf0380bbe56d360c68c80d67816131c570190cad35723fce891ece001128e37",
+    "content_hash": "f4338aa0965f5c306bdd4fef5ac3d0d73ce7b3706a8b49d2af504b547f418c14",
+    "precanonical_content_hash": "5cf5f9a55257bf897d4d03e2a947f25723cb87c38808fa1350957751d81f461a",
+    "skill_md_hash": "c374563442797079004a7cc7c69c334c6df2f71c54d44af4d6b4acd09284cf7f",
+    "version_metadata_sha256": "f3c3004f4a92bc65932d943b2bd32e553447acec9446773366044f3d45cf039e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/donovanpankratz-del/skills/correction-memory",
+    "claim_id": "d3fbadec8cb38338cc772227f4b711bd5e8807babbc9b3fc21c59e7568ce60a7",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "correction-memory",
+        "url": "https://clawskills.sh/skills/donovanpankratz-del-correction-memory"
+      }
+    ],
+    "owner_handle": "donovanpankratz-del",
+    "owner_id": "s171g2r7jkvrtmp9mdgk8dk12h83fqed",
+    "published_at": 1772076209533,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779958444398,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779958444398,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently implement correction memory: a local JavaScript helper logs per-agent corrections and builds a future prompt preamble for the same agent type.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Stored corrections are free-form text replayed into later agent prompts, so bad or overly broad entries can steer future behavior; this is disclosed and scoped by agent type with a 30-day replay filter.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is manual and local: copy the included helper into the workspace and optionally rely on an existing agent-context-loader integration. No hidden installer, package install, or remote fetch was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The implementation uses local filesystem reads and writes under memory/corrections, with no network calls, credentials, session stores, or elevated privilege requests.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "Correction files persist on disk even though replay only includes recent entries; users can inspect them with the documented commands, but deletion/retention controls are manual.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The natural-language logging phrase is a real persistence path, but it is presented as a user-directed way to save corrections and the implementation only writes when logCorrection is invoked.\n[SQP-2] expected: The frontmatter and documentation explicitly describe persistent storage, automatic injection, storage paths, and viewing commands; disclosure could be stronger about deletion, but the behavior is not hidden.\n[SQP-2] expected: The JavaScript stores free-form issue, correction, and session_channel fields locally. That creates privacy risk if users save sensitive text, but the fields and local storage behavior match the stated correction-memory purpose.\n[SSD-3] expected: Persistent prompt replay is the core feature and is scoped by agent type with a recent-entry filter; the risk is user-managed prompt poisoning, not artifact-backed deception or exfiltration.\n[staticScan] expected: Static scan was clean, and local inspection found no network access, credential handling, obfuscation, or unrelated execution path.\n[VirusTotal/code_insight] expected: VirusTotal telemetry was clean and aligned with artifact inspection; it was used only as supporting telemetry.",
+          "guidance": "Install only if you want correction text saved on disk and reused in later agent prompts. Keep saved corrections short and specific, do not include secrets or proprietary raw prompts, and periodically review or delete files under $OPENCLAW_WORKSPACE/memory/corrections if behavior becomes stale or unwanted.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill persistently saves local correction notes and reuses them in future agent prompts, which is its stated purpose and is disclosed, though users should manage the prompt-memory risk.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779958386380,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: correction-memory\nVersion: 1.1.0\n\nThe skill's purpose is to persist agent corrections, and its implementation demonstrates strong security practices. The `correction-tracker-template.js` file includes robust input sanitization for agent types and content, explicitly preventing path traversal and injection vulnerabilities. File operations are confined to the designated `memory/corrections` directory within the workspace. The `SKILL.md` instructions are straightforward, and the verification step executes the local, reviewed JavaScript file in a temporary, self-cleaning environment. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts within the skill's own content or instructions.",
+          "checkedAt": 1779167021366,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "fee5c68f353276eb85c6d4d1a6417711b6997f35534650fa9458ac780cd0f7bf",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/fee5c68f353276eb85c6d4d1a6417711b6997f35534650fa9458ac780cd0f7bf"
+    },
+    "slug": "correction-memory",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

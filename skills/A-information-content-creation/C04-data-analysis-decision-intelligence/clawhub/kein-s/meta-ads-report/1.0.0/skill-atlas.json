@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.35,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C01:token:find",
+      "category:C02:token:language",
+      "category:C04:token:analytics",
+      "category:C04:token:data",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C01",
+      "C02"
+    ],
+    "stages": [
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "d0bf367c6aed5865e22bd7508e3bfbeb9c6463566d9bc5dbc13b931e6507f56b",
+    "content_hash": "f53b771be49592bfbeca08fbd490da71995c972aab28cee3ebcab2098934897a",
+    "skill_md_hash": "30f650f37da599a35c41fbd88594adbbbf4ff4fea122c130227a5da88a207f2b",
+    "version_metadata_sha256": "8a20be99827fd526be3eef4855d5a3c0f7233d0b79ac07492d06477198bbf2d0"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/kein-s/skills/meta-ads-report",
+    "claim_id": "0d714856981f1252a9310c9a35cb07e28b0ec3651088e72b09b782d4fa6b5741",
+    "index_entries": [
+      {
+        "index_path": "categories/marketing-and-sales.md",
+        "label": "meta-ads-report",
+        "url": "https://clawskills.sh/skills/kein-s-meta-ads-report"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "kein-s",
+    "owner_id": "s175236av696zc1wd54qbqbkbx885ard",
+    "published_at": 1771419807664,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779921941836,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779921941836,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, documentation, and code align around read-only Meta Ads analytics and event discovery; this necessarily exposes ad account performance data to the agent.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime behavior is limited to parsing requested date ranges, calling Meta Ads insights APIs, and returning reports; no prompt hijacking, unrelated actions, account mutation, or destructive behavior was found.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The package lists ordinary Python dependencies, but they are mostly unpinned, so users should install in a controlled environment and review dependency versions.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill requires META_ACCESS_TOKEN and META_AD_ACCOUNT_ID, which are proportionate for Meta Ads reporting but are sensitive credentials and business identifiers.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence mechanism, background worker, local indexing, file writes, privilege escalation, or credential storage beyond reading environment variables/.env was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The README tells users to place a Meta access token and ad account ID in .env; this is expected for the integration, but the documentation should more clearly warn that the token is secret and should not be committed or shared.\n[SQP-2] expected: SKILL.md discloses the required Meta token, ad account ID, and read-oriented permissions; the missing least-privilege, rotation, and secure-storage guidance is a documentation gap rather than evidence of hidden behavior.\n[SQP-2] expected: meta_event_list.py reads the configured token and calls Meta's API to list events, which matches the advertised event finder capability; the external account access should be made explicit to users before use.",
+          "guidance": "Install only if you are comfortable giving the skill read access to the specified Meta Ads account. Use a least-privilege Meta token with ads_read/read_insights, keep it out of chat logs and version control, rotate it if exposed, and consider pinning dependencies before deployment.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to be a straightforward Meta Ads reporting tool that reads user-provided Meta credentials to fetch ad metrics and event names.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779921902280,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: meta-ads-report\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills bundle for Meta Ads Analytics and Event Finder is benign. It uses the official `facebook_business` SDK to interact with the Meta Graph API for its stated purpose of fetching ad performance data and event lists. Credentials (`META_ACCESS_TOKEN`, `META_AD_ACCOUNT_ID`) are securely loaded from environment variables via `python-dotenv`. The `SKILL.md` and `README.md` files provide clear, non-malicious instructions for setup and usage, without any prompt injection attempts to subvert the agent. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or obfuscation in any of the provided files (e.g., `main.py`, `meta_event_list.py`).",
+          "checkedAt": 1779165178514,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "d0bf367c6aed5865e22bd7508e3bfbeb9c6463566d9bc5dbc13b931e6507f56b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d0bf367c6aed5865e22bd7508e3bfbeb9c6463566d9bc5dbc13b931e6507f56b"
+    },
+    "slug": "meta-ads-report",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:creative",
+      "category:C05:token:design",
+      "category:C07:token:review",
+      "category:C11:token:project",
+      "category:C17:token:notes",
+      "category:C17:token:schedule",
+      "cross-tag:design",
+      "cross-tag:planning",
+      "cross-tag:review"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C07",
+      "C11",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "design",
+      "plan",
+      "review"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "6f981f336fdd721247067ff10e904d2f15f3fd32f7afb360f326412855064b11",
+    "content_hash": "7ceb7e68996de6dd0b4d456561910faeca82a981504900054868f51d2ca5a9a4",
+    "skill_md_hash": "a2568da8a1aa5d63b56cc77f1cba89b8d54e255f37503bc665e67a4b414ba102",
+    "version_metadata_sha256": "7916429ec92608fae5fb5564a482681eb84288e6ea7f9d720f7203074248fc59"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/wiseape11/skills/creative-ops-copilot",
+    "claim_id": "88d9c06c43c00b47e70b22892bfacc764420bb3b817c9ab3cfad6ecb3abe98d5",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "creative-ops-copilot",
+        "url": "https://clawskills.sh/skills/wiseape11-creative-ops-copilot"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "wiseape11",
+    "owner_id": "s172p6h5mwefsrmadv4f9gwkb1884ndc",
+    "published_at": 1771246737622,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971141290,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971141290,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently match the stated purpose: turning client briefs into plans, estimates, invoice draft files, and optional project folders.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill discloses file-based brief input, local file outputs, optional skeleton creation, and optional invoice push that should only happen when the user asks to push it.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No install script, dependency installation, background service, or startup persistence is present; the bundled Python script uses standard-library modules.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Reading a user-supplied brief path and writing project documents are proportionate to the workflow, but users should choose input and output paths deliberately.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The optional invoicing API integration can use a configured API key and POST invoice draft data; this is disclosed and purpose-aligned, but the destination is user-configurable.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal-code_insight-arbitrary-brief-file-read] expected: The script reads the path passed via --brief-file and embeds brief content into generated planning output; this is a disclosed input mode, not hidden filesystem harvesting.\n[VirusTotal-code_insight-configurable-invoice-endpoint] expected: The invoice push sends draft invoice data to the configured invoicing API. The default example is localhost and the feature is documented as optional, though users should verify the URL before use.\n[SQP-2] expected: The concern is valid as user guidance because --push-invoice transmits business data without an in-script allowlist, but artifact evidence shows it is optional, disclosed, and tied to the invoicing purpose.",
+          "guidance": "Before installing, review the invoicing configuration. Only use --push-invoice when you intend to send client/project invoice data, keep the API URL local or trusted, and use a narrowly scoped API key if one is configured.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill is a disclosed creative production helper that writes planning files and can optionally send an invoice draft to a configured invoicing API.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971102401,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: creative-ops-copilot\nVersion: 0.1.0\n\nThe skill bundle is classified as suspicious due to two significant vulnerabilities found in `scripts/creative_ops_copilot.py`. Firstly, the `--brief-file` argument allows the script to read arbitrary files from the filesystem (e.g., `/etc/passwd`) and embed their content into the generated `plan.md`, posing an arbitrary file read risk if the agent is compromised. Secondly, the `--push-invoice` functionality, while intended for a local invoicing API (defaulting to `http://localhost:8081` in `references/config.example.json`), can be configured via `invoicingApi.baseUrl` to send sensitive invoice data to any arbitrary external URL, creating a potential data exfiltration vector if misconfigured. There is no clear evidence of intentional malicious behavior within the bundle itself, but these capabilities present significant risks.",
+          "checkedAt": 1779164552740,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "29066f9cb201218701bf1c1f1f6fde74592ddc166f905a9cf8a7dd65368b4fd2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/29066f9cb201218701bf1c1f1f6fde74592ddc166f905a9cf8a7dd65368b4fd2"
+    },
+    "slug": "creative-ops-copilot",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

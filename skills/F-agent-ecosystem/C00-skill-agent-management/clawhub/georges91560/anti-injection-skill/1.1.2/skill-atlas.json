@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "website"
+    ],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C00:token:skill",
+      "category:C09:token:security",
+      "category:C09:token:threat",
+      "category:C10:token:llm",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09",
+      "C10"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "7a8e2163e414a5db5fe40bf861ad0d38c4e17c29464e5bfca17def0352383080",
+    "content_hash": "280ad3f22b8fabc82d26ed687b800ad70a4af5fcce8395a448690f17b3aea87d",
+    "precanonical_content_hash": "e7cc0a148626dcc647f66dc4a265bcfcac629aff77e7c3a8f54b13dda620bfec",
+    "skill_md_hash": "d1bd4245c8c6deab6b4fbc29a3de6e2accae40597626bf3c98ce557f37b7d51d",
+    "version_metadata_sha256": "3b263ebfc141814ea9404ddb88e45957a3a421093f3773742bc0c98a3753bdae"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/georges91560/skills/anti-injection-skill",
+    "claim_id": "d584f69c1589b7a3350cbc863a2970458424e8aecfbba0b9ed27b4e684925cda",
+    "index_entries": [
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "anti-injection-skill",
+        "url": "https://clawskills.sh/skills/georges91560-anti-injection-skill"
+      }
+    ],
+    "owner_handle": "georges91560",
+    "owner_id": "s17dcq1h2qc4zm3jjz3888cj7n8856k8",
+    "published_at": 1771641428695,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943807334,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943807334,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently describe an anti-prompt-injection guardrail; the main limitation is that the package is instruction-only, so protection depends on the host agent enforcing these instructions.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "It asks to run at highest priority and inspect every user input, tool output, memory load, and context load; that is broad, but clearly disclosed and aligned with the security purpose.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Only markdown artifacts are present, with no executable files, install scripts, dependency installation, or hidden runtime setup.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill requests reads of local memory/identity files and writes to audit, incident, and heartbeat files; this is proportionate for memory integrity and audit logging, but may touch sensitive local context.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistent audit logs, incident logs, heartbeat state, and lockdown-style behavior are disclosed; no elevated OS privileges or destructive persistence are requested.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[suspicious.prompt_injection_instructions] expected: The flagged phrases appear in blacklist examples and tests, with explicit notices that they are detection patterns to block rather than instructions to follow.\n[SkillSpector clean] expected: SkillSpector reported no issues; direct artifact review also found no hidden code or undeclared authority.\n[VirusTotal clean telemetry] expected: VirusTotal telemetry was clean and consistent with the artifact review, but the verdict is based on the disclosed files and behavior rather than telemetry alone.",
+          "guidance": "Install only if you want this skill to act as a front-line policy gate. Review the listed memory and identity paths, expect persistent local security logs, test for false positives, and use Telegram or webhook alerts only with destinations you trust.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed defensive guardrail skill, with broad but purpose-aligned local monitoring and blocking behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943773253,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: anti-injection-skill\nVersion: 1.1.2\n\nThis skill is explicitly designed as an 'Anti-Injection Skill' to defend against various AI agent threats, including prompt injection, memory poisoning, and data leakage. It transparently declares its file system access (reading agent memory/identity, writing audit/incident logs) and optional network behavior (opt-in webhook for SIEM integration, sending only event metadata). The skill's `SKILL.md` prominently features a `BLACKLIST_PATTERNS` section containing common injection strings (e.g., 'ignore previous instructions'), but it includes multiple, explicit 'SECURITY NOTICE' disclaimers stating these are DETECTION PATTERNS for blocking malicious input, NOT instructions for the agent to execute. Furthermore, its 'Tool Security Wrapper' actively denylists dangerous commands like `curl | bash` and `eval`. All observed behaviors align with a defensive security tool, with no evidence of intentional harmful actions or self-exploitation.",
+          "checkedAt": 1779165822974,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "f33298b8d4c28e6b1c4a8cfc4506f4b6ce1ec60a04a4c3563a35ddf2395af1d1",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/f33298b8d4c28e6b1c4a8cfc4506f4b6ce1ec60a04a4c3563a35ddf2395af1d1"
+    },
+    "slug": "anti-injection-skill",
+    "source_type": "clawhub",
+    "version": "1.1.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

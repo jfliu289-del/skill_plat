@@ -1,0 +1,156 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:browse",
+      "category:C01:token:search",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C09:token:privacy",
+      "category:C12:token:management",
+      "category:C17:token:resume",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C09",
+      "C12",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "b2bd152b3144fed9ea477713e5296954b9bcef5b3934453480237f55e7d5db8e",
+    "content_hash": "6c1c815f79b1dc4063688ae5872eeead99cd451f415f4606539d085d6a56b2ba",
+    "skill_md_hash": "7b76c846d9d33c3e95b7472651774b0e1b20350549488dd294f18a6365fe8f86",
+    "version_metadata_sha256": "d069e20ae8faef8337983462fea56f2b209615ac0197dbd5d944072f00c063e5"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/akivasolutions/skills/plex-ctl",
+    "claim_id": "e616c2da2a544d480fc691c3aa3872ffe27bc67848f5ba9627ca3118498538bc",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "plex-ctl",
+        "url": "https://clawskills.sh/skills/akivasolutions-plex-ctl"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "akivasolutions",
+    "owner_id": "s177f2j8e9h7qxk74bxe93qgks83hbrg",
+    "published_at": 1771046104704,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974648056,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974648056,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The files consistently describe and implement Plex library search, playback, client listing, and playback control through the Plex API.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "SKILL.md scopes use to Plex-related requests and does not instruct the agent to override user intent or perform unrelated system actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation is simple and disclosed: install the plexapi dependency and run the CLI; the included verify script only checks local installation state.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "A Plex server URL and Plex token are proportionate for this purpose, and the code uses them for the configured Plex server plus documented MyPlex discovery fallback.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists the Plex URL, token, and default client in ~/.plexctl/config.json without file-permission hardening, but this storage is disclosed and no exfiltration, autostart, obfuscation, or destructive behavior was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The README tells users how to obtain and store a Plex token but does not clearly label it as a sensitive credential; this is a real documentation gap, not evidence of malicious behavior.\n[SQP-2] expected: The setup code saves the Plex token in plaintext JSON without chmod or keychain storage; local credential storage is expected for the CLI, but users should secure that file.",
+          "guidance": "Install only if you want an agent to control Plex playback and read Plex library metadata. Treat the Plex token like a password: do not share it, commit it, or paste it into logs, and restrict access to ~/.plexctl/config.json. If you require strictly local-only behavior, review the MyPlex cloud discovery fallback before use.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward Plex control tool, but users should protect the Plex token it stores locally.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974604696,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: plex-ctl\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills bundle for 'plexctl' is benign. The code (`plexctl.py`) is a straightforward CLI wrapper around the `plexapi` library, designed to control a user's local Plex Media Server. It stores configuration (Plex URL and token) locally in `~/.plexctl/config.json` and connects directly to the specified Plex server. There is no evidence of data exfiltration, malicious execution (e.g., `curl|bash`, `eval`), persistence mechanisms, or obfuscation. The `SKILL.md` and `README.md` provide clear, well-defined instructions for the agent and user, explicitly stating local-only operation and no external data sharing. The use of `argparse` in `plexctl.py` mitigates direct shell injection risks into the Python script itself, assuming the agent correctly passes user input as quoted arguments.",
+          "checkedAt": 1779163900753,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "b5462099062e891da08ee879edb71cbbdf70bb35b1acf4ff671a6eed0f5394ea",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b5462099062e891da08ee879edb71cbbdf70bb35b1acf4ff671a6eed0f5394ea"
+    },
+    "slug": "plex-ctl",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

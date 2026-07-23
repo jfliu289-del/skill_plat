@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.5972,
+    "domains": [
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C07",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C06:token:code",
+      "category:C07:phrase:code review",
+      "category:C07:token:review",
+      "category:C10:token:llm",
+      "category:C10:token:model",
+      "cross-tag:code-review",
+      "cross-tag:review",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "review"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "45d1653c22388d0b5c00f94ad804a08c45d7fda30a768c87898e6764d8c0b4c1",
+    "content_hash": "cd8ca797be3b665116da90f2216eddf3f90fbd6d14e1dd7a6aad0fc1568334c5",
+    "precanonical_content_hash": "6070cf1db3fea0b4c1d947054510d8e68fd40deb9233dd5e91da8afb34696474",
+    "skill_md_hash": "9cf9b4bc7e1ee7167a689fdd3556a2be895f34630d2772cd6c3d5f769e2ce088",
+    "version_metadata_sha256": "351f8dd9c92f8027e11f036f33e0e494a24d9f5d3bb03d691a7ac60675e09315"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/ishaan-jaff/skills/litellm",
+    "claim_id": "08c6bafdffa62a8c7b33bf4422d7b59763ac8589a46d4e99cf3e967cda6b4c63",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "litellm",
+        "url": "https://clawskills.sh/skills/ishaan-jaff-litellm"
+      }
+    ],
+    "owner_handle": "ishaan-jaff",
+    "owner_id": "s17c4wbqm91vbvp2c05305sc35885mnr",
+    "published_at": 1770488429166,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658967034,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658967034,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is cross-provider LLM access, and the documentation plus helper script directly implement that by sending user-provided prompts and optional system messages through LiteLLM.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions cover examples, model routing, proxy setup, and an explicit CLI helper; they do not request hidden actions, autonomy, prompt overrides, broad local collection, or unrelated data access.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Setup recommends `pip install litellm`, which is normal for this purpose but unpinned; managed environments may want dependency pinning and package-source controls.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The script reads expected LiteLLM and provider environment variables such as `LITELLM_API_BASE`, `LITELLM_API_KEY`, `OPENAI_API_KEY`, and `ANTHROPIC_API_KEY`; this is proportionate for an LLM client but should be understood as enabling outbound provider or proxy calls.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts show no persistence, privilege escalation, credential-store scraping, destructive file operations, obfuscation, or automatic background execution.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: Environment-sourced API keys and outbound model calls are expected for a LiteLLM integration; the permission disclosure could be clearer, but the behavior is not hidden or purpose-mismatched.\n[SQP-2] expected: The skill description and examples involve third-party LLM providers and proxy routing, so off-platform prompt transmission is inherent to the advertised function; stronger privacy wording would improve user understanding.\n[SQP-2] expected: The proxy example uses an API base and key placeholder consistent with LiteLLM proxy use; users should choose trusted proxies and avoid hardcoded real secrets, but the example is not deceptive.\n[SQP-2] expected: The helper script sends the explicitly supplied prompt and optional system message via `litellm.completion`; this is user-directed network behavior aligned with the skill purpose.",
+          "guidance": "Install only if you are comfortable with prompts, system messages, and related request/response data being sent to the selected LLM provider or LiteLLM proxy. Avoid sending secrets, regulated data, or confidential code unless the provider or proxy is approved for that data, protect API keys, monitor usage costs, and consider pinning the LiteLLM dependency in controlled environments.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward LiteLLM helper for user-directed calls to external LLM providers or a proxy, with no evidence of hidden or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658922596,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 29,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: litellm\nVersion: 1.0.0\n\nThe skill bundle is benign. The `SKILL.md` provides clear instructions and examples for using the LiteLLM library to interact with various LLMs, without any prompt injection attempts or malicious directives for the agent. The `scripts/llm_call.py` script is a straightforward command-line utility that wraps the LiteLLM library, reading standard environment variables (`LITELLM_API_BASE`, `LITELLM_API_KEY`) for configuration, which is expected behavior for an LLM client. There is no evidence of data exfiltration, malicious execution, persistence, or obfuscation.",
+          "checkedAt": 1779162090088,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a6605f28a80adf167e9e0f408987127c64fb8738e122fc1ca49bb9c7b0b9d235",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a6605f28a80adf167e9e0f408987127c64fb8738e122fc1ca49bb9c7b0b9d235"
+    },
+    "slug": "litellm",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

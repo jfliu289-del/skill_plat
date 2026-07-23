@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [],
+    "confidence": 0.31,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C17",
+    "reasons": [
+      "category:C02:token:write",
+      "category:C03:token:document",
+      "category:C11:token:team",
+      "category:C17:token:notes",
+      "category:C17:token:personal",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C03",
+      "C11"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "3591301dad1407dd90bcf22ea6d01b686a31e169db99e0b969c9b8d65341e305",
+    "content_hash": "dcf6ddc0297d935ab4434d00eeef7e5cc63468af08f858711e66f3fbaa396b4b",
+    "precanonical_content_hash": "6a9a6fd82552885c5d0d258e08ecc6f9dcc49963ae0c8e119df66ec872a8e7f5",
+    "skill_md_hash": "4de97c9b3e28e3fda7b940e4b95308537a7877a52fd681b659b0da14b554f542",
+    "version_metadata_sha256": "5e2df87e441f39a3a21b055ee725cc5f8a68165e5f5341c03e50c979d22be06b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/nulltea/skills/hackmd",
+    "claim_id": "61888f97af1ce9f53dff161875fef8918868934747b87f6b57396718ff91d269",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "hackmd",
+        "url": "https://clawskills.sh/skills/nulltea-hackmd"
+      }
+    ],
+    "owner_handle": "nulltea",
+    "owner_id": "s1724y0mpbwhfckb4ntctr5725885wyv",
+    "published_at": 1770581675788,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783657874935,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783657874935,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The advertised purpose is to read, create, update, delete, and track HackMD notes, including team notes; the documented commands and helper script match that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Instructions are straightforward command examples, but the quick reference includes delete commands without prominent confirmation or backup guidance.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation requires Node and a global npm install of @hackmd/hackmd-cli; this is coherent for a CLI integration but depends on an external unpinned package.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The HMD_API_ACCESS_TOKEN requirement is proportionate for managing HackMD content, and the helper uses authenticated HTTPS requests to the HackMD API by default.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The tracking helper stores note IDs, titles, and timestamps in ./.hackmd/tracked-notes.json as disclosed; it does not store the API token or note content and does not install background persistence.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The concern is valid as safety guidance because delete examples lack warnings, but deletion is explicitly advertised, user-directed, and requires note IDs or team paths.\n[RA2] expected: Local tracking state is expected for change detection and is disclosed; it stores metadata that could be sensitive in shared repositories or synced folders.",
+          "guidance": "Install only if you are comfortable giving an agent access to your HackMD account. Protect HMD_API_ACCESS_TOKEN, verify note IDs and team paths before updates or deletes, export important notes before deletion, and avoid committing ./.hackmd/tracked-notes.json if note metadata is private.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill clearly provides HackMD note management and change tracking, with sensitive write/delete powers that users should supervise.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783657842333,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 22,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: hackmd\nVersion: 1.0.0\n\nThe skill is designed to interact with HackMD documents, supporting operations like reading, creating, updating, and tracking changes. The `SKILL.md` provides clear instructions for installing the `hackmd-cli` and using the provided `hackmd-track.js` script. The `hackmd-track.js` script manages local state in `./.hackmd/tracked-notes.json` and makes authenticated HTTPS requests to the official HackMD API using the `HMD_API_ACCESS_TOKEN` environment variable. Although `child_process` is imported, no command execution functions (like `execSync`) are actually used in `scripts/hackmd-track.js`, mitigating a significant risk. There is no evidence of data exfiltration, malicious execution, persistence, prompt injection against the agent, or obfuscation. All observed behaviors are aligned with the stated purpose.",
+          "checkedAt": 1779162296858,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "c224ccaab49efd18f89ede929cfba79a0f2f496cb786bd348bc918f7c21ce2af",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/c224ccaab49efd18f89ede929cfba79a0f2f496cb786bd348bc918f7c21ce2af"
+    },
+    "slug": "hackmd",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

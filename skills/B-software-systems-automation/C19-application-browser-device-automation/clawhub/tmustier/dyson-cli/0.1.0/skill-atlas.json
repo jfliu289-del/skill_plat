@@ -1,0 +1,124 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C19",
+    "reasons": [
+      "category:C19:token:device"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "df9dfc2f7e3fc8edfb2846fb8975ba46c6b3ce603699f5e2253eda5c0c728ca8",
+    "content_hash": "4a0b1c427352e4fa2fbacba75d571b809f45ef05f26446c3c9eddcfbb8ef966a",
+    "precanonical_content_hash": "6de6eb5a540b1843d8ab9f7fedd4d0babecd53c12d61bfd24fdc61c01203e670",
+    "skill_md_hash": "b3f9cb8b85c030d097bd46ba9f42474a5b257610f6c0ae2b25e1cd705171823b",
+    "version_metadata_sha256": "5d4f964266d8d3bc13d2d652259ffaecc76fe4a003faf72b9ef3a0fd8e0f772b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tmustier/skills/dyson-cli",
+    "claim_id": "cbf1649f36b232b0afdd835dea49aac4355480c0e0a4061929a77a3dc1d430f8",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "dyson-cli",
+        "url": "https://clawskills.sh/skills/tmustier-dyson-cli"
+      },
+      {
+        "index_path": "categories/smart-home-and-iot.md",
+        "label": "dyson-cli",
+        "url": "https://clawskills.sh/skills/tmustier-dyson-cli"
+      }
+    ],
+    "owner_handle": "tmustier",
+    "owner_id": "s174k5yz2x5asjth4cc7c5h5tx8854ym",
+    "published_at": 1767700977982,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783651528841,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783651528841,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "Cloud login, device inventory retrieval, local MQTT control, and heater/fan commands all fit the stated Dyson device-control purpose, including setup work needed to obtain local device credentials.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions appear operationally scoped to Dyson setup and device commands; heater actions have real-world safety impact and should be user-directed, but there is no evidence of hidden or unrelated instructions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No artifact evidence indicates deceptive installation, unexpected package behavior, obfuscation, or automatic execution outside the normal CLI/skill flow.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to Dyson cloud during setup and local-network MQTT/device reachability checks are proportionate for this purpose, though users should understand this is not purely offline/local during initial setup.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persisting Dyson-derived device credentials, serials, IPs, and related metadata in ~/.dyson/config.json is sensitive but purpose-aligned and apparently disclosed; lack of strong protection guidance is a user-risk note rather than evidence of malicious behavior.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Local read/write and config persistence are expected for a CLI that stores Dyson device credentials, but the user should verify file permissions and whether the skill metadata clearly declares this storage.\n[TP4] expected: Cloud authentication and credential retrieval are broader than routine local MQTT control, but they are coherent with initial Dyson device setup and not evidence of deception when disclosed.\n[SQP-2] expected: README-described Dyson account authentication and ~/.dyson/config.json storage are sensitive; this is expected for the setup flow, but the skill should ideally warn users that the saved values can control devices.\n[SQP-2] expected: Commands that enable heat or change target temperature match the device-control purpose, but users should treat them as physical safety actions and avoid unattended use.\n[SQP-2] expected: The code path saving cloud-derived device credentials is purpose-aligned; the remaining concern is protection and consent clarity, not exfiltration or hidden persistence.",
+          "guidance": "Install only if you are comfortable giving the tool Dyson account setup access and storing device-control credentials locally under ~/.dyson/config.json. Protect that file with restrictive permissions, remove it if you stop using the skill, and use heater commands only when you can supervise the device.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill appears to do what it claims: set up and control Dyson devices, with understandable but sensitive local credential storage and heater-control risks.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783651496603,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 60,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: dyson-cli\nVersion: 0.1.0\n\nThe OpenClaw AgentSkills bundle for 'dyson-cli' is classified as benign. The skill's purpose is clearly defined as controlling Dyson devices locally via MQTT, and all code and instructions align with this purpose. While Dyson account credentials are stored locally in `~/.dyson/config.json` after initial setup, this is a necessary and common practice for CLI tools requiring persistent authentication, and there is no evidence of exfiltration of these or any other sensitive data. All network communication initiated by the skill, beyond the initial Dyson cloud login for credential fetching, is confined to the local network to interact with Dyson devices. The `SKILL.md` instructions do not contain any prompt injection attempts to subvert the agent or perform unauthorized actions, and embedded shell commands are benign, processing the skill's own output.",
+          "checkedAt": 1779159650429,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "b62915134cf759b4a772a9d652f2aac4982308835c0e90354e9b594330e3b2b7",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b62915134cf759b4a772a9d652f2aac4982308835c0e90354e9b594330e3b2b7"
+    },
+    "slug": "dyson-cli",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,194 @@
+{
+  "classification": {
+    "artifacts": [
+      "document",
+      "paper"
+    ],
+    "audiences": [
+      "researcher",
+      "security-professional"
+    ],
+    "confidence": 0.5568,
+    "domains": [
+      "science",
+      "security"
+    ],
+    "needs_review": false,
+    "primary_category": "C15",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:research",
+      "category:C02:token:write",
+      "category:C09:token:threat",
+      "category:C15:phrase:research paper",
+      "category:C15:token:paper",
+      "category:C17:token:knowledge",
+      "category:C17:token:notes",
+      "cross-tag:academic-research",
+      "cross-tag:agent-management",
+      "cross-tag:security",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C01",
+      "C02",
+      "C09",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "research",
+      "secure",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "365fe4cecf9065f9bc5afbc37f61f6593acc624bdbb7806cbc0a719b9722b6df",
+    "content_hash": "c53a3adb897f5b3f5f9f9321a89de012bebc57e5e8c8f6bca70384ec5dc90657",
+    "precanonical_content_hash": "ddb733a27e2a0a72f278c10a0d13908825e87e55f692bf15fa2d67010a758a66",
+    "skill_md_hash": "d65c9c660a8dc9ebf19e6cfc9585c152e3be4e6e1bcac369988fa61a489683ac",
+    "version_metadata_sha256": "7dbac3dd1f3f2eccb57b1a8f983e79891e4a20fd1293f9ac0bb0a4748232e195"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/ilkhamfy/skills/research-paper-kb",
+    "claim_id": "6291fe97267f5873b9494634c020151c39a8274a2d0f2d25c4aa69639b875e13",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "research-paper-kb",
+        "url": "https://clawskills.sh/skills/ilkhamfy-research-paper-kb"
+      }
+    ],
+    "owner_handle": "ilkhamfy",
+    "owner_id": "s177q7q195t1t0qcqsrf8amp9d885ns7",
+    "published_at": 1771520232541,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779165498280,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": [
+            {
+              "categoryId": "ASI02",
+              "categoryLabel": "Tool Misuse and Exploitation",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The skill instructs the agent to make external metadata requests and modify workspace files. This is disclosed and central to the paper-KB purpose, but users should know it can create or update files.",
+                "path": "SKILL.md",
+                "snippet": "Also fetch the Semantic Scholar API...; Check if `PAPERS.md` exists in the workspace root. If not, create it... **Append** (never overwrite)"
+              },
+              "recommendation": "Use it for papers you are comfortable looking up through arXiv/Semantic Scholar, and review PAPERS.md changes before sharing or committing the workspace.",
+              "riskBucket": "abnormal_behavior_control",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "Paper identifiers or titles may be sent to academic metadata services, and PAPERS.md may be created or changed in the workspace."
+            },
+            {
+              "categoryId": "ASI06",
+              "categoryLabel": "Memory and Context Poisoning",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The skill intentionally stores and reuses persistent context across sessions. This is aligned with the stated purpose, but persistent notes can reveal research interests and influence future agent behavior.",
+                "path": "SKILL.md",
+                "snippet": "Updates `MEMORY.md` with a pointer so future sessions know the KB exists; ... infer from prior PAPERS.md entries and MEMORY.md"
+              },
+              "recommendation": "Periodically review PAPERS.md and MEMORY.md for accuracy, remove sensitive or outdated entries, and avoid storing confidential research context unless the workspace is trusted.",
+              "riskBucket": "sensitive_data_protection",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "Saved paper summaries, threat levels, and research-overlap notes may persist and be reused in later sessions."
+            }
+          ],
+          "checkedAt": 1777614695932,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose and behavior align: it fetches paper metadata, summarizes research relevance, and saves entries to a paper knowledge base. The noteworthy aspect is intentional persistent memory about the user's research interests.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The triggers are tied to user paper-related requests, and the file operations are scoped to PAPERS.md and MEMORY.md. It may infer overlap from prior PAPERS.md and MEMORY.md content, so saved context can shape future outputs.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No install spec, required binaries, credentials, or code files are present; this is an instruction-only skill.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "External requests to arXiv and Semantic Scholar and workspace file writes are expected for the skill's purpose and are disclosed in the instructions.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill explicitly persists research-paper context across sessions by writing PAPERS.md and updating MEMORY.md; this is purpose-aligned but should be visible to the user.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": null,
+          "guidance": "This appears safe for its stated purpose. Before installing, be comfortable with it sending paper titles/IDs to arXiv or Semantic Scholar and with it creating persistent PAPERS.md and MEMORY.md files in the workspace. Review those files occasionally, especially if your research topics are confidential.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": {
+            "abnormal_behavior_control": {
+              "highestSeverity": "low",
+              "status": "note",
+              "summary": "The skill uses disclosed, purpose-aligned external lookups and scoped workspace file writes."
+            },
+            "permission_boundary": {
+              "highestSeverity": "none",
+              "status": "none",
+              "summary": "No credentials, tokens, privileged account access, or elevated permissions are requested in the provided artifacts."
+            },
+            "sensitive_data_protection": {
+              "highestSeverity": "low",
+              "status": "note",
+              "summary": "The skill creates persistent research-memory files that may reveal the user's paper interests and influence future sessions."
+            }
+          },
+          "status": "clean",
+          "summary": "The skill is a coherent research-paper note-taking helper, with the main thing to notice being that it creates persistent workspace memory about papers.",
+          "verdict": "benign"
+        },
+        "skillspector": null,
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: research-paper-kb\nVersion: 1.0.0\n\nThe `research-paper-kb` skill is designed to create a persistent knowledge base for research papers. It makes legitimate network requests to academic APIs (arXiv, Semantic Scholar, DOI.org) to fetch paper metadata and abstracts. It performs file write operations to `PAPERS.md` and `MEMORY.md` within the workspace, which is consistent with its stated purpose of maintaining a cross-session knowledge base. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts designed to subvert the agent or harm the user. The skill explicitly states it 'Never modifies: SOUL.md, USER.md, AGENTS.md, TOOLS.md, or any project files', reinforcing its benign intent.",
+          "checkedAt": 1779165498280,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "365fe4cecf9065f9bc5afbc37f61f6593acc624bdbb7806cbc0a719b9722b6df",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/365fe4cecf9065f9bc5afbc37f61f6593acc624bdbb7806cbc0a719b9722b6df"
+    },
+    "slug": "research-paper-kb",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

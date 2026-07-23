@@ -1,0 +1,159 @@
+{
+  "classification": {
+    "artifacts": [
+      "configuration",
+      "data",
+      "report",
+      "website"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "creative",
+      "infrastructure"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:chart",
+      "category:C04:token:data",
+      "category:C05:token:image",
+      "category:C07:token:quality",
+      "category:C19:token:browser",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:data-analysis",
+      "cross-tag:deployment",
+      "cross-tag:design",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00",
+      "C05",
+      "C07",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "automate",
+      "deploy",
+      "design",
+      "manage",
+      "operate"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "cb2901420895fcd43f34128ad5bb6a75f41637194b682de23fb507885c662b94",
+    "content_hash": "c751771b10c6680bb7a5f9941f8bfa5353cdc0b69c24e6eae082e3fe5c23474b",
+    "precanonical_content_hash": "f3d1607df8b8c70f06e2e4e8999f9e3400b53fe5c443b6b788a890ea7d05743e",
+    "skill_md_hash": "4200c6be0a3ae1c83fbdff1faf971dc61d970740ee165092ef9a86e9cb670fa1",
+    "version_metadata_sha256": "6e16c65c9acc41238c9d8d6faf116ff2bcbd70ad7b1282f15d3c91a6e06d4ea6"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/dannyshmueli/skills/chart-image",
+    "claim_id": "46fc6b928cc3071978b6faf1d5573b929ab7a20d0b41917b848f17c38332d459",
+    "index_entries": [
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "chart-image",
+        "url": "https://clawskills.sh/skills/dannyshmueli-chart-image"
+      }
+    ],
+    "owner_handle": "dannyshmueli",
+    "owner_id": "s1785jgb7evz92f88z9psd4m7583gmsv",
+    "published_at": 1775716192948,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783659049475,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783659049475,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe a local Node.js chart renderer using Vega-Lite and Sharp, and the code matches that purpose by parsing data/specs and writing PNG or SVG output.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The CLI supports raw Vega-Lite specs, CSV/spec files, stdin, and arbitrary output paths; this is disclosed, and CAPABILITY.md tells agents to use structured argv calls and keep file/path parameters runtime-controlled.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Setup is a normal npm install in the scripts directory with a package-lock file and integrity-pinned resolved packages, though package.json still uses caret dependency ranges.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime access is limited to local chart input reads and output writes; no credential access, shell execution, network calls, or background indexing were evidenced in the skill script.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to generated chart files, including the documented temp output directory, and there is no daemon, scheduler, privilege escalation, or self-modifying behavior.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SDI-1] expected: Raw Vega-Lite spec rendering is an advanced chart feature documented by the skill; it broadens input surface, but it is not hidden and should be limited to trusted specs.\n[SDI-2] expected: Reading CSV/spec files is expected for a local chart renderer; the artifact guidance appropriately says these paths should be trusted/runtime-controlled rather than free-form user text.\n[SQP-3] unexpected: The Israel-time dark-mode tip is a poor locale assumption, but it is documentation-only for an explicit --dark flag and the code does not infer or transmit timezone data.\n[SC1] expected: Using Vega is expected for this purpose; the caret range is dependency hygiene risk, partly mitigated by the included lockfile.\n[SC1] expected: Using Vega-Lite is expected for this purpose; the caret range is dependency hygiene risk, partly mitigated by the included lockfile.\n[SC1] expected: Using Sharp is expected for PNG rendering; the caret range is dependency hygiene risk, partly mitigated by the included lockfile.\n[SC4] unexpected: The scanner's exact vega==5.30.0 claim is not supported by the package-lock, which resolves vega 5.33.1; dependency advisories should still be monitored and patched deliberately.",
+          "guidance": "Reasonable to install for normal chart generation. Keep --spec, --csv-file, and --output paths controlled by the runtime, avoid rendering untrusted raw Vega-Lite specs, and keep the npm dependencies updated with the lockfile.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill makes chart image files locally and does not show hidden data theft, destructive behavior, or unauthorized persistence.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658978467,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 59,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: chart-image\nVersion: 2.6.35\n\nThe 'chart-image' skill is a legitimate utility for generating chart images using Vega-Lite and Sharp. The core logic in 'scripts/chart.mjs' handles data parsing and image rendering without any evidence of malicious intent, such as data exfiltration, backdoors, or unauthorized execution. The documentation in 'CAPABILITY.md' and 'SKILL.md' provides clear, safe instructions for the AI agent, specifically warning against shell injection vulnerabilities by recommending structured argument passing instead of string interpolation. No suspicious dependencies or obfuscated code were detected.",
+          "checkedAt": 1779160338478,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a1ed982c9d10f4afbf639ab2f9e89b6c772e0d8cd4f134622d451352e9fc6bba",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a1ed982c9d10f4afbf639ab2f9e89b6c772e0d8cd4f134622d451352e9fc6bba"
+    },
+    "slug": "chart-image",
+    "source_type": "clawhub",
+    "version": "2.6.35"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

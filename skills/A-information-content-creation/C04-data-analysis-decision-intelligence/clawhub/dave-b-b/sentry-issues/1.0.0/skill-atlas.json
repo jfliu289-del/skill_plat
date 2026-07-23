@@ -1,0 +1,136 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:analyze",
+      "category:C07:token:review",
+      "category:C11:token:project",
+      "cross-tag:data-analysis",
+      "cross-tag:review"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C07",
+      "C11"
+    ],
+    "stages": [
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "review"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "fd88cf5561bbc9f949f9c58c714295da45270f64c4cd012e30afd82b21a81137",
+    "content_hash": "445b282bd4c47c651fe2f1c290f35ed7ac22fb44833932898af715c436f942b6",
+    "precanonical_content_hash": "01475d5aa0cf2cb4e3b3be34a67779f21ba8be1c34dfe638b7bf1ccda94d6dbb",
+    "skill_md_hash": "ba38e19826f1c2b94d39560e3bde0e1264f4d60a68befb542f5653c5e0a65ccc",
+    "version_metadata_sha256": "6dc139b24fb8b0c667675e4a2d7b45eaa5535b5e1545433e71fc8f5b0bfbb9d4"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/dave-b-b/skills/sentry-issues",
+    "claim_id": "fb6b0a4f92f559acfb929debd05078a5ea9dc3e820b0d84a8a368f25851dee39",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "sentry-issues",
+        "url": "https://clawskills.sh/skills/dave-b-b-sentry-issues"
+      }
+    ],
+    "owner_handle": "dave-b-b",
+    "owner_id": "s176mnp74qste4k5cf5t7az0eh884xa9",
+    "published_at": 1771541612194,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779939987137,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779939987137,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill fetches Sentry issues and optional event details, which matches its stated purpose; stack traces, tags, metadata, and browser or OS details are sensitive but expected for Sentry debugging.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are user-directed command examples for listing issues, filtering issues, and fetching a selected issue; no hidden automation, mutation, deletion, or public posting behavior is present.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The package contains SKILL.md and one standard-library Python script with no installer or dependency setup; metadata does not separately declare network or secret access, but the documentation clearly describes SENTRY_AUTH_TOKEN, --token, and Sentry API use.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Outbound requests to https://sentry.io/api/0 and use of a Sentry token are proportionate to the integration, but users should treat returned event details as potentially private production data.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, credential storage, privilege escalation, background workers, local file indexing, or write APIs were found; the documented token scopes are read-oriented.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The token and Sentry network access are real, but they are disclosed in the skill instructions and necessary for reading Sentry issues; the missing explicit permission metadata is a transparency note, not evidence of hidden behavior.\n[SQP-2] expected: The documentation accurately states that --details includes stack traces, event context, tags, metadata, and browser or OS information; it would benefit from a stronger privacy warning, but the behavior is user-selected and purpose-aligned.\n[SQP-2] expected: The script prints detailed Sentry event data to stdout only when detailed output is requested; this can expose sensitive diagnostics in logs or transcripts, but there is no unrelated destination, automatic exfiltration, or destructive behavior.",
+          "guidance": "Install only if you are comfortable giving the agent read access to the Sentry projects covered by the token. Use a least-privilege token, prefer SENTRY_AUTH_TOKEN over passing tokens on the command line, and use --details only when authorized to view and share raw error-event data.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a read-only Sentry issue helper that behaves as described, though detailed output can expose sensitive diagnostic data.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779939951515,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: sentry-issues\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills bundle for Sentry issue tracking is benign. The `SKILL.md` provides clear, legitimate instructions for fetching Sentry issues, and the `scripts/sentry_issues.py` script correctly implements this functionality. It uses standard Python libraries to interact with the official Sentry API (`https://sentry.io/api/0`), retrieves API tokens securely from environment variables or arguments, and properly URL-encodes user-provided query parameters, preventing injection vulnerabilities. There is no evidence of data exfiltration, unauthorized command execution, persistence mechanisms, or prompt injection attempts against the agent.",
+          "checkedAt": 1779165569216,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "d72fb6d7655f00d756cf56d7de6becb3f79d20e05dbbd54bb4b8c7998e266f1c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d72fb6d7655f00d756cf56d7de6becb3f79d20e05dbbd54bb4b8c7998e266f1c"
+    },
+    "slug": "sentry-issues",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

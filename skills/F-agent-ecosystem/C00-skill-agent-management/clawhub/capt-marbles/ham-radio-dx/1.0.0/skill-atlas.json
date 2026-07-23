@@ -1,0 +1,129 @@
+{
+  "classification": {
+    "artifacts": [
+      "website"
+    ],
+    "audiences": [],
+    "confidence": 0.0,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "cross-tag:browser-automation",
+      "cross-tag:planning",
+      "fallback:C00"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate",
+      "plan"
+    ],
+    "tasks": [
+      "automate",
+      "plan"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "50c74b3359cecdf7798947b4c5b0ebd0275632a8b792d8b7c656e76c908f967f",
+    "content_hash": "d3ac744cf2eb0b8acb2af890590d15acb0e49306768f688ba1205d979d0f6b7a",
+    "precanonical_content_hash": "d3468a04529e76448c38dfa33fd4c1b5da2d9242c00e00c2f331703d7210e931",
+    "skill_md_hash": "f8031f73d1ab57a173297cba30336197922e57e16b95979aa61e12451e183cce",
+    "version_metadata_sha256": "a8bba43400551cfd38d981c3c4a693f69bd3c2dafa69b017d8cafef5e5c20ef3"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/capt-marbles/skills/ham-radio-dx",
+    "claim_id": "3d3b3e0ee81866f5a9c96949fa1a7ec36c795cedf48a2eb6317f3b05182ef095",
+    "index_entries": [
+      {
+        "index_path": "categories/media-and-streaming.md",
+        "label": "ham-radio-dx",
+        "url": "https://clawskills.sh/skills/capt-marbles-ham-radio-dx"
+      }
+    ],
+    "owner_handle": "capt-marbles",
+    "owner_id": "s17df5gcc5vdxfpm151a90vxyd8852kb",
+    "published_at": 1769541126087,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783651912335,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783651912335,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The Python script connects only to listed DX cluster telnet hosts, sends the selected or default callsign, requests DX spots, parses them, and prints watch or digest output consistent with the stated ham-radio monitoring purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The example prompts are broad and could trigger network access in an agent environment, but they remain tied to DX monitoring and do not request unrelated actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "README references a setup script under scripts/ that is not present in the reviewed artifact; users should not run an outside replacement as if it were reviewed.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Outbound telnet connections and optional callsign disclosure are expected for DX cluster monitoring, but the user should understand that third-party cluster servers may receive the callsign.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to disclosed user-added cron examples and local state/log files; there is no artifact evidence of hidden startup installation, privilege escalation, credential access, destructive behavior, or exfiltration.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The documented writes to /tmp logs, a home-directory digest, and /tmp/dx-monitor-state.json support the advertised monitoring and digest features, though the paths should be clearer and preferably configurable.\n[SQP-1] expected: The example phrases are somewhat generic, but they are about DX cluster checks and do not show hidden or unrelated activation; user confirmation before network use would improve clarity.\n[SQP-2] expected: Network access to public DX cluster nodes and sending a callsign are core to the skill, but the quick start should more explicitly warn that a callsign can identify the operator to those third-party services.\n[RA2] expected: The /tmp state file is a real hardening weakness on shared systems, but it stores duplicate-filtering state for the advertised feature and is not evidence of deception, exfiltration, or unsafe privilege use.\n[VirusTotal code_insight] expected: The telemetry flags network sockets, file writes, and cron examples; these are disclosed and purpose-aligned in the artifacts, and VirusTotal engine stats show no malicious detections.",
+          "guidance": "Install this only if you want your agent to contact external DX cluster servers. Use a callsign only if you are comfortable sending it to the selected cluster. Add the cron entries only for intentional background monitoring, review or delete the /tmp logs and state file as needed, and do not run the missing setup script from any outside source unless you inspect it separately.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it advertises: it connects to ham radio DX cluster servers, optionally sends a callsign, and supports user-configured local logging and cron monitoring.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783651875678,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 45,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ham-radio-dx\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to several high-risk capabilities, despite their plausible alignment with the stated purpose. The `dx-monitor.py` script directly initiates network connections via TCP sockets (telnet) to external DX cluster nodes (e.g., dx.ea7jxh.eu:7373). It also performs file system write operations to `/tmp/dx-monitor-state.json` for state management. Furthermore, the `SKILL.md` file explicitly instructs the AI agent to set up cron jobs for persistence, enabling automated execution and logging to `/tmp/dx-alerts.log` and `~/dx-digest-YYYY-MM-DD.txt`. While these actions are presented as features for automated monitoring, they represent significant system interaction and persistence mechanisms without clear malicious intent, thus warranting a 'suspicious' classification.",
+          "checkedAt": 1779160141991,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "bd62efd87e37894ce1e2834231529e1f69a0066c8982d66e41d802c3a8d1ba95",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/bd62efd87e37894ce1e2834231529e1f69a0066c8982d66e41d802c3a8d1ba95"
+    },
+    "slug": "ham-radio-dx",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

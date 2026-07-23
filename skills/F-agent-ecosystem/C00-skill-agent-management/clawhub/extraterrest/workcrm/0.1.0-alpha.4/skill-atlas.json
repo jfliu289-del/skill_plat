@@ -1,0 +1,147 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.1417,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:implementation",
+      "category:C11:token:product",
+      "category:C14:token:crm",
+      "category:C17:token:notes",
+      "category:C19:token:crm",
+      "cross-tag:agent-management",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C11",
+      "C14",
+      "C17",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "ad1e4eacb57356520245f8ffc5f1fcfd7f9f89e8d957b8ca8360384e0c51ab3b",
+    "content_hash": "44408baaec3f66d09dbc06aafc645302aa7714807520cb469b137f70a977c04c",
+    "skill_md_hash": "177912e4fe962884ce7a309b417aca32289548eea1122d6bfec8457b07ba7e55",
+    "version_metadata_sha256": "cfacd366bced1e7e63631ca46b0ea5c4e21114ffa33420c63104eba8b7a4fedb"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/extraterrest/skills/workcrm",
+    "claim_id": "8316a48c933ff79e80e8a9369c598eabf9cbb53d1f1e7d01ea46e50aae76e9ef",
+    "index_entries": [
+      {
+        "index_path": "categories/marketing-and-sales.md",
+        "label": "workcrm",
+        "url": "https://clawskills.sh/skills/extraterrest-workcrm"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "extraterrest",
+    "owner_id": "s17c17a2e992dacvjcg11mx3fh83t99j",
+    "published_at": 1771078950872,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974678119,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974678119,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The capabilities match the stated local-first CRM purpose: parse CRM-like messages, create drafts, and write activities/tasks only after the explicit confirmation token.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are clear and limited to CRM chat triggers plus a confirmation/rejection flow; documentation has a minor DB-path/CLI consistency issue, but this does not create a security concern.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package has no declared runtime dependencies, no install hooks, and no executable installer behavior beyond normal Python packaging metadata.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Environment access is proportionate: local SQLite storage, schema migration files, and optional caller-supplied DB paths; no network, subprocess, credential, or broad filesystem access was found.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill persists CRM records and retained drafts locally for auditability, which is disclosed and purpose-aligned; it does not add background workers, privilege escalation, or automatic high-impact actions.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SkillSpector-no-issues] expected: SkillSpector reported no issues, and artifact review did not find prompt injection, hidden authority, or suspicious execution paths.\n[VirusTotal-clean] expected: VirusTotal telemetry was clean and consistent with the local SQLite-only implementation.\n[static-artifact-review] expected: Manual inspection found parameterized SQLite operations, local schema migrations, no network calls, no subprocess use, and a disclosed confirmation gate before commits.",
+          "guidance": "Before installing, understand that WorkCRM will keep local CRM data and draft history on disk. This is expected for the skill, but users should choose the DB location deliberately if the records include sensitive business or personal information.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "WorkCRM is a local-only CRM skill that stores drafts and confirmed CRM records in SQLite with no evidence of network access, hidden execution, or unsafe persistence.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974636838,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: workcrm\nVersion: 0.1.0-alpha.4\n\nThe OpenClaw WorkCRM skill is classified as benign. The code adheres to good security practices, utilizing parameterized queries in `workcrm/db/repo.py` to prevent SQL injection. Input parsing in `workcrm/parse.py` uses regular expressions to extract data, which is then passed as values to the database, not as executable code. The `SKILL.md` documentation provides clear usage instructions and does not contain any malicious prompt injection attempts. File system access is limited to its own SQLite database, located in a standard OpenClaw data directory, and there are no network calls or attempts to access sensitive system files. The explicit confirmation gate (`记`/`不记`) adds a layer of security by requiring user approval before committing actions.",
+          "checkedAt": 1779163895403,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "84117c94df902762ec5d6fb5875571cd6f7f85a9c7eb7458a7c28e64883a2172",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/84117c94df902762ec5d6fb5875571cd6f7f85a9c7eb7458a7c28e64883a2172"
+    },
+    "slug": "workcrm",
+    "source_type": "clawhub",
+    "version": "0.1.0-alpha.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,135 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional"
+    ],
+    "confidence": 0.475,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:data",
+      "cross-tag:data-analysis",
+      "cross-tag:design"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "809c79e0a525253468a4ed2cb67e683e04fb40d4a49199052923e9dbfad52157",
+    "content_hash": "e08ddab436603c74eff798d32bdfdf92ad0240f60e45eb3bccd35ad2cfe4d7ee",
+    "precanonical_content_hash": "a20e12c4a69db928cd9534c09021c7a585663e4af2565b138c978ae9f49af5c0",
+    "skill_md_hash": "826be23c585368edaa5fc08d97bb958a15bfd1be5338ae93c4d6fde32a7d9f1c",
+    "version_metadata_sha256": "61bd0971b5cbe31f630256a4a8fec8bc9484137220377f14bdde155dbb49ac61"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/qrost/skills/wind-site",
+    "claim_id": "405252a693d813fa16ee1e6f372865ef2be2b8bb33ef798d3d95ad17c14dda42",
+    "index_entries": [
+      {
+        "index_path": "categories/cli-utilities.md",
+        "label": "wind-site",
+        "url": "https://clawskills.sh/skills/qrost-wind-site"
+      }
+    ],
+    "owner_handle": "qrost",
+    "owner_id": "s178f7h4jz91qjvzt9q84pekv5885hjd",
+    "published_at": 1771637907785,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943627856,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943627856,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, metadata, instructions, and scripts align around fetching wind data and generating a wind rose image; the only network destinations found are Open-Meteo forecast/archive endpoints used for that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill tells the agent to run the bundled scripts directly without confirmation for matching wind requests. That is disclosed and purpose-limited, but agents should still pass numeric arguments safely and use the documented allowed output paths.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is manual via pip install -r requirements.txt, with no install-time script or hidden setup behavior found. The dependencies are common but unpinned, so reproducibility depends on the user's Python environment.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill transmits latitude, longitude, dates, and wind-data query parameters to Open-Meteo. That external data flow is expected for live weather lookup and is disclosed in the artifact, but location coordinates may be sensitive.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No credential access, privilege escalation, background workers, or durable persistence were found. File writing is limited to the requested wind-rose PNG output path.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP1] expected: Outbound HTTP is real, but it is to fixed Open-Meteo weather endpoints and is core to the advertised functionality; the missing manifest-level network permission is a documentation/permission-model caveat rather than evidence of hidden behavior.\n[SDI-3] expected: The requests in wind_info.py and wind_rose.py send coordinates and date/query parameters to Open-Meteo for wind data retrieval, matching the skill description.\n[SQP-3] expected: The no-confirmation instruction increases reliance on the agent to construct commands safely, but the artifact scopes execution to the bundled scripts and typed latitude/longitude/day arguments for user-requested wind tasks.\n[E1] expected: Coordinates leave the local environment, which is privacy-relevant, but this is expected for a live weather API skill and is disclosed by the Open-Meteo references.\n[SC1] expected: requirements.txt uses unpinned requests, numpy, and matplotlib dependencies. This is a supply-chain hygiene issue, not purpose-mismatched or deceptive behavior.\n[SC4] expected: The vulnerable-dependency warnings are based on unconstrained package names and depend on the resolved versions; users should install current patched versions in an isolated environment.\n[VirusTotal code_insight] expected: The reported shell-injection/arbitrary-write concern is speculative from the instruction to use shell:exec. The reviewed scripts do not build shell commands, do not invoke subprocesses, and parse latitude/longitude/days as typed argparse values; the output path should still be constrained by the agent as the skill instructs.",
+          "guidance": "Install only if you are comfortable with local Python script execution, installing the listed Python packages, and sharing queried site coordinates with Open-Meteo. Use a virtual environment or pinned dependency set if supply-chain reproducibility matters, and avoid using sensitive private coordinates unless third-party weather API disclosure is acceptable.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This appears to be a straightforward wind/weather helper that runs local Python scripts and sends requested coordinates to Open-Meteo, with privacy and dependency caveats but no evidence of hidden or harmful behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943573111,
+          "issueCount": 10,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: wind-site\nVersion: 1.1.1\n\nThe skill is classified as suspicious due to a significant prompt injection vulnerability against the OpenClaw agent. The `SKILL.md` file explicitly instructs the agent to use `shell:exec` to run Python scripts (`scripts/wind_info.py`, `scripts/wind_rose.py`) with parameters directly derived from user input. If the agent does not robustly sanitize or quote these user-provided parameters when constructing the shell command, a malicious user could inject arbitrary shell commands, potentially leading to Remote Code Execution (RCE). Additionally, `scripts/wind_rose.py` writes to an `output_path` directly from arguments, which, if combined with prompt injection, could lead to arbitrary file writes, despite `SKILL.md` attempting to guide the agent to use 'allowed paths'.",
+          "checkedAt": 1779165803406,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "142a94da58254a04579cf5f8d3fda500c73a9e934741bdc904fb734012c8d8cb",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/142a94da58254a04579cf5f8d3fda500c73a9e934741bdc904fb734012c8d8cb"
+    },
+    "slug": "wind-site",
+    "source_type": "clawhub",
+    "version": "1.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

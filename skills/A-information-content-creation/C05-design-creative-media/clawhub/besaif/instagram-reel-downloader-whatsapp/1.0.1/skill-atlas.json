@@ -1,0 +1,131 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:video",
+      "category:C17:token:notes",
+      "cross-tag:design"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "c0191150a18261a37425d6e4f33113d5c7e7f9518e4fda6375bf39d33dc963a2",
+    "content_hash": "ffa634469df5414c362e2681305d7bfb3d240449fb27a3effe439301da3ce576",
+    "precanonical_content_hash": "7a5ebc7c7ac7373a32571d5000ec60fc6a1843b93e5b4ecdbdf82f3d6db8b27a",
+    "skill_md_hash": "9904c90660d4b509994c9db9b0709cc2a9adc6a416d1a57606a358937b9824b6",
+    "version_metadata_sha256": "2e4fb4266d7b4d96fc7758990c44acc6d55d459d2706a6436b9691dd273a6f91"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/besaif/skills/instagram-reel-downloader-whatsapp",
+    "claim_id": "f2bc77a82aa46bab090a55f8f1c4f7ae6ed4317f7b92e03e5d4faed507f0f318",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "instagram-reel-downloader-whatsapp",
+        "url": "https://clawskills.sh/skills/besaif-instagram-reel-downloader-whatsapp"
+      }
+    ],
+    "owner_handle": "besaif",
+    "owner_id": "s17bvv99b315xq7s957xdz2fg1884gb1",
+    "published_at": 1771481640864,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779933013325,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779933013325,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The third-party downloader workflow, local video save, and WhatsApp handoff are coherent with the stated purpose and disclosed in the skill text.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The script accepts only Instagram reel/reels URLs, automates one named downloader site, validates that the result looks like a video, and prints a local media path.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "No package install script is included; it expects Node.js, playwright-core, and a Chromium-compatible browser already present, so runtime dependency trust matters.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to sssinstagram.com and media URLs plus local writes to a downloads directory are proportionate for a downloader; BROWSER_EXECUTABLE_PATH and REEL_DOWNLOAD_DIR are documented overrides.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no background persistence, credential use, or privileged account access; saved media is local, and cleanup is optional and scoped to reel-named video files in the configured directory.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[suspicious.env_credential_access] expected: The environment variables are used for workspace, download directory, and browser path configuration; the artifacts do not show credentials or environment values being sent over the network.\n[SQP-2] expected: The Instagram Reel URL is submitted to sssinstagram.com, but that third-party service is explicitly named in the description and instructions.\n[SQP-2] expected: Downloaded media is written to disk as expected for a downloader, and the skill documents the output location and an optional cleanup script.\n[VirusTotal code_insight] expected: The browser path override, output directory override, and --no-sandbox browser launch are hardening considerations, but they are not evidence of deception or malicious behavior in this coherent downloader workflow.",
+          "guidance": "Install only if you are comfortable sharing Reel URLs with sssinstagram.com and running local browser automation. Keep BROWSER_EXECUTABLE_PATH pointed at a trusted browser binary, avoid broad or sensitive REEL_DOWNLOAD_DIR locations, and clean up downloaded videos when no longer needed.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill does what it says: it downloads a user-provided Instagram Reel through sssinstagram.com and saves a local video file for WhatsApp.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779932970643,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 19,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: instagram-reel-downloader-whatsapp\nVersion: 1.0.1\n\nThe skill is suspicious due to a significant vulnerability related to the `BROWSER_EXECUTABLE_PATH` environment variable, which, if controlled by an attacker, could lead to Remote Code Execution (RCE) by launching an arbitrary executable instead of a browser (found in `SKILL.md` and `scripts/download_via_sss.mjs`). Additionally, the `REEL_DOWNLOAD_DIR` environment variable allows an attacker to specify an arbitrary download location, and the `download_via_sss.mjs` script runs Chromium with `--no-sandbox`, reducing its security posture. While these are vulnerabilities that could be exploited, there is no clear evidence of intentional malicious behavior by the skill itself.",
+          "checkedAt": 1779165372516,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "8a30330e250bb4208a439cc5343e7d923ced6ab38735320021d278d489522505",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8a30330e250bb4208a439cc5343e7d923ced6ab38735320021d278d489522505"
+    },
+    "slug": "instagram-reel-downloader-whatsapp",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

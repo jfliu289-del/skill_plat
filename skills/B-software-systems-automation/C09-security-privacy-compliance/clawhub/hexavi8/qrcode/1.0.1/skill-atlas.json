@@ -1,0 +1,152 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.25,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C06:token:code",
+      "category:C07:token:quality",
+      "category:C08:token:github",
+      "category:C09:token:secure",
+      "category:C09:token:security",
+      "category:C10:token:embedding",
+      "category:C13:token:business",
+      "cross-tag:agent-management",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C06",
+      "C07",
+      "C08",
+      "C10",
+      "C13"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "2bcf431d68b2a0c7bc44b07011cf51a3099a2fb3cb33a2065b1d480394ad5191",
+    "content_hash": "8d4fce98976b2adc06a05378f4053c2d1fe171ff18794833e74923b19eb30e0c",
+    "skill_md_hash": "2487a643e76746440c29fd765b94b4e5354e6308a24076052f793d35d901204e",
+    "version_metadata_sha256": "6b1ee5ea27646a1014cc31839af30478c38e136e790f4901e58b2f28814c1838"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/hexavi8/skills/qrcode",
+    "claim_id": "144c7409d6566d6458ba0734b0e122ce315dd1dbc6cb1f483a4e7fd0394bded4",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "qrcode",
+        "url": "https://clawskills.sh/skills/hexavi8-qrcode"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "hexavi8",
+    "owner_id": "s17bccdx9ndspa7v05zjqag21s83m3zd",
+    "published_at": 1771787286059,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779949683127,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779949683127,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts implement styled QR generation from user-provided text or URLs and output SVG/PNG/JPG files; no unrelated data collection, external calls, or hidden capabilities were found.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill tells the agent to display generated files, which is normal for an image-generation skill but can expose QR payloads containing WiFi passwords, contact records, private URLs, or tokens.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses npm dependencies qrcode and sharp, which are proportionate for QR matrix generation and image conversion; the package has no install-time lifecycle scripts in the artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The script constrains output to the workspace root, validates extensions and sizes, and avoids symlink overwrites; default filenames include a sanitized prefix of the QR text, which may reveal part of sensitive payloads.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background workers, privilege escalation, credential-store access, network exfiltration, or persistence beyond generated image files were evidenced.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The privacy concern is valid user guidance because the examples include WiFi and vCard payloads and the skill displays outputs, but this is purpose-aligned and based on user-supplied content rather than hidden access or exfiltration.\n[staticScan] expected: Static scan reported no findings, consistent with the inspected files.\n[VirusTotal] expected: VirusTotal telemetry was clean and supports the artifact review, but was not used as the sole basis for the verdict.",
+          "guidance": "Install this for ordinary QR-code generation if you are comfortable running its npm dependencies. Avoid encoding real secrets unless you intend the QR image, chat preview, workspace file, and possibly the default filename to be visible; use an explicit neutral output filename for private payloads.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a QR-code generator whose behavior matches its purpose, with the main caution that generated QR images and filenames can reveal sensitive data if users encode it.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779949655052,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: qrcode\nVersion: 1.0.1\n\nThe OpenClaw AgentSkills 'qrcode' skill is classified as benign. Both the `SKILL.md` instructions and the `scripts/generate.mjs` code demonstrate a strong focus on security. The `SKILL.md` provides clear, non-malicious instructions for the agent, focusing on displaying output and user interaction, with no evidence of prompt injection. The `scripts/generate.mjs` script implements robust security measures, including comprehensive input validation, strict path traversal protection (forcing all outputs to the workspace root via `sanitizeOutputPath`), symlink attack prevention (`safeWriteFile`), resource limits to prevent DoS, and proper XML escaping to prevent SVG injection. There is no evidence of data exfiltration, unauthorized execution, or persistence mechanisms.",
+          "checkedAt": 1779166258048,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "8052f30d4a911465b21f298df1493cbbf94e3407be3b6da4c6dc1f806cbba467",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8052f30d4a911465b21f298df1493cbbf94e3407be3b6da4c6dc1f806cbba467"
+    },
+    "slug": "qrcode",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,153 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C09:token:audit",
+      "category:C09:token:compliance",
+      "category:C10:token:model",
+      "category:C12:token:management",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C01",
+      "C06",
+      "C10",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a107b21bbc8ab5d3ecc0e2e38fe7b5711215879dce35764a0f356e44e6fc3822",
+    "content_hash": "ab3eb9d6d215158c21b33be0ad9abe3840f3236311cc6de03e09568720cf4be0",
+    "precanonical_content_hash": "1d5df79ba20483eaf60b8e2e83865d60054143da2df74d133ff25400f9ac2269",
+    "skill_md_hash": "c36d0255d359d1e8ea724fd0326e13d6b9ee06d18075c948f99131876727e3e0",
+    "version_metadata_sha256": "162ab1911048ba072bd37df45bbdd89a9ab40cc54c9a83ac7237bc07b95a9248"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/bivex/skills/snipeit-skill",
+    "claim_id": "ab4ab92d3209b2cf01d62f195e64333af0a09f71719cd0dd9c04bcacfb9177b2",
+    "index_entries": [
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "snipeit-skill",
+        "url": "https://clawskills.sh/skills/bivex-snipeit-skill"
+      }
+    ],
+    "owner_handle": "bivex",
+    "owner_id": "s17cqbtses1324y0fqmwtcq5hd884k12",
+    "published_at": 1771809257300,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779950849578,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779950849578,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented curl/jq helper and Snipe-IT endpoints match the stated asset-management purpose, including assets, users, licenses, locations, reports, and related records.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill openly documents read and write operations, including create, update, delete, checkout/checkin, restore, audit, and user deactivation workflows; these are purpose-aligned but high-impact enough to require user confirmation in practice.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains only SKILL.md with shell snippets and no installer, executable payload, package install step, obfuscation, or automatic startup behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Using SNIPEIT_URL and SNIPEIT_API_TOKEN is proportionate for this integration, but users should replace the sample URL with their approved Snipe-IT instance and use a least-privilege token because settings, backups, user, and inventory data may be sensitive.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background agents, local credential-store access, privilege escalation, or network destinations beyond the configured Snipe-IT base URL were found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The state-changing examples are real and potentially impactful, but they are plainly documented and central to managing Snipe-IT records rather than hidden or unrelated behavior.\n[SQP-2] expected: The bearer-token requirement is expected for Snipe-IT API access; the artifact would benefit from stronger secret-handling and token-scope guidance, but it does not show token exfiltration or unauthorized endpoints.",
+          "guidance": "Install only if you want an agent to operate against your Snipe-IT instance. Set SNIPEIT_URL to your own approved server, use a dedicated least-privilege API token, avoid exposing the token in logs or chat, and manually confirm delete, checkout/checkin, restore, backup download, user-management, and other write or sensitive actions before execution.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Snipe-IT API helper, but it can modify or delete inventory and user records if given a powerful token.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779950814819,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: snipeit-skill\nVersion: 1.0.0\n\nThe skill bundle provides a legitimate interface to the Snipe-IT REST API, using `curl` and `jq` to perform CRUD operations on asset management data. All network calls are directed to the user-configured `SNIPEIT_URL` using the `SNIPEIT_API_TOKEN`. The `snipe()` helper function properly quotes arguments, mitigating direct shell injection risks. There is no evidence of intentional data exfiltration to unauthorized endpoints, persistence mechanisms, obfuscation, or malicious prompt injection instructions against the AI agent within the `SKILL.md` file. The skill's functionality aligns with its stated purpose.",
+          "checkedAt": 1779166377980,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "d924868bebf6549c3c4e44a926d24a7f7d633c99a7185364819ea4f3e4bc7501",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d924868bebf6549c3c4e44a926d24a7f7d633c99a7185364819ea4f3e4bc7501"
+    },
+    "slug": "snipeit-skill",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

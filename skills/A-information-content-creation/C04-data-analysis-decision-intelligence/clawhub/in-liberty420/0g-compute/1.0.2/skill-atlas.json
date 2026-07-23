@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.31,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:data",
+      "category:C04:token:metrics",
+      "category:C10:token:ai",
+      "category:C13:token:operations",
+      "category:C18:token:health",
+      "cross-tag:data-analysis"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10",
+      "C13",
+      "C18"
+    ],
+    "stages": [
+      "validate"
+    ],
+    "tasks": [
+      "analyze"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ad54bf65a076e47b21e7603b1c74985f8f5d1fc683ab8a6a7b168c5fb02b7613",
+    "content_hash": "b059354880bce3124eeaf3711e05aacfa073bfc387ebec47119df7d9a5c90c87",
+    "precanonical_content_hash": "a753415195aac4c7ff0282fb18cb91da1a56ee0678f68d0be0ddebd38f6da8e7",
+    "skill_md_hash": "83f9dc891c9c22479cd18a6601b86b5f97faad31beb12632802bc8175ed1605a",
+    "version_metadata_sha256": "6377845793bcfc583bfc7d760c4dc6cc02727f2b3aad47ca9038dae5d28dba24"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/in-liberty420/skills/0g-compute",
+    "claim_id": "6570969303ecde44fb189753da9186d74d1cbbe41c3b6ef41214213842bf4f31",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "0g-compute",
+        "url": "https://clawskills.sh/skills/in-liberty420-0g-compute"
+      },
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "0g-compute",
+        "url": "https://clawskills.sh/skills/in-liberty420-0g-compute"
+      }
+    ],
+    "owner_handle": "in-liberty420",
+    "owner_id": "s176n4kv0pw8vp90eq38vqqras8855ka",
+    "published_at": 1772802035744,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971145598,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971145598,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill’s stated purpose matches its artifacts: install/use the 0G Compute CLI, discover and verify providers, manage balances, compare prices, and configure OpenClaw providers. Wallet and fund operations are sensitive but disclosed and central to the workflow.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are mostly manual CLI examples with placeholders and explicit verification guidance. Balance-changing commands are documented, so users should approve amounts and provider addresses before running them.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill depends on a global npm install of @0glabs/0g-serving-broker to provide 0g-compute-cli. This is disclosed and purpose-aligned, though users must trust that external package.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The included price comparison script calls public CoinGecko and OpenRouter endpoints and runs the local 0G CLI; this fits the stated comparison purpose. Configured 0G providers will receive model prompts through their external endpoints.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The docs disclose that the CLI stores the wallet private key in ~/.0g-compute-cli/config.json and that provider API secrets are placed in OpenClaw configuration. No hidden startup, background worker, destructive automation, or unrelated persistence appears in the artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The CLI reference shows a provider API secret example and tells users to use it as an OpenClaw apiKey. That credential use is expected for this provider integration, but the docs should more explicitly say to redact it from logs, chats, screenshots, and commits.\n[SQP-2] expected: The OpenClaw config guide instructs users to save the provider secret in openclaw.json. This is part of the intended setup, but users should treat that file as sensitive and avoid committing or sharing it.",
+          "guidance": "Install only if you are comfortable trusting the external 0G CLI package. Use a dedicated low-balance wallet, protect ~/.0g-compute-cli/config.json and openclaw.json, do not share provider API secrets, verify providers before use, and manually confirm any deposit, transfer, retrieve, or refund command.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent 0G Compute integration, but users should handle wallet keys, on-chain funds, and provider API secrets carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971104640,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: 0g-compute\nVersion: 1.0.2\n\nThe 0g-compute skill bundle provides a legitimate interface for interacting with the 0G Compute Network, a decentralized AI inference marketplace. It includes tools for model discovery, TEE (Trusted Execution Environment) hardware attestation verification, wallet management, and a price comparison script (scripts/0g-price-compare.sh) that fetches data from CoinGecko and OpenRouter. The skill demonstrates security awareness by advising against passing private keys via command-line arguments and emphasizing the importance of TEE verification for provider integrity. No evidence of data exfiltration, malicious execution, or harmful prompt injection was found.",
+          "checkedAt": 1779164588099,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "6f8b38b801b3dfc9efbee239bf70a155d1381ef5072765da7893eba2d1cf1ccb",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6f8b38b801b3dfc9efbee239bf70a155d1381ef5072765da7893eba2d1cf1ccb"
+    },
+    "slug": "0g-compute",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

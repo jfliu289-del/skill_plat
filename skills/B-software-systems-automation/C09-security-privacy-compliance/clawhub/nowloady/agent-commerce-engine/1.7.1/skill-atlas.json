@@ -1,0 +1,160 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.3583,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C06:token:backend",
+      "category:C09:token:privacy",
+      "category:C09:token:secure",
+      "category:C09:token:security",
+      "category:C11:token:product",
+      "category:C12:token:management",
+      "category:C12:token:strategy",
+      "category:C13:token:operations",
+      "cross-tag:agent-management",
+      "cross-tag:debugging",
+      "cross-tag:planning",
+      "cross-tag:security",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00",
+      "C06",
+      "C11",
+      "C12",
+      "C13"
+    ],
+    "stages": [
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "debug",
+      "manage",
+      "plan",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4a4cbad7d3dea0b6b77ebb3112356c0d7eb381a235df8463dfe7b8a0f7cd6c31",
+    "content_hash": "94508d6c676b0119f4dd321687b3fb5c449ad9a7fafa4c77044702c017355676",
+    "precanonical_content_hash": "d340c28f7ff3c68eda71ebcef3c318b166769e83d322022b62bb2c0bf26e6a3a",
+    "skill_md_hash": "f07b866852a819c24c48af62470566cdd735a76f26b56ae1a5cafaf21d65ecef",
+    "version_metadata_sha256": "2897014fcf8024e776e62e6326b50fe2a936446359bbcc6983ce17f980b996b0"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/nowloady/skills/agent-commerce-engine",
+    "claim_id": "1587f7ae0cd6dc276cda3f05e34559f4dfd5697ead18668a346d0743f33f183b",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "agent-commerce-engine",
+        "url": "https://clawskills.sh/skills/nowloady-agent-commerce-engine"
+      },
+      {
+        "index_path": "categories/cli-utilities.md",
+        "label": "agent-commerce-engine",
+        "url": "https://clawskills.sh/skills/nowloady-agent-commerce-engine"
+      }
+    ],
+    "owner_handle": "nowloady",
+    "owner_id": "s170qrwxgcfkzaeyqee42jsysx83q132",
+    "published_at": 1773430813198,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783650232524,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783650232524,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented capabilities fit the stated commerce purpose: product search, cart changes, profile access/update, order creation, order history, promotions, and brand information are all described in the artifacts.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill gives broad operational guidance for agents to run the Python CLI against arbitrary compatible stores, but the store URL is user supplied and the sensitive actions are exposed as explicit commands.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation only declares Python and the requests dependency; there is no post-install execution or hidden package-management behavior in the artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access and local file use are proportionate for a commerce client; remote HTTP is blocked except localhost/127.0.0.1, and production endpoints must use HTTPS.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The client persistently stores per-domain API tokens and visitor IDs under ~/.openclaw/credentials/agent-commerce-engine/; token files are chmod 0600 and logout deletes stored credentials, but users should understand this session material remains until removed.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill does use network, shell execution of its CLI, optional environment variables, and local credential files, but these are disclosed in metadata, README, and SKILL.md and are core to the commerce workflow.\n[TP4] expected: The additional order, promotion, brand, contact, profile, and local-store management features are broader than the short description, but they are explicitly listed in the main instructions and CLI command summary.\n[SQP-2] expected: The server specification mentions password and token headers, which is sensitive for implementers, but the actual client sends passwords only to auth endpoints in JSON bodies, stores tokens rather than passwords, and enforces HTTPS for non-local endpoints.\n[RA2] expected: Persistent token and visitor-ID storage increases local-account exposure if the machine or user account is compromised, but it is disclosed, scoped per store domain, and tied to normal login/session reuse for this type of tool.",
+          "guidance": "Install only if you are comfortable letting an agent manage shopping carts, profile details, order creation, and locally stored store tokens. Prefer trusted HTTPS store URLs, avoid giving passwords unless you intend to log in or register, use logout when finished, and review compatible store backends before sending personal shipping or account data.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed e-commerce client that stores tokens locally and talks to user-selected store APIs, with no artifact evidence of hidden exfiltration or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783650178505,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 59,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: agent-commerce-engine\nVersion: 1.7.1\n\nThe agent-commerce-engine is a well-structured and legitimate tool designed to facilitate e-commerce interactions for AI agents. It implements standard commerce features such as product search, cart management, and order creation while adhering to security best practices, including HTTPS enforcement for remote endpoints and token-based authentication to avoid persisting raw passwords. Credential management is handled locally within the user's home directory (~/.openclaw/credentials/agent-commerce-engine/) with appropriate file permissions (0600), and the code in scripts/commerce.py and scripts/lib/commerce_client.py shows no signs of malicious behavior, data exfiltration, or unauthorized execution.",
+          "checkedAt": 1779160024983,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "16acfac453b06e1c3cb4601370b94f66740d52933f0bfd4960073ca85252d39c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/16acfac453b06e1c3cb4601370b94f66740d52933f0bfd4960073ca85252d39c"
+    },
+    "slug": "agent-commerce-engine",
+    "source_type": "clawhub",
+    "version": "1.7.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

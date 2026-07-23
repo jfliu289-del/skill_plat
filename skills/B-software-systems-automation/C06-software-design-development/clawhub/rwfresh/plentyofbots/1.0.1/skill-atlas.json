@@ -1,0 +1,151 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:lookup",
+      "category:C06:token:api",
+      "category:C06:token:implementation",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C12:token:management",
+      "cross-tag:agent-management",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00",
+      "C01",
+      "C09",
+      "C10",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a62a613bb6e97d8ef7c2d1acc06aa00ea22bdbecb2090d87d0fb30e3db0a3942",
+    "content_hash": "b56e46e35c2680bffdd25a733e8dcfa5db1d6a62e4f9ef34557146806e91eda8",
+    "precanonical_content_hash": "2bf205497eb6319d11fdcfb2543868edef7ed02fa983c4aec2259ed244366f16",
+    "skill_md_hash": "11d3d0cc8c579f43d64143ff53380413e6067b36430ef0bef144940dbdeaf953",
+    "version_metadata_sha256": "6cc81cb6a30cc30e72645bd68fb493c82c58a799ee87e14752e76c5211bdb630"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/rwfresh/skills/plentyofbots",
+    "claim_id": "c86f35827ade9780a25ee3fc4cffc78d80e8268a2a0f163ac31fc06100b44498",
+    "index_entries": [
+      {
+        "index_path": "categories/pdf-and-documents.md",
+        "label": "plentyofbots",
+        "url": "https://clawskills.sh/skills/rwfresh-plentyofbots"
+      }
+    ],
+    "owner_handle": "rwfresh",
+    "owner_id": "s17fjb339vnw24fx73yxj27xz588514a",
+    "published_at": 1771024346322,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974330462,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974330462,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose matches the artifacts: generate Ed25519 keys, register a bot, authenticate by challenge-response, and use Plenty of Bots APIs for discovery and messaging.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Most actions are user-directed and the interactive flow asks for approval before registration; the self-registration section overstates what register.js does because the script requires a public key and does not itself save credentials.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains visible Node helper scripts and a single locked @noble/ed25519 dependency, with no install hooks, obfuscation, or hidden startup behavior found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network calls default to https://plentyofbots.ai/api and are consistent with the skill purpose, though the scripts expose an --api-base override that users should not point at untrusted services.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill stores bot private keys and cached tokens in local JSON credential files with owner-only permissions; this is disclosed and purpose-aligned, but still sensitive.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Outbound network access is central to registration, authentication, discovery, and messaging, and the Plenty of Bots API base is disclosed in the skill text and metadata.\n[TP4] expected: Key generation, credential storage, and token refresh are sensitive but are described in the onboarding and credential sections rather than hidden or unrelated to the dating-platform integration.\n[SQP-2] expected: Local plaintext credentials, command-line private-key input, and stdout keypair output are risky handling patterns, but they are visible parts of the onboarding flow and not evidence of exfiltration.\n[PE3] expected: A predictable credentials path can expose the bot account if the local file is compromised, but the behavior is documented and scoped to this bot-authentication use case.\n[suspicious.exposed_secret_literal] unexpected: The static finding appears to be a false positive: the referenced auth.js line assigns a CLI-provided private key variable, not a hardcoded secret.",
+          "guidance": "Install this only if you want an agent to create or manage a Plenty of Bots bot. Treat the private key, claim URL, and bot token as account credentials: avoid passing the private key on the command line, keep the credential file private, review any autonomous heartbeat or messaging behavior before enabling it, and rotate or delete credentials if they are exposed or no longer needed.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill transparently helps register and authenticate a Plenty of Bots account, but users must protect the bot private key and token it stores locally.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974301052,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: plentyofbots\nVersion: 1.0.1\n\nThe OpenClaw AgentSkills skill bundle for 'plentyofbots' is classified as benign. The code and documentation are transparent, well-structured, and strictly adhere to the stated purpose of onboarding AI bots to the Plenty of Bots platform. Key security indicators include the proper use of Ed25519 challenge-response authentication, local generation and secure handling of private keys (never exfiltrated, only signatures sent to `plentyofbots.ai`), and secure storage of bot tokens in `~/.openclaw/credentials/` with `0o600` permissions. All network communications are directed exclusively to `https://plentyofbots.ai/api`. The `SKILL.md` instructions are clear, task-oriented, and do not contain any prompt injection attempts to subvert the agent's behavior or exfiltrate data. No evidence of malicious execution, persistence mechanisms, or obfuscation was found.",
+          "checkedAt": 1779163864792,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "dde00318facac231a9b080576230ccfb5274a1ddcc1efd743dec216f442f481f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/dde00318facac231a9b080576230ccfb5274a1ddcc1efd743dec216f442f481f"
+    },
+    "slug": "plentyofbots",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

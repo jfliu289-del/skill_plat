@@ -1,0 +1,127 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C10:token:llm",
+      "category:C17:token:knowledge",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "042831b1759b8094f44e57e58b767679018af7e5191383d0df304102f9bbea44",
+    "content_hash": "6dae3e30a94964ff2fb976435bb2587f02eca08a39c54ffb8d01b8c7a650267f",
+    "precanonical_content_hash": "ca6c1e0595ed1ff8f85a0bffd1c591b947dd643010579512165065beff3ce5e0",
+    "skill_md_hash": "31894a73d35df94d9613d505c0235847780de3689e64f541ac393b36c28c2128",
+    "version_metadata_sha256": "f411214feb235b236756ff3ff9810fd408d6e1676d40b975e039f4fffb37dac4"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/grivn/skills/mnemon",
+    "claim_id": "2c9aa88c12fdf8fbf8b77aee9a682895b7442bb45b71d6910307becd1627546f",
+    "index_entries": [
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "mnemon",
+        "url": "https://clawskills.sh/skills/grivn-mnemon"
+      }
+    ],
+    "owner_handle": "grivn",
+    "owner_id": "s175jbd4gc83taw4jywvemnjad867m1g",
+    "published_at": 1771708512878,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779948043896,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779948043896,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is persistent memory for LLM agents, and the documented commands are memory operations such as remember, recall, link, search, forget, garbage collection, and store management.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill tells agents to run mnemon through exec and includes a guardrail not to store secrets, passwords, or tokens; the remind, nudge, and compact behaviors are disclosed as memory-related agent hooks.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation depends on an external mnemon binary via Homebrew or go install @latest, so users must trust the upstream package, but this dependency is clearly declared in the skill metadata and instructions.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact does not request credentials, elevated privileges, unrelated local file access, or network data flows beyond installing and using the named memory CLI.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "Setup persistently installs an OpenClaw skill, bootstrap hook, plugin hooks, and prompt files under named paths; this is high-impact agent integration, but it is disclosed, purpose-aligned, configurable, and paired with an eject command.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal-code_insight] expected: The concern about a bootstrap hook and external binary is artifact-backed, but those behaviors are disclosed and directly fit a persistent-memory skill; VirusTotal is telemetry only and engine stats showed no detections.\n[SQP-2] expected: The setup command writes persistent OpenClaw integration files, but the artifact lists the skill, hook, plugin, and prompt paths and describes the hook purposes, so this is a user-awareness note rather than a Review-level concern.\n[SQP-2] expected: The eject command can remove installed integration components; deletion impact could be documented more explicitly, but uninstalling those components is expected for this integration.\n[StaticScan] expected: Static scan reported no suspicious patterns, consistent with the artifact being a single markdown skill file with disclosed setup and command guidance.",
+          "guidance": "Install only if you want persistent cross-session memory for OpenClaw. Before running setup, review or trust the upstream mnemon package, inspect the generated OpenClaw hook/plugin settings after installation, avoid saving secrets, and use forget, gc, store removal, or eject controls when you no longer want stored memories or installed hooks.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Mnemon is a disclosed persistent-memory integration, but users should understand it installs OpenClaw hooks that can affect future agent behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948022737,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 15,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: mnemon\nVersion: 0.1.2\n\nThe skill is classified as suspicious due to its deep integration with the OpenClaw agent's core functionality. Specifically, the `mnemon setup --target openclaw --yes` command, instructed in `SKILL.md`, installs an `agent:bootstrap` hook that 'injects behavioral guide' into the agent. This grants the `mnemon` binary the capability to directly modify the agent's internal prompts and operational logic, creating a significant prompt injection vector. While the skill's stated purpose is persistent memory, this level of control over the agent's behavior, combined with the reliance on external binaries via `brew` and `go install`, represents a high-risk capability that could be abused for malicious purposes if the `mnemon` binary itself were compromised or designed with harmful intent.",
+          "checkedAt": 1779166052308,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "c15e6c5f73ae434ba22fd7b5f49b9d22862aed850d8194da890cc0f09beda84d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/c15e6c5f73ae434ba22fd7b5f49b9d22862aed850d8194da890cc0f09beda84d"
+    },
+    "slug": "mnemon",
+    "source_type": "clawhub",
+    "version": "0.1.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,158 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document",
+      "website"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.1417,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C02:token:edit",
+      "category:C06:token:api",
+      "category:C17:token:knowledge",
+      "category:C19:token:automate",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:search",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C02",
+      "C06",
+      "C17",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "automate",
+      "build",
+      "manage",
+      "research",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1ab50eb48ac719f56e18d0531649de08ffd8bd9672fef12c08fa04d7ef6fcf8b",
+    "content_hash": "bceb6cfce2d19acf17d220c7996557bd84b7febd2aabb5694d5e518152aa87a1",
+    "precanonical_content_hash": "f3a4ef7a0793624379684d56d321e5e8289235131def56d033f06846654d122b",
+    "skill_md_hash": "fea92e3a626fae7babbb3013492ea636b11b057e687d878762bc1dbccb06466d",
+    "version_metadata_sha256": "f9d1d2e20dfec44526287edca745b73fe27488ffcefa478aeb1c2574aa31e212"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/xenofex7/skills/bookstack",
+    "claim_id": "cd4b85bd27c24330a414d87bdd093fcf3a3eca28db4b6552438137460bf391fc",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "bookstack",
+        "url": "https://clawskills.sh/skills/xenofex7-bookstack"
+      },
+      {
+        "index_path": "categories/notes-and-pkm.md",
+        "label": "bookstack",
+        "url": "https://clawskills.sh/skills/xenofex7-bookstack"
+      }
+    ],
+    "owner_handle": "xenofex7",
+    "owner_id": "s17e2474yecxkn45ydydcjwz09885b4w",
+    "published_at": 1770825967434,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783651142963,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783651142963,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose is BookStack knowledge-base management, and the implementation provides matching CRUD and search operations for books, chapters, pages, and shelves. Delete and update authority is impactful, but it is central to the stated purpose and disclosed in the command list.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands are explicit CLI actions using resource IDs; there is no hidden automatic mutation. The documentation could be safer by adding stronger warnings or confirmations for delete/update commands, but the current scope is understandable and user-directed.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact consists of SKILL.md metadata, _meta.json, and one Python script. No installer, dependency bootstrapper, background setup, obfuscation, or persistence hook is present.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "BOOKSTACK_URL, BOOKSTACK_TOKEN_ID, and BOOKSTACK_TOKEN_SECRET are required and declared for the API integration. The script uses them to send authenticated requests to the configured BookStack API endpoint.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No local persistence, background worker, credential harvesting, broad local indexing, or privilege escalation is present. Effective privilege depends on the BookStack API token the user supplies.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The skill requires environment credentials and outbound access to the configured BookStack URL, which is expected for a BookStack API client. The env vars are declared in the skill metadata, and the code sends them only as the BookStack Authorization header.\n[SQP-2] expected: Create, update, and delete commands can alter live wiki content, but those operations are explicitly documented and purpose-aligned. The lack of extra confirmation is an operational safety caution rather than evidence of hidden or malicious behavior.",
+          "guidance": "Install this only for BookStack instances you want an agent to access. Use a least-privilege API token, protect the token like a password, and review update or delete commands carefully before running them against important documentation.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward BookStack API skill that uses user-provided credentials to manage wiki content as advertised.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783651120835,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 22,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: bookstack\nVersion: 1.0.3\n\nThe skill provides a straightforward API integration for BookStack, allowing CRUD operations on books, chapters, pages, and shelves. It correctly retrieves API credentials (BOOKSTACK_URL, BOOKSTACK_TOKEN_ID, BOOKSTACK_TOKEN_SECRET) from environment variables, which is necessary for its stated purpose. The `SKILL.md` file contains standard documentation and usage examples without any prompt injection attempts or instructions for the agent to perform unauthorized actions. The `scripts/bookstack.py` code is a clean Python script using `urllib.request` for API calls, and it does not contain any evidence of data exfiltration (beyond using the provided BookStack credentials for authentication), malicious execution, persistence mechanisms, or obfuscation. While the skill can create/update content with user-provided HTML/Markdown, this is its intended function as an API client, and any misuse would stem from a prompt injection against the agent, not from malicious intent within the skill itself.",
+          "checkedAt": 1779159834652,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "6e95db836402a56ece3fdc7ae0c29d868040591833c9858643c442ccdc272fb2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6e95db836402a56ece3fdc7ae0c29d868040591833c9858643c442ccdc272fb2"
+    },
+    "slug": "bookstack",
+    "source_type": "clawhub",
+    "version": "1.0.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.2833,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C01:token:sources",
+      "category:C04:token:data",
+      "category:C04:token:statistics",
+      "category:C06:token:developer",
+      "category:C12:token:market",
+      "category:C17:token:personal",
+      "cross-tag:data-analysis",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C06",
+      "C12",
+      "C17"
+    ],
+    "stages": [
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8c17d1d163fd3e35ae7232354b07766917cbe825986c8b6e9ccf0ad198e2a35c",
+    "content_hash": "ba4f741ba6090ebd27f27a5db197cb80393da5b84292d0d5571194339808d5b2",
+    "precanonical_content_hash": "ec1b8bf93404fb7b12923d9ece86ad0ecaa9c8f5fe42275d3bfe262f4716c68a",
+    "skill_md_hash": "12a46062f8736efebaf4966ee3b7582bdca3062b6c17341a58884f123e66c41d",
+    "version_metadata_sha256": "2bd26158787baf5993d406db3b739577325559fcb00131ad4de0ed3cbac9ff81"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/mavremu/skills/emily-radix-assistant",
+    "claim_id": "80c461d0663e1492f524488804c7ad38b5b3aeae3fb333a07edff378fdf7c66d",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "emily-radix-assistant",
+        "url": "https://clawskills.sh/skills/mavremu-emily-radix-assistant"
+      }
+    ],
+    "owner_handle": "mavremu",
+    "owner_id": "s171fn79cqzfvj0dz9gfq43cxx884ce6",
+    "published_at": 1770293172028,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783656283306,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783656283306,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The wallet, token, staking, DeFi, market, news, and developer-resource capabilities match the stated Radix assistant purpose; wallet and .xrd lookups can expose public blockchain activity tied to a user query.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are limited to registering and calling the Emily MCP server through mcporter, then using documented Radix data tools; no prompt overrides, credential collection, filesystem indexing, or destructive commands were found.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill declares installation of the npm package mcporter, which is coherent with the MCP setup but carries normal external package supply-chain trust risk.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill contacts a third-party Emily endpoint and listed upstream data sources for blockchain and market queries, with no API keys, local secrets, privileged host access, or broad local data access requested.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The mcporter config add step creates a persistent local MCP server registration, but it is disclosed, purpose-aligned, and not paired with background execution or elevated privileges.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The privacy concern is valid user guidance because wallet addresses, RNS names, and related financial queries are sent to external services, but the behavior is aligned with the skill's Radix lookup purpose and the artifact lists its endpoint and data sources.\n[VirusTotal code_insight] expected: The npm install and third-party HTTPS endpoint are real, but they are disclosed and necessary for the remote MCP integration; VirusTotal reported no engine detections and the artifact shows no exfiltration, deception, or destructive behavior.\n[staticScan.clean] expected: Static scan found no suspicious bundled files or patterns, and the workspace artifact contains only the skill markdown plus scan metadata.",
+          "guidance": "Install only if you are comfortable installing mcporter from npm and sending Radix wallet addresses, .xrd domains, token identifiers, and market or DeFi queries to the Emily service and its listed data providers. Avoid querying addresses you consider personally sensitive unless you trust those services.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed Radix blockchain lookup assistant with ordinary third-party API and npm package trust considerations, but no evidence of hidden, destructive, or unrelated behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783656269574,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 9,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: \nDeveloper: \nVersion: \nDescription: OpenClaw Agent Skill\n\nThe skill instructs the OpenClaw agent to install the `mcporter` CLI tool via `npm` and then configure it to interact with an external API hosted at `https://www.ineedemily.com/api/mcp/mcp`. While the skill's stated purpose is legitimate (querying Radix DLT data), the reliance on installing an external package (`mcporter`) and making network calls to a specific third-party domain (`ineedemily.com`) introduces a supply chain risk, as the trustworthiness of these external components cannot be fully assessed from the skill bundle alone. There are no explicit instructions for malicious actions like data exfiltration or persistence within the `SKILL.md` itself, but these risky capabilities warrant a 'suspicious' classification.",
+          "checkedAt": 1779161501598,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "b7ae24adbe37745da019cd7745f0a01fe0d56482dff1705e718b87e037dde874",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b7ae24adbe37745da019cd7745f0a01fe0d56482dff1705e718b87e037dde874"
+    },
+    "slug": "emily-radix-assistant",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

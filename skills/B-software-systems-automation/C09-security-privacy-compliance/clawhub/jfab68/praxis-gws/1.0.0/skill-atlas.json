@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C09:token:secure",
+      "category:C09:token:security",
+      "category:C11:token:project",
+      "category:C12:token:management",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C01",
+      "C06",
+      "C11",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "97a37e75c2dbebfa482caeecb099c484b92de1dfcd21617cb28d8369c6417160",
+    "content_hash": "d172fe91dd5618b9480f7edc6da4a0ab8fd86e6c4c9c4d86f2d17383cff9ff17",
+    "precanonical_content_hash": "7f3063380325b45740ac80ec1909807deb0664265e55ab250d73183cde4a6b5e",
+    "skill_md_hash": "bb3e46d6ff5d008a77e460c1156a3322ceb3839d88cefd1e359ba614ce86df13",
+    "version_metadata_sha256": "981563de59ad76cb61cf1443d752531aa2515ab1a9063f60e99f411aad923266"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jfab68/skills/praxis-gws",
+    "claim_id": "745e5a0349612288a4185583c229b3ef34b0cb4e60fe5ea703511e598ccbf4d4",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "praxis-gws",
+        "url": "https://clawskills.sh/skills/jfab68-praxis-gws"
+      }
+    ],
+    "owner_handle": "jfab68",
+    "owner_id": "s1750r8c3kmkqzfmm5kjrndy9d884t3h",
+    "published_at": 1771745691018,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779948618533,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779948618533,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The advertised purpose is to manage Gmail, Calendar, and Drive, and the script implements matching actions: Gmail search/get/send/draft/label changes, Calendar list/create, and Drive search/metadata reads.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The commands are explicit user-invoked CLI actions, but sending mail, creating drafts, changing labels, and creating calendar events affect a live Google account and should require deliberate user confirmation when used through an agent.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Setup requires Node.js, a global googleapis package, and user-created Google OAuth credentials; there are no hidden install scripts, but the global dependency is unpinned.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The OAuth scopes are broad but disclosed and proportionate to the stated features: Gmail modification, full Calendar access, and read-only Drive access.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "OAuth credentials and tokens are stored under ~/.config/praxis-gws/ as documented; this is expected for a reusable local CLI, but those files are sensitive and the script does not set restrictive permissions itself.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The state-changing Gmail and Calendar examples are real account mutations, but they are plainly part of the documented Workspace-management purpose rather than hidden behavior.\n[SQP-2] expected: The unverified-app troubleshooting step is risky if users do not control the OAuth project, but the setup flow instructs users to create their own Google Cloud OAuth client, where this warning can occur for private desktop apps.\n[VirusTotal code_insight] expected: The broad Google API permissions and direct user input to Google APIs are confirmed, but they align with the tool's advertised CLI functions and no artifact evidence shows exfiltration, deception, or automatic abuse.\n[staticScan] expected: Static scan reported no suspicious patterns, consistent with the inspected script using local config files and official Google API calls.",
+          "guidance": "Install only if you trust the script and the googleapis dependency. Use a Google Cloud project you control, review the OAuth consent scopes carefully, protect ~/.config/praxis-gws/, and require explicit confirmation before any agent sends email, modifies labels, creates drafts, or creates calendar events.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Google Workspace CLI whose broad account access matches its stated Gmail, Calendar, and Drive purpose, though users should treat it as powerful.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948573505,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: praxis-gws\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to its broad API permissions and the direct passing of user/agent-controlled input to powerful Google Workspace APIs without explicit sanitization within the skill's code. While the `SKILL.md` documentation is benign and the `scripts/praxis-gws.js` code uses official libraries and performs legitimate file operations for configuration, the combination of `gmail.modify`, `calendar`, and `drive.readonly` scopes allows for significant actions (sending emails, managing calendars, reading drive files). This makes the skill a powerful tool that could be abused by a prompt-injected AI agent to perform harmful actions via API abuse, such as sending phishing emails or searching for sensitive documents, even though the skill itself does not exhibit malicious intent.",
+          "checkedAt": 1779166140169,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "5e467a98f417e99cac85fe289f4af66d4b01d704a1ca44db1591299ff898c70b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/5e467a98f417e99cac85fe289f4af66d4b01d704a1ca44db1591299ff898c70b"
+    },
+    "slug": "praxis-gws",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

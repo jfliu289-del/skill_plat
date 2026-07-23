@@ -1,0 +1,127 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C12:token:decision",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C12"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "5ded251c2e34d4717b7d65f906908e654972b71acfe00c71f28dd6c9963337ce",
+    "content_hash": "e57bc661f5ffa3e3f6cf93275f6671678546c15cc489d61d2d4089f5d0c9df31",
+    "precanonical_content_hash": "bbe438fe311564fd903f0415332801a8812c62067e6698db93c7d181ffd9b685",
+    "skill_md_hash": "1642a99d8dd154add0baf5cc6c2834b9f2b8cc82db5f353e0645bb961790ae07",
+    "version_metadata_sha256": "39a02332b5ca61303c46f779291859ba4dbcd2696c3f199113bb748ae136a160"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/kevinmcnamee/skills/surf-check",
+    "claim_id": "58d4280f9470ad5bada369e5fdabe31b3e759a887af0eab3e80308f463414bff",
+    "index_entries": [
+      {
+        "index_path": "categories/communication.md",
+        "label": "surf-check",
+        "url": "https://clawskills.sh/skills/kevinmcnamee-surf-check"
+      }
+    ],
+    "owner_handle": "kevinmcnamee",
+    "owner_id": "s17b48b3mg8nz5j15bf1x8yj0n885aef",
+    "published_at": 1771617510078,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943630008,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943630008,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The forecast fetching, alert filtering, NOAA buoy support, optional Surfline Premium access, and state tracking all fit the stated surf-checking and alerting purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The agent-facing SKILL.md is terse but points to running forecast checks; the README discloses Premium support, NOAA data, local state, and cookie reuse. I found no prompt-injection, unrelated file access, destructive behavior, or hidden outbound destinations.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is standard npm-based and uses Playwright for optional browser login. The dependency range is broad, but the committed lockfile resolves Playwright to 1.58.2, so the scanner's exact 1.40.0 claim is not supported by the artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Optional SURFLINE_EMAIL and SURFLINE_PASSWORD are declared in the skill metadata and used only by the Surfline login helper. The automated login logs the email address, so shared logs should be avoided.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill writes alert state to data/state.json and optional Surfline session cookies to data/session/cookies.json. Cookie persistence is sensitive but local, disclosed, user-directed, and purpose-aligned.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Network access to Surfline and NOAA and optional Surfline credentials are expected for surf forecast checks; metadata could be clearer about network destinations, but the sensitive configuration is declared.\n[TP4] expected: The broader behavior is not hidden in the full artifacts: README documents Premium support, NOAA buoy data, state tracking, and local session-cookie reuse.\n[SDI-2] expected: Reading Surfline credentials and writing Surfline cookies are part of the optional Premium login flow. This creates credential-adjacent local material, but I found no use outside Surfline or exfiltration path.\n[SDI-1] expected: The authenticated Surfline provider reuses saved cookies only for Surfline forecast endpoints and aligns with the documented Premium feature.\n[SQP-2] expected: The README discloses that cookies are saved locally and reused, but it should more explicitly warn that these cookies are bearer-like account material.\n[SC4] expected: Playwright is expected for browser login. The artifact's package-lock resolves Playwright to 1.58.2 rather than exactly 1.40.0, so the specific vulnerable-version claim is downgraded.",
+          "guidance": "Install only if you are comfortable with a Node tool that contacts Surfline and NOAA. If you use Surfline Premium login, treat data/session/cookies.json like a password, keep the skill directory private, avoid syncing it to shared backups or cloud folders, and delete the cookie file when you no longer need authenticated access.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill coherently checks surf forecasts, with optional Surfline Premium login and local session storage that users should treat carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943581545,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: surf-check\nVersion: 0.2.2\n\nThe OpenClaw AgentSkills skill bundle 'surf-check' is classified as benign. The skill's primary function is to fetch and evaluate surf forecasts from Surfline and NOAA. It handles user-provided Surfline credentials (email and password, declared as 'secret' in SKILL.md) and stores session cookies in its local `data/session/cookies.json` directory to access premium features. This sensitive data handling is explicitly declared and necessary for the skill's stated purpose, not for unauthorized exfiltration. All file system operations, such as managing `data/state.json` and `data/session/cookies.json`, are confined to the skill's own directories or user-specific configuration files (`~/.surf-check.json`). Network calls are exclusively to legitimate Surfline and NOAA endpoints. The `SKILL.md` and `README.md` provide clear, non-malicious instructions for the AI agent and users, with no evidence of prompt injection attempts to subvert agent behavior or access unrelated sensitive data. The use of Playwright is justified for automated login to Surfline.",
+          "checkedAt": 1779165755897,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "5ded251c2e34d4717b7d65f906908e654972b71acfe00c71f28dd6c9963337ce",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/5ded251c2e34d4717b7d65f906908e654972b71acfe00c71f28dd6c9963337ce"
+    },
+    "slug": "surf-check",
+    "source_type": "clawhub",
+    "version": "0.2.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

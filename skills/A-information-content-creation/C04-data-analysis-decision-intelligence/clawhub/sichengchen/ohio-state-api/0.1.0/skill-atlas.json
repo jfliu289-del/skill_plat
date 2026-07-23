@@ -1,0 +1,157 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "paper",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "educator",
+      "researcher",
+      "student"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "education",
+      "science",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C15:token:academic",
+      "category:C16:token:student",
+      "category:C18:token:food",
+      "cross-tag:academic-research",
+      "cross-tag:data-analysis",
+      "cross-tag:education",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C15",
+      "C16",
+      "C18"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "learn",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "research",
+      "teach"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "c5a983b2e7ddba20ec54ed3e83c09d28e0ba91d2b4c868d89dbc1c950268d6bd",
+    "content_hash": "d2e9e8fca22606b4cd9554d5d005a4f53e44eed2d92967d7ef89409dc25e7686",
+    "skill_md_hash": "c667549121faf6014fff4f58ff7b0e6c451f1d6f859828d7d37c26c91863f221",
+    "version_metadata_sha256": "ef5816097a17f7591481a615caf01b7b40a27882831d730164c55d3822f30967"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sichengchen/skills/ohio-state-api",
+    "claim_id": "a766d547cca1b2fe62a4cc44887d976cb5cc78dd6d97fe580bde67c213121143",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "ohio-state-api",
+        "url": "https://clawskills.sh/skills/sichengchen-ohio-state-api"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "sichengchen",
+    "owner_id": "s17640jet5vmj725adwyecg185885cyd",
+    "published_at": 1770498745905,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783656850783,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783656850783,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The declared purpose is fetching public Ohio State campus data, and the MCP tools implement read-only GET requests for buses, dining, buildings, events, classes, directory, parking, and related public services.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The MCP server is scoped to content.osu.edu endpoints, while the standalone helper also accepts a full user-supplied http(s) URL; that is disclosed as a direct fetch mode but users should prefer the service/path mode for OSU-only use.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses standard npm build steps for an optional Node MCP server. The package has caret dependency ranges, though a pnpm lockfile records resolved versions.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Outbound internet access and Node.js/npm are proportionate for a public API integration. The server uses stdio transport rather than opening its own network listener.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No artifact-backed evidence of persistence, privilege escalation, local file scraping, credential/session use, background agents, or destructive actions was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SC1] expected: The unpinned dependency ranges are a real supply-chain hygiene issue, but they are ordinary package metadata for a Node MCP server and do not indicate hidden or purpose-mismatched behavior.\n[SC4] expected: The artifact does resolve @modelcontextprotocol/sdk to 1.17.1 in the pnpm lockfile. This should be remediated by upgrading if the advisories apply, but the local code uses stdio, handles only public read-only data, and does not expose credentials or sensitive local state, so this does not justify a Review verdict by itself.",
+          "guidance": "Install only if you are comfortable running a Node-based MCP server that makes outbound requests for public OSU data. Prefer the documented OSU service/path fetch mode, run it in a normal user account, and consider updating or pinning dependencies before deploying it in a shared or long-running environment.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill coherently provides user-directed access to public Ohio State API data and does not show hidden persistence, credential access, data exfiltration, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783656784421,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 41,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ohio-state-api\nVersion: 0.1.0\n\nThe skill bundle is designed to fetch public data from The Ohio State University Content APIs. All network requests in the `osu-fetch.mjs` script and the MCP server TypeScript files (`mcp-server/src/*.ts`) are strictly confined to `https://content.osu.edu`. There is no evidence of data exfiltration, malicious command execution, persistence mechanisms, or prompt injection attempts against the agent. The `SKILL.md` and `mcp-server/README.md` provide clear, benign instructions for using the skill, and the `pnpm-lock.yaml` ensures dependency integrity.",
+          "checkedAt": 1779162111364,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "e71c3e1d2063a29b18bdf4b577c55f46f55277582640d6ffd8c7d67954042a6a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e71c3e1d2063a29b18bdf4b577c55f46f55277582640d6ffd8c7d67954042a6a"
+    },
+    "slug": "ohio-state-api",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

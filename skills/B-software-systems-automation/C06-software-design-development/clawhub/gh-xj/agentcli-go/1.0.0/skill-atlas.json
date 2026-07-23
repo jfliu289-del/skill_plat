@@ -1,0 +1,136 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C11:token:project",
+      "cross-tag:debugging",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C11"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "debug"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "cbcd03921003d48667401a7b2eac3bebc23cb132f81248e0d336ba78ebe3686f",
+    "content_hash": "b75074cfb9df81f6eddb8252331e546a79b018b9bb08ae1929ac46e021b83005",
+    "precanonical_content_hash": "164bddca67e8520fd20148b5bf1088562e267abed47158c27fa1148bce9593bc",
+    "skill_md_hash": "81682f570981efc7551ebeca57ef9b08bffe3a8e192081030ecc13d020a23cc6",
+    "version_metadata_sha256": "1df962dc0dcf669a42e73b9aaad1d50c85ac91ac6823e667d3ac94dcc4efa017"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/gh-xj/skills/agentcli-go",
+    "claim_id": "c83b8db6bc3d6ca8a850f6ba2615551cf6f7c00a7e7b7f2572ca6bbf183fef5f",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "agentcli-go",
+        "url": "https://clawskills.sh/skills/gh-xj-agentcli-go"
+      }
+    ],
+    "owner_handle": "gh-xj",
+    "owner_id": "s17avaxt1d79n4771gjqhty17x885y40",
+    "published_at": 1771837811843,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779952137139,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779952137139,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The skill's stated purpose is to help build and scaffold Go CLI tools, so documenting shell-command helpers, AppleScript helpers, scaffolding, config loading, and filesystem writes is coherent with that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The trigger language includes broad phrases such as \"add command\" and \"agentcli\", which could invoke the skill in some unrelated development tasks, but this is a routing-quality issue rather than evidence of hidden or malicious behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No deceptive installer or automatic background setup is evident from the supplied artifacts; use appears to be user-directed Go module or CLI installation and project scaffolding.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The framework can read environment variables and run local commands, which is expected for CLI tooling but should be used only in repositories and shells the user intends to modify.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no artifact-backed evidence of persistence, privilege escalation, credential harvesting, exfiltration, or automatic long-running workers.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight] expected: The reported RunCommand, RunOsascript, scaffolding, environment, and filesystem capabilities are high-impact in the abstract, but they are disclosed framework APIs for CLI development and not evidence of automatic or hidden execution by the skill.\n[SQP-1] unexpected: The broad trigger terms are a real scoping weakness because they may activate the skill outside agentcli-go work, but this does not by itself create a material security concern requiring Review.",
+          "guidance": "Install this if you are actively working with agentcli-go or scaffolding Go CLI projects. Before using generated commands or templates, review what files will be written and what shell commands will run, and avoid letting the skill guide unrelated \"add command\" requests unless the repository is actually an agentcli-go project.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a developer reference skill for a Go CLI framework; its command execution and file-writing topics are disclosed and fit the purpose, but users should keep it scoped to CLI development work.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779952086843,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: agentcli-go\nVersion: 1.0.0\n\nThe skill bundle is classified as suspicious due to the exposure of high-risk capabilities without explicit malicious intent. Specifically, the `exec.go` module, as described in `SKILL.md`, provides `RunCommand` and `RunOsascript` functions, enabling the AI agent to execute arbitrary shell commands and AppleScript. This presents a significant remote code execution (RCE) vulnerability if the agent is prompted maliciously. Additionally, `scaffold.go` allows file system modifications, and `configx.go` can read environment variables, posing further risks for data exfiltration or unauthorized changes. While these functionalities might be plausible for a CLI framework, their direct exposure to an AI agent without clear safeguards makes the skill highly susceptible to abuse.",
+          "checkedAt": 1779166456350,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "d2ecf05f595f2804a5c8309550a6bac318ad551b5c62cc94b590cca50f80c473",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d2ecf05f595f2804a5c8309550a6bac318ad551b5c62cc94b590cca50f80c473"
+    },
+    "slug": "agentcli-go",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

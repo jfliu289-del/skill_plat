@@ -1,0 +1,163 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.2389,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:lookup",
+      "category:C01:token:search",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C07:token:test",
+      "category:C17:token:notes",
+      "category:C18:token:travel",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:design",
+      "cross-tag:search",
+      "cross-tag:software-development",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C04",
+      "C06",
+      "C07",
+      "C17",
+      "C18"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "design",
+      "manage",
+      "research",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a007d46a6c4d2b342d368f6b6c0672c213e87b484e38028cdd6d5f0978689f52",
+    "content_hash": "101280c2088f615b6510cc9a5ab8240ce1ba0fa1f7c23306f4b279bb874cd59d",
+    "precanonical_content_hash": "c7992de00aeb723b2e3804c50b3a49511675d90bd53d2661c6468786dd7adeb5",
+    "skill_md_hash": "7c4250429d9a8d8ba065f4bfaab4c6d75c00fc3eadfa9af54992b4a642594296",
+    "version_metadata_sha256": "e871aa2f20c0f2a66f34dc30885a8b651c615f8565215e5431bd58106d40ef35"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/fistfulayen/skills/ubtrippin",
+    "claim_id": "20576a2a98a57f8917c8b946ba2016b07fb268509ce39bd0cf734b5aa9617164",
+    "index_entries": [
+      {
+        "index_path": "categories/transportation.md",
+        "label": "ubtrippin",
+        "url": "https://clawskills.sh/skills/fistfulayen-ubtrippin"
+      }
+    ],
+    "owner_handle": "fistfulayen",
+    "owner_id": "s177gd96csegzj9xd39ftrfb8n884pw9",
+    "published_at": 1772622363426,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779952837613,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779952837613,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill’s capabilities fit its stated travel-management purpose: trips, itinerary items, loyalty vault, family/collaborator sharing, calendar links, webhooks, booking-email import, and account billing are all documented. These features handle sensitive travel and account data, so they require careful use, but they are not hidden or purpose-incompatible.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The REST surface is broad and includes create, update, delete, merge, loyalty export, sharing invites, webhook setup/testing, email forwarding, and checkout-session creation. The artifacts do not show automatic or deceptive execution, but agents should treat destructive, sharing, export, forwarding, webhook, calendar-token, and billing actions as explicit user-confirmation actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a normal ClawHub skill install with markdown docs and small curl example scripts. I found no package hooks, obfuscated code, background workers, or automatic execution paths in the artifact files.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill sends user travel data to UBTRIPPIN and may forward booking emails and PDF attachments for parsing, which is proportionate to a travel tracker. It also allows webhooks to user-specified URLs, so users should verify destinations and understand what events may be delivered.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill uses a user-provided bearer API key and can create persistent remote state such as trips, loyalty entries, family/collaborator access, calendar tokens, and webhooks. The docs include some key safety guidance, though the README’s suggestion to store keys in agent config or TOOLS.md should be interpreted as protected secrets/config only.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-2] expected: Email forwarding to trips@ubtrippin.xyz, including PDF attachments, is explicitly documented as a primary booking-import flow. This is sensitive data transfer, but it is central to the product purpose rather than hidden exfiltration; it should only be done for user-selected messages with clear consent.\n[SDI-2] expected: Webhook creation, update, testing, and delivery history are documented API features and are also disclosed in metadata. Arbitrary webhook destinations create real data-disclosure risk if misused, but the artifacts do not show automatic setup or deceptive destinations.\n[SDI-1] expected: Billing subscription, portal, prices, and checkout endpoints are disclosed account-management features. They are higher impact than trip lookup, but checkout creation is documented and should be gated by explicit user request.\n[SQP-2] expected: Credential guidance is mixed: SKILL.md says to store the API key securely and never share or log it, while README mentions agent config or TOOLS.md without enough warning. This is a documentation caution, not evidence of malicious behavior.\n[SQP-2] expected: The bearer token examples are placeholders or truncated formats, not live credentials. Users still need to avoid pasting real keys into prompts, logs, shared files, or source control.\n[SQP-2] expected: Forwarding booking emails and attachments can expose names, itineraries, reservation codes, loyalty data, and ticket documents. The flow is expected for UBTRIPPIN, but should require just-in-time user confirmation and data-awareness.\n[SQP-2] expected: Delete endpoints for trips, items, loyalty records, families, collaborators, guides, and senders are normal management APIs but are not paired with strong confirmation language in the docs. Agents should confirm the exact object before deletion.\n[VirusTotal code_insight] expected: The VirusTotal concern focuses on documented webhooks and loyalty export. Those are legitimate disclosed capabilities in this skill; I found no artifact evidence of hidden exfiltration, automatic webhook creation, or deceptive use.",
+          "guidance": "Install only if you trust UBTRIPPIN with your travel records, loyalty numbers, booking emails, ticket PDFs, family/collaborator information, and related account data. Store the API key only in protected secrets/config, not shared plaintext files, and require explicit confirmation before forwarding emails, exporting loyalty data, deleting or merging records, sharing trips or family access, creating webhooks or calendar links, or starting billing/checkout flows.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed UBTRIPPIN travel-management skill with sensitive but purpose-aligned account, travel, email-forwarding, webhook, and billing features.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779952784362,
+          "issueCount": 8,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ubtrippin\nVersion: 2.3.0\n\nThe skill bundle is classified as suspicious due to the presence of high-risk capabilities that could be exploited via prompt injection against the AI agent. Specifically, the `SKILL.md` file documents a `webhooks` API (`POST /api/v1/webhooks`) which allows the agent to configure an arbitrary URL to receive real-time event data (e.g., `trip.created`, `item.added`). This presents a significant data exfiltration risk, as a compromised agent could be instructed to send sensitive user travel data to an attacker-controlled server. Additionally, the `GET /api/v1/me/loyalty/export` endpoint allows for bulk export of sensitive loyalty program data, which could also be exfiltrated if the agent is maliciously prompted. These are legitimate API features, but their exposure to an AI agent creates a critical vulnerability.",
+          "checkedAt": 1779166505560,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "09ecbddc7989fc0922a1199c2577883509d558e4b5c3f63608f5ca7a3a1f65e3",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/09ecbddc7989fc0922a1199c2577883509d558e4b5c3f63608f5ca7a3a1f65e3"
+    },
+    "slug": "ubtrippin",
+    "source_type": "clawhub",
+    "version": "2.3.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

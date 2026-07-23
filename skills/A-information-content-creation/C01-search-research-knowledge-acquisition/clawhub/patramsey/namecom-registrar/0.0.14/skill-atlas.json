@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "category:C18:token:home",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C09",
+      "C18"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4754665236f9c9e832cc1cdada713f390231498cae799f2deb3258f9e8758690",
+    "content_hash": "43bb26e2d91dd2039b12282fe17a367e2ae9b2cd4e414b9332d0151435f071cf",
+    "precanonical_content_hash": "ef195778fe057b5b5773fd9b3bb6af3de8849f5518f52e383aeff88a8cf28b4a",
+    "skill_md_hash": "b4194723b46425a747d971097437da5504f5c785b44eeb07c2656610bae42e6d",
+    "version_metadata_sha256": "06f9cb230fac8f62eced7898b35ed93469679be79661c40db2b44afe40aa771a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/patramsey/skills/namecom-registrar",
+    "claim_id": "550c8fb1dec7757585b0a69ed05e4fbc90dd8525fea430775074ff1b12870abe",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "namecom-registrar",
+        "url": "https://clawskills.sh/skills/patramsey-namecom-registrar"
+      }
+    ],
+    "owner_handle": "patramsey",
+    "owner_id": "s174hjdzah7e0d4rk6ke96y5ps83hxd2",
+    "published_at": 1773985206764,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779950248537,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779950248537,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the exposed capabilities: checking domains, registering domains, listing account domains, changing nameservers, managing DNS, solving DNS-01 challenges, and updating DDNS through Name.com.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill documents high-impact operations and describes a two-step purchase flow with a dry run and purchase token; DNS changes and nameserver replacement are also disclosed but should still be confirmed by the user before execution.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact installs the external npm package namecom-clawbot rather than bundling executable source in the skill; this is a normal mechanism, but users should review the package and repository because installation is not pinned to a specific package version.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Requiring NAMECOM_USERNAME and NAMECOM_TOKEN is proportionate for a registrar API integration, and the artifact discloses that Name.com tokens are broad while recommending sandbox credentials, IP whitelisting, account credit, and spending controls.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The submitted skill artifact contains only markdown instructions and metadata; no local persistence, background worker, privilege escalation, hidden file access, or unrelated credential handling was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SkillSpector clean result] expected: SkillSpector reported no issues, and artifact review did not find hidden or purpose-mismatched behavior.\n[VirusTotal clean telemetry] expected: VirusTotal telemetry was clean and consistent with the artifact's stated Name.com API purpose; it was treated as supporting telemetry, not the basis for the verdict.\n[Static scan clean result] expected: The static scan found no suspicious patterns in the submitted markdown-only skill artifact.\n[Broad registrar credential authority] expected: The skill needs a Name.com API token that can affect domains, DNS, and purchases; this authority is sensitive but disclosed and central to the advertised function.\n[High-impact DNS and purchase operations] expected: Domain purchases, DNS edits, DDNS updates, and nameserver replacement can have real operational or financial impact, but they are the core purpose of the skill and are documented rather than hidden.",
+          "guidance": "Install only if you intend to let an MCP server manage your Name.com account. Start with sandbox credentials, IP-whitelist the token where possible, prefer account credit or payment limits, review the npm package before connecting production credentials, and require explicit confirmation before purchases, DNS deletions, DDNS updates, or nameserver changes.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a clearly disclosed Name.com domain and DNS management skill, but it can make real account, DNS, and purchase changes if given production credentials.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779950201924,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: namecom-registrar\nVersion: 0.0.14\n\nThe skill provides a legitimate interface for managing Name.com domains and DNS records via the Name.com CORE API. It includes security-conscious features such as a mandatory two-step confirmation flow for domain purchases (requiring a code-enforced 'purchaseToken' from a dry-run) and recommendations for IP whitelisting. The documentation for the underlying npm package (namecom-clawbot) mentions signed provenance, and the tool's behavior (including public IP detection via ipify for DDNS) is consistent with its stated purpose without evidence of malicious intent or prompt injection.",
+          "checkedAt": 1779166314268,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "249a081edb2d9fe64dd6b53aa160607a3fb125f26803caf4d4b322ad59630ea4",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/249a081edb2d9fe64dd6b53aa160607a3fb125f26803caf4d4b322ad59630ea4"
+    },
+    "slug": "namecom-registrar",
+    "source_type": "clawhub",
+    "version": "0.0.14"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

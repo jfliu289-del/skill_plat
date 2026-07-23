@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "website"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C02:token:communication",
+      "category:C06:token:implementation",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C06",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "automate",
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "97bfb9ade384d06a53321ad6c3f64ee7eae87bb4bbf4984085fd4aa8d650dfe2",
+    "content_hash": "ce93d8533624a1fec70c700c28e1e526eea9c3f965630bd891261b3933c0a3ec",
+    "precanonical_content_hash": "b3f557628fc30ec5e13d6859c53e9e0ef00b8d2ea665d52556a57991be53e70b",
+    "skill_md_hash": "afafd561763eb653ee22121d1cb0637a0bf28ec6aedfa8d29d012af11357f9af",
+    "version_metadata_sha256": "e3bd0cc45b139b31fb6d06d354769f06b88f9b883f6a54d5cfce92182f881008"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/arekqq/skills/tg-groupchat-setup",
+    "claim_id": "fe3933812e57e75742f761d78b25f509e01b8456b1694c8b548bf4437fdcb5d7",
+    "index_entries": [
+      {
+        "index_path": "categories/productivity-and-tasks.md",
+        "label": "tg-groupchat-setup",
+        "url": "https://clawskills.sh/skills/arekqq-tg-groupchat-setup"
+      }
+    ],
+    "owner_handle": "arekqq",
+    "owner_id": "s174ct5c6xyj3pkakx1yc615xd884jwe",
+    "published_at": 1770157402879,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783656200834,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783656200834,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifacts: it configures a MoltBot Telegram group, sender allowlist, mention patterns, and bot identity detection. The sensitive parts are directly related to that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are scoped to a user-provided group ID and allowed users, and they explicitly say to read current config, merge values, patch gateway config, restart, and send a confirmation message.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package includes a visible shell helper requiring curl and python3. The script reads the MoltBot config and calls Telegram's official API; no hidden install hooks or obfuscated behavior were found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading the Telegram bot token and disabling Telegram privacy mode are sensitive, but they are disclosed and proportionate for detecting bot identity and enabling group-context behavior.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists gateway configuration changes for Telegram groups and allowed senders. These changes are central to the stated setup and should be reviewed for the exact group and users.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The shell helper is real and not separately permission-declared in the skill metadata, but its source is visible and its actions are limited to reading the configured MoltBot file and querying Telegram for bot identity.\n[TP4] expected: The credential and network access are disclosed in SKILL.md and align with detecting the Telegram bot name and username; no artifact evidence shows use of the token with an unrelated endpoint.\n[SQP-2] expected: The skill recommends Telegram privacy mode OFF, which lets the bot receive group messages. The reference explains this behavior, though users should still consider group member notice and consent.\n[E1] expected: The bot token is sent to Telegram's getMe API as part of the standard bot API URL. This is sensitive operationally, but the destination is expected and no unauthorized exfiltration is evident.\n[VirusTotal code_insight] expected: VirusTotal flagged high-risk capabilities, but the artifacts disclose and scope those capabilities to Telegram setup; static scan and prior moderation metadata were clean.",
+          "guidance": "Install only if you intend to connect this MoltBot to a Telegram group. Verify the group ID, allowed users, and gateway patch before applying it; protect the bot token from logs or screenshots; and make sure group participants understand that turning Telegram privacy mode off allows the bot to receive group messages even though responses are mention-gated.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill performs the Telegram group setup it describes, but it handles a bot token and makes persistent gateway changes that users should review before running.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783656166095,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 66,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: tg-groupchat-setup\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to its use of high-risk capabilities, including reading sensitive credentials (Telegram bot token) from the agent's configuration file (`$HOME/.clawdbot/moltbot.json`) via `scripts/detect_bot_info.sh` and making external network calls to `https://api.telegram.org`. Additionally, the `SKILL.md` explicitly instructs the AI agent to access and modify its own core configuration using `gateway action: \"config.get\"` and `gateway action: \"config.patch\"`. While these actions are plausibly aligned with the stated purpose of configuring a Telegram bot, they represent powerful capabilities that could be misused, lacking the clear benign safety of a 'benign' classification, but without explicit evidence of malicious intent like exfiltration to unauthorized endpoints.",
+          "checkedAt": 1779161183749,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "1d3841dcaebce64e4480db823c1272eab190990c3a86aa6136d979dc16ad30d1",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1d3841dcaebce64e4480db823c1272eab190990c3a86aa6136d979dc16ad30d1"
+    },
+    "slug": "tg-groupchat-setup",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

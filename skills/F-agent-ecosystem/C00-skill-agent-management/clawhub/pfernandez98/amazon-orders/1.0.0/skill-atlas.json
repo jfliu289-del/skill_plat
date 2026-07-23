@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d771cf410c4ccde558010c440c3118a9940446a19cd781040c2947e94b5ac63b",
+    "content_hash": "f151a591d1a5dc05f40e8a211cd593811e89adebd7d9c0c926f4236b09ac64f4",
+    "precanonical_content_hash": "147259b9389f0719a604f958b02e49d359f6b99cc1ba73eeaf4459fde6b10b25",
+    "skill_md_hash": "bba2d086804480610d3cffb8c64c9bb2cb5fa5fb8653da8f92566d62f8258433",
+    "version_metadata_sha256": "61ba53fbd77fb43ea962cefd5a28a51fe8be731677f3f4849ec2bbdcfd5a14c7"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/pfernandez98/skills/amazon-orders",
+    "claim_id": "c2b98951b2617a63a09842fefbc9721ad3d44777c83cfeb255fa839f927e6689",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "amazon-orders",
+        "url": "https://clawskills.sh/skills/pfernandez98-amazon-orders"
+      },
+      {
+        "index_path": "categories/shopping-and-e-commerce.md",
+        "label": "amazon-orders",
+        "url": "https://clawskills.sh/skills/pfernandez98-amazon-orders"
+      }
+    ],
+    "owner_handle": "pfernandez98",
+    "owner_id": "s175jq9xfcfmvm4jeex2msetsd8851b9",
+    "published_at": 1770679863725,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779963616040,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779963616040,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented capability matches the stated purpose: installing and using the amazon-orders Python package/CLI to log in and retrieve Amazon.com order history. The access is broad because it uses full Amazon account credentials rather than a scoped read-only token, but that is disclosed and inherent to the unofficial scraper workflow.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands are user-directed examples for install, login, history queries, and JSON export. The skill discloses that the tool is unofficial and scraper-based, and gives some credential-handling advice, but it could more explicitly warn that passwords, TOTP seeds, and exported order history are highly sensitive.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a standard pip upgrade command for the external amazon-orders package, with no executable code included in the skill bundle. The package version is not pinned, so users are trusting the current upstream package at install time.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The requested environment variables include Amazon username, password, and optional OTP/TOTP secret. These are proportionate to automated login for this specific purpose, but they are high-value account secrets and should not be stored casually.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill itself contains no persistence mechanism, background worker, hidden execution, or privilege escalation. It mentions environment variables and local config as supported credential sources; persistent local storage of credentials would be a user-controlled choice with additional risk.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The finding is materially relevant as user guidance: the skill asks for full Amazon credentials and an optional reusable TOTP seed, and the warning could be stronger. It does not by itself show deception, exfiltration, hidden behavior, or purpose mismatch, so it does not change the verdict from benign.\n[staticScan.clean] expected: Static scan found no suspicious patterns, consistent with a single non-executable Markdown skill that documents commands rather than shipping code.\n[VirusTotal.clean] expected: VirusTotal telemetry is clean and aligns with the artifact review; it is supporting signal only, not the basis for the verdict.",
+          "guidance": "Install only if you trust the upstream amazon-orders package and are comfortable giving an unofficial tool Amazon sign-in capability. Prefer an isolated environment, consider pinning the package version, avoid persistent shell exports or dotfile storage for credentials, use a secret manager for any automation, and protect exported order-history files because they may contain private purchase data.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent guide for using an unofficial Amazon order-history tool, but it requires sensitive Amazon login and MFA secret handling that users should treat carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779963592693,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: amazon-orders\nVersion: 1.0.0\n\nThe skill bundle is benign. Its instructions and metadata are clearly aligned with its stated purpose of downloading and querying Amazon order history using the `amazon-orders` Python package. It requires sensitive Amazon credentials (username, password, OTP secret key) via environment variables, which is necessary for its functionality, and it provides good security advice on handling these credentials. There is no evidence of prompt injection against the agent, unauthorized data exfiltration, persistence mechanisms, or other malicious intent within the provided files.",
+          "checkedAt": 1779162580689,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "ce4253c5c6f85f8fba9120535159c75390955f89cb0cc1834e67f66dab58b042",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ce4253c5c6f85f8fba9120535159c75390955f89cb0cc1834e67f66dab58b042"
+    },
+    "slug": "amazon-orders",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

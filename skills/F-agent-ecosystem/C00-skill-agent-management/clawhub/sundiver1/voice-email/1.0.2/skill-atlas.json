@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "creative",
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C07:token:testing",
+      "category:C09:token:security",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:security",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C07",
+      "C09",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "design",
+      "manage",
+      "secure",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "dee375f489f02b3974006450cb9f75430861afaac2e1fda8f88299ccf07dcfda",
+    "content_hash": "7f722c3d13fbb620e9df349faa63953c64b3de33bbed77094b0432c90dbd875a",
+    "precanonical_content_hash": "4756867f44b9ea9a99b8541a9fbdf5cb89a445ef397882c5601f86f0b7395e5a",
+    "skill_md_hash": "f5bb8f68119f75f45bf257647ac8643e03bb8835dc08e04023f339f3e7cfab7c",
+    "version_metadata_sha256": "5cf6099d14982596d65d81d04e9da9a1b8fbc8cbe57c888c6f7c14ee8b2d87b8"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sundiver1/skills/voice-email",
+    "claim_id": "5e69501e34e85a9188439cf6de59f581a5e84282d0e69e9970c1eb8af87fa452",
+    "index_entries": [
+      {
+        "index_path": "categories/communication.md",
+        "label": "voice-email",
+        "url": "https://clawskills.sh/skills/sundiver1-voice-email"
+      }
+    ],
+    "owner_handle": "sundiver1",
+    "owner_id": "s175jjsd7kvvnnhkw0gr0hsfnh884mmt",
+    "published_at": 1771603216238,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943148521,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943148521,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The requested capabilities fit the stated function: receive voice input, transcribe it with Deepgram, and send email through the user’s Gmail account via gogcli.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill handles email sending from voice commands, so users should expect account actions and should verify that their runtime asks for clear recipient/message confirmation before sending.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The described setup relies on user-provided service credentials and installing/configuring gogcli; there is no artifact-backed evidence of hidden install steps or automatic unsafe execution.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access and credentials for Telegram, Deepgram, Gmail, and optional ElevenLabs are high-impact but proportionate to the voice-email workflow and disclosed in the supplied snippets.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Gmail OAuth tokens are stored in the system keyring and API keys may be stored in config or environment variables; this is expected for the integration but increases credential exposure if the host environment is not isolated.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The privacy concern is partially valid because voice audio, transcript-derived email content, recipients, and message bodies necessarily pass through third-party services; the supplied documentation does disclose Deepgram/Gmail processing, so this is guidance rather than a Review-level issue.\n[PE3] expected: Credential access is real and sensitive, but it is expected for sending email and using transcription/messaging APIs; no supplied artifact shows unrelated credential collection or exfiltration.",
+          "guidance": "Install only if you are comfortable sending voice recordings and email content through Telegram, Deepgram, and Gmail, and store the required tokens/OAuth access in a secure environment. Before routine use, confirm the workflow gives you a chance to review recipients and message content before any email is sent.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill’s Gmail, Telegram, and Deepgram access is sensitive but appears aligned with its disclosed voice-email purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943109667,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 95,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: voice-email\nVersion: 1.0.2\n\nThe 'voice-email' skill bundle is designed to send emails via voice commands, leveraging Deepgram for transcription and gogcli for Gmail. It explicitly declares necessary permissions like 'network', 'file_access', and 'modify_config', along with required credentials. While these permissions are high-risk, they are clearly aligned with the skill's stated purpose. The documentation (SKILL.md, SETUP.md) transparently outlines its functionality, prerequisites, and security considerations, including explicit statements about what the skill 'CANNOT Do' (e.g., execute arbitrary code, access unrelated files). There is no evidence of prompt injection attempts, data exfiltration to unauthorized endpoints, or other malicious intent. The instructions for installing `gogcli` are directed at the user, not the agent, and the testing commands use legitimate API endpoints.",
+          "checkedAt": 1779165698362,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "1b319799f5972188ae732578bd20f29ade4ca1860a0477d0e457d727b301d146",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1b319799f5972188ae732578bd20f29ade4ca1860a0477d0e457d727b301d146"
+    },
+    "slug": "voice-email",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

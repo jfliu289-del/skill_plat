@@ -1,0 +1,160 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2167,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C00:token:skill",
+      "category:C01:token:find",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C09:token:privacy",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C11:token:project",
+      "category:C11:token:team",
+      "category:C12:token:management",
+      "category:C17:token:knowledge",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C06",
+      "C09",
+      "C10",
+      "C11",
+      "C12",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "0a983a63eb5fa3eab28a81bc78607f787ba6523e0632bbe072a13f03bd35914e",
+    "content_hash": "12cdb9e8e8fb4b9651b3a6ad80a2efe5cfd9618456b6583fc7618eafd617bcca",
+    "skill_md_hash": "e498a0617766ef6449998cd35aed0661e46494b674588dc8eed500d1f500b34f",
+    "version_metadata_sha256": "e38ee8eb11596dd12cf6aa741933e8e8c869a9023ee10844806ba0fc00796dce"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/vedantsingh60/skills/persisent-mind",
+    "claim_id": "a631fe720d62cf8807facd24b2adfac398a612e2834a04cdb98de9b225e9eb83",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "persisent-mind",
+        "url": "https://clawskills.sh/skills/vedantsingh60-persisent-mind"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "vedantsingh60",
+    "owner_id": "s179v2zgm6hpzqc71ntdmqjn9184gcz4",
+    "published_at": 1771272047875,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971440255,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971440255,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The code and docs coherently implement persistent, searchable agent memory with local JSON storage, recall, prompt-context formatting, import/export, and deletion. No artifact evidence shows network calls, credential harvesting, obfuscation, or unrelated capabilities.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Stored memories are intentionally formatted for prompt context and corrections are prioritized. This is purpose-aligned, but users should curate imported or high-importance memories and avoid storing instructions or sensitive details that should not influence future sessions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No package dependencies, install scripts, required environment variables, accounts, or API keys are declared. The included Python file uses standard-library local file operations.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill writes user-provided memories to a local .persistentmind directory and can export/import JSON files. That is proportionate for a memory skill, though exports and team sharing can expose whatever the user stored.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is the core feature and is disclosed. There is no background service, privilege escalation, or broad filesystem indexing; permanent deletion exists but the default forget operation archives rather than deletes.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal] expected: Clean telemetry is consistent with the artifact review: the implementation is local-only and shows no external calls or dangerous command execution.\n[staticScan] expected: The static scan reported no suspicious patterns, which matches the observed standard-library JSON storage implementation.\n[SQP-2] expected: Persistent local storage, export/import, prompt context, and deletion are expected for this skill; the material documentation gap is that sensitivity warnings and confirmation semantics are thin.\n[SQP-2] unexpected: The SKILL.md example about a Stripe API key location and the temporary token example are poor guidance for a memory tool because such content can be resurfaced later.\n[SQP-2] expected: Automatic creation of .persistentmind and JSON persistence are disclosed and purpose-aligned; they do not indicate hidden persistence or unauthorized data collection.\n[SQP-2] expected: Export/import are user-invoked local file operations, not exfiltration, but users should review exported files and imported memories because the artifacts do not provide redaction or provenance controls.\n[SQP-2] expected: Permanent deletion is a normal memory-management capability and soft archive is the default; lack of an API-level confirmation is a usability risk rather than malicious behavior.\n[SSD-3] expected: Prompt-context generation is the stated feature, not an attack by itself; the real concern is that sensitive or untrusted stored content could be included if users put it in memory.\n[SSD-3] unexpected: The README and demo examples referencing .env connection-string locations are not ideal for safe use guidance, but they do not show the skill reading .env files or credentials.",
+          "guidance": "Install only if you want durable local agent memory. Do not store passwords, API keys, tokens, private personal data, confidential business details, or secret locations in this memory store. Review context returned by get_context() before sending it to a model, and treat exported or imported memory JSON as sensitive and untrusted until reviewed.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "PersistentMind is a disclosed local memory tool, but users should avoid saving secrets because stored memories can later be injected into prompts or exported.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971384646,
+          "issueCount": 11,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: persisent-mind\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle 'PersistentMind' is classified as benign. All files (SKILL.md, persistentmind.py, manifest.yaml, LICENSE.md, README.md) consistently describe and implement a local-only, zero-dependency memory system for AI agents. The Python code (`persistentmind.py`) strictly adheres to its stated privacy and security claims: all data is stored locally within a `.persistentmind/` directory, there are no external network calls, no sensitive environment variables are read, and no dangerous system commands are executed. The `SKILL.md` and `README.md` clearly explain the skill's functionality, including how it injects context into prompts, which is a feature for the agent's benefit, not a prompt-injection attack against it. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or obfuscation.",
+          "checkedAt": 1779164647048,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "80bb8eb75756719a4126bd040a70c9e0187015654a7462430e1571df9022ce7b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/80bb8eb75756719a4126bd040a70c9e0187015654a7462430e1571df9022ce7b"
+    },
+    "slug": "persisent-mind",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

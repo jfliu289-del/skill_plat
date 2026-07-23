@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C07",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C05:token:audio",
+      "category:C07:token:test",
+      "category:C07:token:testing",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C05",
+      "C17"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "857fa4163f6c446059d91d5fc15511cbfa2e4c007b5488377580016ebe1497be",
+    "content_hash": "a9bcd729d9f18e3df0781965946ed945cb53e289d935ff4839d1f13f06b2fea5",
+    "precanonical_content_hash": "9fb880a2386c6818cedf75b3077f4989340616edf239491d4b5871db99cd6c7c",
+    "skill_md_hash": "6e18a68e0220c4c5eb8782417006747ddc6078203109011823c1966c3c285a07",
+    "version_metadata_sha256": "d261ec52d44dccaaa3d9e327e2da1d2c0b6f66440c628c8aa2efd26eb9325fdc"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/liuhedev/skills/lh-edge-tts",
+    "claim_id": "4984108b7e33751a63f9cc9d321d513de72eb2afccd10486cbf23b6f372850d3",
+    "index_entries": [
+      {
+        "index_path": "categories/git-and-github.md",
+        "label": "lh-edge-tts",
+        "url": "https://clawskills.sh/skills/liuhedev-lh-edge-tts"
+      }
+    ],
+    "owner_handle": "liuhedev",
+    "owner_id": "s173cp8wp07asz8rf17g1bph9583mpav",
+    "published_at": 1772601600283,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779947093166,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779947093166,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts and documentation match the stated TTS purpose: convert text or user-selected files to MP3 and optional subtitles using edge-tts, with voice, rate, pitch, proxy, and language options.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The trigger guidance is somewhat broad around the generic \"tts\" keyword, so agents should require clear user intent before converting content, especially private content.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses a simple pip install for edge-tts and an install.sh wrapper. This is purpose-aligned, though the dependency is not pinned to an exact version.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access, file input, and output paths are proportional for TTS generation, but text converted through edge-tts is processed by an online Microsoft Edge TTS service.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The configuration manager persists only TTS preferences such as voice, rate, timeout, subtitles, and proxy in ~/.tts-config.json; it does not request credentials or elevated privileges.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The file read/write and persisted configuration capabilities are real and should be documented, but they are directly tied to reading TTS input, saving generated audio/subtitles, and storing TTS preferences.\n[SQP-2] expected: The online-service privacy concern is valid as user text may leave the device, but the artifacts disclose Microsoft Edge online TTS use and internet requirements; this supports user guidance rather than a Review verdict.\n[SQP-1] expected: The generic trigger language could cause accidental activation if an agent is careless, but the behavior remains TTS-focused and there is no hidden or unrelated authority.\n[VirusTotal code_insight] expected: The cited arbitrary file input, output paths, proxy option, and persistence are present, but they are documented TTS features and the telemetry reports no engine detections.",
+          "guidance": "Install only if you are comfortable with edge-tts and with the text you convert being processed by an online Microsoft Edge TTS service. Do not convert secrets, credentials, private documents, or regulated data unless approved. Use explicit input and output paths, and review ~/.tts-config.json if voice or proxy behavior is unexpected.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent text-to-speech helper, but users should avoid sending sensitive text or files to the online TTS service.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779947042195,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 71,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: lh-edge-tts\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to several high-risk capabilities that are explicitly documented in SKILL.md and implemented in `scripts/tts_converter.py` and `scripts/config_manager.py`. Specifically, `tts_converter.py` allows reading arbitrary files via `--file` and writing to arbitrary paths via `--output` and `--subtitles`. Both `tts_converter.py` and `config_manager.py` support configuring a network proxy via `--proxy`. While these features may have legitimate uses, they present significant prompt injection vulnerabilities, allowing an AI agent to be instructed to read sensitive files, overwrite critical system/user files, or route network traffic through an attacker-controlled proxy without clear malicious intent in the code itself.",
+          "checkedAt": 1779165898194,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "1b2c70c59c6866696b6a258119778d9f1574a123e6a664a06e71e1de0b223177",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1b2c70c59c6866696b6a258119778d9f1574a123e6a664a06e71e1de0b223177"
+    },
+    "slug": "lh-edge-tts",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

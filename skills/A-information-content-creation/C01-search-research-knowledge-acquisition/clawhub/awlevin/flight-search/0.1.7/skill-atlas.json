@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C13:token:business",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C13"
+    ],
+    "stages": [
+      "create",
+      "discover"
+    ],
+    "tasks": [
+      "build",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "56557ef49c8249fe89ae156414be636bb29fc1eb193ce7ee5f065ea2283608a8",
+    "content_hash": "a3ee0a806d3dd7bf5f9623d45fa3feeaa37a8060c79da25f2823a776d0d95fba",
+    "precanonical_content_hash": "b76df8d2a00c31c83c4adad9d6d7fae4b92db33e58b8d3255239728a366a881e",
+    "skill_md_hash": "efcb487c7a10f958cc72bc8a46a17d0315e9d6f512ab90f78bac19acb6e2d3af",
+    "version_metadata_sha256": "fa410a3e834e891f5e9ffc91e90b9065e843f85beb46e9810dec1c762044c60e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/awlevin/skills/flight-search",
+    "claim_id": "486810d03bff0f085e964cd20f7f6fdaab1d8cc14553bb263f36b72734c1f673",
+    "index_entries": [
+      {
+        "index_path": "categories/transportation.md",
+        "label": "flight-search",
+        "url": "https://clawskills.sh/skills/awlevin-flight-search"
+      }
+    ],
+    "owner_handle": "awlevin",
+    "owner_id": "s1718qg1ad2pdk2ghq4eqvz44d885ayk",
+    "published_at": 1770362463005,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658789426,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658789426,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is searching Google Flights and returning flight data; the package description, SKILL.md, and code align around a CLI that uses fast-flights and does not require user API credentials. ([pypi.org](https://pypi.org/project/flight-search/))",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are narrow: run uvx or the flight-search CLI with user-provided origin, destination, dates, passenger counts, class, limit, and output format. The skill does not instruct the agent to read local files, credentials, browser profiles, or unrelated user data. ([github.com](https://github.com/Olafs-World/flight-search/blob/main/SKILL.md))",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation uses normal Python package paths such as uv tool install, uvx, pip, and pipx; the README also advertises a curl-to-bash installer, which is a supply-chain risk but is disclosed and not shown as automatic agent runtime behavior. ([pypi.org](https://pypi.org/project/flight-search/))",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to Google Flights via fast-flights is proportionate to flight search, while optional Playwright setup and package-manager usage broaden the environment footprint only when the user chooses those paths. ([pypi.org](https://pypi.org/project/flight-search/))",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The CLI includes an explicit --upgrade path that can run uv, pipx, or pip to update only the flight-search package; this modifies the local Python/tool environment but is user-triggered, visible, and constrained to this package. ([raw.githubusercontent.com](https://raw.githubusercontent.com/Olafs-World/flight-search/main/flight_search/cli.py))",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Using uvx and uv tool install is expected for a Python CLI skill that is installed or run as a command; the authority should be understood by users, but it is disclosed in SKILL.md rather than hidden.\n[SDI-1] unexpected: The README self-update command is not needed to search flights, but it is documented as an explicit maintenance command and does not run automatically.\n[SDI-2] unexpected: The README package-management update instructions broaden operational scope, but they are standard CLI maintenance instructions and are user-directed.\n[SDI-1] unexpected: The cli.py --upgrade implementation can modify the environment by updating flight-search, but it targets this package only and requires the explicit --upgrade flag.\n[SDI-2] unexpected: The package-manager subprocess calls in cli.py support installer detection and self-upgrade; this is ancillary to flight search, but not hidden, arbitrary, or automatic.\n[SQP-2] unexpected: The curl-to-bash installer is riskier than pinned package-manager installation, but it is user-facing installation guidance, not evidence of malicious runtime behavior.",
+          "guidance": "Install through uv, pipx, or pip from a version you trust rather than piping a remote install script directly to bash. Treat --upgrade as a local environment change, and use it only when you intend to update the installed flight-search package.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a flight-search CLI skill with some disclosed package-install and self-update behavior, but I did not find evidence of hidden exfiltration, persistence, or destructive actions.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658728228,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: flight-search\nVersion: 0.1.7\n\nThe skill is classified as benign. Its primary function is to search Google Flights using the `fast-flights` library, which involves web scraping. The `SKILL.md` provides standard installation instructions for `uv` via `pip`. The `cli.py` file uses `subprocess.run` for a legitimate self-update feature (`--upgrade` flag) that specifically targets the `flight-search` package itself, not arbitrary commands. While `install.sh` and `README.md` contain `curl | bash` instructions for users to install `uv`, these are user-facing instructions and not executed by the OpenClaw agent during skill installation or runtime, as the agent's `SKILL.md` specifies a `pip` installation for `uv`. There is no evidence of data exfiltration, persistence, or prompt injection against the agent.",
+          "checkedAt": 1779161789014,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "fde4fbb3f0ee9f41021a0f50a1f4190c4e917ccc36e2001d95de970e2f3eb6c5",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/fde4fbb3f0ee9f41021a0f50a1f4190c4e917ccc36e2001d95de970e2f3eb6c5"
+    },
+    "slug": "flight-search",
+    "source_type": "clawhub",
+    "version": "0.1.7"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,119 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.0,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "fallback:C00"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "177ce8c353df0cbec5edb82203a41629f2e5a6e0b8d5f47b097552a7e302a539",
+    "content_hash": "abf8265eac6ddc1a2d4ee5308ed0d9b023800fc812f20eccc8114dc69072bffa",
+    "precanonical_content_hash": "6df5865589fe7ea14bada5a359bfef4434bc829365f7ee62b7d52866eee9bc76",
+    "skill_md_hash": "54e4ef3874acfb72b8b4b92f110802a6253afcb3639c51d2dcd462500536994f",
+    "version_metadata_sha256": "0f7c4e9b6aff0663fbe64a71254f5e5d88db0465831153a245fe755552f347f0"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/djismgaming/skills/jwdiario",
+    "claim_id": "d0e9083cc6aae8f44b1e262982558a8c6393eccc9fe987455f08a0801a904349",
+    "index_entries": [
+      {
+        "index_path": "categories/transportation.md",
+        "label": "jwdiario",
+        "url": "https://clawskills.sh/skills/djismgaming-jwdiario"
+      }
+    ],
+    "owner_handle": "djismgaming",
+    "owner_id": "s178zs99ggb6pmt884tgnvqgjx8846qp",
+    "published_at": 1773444891608,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783649370108,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783649370108,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is narrow and coherent: retrieve the current Spanish daily text from wol.jw.org/es, and the implementation constructs a date-based URL to that same domain.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill instructions are limited to fetching, extracting, and presenting the daily text; I found no role-change, hidden override, unrelated data access, or broad agent authority.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "No installer, startup hook, package install script, or automatic persistence is present. The included executable script depends on local curl and child_process.execSync, while the skill text describes using web_fetch.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to wol.jw.org is proportionate to the purpose. The shell-based curl call is broader than necessary, but its URL is generated from the system date and fixed domain path, not from user input.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "I found no credential access, local file reads or writes, background worker behavior, privilege escalation, account mutation, or persistent state.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[suspicious.dangerous_exec] expected: The static finding is real: main.js uses child_process.execSync to run curl. In context, it is a purpose-aligned fetch to wol.jw.org/es with only year, month, and day from the system clock, so it warrants user caution but not a Review verdict by itself.\n[VirusTotal code_insight suspicious] expected: VirusTotal flagged the same shell-based curl pattern and also noted the URL parameters are derived from the system clock. No engine detections or artifact-backed malicious behavior were present, so this telemetry does not change the benign verdict.\n[SkillSpector clean] expected: SkillSpector reported no issues; this is consistent with the local artifact review, aside from the already noted shell-based fetch implementation.",
+          "guidance": "Install only if you are comfortable with the skill contacting wol.jw.org to fetch the current daily text. The author should preferably replace the execSync curl call with web_fetch or a native HTTP API and document the implementation clearly, but I did not find hidden behavior, credential access, persistence, or exfiltration.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it claims: it fetches the Spanish JW daily text, with a caution that its script uses shell-based curl instead of a safer fetch API.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783649335069,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: jwdiario\nVersion: 1.0.2\n\nThe skill uses `execSync` in `main.js` to execute a shell command (`curl`) for web requests, which is a high-risk practice and a potential shell injection vulnerability. While the URL parameters are currently derived from the system clock (year/month/day), the use of shell execution instead of standard Node.js networking libraries is unnecessary and risky. The skill otherwise appears to perform its stated function of fetching daily text from wol.jw.org.",
+          "checkedAt": 1779160264997,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "f694e4da2bf0310244a991931f0ca286dc58068e4148c8bfb82c370e46cbe83a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/f694e4da2bf0310244a991931f0ca286dc58068e4148c8bfb82c370e46cbe83a"
+    },
+    "slug": "jwdiario",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

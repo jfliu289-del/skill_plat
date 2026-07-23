@@ -1,0 +1,125 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.55,
+    "domains": [],
+    "needs_review": false,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "bcc48b8cf34a6ef90fae48a355b0892fd465fc36c0058ee8aa6e875f29fc266f",
+    "content_hash": "6a52f75f1f9b423326c434022198500de763f2ecfb46d7e9522ec5ec3c85d239",
+    "precanonical_content_hash": "1fff74798c3770eb349d3f3c4cc7f2533f952772295172188bd0773c02b4c4d6",
+    "skill_md_hash": "af5b64f826db46d8b195862a6b3177a074dcfdbbd141a4c9a119b07de9200a0d",
+    "version_metadata_sha256": "2f5a0169acbcc1f4fe4f094ff762eab7ae8990edaf8ced8a55a87db0da42184f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/embrron/skills/ops-detection-incident-routing",
+    "claim_id": "1f0e869144dca9f03fe374fc9544e7a22d3fc69bb7a2c60e212a39bfdac25492",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "ops-detection-incident-routing",
+        "url": "https://clawskills.sh/skills/embrron-ops-detection-incident-routing"
+      }
+    ],
+    "owner_handle": "embrron",
+    "owner_id": "s173mvmfjnrgcb6rvk329yv935884wnb",
+    "published_at": 1771922075578,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779954949154,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779954949154,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts match the stated purpose: they inspect configured local session, cron, and metrics files, produce detector/router JSONL events, and maintain incident guard state.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Usage is scoped to explicit script runs, defaults to dry-run routing, and requires live mode for state lock acquisition; implicit invocation is enabled, so users should confirm that is desired.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Setup checks for bash, jq, and python3, creates example workspace files, and marks bundled scripts executable; it does not download packages or contact external services.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Local file access and shell execution are proportionate for an ops monitoring skill, and review found no credential-store, browser-profile, or network data flow.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill can write local detector/router JSONL files, lock files, and incident state, and its cleanup script deletes generated .jsonl/.lock artifacts under the skill folder; these effects are disclosed and purpose-aligned.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The local shell scripts do read and write files, but this is central to the documented detector/router workflow; the missing explicit permission declaration is a transparency note rather than evidence of hidden or excessive behavior.\n[SQP-1] expected: Implicit invocation is present in agents/openai.yaml, but the skill description and default prompt narrow use to deterministic ops detection; users should still review whether auto-selection fits their environment.\n[VirusTotal telemetry] expected: The clean telemetry is consistent with artifact review: local parsing and state updates were observed, with no exfiltration or unauthorized remote execution.",
+          "guidance": "Install only if you want a local agent-ops detector/router that can read configured runtime files and write incident outputs. Start with dry-run mode, choose workspace and state-file paths deliberately, review implicit invocation before enabling broad use, and run clean-generated.sh only when you are comfortable deleting generated .jsonl and .lock files under the skill folder.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a local incident-detection and routing toolkit with disclosed file reads and local state writes, and no evidence of hidden network access or credential handling.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779954882757,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ops-detection-incident-routing\nVersion: 1.0.2\n\nThe skill bundle provides a deterministic framework for monitoring agent runtime anomalies and managing incident workflows. It includes scripts for detecting threshold breaches (e.g., cron failures, token spikes) and routing them through a state-managed guardrail system. Security-wise, the bundle demonstrates good practices by implementing path traversal protections in `ops-threshold-detector.sh` and using atomic file operations in `incident-state-update.sh`. No evidence of malicious intent, data exfiltration, or unauthorized command execution was found.",
+          "checkedAt": 1779166642939,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "bcc48b8cf34a6ef90fae48a355b0892fd465fc36c0058ee8aa6e875f29fc266f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/bcc48b8cf34a6ef90fae48a355b0892fd465fc36c0058ee8aa6e875f29fc266f"
+    },
+    "slug": "ops-detection-incident-routing",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

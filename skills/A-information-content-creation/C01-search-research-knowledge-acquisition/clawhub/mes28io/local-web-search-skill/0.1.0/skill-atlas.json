@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.625,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:phrase:web search",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C06",
+      "C09"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "6c0d1675092a47f687b4434b1ed18a9bd1bc121a5e2abcd2e9c04f3ffca51281",
+    "content_hash": "09a4041eb6791ea92c6044b7b4b53cf7227cbab267678bd5db3cca7a16bdc4cb",
+    "precanonical_content_hash": "098ac3aa5d68aa9b3327cb7da90e67fda56271d7387db4da63615b6a2c90530d",
+    "skill_md_hash": "72367ea89fd2b3f1d1a5927ee61f425d3f2ed51cfedbf2fce9a0426497da29c1",
+    "version_metadata_sha256": "0936e74bbde9f060420a72b446736469431f30420da556f55177fbe8adeae8ba"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/mes28io/skills/local-web-search-skill",
+    "claim_id": "634ea12767d571197691df0a84099a0c9d11d7d3bda5b5d971952dc029fa9deb",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "local-web-search-skill",
+        "url": "https://clawskills.sh/skills/mes28io-local-web-search-skill"
+      }
+    ],
+    "owner_handle": "mes28io",
+    "owner_id": "s17f4asmmbk384vzwe6z88t6hn885rb9",
+    "published_at": 1771804223783,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779950835211,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779950835211,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is local web search, and the Python helper implements a DuckDuckGo HTML search, parses results, and returns JSON with titles, URLs, snippets, and trust labels.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Returned snippets and titles are untrusted web content, but the skill tells users to verify key claims with primary sources and does not instruct the agent to treat results as commands.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no installer, dependency setup, post-install hook, or hidden execution path; the bundle is documentation plus one Python helper. The frontmatter does not formally declare network permission, but the network behavior is described in the artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Outbound HTTPS search requests are proportionate to the purpose. The reviewed code does not read environment variables, credentials, local files, or session/profile stores.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background worker, privilege escalation, local writes, destructive behavior, or account mutation is evidenced.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The missing structured permission declaration is a transparency issue, but the artifact clearly describes outbound search behavior and the code limits its direct fetch to a DuckDuckGo search URL; this does not support a Review verdict by itself.",
+          "guidance": "Safe for ordinary searches. Do not put secrets, credentials, private customer data, or confidential business details into search queries, because the query text is sent to DuckDuckGo. Treat returned snippets as untrusted web content and verify important claims from primary sources.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward DuckDuckGo search helper; its main risk is that search queries are sent to an external search engine.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779950783444,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: local-web-search-skill\nVersion: 0.1.0\n\nThe skill bundle is benign. The `SKILL.md` clearly states the purpose and security properties, which are fully upheld by the `scripts/local_search.py` code. The Python script performs web scraping of DuckDuckGo, making outbound HTTPS GET requests only to `duckduckgo.com`, without reading environment variables, sensitive files, or performing any external writes. Input sanitization is correctly handled via `urllib.parse.quote` for the search query, and there are no signs of malicious execution, data exfiltration, persistence, or prompt injection attempts against the agent.",
+          "checkedAt": 1779166354243,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "ceb169500f3f73f9373ff6cdbf8073e72be2d8927f573080a28800e21a3f1bb6",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ceb169500f3f73f9373ff6cdbf8073e72be2d8927f573080a28800e21a3f1bb6"
+    },
+    "slug": "local-web-search-skill",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

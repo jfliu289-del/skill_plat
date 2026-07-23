@@ -1,0 +1,177 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C17",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C09:token:privacy",
+      "category:C17:token:notes",
+      "category:C17:token:schedule",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C04",
+      "C06",
+      "C09"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "42d3a829db659033f8938e48cf80f7934e8442438406e79eb10be6cd3b4942c8",
+    "content_hash": "c6066ece7bb80caaf362ae1043c0e27e3d6574dd2fb8debc3c35bd659932c8f5",
+    "precanonical_content_hash": "009f6fe35763b5f9514055e278918b14ddf8af6d9f04e311cc58a00329b1a2be",
+    "skill_md_hash": "3747d0b5db9ac0a62a3c5b926e9530ef7d0a464c7758551a10ab34c78325130d",
+    "version_metadata_sha256": "59f3c49a2d37dea5495f2b49e1301974492a172bfef073cc68c0db4defb540b6"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/fermions75/skills/deen-time",
+    "claim_id": "cf5b77041ff652c71811d0a1e857a66e3df2b844f7d8bb6664fa7eb8fa9f2ae7",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "deen-time",
+        "url": "https://clawskills.sh/skills/fermions75-deen-time"
+      }
+    ],
+    "owner_handle": "fermions75",
+    "owner_id": "s17edyjy691a903fz84kk2wp2h8857pf",
+    "published_at": 1771581297063,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779165501936,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": [
+            {
+              "categoryId": "ASI07",
+              "categoryLabel": "Insecure Inter-Agent Communication",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The skill sends user-requested location parameters to an external API. This is purpose-aligned and disclosed, but city names or exact coordinates can still reveal location context.",
+                "path": "SKILL.md",
+                "snippet": "curl -L \"https://api.aladhan.com/v1/timingsByCity?city={CITY}&country={COUNTRY}&method={METHOD}\""
+              },
+              "recommendation": "Use city-level locations when possible, and avoid exact coordinates if revealing precise location would be sensitive.",
+              "riskBucket": "sensitive_data_protection",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "A third-party prayer-time service receives the location or coordinates used for the lookup."
+            }
+          ],
+          "checkedAt": 1777614713462,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The declared purpose and artifacts are coherent: the skill fetches prayer, Iftar, Suhoor, Ramadan, and Hijri-date information from a public prayer-times API. Users should notice that city/country or coordinates are sent externally to provide those results.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are limited to read-only curl GET requests to api.aladhan.com and formatting the returned prayer-time data.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "This is an instruction-only skill with no install script, no included executable code, and only a declared curl binary requirement.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access and curl are proportionate to the stated API-lookup purpose; exact coordinates, if used, may be more privacy-sensitive than city-level lookups.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts request no credentials, authentication, local config, persistent storage, background operation, or privileged access.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": null,
+          "guidance": "This appears safe to install if you are comfortable with your requested location being sent to Aladhan's public prayer-times API. Prefer city and country over exact coordinates when privacy matters.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": {
+            "abnormal_behavior_control": {
+              "highestSeverity": "none",
+              "status": "none",
+              "summary": "No artifact-backed evidence of hidden execution, destructive actions, persistence, or behavior outside the prayer-time lookup purpose."
+            },
+            "permission_boundary": {
+              "highestSeverity": "none",
+              "status": "none",
+              "summary": "No credentials, tokens, account access, or privileged permissions are requested."
+            },
+            "sensitive_data_protection": {
+              "highestSeverity": "low",
+              "status": "note",
+              "summary": "The skill discloses an external API data flow involving user-provided city/country or coordinates."
+            }
+          },
+          "status": "clean",
+          "summary": "Deen Time is a straightforward read-only prayer-time helper, with the main privacy consideration that the requested location is sent to Aladhan's public API.",
+          "verdict": "benign"
+        },
+        "skillspector": null,
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: deen-time\nVersion: 1.0.1\n\nThe skill is designed to fetch Islamic prayer times from the public Aladhan API using `curl`. All network requests are directed to `api.aladhan.com` over HTTPS, as explicitly stated in `SKILL.md` and `README.md`. The skill requests `network` permissions, which is consistent with its functionality. There is no evidence of data exfiltration, unauthorized execution, persistence mechanisms, or prompt injection attempts against the agent. The instructions in `SKILL.md` are clear, align with the stated purpose, and even advise URL encoding for user inputs, indicating good practice rather than malicious intent. The skill's behavior is entirely aligned with its description.",
+          "checkedAt": 1779165501936,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "42d3a829db659033f8938e48cf80f7934e8442438406e79eb10be6cd3b4942c8",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/42d3a829db659033f8938e48cf80f7934e8442438406e79eb10be6cd3b4942c8"
+    },
+    "slug": "deen-time",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,151 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "creative",
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "cross-tag:data-analysis",
+      "cross-tag:design",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C09",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "design",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "3042adea4dac04eefd652d455f5dbb449eeeac2021247bfdbbd3caa166254d66",
+    "content_hash": "d8c402ccff35d70d624fdd13ba08fd47d05db8345e4b27a7cb7d14cc7ff0f6e6",
+    "precanonical_content_hash": "b13c8a54d3d3551d633b1283a0627f6129ebfa45dd7f73bc0e5f0ed8cdb15193",
+    "skill_md_hash": "7825ae79f613bb0ae76ae11d0ffd9178eb66af7fb2d7de514f45ed4cf82a3429",
+    "version_metadata_sha256": "a049cee1122b83cdb33d45e67647812e31d960f95e36de2e86416b3608f26f69"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/mjohannp/skills/youtube-ai-videos",
+    "claim_id": "d32ac22d1ce9f86d67d1f8bc7e6a8176183360ff01f5d6c77692a7bca2ece437",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "youtube-ai-videos",
+        "url": "https://clawskills.sh/skills/mjohannp-youtube-ai-videos"
+      }
+    ],
+    "owner_handle": "mjohannp",
+    "owner_id": "s17e5yhs02ttatd9g2j2p9rn9d884ftr",
+    "published_at": 1771500997273,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779933383295,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779933383295,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The SKILL.md, README, config, and scripts consistently describe fetching video metadata from configured YouTube channels and filtering by title keywords, age, and result count.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime behavior is bounded to configured channels and YouTube endpoints; there are no prompt overrides, hidden role changes, automatic background actions, or destructive instructions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation is ordinary ClawHub/manual setup with Python scripts and a config file. The required YOUTUBE_API_KEY is declared and documented, though users should read setup details before first use.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill reads YOUTUBE_API_KEY from the environment, a specific OpenClaw secrets file, or config.json, then uses it for YouTube API requests. This is sensitive but expected and proportionate for the stated purpose.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no background persistence or privilege escalation. The only persistence is user-directed API key storage, including a README example for adding the key to a shell profile.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The environment, local secrets-file read, and YouTube network access are real, but they are disclosed in SKILL.md/README and directly necessary for the skill’s YouTube API workflow, so this is guidance rather than a Review-level concern.\n[SQP-2] expected: The shell-profile API key example stores a secret in plaintext long term. That is weaker than the documented secrets-file option, but it is user-directed, disclosed, and not hidden persistence by the skill.",
+          "guidance": "Install only if you are comfortable providing a YouTube Data API key and making requests to Google/YouTube. Prefer a restricted YouTube Data API v3 key stored in ~/.openclaw/secrets/youtube_api_key.txt with tight permissions, and avoid putting the key in config.json or a synced shell profile.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it uses a user-provided YouTube API key to fetch recent AI-related YouTube videos, with no evidence of hidden or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779933336881,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 19,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: youtube-ai-videos\nVersion: 1.0.1\n\nThe skill bundle is benign. It fetches YouTube videos using the YouTube Data API v3, as described. The code (`scripts/fetch_youtube_ai_videos.py`) securely handles API keys by prioritizing environment variables and a dedicated secrets file (`~/.openclaw/secrets/youtube_api_key.txt`) over the `config.json` file, and it warns the user if the less secure config option is used. All network requests are made to the legitimate YouTube API, and there is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts in the `SKILL.md` or `README.md` files. The utility script `scripts/find_channel_id.py` is also benign, performing its stated function without malicious intent.",
+          "checkedAt": 1779165416991,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "09ba266a864e5db6bc42a368d44275ba0612801f3cc206cac5ff789bb5d8c69b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/09ba266a864e5db6bc42a368d44275ba0612801f3cc206cac5ff789bb5d8c69b"
+    },
+    "slug": "youtube-ai-videos",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

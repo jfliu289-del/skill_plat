@@ -1,0 +1,148 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "security-professional"
+    ],
+    "confidence": 0.5972,
+    "domains": [
+      "security"
+    ],
+    "needs_review": false,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:phrase:multi agent",
+      "category:C00:token:agent",
+      "category:C04:token:data",
+      "category:C08:token:github",
+      "category:C09:token:security",
+      "category:C10:token:model",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:security",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C04",
+      "C08",
+      "C09",
+      "C10"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ba10e4b1141c76284f310002d00dee0585307c6aa843018d05cbd800041718c1",
+    "content_hash": "353549701f8c6431248bdf756473a8afdc7b231b30e1c0520c22c111aa015b7c",
+    "precanonical_content_hash": "8b96a366d5338fb11c7af3975ca93fa6665fb2f61fc4dd2063941d020bf81de5",
+    "skill_md_hash": "54a3e8fb8e617d81f3445576bc8960a1d828a5860be882cfff4b159faa5cd087",
+    "version_metadata_sha256": "d9d737bb11e3d1a32bfd5bbcafb7788f383ce030e14be50a33125c4ee9ad9095"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/thinkoffapp/skills/ide-agent-kit",
+    "claim_id": "4ef665b12c5ea2f598db19cfba663880dc321c27baccc25743c57ddc88dab585",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "ide-agent-kit",
+        "url": "https://clawskills.sh/skills/thinkoffapp-ide-agent-kit"
+      }
+    ],
+    "owner_handle": "thinkoffapp",
+    "owner_id": "s171fqjffx4b0fs9xwy44ns5n188572n",
+    "published_at": 1772452478300,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779954014192,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779954014192,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented capabilities match the stated purpose: local event queues, webhook relay, room polling, gateway sessions, memory, scheduled jobs, and allowlisted command execution for multi-agent IDE workflows.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill clearly separates local default behavior from advanced opt-in features; external POST commands, credentials, and shell execution are disclosed, with shell execution described as allowlisted and partly approval-gated.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses an external npm package and exposes an `ide-agent-kit` binary; the submitted artifact set contains only SKILL.md, so the package implementation is not independently bundled here, though static and SkillSpector scans found no suspicious artifact patterns.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Default behavior is described as local-only with blank credentials and localhost binding; optional network access requires user-specified URLs, API keys, tokens, or webhook configuration, which is proportionate to the integration purpose.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill documents persistent local queue, receipt, and memory files, plus optional keepalive, agent spawning, and cron scheduling; these are purpose-aligned but can affect later sessions if enabled.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code_insight suspicious] expected: The concern about `emit` and `hooks create` sending data to user-specified URLs while the config may contain secrets is artifact-backed, but the behavior is explicit, optional, and aligned with webhook/message relay functionality rather than hidden exfiltration.\n[SkillSpector clean] expected: SkillSpector reported no issues, consistent with the artifact's transparent local-first documentation; this was treated as advisory context, not as the deciding factor.\n[static scan clean] expected: The static scan found no suspicious patterns, and the artifact set contains only a non-executable SKILL.md file.",
+          "guidance": "Before installing, verify the npm package and source, keep `tmux.allow` narrow, avoid committing or broadly sharing `ide-agent-kit.json` if it contains secrets, review every external URL used with `emit` or `hooks create`, and periodically check memory, queues, active sessions, and scheduled jobs.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is coherent for IDE agent coordination, but its optional networking, command execution, credentials, and persistent state need careful configuration.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779953949213,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ide-agent-kit\nVersion: 0.4.1\n\nThe skill is classified as suspicious due to its capabilities that, if exploited via prompt injection, could lead to data exfiltration. Specifically, the `emit` and `hooks create` commands allow sending arbitrary data to user-specified external URLs. The skill also reads `ide-agent-kit.json`, which the documentation explicitly states 'may contain secrets'. A malicious prompt could instruct the agent to read this configuration file and exfiltrate its contents using the `emit` command. While shell command execution (`tmux run`, `exec`) is present, it is heavily mitigated by a strict default allowlist and an approval flow, reducing its immediate malicious potential. The `SKILL.md` is transparent about these capabilities, but the combination of reading potentially sensitive local files and the ability to send data to arbitrary external endpoints constitutes a significant risk.",
+          "checkedAt": 1779166618034,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "ea32b9bdeb12ba7f5f940120e9251af457f933d8b0a62d263ed6663d042853f7",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ea32b9bdeb12ba7f5f940120e9251af457f933d8b0a62d263ed6663d042853f7"
+    },
+    "slug": "ide-agent-kit",
+    "source_type": "clawhub",
+    "version": "0.4.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

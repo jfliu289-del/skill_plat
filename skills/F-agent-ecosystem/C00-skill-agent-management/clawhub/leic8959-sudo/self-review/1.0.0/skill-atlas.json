@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C02:token:edit",
+      "category:C06:token:api",
+      "category:C06:token:code",
+      "category:C07:token:quality",
+      "category:C07:token:review",
+      "cross-tag:agent-management",
+      "cross-tag:review",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C06",
+      "C07"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "review",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "42d1f4213f2993bcda61a210537317224ddd7fe40e3721f39d1e7457b6954f2e",
+    "content_hash": "5ceb8a4a917df807a9d626a91466f54cba0924fdb57ae4b52b65ca502b725921",
+    "skill_md_hash": "d2a9efbacb8150f79cd56157e1bd200ff65c6bdddeeb2046d2e930065fee5c50",
+    "version_metadata_sha256": "776f98f73ccf5332d5464f55906bd82c1e0a450d771ae177c2d0c04d40366122"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/leic8959-sudo/skills/self-review",
+    "claim_id": "070b3974419409ccaf027b9ae92f7d7d5740eb0fc1cf4a5eba2ce0b8cd58d7bd",
+    "index_entries": [
+      {
+        "index_path": "categories/communication.md",
+        "label": "self-review",
+        "url": "https://clawskills.sh/skills/leic8959-sudo-self-review"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "leic8959-sudo",
+    "owner_id": "s17dgjjxvvq7qvmt9wgng8hs6s848m8t",
+    "published_at": 1771700845611,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779948053699,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779948053699,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the implementation: a Node.js command reads piped text, applies basic quality heuristics, prints a pass/fail review, and exits 0 or 1. It does not actually rewrite responses itself.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The README recommends use before sending agent responses and mentions auto-regeneration by the surrounding pipeline. That is disclosed and purpose-aligned, but users should configure any regeneration loop explicitly and avoid treating the score as factual or safety validation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The manifest declares a local Node command and no services, dependencies, installer hooks, credentials, or network integrations.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The runtime behavior is proportionate: it reads stdin and writes console output only. No filesystem reads beyond its own script, network access, credential access, or external API calls were found.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No persistence, background worker, privilege escalation, file writes, or history logging are implemented. README TODO items about future rewriting and memory logging are not active behavior.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The README’s auto-regeneration language and response-pipeline integration are relevant caution points, but the current artifact only returns an exit code and does not modify outbound content by itself.\n[SQP-2] expected: Using the checker before user-visible responses is coherent with a quality-gate skill; the risk depends on how an installer wires the exit code into regeneration, so it merits guidance rather than a Review verdict.\n[SQP-3] expected: The English and Chinese action-word regex is a real reliability limitation for other languages, but it is visible in the code and does not create hidden access, persistence, exfiltration, or unsafe privilege.",
+          "guidance": "Safe to install as a lightweight local formatting and clarity check. Keep it advisory or set clear limits if you wire exit code 1 to regenerate responses, especially for safety-critical, factual, legal, medical, financial, or multilingual output.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a simple local output-quality checker with no evidence of data theft, persistence, hidden installs, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948023363,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: self-review\nVersion: 1.0.0\n\nThe skill bundle is designed for self-review of agent output quality using a simple rule-based engine. The `index.js` script reads input from stdin, performs basic regex checks on its length, presence of action words, and structure, then exits with a status code indicating approval or a need for improvement. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts in any of the files. The documentation (`SKILL.md`, `README.md`) and skill definition (`skill.json`) clearly describe its benign purpose and functionality, with future 'TODO' items in `README.md` being plans, not active instructions or malicious code.",
+          "checkedAt": 1779166029211,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "b97d3011f5c722dc322f183d95463cfed739ed88991fc04cd5c660f16faa204a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b97d3011f5c722dc322f183d95463cfed739ed88991fc04cd5c660f16faa204a"
+    },
+    "slug": "self-review",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

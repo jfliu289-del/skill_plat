@@ -1,0 +1,128 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.4167,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:find",
+      "category:C01:token:search",
+      "category:C10:token:model",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10"
+    ],
+    "stages": [
+      "discover"
+    ],
+    "tasks": [
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1b40c6cdcb1deb4fc4f7609f962b00904a970a25931815b43a4076307a69e00c",
+    "content_hash": "4add83f20bb888881fbca566c11cb47da86c06b4a3acb70d74068a3025df1338",
+    "precanonical_content_hash": "da3a3f13979c55f65e66242184d4f0271816ca2727c8d701cd115e04f9d37ae9",
+    "skill_md_hash": "02d8170e077bf459e575c5f7279a3ad01a047a99cc5ebbeb7bfa029f64310ea7",
+    "version_metadata_sha256": "0cea3f70e133d3ecff95cc88283652dd5b0865df6e0ef30a9a672f6fd0d6056b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/yanick112/skills/mcp-server-discovery",
+    "claim_id": "ac24b3c8efc9c9e25da3c8321a8595156f3fe72a66c7491f56edeff3b8238770",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "mcp-server-discovery",
+        "url": "https://clawskills.sh/skills/yanick112-mcp-server-discovery"
+      }
+    ],
+    "owner_handle": "yanick112",
+    "owner_id": "s171thz76f5qptyec98eby1bq5884p0r",
+    "published_at": 1771754403368,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779949026448,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779949026448,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently match the stated purpose: listing, searching, describing, and generating client config for MCP servers. Some generated configs point to powerful servers such as filesystem, GitHub, database, web, and memory, but that is disclosed and user-selected.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands are examples for user-directed list/search/info/config operations. The trigger wording is somewhat broad for general MCP discussion, but the skill does not instruct automatic installation, background execution, hidden actions, or automatic config writes.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill itself contains a small Python script and markdown references with no package-install step. Generated configs contain unpinned npx commands, which can execute downloaded packages if the user later runs or installs the config.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The script imports urlopen and defines registry URLs, but reviewed code paths use hardcoded server data and do not perform outbound requests. The skill itself does not collect credentials, though referenced downstream servers may require tokens or API keys.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill does not create persistence or request privileges itself. It can recommend memory and filesystem MCP servers, so persistence and local access depend on the user's selected downstream configuration.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code insight] expected: VT reported benign behavior consistent with artifact review: the script outputs hardcoded server information and generated config, and does not execute npx commands, exfiltrate data, or establish persistence.\n[SkillSpector current report] expected: The current supplied SkillSpector report has no issues; historical metadata notes about broad MCP scope and possible network capability were reviewed against the artifacts and do not justify Review because network code is unused and configuration generation is explicit.\n[static scan] expected: Static scan metadata is clean, and manual review found no obfuscation, destructive file operations, credential harvesting, prompt injection, or automatic execution behavior.",
+          "guidance": "Safe to install as a discovery helper. Before saving or running generated MCP configs, review the package names, pin versions where practical, enable only the servers you need, restrict filesystem roots, use least-privilege tokens, and understand whether a selected memory server will retain data across sessions.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward MCP server lookup and configuration helper; the main risk is what downstream MCP servers a user chooses to enable.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948969113,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: mcp-server-discovery\nVersion: 1.0.0\n\nThe skill bundle is designed to discover and configure MCP servers. The `scripts/mcp_discover.py` script lists hardcoded server information and generates client configurations that include `npx` commands. While `npx` can execute remote code, the script itself does not execute these commands; it merely outputs them as part of a configuration. The script does not perform any network requests to external registries despite importing `urlopen`, nor does it attempt to exfiltrate data, access sensitive files, or establish persistence. No prompt injection attempts were found in `SKILL.md` or other documentation.",
+          "checkedAt": 1779166176227,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "e5bd2cf718cb55303a523077c4cb25062d2e3a9f958476b9585cf5cbd11ce063",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e5bd2cf718cb55303a523077c4cb25062d2e3a9f958476b9585cf5cbd11ce063"
+    },
+    "slug": "mcp-server-discovery",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

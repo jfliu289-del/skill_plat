@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [],
+    "confidence": 0.155,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C05:token:audio",
+      "category:C07:token:quality",
+      "category:C10:token:ai",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05",
+      "C07",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "89a766aa302121c19bdf34870580ae8cfb39095e9128757d10bd14707c13519b",
+    "content_hash": "e3526cf61306abd9d007b11f0c87fcba19cea6e0516ea2f5279e3bdd86219db4",
+    "precanonical_content_hash": "2881369048aa07c0a431bccd7c520b8a35ca95cc0c2dd05745efa40c67997c63",
+    "skill_md_hash": "e21cd0608d8f899cc46e70db1fce3d794d0f0564f433007d4189fd9de2bb7899",
+    "version_metadata_sha256": "33bc63a683281c7a7eebbf9f99efadfcaa63511bb28f21c246deb02027863723"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/udiedrichsen/skills/audio-gen",
+    "claim_id": "8364cb178f71aee600b9968088a486659d0311906094e7e457b85f539fd476b9",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "audio-gen",
+        "url": "https://clawskills.sh/skills/udiedrichsen-audio-gen"
+      },
+      {
+        "index_path": "categories/speech-and-transcription.md",
+        "label": "audio-gen",
+        "url": "https://clawskills.sh/skills/udiedrichsen-audio-gen"
+      }
+    ],
+    "owner_handle": "udiedrichsen",
+    "owner_id": "s179t0qrm3e90wea1cjtkqwv55884gmn",
+    "published_at": 1768400692046,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783649856261,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783649856261,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to generate scripts and audio for audiobooks, podcasts, and educational content; the workflow, ElevenLabs TTS use, required API keys, and MP3 output all fit that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill instructs the agent to show the script and get user approval before generating audio, but the approval prompt could more plainly state that approved text will be sent to ElevenLabs.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains markdown instructions only, declares dependency on the SAG skill and API-key environment variables, and includes no bundled installer or executable payload.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use of ANTHROPIC_API_KEY and ELEVENLABS_API_KEY is proportionate for script generation and text-to-speech, though users should expect third-party processing and possible API costs.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill writes generated MP3s to temporary /tmp-style paths and documents 24-hour cleanup; there is no evidence of credential harvesting, privilege escalation, background execution, or durable persistence.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The privacy concern is valid user guidance, but sending approved script text to ElevenLabs is central to the advertised text-to-speech function and is disclosed in the description and technical notes.\n[RA2] expected: Returning a MEDIA token and saving an MP3 are expected for an audio-generation skill; the artifact documents /tmp/audio-gen storage and automatic cleanup after 24 hours.\n[VirusTotal code_insight] expected: The flagged shell command is a fixed invocation of the required SAG TTS script to create an MP3, with no artifact evidence of unrelated arbitrary command execution, exfiltration, or persistence.\n[staticScan] expected: Static scan reported no findings, consistent with an artifact made up of markdown workflow instructions and no bundled executable code.",
+          "guidance": "Install only if you are comfortable sending generated or user-approved script text to Anthropic and ElevenLabs and storing the resulting MP3 temporarily on disk. Avoid sensitive, proprietary, or regulated content unless those providers' data-handling terms are acceptable to you.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent audio-generation skill that uses disclosed AI and ElevenLabs services to create MP3 files, with privacy considerations but no evidence of hidden or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783649835057,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 17,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: audio-gen\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to the direct execution of a shell command (`uv run ...`) instructed within `SKILL.md`. While this command targets a local Python script (`/home/clawdbot/clawdbot/skills/sag/scripts/tts.py`) and appears to be for the legitimate purpose of text-to-speech generation, it represents a high-risk capability (arbitrary command execution) without the full context of the `tts.py` script itself. There is no clear evidence of intentional malicious behavior like data exfiltration or persistence, and prompt injection attempts are not present; however, the direct shell access elevates it beyond benign.",
+          "checkedAt": 1779159744418,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "74e565414bc2c86236c8f55ff11ca409601b1474a53074d929c797aa4e2d90bd",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/74e565414bc2c86236c8f55ff11ca409601b1474a53074d929c797aa4e2d90bd"
+    },
+    "slug": "audio-gen",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

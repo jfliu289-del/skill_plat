@@ -1,0 +1,135 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C02:token:edit",
+      "category:C10:token:model",
+      "cross-tag:design",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "design",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "7584297cc3df7e9fe616279fd42a78fc08e94db6da4276d6504846155643accc",
+    "content_hash": "39025bd765ec5ca177cb20cd9bc0aeb4825ef8952cb5d9b5882b394ce2260a7a",
+    "skill_md_hash": "e5727f6ba31da6325e97ab232477a2f2eea9ec5afdac1db194aa6e990d10b091",
+    "version_metadata_sha256": "cf6a7ff91aeebaa09910d182023fe3ca23072f3c4331f558cb08c62486d5660c"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sarielwang93/skills/model-guard",
+    "claim_id": "04f5fb861c43330f8bb69e7b1cd4dc6f2befc4585df6a1cfe63ad7f87106e2e4",
+    "index_entries": [
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "model-guard",
+        "url": "https://clawskills.sh/skills/sarielwang93-model-guard"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "sarielwang93",
+    "owner_id": "s171gebaewajvke6ga4wztkken8856tq",
+    "published_at": 1770556650827,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658632373,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658632373,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "Changing the default model is meaningful configuration authority, but it directly matches the stated purpose of automatically selecting the Anti-Gravity model with the highest remaining quota or a fixed fallback.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "SKILL.md discloses automatic switching and intended cron or heartbeat use; it does not provide a confirmation or dry-run mode, so users should understand it acts when run.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "package.json exposes a single CLI bin for guard.js and contains no dependencies, install scripts, postinstall hooks, or hidden setup behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script uses child_process.execSync only for openclaw models status/status --json and openclaw models set, with model names drawn from hardcoded constants rather than user-controlled shell input.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill does not create its own scheduler or background service, but users may schedule it externally and openclaw models set likely persists the selected default model.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-4] expected: The inline comment understates the later state-changing action, but the SKILL.md, package purpose, and code all clearly disclose and implement automatic default-model switching.\n[suspicious.dangerous_exec] expected: Shell execution is present, but it is bounded to the OpenClaw CLI commands needed for quota checking and model selection, with no evidence of obfuscation, exfiltration, or untrusted command construction.\n[SQP-2] expected: Automatic model configuration changes are a real user-control consideration, but they are central to the advertised behavior and not hidden or unrelated.",
+          "guidance": "Install or schedule this only if you want OpenClaw's default model to change automatically. Review guard.js to confirm the candidate model list, 20% threshold, fallback model, and the assumption that some Gemini Anti-Gravity models are treated as full quota when not reported.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill openly checks OpenClaw model quota status and changes the default model according to fixed, disclosed rules.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658618743,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 11,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: model-guard\nVersion: 1.0.0\n\nThe skill is classified as benign. It uses `child_process.execSync` to interact with the `openclaw` CLI, specifically to query model status and set the default model. While `execSync` is a powerful primitive, the commands executed (`openclaw models status` and `openclaw models set`) are directly related to the skill's stated purpose of managing Anti-Gravity model quotas. Crucially, all arguments passed to `openclaw models set` are derived from hardcoded lists or constants within `guard.js`, preventing command injection from untrusted sources. There is no evidence of data exfiltration, persistence mechanisms, obfuscation, or prompt injection attempts in `SKILL.md`.",
+          "checkedAt": 1779162221753,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "c178e54dd9e76970d0ba66730672beca9c12d18610207749064eac28141ef768",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/c178e54dd9e76970d0ba66730672beca9c12d18610207749064eac28141ef768"
+    },
+    "slug": "model-guard",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

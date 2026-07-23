@@ -1,0 +1,133 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "2d54ee6c85c27a457ffac9c07712f654625820cd0a1ed14e759f8ad8f02af4ab",
+    "content_hash": "7e8e682a4d3001d45605f54da045719066ccd4df3e0405d322f33d00a048cda5",
+    "precanonical_content_hash": "1d947fd2a1f5c97673d56d5e785d823d06dc9b9352f04ee66db0c96ab4a4230f",
+    "skill_md_hash": "102304d7429967f50ddf2ef0eeef951c5afcfbd42c6ea3105425afd7a667001c",
+    "version_metadata_sha256": "152fa7edcf481463690226bf31431e696797711827b0c3c879061ed912449f59"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/angusthefuzz/skills/crawl-for-ai",
+    "claim_id": "5483851790696ba179a74276261f8d450410d99da1a283c5f6071bbf05b908dc",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "crawl-for-ai",
+        "url": "https://clawskills.sh/skills/angusthefuzz-crawl-for-ai"
+      }
+    ],
+    "owner_handle": "angusthefuzz",
+    "owner_id": "s174z8dkzqyr3xc14wvkpart7n8815fk",
+    "published_at": 1771098491812,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967427707,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967427707,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is local Crawl4AI web scraping, and the script only accepts a URL, posts it to the configured Crawl4AI /crawl endpoint, and prints markdown or JSON results.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are limited to invoking the bundled Node script with an optional --json flag; there are no prompt overrides, hidden agent instructions, or unrelated workflows.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The bundle contains only SKILL.md and one executable Node script, with no install-time script or package installation; the script help text still mentions default env values even though the code requires CRAWL4AI_URL and does not default CRAWL4AI_KEY.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading CRAWL4AI_URL and optional CRAWL4AI_KEY is proportionate for an authenticated Crawl4AI integration, but the configured endpoint receives requested URLs and the bearer key when set.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background worker, privilege escalation, local file indexing, credential storage, destructive action, or broad local data access was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[suspicious.env_credential_access] expected: The static finding is supported by the code reading CRAWL4AI_URL and CRAWL4AI_KEY and sending an Authorization header to the configured endpoint; this is disclosed in SKILL.md and matches the skill's purpose.\n[SkillSpector] expected: SkillSpector reported no issues, which is consistent with the small artifact surface and the disclosed Crawl4AI integration behavior.\n[VirusTotal code_insight] expected: VirusTotal telemetry was clean and described only configured-endpoint network activity; this was treated as supporting telemetry, not as the deciding factor.",
+          "guidance": "Install this only if you intend to use a Crawl4AI instance you control or trust. Set CRAWL4AI_URL deliberately, and only set CRAWL4AI_KEY for a trusted endpoint because that service will receive the bearer token and the URLs you ask it to crawl.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill transparently sends user-requested crawl jobs to a configured Crawl4AI service and does not show hidden, destructive, or persistent behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967390033,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: crawl-for-ai\nVersion: 1.0.1\n\nThis skill bundle is designed to interact with a user-configured local Crawl4AI instance for web scraping. The `scripts/crawl4ai.js` file makes HTTP POST requests to the `CRAWL4AI_URL` (an environment variable) and includes an optional `CRAWL4AI_KEY` for authentication. All network activity is directed to the explicitly configured endpoint, which is essential for its stated purpose. There is no evidence of data exfiltration to unauthorized destinations, malicious execution, persistence mechanisms, or prompt injection attempts in `SKILL.md` designed to manipulate the AI agent into harmful actions. The code is transparent and aligns with the description of a tool for a self-hosted service.",
+          "checkedAt": 1779164081309,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "d0c040295c56b2765c62bed6fe6eb0dedb41379aee4ad315a3cf81fa5cad2c01",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d0c040295c56b2765c62bed6fe6eb0dedb41379aee4ad315a3cf81fa5cad2c01"
+    },
+    "slug": "crawl-for-ai",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

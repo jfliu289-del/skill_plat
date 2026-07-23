@@ -1,0 +1,152 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C04:token:analytics",
+      "category:C04:token:metrics",
+      "category:C06:token:api",
+      "category:C07:token:review",
+      "category:C17:token:personal",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:review",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00",
+      "C06",
+      "C07",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "review"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "83996ba5fb234bbb8b420c4e83243308f0755605b90b4401fbc4a637d0c0bae0",
+    "content_hash": "24476de498a8df1635406c760970f201d0373ef8b9d53dca97740462160e3288",
+    "precanonical_content_hash": "e300a775e8091437fe82b11405378b458b5a028dd9005d5c1fe6caf855f101f7",
+    "skill_md_hash": "c377035508fa0a1cb79fdc85cd81ab1e3596874cd3e937dff8f9d59b378504a1",
+    "version_metadata_sha256": "af4f1d6663bf863f328651ed614986a504750a227bd98af490bf0aeadefc9a60"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/nevaaron/skills/x-smart-read",
+    "claim_id": "d74f3710b798a4ff96c17d73e75d59784b1916b87e0003fdd4f73ad78ab06b59",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "x-smart-read",
+        "url": "https://clawskills.sh/skills/nevaaron-x-smart-read"
+      }
+    ],
+    "owner_handle": "nevaaron",
+    "owner_id": "s171a09bxypggnvyfem5k5mb79884yej",
+    "published_at": 1771678418607,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779947160711,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779947160711,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts and docs align with X analytics, tweet/thread reading, mentions, profile checks, follower tracking, caching, and bookmark management. Bookmark add/remove are account mutations, but they are disclosed commands and fit the bookmark feature.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Agent instructions emphasize cost control, dry runs, cache reuse, and avoiding loops. Mutating bookmark commands and budget bypass flags are documented, but should be treated as requiring direct user intent.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a normal clone plus uv/Python script workflow with tweepy as the API dependency. SETUP.md suggests a curl-to-shell uv installer command, which is a supply-chain hygiene note but not hidden skill behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "X API credentials, paid API calls, and local cache/config files are proportionate to the stated official-API analytics purpose and mostly disclosed. The local plaintext credentials and cached social data require a trusted machine and restrictive file permissions.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists config, usage history, tweets, mentions, bookmarks, and follower history under ~/.openclaw/skills-config/x-twitter for caching and budget tracking. I found no background workers, privilege escalation, obfuscation, destructive behavior, or exfiltration.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] expected: The README's opening read-access framing is incomplete because bookmark add/remove are write actions, but the commands and skill triggers explicitly document bookmarking and saving tweets, so this is a disclosure note rather than a purpose mismatch.\n[SDI-1] expected: The timeline refresh command can fetch an arbitrary readable tweet ID, but the skill also explicitly supports reading any tweet or thread; this does not expand beyond the stated overall capability.\n[SQP-2] expected: Local persistence of tweets, mentions, bookmarks, usage, and follower history supports the advertised caching and cost-control model and is documented, though retention and purge controls are limited.\n[SQP-2] expected: The setup flow necessarily handles X API credentials and stores them in config.json with 0600 permissions after setup; plaintext local secrets remain a host-security risk but are not hidden or unrelated.\n[SQP-2] expected: Bookmark add/remove are state-changing X account actions, but they are explicit CLI commands with no evidence of automatic invocation; agents should only run them after a direct user request.",
+          "guidance": "Install only if you are comfortable giving the skill X API credentials and letting it cache X content, mentions, bookmarks, usage, and follower history locally. Use least-privilege credentials where possible, protect ~/.openclaw/.env and ~/.openclaw/skills-config/x-twitter/, require explicit approval for bookmark add/remove and --force/--no-budget, and consider installing uv through a verified package-manager path instead of piping a remote script to sh.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent X/Twitter analytics skill, but it needs API credentials, stores social-media data locally, and includes explicit bookmark-changing commands.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779947097321,
+          "issueCount": 10,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: x-smart-read\nVersion: 2.0.4\n\nThe OpenClaw AgentSkills skill bundle for X (Twitter) analytics appears benign. All Python scripts (`x_bookmarks.py`, `x_briefing.py`, `x_common.py`, `x_mentions.py`, `x_read.py`, `x_setup.py`, `x_timeline.py`, `x_user.py`) use the `tweepy` library for X API interactions and manage local data within the skill's designated `~/.openclaw/skills-config/x-twitter/` directory. The `SKILL.md` and `AGENTS.md` files contain extensive instructions for the AI agent, all focused on cost optimization and responsible API usage, with no evidence of prompt injection attempts to subvert the agent's behavior. Credentials are handled securely via `~/.openclaw/.env` or interactive prompts, and `config.json` permissions are set to `0o600`. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or obfuscation.",
+          "checkedAt": 1779165910701,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "ed3a7bdd54ef6130faa09d96fe92fefe5b1368b7b083a39b248bc587e52d0eac",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ed3a7bdd54ef6130faa09d96fe92fefe5b1368b7b083a39b248bc587e52d0eac"
+    },
+    "slug": "x-smart-read",
+    "source_type": "clawhub",
+    "version": "2.0.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,131 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.475,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C09:token:security",
+      "cross-tag:agent-management",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "77da723004502967767a30b7b854aa4f151bbd92520403f5603696a03ce515d2",
+    "content_hash": "a0993fb872e516a9524fec28a554f1c9193ce8d73721bce825fff480eba06bab",
+    "precanonical_content_hash": "52d0a0d13349454484629396a97d887c41921a72712e6ff18279a97464a475fa",
+    "skill_md_hash": "4f85fa0b54471c2f5df7aa5b7984a5c58df4db9b9aac1c572efb88959dc75991",
+    "version_metadata_sha256": "a854b7efcf4be37bbc2be9e22d0153564254526dd7742e78cb98663e046c4f6b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/lilyjazz/skills/hive-mind",
+    "claim_id": "9cb78d6f9cb98fc06b67f613103b1d44fd2413dc22f441a832abaf926f7f13d8",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "hive-mind",
+        "url": "https://clawskills.sh/skills/lilyjazz-hive-mind"
+      }
+    ],
+    "owner_handle": "lilyjazz",
+    "owner_id": "s175zyq9k7fh485z86hsfjxbrs83p0tz",
+    "published_at": 1771696510087,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779947087167,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779947087167,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The runtime implements a TiDB-backed key-value preference store with set, get, and list actions, matching the stated shared-memory purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The protocol broadly tells agents to save user preferences and identity-like facts and recall all stored preferences at session start; this is disclosed and purpose-aligned, but privacy-sensitive.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no hidden installer or obfuscated setup. The skill requires python3, curl, and an unpinned pymysql dependency.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading TIDB_* environment variables, using a fixed TiDB Zero provisioning endpoint, and connecting to TiDB are proportionate to the shared database feature and are disclosed in the documentation.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists preferences remotely and caches a DSN containing database access details in ~/.openclaw_hive_mind_dsn; this is disclosed, but the file is plaintext and not permission-hardened by the code.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill discloses required binaries and TIDB environment variables in metadata, and the local DSN cache is documented; lack of richer permission metadata is a packaging transparency issue, not evidence of hidden behavior.\n[TP4] expected: Memory sync, preference sync, remote TiDB use, and DSN caching are all described in the artifacts, so the behavior is not materially different from the advertised purpose.\n[SDI-1] expected: The terms memory, preferences, and configuration are used somewhat interchangeably, but the examples and commands consistently describe small persistent key-value agent preferences.\n[SDI-4] expected: The configuration-store wording is consistent with the implementation; the separate SSL-related code comment is a security-quality note because TLS is not explicitly configured.\n[SDI-2] expected: Auto-provisioning a TiDB Zero database is a disclosed fallback for the shared database feature, using a fixed endpoint rather than arbitrary network destinations.\n[SQP-1] expected: The memory trigger is broad and may store personal facts, but it is visible in PROTOCOL.md and aligns with the persistent-memory purpose; users should narrow it if they require explicit consent.\n[SQP-2] expected: Persistent storage, remote TiDB use, and local DSN caching are real risks, but they are described in the skill documentation and are not hidden exfiltration.\n[SSD-3] expected: Cross-session recall of user-provided preferences is the core function; the artifacts do not show unrelated data harvesting, but they also do not provide deletion, minimization, or access-control guidance.\n[RA2] expected: The DSN cache creates durable access to the shared database, which is expected for persistence but should be protected by the installer or user.\n[VirusTotal code_insight] expected: The suspicious telemetry is based on disclosed curl-based provisioning and plaintext DSN caching; those are risk notes rather than evidence of malicious or deceptive behavior.\n[staticScan] expected: The static scan reported no suspicious patterns.",
+          "guidance": "Install only if you want agent preferences stored in a shared TiDB-backed memory. Use it for low-sensitivity preferences, not passwords, secrets, private personal data, or policy instructions. Prefer your own least-privilege TiDB credentials, protect or chmod the ~/.openclaw_hive_mind_dsn file, and consider narrowing the protocol so facts are saved only when the user explicitly asks to remember them.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it stores shared agent preferences in TiDB, but users should treat it as remote persistent memory and avoid storing sensitive information.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779947043886,
+          "issueCount": 13,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: hive-mind\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to its use of high-risk capabilities, specifically making external network calls via `curl` to provision a database and storing database credentials (DSN) in an unencrypted plaintext file (`~/.openclaw_hive_mind_dsn`) on the local filesystem. While the `curl` command in `run.py` is hardcoded to a legitimate API endpoint and the credential storage is for the skill's own operation, these actions represent significant security risks. The local storage of credentials could be exploited if the agent's environment is compromised, and the external network call, even if currently benign, demonstrates a capability that could be misused in other contexts. There is no evidence of intentional malicious behavior like data exfiltration of unrelated secrets or arbitrary code execution, and the prompt instructions in `SKILL.md` and `PROTOCOL.md` align with the stated purpose.",
+          "checkedAt": 1779165879969,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "658ab481fccbf8dcaf793baa54376cf273153ddaf21135bb7c7a7c3d607cee94",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/658ab481fccbf8dcaf793baa54376cf273153ddaf21135bb7c7a7c3d607cee94"
+    },
+    "slug": "hive-mind",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

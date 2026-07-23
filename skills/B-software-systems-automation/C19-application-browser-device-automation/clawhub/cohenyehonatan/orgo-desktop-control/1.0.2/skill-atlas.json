@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "artifacts": [
+      "website"
+    ],
+    "audiences": [],
+    "confidence": 0.35,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C19",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C12:token:management",
+      "category:C19:token:automation",
+      "category:C19:token:desktop",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C12"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "automate",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "6a25ffb4fb55b68af7068723d2c92d14d6547c160da2cf73e6ebd9c89b62da84",
+    "content_hash": "7bef5c9aeca63eb6d66a232f2be0c986ebbee860061b647a44ca3d9fb03026aa",
+    "precanonical_content_hash": "4140b31d3e75472ff2f0fe1cec03840784a380dbf04acad96669ee1fc4b140ea",
+    "skill_md_hash": "39619e7cb4114ed8510d90d5d2a3ea537b492b80083cfd6cc5497196ceb01bee",
+    "version_metadata_sha256": "139c572e45870b90578d2de34a9e49bed9589e9098ca49fe2ae1f9d8430f05d0"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/cohenyehonatan/skills/orgo-desktop-control",
+    "claim_id": "a6f14f571a52fd40811f19fd9edf5ccc81a92d9577a712644e1db3bd76258d5b",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "orgo-desktop-control",
+        "url": "https://clawskills.sh/skills/cohenyehonatan-orgo-desktop-control"
+      }
+    ],
+    "owner_handle": "cohenyehonatan",
+    "owner_id": "s179jzn136j5zbrmzrcjgn3mqx884hfm",
+    "published_at": 1771740314586,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779948588389,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779948588389,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "Remote desktop provisioning, UI control, screenshots, remote bash/python execution, file transfer, streaming, and VNC password retrieval are high-impact capabilities, but they are explicitly described and match the skill's stated Orgo automation purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill says to activate only for user-requested remote desktop tasks and not for local-only code; destructive workspace/computer deletes require force flags and confirmation guidance, though file deletion and credential examples would benefit from stronger adjacent warnings.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden installer, package install hook, auto-start behavior, or background setup was found; the artifact is documentation plus a Python SDK wrapper that calls the Orgo API.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Internet access, ORGO_API_KEY use, local file upload, signed file download URLs, screenshots, and VNC access are proportionate to cloud-desktop automation, but they can expose sensitive data if used on private files, accounts, or screens.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill can create, preserve, stop, restart, stream, and delete cloud computers; these lifecycle actions are disclosed, and the context manager stops rather than deletes by default.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The metadata is minimal, but the skill description and compatibility fields disclose internet/API-key use and the body lists remote control, command execution, file transfer, streaming, and VNC capabilities.\n[SQP-2] expected: ORGO_API_KEY handling is necessary for the SDK; the artifacts do not show the key being logged or exfiltrated, but users should treat it as a sensitive secret.\n[SQP-2] expected: Computer and workspace deletion examples are purpose-aligned and guarded in code with force=True requirements; explicit user confirmation is also stated for workspace deletion and destructive confirmations.\n[SQP-2] expected: File deletion is a normal cleanup feature for remote file workflows, but the documentation should be read carefully because file deletes are permanent and less strongly guarded than computer/workspace deletes.\n[SQP-2] expected: The sample login flow uses placeholder-style credentials for illustration; it is not evidence of credential theft, though real credentials should be supplied only through secure, user-approved handling.\n[suspicious.exposed_secret_literal] expected: The static finding appears to flag the variable assignment for retrieving a VNC password, not a hardcoded secret literal.\n[VirusTotal code_insight suspicious] expected: VirusTotal's concern is based on broad disclosed capabilities; engine detections were otherwise undetected, and the artifacts do not show hidden or deceptive behavior.",
+          "guidance": "Install only if you need Orgo cloud-desktop automation and trust the publisher with an Orgo API key. Use a limited, rotatable key; do not print or share VNC passwords, signed download URLs, screenshots, or real login credentials; confirm uploads, downloads, streaming, remote commands, and deletes before letting an agent perform them.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a powerful but openly documented Orgo cloud-desktop control skill, with no evidence of hidden execution, deception, or exfiltration beyond its stated purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948553306,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 65,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: orgo-desktop-control\nVersion: 1.0.2\n\nThe skill bundle is classified as suspicious due to its broad and powerful capabilities, which, while explicitly stated as its purpose, introduce significant security risks. The `scripts/orgo_client.py` library allows for arbitrary remote code execution (`run_bash`, `run_python`) on cloud computers, local file upload (`upload_file`) from the agent's host machine to the Orgo cloud, and retrieval of sensitive information like VNC passwords. While the `SKILL.md` and `references/ORGO_ACTION_PATTERNS.md` openly declare these features and include safety instructions, these capabilities create a substantial attack surface for prompt injection or misuse, potentially leading to unauthorized local file exfiltration or remote system compromise if the agent is tricked into executing malicious commands.",
+          "checkedAt": 1779166114449,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "2ef1b1f0bf768e73425d165516e7111965768e5e4c4274f90bc6f278e16ff1ab",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/2ef1b1f0bf768e73425d165516e7111965768e5e4c4274f90bc6f278e16ff1ab"
+    },
+    "slug": "orgo-desktop-control",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,135 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.4167,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C05:token:audio",
+      "category:C05:token:video",
+      "cross-tag:agent-management",
+      "cross-tag:design"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "design",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "24ac2b5b7de1fb07d4865c562b9c81886187098bef0b85fa8923f71eb9a02d0d",
+    "content_hash": "2866f3a421b849256bab2871a9d3dd09b611f359bbfc83bcc2aea379ee151302",
+    "precanonical_content_hash": "769b76e0fff9496acbacec864bf46a1886de0bb6d3df92db97d3c77ce18a55c1",
+    "skill_md_hash": "eaa5ab88fc338a2b6ccf3d7c0c6bc58ede14756ca85201923005f7f8dd1a6f20",
+    "version_metadata_sha256": "714e7232e8d7b7456bb135bc29544df045ea0f7260c2c7898f88a652f5a1816f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sieershafilone/skills/media-orchestrator",
+    "claim_id": "685ba81d284ca144af76abc029c977d38fe0622f403b916d3b709c45ee66bd1b",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "media-orchestrator",
+        "url": "https://clawskills.sh/skills/sieershafilone-media-orchestrator"
+      }
+    ],
+    "owner_handle": "sieershafilone",
+    "owner_id": "s17b9jpzbn7a1kc5xzmcpdvjnn885pgc",
+    "published_at": 1770484002224,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658940975,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658940975,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is media resolution, download, Spotify metadata handling, and WhatsApp/Telegram delivery; the script behavior matches that purpose using yt-dlp, a local spotify-surface helper, and openclaw message send.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The activation examples are broad natural-language media intents and the script does not implement a confirmation step before download or delivery, but the side effects are described as the skill's core workflow rather than hidden behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains SKILL.md, manifest.yaml, and one Python helper script; no install hooks, background workers, self-modification, obfuscation, or unrelated setup behavior were found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Executable access and filesystem read/write are significant but proportionate for a media downloader that invokes yt-dlp, checks ffmpeg, writes media files, and sends files to chat integrations.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Downloaded media and Spotify metadata are written under a disclosed OpenClaw workspace path, but the artifact does not show automatic cleanup, retention limits, file-size limits, or destination confirmation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The manifest declares exec and filesystem read/write, and those capabilities are needed for yt-dlp, ffmpeg checks, local media files, and chat delivery; source/domain scoping could be clearer but the authority is not purpose-mismatched.\n[SQP-1] expected: Broad media phrases could cause accidental activation, but they are tied to the advertised request flow; this is a user-control caveat rather than evidence of hidden or malicious execution.\n[SQP-2] expected: The artifact discloses download, workspace storage, Spotify metadata persistence, and chat dispatch; the remaining concern is incomplete retention/cleanup and consent language.\n[OH1] unexpected: Logging raw stdout from the delegated Spotify helper is a hardening issue because remote metadata could affect logs, but it is limited to stderr/log handling and does not show exfiltration, persistence abuse, or command injection.",
+          "guidance": "Install only if you are comfortable with the agent fetching third-party media, writing files and Spotify metadata into the OpenClaw workspace, and sending resulting files through configured WhatsApp or Telegram accounts. Confirm the recipient and requested media before use, and clean the workspace periodically because the skill does not show automatic deletion or retention limits.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it advertises: it downloads requested media, stores it in the OpenClaw workspace, and sends it through configured chat channels, with cleanup and confirmation caveats.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658902338,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 71,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: media-orchestrator\nVersion: 0.1.1\n\nThe skill is designed to resolve, download, and deliver media using `yt-dlp` and a local `spotify-surface` script. The `orchestrator.py` script uses `subprocess.run` to execute necessary tools (`yt-dlp`, `openclaw message`, `python3 spotify_surface.py`) but passes user-controlled inputs as distinct arguments in lists, mitigating shell injection risks. File operations are confined to the OpenClaw workspace. The `SKILL.md` contains no prompt injection attempts. While the term 'Zero-Auth scraping' for Spotify metadata is noted, its stated purpose is local metadata resolution, not exfiltration, and the implementation delegates to a local script without showing malicious intent in the provided files.",
+          "checkedAt": 1779162080014,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "9c5417d6b9bc5f773262d3b80f28c9279c9cc7d3ecb54484808d54c1db500d13",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/9c5417d6b9bc5f773262d3b80f28c9279c9cc7d3ecb54484808d54c1db500d13"
+    },
+    "slug": "media-orchestrator",
+    "source_type": "clawhub",
+    "version": "0.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

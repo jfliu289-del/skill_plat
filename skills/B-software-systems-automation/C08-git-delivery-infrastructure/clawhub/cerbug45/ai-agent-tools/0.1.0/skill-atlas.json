@@ -1,0 +1,162 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "document",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.325,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C02:token:write",
+      "category:C02:token:writing",
+      "category:C04:token:data",
+      "category:C07:token:testing",
+      "category:C08:token:cd",
+      "category:C08:token:git",
+      "category:C08:token:github",
+      "category:C10:token:ai",
+      "category:C11:token:project",
+      "category:C12:token:management",
+      "category:C13:token:operations",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:testing",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C02",
+      "C04",
+      "C07",
+      "C10",
+      "C11",
+      "C12",
+      "C13"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "test",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "ae33c561cd6e1b404b6716b96baa37aeda9af262baa1bca2cdde1e6b580f6723",
+    "content_hash": "84ed04c7fc756f01d40d0a21be51810dad23ddb360ae17facc0f45226d48cab8",
+    "skill_md_hash": "853a53de557ea87f0566cf40f2f13840c9030ac51679e755025b096f2594bf9e",
+    "version_metadata_sha256": "4f07e934434b78bb6b663a13d54bfa6c0fea2178ad856045a75787ad627bc489"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/cerbug45/skills/ai-agent-tools",
+    "claim_id": "1d3bae767b6c9c4f85c61da98b7afd34b3dd547fe118e20db020019c8e3e57e9",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "ai-agent-tools",
+        "url": "https://clawskills.sh/skills/cerbug45-ai-agent-tools"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "cerbug45",
+    "owner_id": "s170r0ajc2x7b9pyqmvrajgtxx85hz4r",
+    "published_at": 1771170626420,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968384152,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968384152,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The documented purpose is AI-agent helper utilities for file operations, text extraction, JSON/CSV conversion, in-memory storage, and validation; the observed code and docs align with that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "File read, write, and list helpers accept caller-supplied paths, so a host agent that exposes them broadly could read or overwrite unintended local files if misused.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The public docs show normal install, clone, direct download, or copy-paste flows and a test command; the reported sudo troubleshooting guidance was not independently verified in the available artifact view and is not needed for normal use.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The library uses Python standard-library functionality and does not require credentials, network access, background services, or third-party APIs.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no persistence mechanism or privilege escalation in the code itself; persistence is limited to user-directed file writes and in-process memory storage.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code_insight] expected: The warning about unrestricted file paths is a real integration risk, but broad file handling is disclosed and central to this utility library; there is no artifact-backed exfiltration, destructive automation, or hidden persistence.\n[SQP-2] unexpected: Running the library with sudo is not necessary for its stated purpose and would unnecessarily increase impact if the downloaded code were compromised; this is install guidance to avoid, not evidence that the skill itself is malicious.",
+          "guidance": "Install only if you need generic Python helper tools for an agent workflow. Keep file helpers scoped to a project directory when wrapping them as agent-callable tools, review any agent request before reading or writing sensitive paths, and do not run the script with sudo.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This appears to be a straightforward Python utility library, but users should avoid exposing its file tools to untrusted prompts or running it with elevated privileges.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968320296,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ai-agent-tools\nVersion: 0.1.0\n\nThe skill provides general-purpose file system read/write/list capabilities via `FileTools` and `DataTools` in `ai_agent_tools.py`. While these functions are presented as benign utilities, they lack input sanitization or path restrictions, making them vulnerable to abuse. An AI agent susceptible to prompt injection could be instructed to read sensitive files (e.g., `/etc/passwd`, `~/.ssh/id_rsa`) or write malicious content to arbitrary locations, potentially leading to information disclosure or remote code execution. There is no evidence of intentional malicious behavior, data exfiltration, or persistence mechanisms within the code or documentation, classifying it as a vulnerability rather than outright malice.",
+          "checkedAt": 1779164293254,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "57ac5b85c0ca8ab13e477af6b2807021ca2306737c976a46878f2b8193c9d916",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/57ac5b85c0ca8ab13e477af6b2807021ca2306737c976a46878f2b8193c9d916"
+    },
+    "slug": "ai-agent-tools",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

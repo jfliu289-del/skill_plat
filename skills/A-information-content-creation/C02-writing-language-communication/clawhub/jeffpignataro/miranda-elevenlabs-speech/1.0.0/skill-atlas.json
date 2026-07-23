@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C02:token:language",
+      "category:C05:token:audio",
+      "category:C06:token:code",
+      "category:C07:token:quality",
+      "category:C10:token:ai",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05",
+      "C06",
+      "C07",
+      "C10"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "b421afb273eb738c856ba3e89dafceab46095bbacefcdd30964d92b58f8c1759",
+    "content_hash": "bd35e17126a9453857a3ca15379c644515df12cb1766432c06b624e411ce6db7",
+    "precanonical_content_hash": "96a6504a02ec9d3aa2d5c62fb94d097ee12e5c97467cb08208523069e0ecf748",
+    "skill_md_hash": "93fe3c16b40f6dcc6ae1b2f1203320e04f580e648770819bf1e65358c34d066a",
+    "version_metadata_sha256": "bb0b1a041c4ac3c72f42fe39caf0f196dc40e200ded7dbfc17bd8e5c6d4896d5"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jeffpignataro/skills/miranda-elevenlabs-speech",
+    "claim_id": "1f487434992b481639fcd122d1ffdfe84a459afce9d01f6549033144fd72506d",
+    "index_entries": [
+      {
+        "index_path": "categories/communication.md",
+        "label": "miranda-elevenlabs-speech",
+        "url": "https://clawskills.sh/skills/jeffpignataro-miranda-elevenlabs-speech"
+      }
+    ],
+    "owner_handle": "jeffpignataro",
+    "owner_id": "s173pqbgzttm4d88p48j8mveh1884mfv",
+    "published_at": 1771686973511,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779947329022,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779947329022,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts match the stated TTS/STT purpose: they use an ElevenLabs API key, send text for speech generation, upload a selected audio file for transcription, list voices, and save generated audio.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are user-directed examples for voice generation, transcription, and Telegram use; they do not contain hidden prompt overrides or autonomous behavior, though privacy disclosure for third-party processing could be clearer.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact is a small skill with Python scripts and no installer or persistence mechanism; setup depends on Python packages such as requests and python-dotenv and an ELEVENLABS_API_KEY.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to api.elevenlabs.io and reading ELEVENLABS_API_KEY are proportionate for ElevenLabs voice processing, but users should treat submitted text and audio as leaving the local environment.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background worker, privilege escalation, credential storage, broad local indexing, deletion, or unrelated file access is present; local file access is limited to user-specified input audio and output audio paths.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The scanner correctly notes missing explicit privacy warnings, but the external processing is inherent to the documented ElevenLabs API-based TTS/STT function rather than hidden behavior.\n[E1] expected: The external POST of user text to ElevenLabs is purpose-aligned for text-to-speech and is not evidence of unrelated exfiltration.\n[VirusTotal/code_insight] expected: The reported user-controlled input and output paths reflect normal CLI behavior for reading a selected audio file and writing generated speech; there is no artifact evidence of automatic sensitive-file access or deceptive path use.",
+          "guidance": "Install only if you are comfortable using an ElevenLabs API key and sending selected text or audio recordings to ElevenLabs for processing. Avoid secrets or sensitive conversations unless you have consent and appropriate approvals, monitor API quota or costs, and choose output paths carefully because generated audio is written wherever the command is told to save it.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward ElevenLabs text-to-speech and speech-to-text helper, but users should understand that chosen text or audio is sent to ElevenLabs and generated audio can be written to local paths.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779947301124,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 65,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: miranda-elevenlabs-speech\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to potential path traversal vulnerabilities in `scripts/elevenlabs_scribe.py` and `scripts/elevenlabs_speech.py`. Both scripts directly use user-provided file paths (`audio_file_path` for reading, `output_path` for writing) without explicit sanitization. While file access is necessary for the skill's functionality, this lack of sanitization could allow an attacker to read or write to arbitrary file system locations if the OpenClaw agent passes unsanitized user input to these arguments. There is no evidence of intentional malicious behavior, data exfiltration beyond the stated purpose, or prompt injection attempts in SKILL.md.",
+          "checkedAt": 1779165950486,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "b421afb273eb738c856ba3e89dafceab46095bbacefcdd30964d92b58f8c1759",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b421afb273eb738c856ba3e89dafceab46095bbacefcdd30964d92b58f8c1759"
+    },
+    "slug": "miranda-elevenlabs-speech",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

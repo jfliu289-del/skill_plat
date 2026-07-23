@@ -1,0 +1,158 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "configuration"
+    ],
+    "audiences": [
+      "creator",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "creative",
+      "infrastructure",
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C06:token:api",
+      "category:C06:token:implementation",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C13:token:operations",
+      "cross-tag:agent-management",
+      "cross-tag:deployment",
+      "cross-tag:design",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C09",
+      "C10",
+      "C13"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "deploy",
+      "design",
+      "manage",
+      "operate",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "17f62f3acde2ab840686b91c25f147259297b649117073e84cb2a44f0bd81a77",
+    "content_hash": "b455cc7d5ffcad3a4beb20ce83ef52df2df64eb61546d6586045169b353985f6",
+    "precanonical_content_hash": "8251547c88b9197442bbf719a6d358d32e7bb955383687dd06697a9377adbaaa",
+    "skill_md_hash": "c6b8627e5dfa2d7f39774bc86020473b04f3e667d14c90cbb36d1256aaad27ff",
+    "version_metadata_sha256": "94d5bf4d40dd34aeb55245f0e1871424c5e75693180afa966762403acd486c95"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/adboio/skills/agentmail",
+    "claim_id": "cf4bfc342340fb8c0f3a577dfe91b19730728ee7f3742bb4596cd97f5737177b",
+    "index_entries": [
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "agentmail",
+        "url": "https://clawskills.sh/skills/adboio-agentmail"
+      }
+    ],
+    "owner_handle": "adboio",
+    "owner_id": "s179c66pn57ggvjafqynsj2ph98858hw",
+    "published_at": 1769407333271,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783651651045,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783651651045,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently support the stated purpose: creating AgentMail inboxes, sending and reading messages, configuring webhooks, handling attachments, and documenting API usage.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The prompt-injection text appears as a defensive example in a security warning, and the skill recommends sender allowlists, isolated review sessions, and treating email content as untrusted.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation guidance uses normal Python dependencies such as agentmail, python-dotenv, flask, and ngrok for local webhook development; no hidden post-install or obfuscated execution path was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The scripts read AGENTMAIL_API_KEY for the AgentMail API, and an optional GitHub example reads GITHUB_TOKEN; this is sensitive but disclosed and aligned with the described integrations.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistent inboxes, polling, and webhooks are core to the skill and user-invoked, but they create an ongoing inbound-email attack surface that needs allowlists, signature checks, and easy revocation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[ignore-previous-instructions] expected: The phrase appears inside a quoted hostile-email example in the security section, not as an instruction to the installing agent.\n[LP3] expected: Environment access to AGENTMAIL_API_KEY is required for the API client and is documented in the quick start and script headers; a clearer permissions section would improve transparency.\n[SDI-2] expected: The GitHub issue workflow is an optional external-service example rather than default runtime behavior, but real deployments should add sender authorization, validation, rate limits, and approval before posting.\n[SQP-2] expected: The example can copy email body and sender metadata into GitHub, which is a privacy risk; it is visible in the documentation rather than covert, and should be minimized or redacted in use.\n[SSD-3] expected: Republishing raw email content into GitHub is a risky example pattern, especially for public or broad-access repositories, but it is not hidden exfiltration.\n[E1] expected: The external POST to GitHub is explicit and tied to the documented GitHub integration example; use least-privilege tokens and review content before sending.\n[RA2] expected: Long-lived inboxes and webhooks are the advertised capability, and the skill documents prompt-injection risks and mitigation options.",
+          "guidance": "Install only if you intend to give an agent an email identity. Keep AGENTMAIL_API_KEY and any GITHUB_TOKEN secret, restrict webhook endpoints, verify webhook signatures, allowlist trusted senders, avoid logging full payloads in shared systems, and redact or approve email content before forwarding it to GitHub, Slack, or other services.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "AgentMail is a coherent email automation skill, but it handles sensitive email, API keys, webhooks, and optional third-party forwarding that users should configure carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783651595874,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 70,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: agentmail\nVersion: 1.1.1\n\nThis skill bundle is designed for an AI agent to interact with the AgentMail API for email management. All provided scripts (`check_inbox.py`, `send_email.py`, `setup_webhook.py`) and documentation (`API.md`, `WEBHOOKS.md`, `EXAMPLES.md`) are clearly aligned with this stated purpose. Critically, the `SKILL.md` file explicitly warns about prompt injection risks from incoming emails and provides detailed defensive measures (webhook allowlisting, isolated sessions) for the agent to implement, demonstrating a strong security-conscious design rather than malicious intent. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or obfuscation. The local test server in `setup_webhook.py` is clearly for development and does not pose a threat.",
+          "checkedAt": 1779159904487,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "780553ed994c4ee6cc06000d9114c31ce13b6486320a107dc23d50c6b2f6c8f3",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/780553ed994c4ee6cc06000d9114c31ce13b6486320a107dc23d50c6b2f6c8f3"
+    },
+    "slug": "agentmail",
+    "source_type": "clawhub",
+    "version": "1.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

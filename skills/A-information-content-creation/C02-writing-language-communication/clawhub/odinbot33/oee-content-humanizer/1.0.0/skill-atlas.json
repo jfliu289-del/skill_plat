@@ -1,0 +1,132 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C02:token:rewrite",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "31a72386b16976cb9f91de83979fdb5934a1871d926019c527c35f41d4886e7b",
+    "content_hash": "3cf0873a8e10e7cce5effd3eea4da5ab42c81c8e02ee5e92f4b557d1a2f38c05",
+    "skill_md_hash": "d27ed7c5bab947eb1f0da51c6ad6b6e0171c60372b0273075bbd98b17aad37dc",
+    "version_metadata_sha256": "605fe83dcc87cb294cea27c921ad39b5760d868de0c5ffca062d3c555b01f260"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/odinbot33/skills/oee-content-humanizer",
+    "claim_id": "cb0daa08e4154abc3b1d65dcae312178837d5c2862448d2f66dc516c398d1352",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "oee-content-humanizer",
+        "url": "https://clawskills.sh/skills/odinbot33-oee-content-humanizer"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "odinbot33",
+    "owner_id": "s170a9m7bzj0smseet05c49qn18849mc",
+    "published_at": 1771079669077,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967070445,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967070445,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The script detects common AI-sounding phrases and sends the provided text to Claude for rewriting, which matches the stated content-humanizer purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The trigger phrases are broad editing requests, so an auto-invoking agent could route ordinary rewrite requests to this skill; however, the instructions remain limited to running the humanize script with user-provided text.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill uses Python stdlib only, but it requires ANTHROPIC_API_KEY; SKILL.md discloses this, while registry metadata appears to under-declare the required environment variable.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Use of an Anthropic API key and a network call to api.anthropic.com is proportionate for an LLM rewriting tool, but submitted text leaves the local environment.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts show no persistence, background workers, file writes, local indexing, privilege escalation, shell execution, or access to protected local data stores.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-1] expected: The generic trigger phrases are purpose-aligned but could cause unintended invocation in auto-routing environments; this supports user guidance rather than a Review verdict because the artifact does not execute independently or request unrelated authority.\n[SQP-2] expected: The off-box Anthropic call is real and important for privacy, but it is coherent with the Claude-based rewriting purpose and is partially disclosed through the API key and Claude Haiku requirements.\n[VirusTotal code_insight] expected: Embedding user text in the Claude prompt is inherent to a rewriting tool; the model response is only printed, and there is no evidence of tool-command execution, credential exfiltration, persistence, or unauthorized endpoints.",
+          "guidance": "Install only if you are comfortable sending the text you provide to Anthropic and paying for usage on the Anthropic key in your environment. Avoid using it for confidential, regulated, customer, or proprietary content unless external LLM processing is approved.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it claims: it rewrites supplied text through Anthropic Claude, with privacy considerations but no evidence of hidden, destructive, or deceptive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967017909,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: oee-content-humanizer\nVersion: 1.0.0\n\nThe skill is suspicious due to a prompt injection vulnerability in `humanize.py`. User-provided text is directly embedded into the prompt sent to the Claude API without sanitization, allowing an attacker to potentially manipulate the LLM's behavior. While the script makes an expected network call to `api.anthropic.com` for its stated purpose, this vulnerability could lead to unintended LLM outputs or information disclosure. There is no evidence of intentional malicious behavior such as data exfiltration to unauthorized endpoints, persistence mechanisms, or direct shell injection.",
+          "checkedAt": 1779164009350,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "ebfc575da67dc09906a2f23efb3fdcd1a7380c269a8aaadba315d8e8bc34e8a5",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ebfc575da67dc09906a2f23efb3fdcd1a7380c269a8aaadba315d8e8bc34e8a5"
+    },
+    "slug": "oee-content-humanizer",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

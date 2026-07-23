@@ -1,0 +1,156 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "security-professional"
+    ],
+    "confidence": 0.6214,
+    "domains": [
+      "security"
+    ],
+    "needs_review": false,
+    "primary_category": "C03",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C03:phrase:pdf document",
+      "category:C03:token:office",
+      "category:C03:token:pdf",
+      "category:C04:token:data",
+      "category:C06:token:backend",
+      "category:C09:token:audit",
+      "category:C09:token:threat",
+      "category:C12:token:startup",
+      "category:C12:token:strategy",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:planning",
+      "cross-tag:search",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09",
+      "C12"
+    ],
+    "stages": [
+      "discover",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "plan",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "266be74bb881b7cc7544c7d6017c25fd0cb53053329bca7ae0e719c990e8998e",
+    "content_hash": "fac9d5ad1cdc0aa2f6c0c84794558cbf358ed39dbdb2dc2dd3ec961bb4f48651",
+    "precanonical_content_hash": "e28911a9c45114d4f57aba3d06c01fc60d8432da232f1e6c0baac6fb3a89d094",
+    "skill_md_hash": "7fd2d84e66564aae6c988095e362aec69ae43465ea292248aa95ac02a8576b24",
+    "version_metadata_sha256": "cbeb25a3335dc7346f4dfaec81506fcd9a817b06589114a9ae03d682e6f8d8aa"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/kiaraho/skills/sys-guard-linux-remediator",
+    "claim_id": "a57280ccb4f5a3202e29d65b8508cc0aefb8e3ebf8fb09a079d2812c9d06c009",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "sys-guard-linux-remediator",
+        "url": "https://clawskills.sh/skills/kiaraho-sys-guard-linux-remediator"
+      }
+    ],
+    "owner_handle": "kiaraho",
+    "owner_id": "s17dd7d5z6ddkv006q10r1sf8s885ntg",
+    "published_at": 1771060398923,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974687339,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974687339,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill’s Linux host inspection, firewall containment, integrity checks, malware review, and remediation commands fit its stated incident response purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill clearly assumes root or sudo access and gives safety guardrails, but its commands can still stop services, change firewall rules, quarantine files, and inspect sensitive host activity.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no executable installer in the skill package; however, the runtime instructions recommend downloading forensic Python tools from raw GitHub URLs into /opt/forensics with sudo and making them executable, without pinned versions or checksum verification.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Host-level privileges are proportionate for Linux incident response and remediation when used on systems the user owns or administers.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "Persistent firewall saves and service disable or mask commands are disclosed and purpose-aligned, but they can survive reboot or disrupt remote access if used carelessly.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[PE2] expected: The sudo use and forensic-tool setup are aligned with the skill’s administrator-level incident response purpose; the real issue is supply-chain hygiene for unpinned GitHub downloads, not evidence of malicious intent.\n[VirusTotal code_insight] expected: The telemetry flags the same unpinned sudo wget pattern, while also reporting no malicious detections and no evidence of exfiltration, persistence, or deception in the artifact.",
+          "guidance": "Install this only if you want administrator-level Linux incident response guidance. Review every command before running it, avoid host-modifying steps when strict forensic preservation is required, back up firewall and service state first, and replace the raw GitHub download steps with pinned, checksum-verified, or internally vetted forensic tools.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a transparent Linux incident-response skill, but it includes powerful administrator commands and unpinned third-party tool downloads that users should verify before using.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974646439,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: sys-guard-linux-remediator\nVersion: 1.0.0\n\nThe skill is designed for Linux incident response and remediation, requiring high privileges and access to critical system functions. While the `SKILL.md` documentation is extensive and includes robust 'Safety Guardrails' explicitly designed to prevent harmful actions (e.g., `rm -rf /`, `iptables -F` without checks, broad `pkill`), it instructs the agent to download and execute Python forensic tools from an external GitHub repository (`DidierStevens/DidierStevensSuite`) using `sudo wget`. This introduces a significant supply chain vulnerability (Remote Code Execution risk) if the external source were ever compromised, despite the current benign intent and the legitimacy of the tools. There is no evidence of intentional malicious behavior or prompt injection designed to exfiltrate data or establish persistence, but the `wget` command represents a critical vulnerability.",
+          "checkedAt": 1779163933226,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "00f1efd33776ce11b0cfff273efd126d224ddde345a4317b45e4d6c71aa9feb0",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/00f1efd33776ce11b0cfff273efd126d224ddde345a4317b45e4d6c71aa9feb0"
+    },
+    "slug": "sys-guard-linux-remediator",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,152 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:analyze",
+      "category:C08:token:git",
+      "category:C08:token:github",
+      "category:C13:token:operations",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C04",
+      "C13"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "c4edb3ed6fb14e31978acfec383fdfa58aea0cd98aa4ff1715097e975c6884d9",
+    "content_hash": "b28661928b7c939b482a1bc3d664394903d33ae7edb1ae54c188ea5f84850c31",
+    "skill_md_hash": "4adaf666894dcbe7ed4fa9f82b9b4cacfba79b2047d5594148e01aa755b6da59",
+    "version_metadata_sha256": "00d9777e0401b6b21b6b768d927aa8068e41cace02fdd67c60ea3f6a2a94ed25"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/enderfga/skills/async-task",
+    "claim_id": "c83ce9a74fe79dd97b45635fca4f8c9b638542a71d42a8e32e3163c9ae9a3ee5",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "async-task",
+        "url": "https://clawskills.sh/skills/enderfga-async-task"
+      },
+      {
+        "index_path": "categories/productivity-and-tasks.md",
+        "label": "async-task",
+        "url": "https://clawskills.sh/skills/enderfga-async-task"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "enderfga",
+    "owner_id": "s178xw7em7aj5frm3cz4134etd884hcm",
+    "published_at": 1769957539219,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783653578072,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783653578072,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The code, README, and SKILL.md consistently describe starting long-running tasks, saving task state, and sending completion messages back to a session.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The trigger phrases and MUST-use language are broad, so an agent may invoke it for many timeout-prone tasks, but that behavior matches the stated purpose.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses ordinary npm/global-link or executable-copy patterns and does not include hidden install hooks or unexpected dependencies.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill uses OpenClaw/Clawdbot session discovery and optionally sends session IDs and message content to ASYNC_TASK_PUSH_URL; this is documented and opt-in, but it crosses a privacy boundary if configured.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "It writes current task and recent history to a local OpenClaw state file and uses existing session-send authority; this is proportionate for async result delivery but may retain sensitive task text.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad triggers can cause overuse, but they directly relate to long-running or timeout-prone work and do not indicate hidden behavior.\n[SQP-2] expected: The custom push endpoint is a real data-sharing path, but it is explicitly documented as an advanced environment-variable configuration rather than silently enabled exfiltration.\n[suspicious.dangerous_exec] expected: The child_process usage is limited to finding the OpenClaw/Clawdbot CLI and invoking fixed session commands; the message send path uses spawnSync argument arrays rather than shell interpolation.\n[VirusTotal-code_insight] expected: The telemetry concern matches the disclosed endpoint and session handling; no engine detections were reported, and VT alone is not enough to override the coherent artifact evidence.",
+          "guidance": "Install only from a source you trust. Use ASYNC_TASK_PUSH_URL only with a trusted HTTPS endpoint because task results and session IDs will be sent there, and avoid putting secrets in task descriptions or result messages.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed async task helper that stores local task state and pushes results back to OpenClaw/Clawdbot or to a user-configured endpoint.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783653553286,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 23,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: async-task\nVersion: 0.1.0\n\nThe skill is classified as suspicious due to its use of high-risk capabilities, specifically the ability to send session IDs and task results to an arbitrary, user-defined HTTP endpoint (`ASYNC_TASK_PUSH_URL` and `ASYNC_TASK_AUTH_TOKEN` in `async-task.js`). While this feature is explicitly documented as 'Advanced' and requires user configuration, it presents a clear vector for data exfiltration if configured maliciously. Additionally, the script uses `execSync` to retrieve active session keys via the `openclaw sessions` or `clawdbot sessions` CLI, which are then used for pushing messages, further highlighting sensitive data handling.",
+          "checkedAt": 1779160686555,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "2458849f4b31d42d76ddc2d6fd89faca17e0f030e7e2d33ca73795810dd13f49",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/2458849f4b31d42d76ddc2d6fd89faca17e0f030e7e2d33ca73795810dd13f49"
+    },
+    "slug": "async-task",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "881dba2c0da1305d184f851e25f4c6481f136b54b99f947711acbd88152c06af",
+    "content_hash": "086c88c14a573c9bd3577fc860e0677fd2c5f0e146f0eb45f017439b166f30a3",
+    "precanonical_content_hash": "5ea0bdb04547854809c2a0d7a49f69e886658ceaf0e3b6cb3407b1d08f3534b2",
+    "skill_md_hash": "15c4abc000a75daf749004cbd838c0e4f034d0b5a163c8ab02ac23ddfcdb9c2e",
+    "version_metadata_sha256": "28528a65a9d73c90252b437ac81827c05ccd2df5afa1eba72cd81bdfce54eac1"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/chapati23/skills/claude-watchdog",
+    "claim_id": "1378319b669ede06e4671d4a5f38647029cd19c51ee3604ea5bb030b541fb608",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "claude-watchdog",
+        "url": "https://clawskills.sh/skills/chapati23-claude-watchdog"
+      }
+    ],
+    "owner_handle": "chapati23",
+    "owner_id": "s170j9rg98d3hh6ywjvbk96kth83kerm",
+    "published_at": 1772573518658,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779954001057,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779954001057,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts match the stated purpose: status-check.py polls status.claude.com, latency-probe.py sends a minimal request to the local OpenClaw gateway, and both send Telegram notifications.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The documentation describes the credentials needed, cron frequency, config path, state/log paths, and uninstall command; users should still understand that setup sends network requests and installs recurring jobs.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Setup is interactive, writes ~/.openclaw/skills/claude-watchdog/claude-watchdog.env with chmod 600, sends a Telegram test alert, installs two cron entries, and provides an uninstall mode. The crontab cleanup is somewhat broad because it filters existing entries matching status-check.py or latency-probe.py as well as claude-watchdog.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The requested Telegram token/chat ID and OpenClaw gateway token are proportionate to sending alerts and probing the local gateway. Network destinations are limited in the artifacts to Telegram, status.claude.com, and 127.0.0.1.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "Cron-based persistence every 15 minutes is central to the monitoring function and is disclosed, with an uninstall path; it does leave background monitoring active until removed.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The artifact does use env vars, file writes, shell setup, network access, and cron, but the frontmatter declares required bins/env and the README documents config storage, scheduled checks, Telegram alerts, Claude status polling, and local gateway probes.\n[SQP-2] expected: Recurring cron jobs and external requests are disclosed in the setup and behavior sections, though a more prominent pre-setup notice would improve transparency.\n[SQP-2] expected: The setup stores Telegram and OpenClaw gateway tokens in a plaintext env file, but this is documented in the Config and Security Note sections and the script restricts permissions to 600.\n[SQP-2] expected: The setup sends a Telegram test alert without a separate opt-in prompt, but this is directly tied to verifying the alert destination and uses the user-provided bot/chat data for the advertised alerting function.",
+          "guidance": "Install only if you are comfortable storing Telegram and OpenClaw gateway tokens in a local owner-only env file and running cron checks every 15 minutes. Use a dedicated Telegram bot/chat if possible, avoid exposing the gateway token command output, review your crontab after setup, and run the uninstall option when you no longer want monitoring.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed Claude API monitoring tool that stores local tokens, installs scheduled checks, and sends Telegram alerts for its stated purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779953969866,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 45,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: claude-watchdog\nVersion: 1.2.1\n\nThe OpenClaw AgentSkills skill bundle 'claude-watchdog' is classified as benign. The code and documentation align with its stated purpose of monitoring the Claude API and sending Telegram alerts. Sensitive configuration (tokens) is handled securely by writing to a file with `600` permissions (`claude-watchdog.env`), and user inputs in `scripts/setup.sh` are validated (e.g., numeric chat/topic IDs) before being used in `curl` commands or written to config. Network activity is confined to legitimate endpoints: `api.telegram.org` for alerts, `status.claude.com` for status checks, and `127.0.0.1` for local gateway latency probes. There is no evidence of data exfiltration, unauthorized persistence, arbitrary code execution, or prompt injection attempts against the AI agent in `SKILL.md`.",
+          "checkedAt": 1779166586175,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "28311a5213e4349bef06d3e73c7ecce9d7f4c912ea76e41a6ab81db498d4ae56",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/28311a5213e4349bef06d3e73c7ecce9d7f4c912ea76e41a6ab81db498d4ae56"
+    },
+    "slug": "claude-watchdog",
+    "source_type": "clawhub",
+    "version": "1.2.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

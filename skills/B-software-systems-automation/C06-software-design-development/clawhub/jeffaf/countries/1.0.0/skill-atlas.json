@@ -1,0 +1,148 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C01:token:lookup",
+      "category:C06:token:api",
+      "category:C06:token:implementation",
+      "category:C10:token:ai",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C01",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "962e5f3804891ca7f75a5babd668bd55e1a2cf664768ea16d1024b7176e17c0b",
+    "content_hash": "3c3da7dca841fa7c635d5cfd583414c4dfda5f0b1a22dbf0161ed6eeed92c0d2",
+    "precanonical_content_hash": "97a884579c0f958210ebd58c1da06768671cf87b546c55d40d7bc6e385310e07",
+    "skill_md_hash": "b442650957a23091c19b941c76d9eb650a3c63027a0303674bdd7a5d5bdffc3e",
+    "version_metadata_sha256": "0afbadfc34671aefd792d761f12fe906e1f045c186a1a77ce79c404253917247"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jeffaf/skills/countries",
+    "claim_id": "bc1ea1e2d8b093dca9dddf86ce06f1477904371b4dfcd225cd955339d0170fac",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "countries",
+        "url": "https://clawskills.sh/skills/jeffaf-countries"
+      },
+      {
+        "index_path": "categories/security-and-passwords.md",
+        "label": "countries",
+        "url": "https://clawskills.sh/skills/jeffaf-countries"
+      }
+    ],
+    "owner_handle": "jeffaf",
+    "owner_id": "s170beydycbvfehr2pz7rj84p183gak4",
+    "published_at": 1770258659870,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783654964487,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783654964487,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is country/geography lookup through REST Countries, and the documented commands are limited to country names, codes, regions, capitals, and listing countries.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The agent notes include broad examples such as \"Tell me about X,\" but the surrounding scope says to use it when the user asks about countries and explicitly excludes historical countries, disputed territories, and non-sovereign regions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The reviewed artifact contains documentation only; the README directs users to clone an external GitHub repository or symlink a wrapper, so the executable implementation should be checked separately before running.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Requiring bash, curl, jq, and bc is proportionate for a shell-based API lookup tool, and REST Countries API use is disclosed, but lookup terms are sent to a third-party service.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts do not request credentials, privileged access, background execution, persistence, local data indexing, destructive actions, or account mutation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad trigger examples could cause over-invocation in some agents, but the artifact otherwise scopes use to country-related questions; this is a usability/privacy caution rather than evidence of hidden or purpose-mismatched behavior.\n[SQP-2] expected: REST Countries API use is disclosed and aligned with the skill's purpose, though users should understand that search terms and lookup parameters leave the local environment.\n[VirusTotal code_insight] expected: The documentation shows shell CLI commands using user-provided lookup values, but the reviewed package does not include executable code to validate an actual command-injection flaw; shell invocation itself is disclosed and expected for this CLI skill.\n[staticScan] expected: Static scan reported no suspicious patterns, and the local artifact set contains only README.md and SKILL.md with no executable scripts.",
+          "guidance": "Install only if you are comfortable sending country lookup terms to restcountries.com. Verify the external GitHub CLI before cloning or symlinking it, and avoid passing sensitive free-form text as a country search query.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed country lookup skill that calls a public country API, with minor cautions about broad invocation wording, third-party query sharing, and verifying the external CLI before use.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783654943996,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 9,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: countries\nVersion: 1.0.0\n\nThe `SKILL.md` file instructs the AI agent to execute shell commands (`./countries search \"name\"`, `./countries info \"code\"`, etc.) by directly embedding user-provided input into the command string. This design creates a significant command injection vulnerability, as a malicious user could craft input containing shell metacharacters (e.g., `\"query\"; rm -rf /`) that the agent would then execute. Additionally, the skill requires `bash` and `curl`, granting it powerful shell execution and network capabilities, which exacerbates the risk of this command injection vector. While there is no clear evidence of intentional malicious behavior like data exfiltration or persistence from the skill developer, the method of command execution is inherently risky.",
+          "checkedAt": 1779161401551,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "210c95eb2f4991c75d75e4825de9a2e4feed7ba2260335211fc8df8744851e63",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/210c95eb2f4991c75d75e4825de9a2e4feed7ba2260335211fc8df8744851e63"
+    },
+    "slug": "countries",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

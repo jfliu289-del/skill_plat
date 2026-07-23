@@ -1,0 +1,152 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C05:token:image",
+      "category:C06:token:api",
+      "category:C17:token:notes",
+      "category:C18:token:health",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C05",
+      "C06",
+      "C17",
+      "C18"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e3f7c753e65c7ddb0cf849adee1d2da1f1efe710f7f929d04b7639a84ec9d08c",
+    "content_hash": "c5317c85c95c54be42941516f535f99ae723e58ec7fae7a490a6ff8115afbb9c",
+    "precanonical_content_hash": "53a775f3dde9e1bb4e1b6b81966a094e5d393bd27c9437b1e978095b88ac4699",
+    "skill_md_hash": "016053d65c9ab148f2c69caa879a5ccab8cf722e016d1a27f9d172e156fb06b1",
+    "version_metadata_sha256": "904672eea0ca56e29a7ddafe81d2756dcf40ba46569b74257f7d0f670ebe400a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/risboo6909/skills/funda-gateway",
+    "claim_id": "089589ed2a8f00215c9f7452fc743cdcdc98f5bdea427be70704044175fbb095",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "funda-gateway",
+        "url": "https://clawskills.sh/skills/risboo6909-funda-gateway"
+      }
+    ],
+    "owner_handle": "risboo6909",
+    "owner_id": "s171thc5gecds15wpb27dhwx2983g7kk",
+    "published_at": 1772386085717,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779950264080,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779950264080,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documentation and code consistently support the stated purpose: querying Funda listings, price history, search results, and resized image previews through a local gateway.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Instructions ask the agent to create a skill-root virtualenv, install pinned Python dependencies, and run a localhost HTTP server; these actions are disclosed and fit the gateway workflow.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses ordinary Python package dependencies in a local virtualenv. Users must still trust the listed third-party packages and upstream Funda scraping library.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Internet access and a loopback HTTP service are proportionate for the purpose. The artifacts repeatedly warn that the unauthenticated gateway must stay on 127.0.0.1 and not be exposed publicly.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The server can remain running for reuse and can optionally save resized preview images under the skill root, but saving is documented, off by default, path-constrained, and not accompanied by hidden autostart, elevated privilege, credential access, destructive behavior, or exfiltration.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] expected: The save-to-disk behavior is real, but SKILL.md explicitly documents save=1, output paths, defaults, and response changes. The code limits output to the skill root and sanitizes filenames, so this supports user guidance rather than a Review verdict.\n[SDI-2] expected: The endpoint exposes local file creation to callers of the local gateway, but the service binds to 127.0.0.1 in code and documentation, saving is opt-in, and writes are constrained to resized JPEG previews under the skill root. Lack of quotas remains a practical caution.",
+          "guidance": "Install only if you are comfortable running a local Python HTTP gateway. Keep it bound to 127.0.0.1, do not proxy or expose it publicly, stop it when done, and clean the previews directory if you use save=1 heavily.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed local Funda listings gateway with manageable risks from its localhost server and optional preview-image saving.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779950231382,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: funda-gateway\nVersion: 1.0.12\n\nThe OpenClaw skill bundle provides a local HTTP gateway for Funda.nl. The code in `scripts/funda_gateway.py` and the instructions in `SKILL.md`, `README.md`, and `WORKFLOW.md` consistently emphasize that the gateway should run locally on `127.0.0.1` and not be exposed publicly due to a lack of authentication and rate limiting. While this design choice represents a vulnerability if the gateway is exposed, the skill explicitly warns against it, indicating a lack of malicious intent. The file saving functionality in `get_previews` includes robust path traversal prevention (`_resolve_output_base_dir`) and filename sanitization, mitigating risks of arbitrary file writes. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection designed to harm the agent or system.",
+          "checkedAt": 1779166327939,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "73d74d42bc0314f49256c06bff051f134a7458b18de36fe95161b545618e7017",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/73d74d42bc0314f49256c06bff051f134a7458b18de36fe95161b545618e7017"
+    },
+    "slug": "funda-gateway",
+    "source_type": "clawhub",
+    "version": "1.0.12"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

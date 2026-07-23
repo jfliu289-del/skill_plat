@@ -1,0 +1,158 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.23,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C01:token:find",
+      "category:C01:token:search",
+      "category:C02:token:language",
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "category:C11:token:team",
+      "category:C12:token:management",
+      "category:C17:token:notes",
+      "category:C17:token:schedule",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C02",
+      "C06",
+      "C09",
+      "C11",
+      "C12",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "6d389a241700274fdfe2c445865684012ec2d7acdacf5b4c7ae755bd2a89b335",
+    "content_hash": "ff5ce8a13535513a5b993e0b1d19dba67665132aa8367b9cd6efbd267eb5067b",
+    "skill_md_hash": "f7e499fa59c52d50dca3feca86511b40ded05b63f955f46ef275fa3ec7432a1e",
+    "version_metadata_sha256": "6cd0b2d171c4b7b37690e9bb1f0cc9d525ede076ac2e0c9dd1abc649dc2cb31c"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/harshilmathur/skills/cricket-live",
+    "claim_id": "ed8ea9ec321be8c26d4614e340383e2a45d7eac544ce041caecb62151d787f58",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "cricket-live",
+        "url": "https://clawskills.sh/skills/harshilmathur-cricket-live"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "harshilmathur",
+    "owner_id": "s17eqn6xqv5dgxfr2378xyknns885pkr",
+    "published_at": 1771252256263,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971150100,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971150100,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts fetch live scores, match details, schedules, IPL data, and alert state from the CricketData.org API, matching the stated purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are user-directed shell commands and optional cron setup; there are no hidden role changes, prompt-injection directives, or unrelated agent-control instructions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The package declares bash, curl, jq, and CRICKET_API_KEY requirements and does not include an installer, package download step, or automatic mutation of the host environment.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to api.cricapi.com and use of a CricketData API key are proportionate for live cricket data; the key is sent as a URL query parameter, which the skill explicitly discloses as an exposure risk.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Caching in /tmp/cricket-cache and alert state in /tmp/cricket-alert-state.json are disclosed and purpose-aligned, but predictable /tmp paths can be tampered with on shared systems.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The alert state file is expected for detecting changes between runs, but storing mutable state at a predictable /tmp path is a real low-impact multi-user hardening issue rather than hidden or malicious behavior.\n[VirusTotal code_insight] expected: The API key-in-query behavior is disclosed and appears required by the chosen API; the claimed date parsing command-injection path is not supported by the artifact because the API date string is passed as a quoted argument to date rather than evaluated as shell code.",
+          "guidance": "Install only if you are comfortable using a CricketData.org API key with this skill. Prefer CRICKET_API_KEY over saving the key in config, use a free or limited key, avoid shared multi-user machines where process arguments or /tmp files may be visible or tampered with, and rotate the key if exposed.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill coherently provides cricket scores and alerts, with expected API use and only low-impact local-file cautions.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971114564,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 6,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: cricket-live\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to two main vulnerabilities, not malicious intent. Firstly, the `scripts/helpers.sh` file passes the API key as a URL query parameter to `api.cricapi.com` via `curl`, which can expose the key in shell history, process listings, and logs, as explicitly noted in `SKILL.md`. Secondly, the `to_ist()` function in `scripts/helpers.sh` uses `date -d \"$utc_date\"` to parse dates from the API response; if an attacker could compromise `api.cricapi.com` to inject shell metacharacters into the date string, it could lead to command injection. There is no evidence of intentional malicious behavior such as data exfiltration to unauthorized endpoints, backdoor installation, or prompt injection against the agent.",
+          "checkedAt": 1779164563808,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "b9cab25a7b202aa29ec2d177087553aa17f04c4b12889be4e549133f2beb0af1",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b9cab25a7b202aa29ec2d177087553aa17f04c4b12889be4e549133f2beb0af1"
+    },
+    "slug": "cricket-live",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

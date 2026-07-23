@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "business",
+      "developer",
+      "marketer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "business",
+      "marketing",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:code",
+      "category:C08:token:repository",
+      "category:C11:token:project",
+      "category:C14:token:growth",
+      "cross-tag:marketing-sales",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C08",
+      "C11",
+      "C14"
+    ],
+    "stages": [
+      "create",
+      "deliver"
+    ],
+    "tasks": [
+      "build",
+      "market"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "6e080d8fae99cf9f06fcab93a7b56b3c6eabe3e9870f056c3018d2ccc520ef6b",
+    "content_hash": "f8e4f298f44404706730a5dfc42c15b083aa34299c2838d52a73d4b9125134d9",
+    "precanonical_content_hash": "a0829360ba2a9957c981ce83891c22795c055dcec447286ff01b05880df96084",
+    "skill_md_hash": "014c15a9e8910c37e8ba1408f065e2c48a51460c7b90d8c7bf81fc41737cd087",
+    "version_metadata_sha256": "81e97bdfcb15d4cfd142a17191a093e437626ebbdb65f24fa8ebd7b3eee2496b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/autogame-17/skills/code-stats",
+    "claim_id": "9eb2a28358e5bebb63c1f9ea1fc2580d838b6ccaf9d0962e836ca1cda2dd0f6e",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "code-stats",
+        "url": "https://clawskills.sh/skills/autogame-17-code-stats"
+      }
+    ],
+    "owner_handle": "autogame-17",
+    "owner_id": "s174qjf2384d46r16zkn04qam183hbm3",
+    "published_at": 1771176665872,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968349655,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968349655,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is repository complexity metrics, and the code implements file counting, approximate line counting, and extension grouping.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The CLI accepts an optional path and defaults to the current working directory; this is disclosed and purpose-aligned, but it can read any directory the user or agent points it at.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package has a simple Node entry point and test script, no dependencies, no install hooks, and no download behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Local filesystem reads are proportionate for counting repository statistics; no credentials, environment variables, network APIs, or external services are used.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No background process, persistence mechanism, privilege escalation, file mutation, or system-setting changes were found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal telemetry: unsanitized path recursive read] expected: The code uses the provided path or current directory for recursive fs reads, which is necessary for its stated function. The practical risk is accidental scanning of sensitive directories, not artifact-backed exfiltration or malicious behavior.\n[SkillSpector report: no issues] expected: The advisory scan reported no issues, and local inspection found no network calls, shell execution, writes, persistence, or credential access.",
+          "guidance": "Install only if you are comfortable with a local script reading the directory you run it against. Run it from the intended repository or pass a specific project path, and avoid pointing it at home directories or folders containing secrets such as .env files if you do not want those files accessed for line counting.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a local code-statistics tool that recursively reads a chosen directory to count files and lines, with no evidence of network transfer, persistence, or modification.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968316754,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: code-stats\nVersion: 1.0.0\n\nThe `index.js` file directly uses `process.argv[2]` as the root directory for recursive file system operations (`fs.readdirSync`, `fs.readFileSync`) without explicit input sanitization or path validation. While reading files is central to the skill's stated purpose of analyzing code statistics, this direct use of an unsanitized command-line argument creates a vulnerability. An attacker capable of controlling the `[path]` argument could potentially direct the skill to read arbitrary files and directories outside the intended workspace, leading to information disclosure. However, there is no evidence of intentional data exfiltration, persistence, or other malicious activities within the provided code.",
+          "checkedAt": 1775880107992,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "1e145bc87ff6107d76fda4a3ce92c0f1ac22d49454dad7ddec1dd9d62d5bc851",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1e145bc87ff6107d76fda4a3ce92c0f1ac22d49454dad7ddec1dd9d62d5bc851"
+    },
+    "slug": "code-stats",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

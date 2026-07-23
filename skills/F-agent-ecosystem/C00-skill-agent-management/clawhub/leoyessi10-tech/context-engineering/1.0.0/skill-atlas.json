@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.4167,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C07:token:test",
+      "cross-tag:agent-management",
+      "cross-tag:planning",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C07"
+    ],
+    "stages": [
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "plan",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ca3f901d87518ebd5c9deac07bcd4da9e8e915b7f7ef3d241e68e5a9461b7dce",
+    "content_hash": "188bf85996f81ee6ca2ad978ecb037956038d83c7a52c1e7f84df781123db61d",
+    "precanonical_content_hash": "276d953ec7d2dade1d3758939bd40244798ffad8584d3519b2062e9a25576bfc",
+    "skill_md_hash": "1699984e76312757c6b9744fb68d09d6729a5f1cdb2e0bb17dfa98433e194a0b",
+    "version_metadata_sha256": "9f610cdf62d2ee872fe85a597b91c9ecfc2042fa0b8fcbcec4f0a3676ef93250"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/leoyessi10-tech/skills/context-engineering",
+    "claim_id": "893e8967cf8b1baa755c5e428297b2283dcd21a9ba30de8f191c495f3eba9f80",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "context-engineering",
+        "url": "https://clawskills.sh/skills/leoyessi10-tech-context-engineering"
+      },
+      {
+        "index_path": "categories/smart-home-and-iot.md",
+        "label": "context-engineering",
+        "url": "https://clawskills.sh/skills/leoyessi10-tech-context-engineering"
+      }
+    ],
+    "owner_handle": "leoyessi10-tech",
+    "owner_id": "s17782r9gxses7gmmrwt68b9xn88404v",
+    "published_at": 1769591142520,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783650986034,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783650986034,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently support context compression, structured summarization, and probe-based evaluation; preserving file paths, decisions, errors, and conversation state is sensitive but directly tied to the purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Activation language is somewhat broad around token reduction and context-compression discussions, but the instructions remain topical and do not request hidden role changes, unsafe actions, or unrelated authority.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains documentation and one Python helper script, with no installer, package installation, install-time execution, credential requirement, or background service.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The Python script uses local parsing, regular expressions, and heuristic scoring; it includes an example of how a production LLM judge could be wired in, but the active code does not make network calls.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill recommends persistent structured summaries for continuity, but does not implement automatic persistence, privilege escalation, broad local indexing, or credential/session access.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad activation wording is real but low impact for this documentation-style skill; it may benefit from clearer non-trigger cases, but it does not create a Review-level concern.\n[MP2] expected: The phrases about millions of tokens and exceeding context windows describe the context-compression problem space, not an attempt to stuff the evaluator or agent context.\n[SQP-2] expected: Metadata references a concern about possible external LLM-judge use; artifact inspection shows that API call is a documented production example and the shipped implementation is stubbed, so this is user guidance rather than a verdict escalator.\n[VirusTotal telemetry] expected: VirusTotal reported the skill clean and described the script as local/stubbed evaluation logic, which matches manual artifact inspection.\n[static scan] expected: Static scan reported no findings, and manual review found no active shell execution, destructive file operations, credential access, or network behavior.",
+          "guidance": "Reasonable to install for context-compression workflows. Treat generated summaries and evaluation inputs as potentially sensitive because they can preserve user goals, file paths, errors, decisions, and excerpts from prior conversation. If adapting the LLM-judge example, redact sensitive content and get explicit user control before sending compressed context to any external provider.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent context-compression skill whose main risk is preserving sensitive conversation details in summaries, not hidden or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783650965665,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 27,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: context-engineering\nVersion: 1.0.0\n\nThe skill bundle is designed for context compression and evaluation for AI agents. The `SKILL.md` and `references/evaluation-framework.md` files provide detailed documentation and rubrics for context compression strategies and evaluation, without containing any prompt injection attempts against the OpenClaw agent. The `scripts/compression_evaluator.py` script implements the described logic, primarily using string manipulation and regular expressions for information extraction from conversation history. It explicitly stubs out external LLM API calls, meaning the provided code does not perform network requests or access sensitive file system locations, aligning with its stated purpose without exhibiting any malicious or high-risk behaviors.",
+          "checkedAt": 1779160193772,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "c1a0f33421dcec74c0a874d367fa9a7c3187aec640cf049f5aed207abdfad848",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/c1a0f33421dcec74c0a874d367fa9a7c3187aec640cf049f5aed207abdfad848"
+    },
+    "slug": "context-engineering",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

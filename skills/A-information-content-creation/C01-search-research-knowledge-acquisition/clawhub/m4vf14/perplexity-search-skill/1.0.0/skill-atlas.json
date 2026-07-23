@@ -1,0 +1,153 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:research",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "category:C12:token:market",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C06",
+      "C09",
+      "C12",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "b89c71a202278d41434c91e0dbb13a7eae254de71424a14515d9c87e13db4150",
+    "content_hash": "c5033d854c5a54d4dfbe1eff068eb40a8b8d050657d8a470853fe60f7c56b022",
+    "precanonical_content_hash": "c83d201b1fb2ddbc772c920f76a3cf135b95cf303f1e084e534aa21581e650e3",
+    "skill_md_hash": "ab0ec3fa6169eff1e179f4c65861c90f447948cf103ed35e1b6ef085ad9cfa40",
+    "version_metadata_sha256": "6925ab7d00f26200f53e7068c45dc921ff3a02764ed239613ba80ba7797639fc"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/m4vf14/skills/perplexity-search-skill",
+    "claim_id": "9f4acb9c96b54e7fed37477832214ea93df349414c8ca254871e18a9ddd3bd0d",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "perplexity-search-skill",
+        "url": "https://clawskills.sh/skills/m4vf14-perplexity-search-skill"
+      }
+    ],
+    "owner_handle": "m4vf14",
+    "owner_id": "s17ajd78hkctj00w3z3v1hppqd885h13",
+    "published_at": 1770240602168,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783654898388,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783654898388,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, metadata, documentation, and Python script all align around web search through Perplexity and returning titles, URLs, snippets, or JSON results.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The README says an OpenClaw agent will automatically use the skill for web searches, but the executable behavior is limited to a user-supplied query and search options.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is ordinary ClawHub or manual skill placement; no install-time code execution, dependency installation, remote bootstrapper, or hidden setup behavior was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill requires PERPLEXITY_API_KEY and outbound HTTPS to api.perplexity.ai, which is proportionate for a Perplexity search integration, but queries and paid API usage go to a third-party service.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, privilege escalation, local file indexing, shell execution, destructive actions, or credential access beyond the documented Perplexity API key was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The environment variable requirement is declared in SKILL.md and skill.json, and the outbound Perplexity API call is visible and purpose-aligned; this is best treated as disclosure guidance rather than a Review-level concern.\n[SQP-2] expected: The README describes use of Perplexity’s Search API and API key setup, so third-party query transmission is expected, though a clearer privacy warning would help users avoid submitting sensitive terms.\n[SQP-2] expected: The script sends the raw query to https://api.perplexity.ai/search as its core function and does not provide a runtime privacy notice; this is a usability/disclosure gap, not hidden or unrelated behavior.",
+          "guidance": "Install this only if you are comfortable sending search queries to Perplexity with your own API key. Avoid using secrets, regulated personal data, or confidential business information in queries, and monitor Perplexity usage because requests may consume paid quota.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward Perplexity web-search skill that sends user search queries to Perplexity using the user’s own API key.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783654865039,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: perplexity-search-skill\nVersion: 1.0.0\n\nThe skill is designed for web searching via the Perplexity API, demonstrating strong security practices. It securely handles the API key by loading it from environment variables, performs input validation on parameters, and sanitizes all output to prevent terminal injection. The Python script uses only standard libraries, eliminating supply chain risks, and includes robust error handling with network timeouts. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts against the OpenClaw agent in any of the analyzed files (SKILL.md, scripts/search.py, README.md, SECURITY_AUDIT.md).",
+          "checkedAt": 1779161365355,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "21d8db71b9bd96101619d74b430749b8dcabd16e22e34eb21ce8bb61c7808e43",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/21d8db71b9bd96101619d74b430749b8dcabd16e22e34eb21ce8bb61c7808e43"
+    },
+    "slug": "perplexity-search-skill",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

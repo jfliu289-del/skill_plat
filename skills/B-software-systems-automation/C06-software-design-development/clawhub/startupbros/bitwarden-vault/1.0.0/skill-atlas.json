@@ -1,0 +1,156 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C06:token:code",
+      "category:C09:token:security",
+      "category:C12:token:management",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C01",
+      "C09",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "69af8a7a3046c8ebf52329037a011910d6ca905192d05dd1d6d40bfcb396e03b",
+    "content_hash": "e458eeeeef22a36a6ba4c9302ea0d5e834c33619f573bf9eee66048a2b87c362",
+    "precanonical_content_hash": "06a850303289020c611ec9bf8784822005a92583a25c57ac3158052a7c41f735",
+    "skill_md_hash": "f0138330f1238d54bd48ebcdbfd4964e1272277470b159d1d617f1c5350ba4aa",
+    "version_metadata_sha256": "66935e6fa9bc592f630612c7dab2218bc3c75d511f37596653e40b41178c6d43"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/startupbros/skills/bitwarden-vault",
+    "claim_id": "daae3586ab91c81eee9c2208ec06a3b4a56a7fd9eed570ec157d1c06e362287b",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "bitwarden-vault",
+        "url": "https://clawskills.sh/skills/startupbros-bitwarden-vault"
+      },
+      {
+        "index_path": "categories/security-and-passwords.md",
+        "label": "bitwarden-vault",
+        "url": "https://clawskills.sh/skills/startupbros-bitwarden-vault"
+      }
+    ],
+    "owner_handle": "startupbros",
+    "owner_id": "s17d1eh3ac1eye3xsr5v1qm80x885161",
+    "published_at": 1769478869881,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783651734458,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783651734458,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill is explicitly for installing and using Bitwarden CLI to authenticate, unlock, read, list, sync, and in examples create or edit vault items; that is sensitive full-vault capability but matches the stated purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are broad but user-directed and focused on Bitwarden operations, with guardrails to avoid exposing secrets, avoid writing secrets to disk unless necessary, and lock the vault when finished.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains Markdown documentation only and install metadata points to standard Bitwarden CLI package-manager installs; no executable installer, hidden script, or unrelated payload was present.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use of BW_SESSION, BW_CLIENTID, BW_CLIENTSECRET, and exported application credentials is normal for this workflow, but environment variables can leak on shared systems, CI, logs, or child processes if users copy examples carelessly.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The tmux workflow intentionally preserves an unlocked Bitwarden session across commands and is disclosed, with instructions to run bw lock; no hidden persistence or background worker behavior was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: Confirmed examples export vault-derived secrets into environment variables; this is a common CLI secret-injection pattern, but users should keep it short-lived and unset variables after use.\n[SQP-2] expected: Confirmed attachment download example writes a certificate file to disk; downloading Bitwarden attachments is purpose-aligned, but sensitive files should be stored only in protected temporary locations and removed when done.\n[SQP-2] expected: Confirmed API key and BW_SESSION setup examples use environment variables; this matches Bitwarden CLI usage, though stronger warnings about treating BW_SESSION as vault access would improve the documentation.\n[SQP-2] expected: Confirmed tmux is required by the skill to preserve the session; this is disclosed session management rather than hidden persistence, but detached unlocked sessions should not be left running.",
+          "guidance": "Install this only if you want the agent to operate Bitwarden CLI for specific vault tasks. Keep requests narrow, do not let secrets be printed or logged, avoid persistent shell exports or shared tmux sessions, lock or log out when finished, and clean up any downloaded secret files.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed Bitwarden CLI helper, but it needs careful handling because it can access vault secrets.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783651705835,
+          "issueCount": 4,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 14,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: bitwarden-vault\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills bundle for Bitwarden CLI is classified as benign. While it inherently deals with sensitive data (secrets) and requires shell/network access, these capabilities are directly aligned with its stated purpose of managing a Bitwarden vault. The `SKILL.md` file includes explicit 'Security Guardrails' instructing the AI agent to 'NEVER expose secrets in logs' and 'NEVER write secrets to disk', actively mitigating potential misuse. There is no evidence of intentional harmful behavior such as data exfiltration to unauthorized endpoints, persistence mechanisms, or malicious prompt injection attempts to subvert the agent's purpose.",
+          "checkedAt": 1779160084879,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "05cc35b82433c828000ad87c4f026c7df96b1c9b1b06ab0227a8dd43e5db730c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/05cc35b82433c828000ad87c4f026c7df96b1c9b1b06ab0227a8dd43e5db730c"
+    },
+    "slug": "bitwarden-vault",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

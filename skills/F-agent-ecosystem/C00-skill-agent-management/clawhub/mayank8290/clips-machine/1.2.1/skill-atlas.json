@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:sources",
+      "category:C11:token:project",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C11"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "design",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "3f2a371e2655cd1d8c5c58b90ab61522d6ffceb4edfa35578ad3ef29b7ad12f3",
+    "content_hash": "1117f7d4fb8b209f67e60b0357ef8ce773df1a45cdb568f17ecea278210a13d2",
+    "precanonical_content_hash": "badb32bf1ea77599351954029ac0ed01be82dc73efddc60accb40f955101e306",
+    "skill_md_hash": "69d5e0b21b5171f66dd34ab7683e0047807ec650eb043b56e482aa4f6a4dd985",
+    "version_metadata_sha256": "4727a728fbe68a1f0c7654ff8b9ea5314baa2a37e6c3f6e3c086ae3e1c29c1ca"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/mayank8290/skills/clips-machine",
+    "claim_id": "69b0984c71eb60bfe043e7b16a29d758f17fb65870574e084b4a90f4ba89ca3a",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "clips-machine",
+        "url": "https://clawskills.sh/skills/mayank8290-clips-machine"
+      }
+    ],
+    "owner_handle": "mayank8290",
+    "owner_id": "s1739hb2ht17dk9sa4y8easyvh884a53",
+    "published_at": 1770878137821,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658920015,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658920015,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The described behavior matches the stated purpose: downloading or accepting media, transcribing audio, finding clip moments, rendering captions, and writing clips plus metadata.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The workflow appears user-directed, but the documentation should be explicit that URLs may be fetched, local media processed, subprocess tools invoked, and output artifacts written.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No deceptive installer behavior is evident from the supplied artifacts; the skill depends on common media tools such as ffmpeg, yt-dlp, and whisper-cpp, which users should install from trusted sources.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access, shell execution, and file writes are proportionate for video processing, though they are sensitive capabilities and should be visible to the user before use.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background worker, credential theft, or privilege escalation is evident; the main privilege note is execution of local binaries and writing outputs to the selected output directory.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[AST4] expected: Subprocess use is expected for ffmpeg and transcription, but the home-directory whisper-cpp fallback means users should verify that binary before running the skill.\n[TT2] expected: Writing transcripts, summaries, and clip metadata under an output directory is expected for this tool; users should choose the output path deliberately.\n[LP3] expected: The capabilities flagged are aligned with the video-processing purpose, but clearer permission disclosure would improve consent and transparency.\n[SQP-2] expected: The quick-start should more prominently state that media may be downloaded or processed locally and that generated artifacts will be stored on disk.\n[OH1] expected: Caption rendering through ffmpeg/libass is purpose-aligned but exposes normal parser risk when processing untrusted media or transcript text.",
+          "guidance": "Install only if you intend to process the provided media locally and create output files. Use trusted installations of ffmpeg, yt-dlp, and whisper-cpp, avoid sensitive/private videos unless local storage is acceptable, and review or set the output directory before running.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to be a coherent local video-clipping tool, but users should understand that it downloads/processes media, runs external video/transcription tools, and writes generated files locally.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658890536,
+          "issueCount": 9,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 93,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: clips-machine\nVersion: 1.2.1\n\nThe OpenClaw AgentSkill 'clips-machine' is classified as benign. The `clips_machine.py` script demonstrates good security practices by using `subprocess.run` with a list of arguments (avoiding `shell=True`), implementing URL validation against a whitelist of allowed domains to prevent SSRF, and using `tempfile.mkstemp` for secure temporary file creation. Additionally, the script sanitizes text before generating ASS subtitle files to mitigate injection risks. The `SKILL.md` documentation is clear, aligns with the script's functionality, and contains no evidence of prompt injection attempts against the OpenClaw agent or instructions for malicious behavior. All external dependencies (`ffmpeg`, `yt-dlp`, `whisper-cpp`) are legitimate tools for video processing.",
+          "checkedAt": 1779162070139,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "8fcb3e80d63a85daabf0f633ad991ccac5772b8b52a6eaeae9643fae644f8401",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8fcb3e80d63a85daabf0f633ad991ccac5772b8b52a6eaeae9643fae644f8401"
+    },
+    "slug": "clips-machine",
+    "source_type": "clawhub",
+    "version": "1.2.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

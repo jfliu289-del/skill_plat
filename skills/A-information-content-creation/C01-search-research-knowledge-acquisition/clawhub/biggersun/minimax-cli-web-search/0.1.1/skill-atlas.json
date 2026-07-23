@@ -1,0 +1,153 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "website"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.7404,
+    "domains": [
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:phrase:web search",
+      "category:C01:token:lookup",
+      "category:C01:token:research",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C07:token:test",
+      "category:C10:token:model",
+      "category:C19:token:automation",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:search",
+      "cross-tag:software-development",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "build",
+      "manage",
+      "research",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8bbe631e5ad33e42668a03432a203c45b5cc451f9fb9e0db911e1d9539659f81",
+    "content_hash": "1f97b54b127de46d76d0a9955255e51e64c82a115a65e6e3295b167ffe961756",
+    "precanonical_content_hash": "26076e6f36f138fa30b929040b52f1eae8dd8859114d0203385cab9ead75ddfc",
+    "skill_md_hash": "4e8acbb99d588de30d97588bf9770834da3319425c2ec7215022757400cbb39c",
+    "version_metadata_sha256": "d4ef9014d00bc9e69ce7a5e2d7695214e41b96516dcb9df53fbd1674121a4d6a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/biggersun/skills/minimax-cli-web-search",
+    "claim_id": "b307c13647e7d54fe1f338561a09a7560b2a4f7601eb45c0300bc983c305e435",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "minimax-cli-web-search",
+        "url": "https://clawskills.sh/skills/biggersun-minimax-cli-web-search"
+      }
+    ],
+    "owner_handle": "biggersun",
+    "owner_id": "s172nvhwf1h87fj5xzm3mx9h7n88542m",
+    "published_at": 1771849618580,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779952782619,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779952782619,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is real-time web search through MiniMax MCP via mcporter, and the artifacts only implement preflight checks, a web_search call, and result formatting.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill tells the agent to run a local shell wrapper and smoke-test query; this is disclosed and bounded to the search workflow, but search queries leave the local environment through the configured provider.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No installer or package-fetching command is bundled; users must already have python3, mcporter, and a configured MiniMax MCP server/API key.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The wrapper uses the user's local mcporter configuration and MiniMax API access, which is proportionate for web search; it also instructs agents not to print API key values.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The script uses mktemp files cleaned by trap, does not create background services, does not modify credentials or profiles, and shows no privilege escalation or persistence mechanism.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SkillSpector] expected: Reported no issues; manual artifact review is consistent with a clean, purpose-aligned search helper.\n[VirusTotal] expected: Telemetry was clean and aligns with the inspected files; it was used only as supporting context, not as the sole basis for the verdict.\n[staticScan] expected: Metadata reports no suspicious patterns, and manual review found no eval, curl-pipe install, obfuscation, credential capture, unrelated file access, or destructive command behavior.",
+          "guidance": "Install only if you trust your local mcporter installation and MiniMax MCP configuration. Treat search queries as data sent to the configured provider, so avoid including passwords, API keys, confidential documents, or sensitive business details in queries.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward MiniMax web-search wrapper with no evidence of hidden data access, persistence, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779952752779,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: minimax-cli-web-search\nVersion: 0.1.1\n\nThe skill bundle is a well-structured wrapper for the `mcporter` CLI tool to perform web searches. The `SKILL.md` provides clear, non-malicious instructions for the agent and explicitly addresses security concerns like API key exposure and temporary file safety. The `minimax_web_search.sh` script uses robust shell practices (`set -euo pipefail`, `mktemp`, `trap`), performs input validation, and interacts with `mcporter` as intended. There is no evidence of data exfiltration, malicious execution (e.g., `eval` of user input, `curl|bash`), persistence mechanisms, obfuscation, or prompt injection attempts against the agent. Any potential vulnerability would lie in the `mcporter` dependency itself, not in the design or intent of this wrapper skill.",
+          "checkedAt": 1779166492493,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "eaa0e47d68453e4978aa66f053092df74d4846ef4afc7ce31cba4883688139fc",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/eaa0e47d68453e4978aa66f053092df74d4846ef4afc7ce31cba4883688139fc"
+    },
+    "slug": "minimax-cli-web-search",
+    "source_type": "clawhub",
+    "version": "0.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,150 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C04:token:data",
+      "category:C06:token:code",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C10:token:model",
+      "category:C11:token:project",
+      "cross-tag:data-analysis",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C09",
+      "C11"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "7a5c56ac668e18145bc2b724fb2c3594bcf050109028b1e465e442ad2ea6ab09",
+    "content_hash": "6eda8576fc085a11c21edd8a5d6b2a6ebe6fec25e9f6acc3aaa99ddebfd61253",
+    "precanonical_content_hash": "77a6532b19a179608092cf99bc8900321326dea06837b066cc0b1719694a2b3c",
+    "skill_md_hash": "003139e995cc2312a4e1ac7ff471fe6c06f1551f6a939bd60e76447383b76ab8",
+    "version_metadata_sha256": "ee4f6fa76529962979e2c9e7276c14af9bcb1895ddd7d2d904cee8a480c16c0a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/roasbeef/skills/lightning-mcp-server",
+    "claim_id": "fb23afde9196173165add5f8399f634f155144787e9ad27c792b65c2d3bfc3e5",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "lightning-mcp-server",
+        "url": "https://clawskills.sh/skills/roasbeef-lightning-mcp-server"
+      }
+    ],
+    "owner_handle": "roasbeef",
+    "owner_id": "s17ct3pzdm5xvjjh7x3qs5z3kn884ax4",
+    "published_at": 1770777276521,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968947091,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968947091,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The purpose and capabilities fit together: the skill builds/configures an MCP server for Lightning Node Connect and documents read-only tools for node, channel, invoice, payment, peer, and on-chain queries.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Instructions are mostly scoped to installation, MCP registration, and connecting with an LNC pairing phrase/password; those credentials are sensitive even though the docs say they are handled in memory.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses local shell scripts, Go build, Claude MCP config changes, or npx/Docker examples. These are disclosed and purpose-aligned, with normal supply-chain and configuration-review risk.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to the LNC mailbox relay is proportionate. The development example sets LNC_INSECURE=true, which is risky outside local/regtest environments but is disclosed as development-oriented.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The setup script can persist an MCP server entry in project or global Claude Code config, changing future agent behavior until removed. It does not show hidden persistence or credential storage.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: Using a pairing phrase and password is expected for LNC connection, and the artifact says no keys/certs/macaroons are stored and the pairing phrase is in-memory only. The missing stronger credential-handling warning is a user-guidance issue, not evidence of misuse.\n[TM3] expected: The insecure TLS example is explicitly labeled for development/regtest and defaults are secure, but users could copy it into broader environments. This warrants caution, not Review, because it is disclosed and not automatic.",
+          "guidance": "Install only if you intend to let an agent read Lightning node state. Treat the LNC pairing phrase and password as secrets, review any .mcp.json or ~/.claude.json changes, prefer verified/source-built packages, avoid Docker host networking unless necessary, and never use LNC_INSECURE outside controlled local testing.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed, read-only Lightning node connector, but users should handle the pairing phrase carefully and avoid insecure development settings in real use.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968898572,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: lightning-mcp-server\nVersion: 1.0.0\n\nThe skill bundle is designed to connect an AI agent to a Lightning Network node for read-only queries via encrypted WebSocket tunnels. The `SKILL.md` instructions are clear and do not contain any prompt injection attempts to mislead the agent. The shell scripts (`configure.sh`, `install.sh`, `setup-claude-config.sh`) perform standard build and configuration tasks, such as creating an environment file, building a Go binary, and updating Claude Code's configuration. While the `--dev` mode in `configure.sh` allows disabling TLS verification (LNC_INSECURE=true), this is explicitly documented as for development only and is a common practice, not indicative of malice. The use of `npx` for installation and Docker with `host` network mode are capabilities that carry supply chain and broad network access risks, respectively, but are not malicious within the context of this skill's stated purpose and are common deployment methods. No evidence of intentional harmful behavior like data exfiltration, unauthorized remote control, or persistence was found.",
+          "checkedAt": 1779163070481,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "8356c12cf6a81af5ed05410c83a594c10ae5454a38c0403e5d3230bd4cab9ae6",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8356c12cf6a81af5ed05410c83a594c10ae5454a38c0403e5d3230bd4cab9ae6"
+    },
+    "slug": "lightning-mcp-server",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

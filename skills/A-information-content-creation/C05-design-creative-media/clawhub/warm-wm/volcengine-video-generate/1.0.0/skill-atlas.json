@@ -1,0 +1,133 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.4167,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C05:token:image",
+      "category:C05:token:video",
+      "cross-tag:design",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "0dd9d016b4e6610ca82dca9c33971a9f4aca7b5c44af44610c41febe584081c7",
+    "content_hash": "e0401c8d5a8895fc25c51811ffb438248605108a87caa90300929f08e6c080f5",
+    "precanonical_content_hash": "d1dcfb925a0a26f28d30151e312ecca6c15910da1859290ec0153920b24ceccf",
+    "skill_md_hash": "b35b930be44e67743a96d080b2f0f42cbcf62619c904700afc1cbd349f2e41c9",
+    "version_metadata_sha256": "c825a3b0a7b6ee9d9ab2bd438923834da39def567872b34593352d8401f59888"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/warm-wm/skills/volcengine-video-generate",
+    "claim_id": "7575d3c8e9984b2c09853271fa6c346642b13b5247d48ff7b95233de34ea678c",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "volcengine-video-generate",
+        "url": "https://clawskills.sh/skills/warm-wm-volcengine-video-generate"
+      }
+    ],
+    "owner_handle": "warm-wm",
+    "owner_id": "s175yhmvqv4bzg77ggkg1x9khx83gb77",
+    "published_at": 1770689098084,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779964129100,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779964129100,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, documentation, and script all align around generating a video from a prompt with an optional first-frame image through Volcengine/Ark.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script is user-directed but accepts arbitrary local image paths or image URLs and a user-chosen output filename, so agents should only pass paths and URLs the user clearly intended.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains documentation, a license, and one Python script; there is no installer, post-install hook, or automatic execution path.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use of API keys, network calls to a video-generation provider, prompt transmission, optional image upload, and video download are proportionate for the skill, though privacy-sensitive.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no background persistence or privilege escalation; the script polls a remote task and writes the downloaded video to the provided path, creating directories if needed.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The concern about prompts and optional local or remote images being sent to Volcengine is supported by the artifact, but it is expected for cloud video generation and is partially disclosed by the Volcengine-focused purpose and Base64 image step.\n[VirusTotal code_insight] expected: The reported local-file read for first-frame images and local output write are real capabilities, but they are user-supplied inputs needed for this workflow and are not evidence of hidden exfiltration or malicious file writes.\n[staticScan] expected: Static scan reported no suspicious patterns, consistent with the inspected script showing no obfuscation, persistence, credential theft, or unrelated behavior.",
+          "guidance": "Install only if you are comfortable sending prompts and any provided first-frame images to Volcengine/Ark. Do not use confidential images, internal-only URLs, or sensitive prompts unless that third-party processing is acceptable, and choose an output path where creating or overwriting a video file is safe.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward Volcengine video-generation helper, with expected cloud upload and local download behavior that users should handle carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779964083986,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: volcengine-video-generate\nVersion: 1.0.0\n\nThe `scripts/video_generate.py` script exhibits risky capabilities by allowing the reading of arbitrary local files (via the `first_frame_image` argument) and sending their base64 encoded content to the Volcengine API. Additionally, it permits writing the generated video to an arbitrary local path (via the `filename` argument), including creating directories. While these actions are plausibly needed for the skill's stated purpose (using local images and saving videos locally), they introduce a significant risk of data exfiltration or arbitrary file writes if an attacker can manipulate the input arguments, for example, through prompt injection against the executing agent.",
+          "checkedAt": 1779162639038,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "a7221277ad3e50549b1e6cb518a8df55b5709c9689dbe94bc83cbb8127848cb6",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a7221277ad3e50549b1e6cb518a8df55b5709c9689dbe94bc83cbb8127848cb6"
+    },
+    "slug": "volcengine-video-generate",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

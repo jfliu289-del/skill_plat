@@ -1,0 +1,119 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.0,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "fallback:C00"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "fbe14b6a181cbdd4036e312438355c7372ed1339ddab43d277fa4aaeeaf7d048",
+    "content_hash": "0dcae8b3628262368d2cfb74b1c06f78e7fd77c1a320e4c0abaac53aa631f7b8",
+    "precanonical_content_hash": "0c9d52aa2cb529dc4e2f196b60902ac7ad2c9d4c852e9c396e029df48870c787",
+    "skill_md_hash": "3078de7492144d6e4bbb1293363fa31ce001f5baa43bcd193d239285935d94e1",
+    "version_metadata_sha256": "b7ca6d9e88ac03badabcf9859cbe39065217de6c8e14b3b54d583ba9f4dded4e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/6mile-puppet/skills/s3-sort",
+    "claim_id": "8e8b8562ee7c676be81cadf062dc0fa33a76e27be2c192869dba6e4ece887ecb",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "s3-sort",
+        "url": "https://clawskills.sh/skills/6mile-puppet-s3-sort"
+      }
+    ],
+    "owner_handle": "6mile-puppet",
+    "owner_id": "s17cdxgg0rgacd9fcbasw64jk1885yyj",
+    "published_at": 1771225356679,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968980286,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968980286,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documentation and script consistently implement S3 bulk upload with first-character prefix organization using aws s3 cp or aws s3 sync.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Operations are user-invoked, take explicit source directory and bucket arguments, and include a dry-run mode; there are no hidden agent instructions or automatic execution.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The only declared dependency is the standard AWS CLI via Homebrew, with no remote install script or bundled binary.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "AWS access keys and the aws CLI are proportionate for S3 uploads, but risk depends on how broadly the user's IAM credentials are scoped.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill creates persistent S3 objects by design; the actual script uses mktemp-based local staging and cleanup, while the documentation also includes a simple rm -rf staging example and an optional S3 test-object delete.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-2] unexpected: The optional bucket-access test deletes a specific _test_access.txt object after creating it, which is not required for upload-only use. It is disclosed, limited, and not run automatically, so it is guidance-worthy rather than a Review-level concern.\n[SQP-2] expected: Temporary local staging cleanup is expected for the sync workflow. The documentation example uses rm -rf on a named staging directory, but the actual script uses mktemp -d with a cleanup trap, reducing the practical data-loss risk.\n[suspicious.generated_source_template_injection] expected: The flagged line is a shell example that derives a prefix from a filename variable; it is quoted and does not use eval or dynamic code execution, so the static finding is not supported as injection evidence.",
+          "guidance": "Install only if you are comfortable using AWS credentials for S3 uploads. Use a narrowly scoped IAM role or key limited to the intended bucket/prefix, run --dry-run first, verify the source directory does not contain private files, and do not reuse the documentation's staging cleanup pattern with an important directory.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it uploads user-selected local files to a user-specified S3 bucket, with ordinary AWS credential and cleanup risks.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968948361,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: s3-sort\nVersion: 1.0.1\n\nThe OpenClaw skill 's3-bulk-upload' is designed to upload files to S3 with automatic prefix organization. Both the `SKILL.md` documentation and the `s3-bulk-upload.sh` script align with this stated purpose. The skill correctly uses `aws s3 cp` and `aws s3 sync` commands, requires appropriate AWS credentials, and employs standard shell scripting practices including temporary directories and symlinks for efficient bulk uploads. There is no evidence of prompt injection attempts in the markdown, nor any malicious code such as data exfiltration to unauthorized endpoints, persistence mechanisms, or obfuscation in the script. The use of `realpath` for symlink resolution is a standard practice for `aws s3 sync` and is not indicative of malicious intent within the context of uploading files from a specified source directory.",
+          "checkedAt": 1779164416209,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "e566b761e2aeba021e18d23adb20383e6911d2e404fa6ef8746e34f1e1b4087c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e566b761e2aeba021e18d23adb20383e6911d2e404fa6ef8746e34f1e1b4087c"
+    },
+    "slug": "s3-sort",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

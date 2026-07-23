@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "security-professional"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C13",
+    "reasons": [
+      "category:C04:token:data",
+      "category:C09:token:privacy",
+      "category:C13:token:finance",
+      "category:C13:token:operations",
+      "category:C17:token:personal",
+      "cross-tag:data-analysis",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C09",
+      "C17"
+    ],
+    "stages": [
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "2369f6404786d3e8e81672c47756932172f7b6afe0499ad5be118248cf01467d",
+    "content_hash": "b006d0724cabcd0dd14ef1150eedc1a7133c1c552acd0102af12d828df78e882",
+    "precanonical_content_hash": "4d72777a88222db513750d362c323e01e9ef1a3ee0159279688fb1edf11ea08b",
+    "skill_md_hash": "777f32b2897924a361c77f9c22f59a12a604df89901bba7906eeaced0777bd72",
+    "version_metadata_sha256": "f92349ed707c4cffbc9c7d4f4b0e1bac34c2bde637e7f79bdb5fd0467f7f2b71"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/gowtham1984/skills/financial-reconciler",
+    "claim_id": "a29f51ad307dab8f8e88d1a738eddfb6886849f85318eb3eba9c39a767eba323",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "financial-reconciler",
+        "url": "https://clawskills.sh/skills/gowtham1984-financial-reconciler"
+      }
+    ],
+    "owner_handle": "gowtham1984",
+    "owner_id": "s174mp73p1ehhdd9cdkd1h0y9d885dpr",
+    "published_at": 1770830818571,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971052639,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971052639,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts import CSV/OFX bank transactions, categorize them, manage budgets, query local transaction data, and generate reports, matching the stated personal-finance purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Onboarding phrases such as \"get started\" are broad, but the instructions lead to an explanation and a user-provided bank file path rather than hidden collection or automatic unrelated access.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a disclosed pip install of finance/reporting parser dependencies; no hidden installer, updater, network callback, or obfuscated execution was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill uses local files, SQLite, and user-supplied bank statements, which are proportionate for a privacy-first finance tracker; no external data transmission was found.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "It persistently stores sensitive transaction data in a disclosed local SQLite database and can produce report files when requested; users should treat those local artifacts as private financial records.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad onboarding trigger is a privacy-relevant note, but the artifact explicitly explains the finance purpose and asks the user to provide a statement file; it does not show hidden or automatic file harvesting.\n[SQP-2] expected: Report persistence is expected for a reporting feature and the instructions say HTML is used when the user wants a browser-openable file; it would be better to warn about sensitivity, but this is not purpose-mismatched behavior.\n[VirusTotal/code_insight] expected: The cited shell-quoting, user regex, and local HTML escaping risks are implementation hardening issues. They are not backed by evidence of exfiltration, deception, destructive actions, or hidden privilege use.",
+          "guidance": "Install only if you are comfortable keeping bank transaction history in a local SQLite database under the skill data directory. Avoid importing statements on shared machines, review any generated HTML reports before sharing them, and be cautious with custom regex categorization rules because complex patterns can slow local processing.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent local personal-finance skill; it handles sensitive bank data, but its storage and report behavior are disclosed and fit its purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971008202,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: financial-reconciler\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to potential vulnerabilities. The `SKILL.md` instructions for the AI agent to execute `python3 scripts/query.py \"<natural language query>\"` pose a prompt injection risk, as direct substitution of user input without proper shell escaping could lead to arbitrary command execution by the agent. Additionally, `scripts/categorize.py` allows users to add custom regex patterns via `add-rule`, which are then used in `re.search`, creating a Regular Expression Denial of Service (ReDoS) vulnerability. A minor Cross-Site Scripting (XSS) risk exists in `scripts/report.py` if malicious data from bank statements were to be embedded unsanitized into the generated HTML reports.",
+          "checkedAt": 1779163235153,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "53f1746cd968eb5313b1eee9296666bfd3abe386332517db856aea1fe8326217",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/53f1746cd968eb5313b1eee9296666bfd3abe386332517db856aea1fe8326217"
+    },
+    "slug": "financial-reconciler",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

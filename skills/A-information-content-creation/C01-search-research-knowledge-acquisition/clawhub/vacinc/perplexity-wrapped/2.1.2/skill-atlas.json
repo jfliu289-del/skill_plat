@@ -1,0 +1,151 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "paper"
+    ],
+    "audiences": [
+      "developer",
+      "researcher",
+      "security-professional"
+    ],
+    "confidence": 0.6682,
+    "domains": [
+      "science",
+      "security",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:phrase:web search",
+      "category:C01:token:research",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C07:token:quality",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C10:token:model",
+      "cross-tag:academic-research",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "28d628c3d8418366893c4a18a5c6e7604d5933bb82cade6b5c34442ce544e128",
+    "content_hash": "61e983b43fee597a6cb2538230d08f9bb653432cca329d08e13c5b419dd4516b",
+    "precanonical_content_hash": "2b413552cb5a891361dd73524212c34f8f30ca99c646938f675d8376daae887f",
+    "skill_md_hash": "480412075cd698003366975ad2a9217ef2a51bc532f15f393aa1e9b93db7620c",
+    "version_metadata_sha256": "5b7d1c6e2ae26939de50c7160226c95ca9d1b1277c12356e2eab771d284eeb1a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/vacinc/skills/perplexity-wrapped",
+    "claim_id": "b169f385d69dc2b6d3263b21e1f0110b9fddb0612beba623f3dc96521adb4358",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "perplexity-wrapped",
+        "url": "https://clawskills.sh/skills/vacinc-perplexity-wrapped"
+      }
+    ],
+    "owner_handle": "vacinc",
+    "owner_id": "s1703ccjszbq2arbyf7hjw486583gcxy",
+    "published_at": 1770669583607,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783657973772,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783657973772,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is AI-powered web search via Perplexity, and the code implements only Perplexity Search, Sonar, and Agentic API calls matching that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Default outputs are wrapped as untrusted external content and boundary markers are sanitized, but the explicit --json debug mode returns raw unwrapped API responses; this is disclosed, though the top-level description overstates wrapping slightly.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill requires Node and a Perplexity API key supplied through environment/OpenClaw config; no package install script, shell execution setup, or hidden installer behavior was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Sending queries and optional agentic instructions to Perplexity is necessary for the feature, and agentic mode discloses third-party models and web/fetch tools; users should still treat it as an external-service integration.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts show no background worker, persistence, file writes, privilege escalation, broad local indexing, or credential-store access; the only local credential use is reading PERPLEXITY_API_KEY.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The --json concern is real but disclosed as raw, unwrapped debug output and requires explicit opt-in, so it supports user caution rather than a Review verdict.\n[SQP-2] expected: The raw JSON example could be clearer about automation risk, but the security section says wrapped mode is the default and advises using --json only for raw payload debugging.\n[E1] expected: Network transmission to api.perplexity.ai, including the agentic /v2/responses endpoint, is central to the stated search and research functionality and is not evidence of hidden exfiltration.",
+          "guidance": "Install only if you are comfortable sending search queries, prompts, and optional agentic instructions to Perplexity, with agentic mode potentially involving third-party model providers. Use a dedicated API key, monitor costs, avoid submitting secrets or confidential data, and prefer the default wrapped output when another agent or automation will consume results.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to do what it claims: it sends user search queries to Perplexity and returns results, with a raw JSON debug mode that needs care.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783657948983,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 21,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: perplexity-wrapped\nVersion: 2.1.2\n\nThe skill is designed for AI-powered web search via the Perplexity API, which aligns with its stated purpose. It makes network calls exclusively to the legitimate Perplexity API endpoint and handles the API key via environment variables. Crucially, the `SKILL.md` documentation and `scripts/search.mjs` code include explicit and robust measures to prevent prompt injection from external content, such as untrusted content boundaries, character folding, and direct instructions to the OpenClaw agent to treat all returned content as untrusted data. There is no evidence of data exfiltration, malicious execution, persistence, or prompt injection attempts within the skill's own instructions or code.",
+          "checkedAt": 1779161954690,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "dbe55dc1561dcc969a7cd44f1c926db459bc61673ffc3e810a04acd0c91dc223",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/dbe55dc1561dcc969a7cd44f1c926db459bc61673ffc3e810a04acd0c91dc223"
+    },
+    "slug": "perplexity-wrapped",
+    "source_type": "clawhub",
+    "version": "2.1.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

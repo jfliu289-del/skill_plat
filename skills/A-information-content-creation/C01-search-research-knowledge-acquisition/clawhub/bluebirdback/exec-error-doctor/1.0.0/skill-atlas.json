@@ -1,0 +1,128 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C08:token:github",
+      "cross-tag:search",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C08"
+    ],
+    "stages": [
+      "discover"
+    ],
+    "tasks": [
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "42bda53423a24dbe76fa51e2217d23293c3593363d0ad2ae5b4481667fc5707c",
+    "content_hash": "7fa205c25bdbb8cac084fa154d0595ecc43d9f2dca08381e8d24268a552854e2",
+    "precanonical_content_hash": "24dc9681d4219e3bce9a159b05291de9f25e35aa55d265b4b49f6ae6ae050828",
+    "skill_md_hash": "556fe2cb5fc4e535d644ee98f5dcd36d65bd8794799e274af5f75667881858eb",
+    "version_metadata_sha256": "f6c818e64f9bfc52ac463d194115ce5a527f16958f2cfdd5f1066370876b5800"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/bluebirdback/skills/exec-error-doctor",
+    "claim_id": "4603cb6a09c02ab5007a2f60cafb7ea1961b706a1573536e27502196c812d1d8",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "exec-error-doctor",
+        "url": "https://clawskills.sh/skills/bluebirdback-exec-error-doctor"
+      }
+    ],
+    "owner_handle": "bluebirdback",
+    "owner_id": "s1704v7bqw4d7b7nnh5exa3n958471ys",
+    "published_at": 1771243276571,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971149271,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971149271,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill is primarily for command failure triage and includes classifiers plus GitHub and ClawHub CLI wrappers. The ClawHub wrapper can publish a skill remotely, which is high-impact, but SKILL.md explicitly documents it as the publish visibility-lag workflow.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are straightforward: run the triage script first, then use relevant wrappers. The publishing script requires explicit path, slug, name, and version arguments rather than running automatically or hiding the action.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "No external installer, package download, or startup hook is present. The bundle contains markdown references and short shell scripts that rely on already-installed local CLIs.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The scripts rely on local gh and clawhub authentication when those wrappers are used. This is expected for GitHub/ClawHub troubleshooting, but users should use minimally scoped accounts or tokens.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No durable persistence, privilege escalation, or background worker behavior is present. The ClawHub publish wrapper writes temporary whoami output under /tmp and performs a remote publish when explicitly invoked.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] expected: The remote publish and inspect loop exists and is a sensitive action, but it is documented in SKILL.md as the ClawHub publish visibility wrapper and is not hidden or automatic.\n[SDI-2] expected: The script checks ClawHub authentication and publishes once explicit arguments are supplied. This warrants user caution, but artifact evidence supports a disclosed, purpose-aligned troubleshooting workflow rather than deception or exfiltration.",
+          "guidance": "Install only if you want a skill that can help troubleshoot CLI failures, including ClawHub publish visibility issues. Review and run clawhub_publish_safe.sh only when you intentionally want to publish the specified local skill path to ClawHub; use a minimally scoped authenticated account and verify the path, slug, name, and version before invoking it.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed troubleshooting helper; it includes a real ClawHub publishing wrapper, but that behavior is visible, user-invoked, and tied to the stated ClawHub CLI failure workflow.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971123889,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 65,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: exec-error-doctor\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle 'exec-error-doctor' is designed to diagnose and mitigate command execution failures. All scripts (`exec_error_triage.sh`, `gh_search_repos_safe.sh`, `clawhub_publish_safe.sh`) are well-structured, use standard CLI tools (`gh`, `clawhub`), and implement robust error handling, retry logic, and fallback mechanisms for transient issues or schema mismatches. The `SKILL.md` instructions guide the agent to perform diagnostic and corrective actions aligned with the stated purpose. There is no evidence of data exfiltration, unauthorized execution, persistence, obfuscation, or malicious prompt injection attempts. The functionality is entirely consistent with a helpful diagnostic and remediation tool.",
+          "checkedAt": 1779164546251,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "42bda53423a24dbe76fa51e2217d23293c3593363d0ad2ae5b4481667fc5707c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/42bda53423a24dbe76fa51e2217d23293c3593363d0ad2ae5b4481667fc5707c"
+    },
+    "slug": "exec-error-doctor",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

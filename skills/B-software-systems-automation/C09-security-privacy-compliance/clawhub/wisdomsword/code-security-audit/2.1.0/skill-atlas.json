@@ -1,0 +1,181 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report",
+      "website"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.7391,
+    "domains": [
+      "creative",
+      "security",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:prompt",
+      "category:C01:token:find",
+      "category:C02:token:language",
+      "category:C04:token:data",
+      "category:C05:token:design",
+      "category:C06:token:api",
+      "category:C06:token:code",
+      "category:C07:token:debug",
+      "category:C08:token:cd",
+      "category:C08:token:ci",
+      "category:C08:token:git",
+      "category:C08:token:github",
+      "category:C09:phrase:security audit",
+      "category:C09:token:audit",
+      "category:C09:token:compliance",
+      "category:C09:token:security",
+      "category:C09:token:vulnerability",
+      "category:C10:token:ai",
+      "category:C10:token:llm",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:data-analysis",
+      "cross-tag:debugging",
+      "cross-tag:design",
+      "cross-tag:review",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C06",
+      "C08",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "automate",
+      "build",
+      "debug",
+      "design",
+      "manage",
+      "research",
+      "review",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "611155656a617547b294e2388cf9efe6a475f2e3358c92e5d9f2a92ece0eb103",
+    "content_hash": "57fc7c77e42d9227b1f78734444dece6b1a8fed2f6814447fe440b0864d9878e",
+    "precanonical_content_hash": "f1ddc994629b1c2a3b23efd30a226c7d3836dc249cea12520a4bb5dedfaed5dc",
+    "skill_md_hash": "4545a3fa7b119d1b78be0217766f6f6f7edfc4c6b2c8c1e0857d6ab6a5908231",
+    "version_metadata_sha256": "05a84745fb03deb0000a8ec067b9ffcfd488d31f4778b588168fc066d3044c7a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/wisdomsword/skills/code-security-audit",
+    "claim_id": "f124e8213d127dbc2e8270cdd83b7a06656a3338a138700a9f5943e3b537a15c",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "code-security-audit",
+        "url": "https://clawskills.sh/skills/wisdomsword-code-security-audit"
+      }
+    ],
+    "owner_handle": "wisdomsword",
+    "owner_id": "s17816dwhde506q6hgdqabzsx983kpd7",
+    "published_at": 1771912616757,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1780085600358,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779948643183,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently implement a code security audit toolkit: OWASP checks, dependency audits, secret detection, SSL/TLS checks, AI-agent security patterns, report generation, and CI templates all fit the stated purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill is broad within security-audit use cases and directs shell-based scanning of a project, but that is disclosed and central to its function rather than hidden or unrelated authority.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no hidden installer or remote bootstrapper. CI templates install common security tools from package registries, which is expected for dependency and security scanning workflows.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Most reads are scoped to PROJECT_DIR, but the full permission audit checks ~/.ssh directory permissions and secret scans may reveal matching lines in output, especially with verbose mode or CI logs.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill does not automatically persist, escalate privileges, or modify other skills. It includes an optional pre-commit hook example and can write a report to a user-selected output path.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Shell commands such as grep, npm audit, openssl, curl, and filesystem inspection are expected for a local security-audit toolkit; the manifest and documentation disclose the relevant tools.\n[SDI-1] expected: The ~/.ssh check reaches outside the project, but the script only checks directory permissions and the behavior is shown in the file-permission audit documentation; this is a user-awareness caveat, not evidence of secret reading or exfiltration.\n[SQP-1] expected: The activation language is broad, but it remains focused on security audits, vulnerability scanning, secret detection, OWASP compliance, AI/LLM app security, and security reviews.\n[TM1] unexpected: The optional pre-commit hook example prints a --no-verify bypass hint, which is weak security guidance, but it is not automatically installed and does not create hidden evasion behavior.",
+          "guidance": "Install this only when you want a local security audit. Run it in a private workspace or controlled CI job, because secret-detection matches can appear in terminal output or logs. Set PROJECT_DIR deliberately for tight scope, review the ~/.ssh permission check if host-level checks are unwanted, and avoid using the optional --no-verify bypass guidance as part of a real enforcement workflow.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent local security-audit skill, with expected scanning behavior and a few usage caveats around secret output and host permission checks.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948601632,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 71,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": null,
+          "checkedAt": 1780085600358,
+          "normalizedStatus": "clean",
+          "source": "engines",
+          "status": "clean",
+          "verdict": null
+        }
+      },
+      "sha256hash": "611155656a617547b294e2388cf9efe6a475f2e3358c92e5d9f2a92ece0eb103",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/611155656a617547b294e2388cf9efe6a475f2e3358c92e5d9f2a92ece0eb103"
+    },
+    "slug": "code-security-audit",
+    "source_type": "clawhub",
+    "version": "2.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,146 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C06:token:api",
+      "category:C06:token:code",
+      "category:C09:token:security",
+      "category:C19:token:device",
+      "cross-tag:agent-management",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C09",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8fba7d196288562f53fa26aaffe83fef833edd3ec87e357c9980ef05c69558f3",
+    "content_hash": "562939a4b12aabbc98ab118621171128928a2a878bd35c47dc6d96a5bf0c1867",
+    "precanonical_content_hash": "1fac9393b7ca9086daefaeadfa179ab90aff9291b9b0e57a1cb26d8318dee496",
+    "skill_md_hash": "e29453fe83de7f149c221c4e490a19db36c76f79332f7368d797f736d76a8a16",
+    "version_metadata_sha256": "fc7c6d9e416d343d44aeead8d0912c4b581cdd90f34b2daaaedf799b47124627"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/rosasalberto/skills/didit-email-verification",
+    "claim_id": "c8966f9aedbb3902ecfd852032b0c9292245b052f2866639ccc2fc6ce191e603",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "didit-email-verification",
+        "url": "https://clawskills.sh/skills/rosasalberto-didit-email-verification"
+      }
+    ],
+    "owner_handle": "rosasalberto",
+    "owner_id": "s17fenh76mn5y28mwva6bcmn0h8858fw",
+    "published_at": 1772514910268,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974666299,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974666299,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented and implemented behavior matches the stated purpose: sending and checking email verification codes through Didit, with optional breached/disposable/undeliverable checks and fraud signals.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are scoped to Didit email verification and related account setup, but users should keep OTP sends, fraud-signal collection, and decline policies user-directed because they affect recipients and verification outcomes.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains a markdown skill file and one Python helper script; there is no installer, hidden dependency bootstrap, remote code loading, or automatic execution.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The required DIDIT_API_KEY and outbound requests to Didit are proportionate for this integration. Email addresses and optional IP, device ID, user agent, and vendor data are disclosed as request fields, though privacy and data-minimization guidance could be clearer.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background service, privilege escalation, local credential harvesting, destructive file operations, or unrelated system access was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The skill does send email addresses and optional fraud signals to Didit, but this is disclosed in the purpose and request documentation and is central to email verification; the missing explicit consent/privacy warning is user guidance rather than a material policy concern.\n[SQP-2] expected: The skill requires a Didit API key and the script reads it from DIDIT_API_KEY without printing it; stronger secret-handling advice would be useful, but the credential use is disclosed and purpose-aligned.\n[staticScan] expected: Static scan reported no findings, and manual review found only direct HTTPS requests to Didit verification endpoints.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with the reviewed artifacts; it was treated as supporting signal, not the basis for the verdict.",
+          "guidance": "Install this only if you intend to use Didit for email verification. Protect DIDIT_API_KEY in an environment variable or secret manager, avoid logging it, confirm before sending OTP emails, monitor Didit credits or usage, and only send optional IP/device/user-agent fraud signals when you have an appropriate privacy basis and user notice.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward Didit email OTP integration that discloses its API key use and external email-verification requests.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974633268,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 19,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: didit-email-verification\nVersion: 1.2.0\n\nThe skill bundle is designed for email verification using the Didit API. The `SKILL.md` documentation clearly outlines the API endpoints and usage, including instructions for programmatic account registration and billing, which are legitimate API features. The `scripts/verify_email.py` utility script correctly retrieves the `DIDIT_API_KEY` from environment variables and makes standard HTTP requests to the documented Didit API endpoints (`verification.didit.me`, `apx.didit.me`). There is no evidence of intentional harmful behavior such as credential theft, data exfiltration to unauthorized destinations, arbitrary command execution, persistence mechanisms, or explicit prompt injection attempts against the agent to perform malicious actions. All observed behaviors align with the stated purpose of email verification.",
+          "checkedAt": 1779163916763,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "7ac84119ee43eedccf93f073015a5a56d31ba4d610c2dc8e74fb8e61bdcb2503",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/7ac84119ee43eedccf93f073015a5a56d31ba4d610c2dc8e74fb8e61bdcb2503"
+    },
+    "slug": "didit-email-verification",
+    "source_type": "clawhub",
+    "version": "1.2.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

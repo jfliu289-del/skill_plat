@@ -1,0 +1,136 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:code",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "b9907d0fa671f05e82cf963ced0f518b42f92f63b51dbad88177ad58aff91a41",
+    "content_hash": "218d3ae96a1b35ccdc71bf47ba196e9141ca0464e14aa9550b24a4018abeada3",
+    "precanonical_content_hash": "301807be02137e36cb520e0e12e11e08cbb44b49553aa22d04daa5a36c480c7b",
+    "skill_md_hash": "ff2bb84f30ad68e29e2be1d737022b4ece4c29bbf0b50c371d858158840a08b6",
+    "version_metadata_sha256": "52796b9305636ffa43f0301a0d627fc0cf0fdc66496e0172a04e5e58b3b63f9a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/fratua/skills/env-setup",
+    "claim_id": "4c004de23088a1549cf4f338dce7cac9dc35667d4a58bf217a0afdd0117927b0",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "env-setup",
+        "url": "https://clawskills.sh/skills/fratua-env-setup"
+      }
+    ],
+    "owner_handle": "fratua",
+    "owner_id": "s179b3qkd8xyv4vkv17v2t997s884fq4",
+    "published_at": 1771181336498,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968381081,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968381081,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill's capabilities are coherent with its purpose: scanning source files for environment variable references, generating .env.example, validating env-file coverage, checking .gitignore, and warning about committed env files.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The workflow includes recursive repository scans and validation of .env-style files, which is expected for this task but can expose secret-bearing files to the agent context if not handled carefully.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains only SKILL.md instructions with no executable installer, package dependency, background service, or hidden runtime component.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Local grep and git commands are proportionate for an environment-variable audit; users should run it only in the intended repository and avoid printing actual secret values.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill may create .env.example, suggest a starter .env, and offer .gitignore edits, but shows no automatic persistence, privilege escalation, network transfer, or destructive action.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad trigger phrase could activate during general environment setup requests, but the resulting behavior is still aligned with the described env-audit purpose; this is a usability and consent note rather than evidence of malicious behavior.\n[SQP-2] expected: Creating a starter .env is related to environment setup but should be user-confirmed because .env files can later hold real secrets.\n[PE3] expected: Inspecting .env files is sensitive but disclosed and central to validating missing or unused environment variables; the artifact's examples report keys/status, not secret values.\n[TM3] expected: The sample defaults are conventional placeholders for an example file, but users should replace them with project-specific safe placeholders and avoid copying example credentials into production.",
+          "guidance": "Install only if you want an agent to audit environment variables in a specific repository. Before running it, confirm that outputs will list variable names and status only, not secret values; review any .env.example, starter .env, or .gitignore edits before accepting them; and treat any git-history cleanup advice as a manual, coordinated maintenance task.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is an instruction-only environment-audit helper whose file access and generated files match its stated purpose, though users should keep real secrets out of outputs.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968360385,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: env-setup\nVersion: 1.0.0\n\nThe 'env-setup' skill is designed to scan code for environment variables, generate `.env.example` files, validate existing `.env` configurations, and ensure `.gitignore` safety. All commands and instructions in `SKILL.md` (e.g., `grep`, `git log`) are directly related to these stated purposes. While the skill interacts with the file system (reading code, `.env` files, git history, and potentially writing `.env.example` and modifying `.gitignore`), these actions are necessary for its functionality and are not used for exfiltration, unauthorized execution, or persistence. There is no evidence of malicious prompt injection, data exfiltration, or other harmful intent.",
+          "checkedAt": 1779164342045,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "6aef494b4f0d622d30241a344545e05f9fc001a337ff7f725e331658be8a2ecf",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6aef494b4f0d622d30241a344545e05f9fc001a337ff7f725e331658be8a2ecf"
+    },
+    "slug": "env-setup",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

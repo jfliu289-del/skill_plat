@@ -1,0 +1,135 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C02:token:language",
+      "category:C06:token:api",
+      "category:C18:token:health",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C18"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e0c48a71a3cf69f2f3496ec39d4ba7ff98e46239846080c7e3b4578852eb9e54",
+    "content_hash": "c7c99f6635a076541e200a5df5bfd21d9900693ac1f72fcd243889061e919f88",
+    "precanonical_content_hash": "42a1c0b2779158599d3679860f1e395ad17afff92b1e39bb05aa7bc7a3660597",
+    "skill_md_hash": "5c42131da33b1d5c99663da90d731e7a2ddfb3327f6ac90af49f03475bb92497",
+    "version_metadata_sha256": "30f82644d3278f062ad0ad49fda7527e9fc48451187ab7d45f36bb0cdd341b42"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/eason-tien/skills/jarvis-monitor",
+    "claim_id": "5f20c94a2d1a6d9f392481429eeb1a9205bbb084b7f90dba13514fd82f170a70",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "jarvis-monitor",
+        "url": "https://clawskills.sh/skills/eason-tien-jarvis-monitor"
+      }
+    ],
+    "owner_handle": "eason-tien",
+    "owner_id": "s17919gzyr8xs1cf84rx03r3zx8851tp",
+    "published_at": 1771727014550,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779948577501,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779948577501,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is a live system monitor, but monitor.html currently updates CPU, memory, network, activity age, and response time with random/static values and does not call the configured health endpoint.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Setup instructions are limited to hosting monitor.html and replacing a sample /healthz URL, but they do not clearly warn that the shipped page is not actually connected to that endpoint.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is manual hosting of a single HTML file and an example FastAPI route; there is no package installer, autorun hook, dependency install, or privileged setup.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The page loads Google Fonts and contains an unused private HTTP endpoint placeholder; documentation tells users to replace the endpoint, and current JavaScript does not make health-check network requests.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background worker, credential access, local storage, file indexing, mutation authority, or destructive behavior is present.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SDI-1] unexpected: The scanner correctly flags that operational metrics are simulated despite the live-monitor framing. This is a deployment safety and disclosure issue, but the artifact does not perform hidden access or harmful actions.\n[SQP-2] expected: A configurable health endpoint is expected for this kind of dashboard. The hardcoded private HTTP URL is poor hygiene, but it is documented as a placeholder to replace and is unused by the current code.",
+          "guidance": "Treat this as a visual demo until it is connected to authenticated, real telemetry. Replace the sample private HTTP URL, prefer HTTPS or same-origin routing, restrict the monitor and /healthz endpoint to trusted users, and do not rely on the displayed health values for operations without verifying the data source.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a static system-monitor dashboard with no hidden execution or data theft, but its displayed metrics are mock values unless the user wires it to real telemetry.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948536746,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: jarvis-monitor\nVersion: 3.0.0\n\nThe skill bundle provides a client-side web-based system monitor. The `SKILL.md` file contains instructions for users to host the `monitor.html` file and configure an API endpoint, but it does not contain any prompt injection attempts or malicious commands for the OpenClaw agent. The `monitor.html` file's JavaScript generates random data for the dashboard and, despite defining an `API_ENDPOINT` variable, does not actually make any network requests to fetch data from it. There is no evidence of data exfiltration, malicious execution, persistence, or other harmful behaviors. The hardcoded private IP in the HTML is a placeholder, and the documentation instructs users to replace it.",
+          "checkedAt": 1779166099009,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "e0c48a71a3cf69f2f3496ec39d4ba7ff98e46239846080c7e3b4578852eb9e54",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e0c48a71a3cf69f2f3496ec39d4ba7ff98e46239846080c7e3b4578852eb9e54"
+    },
+    "slug": "jarvis-monitor",
+    "source_type": "clawhub",
+    "version": "3.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

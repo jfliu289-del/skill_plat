@@ -1,0 +1,170 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report",
+      "website"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2115,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:find",
+      "category:C01:token:search",
+      "category:C04:token:data",
+      "category:C04:token:statistics",
+      "category:C06:token:api",
+      "category:C06:token:code",
+      "category:C09:token:security",
+      "category:C12:token:management",
+      "category:C13:token:operations",
+      "category:C17:token:notes",
+      "category:C19:token:navigate",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C04",
+      "C06",
+      "C09",
+      "C12",
+      "C13",
+      "C17",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "automate",
+      "build",
+      "manage",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "fee938144c5c937d73d7d5acd6720a198b170c5402c695fa5d7642eda65cf56a",
+    "content_hash": "6116d89a67557bdf7e8533f14f4ee09b9b2cf7cd92f626b41a86952a6a5d0939",
+    "precanonical_content_hash": "7a5d1f944616810ce0902488b12659835b808feac54a24335e0eb72d4002bc81",
+    "skill_md_hash": "3fbecc7ad25406cf669f7c24ea622f07e740255f155d3f397b64c65e9905af11",
+    "version_metadata_sha256": "caade402b40ba42db33ded1facbcd7a322c758593592b7233c090d59c5d2ef05"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/xiaoski/skills/ms-todo-sync",
+    "claim_id": "4718ad1f4301708b000f419a8525cbe9696102c3f27a386b8fc051682ac30a9e",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "ms-todo-sync",
+        "url": "https://clawskills.sh/skills/xiaoski-ms-todo-sync"
+      }
+    ],
+    "owner_handle": "xiaoski",
+    "owner_id": "s17eswbkzzwv7myf0068r52r6h84x296",
+    "published_at": 1770796042486,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779962032785,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779962032785,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose and implementation align: it manages Microsoft To Do lists and tasks through Microsoft Graph, including listing, creating, completing, deleting, searching, and exporting tasks.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions disclose login flow, token cache locations, automatic list creation, export behavior, debug mode, and confirmation guidance for destructive delete operations; the unused --create-list flag is confusing but the auto-create behavior is documented.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses normal Python dependency setup with msal and requests via uv or pip, and no installer-time obfuscation or unrelated setup behavior was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to Microsoft login and Graph endpoints is expected, and local JSON export can contain personal or work task data if the user chooses to run it.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists Microsoft authentication state in the user's home directory and provides logout to clear the cache; this is proportionate but users should treat the cache as sensitive.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Network access and local file reads/writes are expected for a Microsoft To Do CLI with authentication cache and export features; the documentation discloses the main data flows even though formal permission metadata is not present.\n[SDI-4] expected: The add command does auto-create a missing named list despite an optional-looking flag, but SKILL.md explicitly documents and recommends this behavior, making it a usability/scoping caution rather than hidden account mutation.\n[SQP-2] expected: Plaintext export of all tasks is an advertised export feature; users should choose private output locations because task notes and metadata may be sensitive.\n[SQP-2] expected: Local token caching is disclosed and tied to normal MSAL authentication; stronger file permission hardening would be preferable, but there is no evidence of credential exfiltration.\n[SQP-2] expected: Debug mode can print request and response bodies, which may include task content, but it is opt-in and described as showing API requests and responses.",
+          "guidance": "Install only if you want this tool to read and modify Microsoft To Do data for the account you authenticate. Avoid using -y unless deletion intent is clear, store exports in a private path, do not enable --debug in shared logs or CI, and run logout when you want to remove the cached login.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed Microsoft To Do command-line tool; install it only if you are comfortable granting it read/write access to the Microsoft account you sign into.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779961999769,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 78,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ms-todo-sync\nVersion: 1.0.2\n\nThe OpenClaw skill 'ms-todo-sync' is a benign CLI tool designed to manage Microsoft To Do tasks via the Microsoft Graph API. The code and documentation align perfectly with its stated purpose, utilizing the official Microsoft Authentication Library (MSAL) for secure authentication and directing all API calls to legitimate Microsoft Graph endpoints. There is no evidence of data exfiltration, malicious execution, persistence mechanisms beyond token caching, or obfuscation. The `SKILL.md` explicitly instructs the agent to handle destructive operations and authentication with user confirmation, mitigating prompt injection risks for these sensitive actions. The hardcoded client ID is a public identifier for Microsoft Graph API samples, not a secret, and poses no security threat.",
+          "checkedAt": 1779162382196,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "c558cb6d735b492ad5a92ce4971cca695cc031430c15069e60469d1ce2972ce5",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/c558cb6d735b492ad5a92ce4971cca695cc031430c15069e60469d1ce2972ce5"
+    },
+    "slug": "ms-todo-sync",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

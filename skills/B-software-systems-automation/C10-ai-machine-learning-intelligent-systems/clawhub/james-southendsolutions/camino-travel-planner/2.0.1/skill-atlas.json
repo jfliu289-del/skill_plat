@@ -1,0 +1,132 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C10:token:ai",
+      "category:C13:token:business",
+      "category:C18:token:travel",
+      "cross-tag:agent-management",
+      "cross-tag:planning"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C13",
+      "C18"
+    ],
+    "stages": [
+      "operate",
+      "plan"
+    ],
+    "tasks": [
+      "manage",
+      "plan"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "333960d07ec168848c20f26fc8a934dc1c078b59833c94fe40fd12b15f62c654",
+    "content_hash": "0e1d53c6be0b3e640a83f12788eede4c884ef5cadc097286531d9b9bf63bdc7f",
+    "precanonical_content_hash": "0661613e9af12be69264d1c03532583e32b18c270813f88a2ad9bb61d95073fd",
+    "skill_md_hash": "418c6843c3a708740f8eaeba4757beba77aff1dad57d8bba645979d5c6ae28f4",
+    "version_metadata_sha256": "e00f28c3a23051ca6917213dabc13c6db350b9a22028d523c2b3f312bdd962c3"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/james-southendsolutions/skills/camino-travel-planner",
+    "claim_id": "578f5455b24e65a3b87dc32983e04db8b11ae72a0fad31eeb1016e4a945b2497",
+    "index_entries": [
+      {
+        "index_path": "categories/transportation.md",
+        "label": "camino-travel-planner",
+        "url": "https://clawskills.sh/skills/james-southendsolutions-camino-travel-planner"
+      }
+    ],
+    "owner_handle": "james-southendsolutions",
+    "owner_id": "s17dekpybzcxf10vsx8arm960n86hhnf",
+    "published_at": 1778699284632,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972247155,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972247155,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The script validates JSON, checks for at least two waypoints, and posts the user-provided itinerary to Camino's journey API, which matches the stated travel-planning purpose. The data can include exact locations and stop descriptions, so it is sensitive but purpose-aligned.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Usage is user-directed and the documentation shows both the shell script and direct curl request to Camino. The companion-skills install command is broader than this single skill, but a specific single-skill install path is also provided.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is documented through ClawHub or npx from the Camino skills repository. Dependencies on curl, jq, and CAMINO_API_KEY are disclosed, and static scan metadata reports no suspicious patterns.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to https://api.getcamino.ai/journey and a Camino API key are proportionate for a Camino route-planning integration. Calls may consume quota and send exact itinerary details to the provider.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The setup suggests storing CAMINO_API_KEY in Claude Code settings, which is expected credential persistence for this integration. The artifacts do not show background execution, privilege escalation, deletion, or hidden local indexing.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The concern about waypoint and itinerary data leaving the local environment is valid privacy guidance, but the outbound Camino API call is central to the skill and is visible in the documentation.\n[SQP-2] expected: The runtime script does not prompt again before sending data, but execution is user-directed and the request target and required API key are disclosed in the artifacts.\n[E1] expected: The curl POST sends the full JSON input and CAMINO_API_KEY to Camino over HTTPS; this is security-relevant but not purpose-mismatched or hidden for an API wrapper.",
+          "guidance": "Install this only if you are comfortable giving Camino an API key and sending waypoint coordinates, stop names, trip constraints, and route preferences to Camino's service. Use the single-skill install path unless you intentionally want the full Camino companion suite, and avoid including sensitive home, workplace, medical, or private-trip details unless you trust Camino's data handling.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward Camino travel-planning API wrapper, but running it sends your itinerary locations to Camino.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972220082,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: camino-travel-planner\nVersion: 2.0.1\n\nThe camino-travel-planner skill is a standard API wrapper for the Camino AI travel planning service. It uses a shell script (scripts/travel-planner.sh) to validate JSON input and perform a POST request to https://api.getcamino.ai/journey using curl and jq. The implementation includes appropriate dependency checks and environment variable handling for authentication, with no evidence of malicious intent, data exfiltration, or command injection vulnerabilities.",
+          "checkedAt": 1779164738336,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "1cef6e39789150890eac862b982a4346aa73774209f7b6c9e4f91668627c903c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1cef6e39789150890eac862b982a4346aa73774209f7b6c9e4f91668627c903c"
+    },
+    "slug": "camino-travel-planner",
+    "source_type": "clawhub",
+    "version": "2.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

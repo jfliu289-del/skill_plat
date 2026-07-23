@@ -1,0 +1,153 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.1417,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "category:C13:token:operations",
+      "category:C17:token:notes",
+      "category:C18:token:health",
+      "cross-tag:agent-management",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "cross-tag:writing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C06",
+      "C09",
+      "C13",
+      "C17",
+      "C18"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "secure",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "81a59c7077f20fa121f0bb5ee3ce1f351c642573545a66381c1f44a0871fad58",
+    "content_hash": "22d0d6ed5758409e72d8877decb8a8bae2727a19d05345ed303932e850943caa",
+    "precanonical_content_hash": "2c183167761a88fb6cc48b72ae58022747948a7e6882f8be71b63bb5c018a4fc",
+    "skill_md_hash": "8370bfdbfc5339fe4ba9b200410b4d3ab41dd005ceed70b6ce99b2cf852b5d95",
+    "version_metadata_sha256": "fa4c484bd8629990cf7b400dae540be67bdc900b585166f95ae7a545a712c1e1"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/eddygk/skills/idrac",
+    "claim_id": "845f8930d648b8080fe15bbc5316d69cf5bf16060fb908511dc50b2ccc3e478d",
+    "index_entries": [
+      {
+        "index_path": "categories/git-and-github.md",
+        "label": "idrac",
+        "url": "https://clawskills.sh/skills/eddygk-idrac"
+      }
+    ],
+    "owner_handle": "eddygk",
+    "owner_id": "s1722zx8vry8w4hn5t6vf7zsq183n6a6",
+    "published_at": 1771223594401,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779969215572,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779969215572,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill is coherently aimed at Dell iDRAC monitoring and management, including inherently high-impact server power operations that are clearly listed in the description.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The main instructions distinguish read-only actions from destructive actions and require user confirmation before shutdown, restart, or BIOS-changing operations; the endpoint reference includes raw power-operation examples that users should treat carefully.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No remote installer, package fetch, obfuscation, or background setup was found; the artifact contains markdown documentation and one helper shell script requiring curl and jq.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access is scoped to the user-configured iDRAC address, but the script and examples use curl -k, so TLS identity verification is disabled for privileged management traffic.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill discloses persistent local configuration and credential caching in ~/.idrac-credentials with mode 600; this is purpose-aligned but sensitive plaintext credential storage.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The cited power-control and session-auth examples are real sensitive admin operations, but they are part of the documented iDRAC management purpose; the main skill also instructs confirmation for destructive actions and warns not to expose credentials.\n[RA2] expected: Persistent local config and credential files are present and disclosed. They increase exposure if the local account or backups are compromised, but they are not hidden persistence or unrelated agent behavior.\n[TM1] expected: Authenticated curl calls, configurable target host, and disabled TLS verification are confirmed. These are significant security tradeoffs for iDRAC administration, but they are documented and scoped to the user-configured management endpoint.\n[VirusTotal code_insight] expected: The telemetry concern about sourcing a local config and using curl -k is artifact-backed, but it does not show deception, exfiltration, backdoors, or unrelated behavior; VirusTotal is not used as the sole basis for escalation.",
+          "guidance": "Install only if you intend to manage Dell iDRAC devices from this machine. Use a dedicated least-privilege iDRAC account where possible, keep ~/.idrac-credentials protected or delete it when not needed, review ~/.config/idrac-skill/config because it is sourced by the shell script, and only run this on a trusted management network unless you modify it to validate the iDRAC certificate instead of using curl -k. Require explicit human approval before any power or BIOS-changing action.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed iDRAC administration helper with real operational and credential risks, but its behavior matches its stated purpose and does not show hidden or malicious actions.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779969184215,
+          "issueCount": 11,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: idrac\nVersion: 1.1.0\n\nThe skill is designed to manage iDRAC, but it exhibits significant vulnerabilities. The `scripts/idrac.sh` file sources a user-created configuration file (`~/.config/idrac-skill/config`), which introduces a Remote Code Execution (RCE) vulnerability if an attacker can modify this file. Additionally, the script uses `curl -k` to disable TLS verification for iDRAC connections, making them susceptible to Man-in-the-Middle attacks, although this is explicitly documented in `SKILL.md` as a trade-off for self-signed certificates. While these are critical security flaws, there is no evidence of intentional malicious behavior such as data exfiltration to unauthorized endpoints or installation of backdoors.",
+          "checkedAt": 1779164482414,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "63164d6727deaaf663fa92a7f6c6ad68db53e7280defe855b50049e618283881",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/63164d6727deaaf663fa92a7f6c6ad68db53e7280defe855b50049e618283881"
+    },
+    "slug": "idrac",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

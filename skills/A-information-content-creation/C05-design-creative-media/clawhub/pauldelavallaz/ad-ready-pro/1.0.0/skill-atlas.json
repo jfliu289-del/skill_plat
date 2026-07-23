@@ -1,0 +1,157 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "business",
+      "creator",
+      "developer",
+      "marketer"
+    ],
+    "confidence": 0.6346,
+    "domains": [
+      "business",
+      "creative",
+      "marketing",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C05:phrase:image generation",
+      "category:C05:token:creative",
+      "category:C05:token:image",
+      "category:C06:token:api",
+      "category:C08:token:repository",
+      "category:C10:token:ai",
+      "category:C10:token:model",
+      "category:C11:token:product",
+      "category:C14:token:campaign",
+      "cross-tag:design",
+      "cross-tag:marketing-sales",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "deliver"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "market"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "c5320cd671660a72b8a9b9f04016fe7930310167f78b848e3ed0f04a422bafa0",
+    "content_hash": "5118f17d5f9cc39db92c1c482f0f2709cbfef88f7d692cce5653f1954a8c4600",
+    "precanonical_content_hash": "85a3faa6642db9bedd12476247b54666fcccab5804cc4f410794c0d26349a87e",
+    "skill_md_hash": "62e923474848086964910d65bdc38d0a1a92ed3f9e4f80a692d3a2a80a9ccabd",
+    "version_metadata_sha256": "472520cc586a4fe3bc31c09031d5f3fefa2d388edbb0a5efd9ee517c03a0a339"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/pauldelavallaz/skills/ad-ready-pro",
+    "claim_id": "bbbebdea567954cf660a8629cf5c15671dc46befd023bcf30f084ab9b1735a58",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "ad-ready-pro",
+        "url": "https://clawskills.sh/skills/pauldelavallaz-ad-ready-pro"
+      },
+      {
+        "index_path": "categories/marketing-and-sales.md",
+        "label": "ad-ready-pro",
+        "url": "https://clawskills.sh/skills/pauldelavallaz-ad-ready-pro"
+      }
+    ],
+    "owner_handle": "pauldelavallaz",
+    "owner_id": "s17es8yqc61443cxz7kbvr73rs884ggf",
+    "published_at": 1770270217204,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783654531210,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783654531210,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose is URL-driven ad image generation, and the script behavior matches that purpose: it accepts product, logo, reference, model, brand, and prompt inputs, uploads assets to ComfyDeploy, queues a run, polls for completion, and downloads the generated image.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The workflow tells the agent to search for and download product images, logos, and reference ads, including optional auto-fetching. That is disclosed and purpose-aligned, but users should understand it involves third-party sites and untrusted remote content.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts contain a markdown skill file and a direct Python script run with uv-declared dependencies. I found no install hook, obfuscation, self-modification, startup behavior, or hidden execution path.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access, temporary file writes, reading a local brand catalog, and use of a ComfyDeploy API key are proportionate for this external image-generation workflow. The privacy boundary is real because product URLs and image assets can leave the local system.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill reads COMFY_DEPLOY_API_KEY or an explicit --api-key, writes auto-fetched assets under /tmp/ad-ready, and writes requested output files. It does not request privilege escalation or create background persistence, but temporary downloaded assets may remain after use.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The network access, environment-variable API key use, local catalog reads, and temporary file writes are real capabilities, but they are coherent with the documented ComfyDeploy ad-generation workflow.\n[SQP-2] expected: Downloading product images, logos, and reference ads from the web is part of the advertised preparation workflow. This remains a user guidance issue around source trust, licensing, and privacy rather than evidence of hidden behavior.\n[SQP-2] expected: Sending product URLs and image assets to ComfyDeploy is central to the skill and is documented through the API details and input table, including that product and logo images are uploaded.\n[SQP-2] expected: The --auto-fetch mode can contact a user-provided product URL plus logo services and save files locally. That is disclosed in usage text, though users should opt for manual files when they need tighter control.\n[E1] expected: The ComfyDeploy endpoint is explicitly documented and used for the advertised external generation service; I found no unrelated destination or credential exfiltration behavior.\n[VirusTotal code_insight] expected: The telemetry flags broad network and file behavior, but the artifact evidence shows those actions are expected for this skill. Engine stats showed no malicious or suspicious detections, and static scan metadata was clean.",
+          "guidance": "Install only if you are comfortable sending product URLs, product images, logos, reference ads, and optional model/talent images to ComfyDeploy and possibly fetching assets from third-party sites. Use a scoped ComfyDeploy API key where possible, avoid unreleased or confidential campaign assets unless third-party processing is approved, and clean /tmp/ad-ready after auto-fetching sensitive images.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it advertises: it gathers ad assets and sends them to ComfyDeploy to generate advertising images.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783654481551,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 41,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ad-ready-pro\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to its broad use of high-risk capabilities, even though they appear aligned with the stated purpose. The `SKILL.md` explicitly instructs the AI agent to execute shell commands (`ls | grep`) and download files from arbitrary URLs to `/tmp`. The `scripts/generate.py` then performs extensive network requests, including fetching brand logos from external services (`logo.clearbit.com`, `img.logo.dev`), scraping product pages, and uploading user-provided or auto-fetched images to `api.comfydeploy.com`. While these actions are necessary for the skill's functionality, the ability to download and write arbitrary content to the filesystem, combined with reliance on external third-party content sources and the agent's shell execution capabilities, presents a significant attack surface for potential supply chain attacks or prompt injection leading to unintended file writes or data exposure, even if no explicit malicious intent is observed.",
+          "checkedAt": 1779161441610,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "ce7b1628a9383e3ab32abc1a80b72f03d6fec6c0a361b3c6d3e69613a0584396",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ce7b1628a9383e3ab32abc1a80b72f03d6fec6c0a361b3c6d3e69613a0584396"
+    },
+    "slug": "ad-ready-pro",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

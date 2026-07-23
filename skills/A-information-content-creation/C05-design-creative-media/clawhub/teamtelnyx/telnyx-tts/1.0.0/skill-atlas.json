@@ -1,0 +1,133 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:audio",
+      "category:C06:token:api",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "16698b8f59f77bd76c6d98b893aa829cf9718b5284a88dab68ef521d8a7c55f9",
+    "content_hash": "d2b91f94e573d00eba3d7699f41f2349200b9e4e28f063e57419a86816e86960",
+    "precanonical_content_hash": "297767f59e41414b5bb9b402524fe969365ce0efa50223d0ead7adc2223be615",
+    "skill_md_hash": "1fddd158ef0ca39374c95434487bdea40f1851605614e982f03499c63d582ccd",
+    "version_metadata_sha256": "35df1fada060301dfa1ce802ced88001f9f5eeff4d4eb8ddf6678d0bc2de1d7a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/teamtelnyx/skills/telnyx-tts",
+    "claim_id": "c47bba63bd1e37d304bb22012814ead2b8d562218571a31ab7846aaa095bd946",
+    "index_entries": [
+      {
+        "index_path": "categories/media-and-streaming.md",
+        "label": "telnyx-tts",
+        "url": "https://clawskills.sh/skills/teamtelnyx-telnyx-tts"
+      }
+    ],
+    "owner_handle": "teamtelnyx",
+    "owner_id": "s170draq1trsnzq53cd20af77s85vr4p",
+    "published_at": 1770739689462,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779966045359,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779966045359,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose is to generate speech audio from text using Telnyx, and the script does that by sending the provided text to Telnyx and writing returned audio chunks to a chosen file.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill says it uses the Telnyx API and requires a Telnyx API key, but it could more plainly warn that supplied text is transmitted to a third-party service.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No installer, hidden setup command, package mutation, or unrelated install-time behavior was found; it only documents a Python script dependency on the websockets library.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use of TELNYX_API_KEY and network access to Telnyx is proportionate for this purpose, but users should avoid sending sensitive text unless Telnyx processing is acceptable for their needs.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The script writes generated audio to the user-provided output path, which is expected for a CLI audio generator but can overwrite files the invoking user can write.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill declares TELNYX_API_KEY in its metadata and uses it only for Telnyx authorization; this is sensitive but purpose-aligned and not hidden.\n[SQP-2] expected: Transmission of text to Telnyx and saving audio locally are inherent to this cloud TTS workflow, though the documentation would benefit from clearer privacy wording.\n[VirusTotal output-path write] expected: The reported arbitrary output path is a normal command-line output option, not evidence of deceptive or destructive behavior; users should choose paths deliberately.",
+          "guidance": "Install this if you are comfortable sending the text you provide to Telnyx for speech generation. Do not use it for secrets, regulated data, or private content unless that third-party processing is acceptable, and choose the output file path carefully because the script can create or overwrite files your user account can write.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to be a straightforward Telnyx text-to-speech helper, with expected cloud API use and local audio output.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779966011358,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: telnyx-tts\nVersion: 1.0.0\n\nThe `scripts/telnyx-tts.py` script directly uses the user-provided `--output` argument as a file path for writing the generated audio. This creates a local file write vulnerability (path traversal) if the input is not sanitized by the OpenClaw agent or the user invoking the skill, potentially allowing an attacker to write files to arbitrary locations on the system. While not indicative of malicious intent by the skill developer, it represents a significant security flaw.",
+          "checkedAt": 1779162850088,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "3fced5dfea8e20041a84a483bbf184e876945ed7969ec18a3d17846f9cb2059a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/3fced5dfea8e20041a84a483bbf184e876945ed7969ec18a3d17846f9cb2059a"
+    },
+    "slug": "telnyx-tts",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

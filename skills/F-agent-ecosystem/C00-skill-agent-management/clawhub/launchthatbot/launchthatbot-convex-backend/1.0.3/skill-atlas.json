@@ -1,0 +1,158 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "configuration",
+      "document"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.25,
+    "domains": [
+      "infrastructure",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C02:token:write",
+      "category:C06:token:api",
+      "category:C06:token:backend",
+      "category:C08:token:deploy",
+      "category:C12:token:startup",
+      "category:C12:token:strategy",
+      "cross-tag:agent-management",
+      "cross-tag:deployment",
+      "cross-tag:planning",
+      "cross-tag:software-development",
+      "cross-tag:writing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C02",
+      "C06",
+      "C08",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate",
+      "plan"
+    ],
+    "tasks": [
+      "build",
+      "deploy",
+      "manage",
+      "operate",
+      "plan",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "58139f393b9f588e2b3995757eab121213cf8c4e01fd15bc731017fe6fc0ff8e",
+    "content_hash": "b838b1afd515cd4a66cd63cc727dd36f02f2983d57e3914b7a9d763ec4e76a40",
+    "precanonical_content_hash": "e3ba5d00f5d4ee5a08a19ae767d121d25970440f68c256686e3882ef1d9170bb",
+    "skill_md_hash": "b0fc6f9fee9331f2eb1e13f21a3d4e398e8045a10455cccc52bdf9878f2cdaac",
+    "version_metadata_sha256": "98631b733686bb6839e1360ee5b0a15e407d46dca97df42ebce1e158cdcce28a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/launchthatbot/skills/launchthatbot-convex-backend",
+    "claim_id": "eac1b1b79075d884836a489a5f7ee12426843ae76d185de30c2f4b1b2212fb1f",
+    "index_entries": [
+      {
+        "index_path": "categories/notes-and-pkm.md",
+        "label": "launchthatbot-convex-backend",
+        "url": "https://clawskills.sh/skills/launchthatbot-launchthatbot-convex-backend"
+      }
+    ],
+    "owner_handle": "launchthatbot",
+    "owner_id": "s1705196z5fbzbq59es237jgfn885ht3",
+    "published_at": 1772046811239,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779960594652,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779960594652,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill’s stated purpose is to move agent secrets, long-term memory, and daily logs from local files into a user-controlled Convex backend, and the code implements only Convex memory/log functions plus instructions to use stock Convex environment tools for secrets.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are broad because they redirect secret, memory, and log handling to Convex, but the README and SKILL.md disclose this clearly and include guardrails such as not storing CONVEX_DEPLOY_KEY in Convex and not writing raw credentials to memory/logs.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Setup uses user-run npx commands for Convex MCP, mcporter, and Convex deploy; no package lifecycle scripts or hidden automatic execution were found. The deploy-key example should be handled carefully because inline secrets can leak.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading local .env keys and moving them to Convex is high-impact, but it is central to the skill’s purpose, excludes CONVEX_DEPLOY_KEY and CONVEX_DEPLOYMENT, requires preflight, verifies copied keys, and asks for explicit approval before local cleanup.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistent cloud memory and append-only daily logs are the core feature and are disclosed. Local deletion is limited to migrated and verified keys, requires a clear confirmation such as YES_REMOVE_LOCAL_ENV, and includes backup guidance.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The .env migration concern is real but expected for a skill advertised as replacing local secret storage with Convex; the artifacts disclose the migration, require user confirmation, keep Convex bootstrap keys local, verify copied keys, and require separate cleanup approval before deletion.\n[SQP-2] expected: The inline CONVEX_DEPLOY_KEY deploy example is a security-sensitive documentation pattern, but it is a placeholder in a required manual setup flow rather than evidence of hidden credential collection or exfiltration.\n[SSD-3] expected: Long-term memory and daily logs are stored in cloud persistence by design and are prominently described. The artifacts should still be used with care because summaries may contain sensitive operational context if the agent writes too much.",
+          "guidance": "Install only if you want this agent to use your Convex project as a backend for secrets, memory, and daily logs. Before migrating, confirm the target Convex deployment, review which .env keys will be copied, keep CONVEX_DEPLOY_KEY local and private, avoid pasting real deploy keys into shell history when possible, and use a dedicated Convex project if agents should not share memories or credentials.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill performs sensitive Convex-backed secret and memory storage, but the behavior is disclosed, purpose-aligned, and user-controlled enough to remain benign.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779960466565,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: launchthatbot-convex-backend\nVersion: 1.0.3\n\nThis skill is designed to enhance agent security and persistence by migrating secrets and long-term memory from local files to a user-controlled Convex backend. The `SKILL.md` and `README.md` contain explicit instructions for the AI agent to follow strong security practices, such as never storing the `CONVEX_DEPLOY_KEY` in Convex, using Convex environment variables for other secrets, and requiring explicit user confirmation for `.env` file modifications during migration. While the skill involves reading and modifying local `.env` files and executing `npx` commands (e.g., `npx -y mcporter`, `npx -y convex@latest deploy`), these actions are integral to its stated purpose and are accompanied by robust guardrails, user consent requirements, and clear intent to secure data within the user's Convex instance, not exfiltrate it. No evidence of intentional harmful behavior, obfuscation, or unauthorized data exfiltration was found.",
+          "checkedAt": 1779167192598,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "c1d58eb5baf169c17e381b13249c103336632c0eaf940f4848afa65f4ef15849",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/c1d58eb5baf169c17e381b13249c103336632c0eaf940f4848afa65f4ef15849"
+    },
+    "slug": "launchthatbot-convex-backend",
+    "source_type": "clawhub",
+    "version": "1.0.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

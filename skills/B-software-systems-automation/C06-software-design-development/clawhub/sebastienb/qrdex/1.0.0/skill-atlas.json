@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.75,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C05:token:image",
+      "category:C06:phrase:code generation",
+      "category:C06:token:api",
+      "category:C06:token:code",
+      "category:C13:token:operations",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "b1b9d22c3ba8eeaf252ecc6e313db239372d7b5254696330244b80a1314cafee",
+    "content_hash": "38dde3a92917507c419158ed1c7950f8428b083b0069d9c12daf8aa6e4c3cfab",
+    "precanonical_content_hash": "26de3ed33a4a2f2f9826191678c649908b41c212f1719e00626215b253f98f71",
+    "skill_md_hash": "be457acb6390317629ef5538a8147fc1e08f53ce04088ce61e6896fdde78c0bc",
+    "version_metadata_sha256": "35921583cc0d79cfb4efacfa58b6df4c0c9f20c311726aa494ea1640e59a693e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sebastienb/skills/qrdex",
+    "claim_id": "88898092e30cb49efb60aa5660a52b610c33de15c29c89b40aa980b55c0aef36",
+    "index_entries": [
+      {
+        "index_path": "categories/communication.md",
+        "label": "qrdex",
+        "url": "https://clawskills.sh/skills/sebastienb-qrdex"
+      }
+    ],
+    "owner_handle": "sebastienb",
+    "owner_id": "s17fkyr8kejpwk6vgcqv8khhah885wqm",
+    "published_at": 1770142728380,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783656757006,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783656757006,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented and implemented capabilities match the stated purpose: create, list, get, update, soft-delete, and download QR codes through the QRdex.io API.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions disclose the API key, endpoint, update/delete operations, and scan tracking default, but they would benefit from clearer confirmation and privacy guidance for deletes, updates, and tracked QR codes.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no automatic installer, persistence hook, or package mutation; the optional Python CLI imports requests and otherwise uses standard libraries.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Reading QRDEX_API_KEY and sending QR payloads to https://qrdex.io/api/v1 is proportionate for this integration, but payloads can include URLs, phone numbers, email addresses, messages, and WiFi passwords.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No local persistence or privilege escalation is present beyond saving downloaded SVG images; QR records, scan tracking, and soft-deleted resources persist remotely in the user's QRdex account.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Environment-variable credential use and outbound network access are disclosed and necessary for an authenticated QRdex.io API skill; the missing separate permission declaration is a transparency gap, not evidence of abuse.\n[SQP-2] expected: Update and delete operations are expected for a QR management tool and are documented, though the artifacts should recommend explicit confirmation and read-back before changing or deleting remote QR resources.\n[SQP-2] expected: Scan tracking is documented as supported and default-enabled; it is purpose-aligned, but users should understand that tracked QR scans may create analytics or privacy obligations.\n[SQP-2] expected: The CLI delete command directly calls the documented delete endpoint without a protective prompt; this is a safety/usability issue for agent workflows but remains a user-invoked, purpose-aligned soft-delete action.",
+          "guidance": "Install only if you want an agent to use your QRdex.io account. Use a revocable API key where possible, confirm QR IDs before update or delete actions, and avoid tracked QR codes or QR payloads containing sensitive WiFi, contact, message, or business data unless that remote storage and tracking are acceptable.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "QRdex is a straightforward QRdex.io API helper with disclosed credential use and account-level QR management actions, but no evidence of hidden or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783656732250,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 30,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: qrdex\nVersion: 1.0.0\n\nThe skill is designed to interact with the QRdex.io REST API for managing QR codes. All network requests, both in the `SKILL.md` examples and the `scripts/qrdex_api.py` script, are directed solely to `https://qrdex.io/api/v1`. The API key (`QRDEX_API_KEY`) is securely retrieved from environment variables and used only for authentication with the intended service. File operations are limited to saving downloaded QR images, which is a legitimate function of the skill. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, obfuscation, or prompt injection attempts against the agent.",
+          "checkedAt": 1779161150580,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "d3f740e7c2d885a72f39a49bbae070a6623ccdc71447a5744fed5b4eb5841ed0",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d3f740e7c2d885a72f39a49bbae070a6623ccdc71447a5744fed5b4eb5841ed0"
+    },
+    "slug": "qrdex",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

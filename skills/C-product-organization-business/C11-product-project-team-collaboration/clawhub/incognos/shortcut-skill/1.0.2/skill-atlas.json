@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [],
+    "confidence": 0.69,
+    "domains": [],
+    "needs_review": false,
+    "primary_category": "C11",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C02:token:writing",
+      "category:C11:phrase:project management",
+      "category:C11:token:project",
+      "category:C11:token:sprint",
+      "category:C12:token:management",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create",
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "research",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "b7ab8ccc423a7fc393e53667fe55833fd2463996be1a7688104a82fdea4870da",
+    "content_hash": "66d438c719b4266917cd1599a4d317e3e5bd802cc4b5234962412fe00fb71e78",
+    "precanonical_content_hash": "2908f70cb6754f19421e5eb53e4d7fdb638afd87f004b9019897c4cac1e2498a",
+    "skill_md_hash": "35bc3fdc23bee5ddc68785f2a4f796be20b76ec978517d4c0492d08d2074772a",
+    "version_metadata_sha256": "9f41bbf147021d03a69b107859021f7ff2c01afd32ff90d8ab71918dc4c4ae3a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/incognos/skills/shortcut-skill",
+    "claim_id": "c27b7eb177c2b48751d69d1aefebb79c18ed1c770c7ae32c6dbeac6829a592d1",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "shortcut-skill",
+        "url": "https://clawskills.sh/skills/incognos-shortcut-skill"
+      }
+    ],
+    "owner_handle": "incognos",
+    "owner_id": "s17466t8tmcm7e71fzmsvpy35h8849z8",
+    "published_at": 1771952860345,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779956091573,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779956091573,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill’s stated purpose is to manage Shortcut stories, epics, comments, workflow states, and dependencies, and the documented API calls match that purpose. These actions can modify live project-management data, but that capability is disclosed.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are user-directed and emphasize safe JSON construction with jq. The trigger terms include broad project-management words and the write examples do not consistently require an explicit approval step, so users should be deliberate before allowing writes.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle is instruction-only Markdown with no executable installer, background service, or packaged code. It declares curl, jq, and a Shortcut secret as requirements.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network use is limited to the Shortcut REST API endpoint, and local file access is limited to the declared Shortcut token secret. That is proportionate for this integration.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill stores a Shortcut API token at ~/.openclaw/secrets/shortcut with chmod 600, discloses that Shortcut tokens have full member-level access with no scope restriction, and offers a session-only environment-variable alternative.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] unexpected: The broad trigger keywords could activate the skill for generic project-management requests, but the artifact clearly frames the skill around Shortcut and does not include hidden or automatic writes. This is user-caution guidance rather than a Review-level concern by itself.\n[E1] expected: Authenticated POST and PUT requests create stories, epics, comments, state updates, and dependencies in Shortcut. These are real external writes, but they are the disclosed core function and only target Shortcut’s API.\n[RA2] expected: Persistent token storage is disclosed in metadata and setup instructions, uses mode 600, and includes a non-persistent session alternative. The full-access nature of Shortcut tokens is also explicitly disclosed.",
+          "guidance": "Install this only if you want an agent to use your Shortcut token to read and modify Shortcut data. Review story, epic, comment, state-change, and bulk-creation payloads before execution, and rotate or delete the token if you no longer need the skill.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward Shortcut.com integration that openly uses a user-provided token to read and change Shortcut project data.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779956040710,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 70,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: shortcut-skill\nVersion: 1.0.2\n\nThe skill bundle is benign. It provides instructions and code examples for an AI agent to interact with the Shortcut.com API using `curl` and `jq`. All API calls are directed to `api.app.shortcut.com` and use the `SHORTCUT_API_TOKEN` stored in the designated OpenClaw secrets location. The `SKILL.md` explicitly warns against shell injection and demonstrates safe JSON construction using `jq -n --arg`, indicating a focus on secure practices. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts designed to subvert the agent's purpose.",
+          "checkedAt": 1779166738663,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "0ba0eb841f5f232a358d38b9c59bc5b8d542486d9783f8d0b1fa239aa9741ef1",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0ba0eb841f5f232a358d38b9c59bc5b8d542486d9783f8d0b1fa239aa9741ef1"
+    },
+    "slug": "shortcut-skill",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

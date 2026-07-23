@@ -1,0 +1,158 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.25,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C03:token:pdf",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C10:token:llm",
+      "category:C12:token:startup",
+      "category:C13:token:business",
+      "cross-tag:data-analysis",
+      "cross-tag:planning",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C03",
+      "C04",
+      "C06",
+      "C09",
+      "C12",
+      "C13"
+    ],
+    "stages": [
+      "create",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "plan",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "46823f88d8e25c8c501b1fcf098ba2fb4d225638a80d4dbc3dbe9e4b8a464ef8",
+    "content_hash": "69701d6067bfc61f40d432e41b6b3beb8807fdc913aaf4854cdf08c70a37a66d",
+    "precanonical_content_hash": "5787b9c9860602bf29bbf64d8c49e6b26887b8b7d3140c8e1d2dcedfd0d3e9e2",
+    "skill_md_hash": "c68744d28c4684fa7181d4792d696e06ece5893de9df0446dd1f137aa276a821",
+    "version_metadata_sha256": "b56e76d1d8616aac5c746fd9150bd80b84ce34c579fdef3c87b746ef6d813d80"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/lifeissea/skills/raon-os",
+    "claim_id": "0e3df0e1c4ce23194c5ef2ea28178a46987e5aae1b3a9bfa5c496b8b0a11d7fc",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "raon-os",
+        "url": "https://clawskills.sh/skills/lifeissea-raon-os"
+      }
+    ],
+    "owner_handle": "lifeissea",
+    "owner_id": "s170g3z8qxdg1sz9j7s6tkffvn83s571",
+    "published_at": 1774702422494,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779921961766,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779921961766,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The advertised capabilities match the artifacts: business-plan evaluation, funding matching, valuation, RAG search, a local HTTP API, a web widget, and Kakao-style integration are all startup-assistant functions.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill instructs agents/users to run local shell and Python scripts against selected PDFs/text and to start a local server; this is disclosed and central to the CLI/server workflow.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The Node bin wrapper delegates to scripts/raon.sh, and the optional install-model command can install Ollama via Homebrew and download a large model only when explicitly invoked.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Optional LLM, managed API, Kakao, Supabase, and Ollama settings are proportionate to the integrations, but ~/.openclaw/.env is loaded broadly and users should only place keys there that this skill may use.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill may keep local profile/history data, browser localStorage conversation history, API key/usage files, and optional Supabase or SaaS feedback records; these are purpose-related but relevant for confidential startup material.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[TT3] expected: OLLAMA_URL is configurable and used for Ollama API calls; the default is localhost and this is part of the local-model feature, but users should not point it at untrusted services.\n[SDI-1] expected: The broader CLI capabilities called out by the scanner are reflected in README/SKILL documentation and fit the startup companion scope.\n[SDI-2] expected: Model installation and service-start commands are explicit user-invoked operations; the referenced install-service.sh is not present in this artifact, so there is no confirmed hidden persistence implementation here.\n[SQP-2] expected: External LLM/API transmission, PDF upload, feedback routing, and local/browser history are expected for the skill’s analysis and widget features, but they involve sensitive business-plan data and need careful configuration.\n[static-scan] expected: The child_process wrapper is expected for a CLI skill, and the apparent TEST_API_KEY is a dummy pytest fixture rather than a production secret.",
+          "guidance": "Install only if you are comfortable letting this tool process startup plans locally and through whichever LLM/API endpoints you configure. Use trusted RAON_API_URL, OLLAMA_URL, Supabase, and widget data-api values; avoid uploading confidential PDFs to deployments without a privacy policy; protect ~/.openclaw/.env with restrictive permissions; and set webhook/API secrets before exposing the server publicly.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill’s sensitive behavior is mostly disclosed and aligned with its startup-analysis purpose, but users should treat submitted business plans as potentially sent to configured AI/API services.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779921896403,
+          "issueCount": 22,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: raon-os\nVersion: 0.7.28\n\nThe raon-os skill is a comprehensive startup assistant designed to evaluate business plans, match government funding, and provide valuation estimates. It implements a RAG (Retrieval-Augmented Generation) pipeline using various LLM providers (Gemini, OpenAI, OpenRouter) and includes a local HTTP API server (server.py) to power a web widget. Security-conscious features are present, such as SSRF protection via domain whitelisting, input sanitization to mitigate prompt injection, and restricting administrative API endpoints to localhost. The network activities, including crawling government sites and communicating with LLM APIs, are transparently documented and aligned with the skill's stated purpose.",
+          "checkedAt": 1779165110203,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a99daaac19d3a9b672ea2f84520cb45168d38dcce65598e496b136cc5e905817",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a99daaac19d3a9b672ea2f84520cb45168d38dcce65598e496b136cc5e905817"
+    },
+    "slug": "raon-os",
+    "source_type": "clawhub",
+    "version": "0.7.28"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

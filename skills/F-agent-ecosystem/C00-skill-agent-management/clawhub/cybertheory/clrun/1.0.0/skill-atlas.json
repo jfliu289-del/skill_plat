@@ -1,0 +1,133 @@
+{
+  "classification": {
+    "artifacts": [
+      "website"
+    ],
+    "audiences": [],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C10:token:ai",
+      "category:C19:token:navigate",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10",
+      "C19"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "automate",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "11e287dfdc6d5a688d98d5bf4f69e1ac368a4f0e07049a4f8ab93fdd7d4c3ce3",
+    "content_hash": "f9d1ab54bfb9659b2a68a217193d2123e4a3871eee6ddf64b2abdeceacbe699f",
+    "precanonical_content_hash": "0f2c1e335301f0c8519947b0e23388fa7414ee1ea47a784a321d4ee83e365794",
+    "skill_md_hash": "16b6c498002c6604e8d2cc78154e39cda050025447a4d671bdd226fe4bfaa22d",
+    "version_metadata_sha256": "9152e051a4d5d6c0a4ed477c2ad63176aa2b3b686f4d8bd0338324eb1e1be74a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/cybertheory/skills/clrun",
+    "claim_id": "dacd76bc6453ee1c35f53c2d517e435da418799684529e2eee9c5bf0647f68e0",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "clrun",
+        "url": "https://clawskills.sh/skills/cybertheory-clrun"
+      }
+    ],
+    "owner_handle": "cybertheory",
+    "owner_id": "s17bcrt91sk27tgjm3wb7jeqhh884n1q",
+    "published_at": 1771290555712,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971758098,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971758098,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill consistently describes using clrun to run terminal commands, respond to prompts, manage long-running processes, and preserve shell session state; that capability matches the stated purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions openly include arbitrary command execution and sending commands into active sessions. This is expected for an interactive terminal-control skill, though the docs do not add much safety guidance around destructive or privileged commands.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains Markdown instructions only and no executable scripts or install hooks. It tells users that Node.js and the external clrun CLI are required, which is consistent with the purpose.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The examples show setting and echoing environment variables, including an API-key-shaped placeholder. That demonstrates intended session persistence but could lead users to expose real secrets in terminal output or logs if copied carelessly.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Session suspension and auto-restore are disclosed as clrun behavior and are proportionate to managing long-running interactive processes. The skill itself does not create background services, modify system startup, or request elevated privileges.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The concern about arbitrary interactive command execution is valid as a risk, but it is the core disclosed function of this terminal-control skill rather than hidden or purpose-mismatched behavior.\n[SQP-2] expected: Sending text into an active session can execute shell commands, and the skill states this directly. This should be treated carefully, but it is expected for controlling an interactive shell.\n[SQP-2] unexpected: The API key echo example is poor security guidance because real secrets could be exposed through output, logs, or resumed sessions. It is a documentation safety issue, not evidence of exfiltration or malicious behavior.",
+          "guidance": "Install only if you want an agent to control terminal sessions on your machine. Use it in a sandbox or project-specific directory when possible, review commands before destructive or privileged actions, and avoid putting real API keys or tokens into sessions the agent can read or echo.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a documentation-only skill for controlling an interactive terminal CLI; its powerful shell access is clearly part of the stated purpose, but users should handle commands and secrets carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971734980,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 45,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: clrun\nVersion: 1.0.0\n\nThe skill bundle is classified as suspicious due to its core functionality enabling arbitrary command execution and stateful shell sessions, including environment variable persistence, as described in `SKILL.md` and `references/tui-patterns.md`. While the skill itself does not contain explicit malicious instructions or code for data exfiltration, persistence, or backdoors, the inherent power to run and interact with any shell command presents a significant attack surface. A malicious prompt to the AI agent could exploit this capability for unauthorized actions, making it a high-risk tool that could facilitate remote code execution if misused.",
+          "checkedAt": 1779164711995,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "11e287dfdc6d5a688d98d5bf4f69e1ac368a4f0e07049a4f8ab93fdd7d4c3ce3",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/11e287dfdc6d5a688d98d5bf4f69e1ac368a4f0e07049a4f8ab93fdd7d4c3ce3"
+    },
+    "slug": "clrun",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

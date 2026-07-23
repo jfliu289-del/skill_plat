@@ -1,0 +1,146 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "website"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:dashboard",
+      "category:C07:token:testing",
+      "category:C08:token:cd",
+      "category:C08:token:ci",
+      "category:C18:token:health",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C04",
+      "C07",
+      "C18"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "manage",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "500b503b6caa344d72b20f2aa779cc37373e950e0dc5ad1b219c91de3c507710",
+    "content_hash": "e25c291aac6165813689b1aa9525ad3367bec5c00c3b28ce67b9cead17b4296b",
+    "precanonical_content_hash": "6e3a9ea8e280763ce3a35c554be29758ac610f7e7ba44fe5f8e3ccf475a61d90",
+    "skill_md_hash": "12a41ba40117b5bd2a163de78a60a8f8a8f4f0159c3580d8dc5b18c3f740b8ed",
+    "version_metadata_sha256": "0653967cdeecdaecb748eb6fb8900a15492a2706252cfb76248a6c4642fa584f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/g9pedro/skills/skillbench",
+    "claim_id": "932c8a9bc5a56921cb55a04c477fddafc1ce17e4c62890851e59ac6866f550a6",
+    "index_entries": [
+      {
+        "index_path": "categories/git-and-github.md",
+        "label": "skillbench",
+        "url": "https://clawskills.sh/skills/g9pedro-skillbench"
+      }
+    ],
+    "owner_handle": "g9pedro",
+    "owner_id": "s170qw9ry89qte3815nzjvz1sh83mzvt",
+    "published_at": 1770744521286,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779965307400,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779965307400,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The documented commands match the stated purpose: tracking skill versions, recording benchmark outcomes, scoring performance, comparing versions, exporting reports, and generating improvement signals.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The commands are presented as user-invoked CLI actions; watch, schedule, sync, and dashboard actions are disclosed, though the phrase that ClawVault sync happens automatically is underspecified.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation delegates to the global npm package @versatly/skillbench and requires the skillbench binary; the reviewed artifact contains only SKILL.md, not the CLI implementation source.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Use of tasktime data, installed-skill inventory, benchmark task names, timings, success/failure status, and error types is proportionate to benchmarking, but those records may reveal sensitive operational metadata.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill documents ClawVault sync, continuous watch mode, and cron config generation; these are purpose-aligned but should only be enabled deliberately because they can create ongoing activity or outbound records.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The concern about ambiguous automatic sync is supported by the artifact, but the sync is disclosed and directly tied to benchmark sharing rather than hidden or unrelated behavior.\n[SQP-2] expected: The privacy concern is valid user guidance: the artifact does not specify exact uploaded fields, timing, retention, or opt-out controls for ClawVault sync. This is not enough by itself to move the coherent skill into Review.\n[VirusTotal code_insight] expected: The telemetry flags network sync and cron-style automation as risky capabilities, but both are documented and aligned with benchmarking and monitoring; engine stats show no malicious or suspicious detections.\n[staticScan] expected: Static scan reported no suspicious patterns, consistent with the artifact being an instruction file plus disclosed npm install metadata.",
+          "guidance": "Before installing, verify you trust the @versatly/skillbench npm package. Avoid recording secrets, customer names, sensitive project names, or detailed failure messages unless you are comfortable with benchmark data potentially syncing to ClawVault, and only enable watch or scheduled testing when you want recurring activity.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "SkillBench is a coherent benchmarking skill, but users should treat its ClawVault sync and optional recurring monitoring as privacy-relevant features.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779965262326,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 35,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: skillbench\nVersion: 2.0.0\n\nThe skill is designed for benchmarking and monitoring AI agent performance, which involves syncing data to external services (ClawVault, ClawHub) and generating cron configurations for automated testing. While these actions are explicitly stated as part of the skill's purpose and do not show clear malicious intent, the capabilities to perform network communication to external endpoints (e.g., `skillbench sync --vault` to clawvault.dev) and to generate system-level automation (e.g., `skillbench schedule` for cron jobs) are considered high-risk behaviors. These capabilities, even if intended for benign use, could be exploited or lead to unintended consequences, warranting a 'suspicious' classification.",
+          "checkedAt": 1779162702640,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "d248523c3e21c334074af1f038833032ebdd78ad6fef90b56dbccb7fcae8194d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d248523c3e21c334074af1f038833032ebdd78ad6fef90b56dbccb7fcae8194d"
+    },
+    "slug": "skillbench",
+    "source_type": "clawhub",
+    "version": "2.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

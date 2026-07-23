@@ -1,0 +1,159 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.3341,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:find",
+      "category:C01:token:research",
+      "category:C01:token:search",
+      "category:C04:token:data",
+      "category:C04:token:metrics",
+      "category:C07:token:test",
+      "category:C08:token:repository",
+      "category:C11:token:project",
+      "category:C12:token:market",
+      "category:C13:token:finance",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C04",
+      "C07",
+      "C08",
+      "C11",
+      "C12",
+      "C13"
+    ],
+    "stages": [
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "research",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "c775834093440231c2ea6d0be239f1e6db969c4b8c4e633ab9360b8b40960b39",
+    "content_hash": "4ee76e411adf4342027a94cd1046431d35ed90088b158217419b80c615df4cdd",
+    "precanonical_content_hash": "06d0a129cf7efaee31c24df21d9ba62714799191881d452b09ca8b5b9e830116",
+    "skill_md_hash": "c5bf0715c4210f09927a7dfb928edda3b571f40e0374251ebf186be1e68171bc",
+    "version_metadata_sha256": "02ab26fb3ba57c8a2852ea245eacf96de0321e8d744baef1e677254da441d5f3"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/rizkydwicmt/skills/yfinance-mcp-server",
+    "claim_id": "ce8c99550675097b91be8e01973bd27dacb3662497ef94d43fbc71e33b722f07",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "yfinance-mcp-server",
+        "url": "https://clawskills.sh/skills/rizkydwicmt-yfinance-mcp-server"
+      }
+    ],
+    "owner_handle": "rizkydwicmt",
+    "owner_id": "s17agngv3frjqvwk7zybxwf38h885jy6",
+    "published_at": 1771314284097,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972258040,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972258040,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented capabilities are finance-data lookups through Yahoo Finance tools: prices, history, fundamentals, options, dividends, news, market movers, and screeners. These capabilities fit the stated purpose and appear read-only at runtime.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill text gives normal usage examples and installation instructions. I did not find hidden instructions, prompt-injection content, credential requests, or user-goal hijacking.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The installer is more than a simple skill file install: it can clone the upstream GitHub repository, install uv via a remote shell script, create a Python virtual environment, install dependencies, and verify the MCP server. These steps are disclosed and purpose-aligned, but they carry normal supply-chain risk.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The installer can update mcporter.json and copy skill files into an OpenClaw skills directory, which is expected for MCP/OpenClaw integration and documented in SKILL.md. It also provides SKIP_MCPORTER and SKIP_SKILL controls.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The installer persistently registers the yfinance MCP server for future agent use, but I found no background service, credential access, exfiltration, obfuscation, privilege escalation, or destructive behavior beyond optional removal of an existing virtual environment after confirmation or auto-yes.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The setup changes the local environment, but SKILL.md explicitly states that install.sh handles uv setup, venv creation, package install, mcporter config, and OpenClaw skill registration.\n[TP4] expected: The finance-data purpose and MCP installation behavior fit together: the installer registers the finance server so the documented tools can be used. I do not see deceptive tool-poisoning behavior.\n[SDI-1] expected: Cloning, dependency installation, and venv creation are broad but normal for bootstrapping a Python MCP server. The mutable upstream dependency is a caution, not evidence of malicious behavior.\n[SDI-2] expected: Editing mcporter configuration and copying the skill file are persistent integration actions, but they are documented in the installation section and can be skipped through environment variables.\n[SQP-2] expected: The documentation could warn more plainly about local system changes and rollback, but the actual changes are listed in the installer description and are not hidden.\n[SQP-2] expected: Non-interactive auto-accept mode can update mcporter paths without prompting, but that behavior requires the YFINANCE_YES=true setting and is consistent with an auto-yes installer mode.\n[SQP-2] expected: The install.sh uv bootstrap uses curl piped to sh, which is a supply-chain risk. It is disclosed and limited to setup, so it supports user caution rather than a Review or malicious verdict by itself.\n[SC2] expected: The manual install instructions include the same remote uv installer command. Users should prefer a trusted package-manager or verified uv install path when possible.\n[TM2] expected: The shell-pipe pattern is risky because it removes an inspection step, but there is no artifact evidence that it is used for hidden or unrelated execution.",
+          "guidance": "Install only if you trust the upstream GitHub repository and the uv installer source. Review install.sh first, consider installing uv through a trusted package manager instead of curl | sh, and use SKIP_MCPORTER=true or SKIP_SKILL=true if you do not want persistent agent registration.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Yahoo Finance MCP skill, but its installer makes persistent local setup changes and should be reviewed before running.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972222407,
+          "issueCount": 9,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: yfinance-mcp-server\nVersion: 0.1.2\n\nThe OpenClaw AgentSkills bundle for 'yfinance-mcp-server' is classified as benign. The `SKILL.md` file clearly defines tools for accessing Yahoo Finance data without any evidence of prompt injection attempts, instructions for unauthorized actions, or requests for sensitive data. The `install.sh` script performs standard installation procedures, including cloning from a public GitHub repository and installing the `uv` package manager via `curl | sh` from `astral.sh`. While executing remote scripts carries inherent supply chain risks, these actions are common for legitimate software installation and do not demonstrate malicious intent such as data exfiltration, persistence mechanisms, or unauthorized system modifications beyond the scope of skill setup.",
+          "checkedAt": 1779164764437,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "8178794516d6f95e6c38b05d41774b6dec271557a4afddefaae4b8fabde2bcac",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8178794516d6f95e6c38b05d41774b6dec271557a4afddefaae4b8fabde2bcac"
+    },
+    "slug": "yfinance-mcp-server",
+    "source_type": "clawhub",
+    "version": "0.1.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,129 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "cross-tag:agent-management",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "65163cc36b91d490d851bec758e9de6d2fe39f7a49b0db84175362792aa107f0",
+    "content_hash": "8a1444fafda348ee68a5a3a82f10f4e4d04da02b61ce992fb4b77c495ab91efe",
+    "precanonical_content_hash": "db1d014e4d6d9266570c2a2243bb87e25b58b3a515c28d9be1abb0dca2857755",
+    "skill_md_hash": "3bf52b50f05f67ae66ff0f07d04f27b5e13e869e313639591c5e4852a636f1ee",
+    "version_metadata_sha256": "c9a4c5653d8da3ed24ba028c08a248312126a4c36365835b3a8a5be964184cce"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/wanng-ide/skills/json-modifier",
+    "claim_id": "166905e6374f5e39099c11493b0b72687ea627c99ee74145808e1b04250e1a95",
+    "index_entries": [
+      {
+        "index_path": "categories/notes-and-pkm.md",
+        "label": "json-modifier",
+        "url": "https://clawskills.sh/skills/wanng-ide-json-modifier"
+      }
+    ],
+    "owner_handle": "wanng-ide",
+    "owner_id": "s176gjsdvgc0ce9sr8b6s9yzmx84mv9j",
+    "published_at": 1771187803445,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968691873,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968691873,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to apply RFC 6902 JSON patches, and the main script does exactly that by reading a selected JSON file, applying a supplied patch, and writing the result.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill gives explicit CLI usage for --file, --patch, --patch-file, --out, and --indent, with no hidden prompt overrides, autonomous behavior, or unrelated runtime instructions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The package uses a normal Node/npm dependency on fast-json-patch with a lockfile, but the skill instructions do not spell out the dependency installation step.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Local file read/write access is broad but purpose-aligned for a JSON modification utility; there is no network access, credential handling, or data sharing in the artifacts.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no background persistence, privilege escalation, or startup behavior; persistence is limited to the intended write or overwrite of the chosen output JSON file.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[suspicious.dangerous_exec] expected: The static scan hit is in scripts/test.js, where execSync runs the local CLI against generated test files; it is not part of the main runtime path, though a non-shell spawn style would be safer.\n[VirusTotal code_insight suspicious] expected: VirusTotal highlighted arbitrary local file read/write through --file and --patch-file; that authority is the disclosed core function of the tool and no exfiltration, credential access, or hidden behavior was found.\n[SkillSpector clean] expected: SkillSpector reported no issues, which is consistent with the inspected artifacts aside from the expected local file mutation capability.",
+          "guidance": "Install only if you want an agent to make structured JSON edits. Before running it, confirm the target path and patch contents, avoid patches from untrusted text, and use --out or a backup for important configuration, package, or memory files.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a transparent local JSON patching tool, but users should review the target file and patch because it can overwrite JSON files they point it at.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968652823,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: json-modifier\nVersion: 1.0.0\n\nThe `index.js` script allows reading and writing arbitrary files specified via command-line arguments (`--file`, `--patch-file`). While this functionality is core to its stated purpose of modifying JSON files, it introduces a significant vulnerability. An attacker could potentially leverage this skill by crafting a prompt to the OpenClaw agent, instructing it to modify or read sensitive system configuration files (e.g., `/etc/passwd`, `/etc/sudoers`) or other critical application data, without the skill itself exhibiting explicit malicious intent like data exfiltration or backdoor installation. The `scripts/test.js` also uses `child_process.execSync`, a powerful primitive, though it is used benignly within a controlled test environment.",
+          "checkedAt": 1779164374679,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "29a7b983147c611e21321b02fe412e62cf9bc4f7c8fb77d59f26189f51385b72",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/29a7b983147c611e21321b02fe412e62cf9bc4f7c8fb77d59f26189f51385b72"
+    },
+    "slug": "json-modifier",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

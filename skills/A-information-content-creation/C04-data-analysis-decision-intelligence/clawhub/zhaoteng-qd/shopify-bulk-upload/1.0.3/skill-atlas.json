@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:data",
+      "category:C05:token:image",
+      "category:C06:token:api",
+      "category:C11:token:product",
+      "category:C12:token:management",
+      "cross-tag:data-analysis",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05",
+      "C06",
+      "C11",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "ed1e482766fd02af82df4a3f52c2de5b91d4148277261bcab4b6772bc12cc236",
+    "content_hash": "7b497bafc2dd56e9e53eb6e9bde5517bcb4e5998629b3facd2951e1ce4d4fe0e",
+    "skill_md_hash": "23fa32cb2cf703baf60756142c967dfdf43c8213066737526a859629e796e663",
+    "version_metadata_sha256": "18737db7ff71be767c222fcaaab5425d055da59cfbd8edd55f29991c9af6dd67"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/zhaoteng-qd/skills/shopify-bulk-upload",
+    "claim_id": "0403f0f3c74234413cde8f543f3c86bfa10d5b76f90bd9e52b9da17784993719",
+    "index_entries": [
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "shopify-bulk-upload",
+        "url": "https://clawskills.sh/skills/zhaoteng-qd-shopify-bulk-upload"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "zhaoteng-qd",
+    "owner_id": "s17377kcbghv46z7ny7bgc1njh84m3pf",
+    "published_at": 1771680736451,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943829012,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943829012,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The product creation, image upload, variant, price, and inventory behavior matches the stated Shopify bulk upload purpose, but it is high-impact store mutation authority.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Execution is user-directed and the artifacts disclose product and inventory writes, but there is no dry-run, rollback, or explicit confirmation step before bulk live changes.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is manual via pip requirements; dependencies use lower-bound ranges rather than pinned versions or hashes.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "A Shopify Admin token with write_products and write_inventory is proportionate for the purpose, though the documentation does not strongly label it as a secret credential.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The script writes local logs and output JSON containing product data and upload results; no hidden persistence, privilege escalation, background worker, or unrelated credential access was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The scanner concern about live Shopify catalog and inventory changes is valid as user guidance, but the SKILL.md and script plainly describe creating products, images, prices, variants, and inventory, so this is purpose-aligned rather than deceptive.\n[SQP-2] expected: The Shopify access token concern is valid as credential-handling guidance; the requested token scopes are disclosed and necessary for the uploader’s stated function.\n[VirusTotal code_insight] expected: The script performs a local GET for CSV-provided image URLs before posting the image URL to Shopify, which creates SSRF-style risk if the input file is untrusted; this appears to be an implementation weakness in a purpose-aligned image-upload path, not evidence of malicious behavior.",
+          "guidance": "Install only if you intend to let this skill make Shopify product and inventory changes. Use a least-privilege Shopify app token, keep it out of source control and shared logs, test on a development store or with draft products first, back up/export your catalog, and only run trusted CSV/Excel files because image URLs can trigger network requests from your machine.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent Shopify bulk-upload skill, but it can make live catalog changes and should be used carefully with trusted inputs and a protected Shopify token.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943780566,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: shopify-bulk-upload\nVersion: 1.0.3\n\nThe skill's primary function is legitimate: bulk uploading products to Shopify. However, the `scripts/shopify_bulk_upload.py` script contains a Server-Side Request Forgery (SSRF) vulnerability in the `upload_image` function. It performs an `requests.get()` call to a user-controlled `image_url` sourced from the input CSV/Excel file. This allows an attacker who can manipulate the input file to make arbitrary HTTP requests from the server where the skill is executed, potentially leading to information disclosure, port scanning, or interaction with internal services. There is no evidence of intentional malicious behavior, and the `SKILL.md` instructions do not contain prompt injection attempts.",
+          "checkedAt": 1779165859247,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "ed1e482766fd02af82df4a3f52c2de5b91d4148277261bcab4b6772bc12cc236",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ed1e482766fd02af82df4a3f52c2de5b91d4148277261bcab4b6772bc12cc236"
+    },
+    "slug": "shopify-bulk-upload",
+    "source_type": "clawhub",
+    "version": "1.0.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

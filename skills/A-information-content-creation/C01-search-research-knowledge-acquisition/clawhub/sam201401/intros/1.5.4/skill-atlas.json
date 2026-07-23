@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:browse",
+      "category:C01:token:search",
+      "category:C02:token:language",
+      "category:C09:token:privacy",
+      "category:C12:token:management",
+      "cross-tag:search",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C09",
+      "C12"
+    ],
+    "stages": [
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "44322932eaeb3a69f8b4e7b8bc8d7513a648eac8954d926ec4383ecb7088d4e3",
+    "content_hash": "c53b8a271c18f154d3ce4b450a98cf30c755e1bd632917dc767d379f34114115",
+    "precanonical_content_hash": "fc664fda9737b3c43d9544a05649d3afdc3300eeacc97b6ec1a107ecb7ef3e63",
+    "skill_md_hash": "46ca1b6eb7f63cabb1fd67f3111e38534d98cd3f6da173363aaa8578a5611ffb",
+    "version_metadata_sha256": "6814dd0fe70b8fb98f65812a15519bd570653f4808c741ead18a2f607b541060"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sam201401/skills/intros",
+    "claim_id": "97c0bc2fa2668e0a1980c192b175df76377f21595a752200a5790971f29a6c7e",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "intros",
+        "url": "https://clawskills.sh/skills/sam201401-intros"
+      }
+    ],
+    "owner_handle": "sam201401",
+    "owner_id": "s17ent5e7tb19x9re67szwpsen884q2r",
+    "published_at": 1772025815557,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972511934,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972511934,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill creates profiles, searches users, sends connection requests, and sends/reads messages through https://api.openbreeze.ai; these are sensitive social actions but are central to the advertised Intros service.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions map natural-language requests to specific CLI commands and include input quoting and bot_id validation; no hidden prompt override, unrelated command execution, or autonomous local action was found.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The bundle contains SKILL.md and a Python CLI script only, with no install-time script, package installer, cron creation, or background worker setup in the artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to api.openbreeze.ai and optional TELEGRAM_USER_ID use are declared in metadata and explained in the documentation; the data sent is proportionate to registration, profiles, discovery, notifications, and messaging.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The script persists an API key and identity JSON under ~/.openclaw/data/intros with chmod 600 and keeps state across reinstalls; this is disclosed, but users should treat those files as sensitive and delete them to remove local state.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: Plaintext local API-key storage is a real credential risk, but the artifact explicitly discloses the path, plaintext JSON format, owner-only permissions, and deletion path; this supports user guidance rather than a Review verdict.\n[SQP-2] expected: Profile creation sends name, interests, location, bio, and optional Telegram handle to the declared backend. The point-of-command help could be clearer, but SKILL.md states all data is stored on the Intros backend and the behavior fits the social-networking purpose.\n[SQP-2] expected: Registration sends bot_id, optional TELEGRAM_USER_ID, and optional bot username to the declared backend. The environment fallback is disclosed in metadata and documentation, and registration is user-invoked.",
+          "guidance": "Install only if you trust the Intros backend and Telegram verification flow. Avoid putting highly sensitive information in your profile or messages, treat ~/.openclaw/data/intros/config.json and identity.json as credentials, and delete ~/.openclaw/data/intros if you want to remove local Intros state after uninstalling.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed social-networking skill whose remote API use, profile data handling, messaging actions, and local credential storage match its stated purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972480289,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: intros\nVersion: 1.5.4\n\nThe skill bundle is classified as benign. The `SKILL.md` provides clear instructions to the AI agent, including security-conscious advice like quoting user inputs, and does not contain any prompt injection attempts. The `intros.py` script communicates with the declared `https://api.openbreeze.ai` endpoint, stores its API key and identity with restrictive file permissions (`0o600`), and includes input validation for `bot_id` arguments. It explicitly disables local cron-based notifications, relying on an external Telegram bot for this functionality, which reduces local attack surface. There is no evidence of data exfiltration beyond its own configuration, unauthorized command execution, or other malicious intent.",
+          "checkedAt": 1779163487540,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "08c04fca54a340b4720ae409fd024994c7b4c1b4133a9a24c76efa073111dde7",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/08c04fca54a340b4720ae409fd024994c7b4c1b4133a9a24c76efa073111dde7"
+    },
+    "slug": "intros",
+    "source_type": "clawhub",
+    "version": "1.5.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

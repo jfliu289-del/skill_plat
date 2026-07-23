@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:image",
+      "category:C05:token:video",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "category:C11:token:product",
+      "category:C17:token:notes",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C10",
+      "C11",
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d2085e28c26eec98308898d8c15827dc4ee8b838b763cdf79a71e21e8526b88b",
+    "content_hash": "a3a4ee4dcc1b76f2b2a1c5860ed426fee10c697f8340a5fee9e78848fedc066e",
+    "precanonical_content_hash": "b1085e00c44d703854e7a42cd8ffc92cfe406bd932853c6456507500cf7d816d",
+    "skill_md_hash": "b97b1bdf034170f47cc06e8512b6e89ce14af21e5d4f17d27360c8bcdab9b176",
+    "version_metadata_sha256": "fa3896b0fb3785c8b137492c0223d26e6af3793fa135c0712bb0ed059e6e8503"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/pauldelavallaz/skills/veed-ugc",
+    "claim_id": "d7f5de8de6cb7735647c19ee7ff846886e122266e27ef56a4020a232bde55310",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "veed-ugc",
+        "url": "https://clawskills.sh/skills/pauldelavallaz-veed-ugc"
+      }
+    ],
+    "owner_handle": "pauldelavallaz",
+    "owner_id": "s17es8yqc61443cxz7kbvr73rs884ggf",
+    "published_at": 1770856234796,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968948431,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968948431,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documentation and script align: they take an image or image URL, dialogue text, a voice ID, and an output filename, then queue a ComfyDeploy video-generation job and download the result.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Instructions are focused on the advertised workflow and do not contain hidden role changes or unrelated agent behavior, though they could more plainly warn about consent and sensitive likeness/content handling.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The helper is a user-invoked Python script run via uv with a declared httpx dependency; there is no hidden installer, post-install execution, obfuscation, or package mutation.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access, a ComfyDeploy API key, local image reads, and output-file writes are proportionate to the video-generation purpose, but users should understand that selected images and scripts leave the local machine.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background service, persistence mechanism, privilege escalation, credential harvesting, destructive behavior, or autonomous long-running worker is present beyond polling the requested generation run.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The skill does not declare formal permissions, but the documented endpoint, API-key usage, and script behavior make network/API use expected for this integration; this is a disclosure improvement rather than a policy hold.\n[SQP-2] expected: Local images are uploaded when the user passes a non-URL --image value; that is inherent to remote video generation, but the docs should state this more explicitly.\n[SQP-2] expected: The dialogue script is sent in the ComfyDeploy job inputs; this matches the purpose, with residual privacy risk for confidential scripts.\n[E1] expected: External transmission to https://api.comfydeploy.com is explicit in the artifacts and necessary for the advertised service-backed workflow; no unrelated exfiltration was found.\n[VirusTotal code_insight] expected: The script can upload any user-supplied local path as --image, but this is a direct CLI argument in an upload workflow, not hidden file collection. The lack of file-type enforcement is accidental-misuse risk, not malicious behavior.",
+          "guidance": "Install only if you are comfortable providing a ComfyDeploy API key and sending the selected image, image URL, dialogue script, and voice ID to ComfyDeploy for processing. Do not pass sensitive local files as --image, and avoid private likenesses, confidential marketing copy, or images of people without appropriate permission.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward ComfyDeploy client for generating lip-synced promotional videos from a user-chosen image and script, with expected but privacy-relevant remote upload behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968914376,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 78,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: veed-ugc\nVersion: 1.0.1\n\nThe `scripts/generate.py` file is designed to upload local image files to `api.comfydeploy.com` for video generation. However, the script takes the `--image` argument directly as a file path without explicit validation or sanitization, making it vulnerable to arbitrary file read/upload. An attacker could potentially provide a path to a sensitive local file (e.g., `/etc/passwd`, `~/.ssh/id_rsa`), leading to its exfiltration to the `comfydeploy.com` service. While the skill's stated purpose requires file upload, this lack of input validation represents a significant vulnerability, classifying it as suspicious rather than benign.",
+          "checkedAt": 1779163108362,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "f93c8afb19272eab16d23ed5c622bf17eeadea81ac4327efe373fd9d3ea9a236",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/f93c8afb19272eab16d23ed5c622bf17eeadea81ac4327efe373fd9d3ea9a236"
+    },
+    "slug": "veed-ugc",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

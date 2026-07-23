@@ -1,0 +1,151 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "paper"
+    ],
+    "audiences": [
+      "developer",
+      "researcher"
+    ],
+    "confidence": 0.6214,
+    "domains": [
+      "science",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:phrase:web search",
+      "category:C01:token:research",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C06:token:backend",
+      "category:C15:phrase:research paper",
+      "category:C15:token:paper",
+      "cross-tag:academic-research",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C15"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "c4a19d3bb0a36869a2b8dbd2d91096c2781bd42112ec97e990f6f53bc531fd22",
+    "content_hash": "7e17d40c36ca570d28bdd142cfa8a8efd1e4597a50eca4d3fec546c84fd99d74",
+    "precanonical_content_hash": "1aa5835fb104f1f62aa95de9c158c9d5c0f207ce4a05606ac6495eb886ff99b4",
+    "skill_md_hash": "3492014df6e72840dfcf077d8d73a269d3d273556b136a20d328e444557cceff",
+    "version_metadata_sha256": "bab15aa318ef5aab860fa696b0197746388b7a90b4592a27a6d5f1972b91f986"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/camopel/skills/ddgs-search",
+    "claim_id": "fddc612d91e2d7de9e6011ec4e6543eabef0bf00deb9c2857bcc654b1f5df71d",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "ddgs-search",
+        "url": "https://clawskills.sh/skills/camopel-ddgs-search"
+      }
+    ],
+    "owner_handle": "camopel",
+    "owner_id": "s173h157g83yxadz0b0brs0h6s884my9",
+    "published_at": 1772402190152,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779948057670,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779948057670,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The described capabilities are web search and arXiv search; sending search terms to search providers and arXiv is expected for that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Users should understand that their queries leave the local machine, but the artifacts described do not show unrelated data collection, credential use, or hidden behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The installer invokes pip for the ddgs dependency and installs a wrapper under ~/.local/bin, which modifies the user environment but is coherent for a command-line search skill.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access and subprocess execution appear limited to search, arXiv access, dependency installation, and local command wrapping; no broad filesystem indexing or privileged system modification is indicated.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "A persistent executable wrapper in ~/.local/bin is a real host change, but it is not shown to auto-run, escalate privileges, or operate outside the search workflow.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The reported network and process capabilities are expected for a web/arXiv search skill, though clearer metadata disclosure would help users and orchestrators understand required permissions.\n[SDI-2] expected: The pip install and ~/.local/bin wrapper are environment changes, but they support the advertised CLI search functionality and are not evidence of deception or malicious persistence.\n[SQP-2] expected: External query transmission is inherent to search, but the skill should warn users not to submit secrets, private identifiers, or sensitive research topics.",
+          "guidance": "Before installing, be aware that searches are sent to external services and that installation may add a local command wrapper in ~/.local/bin and install the ddgs Python package. Avoid using it for confidential queries unless you are comfortable with those third-party search providers receiving the query text.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a search helper whose network use, dependency install, and local wrapper are aligned with its stated web and arXiv search purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948025906,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 71,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ddgs-search\nVersion: 1.2.0\n\nThe skill bundle provides web search and arXiv paper search functionality. All Python scripts (`arxiv_search.py`, `install.py`, `search.py`) use `subprocess.run` with a list of arguments, which prevents shell injection vulnerabilities. Network calls are limited to the legitimate arXiv API endpoint (`export.arxiv.org`). The installer script (`install.py`) correctly installs the `ddgs` package and a local wrapper script to `~/.local/bin`, which is part of its stated purpose. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, obfuscation, or prompt injection attempts in the `SKILL.md` or `README.md` files. The code aligns with the stated purpose and lacks high-risk behaviors.",
+          "checkedAt": 1779166048955,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "612e8e9f921455a4cc19eee8c29c22a870cf3975b06980d67960c6b22de077b7",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/612e8e9f921455a4cc19eee8c29c22a870cf3975b06980d67960c6b22de077b7"
+    },
+    "slug": "ddgs-search",
+    "source_type": "clawhub",
+    "version": "1.2.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

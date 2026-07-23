@@ -1,0 +1,137 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.31,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C17",
+    "reasons": [
+      "category:C00:token:orchestration",
+      "category:C02:token:language",
+      "category:C04:token:data",
+      "category:C17:token:resume",
+      "category:C17:token:schedule",
+      "cross-tag:data-analysis"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C02",
+      "C04"
+    ],
+    "stages": [
+      "validate"
+    ],
+    "tasks": [
+      "analyze"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "91737739abace5dd9b02b73f44b882b049435067c02c1d88762677e22b5061ae",
+    "content_hash": "52d73aa3bf54aed590114ed7dfa50ca8a4c6f9e7f4a381c337999ba5934adf5c",
+    "skill_md_hash": "27292bf21dc3ac3c8fd5d39aa2a6701a185dcedb585ef337b3dc0323d1be8684",
+    "version_metadata_sha256": "3db15e9e994293067ff65399a4404a5baadc2807cb27320d2b19d5dba005fff0"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/mariusfit/skills/smart-cron",
+    "claim_id": "987bc5218f3756c884a1ff1ce8f6a0668a5b1d955f75d1a7e723ce1d63f9b893",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "smart-cron",
+        "url": "https://clawskills.sh/skills/mariusfit-smart-cron"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "mariusfit",
+    "owner_id": "s17en27tt4m76ranka73sgtdfd884sb7",
+    "published_at": 1771990515091,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779958379225,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779958379225,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, natural-language scheduling of OpenClaw tasks, cron lifecycle controls, next-run preview, logs, and failure alerts are coherent for a scheduler.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill can schedule arbitrary user-provided OpenClaw tasks and accepts custom cron expressions, but this is explicit, user-directed, and central to the advertised functionality.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The submitted package contains only SKILL.md and skill.json, with no executable implementation to inspect; this limits functional verification but does not show hidden install behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Use of exec and message tools is proportionate to system cron scheduling and failure alerts, though users should understand that scheduled tasks may run unattended and alerts may go to external messaging channels.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistent jobs and local run logs are clearly disclosed, stored under ~/.openclaw/workspace/smart-cron-data/, and lifecycle commands for pause, resume, remove, and logs are documented.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal/code_insight] expected: The exec-tool and arbitrary task scheduling concern is real but inherent to a cron scheduler; the artifacts disclose this behavior and do not show malicious command execution or deception.\n[SQP-2] expected: Failure alerts over WhatsApp/Telegram are disclosed, and the example alert shows operational metadata such as task name, time, and error; users should still treat alert contents as potentially sensitive.\n[staticScan] expected: Static scan reported no findings, consistent with the package containing markdown and JSON only.",
+          "guidance": "Install only if you want OpenClaw tasks to run unattended on a schedule. Review each scheduled task carefully, avoid putting secrets in task names or prompts, confirm alert channels are private, and periodically remove jobs you no longer need.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Smart Cron is a disclosed automation scheduler whose main risks come from expected recurring execution and optional messaging alerts, not hidden or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779958357609,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: smart-cron\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to its reliance on the `exec` tool (declared in `skill.json`) and the ability to schedule arbitrary commands via the `smart-cron add --task` functionality described in `SKILL.md`. While these capabilities are central to a cron scheduler's purpose, they introduce a significant risk of Remote Code Execution (RCE) if the OpenClaw agent is susceptible to prompt injection or if the underlying skill implementation fails to sanitize user-provided task commands before passing them to the system's cron daemon. This represents a critical vulnerability rather than explicit malicious intent within the provided files.",
+          "checkedAt": 1779166973348,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "eaf0be247bcb0f86c91380192fdbdd879cbaae9dfc95df080f0ef6016bfeaae8",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/eaf0be247bcb0f86c91380192fdbdd879cbaae9dfc95df080f0ef6016bfeaae8"
+    },
+    "slug": "smart-cron",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

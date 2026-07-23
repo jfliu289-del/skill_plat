@@ -1,0 +1,157 @@
+{
+  "classification": {
+    "artifacts": [
+      "configuration",
+      "document"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.3583,
+    "domains": [
+      "creative",
+      "infrastructure"
+    ],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C02:token:write",
+      "category:C05:token:image",
+      "category:C08:token:deploy",
+      "category:C08:token:deployment",
+      "category:C08:token:kubernetes",
+      "category:C10:token:ai",
+      "category:C12:token:management",
+      "category:C13:token:operations",
+      "category:C18:token:health",
+      "cross-tag:deployment",
+      "cross-tag:design",
+      "cross-tag:writing",
+      "risk:R3",
+      "risk:R4"
+    ],
+    "risk_level": "R4",
+    "secondary_categories": [
+      "C02",
+      "C05",
+      "C10",
+      "C12",
+      "C13",
+      "C18"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate"
+    ],
+    "tasks": [
+      "deploy",
+      "design",
+      "operate",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "9447d0cdc20668688d4243c4433218a0e3b504792354f32b7768842f0dfe52ef",
+    "content_hash": "14cdd3bf4f41f8dcd4630e1e023e372f531aa505d2b67af2aa9bd82bffd7fbe6",
+    "precanonical_content_hash": "451a6ca1d43f2e107ff26aa7bc0260c77faedcc2526dbfb7bbed1048df07b1cf",
+    "skill_md_hash": "94249e3c663dfbd9668b1f52c391528b01293bed878191d06276c16ce5fdfa90",
+    "version_metadata_sha256": "536d1843eeec406c5d60e0a956eb3bea7898e2543c7d9df50bdd1cbd8fc8144c"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tkuehnl/skills/kube-medic",
+    "claim_id": "994b9e3be8c40556ac90cde65f021627f2f1635fddc2008f0200cdc29cb84282",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "kube-medic",
+        "url": "https://clawskills.sh/skills/tkuehnl-kube-medic"
+      }
+    ],
+    "owner_handle": "tkuehnl",
+    "owner_id": "s1796xcga59f855vmh35x909yh84742a",
+    "published_at": 1771717104334,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779969254960,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779969254960,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The purpose is coherent: it uses kubectl for Kubernetes sweeps, pod/deployment diagnosis, resource checks, events, and optional remediation. The capability is operationally sensitive because it can read cluster state and pod logs and can perform approved writes.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions clearly say writes require showing the exact command, explaining risk, and waiting for explicit user approval. Default diagnostics may span all namespaces, and pod logs may contain sensitive data.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill runs a local shell script and depends on kubectl and jq. These dependencies are disclosed in the artifacts, though platform-level permission metadata appears less explicit than the documentation.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Using the user's existing kubeconfig is expected for Kubernetes diagnostics, but the effective blast radius depends entirely on the active context and RBAC permissions.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background worker, credential harvesting, or hidden install behavior was found. Optional writes are allowlisted and confirmation-gated, but the confirm-write interface still accepts user-supplied kubectl flags and targets.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: kubectl access to Kubernetes APIs is inherent to the skill's stated purpose and is documented, but users should be aware it uses existing cluster credentials.\n[TP4] expected: The write capability is not hidden: SKILL.md, README, SECURITY.md, and tests disclose confirm-write, allowed operations, and the requirement for explicit user approval.\n[SDI-1] expected: The rollback test confirms optional remediation behavior; it is documented as a write path and the testing guide limits write tests to disposable clusters.\n[SDI-2] expected: Delete pod, scale, rollout, cordon, and uncordon can affect availability, but they are purpose-aligned for incident remediation when explicitly approved.\n[SDI-4] unexpected: The loose command-string allowlist is a residual risk because extra kubectl flags and broad targets can be supplied, but it is not evidence of hidden or malicious behavior and still requires an approved command.",
+          "guidance": "Install only if you are comfortable letting the agent inspect Kubernetes state and pod logs through your current kubeconfig. Prefer a read-only or namespace-scoped RBAC role, verify the active kubectl context before running it, and approve confirm-write commands only after checking the exact cluster, namespace, resource, and availability impact.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Kubernetes triage skill that is read-only by default, with optional user-confirmed cluster changes that require careful review before use.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779969189948,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: kube-medic\nVersion: 1.0.3\n\nThe OpenClaw AgentSkills bundle 'kube-medic' is classified as benign. The `SKILL.md` explicitly instructs the AI agent to require user confirmation for all write operations and to never execute `kubectl exec`. The core script `scripts/kube-medic.sh` robustly implements these security controls, including `set -euo pipefail`, extensive use of `jq --arg` for safe JSON output, double-quoting of all variables in `kubectl` commands, and a highly secure `cmd_confirm_write` function that blocks shell metacharacters, parses commands into arrays, and enforces a strict allowlist for approved `kubectl` write operations while explicitly forbidding `kubectl exec`. The `SECURITY.md` and `TESTING.md` further confirm a strong, well-thought-out security posture.",
+          "checkedAt": 1779164515607,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "06528e938ee695c304afffcb93c3521ddcb21a3fe32fe979714932eda7daac52",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/06528e938ee695c304afffcb93c3521ddcb21a3fe32fe979714932eda7daac52"
+    },
+    "slug": "kube-medic",
+    "source_type": "clawhub",
+    "version": "1.0.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.35,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C10"
+    ],
+    "stages": [
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8839afefa8c2e39ac48a6ae5c66b4f8de614da65e61dcb5bbfd015650102d1bf",
+    "content_hash": "703d54467a599b3afe59e0e9be6093e0188d39b67508faaa7b65f0fbbd6e67d5",
+    "precanonical_content_hash": "1d3c2bdb7d46ff5d3d76828f434ee93bb4b9d8d559e9d212ea370df91515e32e",
+    "skill_md_hash": "6a844fca89c5f885a33b70791ae136f34f72ed5c4522c6cdbf34c0f0b36e4240",
+    "version_metadata_sha256": "051687d1cd9c0878f99e81c3f66113937850e9f63360cd129d7a72f24f1176d0"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/doanbactam/skills/agnxi-search-skill",
+    "claim_id": "26214799a9d885d35f291a4f46f450af79ffe9d5ded6939e2041a212cbecd3f2",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "agnxi-search-skill",
+        "url": "https://clawskills.sh/skills/doanbactam-agnxi-search-skill"
+      },
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "agnxi-search-skill",
+        "url": "https://clawskills.sh/skills/doanbactam-agnxi-search-skill"
+      }
+    ],
+    "owner_handle": "doanbactam",
+    "owner_id": "s17an2rtbadytrzfa1ky4hz4s1843dm2",
+    "published_at": 1769832005849,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783653076551,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783653076551,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is searching Agnxi for AI agent tools, MCP servers, and skills, and the code implements that narrow behavior by fetching and filtering Agnxi sitemap URLs.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The README says agents may use the tool automatically for tool-discovery requests, which is purpose-aligned but broad enough that hosts should invoke it only when the user is clearly asking for external tool discovery.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is described as registry/manual placement and uses only Python standard libraries, but the README contains a placeholder clone URL and the skill does not explicitly declare its outbound network dependency.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime behavior is proportionate: it contacts the hard-coded Agnxi sitemap URL, uses the user query locally for filtering, and does not read credentials, local profile stores, secrets, or broad filesystem content.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No persistence, privilege escalation, background worker, startup hook, destructive operation, or implemented file-writing behavior was found; the cache filename in the script is unused.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The outbound request exists and should be disclosed, but it is limited to Agnxi's sitemap and matches the skill's search purpose; the query is not appended to the network URL.\n[SQP-1] expected: The automatic-use wording is broad, but it is limited to finding tools, skills, and MCP servers, which matches the documented purpose and does not add mutation authority or hidden access.\n[staticScan] expected: Static scan reported no findings, and manual review found no obfuscation, credential handling, subprocess chaining, destructive commands, or persistence.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with artifact review, but it was treated only as supporting signal.",
+          "guidance": "Install this if you want your agent to search Agnxi for tools and skills. Be aware that using it makes an outbound request to agnxi.com, verify the package source because the README's clone URL is a placeholder, pass queries as safe process arguments rather than raw shell text, and review any returned tools before installing or using them.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a simple Agnxi directory search skill that fetches a public sitemap and prints matching links, with minor transparency cautions about network use and broad auto-use wording.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783653057505,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 23,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: agnxi-search-skill\nVersion: 1.0.0\n\nThe skill bundle is classified as benign. The `SKILL.md` instructs the agent to execute a local Python script (`search.py`) with a user-provided query. The `search.py` script safely handles the query as a string for filtering purposes, making an expected network request to `https://agnxi.com/sitemap.xml` to fetch the sitemap. There is no evidence of intentional malicious behavior such as data exfiltration, malicious execution within the script, persistence mechanisms, or prompt injection attempts against the agent to deviate from its stated purpose. The shell execution instruction in `SKILL.md` is the intended mechanism for the skill to function, and the script itself processes input securely.",
+          "checkedAt": 1779160362960,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "811f9748f00493d1ff166ca9ce10927bdda4d5ef24a25c3929a5707448f0cbe6",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/811f9748f00493d1ff166ca9ce10927bdda4d5ef24a25c3929a5707448f0cbe6"
+    },
+    "slug": "agnxi-search-skill",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

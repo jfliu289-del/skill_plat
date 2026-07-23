@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.175,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:find",
+      "category:C04:token:data",
+      "category:C10:token:ml",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C04",
+      "C10"
+    ],
+    "stages": [
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "314c0e73fdc201e570facd751e24e92dbe21ac378fb5835d50888b79c633a017",
+    "content_hash": "fe4700cf38d36f7d09de74ad6af400df0beeeab270a48f18b4da10e2dc685d8f",
+    "precanonical_content_hash": "27d41b3cd9c4f521d68deabd642a73cd928d0c61f4945bbd0cc3c65eefdcb5ba",
+    "skill_md_hash": "a07a4e78d192101e5f98abf13db3a826e9cb4b5ca03236cb93887bd942cadc6d",
+    "version_metadata_sha256": "213383137fd4526c8cac1939ec857ff26721152365db5e99140b120ddc64d0a0"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/deyashmukh/skills/data-cleaning-annotation-workflow",
+    "claim_id": "17655b405d39e5160126466cdc43922441fbb68ec4535c9297d2141006661dd9",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "data-cleaning-annotation-workflow",
+        "url": "https://clawskills.sh/skills/deyashmukh-data-cleaning-annotation-workflow"
+      }
+    ],
+    "owner_handle": "deyashmukh",
+    "owner_id": "s172ra2jz05qhv1cjdf4ks3zth8854p8",
+    "published_at": 1771385224036,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779920536156,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779920536156,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, instructions, and scripts fit together: it helps users find Kaggle datasets, clean CSV files, and upload raw/cleaned data with metadata to data.smlcrm.com. External upload of dataset contents is central to the workflow and is disclosed.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are procedural and user-directed, with no prompt override, hidden role instruction, autonomous execution, background worker, or unrelated authority request found in the artifacts.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no complex installer, but the instructions mention installing the Kaggle CLI with pip and running bundled scripts. This is purpose-aligned, though users should install dependencies from trusted sources, preferably in an isolated environment.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The scripts read and write local CSV files, download Kaggle datasets, extract ZIP files, and remove ZIP archives from the chosen output directory. This is proportionate for dataset preparation but should be run in a dedicated directory.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden persistence, privilege escalation, credential harvesting, or hardcoded secrets were found. Kaggle CLI and the annotation platform may use the user's existing accounts or sessions, which is expected for the workflow.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code_insight suspicious] expected: The reported concern about user-provided arguments in the Kaggle downloader is not enough to justify Review: the script quotes the dataset name and output directory and does not use eval or shell command construction. The downloader still performs expected local download, extraction, and ZIP cleanup, so users should choose a dedicated output directory.\n[SkillSpector clean] expected: SkillSpector reported no issues, which is consistent with the artifact review showing a coherent, disclosed data-cleaning workflow.\n[staticScan clean] expected: The static scan reported no findings; artifact inspection likewise found no hidden execution, obfuscation, persistence, credential collection, or destructive behavior beyond expected file cleanup.",
+          "guidance": "Install only if you are comfortable using Kaggle and data.smlcrm.com for this workflow. Use public or approved datasets, avoid uploading sensitive data unless the platform is authorized for it, install Kaggle dependencies in a trusted environment, and run the downloader in a new empty folder so its ZIP extraction and cleanup do not affect unrelated files.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a transparent dataset cleaning and upload workflow, with expected local file handling and external uploads that users should use deliberately.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779920476505,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: data-cleaning-annotation-workflow\nVersion: 1.0.0\n\nThe skill's stated purpose of data cleaning and annotation is benign. The `scripts/clean_dataset.py` file performs standard data processing operations without suspicious behavior. However, the `scripts/download_kaggle.sh` script directly uses user-provided arguments (`$DATASET_NAME`, `$OUTPUT_DIR`) in shell commands (`kaggle datasets download -d \"$DATASET_NAME\"`, `mkdir -p \"$OUTPUT_DIR\"`, `cd \"$OUTPUT_DIR\"`) without explicit sanitization, creating a shell injection vulnerability. While not intentionally malicious, this vulnerability makes the skill 'suspicious' as it could be exploited by a malicious agent or crafted input.",
+          "checkedAt": 1779165025895,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "6e34f961d701fec2cf750e3f61c24187794403a00cdb9cf66f1b61d0ff4431a0",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6e34f961d701fec2cf750e3f61c24187794403a00cdb9cf66f1b61d0ff4431a0"
+    },
+    "slug": "data-cleaning-annotation-workflow",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

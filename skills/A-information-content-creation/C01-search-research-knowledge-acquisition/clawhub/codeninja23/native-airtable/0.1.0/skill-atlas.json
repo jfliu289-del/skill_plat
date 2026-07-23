@@ -1,0 +1,148 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C03:token:spreadsheet",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C17:token:notes",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C03",
+      "C04",
+      "C06",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "bab118be0495d91a09d0048d6f9071c419ff79f3b4fafcbe8107c099ee07920c",
+    "content_hash": "9736097ef922a42f27e7b3ec1402f9ffae8f9d2e96bf4f271bf5c5edd132253e",
+    "precanonical_content_hash": "7a42c4dafab30566487825708d968ba91f67f036b994c0692bdae30905a32638",
+    "skill_md_hash": "dd51081e322e0b68c3efd931bd90a487de235e413ae7d5f30d2e36d1aea3ff73",
+    "version_metadata_sha256": "fdaec3884635ffc69c23ab286115dd823db8867703c0285479c306bf9ffd587d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/codeninja23/skills/native-airtable",
+    "claim_id": "2bdc15171b46ad6d5b722e140d5935862a25196d5173e10f2a080b35357233b4",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "native-airtable",
+        "url": "https://clawskills.sh/skills/codeninja23-native-airtable"
+      }
+    ],
+    "owner_handle": "codeninja23",
+    "owner_id": "s173w4sv23s5bb8w4kjv1t143n842den",
+    "published_at": 1771927570214,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779956063047,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779956063047,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to read Airtable bases, tables, and records, and the script implements GET-based list, get, filter, and search commands against Airtable's API.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill clearly discloses the required Airtable PAT and recommends read-only scopes, but users can grant the token broad base access and the search command builds an Airtable formula from query and field inputs without escaping.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no install-time execution, package download, background setup, or dependency bootstrap; the artifact contains a SKILL.md and one Python script using the standard library.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to api.airtable.com and AIRTABLE_PAT are proportionate for an Airtable reader, but the token can expose all records within the bases the user grants.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts show no persistence, privilege escalation, credential storage, background worker, or Airtable write/delete capability.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight] expected: The reported formula-injection concern is artifact-backed in search-records, but it is a bounded read-query robustness issue within the user's authorized Airtable scope, not evidence of deception, local compromise, destructive behavior, or hidden exfiltration.\n[SkillSpector] expected: SkillSpector reported no issues, which is consistent with the artifact's disclosed read-only Airtable API behavior.\n[staticScan] expected: Static scan was clean, and manual inspection found no obfuscation, install-time execution, persistence, or write/delete API use.",
+          "guidance": "Use a dedicated Airtable Personal Access Token with only the documented read scopes and grant it access only to the bases needed. Avoid feeding untrusted text into search query or field names until formula escaping is fixed; use explicit filters you control for sensitive data.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward read-only Airtable helper, with a search escaping bug users should keep in mind.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779956030182,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: native-airtable\nVersion: 0.1.0\n\nThe skill is designed to interact with the Airtable API, and its `SKILL.md` instructions are benign. However, the `scripts/airtable.py` file contains a vulnerability in the `cmd_search_records` function. User-provided `query` and `field` arguments are directly embedded into an Airtable formula string without proper sanitization, which could lead to an Airtable formula injection. This vulnerability could allow an attacker to manipulate the search query on the Airtable server, potentially leading to unintended data access or API errors, though it does not pose a direct risk of RCE or data exfiltration from the local system.",
+          "checkedAt": 1779166730815,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "4d1c1afa9fec35889773f2d209bf51be25283a26f87c42a3922bfcd8a1e5accc",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4d1c1afa9fec35889773f2d209bf51be25283a26f87c42a3922bfcd8a1e5accc"
+    },
+    "slug": "native-airtable",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

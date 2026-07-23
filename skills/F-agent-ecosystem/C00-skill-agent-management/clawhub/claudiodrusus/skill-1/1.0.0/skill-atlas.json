@@ -1,0 +1,151 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:data",
+      "category:C05:token:image",
+      "category:C06:token:code",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:design",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C04",
+      "C05",
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "design",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e28fb8cc09c7de03e7030ccd392e6977477fdae85705b78e334e0fbc1f1573a0",
+    "content_hash": "9af8a51fd3171e5a01607ce34a4f42876b138faa41a9929fafaccea461326439",
+    "precanonical_content_hash": "3d5283ad8e8c614a29574b857737235da98d873fac866ec07ea17662317ef27c",
+    "skill_md_hash": "41c84cb42c552a92a7ffdebf71e1a2c4f0e405d6c38d1333b2a98bb50645a457",
+    "version_metadata_sha256": "bafcd7ded42b65ba2c98893125c630053cf46af0c632675715c9706a449dcedb"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/claudiodrusus/skills/skill-1",
+    "claim_id": "139de85163bd58191cc8bfb2aceb9451977556f1ce769688a091d77a23ea9c20",
+    "index_entries": [
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "skill-1",
+        "url": "https://clawskills.sh/skills/claudiodrusus-skill-1"
+      }
+    ],
+    "owner_handle": "claudiodrusus",
+    "owner_id": "s172xccbt04xdg9tshkc5tw64x88526n",
+    "published_at": 1771777926817,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779949699489,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779949699489,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill purpose, documentation, and bundled Python script align around generating QR codes from user-provided text, URLs, WiFi details, vCards, and outputting PNG, SVG, or ASCII.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The trigger language is broad inside the QR/scannable-code domain, but it does not introduce unrelated automation, role changes, hidden instructions, or autonomous use.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The script automatically runs a hardcoded pip install for qrcode[pil] when missing. This is disclosed and supports the stated purpose, but it is an unpinned runtime package install from the configured Python package source.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Writing a user-selected output file is expected for this tool. WiFi QR generation intentionally embeds the supplied network password, so those generated files and command invocations may expose sensitive credentials.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts show no background persistence, privilege escalation, credential-store access, exfiltration, destructive behavior, or long-running worker activity.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[AST4] expected: Confirmed subprocess use is limited to installing the QR-code dependency with a hardcoded package name if import fails; this is a supply-chain caution, not hidden or unrelated execution.\n[LP3] expected: The documentation clearly shows shell usage and file output. Missing separate permission metadata is a transparency limitation rather than evidence of undisclosed behavior.\n[SDI-2] expected: Runtime dependency installation expands the environment beyond pure QR encoding, but it is disclosed and directly supports the QR generator rather than serving an unrelated purpose.\n[SQP-1] expected: Phrases like any data are broad, but the surrounding text consistently scopes use to explicit QR-code or scannable-code generation.\n[SQP-2] expected: WiFi password handling is expected for WiFi QR creation, but the skill should warn more clearly that command lines and generated QR images may reveal the password.\n[VirusTotal/code_insight] expected: The reported arbitrary path write is user-directed output-path behavior typical of a CLI file generator. It can overwrite files if invoked that way, but the artifacts do not show attacker-controlled or hidden writes.\n[staticScan] expected: The static scan was clean and did not add artifact-backed malicious evidence.",
+          "guidance": "Install only where it is acceptable for a skill to create files and potentially install a Python package automatically. For stricter environments, preinstall or pin qrcode[pil] yourself. Choose output paths carefully, and treat WiFi QR codes as secrets because they contain the network password.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a QR-code generator with disclosed file output and dependency-install behavior, but users should handle automatic pip installs and WiFi QR files carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779949649502,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 91,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: skill-1\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to a path traversal vulnerability in `scripts/generate_qr.py`. The script uses `args.output` directly for file saving (`img.save(args.output)` and `open(args.output, 'w')`) without sanitizing the path. This allows an attacker to specify an output path containing `../` sequences, potentially writing files to arbitrary locations on the filesystem, which is a critical security flaw. While the `SKILL.md` is benign and the `pip install` via `subprocess` uses hardcoded, legitimate package names, the arbitrary file write vulnerability makes the skill risky.",
+          "checkedAt": 1779166254773,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "4c14f001e85c8edc73dfc025a7b40858ad01316e4c40947b0972175191cc29ef",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4c14f001e85c8edc73dfc025a7b40858ad01316e4c40947b0972175191cc29ef"
+    },
+    "slug": "skill-1",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

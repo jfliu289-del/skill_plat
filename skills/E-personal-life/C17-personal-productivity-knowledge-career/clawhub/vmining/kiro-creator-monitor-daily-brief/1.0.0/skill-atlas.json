@@ -1,0 +1,124 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.4167,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C17",
+    "reasons": [
+      "category:C08:token:github",
+      "category:C17:token:notes",
+      "category:C17:token:schedule",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C08"
+    ],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4a10b57650634055efb0b257353665d74557bf97fa0360fbf6cf124990d98c0d",
+    "content_hash": "6c2f7e81b0f162fd7c011a113c7f26c229720c76f9700b7d0c5b5e89cc526592",
+    "precanonical_content_hash": "6b8cb5a9b94e3587b2df50af307bdb0e4e73a1f8b5c877b645113779d97259dc",
+    "skill_md_hash": "592fa18a1ed9708badf57ea295fa15dbdbb5e56a626e0ea5b4e0b4d05e5ead03",
+    "version_metadata_sha256": "aedb07164b7abcef3098f2221c81d4bb15cbe90e4356a0dce7f4d6ed6cecd03b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/vmining/skills/kiro-creator-monitor-daily-brief",
+    "claim_id": "abff7af743126f31c471ae1ef05c1f2ff8c2d1b6b3133aa194d54bc01e89212a",
+    "index_entries": [
+      {
+        "index_path": "categories/git-and-github.md",
+        "label": "kiro-creator-monitor-daily-brief",
+        "url": "https://clawskills.sh/skills/vmining-kiro-creator-monitor-daily-brief"
+      }
+    ],
+    "owner_handle": "vmining",
+    "owner_id": "s17egwyjsr6yzmmjjyakghyvyd83mx21",
+    "published_at": 1771710913911,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779948080678,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779948080678,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to monitor creator topics and produce daily briefs; fetching from external APIs and optionally sending the resulting brief to Telegram, Slack, or email is coherent with that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The artifacts describe optional delivery channels, but the supplied scanner context indicates the privacy impact of transmitting generated brief content to third-party services could be clearer.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No evidence was supplied of deceptive installation, hidden package execution, obfuscation, or install-time persistence beyond normal script use.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill uses environment variables for API and delivery credentials such as X, Telegram, Slack, and SMTP; this is proportionate for the integrations, but those secrets should be scoped to this skill and protected.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No artifact-backed evidence shows background persistence, privilege escalation, destructive behavior, or unauthorized local data access.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[TT3] expected: Using a Slack webhook from an environment variable as an outbound destination is standard for Slack delivery; the risk is mainly configuration hygiene, not evidence of malicious exfiltration.\n[SQP-2] expected: The skill’s optional Telegram, Slack, and email delivery means brief content will be sent externally when enabled; this should be clearer to users, but it remains aligned with the advertised delivery feature.\n[SQP-2] expected: The --deliver behavior transmits generated monitoring results without a separate preview or confirmation, which is a usability and disclosure concern, but delivery appears user-invoked rather than hidden or automatic in the supplied evidence.",
+          "guidance": "Install only if you are comfortable sending the generated creator-monitoring briefs to the configured Telegram, Slack, or email destinations. Use dedicated low-privilege tokens, verify webhook and email recipients before enabling delivery, and avoid external delivery for sensitive monitoring topics.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill’s network delivery and credential use fit its daily briefing purpose, but users should understand that delivered briefs leave the local environment.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948047335,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 91,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: kiro-creator-monitor-daily-brief\nVersion: 1.0.0\n\nThe skill is designed to monitor creator topics and deliver daily briefs, which necessitates reading sensitive environment variables (e.g., X_BEARER_TOKEN, TELEGRAM_BOT_TOKEN, SMTP_PASS) and making network requests to external APIs (X, Telegram, Slack) and an SMTP server. All such actions are directly aligned with the stated purpose of the skill. The code in `scripts/daily_brief.py` uses standard libraries for HTTP requests and email, and handles credentials securely via environment variables. The `SKILL.md` and `agents/openai.yaml` files contain benign instructions for the agent, without any evidence of prompt injection or malicious intent. No obfuscation, unauthorized data exfiltration, or persistence mechanisms were found.",
+          "checkedAt": 1779166057828,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "d0ba3c89ac1bb660bda7d60bfe55f893349bc7ac9664c9e4cf3a710e82b310a3",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d0ba3c89ac1bb660bda7d60bfe55f893349bc7ac9664c9e4cf3a710e82b310a3"
+    },
+    "slug": "kiro-creator-monitor-daily-brief",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

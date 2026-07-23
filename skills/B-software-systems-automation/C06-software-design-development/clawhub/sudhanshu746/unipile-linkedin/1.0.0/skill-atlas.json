@@ -1,0 +1,135 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C12:token:management",
+      "category:C17:token:notes",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C12",
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8bed7361621775cd808d258bb99478f883a35f810ec29a535cc9433f877a515a",
+    "content_hash": "fe436bd95afc0893c910913e64078b5ab24c226f76b420d771c420a92e43bbe5",
+    "precanonical_content_hash": "ab484912faf82d7de906744bf6db99ceb0becbe65fd9e1bce43ef8a77f81c66a",
+    "skill_md_hash": "86b166672b983bc3952ff5fcf5c87085138dfa388e6692017525f209308032a0",
+    "version_metadata_sha256": "042126318fb4bbbbbee69749cf794f7c6c497e338105df585b9c090f525d5c1e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sudhanshu746/skills/unipile-linkedin",
+    "claim_id": "5d528fd95a3c239df2a2624c5a54ab452d589b0877dca09341ff5a66df1c356d",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "unipile-linkedin",
+        "url": "https://clawskills.sh/skills/sudhanshu746-unipile-linkedin"
+      }
+    ],
+    "owner_handle": "sudhanshu746",
+    "owner_id": "s179xy2aak1ch27zrhqawft8hd8847t1",
+    "published_at": 1770660424074,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779963134160,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779963134160,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented capabilities match the stated purpose: LinkedIn messaging, profiles, connections, posts, comments, reactions, and account lookup through the Unipile API. These are sensitive account actions but not purpose-mismatched.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands are explicit CLI invocations with named arguments, but mutating actions such as send, start-chat, invite, cancel-invite, create-post, comment, react, and profile --notify execute without a built-in confirmation or dry-run step.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package declares only dotenv and unipile-node-sdk dependencies, includes a package-lock.json, and has no observed install lifecycle scripts or installer persistence.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use of UNIPILE_DSN and UNIPILE_ACCESS_TOKEN is proportionate for a Unipile integration, but those credentials grant access to LinkedIn data and account actions and should be treated as account secrets.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background worker, privilege escalation, arbitrary command execution, unrelated filesystem access, local credential-store scraping, or hidden persistence mechanism was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The flagged LinkedIn write actions are real and can affect third parties, but they are openly documented and central to the skill's stated purpose rather than hidden behavior.\n[SQP-1] expected: The broad routing description covers both read and write LinkedIn tasks; this warrants user caution and approval controls, but the scope is coherent with the integration.\n[SQP-2] expected: The CLI does not add confirmation or dry-run safeguards before mutating actions. That is a meaningful safety limitation for agent use, but the script acts only when explicitly invoked with command parameters.\n[RA2] expected: Persistent environment credentials are expected for Unipile API access. The artifacts do not show token harvesting, credential exfiltration, or use of local browser/session stores.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with the artifact review, but it was used only as supporting signal.",
+          "guidance": "Install only if you want an agent to operate a Unipile-connected LinkedIn account. Protect the Unipile token, avoid exposing it in prompts or logs, and require explicit human review before sending messages, invitations, posts, comments, reactions, or profile views that notify others.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed LinkedIn automation skill that uses Unipile credentials to read and act on a connected LinkedIn account, with no evidence of hidden or unrelated behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779963096298,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 50,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: unipile-linkedin\nVersion: 1.0.0\n\nThe skill is designed to interact with LinkedIn via the Unipile API, as stated in `SKILL.md` and `README.md`. The core script, `scripts/linkedin.mjs`, uses the `unipile-node-sdk` to perform all LinkedIn operations and retrieves API credentials (`UNIPILE_DSN`, `UNIPILE_ACCESS_TOKEN`) from environment variables, which is standard practice. There is no evidence of prompt injection, unauthorized file system access, arbitrary command execution, or data exfiltration to unapproved endpoints. The `resources/last_50_posts.json` file contains only public sample data. All observed behaviors are aligned with the stated purpose.",
+          "checkedAt": 1779162512139,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "361f1b8636dd96c11a5596f330e7734dcc0c130d9889660bc45bec6eb4a5a8d9",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/361f1b8636dd96c11a5596f330e7734dcc0c130d9889660bc45bec6eb4a5a8d9"
+    },
+    "slug": "unipile-linkedin",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

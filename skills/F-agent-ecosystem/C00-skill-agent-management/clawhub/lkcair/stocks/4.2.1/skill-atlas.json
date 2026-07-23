@@ -1,0 +1,150 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C04:token:data",
+      "category:C05:token:design",
+      "category:C08:token:github",
+      "category:C13:token:finance",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:design"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C05",
+      "C08",
+      "C13",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "design",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "f3475a9eb2baf0dce1078a298cedac7ea42334747e9c33afdd1444c993e8e2bc",
+    "content_hash": "b230b5daf38183680061ed316b56725c9ff3f1d69d864af740bc75be1a34b63d",
+    "precanonical_content_hash": "993473508a1350d2b3733d85121c2f36a8089544f19125f9063f2a915a2773b8",
+    "skill_md_hash": "8079af35a32b890f201d622b5bd17c0614b0e270ecab3454622e0b992b0d1c91",
+    "version_metadata_sha256": "6a8a9bebd91480a668cdaf35517452800251383c959ed53d8eb05a6b17eba128"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/lkcair/skills/stocks",
+    "claim_id": "ff0109c335459bc5562e78f5127d93a5df9e99e384620936c7fc96f9627ff95a",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "stocks",
+        "url": "https://clawskills.sh/skills/lkcair-stocks"
+      }
+    ],
+    "owner_handle": "lkcair",
+    "owner_id": "s17dc29qb7h6rm492183de2gx585sqtw",
+    "published_at": 1778915125711,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974658648,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974658648,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently implement read-only stock, crypto, forex, commodities, news, and fundamentals retrieval through yfinance/Yahoo Finance. The metadata includes a broad can-make-purchases capability tag, but inspected code and instructions do not show brokerage access, order placement, account mutation, or payment flows.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The invocation pattern and Yahoo Finance data source are disclosed. The routing phrase 'Tell me about' is broader than necessary, stderr suppression may hide troubleshooting warnings, and self-test/complete-analysis paths can trigger many outbound data calls, so hosts should route these only for clear finance requests.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Setup is a standard local virtualenv plus pip install from requirements.txt. Dependencies use lower-bound ranges rather than exact pins, which is a reproducibility and supply-chain hygiene issue but not evidence of malicious behavior in the skill artifacts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to public market-data services is expected for the stated purpose and disclosed in the documentation. Local inspection found no requests for API keys, browser profiles, auth/session stores, private files, environment secrets, or arbitrary user-controlled URLs.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill suggests optionally copying usage instructions into persistent agent context such as TOOLS.md, which would make the finance lookup ability available across sessions. The artifacts do not create background workers, startup hooks, privilege escalation, persistent collection, or destructive local changes.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Outbound network-backed financial lookup is inherent to the skill and is described in SKILL.md; the lack of a formal permission declaration is a transparency gap, not a purpose mismatch.\n[SQP-1] unexpected: The generic 'Tell me about' route is overbroad and could cause unintended market-data lookups, but the observed effect is limited to disclosed read-only external data retrieval.\n[SQP-2] expected: The self-test intentionally exercises many available tools and can create heavy network activity; this should be user-directed or gated, but it is documented as a diagnostic feature.\n[SQP-2] expected: The complete-analysis routine chains many data-fetching functions for a deep-dive request. That breadth is purpose-aligned, though users should expect substantial outbound Yahoo Finance activity.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with the artifact review; it was used only as supporting signal.\n[staticScan] expected: Static scan reported no suspicious findings, and local review likewise found finance data calls, validation, rate limiting, and no destructive or credential-handling code.",
+          "guidance": "Install only if you want an agent to make Yahoo Finance-backed market-data requests. Use it in an isolated virtual environment, consider pinning dependencies for repeatable installs, narrow the routing rules to explicit finance questions, and avoid running self-test or complete analysis unless you expect many outbound requests.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Yahoo Finance lookup skill with some routing, dependency, and bulk-query hygiene issues, but no evidence of trading, credential theft, destructive behavior, or hidden persistence.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974624308,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: stocks\nVersion: 4.2.1\n\nThe 'stocks' skill is a comprehensive financial data suite providing over 50 tools for accessing Yahoo Finance data. The core logic in `scripts/yfinance_ai.py` is well-structured and includes robust security practices such as input validation via Pydantic (e.g., `TickerValidator` using regex), rate limiting, and error handling with exponential backoff. While the `SKILL.md` instructions guide the AI agent to execute Python code via a shell command (`python3 -c`), this is a standard integration pattern for the OpenClaw framework and lacks any indicators of malicious intent, data exfiltration, or unauthorized persistence.",
+          "checkedAt": 1779163891153,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "fd8011ead649ac83d8834f396b34a4c9d017751693366debd9d3855e75080f5f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/fd8011ead649ac83d8834f396b34a4c9d017751693366debd9d3855e75080f5f"
+    },
+    "slug": "stocks",
+    "source_type": "clawhub",
+    "version": "4.2.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

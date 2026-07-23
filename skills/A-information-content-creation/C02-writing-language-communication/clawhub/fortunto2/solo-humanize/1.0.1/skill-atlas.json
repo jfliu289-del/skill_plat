@@ -1,0 +1,129 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C02:token:writing",
+      "category:C10:token:ai",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "16ab485acd39a6d8d6d1d0b80da517b526e5861d74c86e6d26c9cd0ebac2bf1a",
+    "content_hash": "152cec7752bd1c7c3fbd017cb18334e435b9c7fae9301ed564aeb923e9c88d3f",
+    "precanonical_content_hash": "aaab9715b880c0ba7ec48ca9b57b1d32a633df2aa5e65382c82d540c1282e74c",
+    "skill_md_hash": "0505099fb60d5e7dc51386d77da13de07a0a368b3153d7cbf2a46bea48e19162",
+    "version_metadata_sha256": "114c974d25c7098cb3b415c6d2aace2c4f61fe6fbc842f5713f6b265e99576ba"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/fortunto2/skills/solo-humanize",
+    "claim_id": "81ff87d2f2336365b6421632bafa42066b80c9e6b64e839bc46910ab9a9d1ca4",
+    "index_entries": [
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "solo-humanize",
+        "url": "https://clawskills.sh/skills/fortunto2-solo-humanize"
+      }
+    ],
+    "owner_handle": "fortunto2",
+    "owner_id": "s17ccp4nxta4tm3ahx4kexjbq5885bd3",
+    "published_at": 1771711587737,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943544244,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943544244,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to humanize prose by removing AI-writing patterns, and Read/Write/Edit/Grep/Glob fit a user-directed text cleanup workflow.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill triggers on broad editing phrases such as \"clean up the copy,\" but its behavior is described as rewriting provided text or a provided file path rather than acting on unrelated content.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains a single SKILL.md instruction file with no executable scripts, install commands, downloads, or external service setup.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no request for credentials, session stores, environment variables, network access, background workers, or broad private indexing; file access is tied to editing user-supplied text.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "For file-path input, the skill explicitly rewrites the source file in place and only then shows a diff summary. This is disclosed and purpose-aligned, but it can overwrite original prose if invoked on the wrong file.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The line noting that file inputs are rewritten in place is real. It creates accidental overwrite risk, but it is disclosed and central to the text-editing purpose rather than hidden or unrelated behavior.\n[SQP-2] expected: The later process step also instructs writing cleaned content back to the file. A preview-first workflow would be safer, but the artifact does not show deception, exfiltration, or destructive behavior beyond user-directed content rewriting.\n[VirusTotal code_insight] expected: The telemetry flags broad file modification capability. That concern is supported only as an integrity-risk note: the artifact is a file-editing skill, all engines were undetected, and there is no separate artifact evidence of malicious behavior.",
+          "guidance": "Install this only if you are comfortable with a writing helper that may overwrite files you explicitly give it. For important documents, ask the agent to preview the rewrite or produce a diff before applying changes, or use pasted-text mode to avoid modifying originals.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward text-editing skill that can overwrite files the user points it at, so it should be used with care but does not show hidden or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943518524,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: solo-humanize\nVersion: 1.0.1\n\nThe skill requests broad file system modification permissions (`Read`, `Write`, `Edit`, `Glob`, `Grep`) in `SKILL.md`. It explicitly instructs the agent to 'read and rewrites in place' for files provided via `$ARGUMENTS`, allowing it to modify arbitrary files on the system. While the stated purpose is benign (humanizing text) and includes safeguards like 'What NOT to change', the unrestricted file modification capability presents a significant vulnerability for data corruption or unintended changes to critical system files if misused or given an inappropriate path, even without clear malicious intent.",
+          "checkedAt": 1779165753184,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "16ab485acd39a6d8d6d1d0b80da517b526e5861d74c86e6d26c9cd0ebac2bf1a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/16ab485acd39a6d8d6d1d0b80da517b526e5861d74c86e6d26c9cd0ebac2bf1a"
+    },
+    "slug": "solo-humanize",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

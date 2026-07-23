@@ -1,0 +1,135 @@
+{
+  "classification": {
+    "artifacts": [
+      "configuration"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.475,
+    "domains": [
+      "infrastructure"
+    ],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C08:token:deploy",
+      "cross-tag:agent-management",
+      "cross-tag:deployment",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [],
+    "stages": [
+      "deliver",
+      "operate"
+    ],
+    "tasks": [
+      "deploy",
+      "manage",
+      "operate"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "8a0a904b0e1fcd895452ca9dc11645b75d28dea36500232ca89cfd223a35230b",
+    "content_hash": "06f4891752d5d44196545215cfbbc0cd9218091d9b123883830959a3e5cea3b9",
+    "skill_md_hash": "4fbfd2533faf6dd929d978c39403ea05e0438ff6ba3f32e84a4e0ca8f18bb8b4",
+    "version_metadata_sha256": "9e0b4b8006b02911001ed262cafd89864d9aa92de88a53954880a933856e87a8"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/aronchick/skills/expanso-json-validate",
+    "claim_id": "ba0a5e65db2e01a5eaedd4a06c09d89dc80c77aa1823c02f197adc0842099d5c",
+    "index_entries": [
+      {
+        "index_path": "categories/cli-utilities.md",
+        "label": "expanso-json-validate",
+        "url": "https://clawskills.sh/skills/aronchick-expanso-json-validate"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "aronchick",
+    "owner_id": "s17fa42qpeysjrnwgx6nzdyj75884r3b",
+    "published_at": 1770753107194,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968101873,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968101873,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The pipelines parse user-provided JSON, return validity, parsed content, basic stats, and metadata; this matches the stated validation purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions are limited to CLI, MCP, and cloud deployment usage examples, with no prompt-injection, agent override, unrelated automation, or hidden behavior found.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "It requires the Expanso Edge binary and suggests installing expanso-edge, but no credentials, privileged setup, package scripts, or shell-execution payloads are included in the artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "MCP mode enables an HTTP server on /validate and binds to 0.0.0.0 by default; this is disclosed in the MCP pipeline and README, but users should avoid exposing it beyond trusted local environments.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, privilege escalation, credential access, local profile/session access, destructive file operations, or background worker behavior beyond the user-started MCP server is indicated.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SDI-2] expected: The http_server input is part of the documented MCP mode, so it is purpose-aligned; the 0.0.0.0 default binding is a real deployment caution but not evidence of hidden or malicious behavior.\n[SDI-4] expected: The manifest says local/no API calls while also listing http_server, but README and pipeline-mcp.yaml disclose the MCP HTTP endpoint; this is a documentation/scoping note rather than a Review-level mismatch.",
+          "guidance": "Appropriate to install for JSON validation. If using MCP mode, run it only on trusted machines or restrict the bind address/firewall, because the default server configuration listens on all interfaces and has no artifact-level authentication.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward JSON validation skill; its only notable caution is that MCP mode starts an HTTP endpoint.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968060902,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: expanso-json-validate\nVersion: 1.0.0\n\nThe OpenClaw skill 'json-validate' is designed to validate JSON syntax and structure. The `pipeline-cli.yaml` and `pipeline-mcp.yaml` files implement this functionality using Expanso's built-in `parse_json()` function, collecting basic metadata like content hash and length. There are no indications of shell command execution, unauthorized file system access, external network calls (beyond serving an HTTP endpoint in MCP mode), or attempts to exfiltrate sensitive data. The `SKILL.md` and `README.md` files provide usage instructions for the user/agent but do not contain any prompt injection attempts or malicious directives. The `skill.yaml` explicitly states no credentials are required and uses only local processing components.",
+          "checkedAt": 1779162956065,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "77e7a73be6d51fcbfe07bf6cc491a9e660517f46c838d47bec9bb7387fac1cb9",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/77e7a73be6d51fcbfe07bf6cc491a9e660517f46c838d47bec9bb7387fac1cb9"
+    },
+    "slug": "expanso-json-validate",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

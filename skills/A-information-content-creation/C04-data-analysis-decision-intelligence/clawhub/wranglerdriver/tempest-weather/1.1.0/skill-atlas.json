@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C18:token:home",
+      "category:C19:token:device",
+      "cross-tag:data-analysis",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C18",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "cb491ec6770aaea2ac5b3d004e88989ccc3ca9899c6dc70dfe101f9dbba942bd",
+    "content_hash": "429fccc9c38ea37958154b7255b449a48eec901cd5b6e8cdb32354537ecb415b",
+    "precanonical_content_hash": "064aae6cffcd357bb37851842563138f0161bdae35c40ff4e380cd44d17a0fd4",
+    "skill_md_hash": "816a11a1ca81fb73949bed1950cfbb35093c76d642ddd1eb8c40be30647e8f55",
+    "version_metadata_sha256": "fa584137b66d920426e83362a995b78e3a34640a09dd4b82ecdabd63adb4d893"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/wranglerdriver/skills/tempest-weather",
+    "claim_id": "4c3e2859146a62b82dd8ffc1b01fdd84f3f38aa07199661b2c198f31d47fc852",
+    "index_entries": [
+      {
+        "index_path": "categories/smart-home-and-iot.md",
+        "label": "tempest-weather",
+        "url": "https://clawskills.sh/skills/wranglerdriver-tempest-weather"
+      }
+    ],
+    "owner_handle": "wranglerdriver",
+    "owner_id": "s17fhkqp2dbr5x29ddnp6w0e1d8853t0",
+    "published_at": 1771881612782,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972811401,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972811401,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill’s stated purpose and code match: it fetches current observations and historical stats from WeatherFlow Tempest APIs. The data can reveal home-station weather context, so users should treat it as personal local data.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are limited to running the Python fetch script, but the trigger text includes generic phrases like home or backyard weather that could activate the skill when a general weather answer was intended.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No install hook or hidden setup behavior was found. The package script copies files into a temporary package directory and invokes a configurable OpenClaw packaging helper.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Requiring TEMPEST_API_TOKEN plus a station or device ID is proportionate to the API integration, and output URLs redact the token.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background worker, persistence, credential storage, privilege escalation, destructive behavior, or broad local file indexing is evidenced.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-1] expected: Confirmed that the trigger wording is somewhat broad, but it remains related to Tempest/home weather use and is disclosed as Tempest-sourced; this is a user-awareness caveat, not enough for Review by itself.\n[staticScan] expected: Static scan reported no findings, consistent with artifact review.\n[VirusTotal] expected: VirusTotal telemetry was clean and aligns with the observed read-only WeatherFlow API behavior; it was treated as supporting telemetry only.",
+          "guidance": "Install this if you want your agent to read your Tempest station data. Store the Tempest API token in environment configuration, not chat, and be aware that broad requests like home or backyard weather may use your station-specific data rather than a general weather source.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent read-only Tempest weather skill that uses a user-provided token to fetch station data from WeatherFlow.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972753456,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: tempest-weather\nVersion: 1.1.0\n\nThe OpenClaw skill 'tempest-weather' is benign. The `get_tempest_weather.py` script correctly fetches weather data from the hardcoded WeatherFlow Tempest REST API (`https://swd.weatherflow.com/swd/rest`) using `urllib.request`. It handles API tokens securely by expecting them from environment variables or CLI arguments and redacting them in output URLs. The `SKILL.md` and `README.md` provide clear, functional instructions for the AI agent and do not contain any prompt injection attempts or directives for malicious actions. The `package_clean.sh` script is a standard build script that uses `rsync` to clean the package and calls the OpenClaw framework's `package_skill.py`.",
+          "checkedAt": 1779163498977,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "7c89b3e994ce497a4d38eb1727ab8668a601a2900a240f8c1139ad868f03b234",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/7c89b3e994ce497a4d38eb1727ab8668a601a2900a240f8c1139ad868f03b234"
+    },
+    "slug": "tempest-weather",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,174 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report",
+      "website"
+    ],
+    "audiences": [
+      "business",
+      "data-professional",
+      "developer",
+      "marketer"
+    ],
+    "confidence": 0.23,
+    "domains": [
+      "business",
+      "marketing",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:sources",
+      "category:C04:token:analyze",
+      "category:C06:token:api",
+      "category:C06:token:implementation",
+      "category:C10:token:ai",
+      "category:C14:token:customer",
+      "category:C17:token:notes",
+      "category:C19:token:browser",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:data-analysis",
+      "cross-tag:marketing-sales",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C04",
+      "C06",
+      "C10",
+      "C14",
+      "C17",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "automate",
+      "build",
+      "manage",
+      "market",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4c550d4a3cdfec181e41b673850f7a2d1e1c74fc41a597101398370b8622c640",
+    "content_hash": "718e69f83cb538c3162489ce9c7bf13233f42151a9b330c3246eaf5d6dafa53a",
+    "precanonical_content_hash": "4519de7bc35b8b30fe0628516b4dab03bf5e9d384d6210ef2c9c407810e3473c",
+    "skill_md_hash": "7434f80adc562555f7129b46c975f90393e01b22efb2d584546f6e654baea761",
+    "version_metadata_sha256": "7090db8f023b24bc9904bc1aae706a39cd2f5d23176c82e2cbf2ddcae823b9f7"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/grahac/skills/botsee",
+    "claim_id": "5eb40b6f948195d1ce629a8b528e8c2391e301714f3bcfd27e9277842fe3a66b",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "botsee",
+        "url": "https://clawskills.sh/skills/grahac-botsee"
+      },
+      {
+        "index_path": "categories/marketing-and-sales.md",
+        "label": "botsee",
+        "url": "https://clawskills.sh/skills/grahac-botsee"
+      }
+    ],
+    "owner_handle": "grahac",
+    "owner_id": "s173xn0majnn6vwtypednapqa98859r9",
+    "published_at": 1771979432858,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779940263112,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779940263112,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The skill's capabilities match its stated BotSee purpose: signup, API-key based account access, site setup, analysis, content generation, results retrieval, and BotSee resource management. It also includes USDC top-up/signup and remote archive/delete operations, which are disclosed and purpose-related but higher impact.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands are framed as user-invoked /botsee actions and generally map directly to the bundled Python CLI. The artifacts do not show hidden automatic execution, but destructive archive/delete operations lack an explicit confirmation step in the instructions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a standard skill/plugin copy with a manifest pointing to skills/botsee and a bundled Python script. There is no post-install hook, self-update mechanism, package installation, or arbitrary shell execution path in the inspected artifacts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to the BotSee API and use of a BotSee bearer token are proportionate for the service. The BOTSEE_BASE_URL environment override can redirect authenticated API traffic if set, so it should be treated as a trusted development/testing override only.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists BotSee API and signup state under ~/.botsee and workspace configuration under .context. This is disclosed and purpose-aligned, with owner-only permissions attempted for sensitive files, but it is still long-lived local credential storage rather than an OS keychain.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[TT3] expected: Confirmed: the API origin comes from BOTSEE_BASE_URL and bearer tokens are sent to that origin. This is a real configuration risk if the environment is untrusted, but the artifact does not set the variable itself and the default endpoint is BotSee over validated TLS.\n[SQP-2] unexpected: Confirmed in README examples: users are told to paste an API key into chat. This is unsafe documentation, but the current SKILL.md flow retrieves the key via signup-status or explicit CLI flag and no passive chat key detection was found.\n[SSD-3] unexpected: The secret-disclosure concern is supported by stale README text, not by hidden runtime behavior. Users should avoid following the chat-paste examples.\n[SQP-2] expected: Automatic saving of the BotSee API key to ~/.botsee/config.json is disclosed in SKILL.md and implemented for signup completion; this is expected for the integration, though users should understand the local persistence.\n[SQP-2] expected: Archive and delete commands are real remote mutations and should be used carefully. They are visible commands requiring user-supplied targets, so this is purpose-aligned rather than hidden behavior.\n[VirusTotal] expected: VirusTotal telemetry reported no detections and its benign summary is consistent with artifact inspection, but it was treated only as supporting signal.",
+          "guidance": "Install only if you trust BotSee with your BotSee account data and want an agent to manage that account. Do not paste API keys into ordinary chat despite the stale README examples; prefer the signup-status flow or a deliberate local CLI invocation. Keep BOTSEE_BASE_URL unset unless testing a trusted BotSee endpoint, and confirm payment amounts, wallet/proof details, UUID targets, and archive/delete actions before running them.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The BotSee skill is a coherent API integration, but users should handle its API key, payment flows, and delete/archive commands carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779940190854,
+          "issueCount": 9,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: botsee\nVersion: 0.2.5\n\nThe OpenClaw AgentSkills skill bundle for BotSee is classified as benign. The Python script (`scripts/botsee.py`) primarily interacts with the `botsee.io` API using `urllib.request` with proper SSL certificate validation. It implements secure handling of API keys by storing them in `~/.botsee/config.json` with strict `0o600` file permissions. Crucially, the `CHANGELOG.md` explicitly notes the removal of a self-update mechanism (mitigating supply chain risk) and a passive API key detection method in `SKILL.md` (addressing a prompt injection vector), demonstrating a strong commitment to security. There is no evidence of arbitrary command execution, data exfiltration beyond the stated purpose, or persistence mechanisms. Minor discrepancies exist between `README.md` and `botsee.py` regarding supported arguments for USDC payment, but these result in the script being less permissive, not more, and do not indicate malicious intent.",
+          "checkedAt": 1779165611258,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "c5478448f1421f66a37d48b6f30f9f079cd4ce029aa2a3e9bf9feafdd2607936",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/c5478448f1421f66a37d48b6f30f9f079cd4ce029aa2a3e9bf9feafdd2607936"
+    },
+    "slug": "botsee",
+    "source_type": "clawhub",
+    "version": "0.2.5"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

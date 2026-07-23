@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:plugin",
+      "category:C06:token:api",
+      "category:C10:token:model",
+      "category:C18:token:health",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C10",
+      "C18"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "b849f7b912e5c13b5fb13e96cb1520102fa4b6b59abf3f80c766c35190014ef4",
+    "content_hash": "a693e86f7f71e514c876bb68c4d89808305a088a08d12c688455e189f5e4d9a5",
+    "skill_md_hash": "11e5ff32e1bc97fbffc94741f551b16d6d0eb523b5f1232c1cde849a85dc816c",
+    "version_metadata_sha256": "72d6495eada9412b48919834093b471d5aa7f1d6262d294743f5a4aab4479b65"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/emberdesire/skills/jasper-configguard",
+    "claim_id": "bed650120357ba45f0d54db482fbe50f3153fbb12fa5e48e0b8063d9663e0177",
+    "index_entries": [
+      {
+        "index_path": "categories/health-and-fitness.md",
+        "label": "jasper-configguard",
+        "url": "https://clawskills.sh/skills/emberdesire-jasper-configguard"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "emberdesire",
+    "owner_id": "s177cfz66zn5hh0s9eedtt4bbh885v1b",
+    "published_at": 1770370396786,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658849758,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658849758,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The live config edits, backups, gateway restart, health check, and rollback behavior match the stated purpose of safer OpenClaw configuration changes.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The README and SKILL.md disclose patch, restore, diff, dry-run, validation, restart behavior, and array replacement semantics; the early usage examples could be more cautionary, but the behavior is not hidden.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is presented as npm global or npx usage, package.json exposes CLI binaries, and there are no install-time scripts or dependency hooks in the package metadata.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "File access is scoped to OpenClaw config and local backup paths by default, with localhost health checks; backups and diffs may include sensitive config values if the user's OpenClaw config contains them.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists timestamped backups under ~/.openclaw/config-backups and prunes old backups, and it sends a fixed signal to processes matching openclaw-gateway to reload or restart; this is impactful but disclosed and purpose-aligned.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The concern about users needing clearer warning for live patching and array replacement is partly supported as a documentation-improvement point, but README later documents dry-run, restart/rollback behavior, and full array replacement.\n[suspicious.dangerous_exec] expected: Static scan flagged child_process use; the artifact uses fixed pgrep/kill commands for OpenClaw gateway process detection and signaling, not user-controlled arbitrary command execution.\n[VirusTotal clean telemetry] expected: VirusTotal reported no malicious or suspicious detections and described the local file, process, and localhost network behavior as consistent with the tool's purpose; this was treated as supporting telemetry only.",
+          "guidance": "Install this only if you want a tool that can modify and restart your OpenClaw gateway. Use --dry-run before applying patches, be careful that arrays are replaced wholesale, and protect or periodically review ~/.openclaw/config-backups because backups may contain provider keys or other private settings from openclaw.json.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This appears to be a legitimate OpenClaw configuration safety tool that edits local config, backs it up, restarts the gateway, and rolls back on failed health checks.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658808797,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 11,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: jasper-configguard\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle 'jasper-configguard' is designed for safe configuration management with automatic rollback for the OpenClaw gateway. The code (cli/configguard.js, src/index.js) uses file system operations (read/write config, manage backups in ~/.openclaw), process management (pgrep and kill -USR1 for 'openclaw-gateway' to restart), and local network calls (http.get to localhost:18789 for health checks). These actions are all directly and plausibly required for its stated purpose. There is no evidence of data exfiltration, arbitrary malicious execution, persistence mechanisms, or prompt injection attempts in SKILL.md or README.md. The capabilities, while involving system interaction, are tightly scoped to the intended function and do not indicate intentional harmful behavior.",
+          "checkedAt": 1779161825061,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "51e4ca3328e1f48dc08dd8fc1ce0855bbfc172e5ca025555625b8493aa3d0338",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/51e4ca3328e1f48dc08dd8fc1ce0855bbfc172e5ca025555625b8493aa3d0338"
+    },
+    "slug": "jasper-configguard",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

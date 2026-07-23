@@ -1,0 +1,163 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.325,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:find",
+      "category:C01:token:search",
+      "category:C04:token:data",
+      "category:C04:token:metrics",
+      "category:C06:token:api",
+      "category:C06:token:code",
+      "category:C08:token:cd",
+      "category:C08:token:ci",
+      "category:C08:token:github",
+      "category:C11:token:project",
+      "category:C18:token:travel",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:planning",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C01",
+      "C04",
+      "C06",
+      "C11",
+      "C18"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "plan",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "39393be47edca448ab2d2e1ab55d28a6cec24c33f68ff17b061e9347bc7a69d1",
+    "content_hash": "bc2f66a6ac82fc32c221eaedc2dc806e73ac62db759806971b9f32daf54d799f",
+    "precanonical_content_hash": "47480c5fcc77641f28d13d5aa94d730c75d253f7173d1341740303dbd7d8b69d",
+    "skill_md_hash": "b6e5a4e206285dd912c95dad8c55bf4c6fc00bbb2ea8181c19c1b77364af439e",
+    "version_metadata_sha256": "c39cca1bf79beba9706ec4e44bafa982011a1f38433e49a99bdeca0e1acfe1c9"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/lyz1990/skills/variflight",
+    "claim_id": "c8fe49eaba6397da6ebefe6c4f2259d36f34e980d176735f1352bfbbea7b1f09",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "variflight",
+        "url": "https://clawskills.sh/skills/lyz1990-variflight"
+      }
+    ],
+    "owner_handle": "lyz1990",
+    "owner_id": "s17ftc9vmwmwntsxfv77qnaqq1885fpj",
+    "published_at": 1770792791930,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968959720,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968959720,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is flight, train, weather, price, and itinerary lookup through Variflight, and the scripts implement that by sending selected query parameters to a hardcoded Variflight HTTPS endpoint.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions disclose the endpoint and API key use, but examples also show command-line keys and plaintext config files without strong warnings about shell history, process listings, file permissions, commits, or shared environments.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is documented as cloning or copying scripts; inspected files show shell wrappers and one Python script, with no install-time execution, dependency installer, obfuscation, or persistence setup.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to ai.variflight.com and use of travel query data are proportionate for the skill, but users should understand that itinerary-like details and the API credential are sent to that external service.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The runtime reads API keys from environment variables or local config files, including home-directory and OpenClaw workspace locations; it does not write files, escalate privileges, or create background persistence.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: Verified: the artifacts support API keys via command-line flags and plaintext config examples. This is a legitimate integration mechanism, but the documentation under-warns about accidental credential exposure.\n[SQP-2] expected: Verified: the skill sends travel query parameters and an API key to the documented Variflight HTTPS endpoint. That external data flow is core to the skill, though a clearer privacy notice would help.\n[VirusTotal code_insight] expected: The clean telemetry matches inspection: the scripts wrap variflight.py, which JSON-serializes endpoint parameters and posts to the documented Variflight endpoint without eval, shell downloaders, obfuscation, or persistence.\n[staticScan] expected: Static scan reported no suspicious patterns, consistent with the artifact review.",
+          "guidance": "Install only if you intend to use Variflight and are comfortable sending travel queries to its API. Prefer a protected environment variable or secret manager for VARIFLIGHT_API_KEY, avoid passing the key on the command line, do not commit config files containing the key, set restrictive permissions on local key files, and do not bake live keys into Docker images or shared settings.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward Variflight travel-query wrapper, with a real API-key handling caveat but no evidence of hidden, destructive, or unrelated behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968916200,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 58,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: variflight\nVersion: 1.0.1\n\nThe OpenClaw AgentSkills skill bundle is benign. All shell scripts act as wrappers, safely passing arguments to the `variflight.py` Python script. The Python script correctly parses arguments, loads API keys from expected locations, and then securely serializes all user-provided parameters into a JSON body before making an HTTP POST request to a hardcoded, legitimate Variflight API endpoint (`https://ai.variflight.com/api/v1/mcp/data`) using `urllib.request`. There is no evidence of prompt injection in `SKILL.md` or `README.md`, no data exfiltration, no malicious execution (e.g., `eval`, `os.system`, `curl|bash`), and no attempts at persistence or obfuscation.",
+          "checkedAt": 1779163120124,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "7dbfe17a77adc36c42371dcf3a0bf4bc022e03bd91c29499f9a690651ced3b63",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/7dbfe17a77adc36c42371dcf3a0bf4bc022e03bd91c29499f9a690651ced3b63"
+    },
+    "slug": "variflight",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

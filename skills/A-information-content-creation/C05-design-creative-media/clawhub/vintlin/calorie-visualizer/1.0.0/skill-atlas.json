@@ -1,0 +1,136 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:image",
+      "category:C18:token:food",
+      "cross-tag:design"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C18"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e7d99b9ea993fa99ce15faff3043a5b57536b632faf631a4f467934b212848da",
+    "content_hash": "999e72a9f9a1166992c7dc468409ecddec0b8f21b85ff27a39dc92d8da5c3d47",
+    "precanonical_content_hash": "6589640bbd7e08d92dad163267f3544170a5b40617dbc932732ce44e559754f2",
+    "skill_md_hash": "a2c0acbb1438a6dc2e7f66a2f9239e098cd2490897d84f84d2bb381dce6bb8e0",
+    "version_metadata_sha256": "2347f0dd9f64131cae809c8bf518a9bf40253e23a34d681e490caa1b975b7c1d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/vintlin/skills/calorie-visualizer",
+    "claim_id": "5ea09d202f7928b4a4001bca7c31484e0bf4a0127b43c88a740895f93de55c7c",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "calorie-visualizer",
+        "url": "https://clawskills.sh/skills/vintlin-calorie-visualizer"
+      },
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "calorie-visualizer",
+        "url": "https://clawskills.sh/skills/vintlin-calorie-visualizer"
+      }
+    ],
+    "owner_handle": "vintlin",
+    "owner_id": "s17adgm9mk40kgfmm51yrx3bj983hymj",
+    "published_at": 1771331023696,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972603319,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972603319,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "Meal logging, local SQLite storage, food lookup, TDEE calculation, and report-image generation all fit the stated calorie visualizer purpose. The data is health-adjacent, but the behavior is purpose-aligned and mostly disclosed.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands are user-directed CLI actions, and automatic report refresh after logging is documented. USER.md profile use and USDA fallback are disclosed, though the documented user_refused_profile setting is not a complete opt-out when USER.md exists because the code checks USER.md before that flag.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden install hook or privilege escalation was found. Installation requires Python dependencies from requirements.txt and a local Chromium/Chrome runtime through html2image, which is disclosed but expands the trusted dependency surface.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill reads only selected profile fields from USER.md for calorie targets and uses USDA_API_KEY only for optional food lookups. The default add-food flow may call USDA on a local database miss if the API key is configured, while --offline prevents that.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "It persists meal entries, config, optional photo paths, and cached food data locally in the skill directory. No background worker, startup persistence, credential harvesting, external sync, or destructive behavior was evidenced.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill uses local files, SQLite, subprocess rendering, environment variables, and optional network access. These capabilities are documented in SKILL.md or README.md and fit the purpose, though a formal permission declaration would improve transparency.\n[TP4] expected: The scanner's mismatch concern is mostly downgraded: USER.md-derived TDEE, local config, and optional USDA lookup are disclosed in the artifacts and align with calorie tracking.\n[SDI-1] expected: The USDA fallback sends food search text externally only when USDA_API_KEY is set and the local database misses. This is documented and has an --offline option, so it is a privacy note rather than a policy hold.\n[SDI-2] expected: Reading USER.md for height, weight, age, and gender is purpose-aligned for TDEE calculation and disclosed, but users should know this profile read happens automatically unless they set a manual daily_goal or avoid exposing USER.md.\n[SQP-2] expected: The sensitive-data concerns are valid as user guidance because diet logs and biometric profile fields are personal. The artifacts show local use rather than exfiltration or hidden collection.\n[SC1] expected: The lower-bound dependency versions are a supply-chain hygiene issue, but not evidence of malicious behavior.\n[SC4] expected: The Pillow advisory finding is not enough for a suspicious verdict because the requirement is a lower bound and does not force a known vulnerable version. Users should still install current patched packages.",
+          "guidance": "Install this only if you are comfortable keeping meal history and optional photo paths in a local SQLite database. Set a manual daily_goal if you do not want profile-derived calorie targets, and use --offline or leave USDA_API_KEY unset if you do not want food search terms sent to USDA. Keep Python packages and the local browser runtime patched.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent local calorie-tracking skill with disclosed privacy considerations around local health logs, USER.md profile fields, and optional USDA lookups.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972544071,
+          "issueCount": 12,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: calorie-visualizer\nVersion: 1.0.0\n\nThe OpenClaw skill 'calorie-visualizer' is classified as benign. All observed behaviors, including local SQLite database operations, reading user profile data from `USER.md` for TDEE calculation, optional external API calls to USDA for food data lookup (requiring `USDA_API_KEY`), and subprocess execution to generate visual reports using `html2image` (which requires a system browser), are clearly aligned with the skill's stated purpose. The `SKILL.md` and `README.md` are transparent about these functionalities and explicitly state 'No automatic external sync', indicating no intent for data exfiltration. There is no evidence of prompt injection, malicious execution, persistence mechanisms, or obfuscation.",
+          "checkedAt": 1779164811044,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "0e8f80581334a5a961439d80baac99273e0379e143ed8f5fb60ec283565404e0",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0e8f80581334a5a961439d80baac99273e0379e143ed8f5fb60ec283565404e0"
+    },
+    "slug": "calorie-visualizer",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

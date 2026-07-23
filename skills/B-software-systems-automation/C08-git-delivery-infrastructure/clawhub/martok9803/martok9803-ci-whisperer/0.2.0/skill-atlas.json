@@ -1,0 +1,151 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "document",
+      "report",
+      "website"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C02:token:write",
+      "category:C04:token:analyze",
+      "category:C06:token:api",
+      "category:C08:token:ci",
+      "category:C08:token:github",
+      "cross-tag:browser-automation",
+      "cross-tag:data-analysis",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C04",
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "automate",
+      "build",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "5e8a1aaf8f689bd792f6eb31b7e668bf993e7145534bd5b4a7ba9fc68c35b7d6",
+    "content_hash": "851cefa5c8028f30e560da15b869a6f9465f34f58337a4955caba444fbc8a5cb",
+    "precanonical_content_hash": "0fd22e45ee0a3efdca3b6eeb885f7d941c6e7f95237c6a1a3f3fc41b13f3352a",
+    "skill_md_hash": "7d8db351727fb7042cce94b32866015edf1e6b9753b047ec2035781b62c51dfc",
+    "version_metadata_sha256": "b090c786389a055a1ce8048a9c15dfe3a78ce85c41e6bc4e346eb2c6fea75309"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/martok9803/skills/martok9803-ci-whisperer",
+    "claim_id": "c6b141fd8d7723277f3e1f3ecdebda43b769653e21d2b0a73b21566669ca5ccd",
+    "index_entries": [
+      {
+        "index_path": "categories/git-and-github.md",
+        "label": "martok9803-ci-whisperer",
+        "url": "https://clawskills.sh/skills/martok9803-martok9803-ci-whisperer"
+      }
+    ],
+    "owner_handle": "martok9803",
+    "owner_id": "s17dnm09x6477qdyp9mt48bf2d884yqs",
+    "published_at": 1771260070799,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971384780,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971384780,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe fetching GitHub Actions run metadata/logs, summarizing failures, and proposing minimal fixes; the bundled script only wraps GitHub CLI run list/view/failed-log commands.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Default behavior is read-only, and repository mutation is allowed only when the user explicitly asks and CI_WHISPERER_WRITE=1 is set.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no install-time code, but the package metadata does not separately declare the GitHub CLI/auth dependency that the skill documentation describes.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Using an authenticated GitHub CLI account and reading CI logs is proportionate for CI diagnosis, but private logs may contain sensitive repository output or accidental secrets.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background persistence is shown; the only persistent effects are optional branch/PR creation in the documented opt-in write mode.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The concern is mostly a metadata transparency issue: the artifacts openly document GitHub CLI use, authentication, read-only defaults, and the write-mode toggle.\n[TP4] expected: The claimed behavior mismatch is not supported by the reviewed artifacts; run lookup/log retrieval and optional PR creation are described and fit the stated CI-debugging purpose.",
+          "guidance": "Install only if you are comfortable with the agent using your local GitHub CLI identity to inspect workflow runs and logs. Keep CI_WHISPERER_WRITE unset unless you deliberately want it to create a branch or PR, and review log excerpts because CI output can contain sensitive data.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed GitHub Actions troubleshooting helper with read-only defaults and an explicitly gated PR-creation mode.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971352816,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 45,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: martok9803-ci-whisperer\nVersion: 0.2.0\n\nThe OpenClaw AgentSkills bundle 'ci-whisperer' is classified as benign. The `SKILL.md` clearly outlines a legitimate purpose (analyzing GitHub Actions failures) and implements robust safety measures, such as requiring explicit user approval and an environment variable (`CI_WHISPERER_WRITE=1`) for any write operations (e.g., creating PRs). The `scripts/ci_autopsy.py` script uses the GitHub CLI (`gh`) in a read-only capacity, explicitly preferring `/usr/bin/gh` to prevent path hijacking, and uses `subprocess.run` with a list of arguments, which is a safer method against shell injection. There is no evidence of malicious intent, data exfiltration, unauthorized execution, or prompt injection designed to bypass security controls.",
+          "checkedAt": 1779164600005,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "6263ccd60edea8fc2ed9887ce026e721558765d9de8235b79e03bbcfe3ac3e7b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6263ccd60edea8fc2ed9887ce026e721558765d9de8235b79e03bbcfe3ac3e7b"
+    },
+    "slug": "martok9803-ci-whisperer",
+    "source_type": "clawhub",
+    "version": "0.2.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

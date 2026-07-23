@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C09:token:privacy",
+      "category:C09:token:security",
+      "category:C10:token:model",
+      "category:C12:token:management",
+      "cross-tag:search",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C10",
+      "C12"
+    ],
+    "stages": [
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "6b41652d7afa4f75180d7e8df77269a678c514de99575c9fc3b6bdd5534fabaa",
+    "content_hash": "965a52661c875ddbc649052a4c70e194f5c0315861229165459edaf48df8a5cf",
+    "precanonical_content_hash": "6c552aa069c07c4df0e4c408a363832f04bd812fc6f45019ccc6433de35b3c09",
+    "skill_md_hash": "af7f67b777254b7e5d4464a76a7e9adfe02bd504c5c8ccb0a170a3ae3aac54dd",
+    "version_metadata_sha256": "0dbcafb1e58a09e9ba93ad5261e3fbdd836a80534332912b697e820e6dc74da6"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/qsmtco/skills/session-state-tracker",
+    "claim_id": "c32191f64520a1f9e889a1936be6abd2a84b20ef82cd4a9724d993515446bf33",
+    "index_entries": [
+      {
+        "index_path": "categories/cli-utilities.md",
+        "label": "session-state-tracker",
+        "url": "https://clawskills.sh/skills/qsmtco-session-state-tracker"
+      }
+    ],
+    "owner_handle": "qsmtco",
+    "owner_id": "s17c6trzbwfqeabfg04zjp98cs884arg",
+    "published_at": 1771434214027,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967474483,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967474483,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is preserving session state across compaction and restarts, and the code implements that through lifecycle hooks, a CLI, and tools that read/write SESSION_STATE.md and optionally use memory_search to recover state from indexed sessions.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The documentation discloses automatic hooks and session transcript discovery, including that session_state_discover writes synthesized state; the code also stores a raw top transcript snippet in the state body, which is privacy-relevant but purpose-aligned.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is via ClawHub or copying the skill folder; package metadata declares only Node.js and js-yaml, with no arbitrary installer scripts, shell execution, or external download steps in the artifacts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill uses OPENCLAW_WORKSPACE to locate SESSION_STATE.md and may call the injected memory_search tool over session indexes. This is proportionate to recovery/state tracking, but depends on the user's memory backend configuration.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The plugin enables pre-compaction, post-compaction, and session-start hooks that automatically write SESSION_STATE.md and inject concise system reminders. This is disclosed and central to the feature, but it is persistent automation users should deliberately enable.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] expected: Verified: discoverFromSessions queries indexed sessions. This is disclosed in SKILL.md and directly supports rebuilding lost session state, so it does not indicate malicious behavior.\n[SDI-4] expected: Partly supported: inline code comments and file permissions emphasize SESSION_STATE.md, but SKILL.md explicitly discloses memory_search and indexed session transcripts. This is a documentation nuance, not a hidden capability.\n[SQP-2] expected: Verified: discovery writes synthesized state automatically with validation disabled. Automatic persistence is disclosed and purpose-aligned, though users should know it may update the state file without a separate confirmation at hook time.\n[SSD-3] expected: Verified: the top session snippet is copied into the persistent body field and dry-run logging can print a short prefix. This is local and related to state recovery, but it can preserve sensitive conversation text.\n[VirusTotal-code_insight] expected: Clean telemetry is consistent with the artifact review: no network APIs, shell execution, arbitrary filesystem traversal, credential access, or exfiltration behavior was found.",
+          "guidance": "Install this only if you are comfortable with automatic lifecycle hooks. If session indexing is enabled, the skill may search recent transcripts and persist a short snippet into SESSION_STATE.md; avoid using discovery in workspaces where prior sessions may contain secrets or personal data, or disable the hooks/discovery behavior if you want manual-only state updates.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill is coherent and local, but users should understand that its automatic discovery can copy recent session snippets into a persistent workspace state file.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967420366,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: session-state-tracker\nVersion: 2.0.0\n\nThe OpenClaw AgentSkills skill bundle 'session-state-tracker' is classified as benign. The documentation (SKILL.md, README.md) explicitly states that the skill operates entirely locally, does not call external endpoints, and only reads/writes to `SESSION_STATE.md` within the workspace. Code analysis of `hooks/*.js`, `scripts/cli.js`, `scripts/state.js`, and `scripts/tools.js` confirms these claims, showing no network calls, no arbitrary file system access, no shell execution, and no attempts at data exfiltration. The `openclaw.plugin.json` file also explicitly limits file system permissions to `SESSION_STATE.md` for both read and write operations. The use of `js-yaml` and atomic file writes are standard and secure practices. The skill's purpose is to manage session state, and its implementation aligns with this goal without exhibiting any malicious intent or significant vulnerabilities.",
+          "checkedAt": 1779164115544,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "6b41652d7afa4f75180d7e8df77269a678c514de99575c9fc3b6bdd5534fabaa",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6b41652d7afa4f75180d7e8df77269a678c514de99575c9fc3b6bdd5534fabaa"
+    },
+    "slug": "session-state-tracker",
+    "source_type": "clawhub",
+    "version": "2.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

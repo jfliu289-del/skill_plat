@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.5,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C02:token:language",
+      "category:C06:token:api",
+      "category:C08:token:cd",
+      "category:C08:token:ci",
+      "category:C08:token:git",
+      "category:C08:token:github",
+      "category:C11:token:project",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C02",
+      "C06",
+      "C11"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "f00a1dde5509464b50e9abd354ddb19ba0044b8b0b229f188010b081d2080cdf",
+    "content_hash": "538832638cfbfcc023f494307353a145cafa0b1b95417df4ed871e0abb7173d5",
+    "skill_md_hash": "6225a27a0a258082c1b3f9ed22dce5056c5c6ec3407279735314ed65ff83281b",
+    "version_metadata_sha256": "6841ab9b14f20425a30e5729203a90563b273802a9fbb8b427a9a14eb67074b8"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/ryudi84/skills/sovereign-project-setup-wizard",
+    "claim_id": "7d4740f67fca83919ebc62d93c560a73a9d9940eb6c523afcba51fa1adc980b4",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "sovereign-project-setup-wizard",
+        "url": "https://clawskills.sh/skills/ryudi84-sovereign-project-setup-wizard"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "ryudi84",
+    "owner_id": "s179sa8mgbgqvczdvr80yyh9fh885q9b",
+    "published_at": 1771720744470,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779948608272,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779948608272,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose and artifacts align: the skill generates Node.js, Python, Go, and Rust project structures with README, license, CI, Docker, and language-specific files.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The triggers are broad project-creation phrases, but they are still aligned with scaffolding intent; usage documents interactive and non-interactive operation, dry-run, output directory, Docker toggles, and --no-git-init.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a normal local OpenClaw skill with a bash entry script and git requirement. The script has CRLF line endings, which can break execution on Linux, but this is a reliability issue rather than malicious behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The script writes local project files under the selected output path and reads local git name/email only to prefill author metadata; there is no artifact evidence of network upload, credential harvesting, or unrelated data access.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill creates persistent files and initializes a local git repository by default, but these side effects are purpose-aligned and user-controllable through --dry-run and --no-git-init; no background persistence or privilege escalation is shown.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal/code_insight] unexpected: The reported shell-injection/RCE claim is not supported by artifact review: user values are quoted in command contexts, there is no eval or shell re-execution of variable contents, and a dry-run test after normalizing line endings printed command-substitution payloads literally rather than executing them.\n[SQP-1] expected: The generic trigger phrases could cause accidental invocation in an agent environment, but they are project-scaffolding related and do not show hidden or purpose-mismatched behavior.",
+          "guidance": "Install this only if you want a local bash-based scaffolder that writes many files. Use --dry-run first, choose a simple project name and output directory, use --no-git-init if you do not want a repository created, and review any git name/email copied into generated files before publishing.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed local project scaffolding tool that creates project files and may initialize Git, with no supported evidence of hidden execution or data theft.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948546716,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: sovereign-project-setup-wizard\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to a critical shell injection vulnerability (Remote Code Execution) present in `scripts/setup.sh`. User-controlled inputs such as `PROJECT_NAME`, `DESCRIPTION`, `AUTHOR_NAME`, and `AUTHOR_EMAIL` (obtained via command-line arguments, interactive prompts, or environment variables) are directly interpolated into shell commands and here-documents without proper sanitization. This allows an attacker to inject and execute arbitrary shell commands by crafting malicious input, for example, by providing a project name like `my-app$(rm -rf /)`.",
+          "checkedAt": 1779166086720,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "9561ac7105d9446097c1187fed64f1046853357bd40896fafea5873da6145d96",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/9561ac7105d9446097c1187fed64f1046853357bd40896fafea5873da6145d96"
+    },
+    "slug": "sovereign-project-setup-wizard",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C05:token:audio",
+      "category:C18:token:home",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05",
+      "C18"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "0f22eac95c4d7b5e5080a88c953fa397d84682dda570a6e183697cc01e93be14",
+    "content_hash": "128b68b67de17f19b3ff32cf0cd3b0f832cc037b3cea8078f73e343aac0bf9ff",
+    "precanonical_content_hash": "c8d43d80a878b11310b3e5885e268593edbd9b1710889549391f9673f79f0ec0",
+    "skill_md_hash": "217187023db6beda478dfaa23018261f186ec4230cf101fa72bb31fe99c624ee",
+    "version_metadata_sha256": "5f03a6e611a3515ffb80bbcdab59e837feb3c92af339140b7423583bf710386b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/asteinberger/skills/home-music",
+    "claim_id": "5ea9cd9e9917c8770c47bc300a315662ffeba8127ba70c3c0793980d78b1c731",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "home-music",
+        "url": "https://clawskills.sh/skills/asteinberger-home-music"
+      },
+      {
+        "index_path": "categories/smart-home-and-iot.md",
+        "label": "home-music",
+        "url": "https://clawskills.sh/skills/asteinberger-home-music"
+      }
+    ],
+    "owner_handle": "asteinberger",
+    "owner_id": "s17eknpz0e06033bpv8e5gee5n88412y",
+    "published_at": 1769324742847,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783651620589,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783651620589,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose matches the artifacts: the shell script starts preset Spotify playlists, routes audio through Airfoil, sets speaker volume, disconnects speakers, and reports status.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The natural-language triggers and examples include broad phrases such as party mode, chill music, house music, and stop music, which could cause unintended household audio changes if the platform routes them too eagerly.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is user-directed and disclosed, but it recommends chmod plus a sudo symlink into /usr/local/bin, creating a persistent global home-music command and potentially replacing an existing command of that name.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "macOS Automation, Spotify Desktop, Airfoil, and a local spotify-applescript helper are proportionate to the stated music-control purpose; the helper path is hardcoded to an author-specific location and should be reviewed or adjusted by users.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No launch agent, background worker, credential collection, data exfiltration, or autonomous persistence is present; persistence is limited to the optional global symlink and local app automation permissions.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The artifact does contain broad trigger phrases for music scenes; this is a real accidental-activation concern, but it is disclosed, directly related to music control, and not evidence of hidden or purpose-mismatched behavior.\n[SQP-1] expected: The usage examples use generic assistant-style requests such as starting party mode or stopping music; users should prefer explicit home-music invocations, but the examples align with the stated function.\n[TR2] expected: The stop music trigger could overlap with other stop semantics, but in this artifact it maps to the documented off/stop scene and does not show unsafe execution beyond local audio control.",
+          "guidance": "Before installing, review the speaker names, playlist URIs, volume levels, and the hardcoded spotify-applescript path. Use explicit commands like home-music party or home-music off, and consider using a user-local bin directory instead of the sudo /usr/local/bin symlink if you do not need global access.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill transparently controls local Spotify and Airfoil speaker scenes, with only accidental-activation and install-scope cautions.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783651598173,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 24,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: home-music\nVersion: 1.0.0\n\nThis skill is designed to control whole-house music scenes using Spotify and Airfoil on macOS. It uses AppleScript (`osascript`) to interact with the Airfoil application and relies on a local `spotify-applescript` skill for Spotify control. The `SKILL.md` provides clear installation instructions, including a `sudo ln -sf` command to create a symlink for global access, which is a common practice for CLI tools and not indicative of malicious intent. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts against the agent. All actions are aligned with the stated purpose.",
+          "checkedAt": 1779159906458,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "595e987d5dd58c7d06b19ddd5f2d62a69aa5bfc2dddc99ff45aad1caf64f5cba",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/595e987d5dd58c7d06b19ddd5f2d62a69aa5bfc2dddc99ff45aad1caf64f5cba"
+    },
+    "slug": "home-music",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

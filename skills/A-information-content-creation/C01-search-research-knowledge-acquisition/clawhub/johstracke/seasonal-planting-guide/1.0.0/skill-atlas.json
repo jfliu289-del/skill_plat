@@ -1,0 +1,156 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "security-professional"
+    ],
+    "confidence": 0.25,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:find",
+      "category:C01:token:search",
+      "category:C04:token:data",
+      "category:C09:token:security",
+      "category:C11:token:team",
+      "category:C17:token:knowledge",
+      "category:C17:token:schedule",
+      "category:C18:token:home",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:planning",
+      "cross-tag:search",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C09",
+      "C11",
+      "C17",
+      "C18"
+    ],
+    "stages": [
+      "discover",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "plan",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "fe64775cda77dbc294575cc78a614446cf0ee8b2ce152cce8d4e1caa0dc8ee52",
+    "content_hash": "4e139f1c12e0c0178d35066d1501520c61709928ca43b3cd59ac4d4c57396a4a",
+    "skill_md_hash": "2e713f2455dcd9085e258ef399166855ddf591dcc89c3d469dab2708127da587",
+    "version_metadata_sha256": "18366655f94fa26efff4b2394eb95719040658f64effb51b414606ff91d19118"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/johstracke/skills/seasonal-planting-guide",
+    "claim_id": "c5e51db8c371a6806b7026fe2797753a0ce52c0d7bb2c445a756dcdb8eadc853",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "seasonal-planting-guide",
+        "url": "https://clawskills.sh/skills/johstracke-seasonal-planting-guide"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "johstracke",
+    "owner_id": "s173d5fsnxa2pq9qbfax6fcewd8847r5",
+    "published_at": 1770551556732,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658573606,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658573606,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is seasonal garden planning, and the script implements plant lookup, monthly/yearly calendars, search, custom plant entries, and markdown export consistent with that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Instructions are user-invoked CLI examples and gardening guidance; no hidden role changes, prompt-injection behavior, background execution, or unrelated authority requests were found.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The artifact contains a markdown instruction file and one Python script using the standard library; there are no install hooks, package downloads, or privileged setup steps.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Local file access is proportionate for the tool: it stores custom data under ~/.openclaw/workspace and can write a user-requested export file under home, /tmp, or the OpenClaw workspace.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to the local planting_calendar.json file and requested markdown exports; no credential access, network activity, elevated privilege, scheduled task, or background worker was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-4] expected: The export path check broadly allows user home-directory paths, but that behavior is disclosed in SKILL.md and exports only occur for a user-supplied --export path; this is broader than a dedicated workspace but not hidden or purpose-mismatched.\n[SDI-4] expected: The runtime error message omits that /tmp is also allowed, while the SKILL.md security section correctly lists /tmp, home, and the OpenClaw workspace; this is a documentation polish issue rather than evidence of unsafe automatic behavior.",
+          "guidance": "Reasonable to install for garden planning. Be aware that adding custom plants saves notes locally under ~/.openclaw/workspace, and using --export can create or overwrite a markdown file at the path you choose, including many locations inside your home directory.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a local gardening calendar skill that only saves custom planting data and exports calendar files when the user asks it to.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658527710,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 12,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: seasonal-planting-guide\nVersion: 1.0.0\n\nThe skill provides a seasonal planting guide, storing its data in the designated OpenClaw workspace. The `SKILL.md` is purely instructional and does not contain any prompt injection attempts. The Python script `seasonal_planting.py` includes a robust `is_safe_path` function that strictly validates export paths, preventing writes to system directories or sensitive user files (e.g., `~/.ssh`, `~/.bashrc`), and restricts exports to the OpenClaw workspace, home directory, or `/tmp`. There is no network activity, external command execution from untrusted input, or access to sensitive environment variables or credentials.",
+          "checkedAt": 1779162196671,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "717c27eb67a1c3411b6393794aa23cd6463bfa9a004f9336c07921a338fbe366",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/717c27eb67a1c3411b6393794aa23cd6463bfa9a004f9336c07921a338fbe366"
+    },
+    "slug": "seasonal-planting-guide",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

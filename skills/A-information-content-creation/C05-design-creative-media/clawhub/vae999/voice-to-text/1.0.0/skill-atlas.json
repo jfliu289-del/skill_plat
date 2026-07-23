@@ -1,0 +1,122 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:audio",
+      "category:C17:token:notes"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "03afbaa0d5a7b53c5e7ae5f63f6f1111320335ff773fe86a8434fc9bdb5aadc5",
+    "content_hash": "f5b411f4851fb0e44d784fc750985143129e78491b5f25282e7fa197a40be598",
+    "precanonical_content_hash": "a39d0afe1d64dbdcefea341074f8a10a2e47c7798cc053b13a8d030bfd20368a",
+    "skill_md_hash": "6f27a760a0a69c121c3a37104068592f522f12efd1063c4518aa2604107ac215",
+    "version_metadata_sha256": "5d9bc2390005cbdecf30429cb52dca46193cf92fbb53edea58e86a3615cf22ec"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/vae999/skills/voice-to-text",
+    "claim_id": "195cfe19120d70764bfd71290fb71ac207d2d44a55a8fed75736f99ae03f365b",
+    "index_entries": [
+      {
+        "index_path": "categories/media-and-streaming.md",
+        "label": "voice-to-text",
+        "url": "https://clawskills.sh/skills/vae999-voice-to-text"
+      }
+    ],
+    "owner_handle": "vae999",
+    "owner_id": "s1731bvd4rq3bt1p1xn7ww2qh98848v6",
+    "published_at": 1771310191642,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972257755,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972257755,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, instructions, and transcribe.py implementation align: it converts a user-provided audio file with FFmpeg, loads a local Vosk model, and prints transcription text.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill tells the agent to run local commands on a provided audio path and optionally use VOSK_MODEL_PATH; this is disclosed and necessary for transcription, but users should expect local file processing.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Setup uses standard package managers for ffmpeg/vosk and manual curl/unzip downloads for Vosk models from alphacephei.com. These are purpose-aligned, though the registry install metadata appears less complete than the SKILL.md setup notes.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Environment use is limited to an optional model-path variable, local model directories under ~/.vosk/models, the selected audio file, and a temporary WAV file; no credentials or broad local indexing are requested.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No background execution, privilege escalation, startup persistence, agent-behavior modification, or unrelated mutation is present. The only file mutation is temporary WAV cleanup during transcription.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The shell command and environment-variable use are real, but they are disclosed, tied to local transcription, and implemented without shell-string execution for ffmpeg arguments. This supports a user guidance note rather than a Review verdict.\n[SQP-1] expected: The activation text is somewhat broad, but it remains tied to voice messages, audio files, and transcription requests. The usage section further scopes execution to a user-provided audio file path.",
+          "guidance": "Install only if you are comfortable installing ffmpeg and the vosk Python package and downloading Vosk model files. The skill processes the audio files you provide locally and reads models from ~/.vosk/models; verify that the chosen audio path is intentional and that you trust the model download source.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent offline voice transcription tool with disclosed dependency installs and no evidence of hidden data access or exfiltration.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972232554,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: voice-to-text\nVersion: 1.0.0\n\nThe skill is designed for voice-to-text transcription using Vosk and FFmpeg. All operations, including dependency installation and model downloads, are from official and legitimate sources (alphacephei.com for Vosk models, standard package managers for FFmpeg and Vosk Python package). The `transcribe.py` script correctly uses `subprocess.run` with a list of arguments for executing `ffmpeg`, which prevents shell injection vulnerabilities from user-provided audio file paths. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts against the agent. The code and instructions align with the stated purpose and lack high-risk behaviors.",
+          "checkedAt": 1779164763515,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "03afbaa0d5a7b53c5e7ae5f63f6f1111320335ff773fe86a8434fc9bdb5aadc5",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/03afbaa0d5a7b53c5e7ae5f63f6f1111320335ff773fe86a8434fc9bdb5aadc5"
+    },
+    "slug": "voice-to-text",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

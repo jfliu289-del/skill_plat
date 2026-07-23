@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C02:token:edit",
+      "category:C05:token:image",
+      "cross-tag:design",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "design",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a5e15371d3534bbbcbf8936f313432ad5b0f9ba3d62abd4264861e5191898114",
+    "content_hash": "87d42679dfeaec0216c6fdfff59ea5eced1b8a9b7bf55cfc35f738bda80cbfb6",
+    "precanonical_content_hash": "f69378ed21e79b19b61e18ae7669c78a438d1d2fd08e82bdb0b15c3dd8ff681e",
+    "skill_md_hash": "cb858ca963ccf00c23b48bf3138a2af42fee6bd2909e08b33f8d3828af477473",
+    "version_metadata_sha256": "af3e9c82aa94e19cc0290dde593c57aa48501b27ec4153b7e926602114c7084c"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/bextuychiev/skills/bex-nano-banana-pro",
+    "claim_id": "2f92f070770e9d9fcdef4a013cf7255abd1164faf84d4682403777aba6358ed0",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "bex-nano-banana-pro",
+        "url": "https://clawskills.sh/skills/bextuychiev-bex-nano-banana-pro"
+      },
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "bex-nano-banana-pro",
+        "url": "https://clawskills.sh/skills/bextuychiev-bex-nano-banana-pro"
+      }
+    ],
+    "owner_handle": "bextuychiev",
+    "owner_id": "s177z2a3gfctv2hc316sc9esr1885azf",
+    "published_at": 1771533260406,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779935920819,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779935920819,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, Replicate API use, REPLICATE_API_TOKEN requirement, and google/nano-banana-pro model all align; the only mismatch is documentation claiming image editing/Gemini 3 Pro Image while the script implements prompt-to-image generation only.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions tell the agent to run the included script with a user prompt, aspect ratio, and output path; the code sends only those parameters to Replicate and downloads the returned image.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no postinstall or automatic setup behavior; usage is explicit via uv with the replicate dependency.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The required REPLICATE_API_TOKEN and network call are expected for a Replicate image-generation skill and are disclosed in metadata and README text.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No persistence or privilege escalation is present, but the output path is user-controlled and not constrained, so users should avoid paths outside the intended workspace.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Network access to Replicate is purpose-aligned and disclosed through the description and required token, though a formal network permission is not separately declared.\n[TP4] unexpected: The scanner correctly notes a documentation mismatch: editing is claimed but not implemented. This affects clarity, not intent or hidden behavior.\n[SQP-2] expected: Sending the prompt to Replicate is expected for this remote image-generation skill and is reasonably disclosed by the Replicate API wording and token requirement.\n[SQP-2] expected: Downloading the generated remote image and writing it locally is expected, but the unconstrained output path deserves user caution.\n[VirusTotal code_insight] expected: The path-traversal concern is real as a hardening issue, but the output path is user-directed and documented; with no other malicious signal, it does not justify Review by itself.",
+          "guidance": "Install only if you are comfortable sending prompts to Replicate/Google through your REPLICATE_API_TOKEN. Use ordinary workspace-relative output filenames, avoid sensitive prompts, and treat the image-editing claim as unsupported by this version.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill coherently calls Replicate to generate an image and save it locally, with no evidence of hidden access or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779935878969,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 65,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: bex-nano-banana-pro\nVersion: 1.0.0\n\nThe `generate.py` script is vulnerable to path traversal via the `--output` argument. The `urllib.request.urlretrieve` function writes the downloaded image to the path specified by `args.output` without any sanitization or validation. This allows a malicious user or a compromised agent to specify a path like `../../evil.sh`, potentially writing files to arbitrary locations outside the skill's intended workspace. This is a significant vulnerability (lack of input sanitization) that could lead to arbitrary file writes, classifying the skill as suspicious rather than benign.",
+          "checkedAt": 1779165536986,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "a5e15371d3534bbbcbf8936f313432ad5b0f9ba3d62abd4264861e5191898114",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a5e15371d3534bbbcbf8936f313432ad5b0f9ba3d62abd4264861e5191898114"
+    },
+    "slug": "bex-nano-banana-pro",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

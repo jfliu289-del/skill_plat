@@ -1,0 +1,136 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.55,
+    "domains": [
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C07",
+    "reasons": [
+      "category:C07:token:debug",
+      "category:C07:token:testing",
+      "cross-tag:agent-management",
+      "cross-tag:debugging",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "debug",
+      "manage",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "af6d295908e264f3ea82d40effaab8770dfd5bf55a65c8f6062837f28c656011",
+    "content_hash": "a26161de629019191675dd56a92304aee4a2d5cce6ef542307ed51237efb1b73",
+    "precanonical_content_hash": "812c19b8c967bc7155acec9da826a9656181d5edb7285af9484ed6f5be69bcad",
+    "skill_md_hash": "293719b2f4f2cab35cf67719a1ffcb1b31b4856cb4d1b2d06a82c9f393694261",
+    "version_metadata_sha256": "4a94f9eceb864a8b50e143aacd8d40012236d1e42f57f07f4c503f882ca97228"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/humanagent/skills/xmtp-cli",
+    "claim_id": "b8b24dd7b352d2115b7f81693a4e0d173c4abc4d1d58f5c310d604aa9d2161bd",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "xmtp-cli",
+        "url": "https://clawskills.sh/skills/humanagent-xmtp-cli"
+      }
+    ],
+    "owner_handle": "humanagent",
+    "owner_id": "s172nd8vgpdsdqm6vv6v4fwspx885t39",
+    "published_at": 1769993827831,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783653729696,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783653729696,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented capabilities match the stated purpose: install/run XMTP CLI commands for setup, sending, listing, syncing, debugging, groups, content demos, and permissions.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Most commands are explicitly scoped to XMTP, but some trigger terms are broad and the send/group/permission examples can affect real external recipients or groups if run.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is disclosed as npm, pnpm, yarn, or npx-style execution of @xmtp/cli; the skill artifact itself contains markdown guidance only and no executable scripts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill asks users to configure wallet and database encryption secrets in environment variables, which is coherent for XMTP CLI setup but should include stronger secret-handling warnings.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden persistence, privilege escalation, obfuscation, destructive commands, or unrelated data exfiltration are present; persistence is limited to expected local CLI configuration and database files.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SDI-4] expected: The update-permissions operation appears in a read-oriented permissions rule, but the root permissions skill and a separate rule clearly disclose permission updates as supported XMTP functionality.\n[SQP-1] expected: The debug skill uses generic terms such as address and inbox, which could be narrower, but the surrounding skill text consistently frames them as XMTP diagnostic commands.\n[SQP-2] expected: Sending messages and content to addresses or groups is core XMTP CLI behavior; the documentation would benefit from clearer warnings that this transmits content to external recipients.\n[SQP-2] expected: The setup rules document wallet private keys and database encryption keys because the CLI needs them, but they under-document normal precautions such as keeping .env files out of source control and logs.\n[SQP-2] expected: The private-key command-line option is purpose-aligned for importing an existing wallet, but users should understand shell history and process-list exposure risks.",
+          "guidance": "Install only if you intend to use XMTP CLI commands. Prefer dev or ephemeral keys for testing, keep .env files out of git and shared logs, avoid passing real private keys on the command line where possible, and double-check recipients before sending messages, creating groups, or changing permissions.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward XMTP CLI guide, with expected but sensitive messaging and wallet-key handling that users should treat carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783653695567,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 34,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: xmtp-cli\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills bundle for the XMTP CLI is benign. It provides instructions and commands for installing and interacting with the XMTP command-line interface, including managing conversations, groups, messages, and debugging. While the skill handles sensitive information like private keys (`XMTP_WALLET_KEY`) and database encryption keys (`XMTP_DB_ENCRYPTION_KEY`) in `setup/rules/env-variables.md` and `setup/rules/init.md`, these are explicitly for configuring the XMTP CLI itself, not for exfiltration or unauthorized access. There is no evidence of prompt injection, malicious execution, data exfiltration to external endpoints, persistence mechanisms, or obfuscation. All actions are clearly aligned with the stated purpose of managing the XMTP CLI.",
+          "checkedAt": 1779160784996,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "3ff746138625cb5fb0f371fa70305db4f176b8decdd85a69bd2b5c9ed448dbd6",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/3ff746138625cb5fb0f371fa70305db4f176b8decdd85a69bd2b5c9ed448dbd6"
+    },
+    "slug": "xmtp-cli",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

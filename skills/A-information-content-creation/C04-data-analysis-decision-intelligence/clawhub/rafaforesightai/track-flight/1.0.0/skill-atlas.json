@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C17:token:notes",
+      "cross-tag:data-analysis",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1e735a92a466260dfee83d905a5ede61a0f8ffa3bfe0b2c6d0e4a3f50acd8e9a",
+    "content_hash": "79224e7cab57a7018d3879d42bb36e0b23c5eb98fc195a5fedbb66aa1ff13e86",
+    "precanonical_content_hash": "6fab52283e71c283c77606a6580dd8978d9a8e1dfbdb5520d5725f0a23976c7b",
+    "skill_md_hash": "f9f61f83c8e71b148674b76910ff678769fcf7f29c0c1d2103ebd79e409f09be",
+    "version_metadata_sha256": "bbf9cbf87f9040ff050a623f22d079c3598feea863a0761a6d8c701caf89ecdd"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/rafaforesightai/skills/track-flight",
+    "claim_id": "1c3b191ff6ce4c49f7a8da9f045cca3380cde98d6cd0edfa0049663e398d737e",
+    "index_entries": [
+      {
+        "index_path": "categories/transportation.md",
+        "label": "track-flight",
+        "url": "https://clawskills.sh/skills/rafaforesightai-track-flight"
+      }
+    ],
+    "owner_handle": "rafaforesightai",
+    "owner_id": "s175kw94trabt3y7bmpwqnw67n885gkg",
+    "published_at": 1771450309424,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779932735409,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779932735409,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The script is limited to looking up a user-supplied flight number through AviationStack and formatting the response; no unrelated local file access, hidden endpoints, destructive actions, or account mutations were found.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are bounded to extracting a flight number, running the included script, and showing the result; there are no autonomous persistence, prompt override, or broad agent-control instructions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Setup asks the user to install the unpinned Python requests package manually with pip3, which is common for this script but should ideally be done in an isolated environment.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Use of an AviationStack API key and outbound network access is purpose-aligned and disclosed, but the code uses an HTTP endpoint, exposing the key and queried flight number to network-path observers.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The reference guide suggests optionally adding the API key to a shell profile for persistence; this is user-directed credential persistence, not background execution or privilege escalation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[TT3] expected: Confirmed: the API key from AVIATIONSTACK_API_KEY is sent with the flight number to the intended AviationStack API over HTTP. This is a real transport risk, but it is purpose-aligned and not evidence of hidden exfiltration.\n[LP3] expected: The skill documentation clearly describes the API key, dependency, and AviationStack use, although the minimal frontmatter does not provide a separate permissions declaration.\n[SQP-2] expected: Flight queries are sent to AviationStack as part of the advertised function. The documentation says the free tier is HTTP-only, but users would benefit from a clearer warning that the key and lookup are not protected by TLS.",
+          "guidance": "Use a dedicated, revocable AviationStack key and avoid using this skill for sensitive travel lookups on untrusted networks. Prefer an HTTPS-capable plan, proxy, or alternative provider if confidentiality matters, and install Python dependencies in a virtual environment.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This flight-tracking skill does what it says, but its free AviationStack setup sends the API key and flight lookup over HTTP.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779932690361,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: track-flight\nVersion: 1.0.0\n\nThe skill's primary function is benign, but it uses HTTP for API communication with `http://api.aviationstack.com` as explicitly noted in `SKILL.md` and `references/api-setup.md`. The `scripts/track_flight.py` script transmits the `AVIATIONSTACK_API_KEY` in plaintext over HTTP, which is a significant vulnerability (Man-in-the-Middle risk) that could lead to API key compromise. While this is a limitation of the external API's free tier and is openly declared, it constitutes insecure data transmission, classifying the skill as suspicious.",
+          "checkedAt": 1779165296920,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "f141601874eca0b8da0c8da719754cccdc4bac55c72e099d24ecf0777b51edb0",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/f141601874eca0b8da0c8da719754cccdc4bac55c72e099d24ecf0777b51edb0"
+    },
+    "slug": "track-flight",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

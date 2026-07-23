@@ -1,0 +1,209 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.625,
+    "domains": [
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:phrase:web search",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "category:C10:token:llm",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "discover"
+    ],
+    "tasks": [
+      "build",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "795d04bc2e47c9efce2ca6d37926483cd0de26e12df4379c8d1d4995f0558e64",
+    "content_hash": "f125a10d7a3034e3c95d57efc7b480b97d7ac2534d09c34e87bdad46f46bf9df",
+    "precanonical_content_hash": "93672676c46f163df3139718051d127e41cf9081a4f5657d660720131d66fca6",
+    "skill_md_hash": "6715138c1b67e759e100de8ebea2546a107aa53841cf4c0b8a9a14eeed575854",
+    "version_metadata_sha256": "2f3f042792750a11897fae5281ee1a4d364dfd1a58c2bc21590201de8f33bb82"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/bartoszpijet/skills/zai-search",
+    "claim_id": "317264b2e7a22923eb7b0ce2da640620a63ff0fd64a582d20cbb42c8ba89d077",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "zai-search",
+        "url": "https://clawskills.sh/skills/bartoszpijet-zai-search"
+      }
+    ],
+    "owner_handle": "bartoszpijet",
+    "owner_id": "s1761v7a4jg627ax2sbbavkzf9884hdy",
+    "published_at": 1771512737723,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779165459404,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": [
+            {
+              "categoryId": "ASI01",
+              "categoryLabel": "Agent Goal Hijack",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The skill prints external web-result summaries into the agent context. That is expected for a search tool, but the text is untrusted web content and could contain prompt-injection-style instructions.",
+                "path": "scripts/search.mjs",
+                "snippet": "const content = String(r?.content ?? \"\").trim(); ... console.log(`  ${content.slice(0, 400)}${content.length > 400 ? \"...\" : \"\"}`);"
+              },
+              "recommendation": "Treat search results and extracted page text as untrusted evidence. Do not follow instructions found in web pages unless they are independently verified and aligned with the user request.",
+              "riskBucket": "abnormal_behavior_control",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "A malicious or low-quality search result could include text that tries to influence the agent if the agent treats search output as instructions instead of data."
+            },
+            {
+              "categoryId": "ASI02",
+              "categoryLabel": "Tool Misuse and Exploitation",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The extraction helper fetches arbitrary URLs supplied as arguments. This is purpose-aligned, but it is not restricted to public web URLs by the artifact.",
+                "path": "scripts/extract.mjs",
+                "snippet": "const urls = args.filter(a => !a.startsWith(\"-\")); ... const resp = await fetch(url, {"
+              },
+              "recommendation": "Use the extract command only for intended public or trusted URLs, and avoid localhost, private-network, cloud-metadata, or authenticated URLs unless you explicitly want that content read.",
+              "riskBucket": "abnormal_behavior_control",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "If directed at private, local, or internal URLs, the tool could retrieve content that the user did not intend to place into the agent context."
+            },
+            {
+              "categoryId": "ASI03",
+              "categoryLabel": "Identity and Privilege Abuse",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The script reads a Z.AI API key from the environment and sends it as a Bearer credential to the Z.AI API. This matches the declared setup and purpose.",
+                "path": "scripts/search.mjs",
+                "snippet": "const apiKey = (process.env.ZAI_API_KEY ?? process.env.Z_AI_API_KEY ?? \"\").trim(); ... \"Authorization\": `Bearer ${apiKey}`"
+              },
+              "recommendation": "Use a dedicated API key with the minimum needed scope if available, keep it out of logs and shared shells, and rotate it if it may have been exposed.",
+              "riskBucket": "permission_boundary",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "The key may allow API usage under the user's Z.AI account, including any associated billing or quota impact."
+            },
+            {
+              "categoryId": "ASI07",
+              "categoryLabel": "Insecure Inter-Agent Communication",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "Search queries, domain filters, and recency filters are sent to the external Z.AI provider endpoint. This is disclosed and central to the skill's function.",
+                "path": "scripts/search.mjs",
+                "snippet": "search_query: query, ... fetch(\"https://api.z.ai/api/paas/v4/web_search\", { ... body: JSON.stringify(body)"
+              },
+              "recommendation": "Avoid entering confidential, regulated, or secret information in search queries unless sharing it with the provider is acceptable.",
+              "riskBucket": "sensitive_data_protection",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "Sensitive search terms could be shared with Z.AI as part of normal operation."
+            }
+          ],
+          "checkedAt": 1778396294105,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently implement the stated purpose: search.mjs calls the Z.AI Web Search API and extract.mjs fetches user-supplied pages for basic text extraction.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill can return untrusted web-result text into the agent context and can fetch arbitrary user-provided URLs; this is expected for web search, but users should avoid treating returned page text as instructions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no install script or package dependency; the included scripts require Node and use native fetch. No hidden installer, remote script, or package supply-chain behavior is shown.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The ZAI_API_KEY requirement and outbound calls to Z.AI are proportionate for the stated API integration, but search queries and API usage will be visible to that provider.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts show no persistence, background process, privileged local modification, credential storage, or destructive behavior.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[suspicious.env_credential_access] expected: search.mjs reads ZAI_API_KEY and uses it as a Bearer token for the documented Z.AI web_search endpoint; the artifacts do not show unrelated credential transmission, logging, or hardcoded secrets.",
+          "guidance": "This skill is reasonable to install if you want Z.AI-backed web search. Before using it, set a dedicated ZAI_API_KEY, avoid sensitive search queries, treat returned web text as untrusted information, and only extract pages or URLs you intentionally want the agent to read.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": {
+            "abnormal_behavior_control": {
+              "highestSeverity": "low",
+              "status": "note",
+              "summary": "The skill returns untrusted web content and can fetch arbitrary user-supplied URLs, which is expected for a search/extraction tool but should be used carefully."
+            },
+            "permission_boundary": {
+              "highestSeverity": "low",
+              "status": "note",
+              "summary": "The skill requires a Z.AI API key and uses it only for the documented Z.AI search API in the provided code."
+            },
+            "sensitive_data_protection": {
+              "highestSeverity": "low",
+              "status": "note",
+              "summary": "Search queries and filters are sent to Z.AI, so users should avoid sensitive queries unless that provider data flow is acceptable."
+            }
+          },
+          "status": "clean",
+          "summary": "This appears to be a straightforward Z.AI web search skill, but searches, URLs, and the ZAI_API_KEY are used with external network services.",
+          "verdict": "benign"
+        },
+        "skillspector": null,
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: zai-search\nVersion: 1.0.0\n\nThe `scripts/extract.mjs` file is vulnerable to Server-Side Request Forgery (SSRF). It fetches content from arbitrary URLs provided as input without sufficient validation or restriction, allowing an attacker to potentially access internal network resources, cloud metadata endpoints, or other sensitive services from the agent's host. While this is a significant vulnerability, there is no clear evidence of intentional malicious behavior (e.g., exfiltration to an attacker-controlled domain, persistence, or obfuscation), classifying it as suspicious rather than malicious. Other files are benign.",
+          "checkedAt": 1779165459404,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "795d04bc2e47c9efce2ca6d37926483cd0de26e12df4379c8d1d4995f0558e64",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/795d04bc2e47c9efce2ca6d37926483cd0de26e12df4379c8d1d4995f0558e64"
+    },
+    "slug": "zai-search",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

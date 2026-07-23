@@ -1,0 +1,146 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.625,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:phrase:web search",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C09:token:privacy",
+      "category:C12:token:management",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C09",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "0e23d832e935af25b6cc6cff9fc7e0c8584e888d475ee7f2cc4723c3baf1784d",
+    "content_hash": "583e2f46cdbfedf2aaef6d30c716fca06c98a04216ff9a11608cffa30231180d",
+    "precanonical_content_hash": "df0fe6810edd6e769d56e6dc032bfc7e504b28bfdf5f9831d65d382def9fc58f",
+    "skill_md_hash": "3e74f26f98f0e533824766c29c16c3865372f18174de83a3c13eaca9700af58e",
+    "version_metadata_sha256": "4d546a2a72986dd94f18cd47736d128f4dd28d12c8ca52a3435cffa42e93b6ae"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/adelpro/skills/private-web-search-searchxng",
+    "claim_id": "6d0300be45d3cf08856c1eab95ad35655006868561f61b5c5d36e781bce7492a",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "private-web-search-searchxng",
+        "url": "https://clawskills.sh/skills/adelpro-private-web-search-searchxng"
+      }
+    ],
+    "owner_handle": "adelpro",
+    "owner_id": "s177vajy8ffpjnym8evc1jcxr5877x59",
+    "published_at": 1771766797518,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779949024069,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779949024069,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is private/self-hosted web search, and the artifacts match that purpose by documenting SearXNG setup and providing a small helper script that queries SearXNG results.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions include Docker, curl, jq, sed, restart, and removal commands, but they are visible and tied to setup and management of the search service. The helper script lacks URL encoding and limit validation, which is weak input handling rather than evidence of command execution or deception.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Metadata declares required binaries for docker, curl, and jq, and the install check only verifies Docker. Setup pulls and runs an unpinned searxng/searxng container and maps port 8080, so users should review the image and exposure before running it.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Sending search terms to the configured SearXNG host is expected for a search skill, but the default helper URL uses HTTP; this is proportionate for localhost and riskier if pointed at a remote server.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill creates and manages a persistent Docker container named searxng and includes a forced removal command. This is disclosed service-management behavior, but it can affect an existing container with the same name.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The shell and container commands are substantial, but the skill frontmatter declares the required binaries and the commands are plainly shown as SearXNG setup/management steps.\n[SQP-2] expected: Starting, modifying, restarting, and removing the Docker container are expected for a self-hosted SearXNG setup, though users should confirm before running state-changing or destructive commands.\n[SQP-2] expected: The helper script sends the user query to SearXNG, which is inherent to search; the privacy risk is mainly for remote or logged HTTP endpoints, not hidden exfiltration.\n[VirusTotal telemetry] expected: The reported injection concern is downgraded: the script interpolates query and limit values without robust encoding or validation, but shell quoting prevents ordinary host shell command injection and the behavior remains aligned with search.",
+          "guidance": "Install this only if you are comfortable running a Dockerized local search service. Prefer binding it to localhost on shared or network-accessible machines, consider pinning the SearXNG image version, avoid sensitive queries when using a remote SEARXNG_HOST or plain HTTP, and review before running docker rm searxng -f because it can remove an existing container.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill openly sets up and queries a self-hosted SearXNG search service, with Docker and privacy cautions but no hidden or malicious behavior found.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948971980,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 32,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: private-web-search-searchxng\nVersion: 1.3.0\n\nThe skill bundle is classified as suspicious due to a potential command injection vulnerability in `scripts/search.sh`. The script directly interpolates user-provided arguments (`QUERY` and `LIMIT`) into `curl` and `jq` commands without explicit sanitization or URL encoding. While double-quoting mitigates direct shell injection on the host for the `curl` command, it's a risky practice that could lead to URL parameter manipulation or other injection issues if the backend service or `jq` parsing were vulnerable, indicating a lack of robust input handling.",
+          "checkedAt": 1773894599710,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "0e23d832e935af25b6cc6cff9fc7e0c8584e888d475ee7f2cc4723c3baf1784d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0e23d832e935af25b6cc6cff9fc7e0c8584e888d475ee7f2cc4723c3baf1784d"
+    },
+    "slug": "private-web-search-searchxng",
+    "source_type": "clawhub",
+    "version": "1.3.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

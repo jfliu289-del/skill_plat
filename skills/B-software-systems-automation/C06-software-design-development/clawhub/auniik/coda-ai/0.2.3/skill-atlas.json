@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C10"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e71faac90f4ead7e83840d0b51f9fb9257d7414434a634b34528bdfe806e6052",
+    "content_hash": "6581a920ef7c9b42295a6aa1a32a04fcf2e06429e6598ae15ec22015dbdd96ba",
+    "precanonical_content_hash": "7e6fd9c3a1c4cb5e16d846882f7c3c1330bacaea54ad0ed75cd3c7674112f82a",
+    "skill_md_hash": "e7767ea77b1dc063408b0fdcb9f032cfa904b2c28c5a1801bc50beb25a2a5230",
+    "version_metadata_sha256": "a85327a1f4b1e3715b6b37c300853dfdbf8b983068d465c753408ae65c95696f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/auniik/skills/coda-ai",
+    "claim_id": "95351949f346364bc06179fcd695bde27bd32629092b680b4167e782b6099f83",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "coda-ai",
+        "url": "https://clawskills.sh/skills/auniik-coda-ai"
+      }
+    ],
+    "owner_handle": "auniik",
+    "owner_id": "s17agkdn7d9c3ehpke2qyhr6zn885ebw",
+    "published_at": 1770841107328,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968086345,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968086345,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill's purpose is to list Coda documents, list pages, and read page contents in markdown, JSON, or HTML; that can expose private workspace content to the agent, but it directly matches the stated capability.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The runtime instructions are explicit, user-directed CLI commands for setup, verification, listing, and reading; there is no evidence of prompt injection, hidden automation, destructive behavior, or unrelated data access.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill installs an external npm CLI package, which is expected for this integration. There is a minor version clarity issue because the skill version is 0.2.3 while the setup example pins coda-ai@0.2.2 and metadata names the package without a version.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Requiring CODA_API_TOKEN is proportionate for Coda API access and is disclosed in metadata and setup instructions; users should assume the token can access whatever Coda docs its permissions allow.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Credential persistence is disclosed as ~/.coda-ai/config.json with 0600 permissions, and logout is documented. The setup also writes the token to a local .env file, so users should remove that file after authentication and avoid committing it.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The scanner concern about Coda workspace data exposure is valid user guidance, but reading Coda content is the disclosed purpose of the skill and the commands require user-provided doc and page identifiers.\n[PE3] expected: The plaintext .env setup method is a credential-handling caution, not evidence of credential theft or privilege escalation; token use is disclosed and the stored credential location and logout path are documented.\n[VirusTotal] expected: VirusTotal telemetry reported no malicious or suspicious detections, which supports but does not determine the benign verdict.",
+          "guidance": "Install only if you are comfortable giving this CLI a Coda API token and letting the agent read Coda documents you request. Use the least-privileged token available, avoid exporting sensitive pages unnecessarily, delete the temporary .env file after authentication, never commit it, and use coda-ai logout when you want to remove stored credentials.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward Coda.io reading tool with expected token-based access and no evidence of hidden or harmful behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968068549,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 35,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: coda-ai\nVersion: 0.2.3\n\nThe skill provides a CLI wrapper for interacting with Coda.io, allowing agents to list documents, pages, and read content. It requires a `CODA_API_TOKEN` for authentication, which is standard for API access, and instructs the agent to install the `coda-ai` npm package. The `SKILL.md` instructions are clear, align with the stated purpose, and do not contain any prompt injection attempts, data exfiltration commands, or other malicious behaviors. Credential storage is noted to use secure 0600 permissions.",
+          "checkedAt": 1779162999267,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "1399ae37f9bf672b4f29b25823df25742583e647e71b9bd24475c749cdc1b3dd",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1399ae37f9bf672b4f29b25823df25742583e647e71b9bd24475c749cdc1b3dd"
+    },
+    "slug": "coda-ai",
+    "source_type": "clawhub",
+    "version": "0.2.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

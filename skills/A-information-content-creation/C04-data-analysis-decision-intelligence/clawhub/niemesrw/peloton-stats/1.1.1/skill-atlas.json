@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.465,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:data",
+      "category:C04:token:metrics",
+      "category:C04:token:statistics",
+      "category:C06:token:api",
+      "category:C17:token:notes",
+      "cross-tag:data-analysis",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "3c2a5a4ea38c9b903cd01e60c683f2058d61d1ab54b88bd0dffb2ee87a7a046f",
+    "content_hash": "5cfa8a61dd193ca70b2cde90cd7d847c5572fd4558063ab5265de7633c0b38dd",
+    "precanonical_content_hash": "17f7e9df1035803e7c4f481f48b8e916ddb54eea205e79b5123a93ef3f4904f4",
+    "skill_md_hash": "92a8e0c45ca65e0d0922c0063e64872161cc7e8b25a3693d7b620b3ad9b2016c",
+    "version_metadata_sha256": "fee06f564982a1eb97c8f0831aeb67b01e7458dcc47235fb6db3be7f09174760"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/niemesrw/skills/peloton-stats",
+    "claim_id": "eb27875c54209191e737dfb37ad7a9c7e5690fe309eb7d186bc21afc347e7667",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "peloton-stats",
+        "url": "https://clawskills.sh/skills/niemesrw-peloton-stats"
+      }
+    ],
+    "owner_handle": "niemesrw",
+    "owner_id": "s1788xkyda0g5zsm1vbxwsyx8h885jw4",
+    "published_at": 1771848069095,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779933000454,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779933000454,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The purpose and capability align: the script authenticates to Peloton, fetches recent cycling workouts, and prints workout metrics. The data is personal fitness/account data, so users should understand it will appear in the agent output.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill is user-invocable and scoped to a weekly Peloton cycling report. The code filters to cycling workouts from the last 7 days and does not include unrelated agent instructions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no installer, dependency fetch, or setup-time execution. Usage is a direct Python script invocation.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Peloton username/password access is proportionate to fetching private Peloton stats and is disclosed in the frontmatter and setup instructions. Network calls are limited to Peloton API/auth endpoints.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill reads Peloton credentials from environment variables or the documented OpenClaw auth profile path, and the setup suggests storing credentials there. It does not write persistent state, store tokens, spawn background workers, or request broader local access.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-2] expected: The script reads Peloton credentials from PELOTON_USERNAME/PELOTON_PASSWORD or a peloton:default OpenClaw auth profile. This is sensitive, but it is documented in the skill metadata/setup and is directly needed to fetch private Peloton stats.\n[SQP-2] expected: The setup shows storing a Peloton password in OpenClaw config or auth-profiles.json. That is a real credential-handling caution, but it is user-directed, disclosed, and not evidence of hidden access or exfiltration.\n[SQP-2] expected: Runtime credential loading occurs without an extra confirmation prompt, but the skill's stated function is to fetch private Peloton data and the credential sources are bounded and disclosed.",
+          "guidance": "Install only if you are comfortable giving this agent access to your Peloton account and having recent workout stats printed in the conversation. Prefer the OpenClaw credential flow, keep the auth profile protected, and rotate the Peloton password if this environment is later shared or untrusted.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it claims: it logs into Peloton to show recent cycling stats, but it requires handling Peloton account credentials.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779932976384,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: peloton-stats\nVersion: 1.1.1\n\nThe skill bundle is benign. The `SKILL.md` provides clear instructions for setup and usage without any prompt injection attempts against the agent. The `scripts/fetch_stats.py` Python code correctly implements the stated purpose of fetching Peloton workout statistics. It loads credentials from expected OpenClaw configuration files (`~/.openclaw/agents/main/agent/auth-profiles.json`) or environment variables, and communicates exclusively with legitimate Peloton API endpoints (`api.onepeloton.com`, `auth.onepeloton.com`) to retrieve and report workout data. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or obfuscation.",
+          "checkedAt": 1779165345777,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "24ce391d7b1bdd467f65b9d6f985ae405769d6a6b780faaa8d3fefe8d2000662",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/24ce391d7b1bdd467f65b9d6f985ae405769d6a6b780faaa8d3fefe8d2000662"
+    },
+    "slug": "peloton-stats",
+    "source_type": "clawhub",
+    "version": "1.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

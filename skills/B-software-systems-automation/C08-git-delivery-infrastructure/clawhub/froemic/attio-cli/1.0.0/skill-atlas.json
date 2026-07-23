@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.3583,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C06:token:code",
+      "category:C08:token:cd",
+      "category:C08:token:git",
+      "category:C08:token:github",
+      "category:C13:token:operations",
+      "category:C14:token:crm",
+      "category:C17:token:notes",
+      "category:C19:token:crm",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C13",
+      "C14",
+      "C17",
+      "C19"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "033fc714708a7822784cbbd14c5557a36ded810339f48cf7e2e83701b03d190c",
+    "content_hash": "e9790f76e838e9c4f178ebf6ba6475d39e8a6a574809c56778b8943d53dc746c",
+    "skill_md_hash": "1d0ddb8c90ab9c5cc5c3e57b99e12c4ae47e338cf9304c733538b247f838e64c",
+    "version_metadata_sha256": "7154e0c2f1b84952d4c2a444ec00cfd9b39e6995a7fc6acd0364e63fccb2d2c8"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/froemic/skills/attio-cli",
+    "claim_id": "ba342a3e97f93bf2c576fc59b57a7e2edb46a58ddcbf4f1bed3c1196382946dc",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "attio-cli",
+        "url": "https://clawskills.sh/skills/froemic-attio-cli"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "froemic",
+    "owner_id": "s171zfsast3asm7t4j2e7gw5e5885zgx",
+    "published_at": 1770230784504,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783655399063,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783655399063,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to interact with an Attio CRM workspace, and the documented capabilities align with that: listing objects and records, generating workspace schema context, and showing Attio API examples including record and list-entry creation.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are visible, user-run commands rather than hidden automation. The mutating examples and schema generation would benefit from clearer warnings, but they are not deceptive or unrelated to the CRM purpose.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is disclosed as cloning an external GitHub repository and running npm install/npm link. That creates normal npm supply-chain exposure and is unpinned, but VirusTotal reported no engine detections and the artifact does not show malicious install behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "An Attio API key and calls to the Attio API are proportionate for a CRM CLI. The key may permit sensitive CRM reads and writes depending on its permissions, and the generated schema can contain internal business metadata.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no hidden background worker, privilege escalation, or destructive persistence. The skill does recommend persistent API-key storage in local env or shell files and can create a local workspace.schema.md file.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The schema-generation concern is valid user guidance: the file may expose CRM structure and field options, but it is a disclosed local output aligned with the skill purpose.\n[SQP-2] expected: The live write-operation concern is valid user guidance: create-record and add-entry examples can change CRM data, but they are explicit examples of CRM operations rather than hidden behavior.\n[VirusTotal code_insight] expected: The supply-chain caution is understandable because the install uses an external npm/GitHub source, but VirusTotal showed no engine detections and this telemetry alone does not justify a Review or malicious verdict.\n[staticScan] expected: The static scan reported no suspicious patterns, consistent with the inspected skill files.",
+          "guidance": "Before installing, inspect or pin the external attio-cli source, use a least-privileged Attio API key, keep the key out of shared or committed dotfiles, and treat generated workspace schema files as confidential. Only run the create-record or add-list-entry examples when you intend to modify the target CRM workspace.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent Attio CRM helper, but users should treat its CRM credentials, write examples, and generated schema file carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783655335808,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 12,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: attio-cli\nVersion: 1.0.0\n\nThe skill is classified as suspicious primarily due to the supply chain risk introduced by its installation instructions in `SKILL.md`. It directs the agent to `git clone` and `npm install` from an external GitHub repository (`https://github.com/FroeMic/attio-cli`). `npm install` can execute arbitrary code via package scripts, posing a risk if the upstream repository is compromised or malicious. While the `scripts/generate-schema.sh` file and other instructions appear to align with the stated purpose of interacting with Attio CRM, the reliance on an external, potentially untrusted source for installation elevates the risk beyond benign.",
+          "checkedAt": 1779161341682,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "109536de4e0a3e255ca201211bcd5f6e01f908b6c1bd8a49a32e3544b97690e9",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/109536de4e0a3e255ca201211bcd5f6e01f908b6c1bd8a49a32e3544b97690e9"
+    },
+    "slug": "attio-cli",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

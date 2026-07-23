@@ -1,0 +1,119 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C17",
+    "reasons": [
+      "category:C17:token:notes"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "0da3322853d012adaf1aaab634746faa64dea342d864330912f9b59311045668",
+    "content_hash": "468e1a2b15de9ca038d94db88045f477a61b84e5a362374243e36ac570dd33ae",
+    "skill_md_hash": "9c472474eea76fc38d69d25bdd5804e1b0835e7a4be093067af1220bcba519ce",
+    "version_metadata_sha256": "d904713ee419ef60519936b05a415d4f537a4e9e58eca65c7e54011fab345acc"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/claudiodrusus/skills/meeting-summarizer",
+    "claim_id": "767e683b12f201aba83218a9a6d357ddc116ed2d43618f182245fc561647624d",
+    "index_entries": [
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "meeting-summarizer",
+        "url": "https://clawskills.sh/skills/claudiodrusus-meeting-summarizer"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "claudiodrusus",
+    "owner_id": "s172xccbt04xdg9tshkc5tw64x88526n",
+    "published_at": 1771785849864,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779950242261,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779950242261,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts are coherent: SKILL.md describes meeting transcript summarization, and summarize.sh reads stdin, sends that transcript to Anthropic's messages API, and prints a structured markdown summary.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The external API flow is visible in the script and implied by the ANTHROPIC_API_KEY requirement, but SKILL.md does not plainly state that transcript contents leave the local machine.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No installer, package download, auto-update, or hidden setup mechanism is present; the package contains documentation, an example output, and one shell script.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script uses the Anthropic API key for the stated summarization workflow and does not read unrelated files, credentials, profile stores, or environment variables beyond the provided transcript on stdin.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no persistence, privilege escalation, background worker, credential storage, destructive action, or modification of agent/system configuration.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SDI-2] expected: The script does transmit user-provided meeting text to an external model provider, which is privacy-relevant, but that transmission is the core mechanism of the claimed API-based summarizer rather than hidden or unrelated behavior.\n[SQP-2] expected: The lack of a prominent privacy notice is a real documentation gap, but the required ANTHROPIC_API_KEY and visible curl call make the behavior discoverable and aligned with the stated purpose.\n[E1] expected: The hardcoded api.anthropic.com endpoint is expected for this Anthropic-backed summarization tool; there is no evidence of exfiltration to an unrelated destination.",
+          "guidance": "Install only if you are comfortable sending the transcript text you provide to Anthropic for processing. Avoid using it for confidential, regulated, HR, legal, customer, or internal strategy meetings unless your organization permits that use and the API account is governed appropriately.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it claims, but users should know it sends the transcript they provide to Anthropic for summarization.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779950207421,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 65,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: meeting-summarizer\nVersion: 1.0.0\n\nThe OpenClaw skill 'meeting-summarizer' is benign. The `SKILL.md` file provides clear, non-malicious instructions for the AI agent and user. The `summarize.sh` script correctly implements the stated purpose of summarizing meeting transcripts using the Anthropic API. It securely handles the `ANTHROPIC_API_KEY` by reading it from environment variables and sending it only to the legitimate `api.anthropic.com` endpoint. Input transcript text is properly escaped using `python3 json.dumps` before being included in the API request, mitigating prompt injection and shell injection risks. There is no evidence of data exfiltration to unauthorized parties, malicious execution, persistence mechanisms, or obfuscation.",
+          "checkedAt": 1779166289694,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "0da3322853d012adaf1aaab634746faa64dea342d864330912f9b59311045668",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0da3322853d012adaf1aaab634746faa64dea342d864330912f9b59311045668"
+    },
+    "slug": "meeting-summarizer",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

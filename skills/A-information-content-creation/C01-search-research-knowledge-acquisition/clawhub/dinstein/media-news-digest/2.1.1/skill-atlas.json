@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.7167,
+    "domains": [],
+    "needs_review": false,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:phrase:web search",
+      "category:C01:token:search",
+      "category:C01:token:sources",
+      "category:C03:token:office",
+      "category:C03:token:pdf",
+      "category:C04:token:data",
+      "cross-tag:data-analysis",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C03"
+    ],
+    "stages": [
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e33ecd10b9a9cebc798c30f3468d626494b7ab57b2faf0717b13c67f8ab84ff0",
+    "content_hash": "ffa48cb5893832727e8c863009a315c71f4fc60c7833a3e70c53f4a90d57e70f",
+    "precanonical_content_hash": "4a1cdebe54b98b26828affafecc9a7fb272bed13ee4b59df767be3083673ef41",
+    "skill_md_hash": "ce412b3872e89444a62cc5febd89629a61fb8f9897377cd77a734d238b6660a3",
+    "version_metadata_sha256": "95ac75cc44fc92a3f2bc2b204de57d4d80b0cc58a9c3859af26b54c3518295f2"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/dinstein/skills/media-news-digest",
+    "claim_id": "8837cc69aa7f0975dc48b8187bd8b3895dbea8a9db903f218d09392187cc8698",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "media-news-digest",
+        "url": "https://clawskills.sh/skills/dinstein-media-news-digest"
+      }
+    ],
+    "owner_handle": "dinstein",
+    "owner_id": "s17b4tqstw4mskfqf2pwt634b183jtng",
+    "published_at": 1772383203855,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779969653733,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779969653733,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The main capabilities fit the stated purpose: fetch entertainment news from RSS, Twitter/X, Reddit, and web search, merge and score results, then prepare Discord or email digests. Some artifacts still reference GitHub ingestion even though no fetch-github.py is bundled, and two enabled Twitter sources are explicitly marked as needing verification.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are mostly scoped to the skill scripts, /tmp outputs, and a workspace archive. Discord and email delivery are disclosed and destination-driven, but they still send content externally and should be enabled only with explicit target review.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The install metadata requires python3 and discloses optional mail/msmtp plus optional API-key environment variables. There is no evidence of hidden install hooks or automatic credential collection.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to news feeds, Twitter/X, Reddit, Brave/Tavily, and mail delivery is proportionate for a digest generator. The enabled but unverified social handles reduce content-source quality and should be corrected or disabled.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill supports scheduled recurring digests and instructs deletion of files older than 90 days under <WORKSPACE>/archive/media-news-digest/. This is disclosed and scoped, but users should use a dedicated archive directory.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[TP4] expected: The broad description largely matches the bundle, including RSS/Twitter/Reddit/web collection and Discord/email output. The GitHub references are a real documentation/code mismatch, but the referenced fetch-github.py is absent, so this appears to be stale or incomplete pipeline code rather than hidden working ingestion.\n[SQP-2] expected: README_CN describes automatic scheduling and delivery to Discord or email. That is expected for this skill and also disclosed elsewhere, but users should still confirm destinations and schedules before enabling recurring delivery.\n[SQP-3] unexpected: The two enabled Twitter handles called out by the scanner are inconsistent with the named sources and the artifact itself says they need verification. This is a content-integrity problem, not evidence of malicious behavior.\n[SQP-2] expected: The archive cleanup instruction is scoped to the skill archive path, not arbitrary filesystem deletion. It should be documented more clearly and run only against a dedicated workspace archive.\n[VirusTotal/code_insight] unexpected: The test-pipeline.sh helper does interpolate --topics and --ids into inline Python, which can allow code injection if those arguments are attacker-controlled. It is not part of the normal digest execution path, but it should be fixed and not used with untrusted input.",
+          "guidance": "Install only if you are comfortable with a skill that fetches public web/social content, can use optional API keys, and can send digests to configured Discord or email destinations. Before scheduling it, verify the recipient channel/email, use a dedicated archive directory, provide only the API keys needed, and disable or correct the unverified Twitter sources.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed news-digest automation skill, but users should review its delivery settings, archive cleanup, and a few rough edges before relying on it.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779969569990,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 84,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: media-news-digest\nVersion: 2.1.1\n\nThe skill bundle is classified as suspicious due to a shell injection vulnerability found in the `scripts/test-pipeline.sh` file. Specifically, the script uses unquoted shell variables (`$TOPICS`, `$IDS`) within `grep -qi` and `python3 -c` commands, which could allow arbitrary command execution if a user provides specially crafted input to the `--topics` or `--ids` arguments. While this is a test script and not part of the main agent execution flow, it represents a vulnerability that could be exploited. The rest of the skill demonstrates strong security awareness, including explicit prompt injection mitigations in `SKILL.md` and `references/digest-prompt.md`, and robust HTML sanitization in `scripts/sanitize-html.py`.",
+          "checkedAt": 1779164516968,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "131836791441fbe2d19721b4cb7fdfea525e4057966a4253faa7bf26e46e653f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/131836791441fbe2d19721b4cb7fdfea525e4057966a4253faa7bf26e46e653f"
+    },
+    "slug": "media-news-digest",
+    "source_type": "clawhub",
+    "version": "2.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

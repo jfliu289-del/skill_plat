@@ -1,0 +1,154 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "document",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.1321,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C02:token:edit",
+      "category:C04:token:data",
+      "category:C11:token:project",
+      "category:C12:token:management",
+      "category:C13:token:finance",
+      "category:C17:token:personal",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C04",
+      "C11",
+      "C12",
+      "C13",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "research",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "5d1db38d76adee0b9e957ba712b2aaa58828819a0cc0a0aa67622a6190f8e299",
+    "content_hash": "fe3681e09cc1963893764af127b133d071c2510f23369421059a101d63d25783",
+    "skill_md_hash": "61dd9e1f423795be300fefab600a5cba69e385f7b60961bd6bbd09d3b5b5849c",
+    "version_metadata_sha256": "dd231565a3f9b344dcf453a1a8d28fcb154a9901e67377b65fa7b360a39cfae2"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/salen-project/skills/finance-tracker",
+    "claim_id": "715fed2dc09a50b87477e266304034021ce85eb4918824664775a5ae0ed1c855",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "finance-tracker",
+        "url": "https://clawskills.sh/skills/salen-project-finance-tracker"
+      },
+      {
+        "index_path": "categories/calendar-and-scheduling.md",
+        "label": "finance-tracker",
+        "url": "https://clawskills.sh/skills/salen-project-finance-tracker"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "salen-project",
+    "owner_id": "s17fe69nfkxnef62gkks4k9nad885jtf",
+    "published_at": 1769925179589,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783652700978,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783652700978,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is personal finance management, and the artifacts implement matching expense, income, asset, goal, recurring, reporting, export, and currency commands.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Commands that add, edit, delete, undo, and process recurring entries are documented and user-invoked; scheduling recurring processing can mutate local finance records automatically.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No install-time scripts, postinstall behavior, or privilege escalation were found. Package metadata has a non-security mismatch: package.json lists version 1.0.0 and bin './bin/finance' while the artifact contains bin/finance.py.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Local writes under ~/.finance-tracker and outbound calls to fixed exchange-rate APIs are proportionate to the advertised finance and multi-currency features; no credential access or transaction upload was found.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists readable JSON and Markdown finance data under ~/.finance-tracker, which is disclosed and purpose-aligned but sensitive and not encrypted by the skill.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: Recurring processing does create transaction records, but SKILL.md describes it as auto-logging due expenses and shows it as an explicit command or user-added heartbeat task.\n[SQP-2] expected: Live exchange rates require network requests; the code uses hardcoded rate-provider endpoints and does not send stored transaction, income, asset, or goal data.\n[SQP-2] expected: Portfolio and income files are created under the advertised ~/.finance-tracker data directory, which fits the local finance-tracker purpose.\n[SQP-2] expected: Asset and income records are serialized to local JSON as expected for this tool, though users should treat those files as sensitive because there is no built-in encryption.\n[SQP-2] expected: The recurring process path bulk-logs due items without an interactive confirmation, but it is reached through an explicit CLI command and tracks last_logged to reduce same-day duplicate entries.",
+          "guidance": "Install only if you are comfortable storing expenses, income, goals, assets, and cached exchange rates in ~/.finance-tracker. Be careful before asking an agent to run edit, delete, undo, remove, or recurring process commands, especially in automation. Currency features may contact third-party exchange-rate providers.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent local finance-tracking CLI, but users should understand it stores sensitive finance records locally and may contact exchange-rate services.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783652664320,
+          "issueCount": 5,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: finance-tracker\nVersion: 2.0.0\n\nThe OpenClaw skill 'finance-tracker' is a personal finance management tool. Its `SKILL.md` provides clear instructions for users to interact with the `finance` CLI, without any prompt injection attempts against the agent. The Python code in `bin/finance.py` and `lib/*.py` primarily handles local file I/O within the `~/.finance-tracker/` directory for data storage (`transactions.json`, `FINANCE_LOG.md`, etc.). The only network activity observed is in `lib/currency.py`, which fetches exchange rates from hardcoded, legitimate APIs (`open.er-api.com`, `api.exchangerate.host`) using `urllib.request.urlopen`. This network access is directly aligned with the stated multi-currency feature and does not show any signs of data exfiltration or malicious intent. No other high-risk behaviors like arbitrary command execution, persistence mechanisms, or obfuscation were found.",
+          "checkedAt": 1779160428775,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "bfdb0d57f4c69cfc1ebdedebf0eee09e531ebfc4f29c276272145decb5d79749",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/bfdb0d57f4c69cfc1ebdedebf0eee09e531ebfc4f29c276272145decb5d79749"
+    },
+    "slug": "finance-tracker",
+    "source_type": "clawhub",
+    "version": "2.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.475,
+    "domains": [
+      "creative",
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C09:token:security",
+      "cross-tag:design",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "7f8b3d8a3520cba10e1808227ebf09f7576d8684f5a17d4f7aa24292e8e8bca8",
+    "content_hash": "7c334a4cb38e39c3f8d96abd9049a7acd0d62cd50ed90750be7742dc2ec68bb1",
+    "skill_md_hash": "316328e872b1929cb8eecb7d95d76118706c225d0d59a08103d4a9497a588ea8",
+    "version_metadata_sha256": "a92737a89f9e2573653ff0cbbff95aa50ce459f48d18b533cf4c31cc0fd3874b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/lifehackjohn/skills/qr-password",
+    "claim_id": "bb3d6c1aedc0d12434d26e00dda3ed183246d367e16b10147abb76c3ad57ddf2",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "qr-password",
+        "url": "https://clawskills.sh/skills/lifehackjohn-qr-password"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "lifehackjohn",
+    "owner_id": "s172tbwsq8p6gy7b1ebjgpzmks884h8p",
+    "published_at": 1771238384488,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971144145,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971144145,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is air-gapped credential transfer via QR codes, and the described HTML and Python utilities match that purpose without evidence of network exfiltration, obfuscation, or unrelated capability.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The safety instructions reportedly tell agents not to log credentials, to redact passwords, clear displays, delete QR images, and avoid storing decoded credentials; wording like credentials never leaving the device should be treated carefully because QR scanning intentionally transfers the secret visually.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No evidence was supplied of privileged install hooks, background services, dependency hijacking, or mutation of agent behavior during installation.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Displaying and encoding credentials is high-sensitivity behavior, but it is central to the skill's purpose and appears constrained to offline local tools.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Generated QR images may persist credential material on disk, which is an exposure risk, but this is expected output for the tool and not evidence of hidden persistence or privilege escalation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-4] expected: The visual transfer risk is real, but QR-based credential transfer is the explicit purpose; this supports clearer warnings rather than a Review verdict by itself.\n[SQP-2] expected: README-level warnings about shoulder-surfing, screenshots, camera retention, and receiving-device compromise would improve user understanding, but the sensitive behavior is disclosed by the skill's purpose.\n[SQP-2] expected: Rendering plaintext credential material into a QR code and retaining form input during use is inherent to the workflow; it should be minimized with clearing controls but does not show exfiltration.\n[SQP-2] expected: Saving a credential-derived QR image to disk creates local persistence risk; users should delete outputs promptly, but the behavior is purpose-aligned and not hidden in the supplied evidence.",
+          "guidance": "Install only if you specifically need offline QR-based credential transfer. Treat every generated QR image as the password itself: use it in a private setting, trust the receiving device, avoid screenshots or cloud-synced folders, clear the browser/form after use, and delete generated image files immediately after transfer.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill handles passwords in a sensitive way by design, but the reviewed evidence shows an offline, purpose-aligned QR transfer tool rather than hidden credential theft.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971091642,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: qr-password\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle 'qr-password' is designed for air-gapped credential transfer via QR codes. The code and documentation consistently emphasize security best practices, including explicit instructions in `SKILL.md` for the agent to never log credentials, redact passwords, auto-clear canvas displays, delete QR images after use, and never store decoded credentials in files. The `assets/qr-generator.html` is self-contained and explicitly states it works offline without network connections. The Python scripts (`generate-qr.py`, `read-qr.py`, `qr-format.py`) use standard libraries for their stated purpose and do not exhibit any signs of data exfiltration, malicious execution, persistence, or obfuscation. While potential vulnerabilities could arise from an agent's failure to sanitize user-provided input when constructing commands for the skill (e.g., shell injection via file paths or JSON content), this represents a vulnerability in the agent's interaction layer rather than malicious intent within the skill itself. The skill's design and instructions are aligned with its stated purpose and prioritize secure handling of sensitive data.",
+          "checkedAt": 1779164532651,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "dfda4cb4d66cb41e52db1ee828b8cc778dfb4032071deaae08c63495402e153e",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/dfda4cb4d66cb41e52db1ee828b8cc778dfb4032071deaae08c63495402e153e"
+    },
+    "slug": "qr-password",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

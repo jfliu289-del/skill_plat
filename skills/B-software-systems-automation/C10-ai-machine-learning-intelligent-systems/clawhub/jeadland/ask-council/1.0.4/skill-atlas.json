@@ -1,0 +1,130 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.35,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C10:token:llm",
+      "category:C10:token:model",
+      "category:C17:token:notes",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C17"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "70c4f76f82d6d166b21a5813e042601d7f6818c651457e07c71492b43983e14b",
+    "content_hash": "b70e248b9a4b3c81f7f3fb08e3866cbf515967c9d113c28afb53afaa5ad801b8",
+    "precanonical_content_hash": "0c3de8527ba4fa7069d61e98e4d47d848277c29508232397d6d682e10caa5d0b",
+    "skill_md_hash": "cb89575bac5b4921925a7e400c1f67ff59bcda1896e4624d1be8cc08b48b3978",
+    "version_metadata_sha256": "d6427a8964eee6dcfae2c83d02f46f964d43f47ac7e2d043867a13b957adab25"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jeadland/skills/ask-council",
+    "claim_id": "9e10345707ba1a1d6b663a3abe43667c51bf86b0aa09815a793873a635d38045",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "ask-council",
+        "url": "https://clawskills.sh/skills/jeadland-ask-council"
+      }
+    ],
+    "owner_handle": "jeadland",
+    "owner_id": "s17f6d50w88q6ncqe3hbdm106n858017",
+    "published_at": 1771764954983,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779948583293,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779948583293,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is quick chat/CLI access to LLM Council, and the script only creates a local conversation, starts a run, polls for completion, and prints the final answer plus a UI link.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The primary `/council` command is explicit, but the alternate natural-language trigger `ask council` is broad enough that users should invoke it intentionally.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill plainly documents running a shell script from `~/.openclaw/skills/ask-council/ask-council.sh`, though the metadata does not separately declare command-execution permission and the bundled metadata shows version 1.0.3 while the target record is 1.0.4.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The script uses `curl` only against `http://127.0.0.1:8001`, escapes the question as JSON before POSTing, and uses `hostname -I` only to display a local web UI URL.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No persistence setup, privilege escalation, credential access, destructive file operations, background worker installation, or broad filesystem access was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: Shell execution is expected for this CLI wrapper and is disclosed in the skill instructions; the remaining issue is metadata transparency, not hidden behavior.\n[SQP-1] unexpected: The alternate `ask council` trigger is broader than necessary and could be accidentally matched, but the primary slash command is clear and the behavior is documented.\n[SQP-2] expected: The skill states that questions are sent to the LLM Council backend, and the script targets localhost; users should still treat prompts as visible to that backend and its model/logging stack.\n[SQP-2] expected: The script POSTs the question without an additional confirmation prompt, which matches the documented one-command workflow but deserves privacy caution for sensitive content.\n[E1] expected: Forwarding the prompt to the local council backend is the core function of the skill, not evidence of unrelated exfiltration.",
+          "guidance": "Install only if you run and trust the LLM Council backend on your machine. Avoid sending secrets, credentials, or sensitive personal data through `/council`, because prompts may be processed by connected models and may appear in the backend web UI or logs.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed local wrapper that sends a user’s council question to a local LLM Council backend and prints the synthesized answer.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948547984,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 65,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ask-council\nVersion: 1.0.4\n\nThe skill bundle is benign. The `ask-council.sh` script interacts exclusively with a local API endpoint (`http://127.0.0.1:8001`). User input is safely escaped using `python3 -c 'import json, sys; print(json.dumps(sys.stdin.read().strip()))'` before being embedded in JSON payloads for `curl` requests, preventing shell and JSON injection. The use of `hostname -I` is for displaying a local IP address in a URL for user convenience, not for malicious network activity. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts against the agent within the skill's instructions or code.",
+          "checkedAt": 1779166098209,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "1933426f8e9256dc1fda1bc30645c9265d68dd0a9cc5701618bb47fbcad881db",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1933426f8e9256dc1fda1bc30645c9265d68dd0a9cc5701618bb47fbcad881db"
+    },
+    "slug": "ask-council",
+    "source_type": "clawhub",
+    "version": "1.0.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,146 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:sources",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C13:token:finance",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C13"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "9cadd4c2399d852b333cc9f8f471738dc926bd67fe1f5888a36fe6dae0f72954",
+    "content_hash": "5336a2419a0542cb9d8e8a879208e8bd74af961631c1e74a6694185e02510fe5",
+    "precanonical_content_hash": "8a6c2cef1651628adbe9e9f9e5582b95aaf79d50ffcf582fc6e754c954cef139",
+    "skill_md_hash": "a559409e0602bc4e90a16c28b2a2256e9aa814527b209d08d9fdca6f9500776d",
+    "version_metadata_sha256": "b5032fcd2479b32709c157a6ad89309814ff999adc99be20953d3084b0e03618"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/su707181393-del/skills/finance-watcher",
+    "claim_id": "64a9801d489b2fb8b41cdaee658cac548a96b6cd2d40ca495e77dc6a0410290e",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "finance-watcher",
+        "url": "https://clawskills.sh/skills/su707181393-del-finance-watcher"
+      }
+    ],
+    "owner_handle": "su707181393-del",
+    "owner_id": "s17chxvsb9anvzr08vnbv7kt9n884zb3",
+    "published_at": 1771049546189,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974658883,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974658883,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The implemented commands add/remove/list watchlist entries, fetch stock and crypto prices, set/check alerts, and generate reports, matching the stated finance monitoring purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill clearly names CoinGecko and Yahoo Finance as data sources, though it could more plainly explain that watched symbols and request timing are sent to those third parties.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package installs a single Node CLI with normal dependencies and no postinstall, preinstall, shell execution, privilege escalation, or background service setup found in the artifacts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to CoinGecko and Yahoo Finance is proportionate for real-time prices; it does not request API keys or credentials, but portfolio/watchlist interests may be exposed through those lookups.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The CLI stores watchlists and alerts under the user's home config directory and can write reports to a user-supplied path; this is expected CLI behavior but can overwrite files if pointed at an existing or sensitive path.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: Outbound calls to market-data providers are expected for this skill, and SKILL.md identifies CoinGecko and Yahoo Finance; the remaining issue is disclosure quality rather than hidden behavior.\n[VirusTotal code_insight arbitrary output path] expected: The report command writes markdown to the explicit --output path. That can overwrite files if misused, but the artifacts show user-directed report generation rather than stealthy or destructive file mutation.",
+          "guidance": "Install only if you are comfortable with your watched symbols being queried against CoinGecko and Yahoo Finance and stored locally in ~/.config/finance-watcher. When generating reports, choose a normal report filename or dedicated folder and do not point --output at sensitive files.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Finance Watcher is a coherent market-price CLI with expected local config, market-data network calls, and user-directed report output, but users should avoid sensitive output paths.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974623490,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 6,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: finance-watcher\nVersion: 1.0.0\n\nThe 'finance-watcher' skill is generally benign, performing its stated functions of monitoring stock and cryptocurrency prices, setting alerts, and generating reports. However, it contains a significant vulnerability in `bin/finance-watcher.js`. The `report` command allows writing the generated markdown report to an arbitrary file path specified by the user via the `--output <file>` option. This lack of path sanitization could allow an attacker or a confused AI agent to overwrite sensitive system or user files (e.g., `/etc/passwd`, `~/.ssh/id_rsa`) with the report content, leading to data loss or system instability. While the content written is not inherently malicious, this arbitrary file write capability represents a critical vulnerability.",
+          "checkedAt": 1779163911937,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "9cadd4c2399d852b333cc9f8f471738dc926bd67fe1f5888a36fe6dae0f72954",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/9cadd4c2399d852b333cc9f8f471738dc926bd67fe1f5888a36fe6dae0f72954"
+    },
+    "slug": "finance-watcher",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

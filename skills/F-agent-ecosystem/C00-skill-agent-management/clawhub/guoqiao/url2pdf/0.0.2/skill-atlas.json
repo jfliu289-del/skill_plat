@@ -1,0 +1,127 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C03:token:pdf",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C03"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a7374e029c0e104cfbab3c015b9a5db6c5dcff2092325787a8b3b4191da0e810",
+    "content_hash": "ef281d0b17d4187fbfd3e370e1ffa41e118cb499ce4a4d1e32b1d77fd4e8619e",
+    "precanonical_content_hash": "79bb825a1b415d9aeff758234116a7ac7777ff4bc4912122a9b8b7b20cf1744b",
+    "skill_md_hash": "2b8bfdac2123af010eacdfb4d50a825e39ffec95e808052163b65f6c5478a19f",
+    "version_metadata_sha256": "00d8b4f692138387b0138fbefafd2e93f4235dcf116f3076b095039b875876a2"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/guoqiao/skills/url2pdf",
+    "claim_id": "0699da283821a6e8f38c77ab04d75907f312795d046adf995f8dc2d46dbe4a4a",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "url2pdf",
+        "url": "https://clawskills.sh/skills/guoqiao-url2pdf"
+      }
+    ],
+    "owner_handle": "guoqiao",
+    "owner_id": "s17ffveb731pj7ry6ezhyn9hts88598a",
+    "published_at": 1770717903500,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779965287593,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779965287593,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, triggers, and Python implementation all align around rendering a supplied URL with Playwright and saving it as a mobile-sized PDF.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Agent instructions are narrow: run the local script with the URL and send the produced PDF path back to the user. Natural-language triggers are somewhat broad, so users should invoke it only when they intend a URL to be fetched.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill uses uv-managed Python dependencies and requires installing Playwright Chromium, which is disclosed and proportionate for browser-based PDF rendering.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The script opens arbitrary user-supplied URLs from the host environment and writes PDFs locally, defaulting to ~/Documents. This is expected for a URL-to-PDF tool, but internal or sensitive URLs should be used deliberately.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background worker, persistence mechanism, credential harvesting, privileged mutation, destructive action, or hidden exfiltration was found in the artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad trigger phrases are real but not enough to change the verdict: the skill still requires a URL-oriented request and its runtime instructions remain limited to conversion.\n[SQP-2] expected: Rendering arbitrary URLs in Playwright is the core capability of the skill. The lack of URL filtering creates SSRF-style caution for internal or local addresses, but the behavior is user-directed and disclosed by the tool purpose rather than hidden or unrelated.",
+          "guidance": "Install only if you are comfortable with the skill opening URLs from your machine in a Playwright browser and saving the result under Documents or a chosen output path. Avoid using it on localhost, private-network, admin, or credential-bearing pages unless you intentionally want that page rendered into a PDF and shared back through the agent.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill coherently converts a user-provided web page into a local PDF, with expected browser and network behavior for that purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779965263856,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: url2pdf\nVersion: 0.0.2\n\nThe skill bundle is designed to convert a given URL to a PDF file. The `SKILL.md` instructions guide the agent to execute the `url2pdf.py` script and then send the generated PDF to the user. The Python script uses `playwright` to browse the specified URL and save it as a PDF, defaulting to `~/Documents` or a user-specified path. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts against the agent. All observed behaviors are aligned with the stated purpose of the skill.",
+          "checkedAt": 1779162720777,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "8e1b3f30bf611cb2c1a1fb1c4353099e2329a29b6ed0302dd710191b3c510996",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8e1b3f30bf611cb2c1a1fb1c4353099e2329a29b6ed0302dd710191b3c510996"
+    },
+    "slug": "url2pdf",
+    "source_type": "clawhub",
+    "version": "0.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

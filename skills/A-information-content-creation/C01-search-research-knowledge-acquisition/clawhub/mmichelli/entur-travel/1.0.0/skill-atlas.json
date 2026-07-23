@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C18:token:travel",
+      "cross-tag:planning",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C18"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "plan"
+    ],
+    "tasks": [
+      "build",
+      "plan",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "af15610c20375726cd1d93847c381a0379971a917d9cf3146cf41a2e51af6e7c",
+    "content_hash": "0810a0e9beae07b48eae41264e7599e0a8da06a14127f87ea29f409a45dc2102",
+    "precanonical_content_hash": "d2d0d88db90aefa4cf5f20dec18a296b9fb48e4b092374c1466773e65136bd4d",
+    "skill_md_hash": "2d9fd96ab62405f1de0c5b406c7f591a63d511eac69ade7472ddbd1cad0a95e0",
+    "version_metadata_sha256": "ffe082c429e734d917ff93a8f6fbd1e723b4f06686ef56a28802a555fb304503"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/mmichelli/skills/entur-travel",
+    "claim_id": "223d0f3601d18572e53e39bf49f19a679d3c9b6311ae8d82ad3a7834f105f630",
+    "index_entries": [
+      {
+        "index_path": "categories/transportation.md",
+        "label": "entur-travel",
+        "url": "https://clawskills.sh/skills/mmichelli-entur-travel"
+      }
+    ],
+    "owner_handle": "mmichelli",
+    "owner_id": "s1736y0ez23m23hnssdwxkxkrh885rb0",
+    "published_at": 1771664301375,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943845331,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943845331,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill’s stated purpose is Norway transit planning, and the artifacts support that: it searches places, plans trips, checks departures, and fetches stop details from Entur’s public API with no API key.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The runtime scope is narrow, but the Python script builds GraphQL strings with user-controlled fields such as stop IDs, time, modes, and resolved place names instead of using variables or escaping consistently.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The install surface appears to be ordinary OpenClaw skill installation with SKILL.md, _meta.json, and a standalone Python script; I found no install-time execution, package-install hook, persistence setup, or hidden loader.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Outbound access to api.entur.io is expected for transit lookup and no credentials are required; the missing explicit network permission is a transparency gap rather than a high-impact authority concern.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts show no credential collection, local profile/session access, background worker, persistence mechanism, privilege escalation, or local data indexing.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: Outbound network access is inherent to querying Entur and is disclosed in the skill description; lack of a declared network permission should be fixed for clarity, but it does not by itself make the skill suspicious.\n[VirusTotal code_insight] unexpected: The GraphQL injection concern is artifact-backed: the script interpolates user-controlled values into GraphQL queries. This is a security bug to remediate, but the total artifact evidence still indicates a transit-planning tool rather than exfiltration, backdoor, destructive behavior, or hidden high-impact access.",
+          "guidance": "Install only if you are comfortable with the skill sending your transit queries to Entur’s public API. Maintainers should add explicit scoped network disclosure for api.entur.io and fix GraphQL construction by using variables, allowlisting enum values, and escaping or validating stop IDs and date strings.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a public-transit lookup skill with a real input-escaping bug, but its behavior is disclosed, purpose-aligned, and not credentialed or destructive.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943772381,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: entur-travel\nVersion: 1.0.0\n\nThe `scripts/entur.py` file contains GraphQL injection vulnerabilities. The `_place_arg` function and the `cmd_departures`/`cmd_stop` commands directly insert user-controlled input (`place[\"id\"]`, `place[\"name\"]`, `args.stop_id`) into the GraphQL query string without proper escaping of double quotes. This allows an attacker to inject arbitrary GraphQL directives or fields, potentially leading to information disclosure or denial of service against the Entur API. There is no evidence of intentional malicious behavior such as data exfiltration, backdoor installation, or unauthorized remote control; the script's purpose aligns with its stated goal of public transit planning.",
+          "checkedAt": 1779165874704,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "af15610c20375726cd1d93847c381a0379971a917d9cf3146cf41a2e51af6e7c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/af15610c20375726cd1d93847c381a0379971a917d9cf3146cf41a2e51af6e7c"
+    },
+    "slug": "entur-travel",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

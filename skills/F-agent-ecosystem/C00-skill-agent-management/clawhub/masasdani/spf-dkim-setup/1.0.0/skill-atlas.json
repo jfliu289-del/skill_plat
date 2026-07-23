@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C06:token:api",
+      "category:C13:token:operations",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C13"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "fcf23700ad5aa4b5accccea7ca955e6d67a5634c80c9bf561194c69e70a53b11",
+    "content_hash": "801bce39cf2c3f241eac3fd9c12af5e8c39f08b5a50d519fcc06c29e263903d9",
+    "precanonical_content_hash": "cc1d0c49a00c8efe966fe04ea5737f14d3c3be8fef6e0b9f0b536f4a0a6445b8",
+    "skill_md_hash": "5cb1b7f59adcd1fd9bb01d7c9f7ed55677305368e5a44c2c2a635a44d3f12c93",
+    "version_metadata_sha256": "fb16272b0ac3a629da5be63cb04f00a299cc6bb7d0d55553825409f01b390c0b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/masasdani/skills/spf-dkim-setup",
+    "claim_id": "944d546b71e2afa7cb782f231d4b23cf0f239dbd32d56c5e1b68f9cc20f8c01d",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "spf-dkim-setup",
+        "url": "https://clawskills.sh/skills/masasdani-spf-dkim-setup"
+      }
+    ],
+    "owner_handle": "masasdani",
+    "owner_id": "s175vnf70bav6ahbjzv83kqhfd884a7e",
+    "published_at": 1771830782838,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779952128491,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779952128491,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifact: it manages Cloudflare DNS records for SPF, DKIM, DMARC, verification, and general DNS operations. Create, update, and delete authority is high-impact but disclosed and necessary for the purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions show direct Cloudflare API calls and an autonomous Mailtarget workflow. They do not include strong review, dry-run, or confirmation guidance before mutating or deleting DNS records, which is an operational safety gap rather than evidence of hidden behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains markdown documentation and a reference file only; there are no executable installers, scripts, package installs, or background components.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "A Cloudflare API token with DNS Write permission and a zone ID are proportionate for DNS management, but the credential is sensitive and should be narrowly scoped to the intended zone.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence mechanism, local credential storage, obfuscation, non-Cloudflare endpoint, or self-starting behavior was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The concern about autonomous DNS modification is valid as an operational risk, but the authority is disclosed, Cloudflare-specific, and aligned with the skill's DNS-management purpose.\n[SQP-2] expected: The direct delete example is a high-impact operation and would benefit from warnings and confirmation guidance, but it is a normal documented capability for a DNS management skill and is not hidden or deceptive.\n[VirusTotal] expected: VirusTotal telemetry reported the artifact as clean and found only Cloudflare API usage consistent with the stated purpose.\n[staticScan] expected: The static scan reported no suspicious patterns, and local artifact review found only markdown documentation and Cloudflare API examples.",
+          "guidance": "Install only if you want an agent to manage DNS for a Cloudflare-hosted domain. Use a least-privilege Cloudflare token scoped to the intended zone, review the exact record name, type, old value, and new value before changes, and be especially cautious with delete, import, batch, MX, CNAME, SPF, DKIM, and DMARC changes because mistakes can break websites, email delivery, or domain verification.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward Cloudflare DNS helper, but it can make real DNS changes and should be used carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779952100214,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: spf-dkim-setup\nVersion: 1.0.0\n\nThe skill bundle is designed for legitimate Cloudflare DNS management, requiring a `CLOUDFLARE_API_TOKEN` with DNS Write permissions, which is necessary for its stated purpose. All `curl` commands in SKILL.md interact with the Cloudflare API as expected, without any evidence of data exfiltration to unauthorized endpoints, malicious execution, persistence mechanisms, or obfuscation. While managing DNS records is a powerful capability and potential shell injection is a general concern for AI agents executing commands from user input, the skill's documentation and examples do not contain any explicit malicious prompt injection attempts or instructions for the agent to deviate from its stated, benign purpose.",
+          "checkedAt": 1779166435327,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "e0cc527d24de2d8cef573c4dccbf18efbf2119fedd8c35ed97cdb04a94f282f1",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e0cc527d24de2d8cef573c4dccbf18efbf2119fedd8c35ed97cdb04a94f282f1"
+    },
+    "slug": "spf-dkim-setup",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

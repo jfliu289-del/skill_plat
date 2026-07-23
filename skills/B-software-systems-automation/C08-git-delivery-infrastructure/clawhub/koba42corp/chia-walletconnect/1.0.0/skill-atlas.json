@@ -1,0 +1,155 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "configuration"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "infrastructure",
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C08:token:deploy",
+      "category:C08:token:deployment",
+      "category:C09:token:security",
+      "category:C11:token:project",
+      "cross-tag:agent-management",
+      "cross-tag:deployment",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00",
+      "C06",
+      "C09",
+      "C11"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "deploy",
+      "manage",
+      "operate",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "c31dfbcdd92689465596c7494db4144020231a477fd1e7dc18651a70442d2db2",
+    "content_hash": "a5f48d030e99796240e87061b0030986853224d68513c09501b9c5bc201347d1",
+    "precanonical_content_hash": "9d2ae563c71d0cc4e24992985a507867392dfac663d5fac1b95b62273ff9b792",
+    "skill_md_hash": "0cc6f9269ba2f8ce64a1864ecbf9337751b874820ba8d5c6649196ce78d120da",
+    "version_metadata_sha256": "8eb1b87c6723c6279d11a6d30f68110116c9dbf620a8083d4b587db6d74f7b33"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/koba42corp/skills/chia-walletconnect",
+    "claim_id": "38ba29239f41358c4d55e126d4e785f33a8402c0c07920c739d75b933aca61f3",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "chia-walletconnect",
+        "url": "https://clawskills.sh/skills/koba42corp-chia-walletconnect"
+      }
+    ],
+    "owner_handle": "koba42corp",
+    "owner_id": "s178ggk1zgbe8bk8vpp508wm1x884fp8",
+    "published_at": 1769730633425,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783652910705,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783652910705,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "WalletConnect, Sage wallet signing, Telegram Web App data return, and MintGarden signature verification fit the stated wallet-ownership verification purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The docs describe the address, message, signature, public key, and Telegram-linked user ID flow, but the in-app UI should be clearer that this data is sent to the bot and MintGarden.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Install is a normal Node/npm workflow with no package lifecycle scripts or automatic execution beyond user-directed commands; a bundled WalletConnect project ID is documented as a reference value to replace for production.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Outbound access to Telegram, WalletConnect, hosted web app assets, and MintGarden is expected for this integration; the optional Express server uses broad CORS and unauthenticated status lookup, which should be tightened before production use.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden persistence, privilege escalation, filesystem indexing, credential-store access, or background worker behavior was found; the server only keeps verification status in memory.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The metadata only declares Node, while the docs and code rely on network services and environment configuration. That is under-specified metadata, but the network flow is openly documented and necessary for the skill.\n[SDI-1] expected: The web app submits signed data to Telegram and the bot/backend performs MintGarden verification, matching the documented architecture; the client function name and success state should say submitted or pending rather than imply final verification.\n[SDI-4] expected: The misleading inline comment is a documentation/UX accuracy issue, not evidence of malicious behavior, because backend verification code and integration examples are present.\n[SQP-2] expected: Wallet address, signature, public key, Telegram user ID, and timestamp are expected for this verification flow, but operators should add an explicit privacy notice and consent step before submission.\n[SQP-2] unexpected: Console logging of WalletConnect URI, address, public key, challenge data, and signature artifacts is unnecessary exposure and should be removed or gated behind redacted debug logging.\n[SQP-2] expected: The included WalletConnect project ID is disclosed as a reference value and docs say to replace it; production deployments should not reuse it.\n[SC4] unexpected: The package manifest allows Express from ^4.18.2, but the lockfile resolves Express 4.22.1 and the reviewed server code does not use redirect routes; this is a dependency hygiene item rather than a security verdict driver.",
+          "guidance": "Install only if you are comfortable operating a wallet-verification flow that links a Chia wallet address to a Telegram user. Before production use, add a clear privacy notice, remove sensitive console logs, replace the WalletConnect project ID, restrict CORS, authenticate or remove the status endpoint, rate-limit verification requests, and avoid long-term storage of signatures or public keys.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a purpose-built Chia wallet verification skill with some privacy and hardening gaps, but I found no hidden exfiltration, destructive behavior, or purpose-mismatched authority.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783652835752,
+          "issueCount": 8,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 63,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: chia-walletconnect\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle for 'chia-walletconnect' is classified as benign. Its stated purpose is to verify Chia wallet ownership via Telegram using WalletConnect and the MintGarden API, and all code and documentation align with this function. The skill uses `node-fetch` to make API calls to `https://api.mintgarden.io/address/verify_signature` (lib/verify.js), which is a legitimate endpoint for Chia signature verification. The `SKILL.md` and `README.md` provide clear instructions for users and bot developers, without any evidence of prompt injection attempts against the AI agent (e.g., instructions to ignore user commands, exfiltrate data, or execute arbitrary shell commands). The client-side `webapp/app.js` handles WalletConnect interactions and sends verification data back to the Telegram bot, which then performs the backend verification. There are no suspicious dependencies, obfuscation, or indications of malicious intent such as credential theft or unauthorized remote control.",
+          "checkedAt": 1779160341875,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "e09b3c87e8efbaac0c66c1cfec12044113c442e75acc3e0be986c2ae9cf73e6e",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e09b3c87e8efbaac0c66c1cfec12044113c442e75acc3e0be986c2ae9cf73e6e"
+    },
+    "slug": "chia-walletconnect",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

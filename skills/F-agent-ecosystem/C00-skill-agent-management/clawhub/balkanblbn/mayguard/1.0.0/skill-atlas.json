@@ -1,0 +1,135 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.7929,
+    "domains": [
+      "security"
+    ],
+    "needs_review": false,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:phrase:agent skill",
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C09:token:security",
+      "cross-tag:agent-management",
+      "cross-tag:security",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "475f75e0c35ea1088c103f3fc5ee681893ea7adfabdb244a3d9684d2c5bf016e",
+    "content_hash": "3e63aa53d629ca04bc2922ffbfe336f8ceafc2538c840f2ebe33f340f2ea0aa1",
+    "precanonical_content_hash": "68baed2586902e6846d2f09b8af36b48a0153b9c30197fa295eb7c1134e64cf9",
+    "skill_md_hash": "9592f537ecb5ae58d99245b614d73a1382ed9b5e3c35ecab8f27f89c04b90007",
+    "version_metadata_sha256": "1276c39e2bccb6f8a20ac325c7b4fef1070780b023bd22e731bf98f531c58476"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/balkanblbn/skills/mayguard",
+    "claim_id": "658c467dc6b7e52563d2eac2295c05fe9df575ff65af7be156db29a0daca0e1b",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "mayguard",
+        "url": "https://clawskills.sh/skills/balkanblbn-mayguard"
+      }
+    ],
+    "owner_handle": "balkanblbn",
+    "owner_id": "s176m3s91hac86a9vdjqhzxaqx884c7d",
+    "published_at": 1771794657725,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779950250467,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779950250467,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is security auditing of agent skills, and the artifacts match that purpose: a Python script reads a user-supplied directory and checks file contents against bundled regex patterns.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The scan scope is controlled by the path the user passes to `scripts/audit.py`; recursive local reads are expected for a static scanner, but users should choose a narrow skill directory.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains only `SKILL.md`, one Python script, and one JSON pattern file; there is no installer, package fetch, setup hook, or dependency bootstrap.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Local file reading is proportionate for the advertised scanner. The script outputs matched pattern names and relative paths, not file contents, and shows no network calls or mutation behavior.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background service, autorun mechanism, privilege escalation, credential/session store use, or persistent state is present in the artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The concern about scanning sensitive files is real in broad directories, especially because `.ssh/id_rsa`-style files could be read if included under the chosen path. This is purpose-aligned and user-directed, and the script does not print secret contents or transmit data.\n[staticScan.clean] expected: Static scan reported no findings, consistent with direct review of the script and pattern file.\n[VirusTotal.clean] expected: VirusTotal telemetry is clean and aligns with artifact review, but the verdict does not rely on VirusTotal alone.",
+          "guidance": "Install only if you want a lightweight local scanner for downloaded skill folders. Run it against the specific skill directory you intend to inspect, not your home directory or broad private folders, and treat its SAFE result as a heuristic rather than a guarantee.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "MayGuard is a local, user-run scanner for other skill folders, with no evidence of hidden network access, persistence, credential theft, or file modification.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779950223428,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: mayguard\nVersion: 1.0.0\n\nThis skill bundle, 'mayguard', is designed as a security auditor for other agent skills. The `SKILL.md` clearly describes its purpose and usage, and does not contain any prompt injection attempts. The `scripts/audit.py` code implements static analysis by scanning files for patterns defined in `references/threat_patterns.json`. The script itself does not perform any network calls, execute arbitrary commands, access sensitive host files, or attempt data exfiltration. Its functionality is entirely aligned with its stated benign purpose of detecting malicious patterns in *other* skills, not performing them itself.",
+          "checkedAt": 1779166318794,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "ec1d5ecd72a8cdac02bf8d391f78113e4686998401e2a1b93374d23fc7fc69b3",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ec1d5ecd72a8cdac02bf8d391f78113e4686998401e2a1b93374d23fc7fc69b3"
+    },
+    "slug": "mayguard",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

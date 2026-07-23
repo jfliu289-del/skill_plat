@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C02:token:write",
+      "category:C09:token:audit",
+      "category:C12:token:management",
+      "cross-tag:agent-management",
+      "cross-tag:testing",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C09",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "test",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "84f2a9dd1450cb247c2ad5754a2ee06599adfeba38ceb31b52c90794aa5df509",
+    "content_hash": "efa3cc2c19dd021e7a5c371c43ae6b1fc26eb429b02703a2bf434db08ce716ec",
+    "precanonical_content_hash": "050bad525040876cda0decb2f7a378dbe278a575f15bd4ae900ec545501d499f",
+    "skill_md_hash": "990eeeb1c654034f02044805ffc8785ca39290e54388cf810e343faa00798591",
+    "version_metadata_sha256": "f2f21bc06e3549bfeb81707b74e9098478aeda5414c1d04ca2f0463bb3353f3b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/waynevaughan/skills/buffer-session",
+    "claim_id": "7b691bc43b1e301d452846196ff53db88c85dbe0f7266b9764ff437156525086",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "buffer-session",
+        "url": "https://clawskills.sh/skills/waynevaughan-buffer-session"
+      }
+    ],
+    "owner_handle": "waynevaughan",
+    "owner_id": "s170f0h7qnqfm0qge207bpkxzn884t3y",
+    "published_at": 1771899751445,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779954006194,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779954006194,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The capabilities match the stated purpose: reading HANDOFF.md and MEMORY.md, writing structured session handoffs, monitoring context usage, and auditing OpenClaw workspace prompt and memory files.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill instructs first-run creation of a sibling buffer-optimizer skill and local scripts, plus ongoing session-state writes. This is disclosed in README.md and SKILL.md, though a clearer opt-in prompt would reduce surprise.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No remote dependency install or external code download is required during skill execution. The bundle embeds the companion skill text and two shell scripts, then recreates them locally on first run if missing.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The scripts are scoped to OPENCLAW_WORKSPACE or the default OpenClaw workspace and inspect file sizes, markdown filenames, skill counts, and AGENTS.md patterns. They do not request credentials, tokens, network access, privileged access, or unrelated system traversal.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "Persistent writes to HANDOFF.md, possible MEMORY.md creation or update, scratch files, and the buffer-optimizer skill directory are central to the workflow and mostly disclosed, but users should understand these files can affect future agent behavior and may contain sensitive session context.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] expected: The artifact does instruct automatic extraction of buffer-optimizer on first run. This expands local skill state, but it is explicitly described as a companion auditor and is coherent with the session-management and workspace-optimization purpose.\n[SDI-2] expected: The artifact can create and run shell audit scripts. The reviewed scripts only read local workspace metadata and AGENTS.md text patterns, with no network calls, credential handling, destructive commands, or privilege escalation.\n[SQP-2] expected: The README and SKILL.md disclose first-run setup and automatic companion extraction, but the disclosure could be more prominent and should ideally include explicit confirmation before writes.\n[SQP-2] expected: Persistent HANDOFF.md and MEMORY.md behavior is part of the advertised session-continuity design. The privacy concern is real because sensitive operational details may be stored locally, but the behavior is purpose-aligned and not hidden.\n[VirusTotal code_insight] expected: The telemetry concern about self-extraction and script execution is supported, but artifact review shows bounded local setup of a disclosed companion skill and benign local audit scripts rather than malicious payload behavior.",
+          "guidance": "Install this only if you want the agent to persist session state and create a local buffer-optimizer companion skill. Review or back up HANDOFF.md, MEMORY.md, AGENTS.md, and any existing skills/buffer-optimizer directory first, and avoid using it in workspaces where local session notes or prompt files should not be retained.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Buffer is a session-continuity skill that persistently writes local handoff and memory files and installs a disclosed local companion auditor, but the reviewed artifacts do not show exfiltration, credential access, destructive behavior, or hidden unrelated capabilities.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779953972577,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 84,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: buffer-session\nVersion: 1.0.0\n\nThe skill bundle uses the AI agent to perform a 'self-extraction' and installation of a secondary skill (buffer-optimizer) and several shell scripts (measure-boot.sh, audit-agents-md.sh) into the workspace. While the scripts themselves appear benign—focused on auditing file sizes and prompt patterns—the pattern of using AI instructions to write and execute shell scripts is a high-risk behavior. There is no evidence of data exfiltration or malicious intent, but the capability for self-replication and script execution warrants a suspicious classification.",
+          "checkedAt": 1779166635043,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "84f2a9dd1450cb247c2ad5754a2ee06599adfeba38ceb31b52c90794aa5df509",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/84f2a9dd1450cb247c2ad5754a2ee06599adfeba38ceb31b52c90794aa5df509"
+    },
+    "slug": "buffer-session",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

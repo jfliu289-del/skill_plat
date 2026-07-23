@@ -1,0 +1,133 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:code",
+      "category:C17:token:notes",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8614c52f7b7d9651eb61af7a8ae487a79e7a73d41b78f353a0ea84abd046a094",
+    "content_hash": "4cbafd7757f0a212f3e82d03825ffbdf96709600f28751f31da9984ce7f21db7",
+    "precanonical_content_hash": "883bc6a1c99198d85105a6847084e949188c37ccdc9c799258126d4007de5d41",
+    "skill_md_hash": "9078325b8c627bbed8a031f828cf2fe2bbe1777137ac904b918972782ec4c1a8",
+    "version_metadata_sha256": "8f715c9b08a2bae4f852a3acf55a179d1dc6761dde2403a4e2f81f397efc9dd3"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/aligurelli/skills/claude-usage-checker",
+    "claim_id": "9eab37e3b1ea06fe50f00d6b76f34b4262604d2d1b8de659fd61dd0e7492a1f9",
+    "index_entries": [
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "claude-usage-checker",
+        "url": "https://clawskills.sh/skills/aligurelli-claude-usage-checker"
+      }
+    ],
+    "owner_handle": "aligurelli",
+    "owner_id": "s173mrkjrvj2e8q7c4h8nhvsz58845nw",
+    "published_at": 1771466205659,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779932984826,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779932984826,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The PTY-based Claude CLI control is directly tied to the stated purpose of retrieving Claude usage and quota information, and the sensitive account-usage visibility is disclosed.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are narrow: launch `claude`, send `/usage`, read the result, exit, and report the quota table.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no bundled executable or install script; the skill only declares `claude` as a prerequisite and tells the user to install or log in manually if needed.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Using an interactive PTY and the user's existing Claude CLI login is proportionate for this workflow, but it means the agent can view Claude account usage and reset details.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Artifacts show no background process, credential capture, file indexing, persistence mechanism, or unrelated privilege use.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code insight: PTY use] expected: The telemetry flags `pty: true` as broad interactive process control, but the artifact explicitly scopes it to the local Claude CLI `/usage` workflow and does not show shell escapes or unrelated commands.\n[SkillSpector report] expected: SkillSpector reported no issues, consistent with the visible artifact behavior.\n[Static scan] expected: The static scan found no suspicious patterns, and manual review found only a markdown skill file with disclosed prerequisites and steps.",
+          "guidance": "Install only if you are comfortable with an agent briefly controlling your local Claude CLI and seeing your Claude usage, quota, reset times, and related spending-limit information. Confirm the CLI is logged into the intended account before running it.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it briefly opens the local Claude CLI to check usage limits, with no hidden code or persistence found.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779932957271,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: claude-usage-checker\nVersion: 1.3.0\n\nThe skill is classified as suspicious due to the use of `pty: true` in `SKILL.md` which grants broad interactive process control. While the explicit instructions for the agent are limited to running the `claude` CLI and sending benign commands (`/usage`, `/exit`), the `pty=true` capability itself is a high-risk permission. It creates a significant attack surface, as it allows for arbitrary command execution within the pseudo-terminal if the agent were compromised or if the `claude` binary itself had shell escape vulnerabilities, even though no malicious intent is present in the current instructions.",
+          "checkedAt": 1779165341765,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "3dcdfa75d8395a424cd69066480bdcc562bb3013ca800c1f1e528c3c20508bb5",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/3dcdfa75d8395a424cd69066480bdcc562bb3013ca800c1f1e528c3c20508bb5"
+    },
+    "slug": "claude-usage-checker",
+    "source_type": "clawhub",
+    "version": "1.3.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

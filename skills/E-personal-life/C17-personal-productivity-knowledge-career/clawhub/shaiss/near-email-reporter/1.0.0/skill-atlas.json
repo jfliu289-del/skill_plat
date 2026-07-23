@@ -1,0 +1,128 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.4167,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C17",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C17:token:notes",
+      "category:C17:token:schedule",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "bfaa8731a0eeab761cf600a67fe4e7bfc6c7b0602fc2d6be5b2a2dab751494de",
+    "content_hash": "667bf759c235c0128d22c95bcece844a6a1303696cc81711b2ce6690b468fbe5",
+    "precanonical_content_hash": "277b0e52e19c89a049d792970e359de8f652bf9e7021f681fc870a2bd8bc5a5a",
+    "skill_md_hash": "aa53626dc28fbf6ab1381fa927b848dd3d2fdd6955ce88eb6192b8062b04dbf1",
+    "version_metadata_sha256": "f342ccf04bd425406fc66f4030b8a27a7126729ca44bb42a236c27e705a14852"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/shaiss/skills/near-email-reporter",
+    "claim_id": "295d75771bf25044bbe1e4ef0d47be3b33bcfafb3460bec0a0a61468a1eeb3c2",
+    "index_entries": [
+      {
+        "index_path": "categories/communication.md",
+        "label": "near-email-reporter",
+        "url": "https://clawskills.sh/skills/shaiss-near-email-reporter"
+      }
+    ],
+    "owner_handle": "shaiss",
+    "owner_id": "s176b0j1b6a85cakm6bdwdej65885m7p",
+    "published_at": 1770554477652,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658625561,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658625561,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifact purpose, NEAR account reporting through email, matches the script's setup and NEAR RPC account lookup behavior, though actual email sending, alerts, and scheduling are mostly placeholders unless the user adds nodemailer or scheduling integration.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are explicit user-run CLI commands with no hidden prompt overrides, automatic execution, destructive actions, or broad local indexing.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no automatic installer, lifecycle hook, or dependency execution; the README only suggests a user-directed nodemailer install for real email delivery.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime access is proportionate: it reads and writes a local email config file and queries the public NEAR mainnet RPC endpoint; external email delivery would be expected for this purpose if the user integrates SMTP sending.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "SMTP credentials are accepted with a --pass command-line argument and stored as plaintext JSON under ~/.near-email/config.json with mode 0600, which is disclosed and purpose-aligned but weaker than interactive or keychain-based secret handling.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The README and SKILL.md do document local SMTP configuration storage, but they do not clearly warn that SMTP credentials are sensitive secrets; this is a user-caution issue rather than evidence of hidden or malicious behavior.\n[SQP-2] expected: The command-line --pass flow is real in scripts/emailer.js and can expose credentials through shell history or process listings, but it is part of the disclosed setup flow for an SMTP-reporting helper.\n[SQP-2] expected: Plaintext local credential storage is present, mitigated somewhat by mode 0600; no artifact evidence shows credential exfiltration, background persistence, or unauthorized email sending.",
+          "guidance": "Use an app-specific SMTP password rather than your primary email password. Avoid running setup on shared machines, consider clearing shell history after using --pass, verify ~/.near-email/config.json permissions, and test manually before relying on alerts or scheduled reports because those features are not fully implemented in the included script.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears aligned with NEAR email reporting, but users should handle the SMTP password carefully because it is entered on the command line and saved locally.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658572308,
+          "issueCount": 3,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: near-email-reporter\nVersion: 1.0.0\n\nThe skill's code and documentation align with its stated purpose of configuring email settings and fetching NEAR account data. SMTP credentials are saved to `~/.near-email/config.json` with secure `0o600` permissions. The `scripts/emailer.js` file explicitly notes that email sending functionality requires `nodemailer` to be installed and integrated, meaning the provided code does not actually send emails or exfiltrate data. Network activity is limited to legitimate NEAR RPC endpoints for querying account balances. There is no evidence of prompt injection, malicious execution, or unauthorized data exfiltration.",
+          "checkedAt": 1779162209207,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "0218616122f29c156ea8b4f23c22aced54bd717fa260d7fa0987b755f3a9cf34",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0218616122f29c156ea8b4f23c22aced54bd717fa260d7fa0987b755f3a9cf34"
+    },
+    "slug": "near-email-reporter",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

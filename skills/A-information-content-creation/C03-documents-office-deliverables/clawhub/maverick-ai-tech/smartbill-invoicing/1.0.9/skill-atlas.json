@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "website"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C03",
+    "reasons": [
+      "category:C03:token:document",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "category:C19:token:automation",
+      "cross-tag:browser-automation",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C10",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "automate",
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "71e42aa409e7e4d3592deee32805f8509c1dc4386c5ceee5727ec154ff590015",
+    "content_hash": "4546feb0a51a296e0febfa07d2c01f27e250c578f484c541450402466620e7fe",
+    "precanonical_content_hash": "24978a4aac1f237c75b57791f35bd352aa7e2fd491f5386e06bb64a1cfffaafd",
+    "skill_md_hash": "32547024f0c8fe83cf2d0297ad321aeb66ecfa3c3cda703995182ecc711a8075",
+    "version_metadata_sha256": "7ba5a53a4f6933efef8e4c60859088b62c38bde2d6a63b2d3105218b30dd4758"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/maverick-ai-tech/skills/smartbill-invoicing",
+    "claim_id": "46999fe110210a92ac366809f84eb8dd48ff57b98c23816b4dadfff7b70a3167",
+    "index_entries": [
+      {
+        "index_path": "categories/productivity-and-tasks.md",
+        "label": "smartbill-invoicing",
+        "url": "https://clawskills.sh/skills/maverick-ai-tech-smartbill-invoicing"
+      }
+    ],
+    "owner_handle": "maverick-ai-tech",
+    "owner_id": "s1739hrwh7208jxhr18qg7tgas85tx88",
+    "published_at": 1771745757433,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943805201,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943805201,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "Network calls to SmartBill, SmartBill credential use, invoice creation, and PDF output all fit the stated invoicing purpose; final invoice issuance is described as gated by an explicit --allow-final control.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill instructions reportedly include safety guidance and output-path restrictions, but the manifest-level permission scope appears less explicit than ideal for a credentialed business-data integration.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No evidence was provided or found of unusual install behavior, background workers, persistence hooks, or unrelated setup actions.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Reading SmartBill environment variables, writing invoice PDFs, and contacting the SmartBill API are proportionate for this purpose, with output path validation reported; debug logging can expose business-sensitive payloads if enabled.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No evidence of privilege escalation, durable persistence, credential harvesting, broad local indexing, or hidden use of local auth/session stores was identified.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The flagged environment access, file output, and outbound network use are expected for a SmartBill invoicing CLI; the concern is downgraded because the behavior is purpose-aligned and reportedly constrained, though clearer declared permissions would improve reviewability.\n[SQP-2] unexpected: Full request and response body logging in debug mode is not necessary for core invoicing and may expose customer or tax data in logs; because it is conditional debug behavior rather than hidden automatic exfiltration, it warrants user caution rather than a Review verdict.",
+          "guidance": "Install only if you are comfortable giving the skill access to SmartBill credentials and invoice/customer data. Use the final-invoice flag deliberately, choose PDF output paths carefully, and avoid debug mode unless logs are protected and you are prepared for invoice payloads to appear there.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill appears to be a coherent SmartBill invoicing helper, but users should avoid enabling debug logging with sensitive invoice data.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943768621,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: smartbill-invoicing\nVersion: 1.0.9\n\nThe skill bundle is benign. The `scripts/smartbill_cli.py` implements robust security controls, notably the `_safe_output_path` function, which strictly validates PDF output paths to prevent arbitrary file writes and path traversal by ensuring paths end in `.pdf` and resolve within OpenClaw-allowed media roots or the current working directory. Furthermore, the `SKILL.md` and `agents/openai.yaml` instructions explicitly guide the AI agent towards secure practices, such as requiring `--allow-final` for issuing final invoices and reinforcing the output path restrictions, demonstrating a clear intent to prevent misuse rather than facilitate it.",
+          "checkedAt": 1779165869359,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "b1aaf6c658a09ae38bd3aedccbb62c4d567b9fd3e10aab2d8aac8601d6a024eb",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b1aaf6c658a09ae38bd3aedccbb62c4d567b9fd3e10aab2d8aac8601d6a024eb"
+    },
+    "slug": "smartbill-invoicing",
+    "source_type": "clawhub",
+    "version": "1.0.9"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

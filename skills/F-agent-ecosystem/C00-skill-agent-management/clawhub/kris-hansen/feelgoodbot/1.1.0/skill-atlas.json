@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:prompt",
+      "category:C06:token:code",
+      "category:C09:token:security",
+      "cross-tag:agent-management",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C09"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "12568b1fab6bd50047b4e6c70e4c9902025d9514feec27278025e8f19ffd3c70",
+    "content_hash": "2471205001b06356b7ecd9dfdc6973b0614b3fce27d1fd7b5945e3933f3a06f9",
+    "precanonical_content_hash": "b1655ab35a86d569096af043693fecbc14e4fe1d67e77e30ea12c9972d6e2a8a",
+    "skill_md_hash": "1abe954729dfe83e507b5f42f66b5b1cd9e2e30c1f7a19a3a96c6613b1ae801a",
+    "version_metadata_sha256": "cf2b9fdfe060033e1be3fba8f104f0490ae3754006f28941ab8fee52c6bd20b1"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/kris-hansen/skills/feelgoodbot",
+    "claim_id": "67f2b02a41de6f85cb92d0f06d21a8aa41e753d9e49c2a94d2919e5935bd6452",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "feelgoodbot",
+        "url": "https://clawskills.sh/skills/kris-hansen-feelgoodbot"
+      },
+      {
+        "index_path": "categories/security-and-passwords.md",
+        "label": "feelgoodbot",
+        "url": "https://clawskills.sh/skills/kris-hansen-feelgoodbot"
+      }
+    ],
+    "owner_handle": "kris-hansen",
+    "owner_id": "s17abb2vf02fmnvkqz9kexf3rn8676t1",
+    "published_at": 1770588103818,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783657983328,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783657983328,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently target macOS file integrity monitoring, local security alerts, and TOTP step-up guidance. The installer implements monitoring and Clawdbot alerting, while TOTP setup is documented as separate user-run commands rather than silently enabled by setup.sh.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The runtime instructions tell the agent to check step-up requirements before sensitive actions and do not contain role overrides, hidden instructions, exfiltration requests, or unrelated behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "setup.sh uses go install from the upstream GitHub module at @latest, initializes a baseline, writes a local config, enables Clawdbot webhooks, restarts the gateway, and starts the daemon. These are meaningful local changes but are disclosed and purpose-aligned.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Monitoring system files, shell configs, SSH/sudo-related files, browser extensions, and AI agent configs is broad but proportionate for a file integrity monitor and is described in SKILL.md.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "launchd-style daemon persistence and a stored local webhook secret are expected for continuous monitoring and alerting, but users should review the service and file permissions before enabling it.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[TP4] expected: The concern about advisory TOTP enforcement is partially supported because enforcement depends on the installed tool and agent integration, but SKILL.md explicitly documents TOTP setup, checks, and protected-action configuration rather than hiding the limitation.\n[SDI-1] expected: Clawdbot webhook configuration and gateway restart are present in setup.sh, but SKILL.md has a Clawdbot Integration section and the manifest includes security alerts, so this is disclosed alerting behavior rather than a purpose mismatch.\n[SDI-1] expected: setup.sh does not initialize TOTP automatically, but SKILL.md separates TOTP into a user-run setup section with init, verify, status, and action commands. This is a caveat, not evidence of malicious behavior.\n[SQP-2] expected: The webhook secret is written into ~/.config/feelgoodbot/config.yaml as part of localhost alert integration. Plaintext local storage deserves caution and permission review, but it is not evidence of exfiltration.\n[SQP-2] expected: Automatic Clawdbot webhook changes and gateway restart are operationally significant, but they are visible in the script and match the documented local alerting feature.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with the artifact review, but it was treated only as supporting telemetry.\n[staticScan] expected: Static scan reported no suspicious patterns, and manual review found no artifact-backed deception, remote exfiltration, or destructive behavior beyond documented reset/troubleshooting commands.",
+          "guidance": "Install only if you trust the upstream feelgoodbot Go project and want persistent local monitoring. Before running setup, review that it installs an unpinned @latest Go binary, creates a baseline, enables Clawdbot webhooks, stores a local webhook secret, restarts the gateway, and starts a daemon. Run and verify the documented TOTP initialization separately if you expect step-up authentication to protect sensitive actions.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill is a disclosed local security-monitoring setup with expected persistence and local alert integration, but users should understand that TOTP protection depends on separate setup and agent integration.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783657947048,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 73,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: feelgoodbot\nVersion: 1.1.0\n\nThe skill bundle installs a file integrity monitoring and TOTP step-up authentication tool. The `scripts/setup.sh` uses `go install` to fetch and compile the tool from a public GitHub repository, which is a standard method for Go applications. It configures a `launchd` daemon for persistence, necessary for an FIM tool, and integrates with `clawdbot` via a local webhook (`http://127.0.0.1:18789/hooks/wake`) and a locally generated secret, indicating local communication for alerts. The `SKILL.md` provides instructions for the AI agent to implement a security control (TOTP step-up authentication) for sensitive actions, which is a defensive measure, not a prompt injection attack. All actions are aligned with the stated purpose of setting up a security tool, with no evidence of intentional malicious behavior like data exfiltration or unauthorized remote control.",
+          "checkedAt": 1779161953154,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "1a83d8d0e522f46947bcee23e3218e0c4602b91947d9415970e1b5d317de03ed",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1a83d8d0e522f46947bcee23e3218e0c4602b91947d9415970e1b5d317de03ed"
+    },
+    "slug": "feelgoodbot",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

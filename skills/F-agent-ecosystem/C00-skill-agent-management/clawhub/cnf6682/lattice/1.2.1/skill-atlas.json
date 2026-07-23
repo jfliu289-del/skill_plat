@@ -1,0 +1,154 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.5417,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:phrase:multi agent",
+      "category:C00:token:agent",
+      "category:C06:token:implementation",
+      "category:C07:token:review",
+      "category:C07:token:testing",
+      "category:C10:token:ai",
+      "category:C10:token:model",
+      "category:C11:token:project",
+      "category:C11:token:team",
+      "cross-tag:agent-management",
+      "cross-tag:planning",
+      "cross-tag:review",
+      "cross-tag:software-development",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C07",
+      "C10",
+      "C11"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "plan",
+      "review",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "fdd21eff1845c991659f0574ee5c6f1a51c389d31a663e196926111df3c6419c",
+    "content_hash": "e5512aef731daab32cfa03a5759b1d961ccfde7ad166ad1786f07b7ad96d9134",
+    "precanonical_content_hash": "a3b155d6d21db9ca20c3782c4937c015e8145e9eb6c43f4efa5911d2e0de0b8c",
+    "skill_md_hash": "3e449454cc16cf403d2e594addd03c0ad98fac2ad9b70bd8001cc4a4c401cd3e",
+    "version_metadata_sha256": "6aef0541f73262ebe460c313329f6ef07c6d94883b32d0a532e8cb1042944f7d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/cnf6682/skills/lattice",
+    "claim_id": "95c1d8d137af013b099e900e18a3e8144884aaa15b6f45b65992f3e5c69f51a8",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "lattice",
+        "url": "https://clawskills.sh/skills/cnf6682-lattice"
+      }
+    ],
+    "owner_handle": "cnf6682",
+    "owner_id": "s172v1b4k6ct62ssch5h68b601884r5g",
+    "published_at": 1771154142396,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968000697,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968000697,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The requested capabilities fit the stated purpose: scaffold ORG/project files, configure pipeline state, create a scheduled orchestrator, spawn phase agents, and write project artifacts/code as part of an explicit development workflow.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill gives broad autonomous development instructions once configured, including implementation, testing, review, escalation, peer consult, and auto-triage, but it repeatedly scopes agents to assigned phases and forbids system config/gateway changes.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle is markdown and JSON templates only; no executable installer, package install, binary payload, or hidden startup mechanism was present in the artifacts inspected.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The cron-driven workflow can consume model/API resources and modify a selected code repository, which is proportionate to the stated long-running pipeline purpose but should be used only on intended repos.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistent files and cron scheduling are central and disclosed, including a default 30-minute cadence and instructions to tell the user the cron job ID; there is no hidden persistence beyond that disclosed scheduler.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: Setup-side file creation, template copying, example-folder removal, and cron creation are explicit user-facing setup tasks. The artifact would benefit from a final side-effect confirmation, but the behavior is disclosed and purpose-aligned.\n[SQP-1] expected: The orchestrator uses recurring cron triggers and says to wait for the next trigger. This is an operational clarity issue rather than evidence of malicious behavior; the default cadence and cron model are disclosed.\n[SQP-2] expected: The implementation phase writes code and updates IMPL_STATUS.md because that is the core purpose of the development pipeline. The prompt limits work to the assigned task and tells agents not to modify system config/gateway or previous phase files.\n[E4] expected: Auto-triage can collect substantial project context and pass it to another model/session. That is disclosed as part of the multi-agent failure-handling design, with no external exfiltration endpoint found, but sensitive projects should minimize or redact shared context.\n[VirusTotal code_insight] expected: The artifacts do insert user-provided project names, paths, agent IDs, and models into prompts/configuration. This templating is expected for setup; no hidden prompt-injection payload or malicious instruction was found, though users should keep these values trusted and simple.",
+          "guidance": "Install only if you want an autonomous, cron-driven agent pipeline that can modify the chosen repository over time. Use a dedicated repo path, review the generated PIPELINE_STATE.json and cron schedule, keep secrets out of ORG and pipeline files, and consider disabling or tightening peer consult and auto-triage for sensitive work.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Lattice is a disclosed template-based automation skill for creating a long-running multi-agent project pipeline; no hidden exfiltration, deception, or unrelated destructive behavior was found.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967932937,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 65,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: lattice\nVersion: 1.2.1\n\nThe skill bundle is classified as suspicious due to significant prompt injection vulnerabilities stemming from the direct incorporation of unsanitized user inputs into agent prompts and configuration files. Specifically, user-provided values like project names, repository paths, agent IDs, and models are used to construct the `ORCHESTRATOR_PROMPT.template.md` (which defines the cron job payload) and `PIPELINE_STATE.json`. This allows an attacker to inject malicious instructions into the orchestrator agent's prompt or sub-agent configurations, potentially leading to unauthorized file system operations, command execution, or resource abuse. The ability to create persistent cron jobs and orchestrate multiple agents with dynamically generated prompts amplifies this risk, even though the skill's stated purpose is benign and includes self-imposed constraints against harmful actions.",
+          "checkedAt": 1779164206975,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "a546d15e65a048b8af2b1627bb3fa3d3231e0f1b49123634027342bba9414626",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a546d15e65a048b8af2b1627bb3fa3d3231e0f1b49123634027342bba9414626"
+    },
+    "slug": "lattice",
+    "source_type": "clawhub",
+    "version": "1.2.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

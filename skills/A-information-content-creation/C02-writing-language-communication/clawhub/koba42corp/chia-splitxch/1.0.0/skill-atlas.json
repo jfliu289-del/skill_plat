@@ -1,0 +1,135 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C02:token:language",
+      "category:C06:token:api",
+      "category:C17:token:notes",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "5e9d21a0a5cf6134a8557d6a89815b3e84684767790c9d2d2041eb512dc77137",
+    "content_hash": "d7b3a4994ab3614011064512f10b444ff1e76e4428ff4c69c8326e7429dbf808",
+    "precanonical_content_hash": "8af435de02e018ae895679c196fd6a7dec0a99f524e4d927ad6bf87db083bac3",
+    "skill_md_hash": "977b63cbcb5764ba0d9a2e0ca8ff43909c1ffaa227df1e21f7e57a9b57f570ec",
+    "version_metadata_sha256": "4701b12d3b489ccf42a99413cb64e0b936cdd35bb1619a7f60383f5e3280a8c9"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/koba42corp/skills/chia-splitxch",
+    "claim_id": "abe08576f88a74bd18a0ed7eaba0390bbac8edd2033c792120ec6fd9871847d1",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "chia-splitxch",
+        "url": "https://clawskills.sh/skills/koba42corp-chia-splitxch"
+      }
+    ],
+    "owner_handle": "koba42corp",
+    "owner_id": "s178ggk1zgbe8bk8vpp508wm1x884fp8",
+    "published_at": 1770727791530,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779965559415,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779965559415,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently support the stated purpose: parse Chia/XCH split instructions, convert percentages to basis points, call SplitXCH, and return a generated split address. The generated address may later route real XCH, so users must verify recipients, percentages, nesting, and fees before use.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are bounded to split creation, validation, previewing, and API calls. Some trigger phrases such as generic revenue share or payment split are broad, so the agent should clarify Chia/SplitXCH intent before creating an address.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden installer or package installation was found. The skill includes a visible shell helper that depends on bash, jq, and curl, but those execution requirements are not separately declared in an install manifest.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The external call to https://splitxch.com/api/compute/fast is central to the advertised function and sends recipient names, XCH addresses, point allocations, and IDs. This is purpose-aligned but should be treated as sharing payment-relationship data with a third-party service.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No local persistence, wallet keys, browser sessions, credentials, or privileged account access are requested. The remote API response indicates the split is saved remotely, and the returned address can route future funds according to the submitted split.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The shell helper is real and under-declared, but it performs fixed jq validation and a fixed curl POST with quoted data; no eval, dynamic command construction, credential access, or unrelated execution was found.\n[SQP-1] unexpected: The broad trigger wording is worth tightening for a financial workflow, but it does not reveal hidden or unrelated capability; the artifacts remain focused on Chia/SplitXCH split-address creation.\n[SQP-2] unexpected: The skill should more prominently warn that later blockchain transfers are irreversible and nested splits add fees, but it does not itself spend funds and it already includes fee notes, validation rules, and dry-run guidance.\n[SQP-2] expected: Sending the split payload to splitxch.com is necessary for the documented remote computation, and the API reference shows the recipient fields sent; stronger consent wording would improve transparency.\n[VirusTotal code_insight] unexpected: The reported shell-injection concern was not supported by the artifacts inspected: user-derived JSON is treated as data, parsed by constant jq filters, and passed to curl as a quoted argument.\n[staticScan] expected: The static scan reported clean status with no findings.",
+          "guidance": "Install only if you are comfortable sending recipient names, XCH wallet addresses, and split percentages to SplitXCH. Before using any generated address for live funds, preview when possible and independently confirm every address, percentage, basis-point total, nesting level, and the 1.5% fee per split level.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it creates Chia SplitXCH payment-split addresses, with privacy and irreversible-transfer caveats users should understand.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779965514403,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: chia-splitxch\nVersion: 1.0.0\n\nThe skill is suspicious due to a clear prompt injection vulnerability against the AI agent, which could lead to shell injection. The `SKILL.md` instructs the agent to \"Parse the user's plain-language split description\" and then execute `scripts/splitxch.sh` with a JSON payload derived from this user input. If the agent fails to properly sanitize or escape malicious user input when constructing the JSON payload, an attacker could inject arbitrary shell commands into the payload, which would then be processed by `jq` and potentially `curl` within `scripts/splitxch.sh`, leading to unauthorized command execution. While the script itself is not inherently malicious, the design exposes a significant risk through the AI agent's interpretation of untrusted input.",
+          "checkedAt": 1779162775151,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "2ffad2eba0278597f8bf0fc8e99a0fdb2d2557e95ed9e6222007ad6b2ace2b49",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/2ffad2eba0278597f8bf0fc8e99a0fdb2d2557e95ed9e6222007ad6b2ace2b49"
+    },
+    "slug": "chia-splitxch",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

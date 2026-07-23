@@ -1,0 +1,151 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.25,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:research",
+      "category:C01:token:search",
+      "category:C02:token:write",
+      "category:C09:token:privacy",
+      "category:C09:token:security",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C02",
+      "C09",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "research",
+      "secure",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ad7abc4a16b0a99ff94b447067c8d2465050835bbc16e7f2260e1bf991479754",
+    "content_hash": "6a3dcc057dabc188a3616073841c806674cb71f4f91f133fbeecd72ec9c6909a",
+    "precanonical_content_hash": "aec11851e4ed2df7bfd0dd1af7556f41cbde7faff0f36a00de95878152ce54ac",
+    "skill_md_hash": "0aea5978111d7a06b4433d379d68fe84ef29da43ef93b7827898b23c9bee8147",
+    "version_metadata_sha256": "4b2efcc78c8e8ee65c86fb3dcba10aaf5c698d08ef23292e1c1c36540ef06a60"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/alinxus/skills/usewhisper",
+    "claim_id": "91a2eccc9e911033204504255ef6abd5bf4c5c94912e34f29f0124ba7590c594",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "usewhisper",
+        "url": "https://clawskills.sh/skills/alinxus-usewhisper"
+      }
+    ],
+    "owner_handle": "alinxus",
+    "owner_id": "s178327ahr45hgqzy55eeacj8x885bqz",
+    "published_at": 1770960338204,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779973243705,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779973243705,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The script capabilities match the stated purpose: query compressed context, ingest session turns, write and search memories, run provider search, and fetch cache/cost data through the Whisper Context API.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill encourages routine query-before-model and ingest-after-reply use, so agents may regularly transmit conversation-derived content when configured; this is disclosed in SKILL.md and aligned with the memory feature.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Artifacts show a standard ClawHub skill install, a Node script, required environment variables, and no extra npm dependencies or installer-side execution.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Outbound HTTPS requests, the API key, project configuration, stdin input, and explicit @path file reads are proportionate for a hosted memory/context client, but users should avoid passing secrets or broad local files unless intended.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill intentionally creates remote memory and may auto-create a missing remote project; this is disclosed in SKILL.md, and no local persistence, background worker, privilege escalation, or unrelated destructive behavior was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] expected: The auto-project creation behavior is present, but SKILL.md explicitly says the helper will auto-create the project on first use if it does not exist; this is remote provider state, not hidden local persistence.\n[SQP-2] expected: The README examples send user and assistant messages to the service, and SKILL.md discloses that ingest_session sends both user and assistant text to the Context API for memory and retrieval.\n[SQP-2] expected: The script transmits message and memory content to the configured remote API, but that is the advertised purpose of the skill; the concern remains a privacy consideration rather than evidence of deception.\n[VirusTotal code_insight] expected: Local file reads only occur when the caller supplies stdin or an explicit @path value, and outbound requests go to the configured Whisper Context API URL for declared operations.",
+          "guidance": "Install only if you trust Whisper Context with the conversations and memories you choose to send. Use a least-privilege API key, keep the API URL pointed at a trusted endpoint, avoid sending secrets or arbitrary local files through stdin/@path, and confirm automatic project creation is acceptable for your organization.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed hosted context-compression and memory helper that sends selected conversation data to Whisper Context as its core function.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779973217373,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 30,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: usewhisper\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to its capabilities for reading local files and making outbound HTTPS requests to a third-party API. While these actions are explicitly declared in SKILL.md and README.md, and are central to the skill's stated purpose (context compression and memory for AI agents), the ability to read arbitrary local files (via `@path` or stdin `-` in `whisper-context.mjs`) and transmit their content to an external service (`https://context.usewhisper.dev`) presents a significant risk. An AI agent could be susceptible to prompt injection, leading it to read sensitive local files and exfiltrate their contents to the Whisper Context API, even if the API itself is the intended destination. There is no evidence of arbitrary code execution, persistence, or exfiltration to arbitrary, undeclared endpoints, which would elevate it to malicious.",
+          "checkedAt": 1779163671431,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "6f03c4577f8cfcc9aef85309480f47ebc0404765f6f48848635ee549af7aa3f8",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6f03c4577f8cfcc9aef85309480f47ebc0404765f6f48848635ee549af7aa3f8"
+    },
+    "slug": "usewhisper",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

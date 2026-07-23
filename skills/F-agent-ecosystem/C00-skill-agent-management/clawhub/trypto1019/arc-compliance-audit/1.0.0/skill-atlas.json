@@ -1,0 +1,148 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "security-professional"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C04:token:data",
+      "category:C09:token:audit",
+      "category:C09:token:compliance",
+      "category:C12:token:decision",
+      "category:C13:token:operations",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C09",
+      "C12",
+      "C13"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "6f481ac8979b56303c8006a4bd3748424c73bcdbc61d05d22084a591132db773",
+    "content_hash": "09574ecd46afb98b0c6ebf28861c7621a09b551916144065bd0ab2343cbc863d",
+    "precanonical_content_hash": "d8228299414ac093ffbe11fc6031acf7998846f2d71778d78e6ba4ec07abd030",
+    "skill_md_hash": "930b7aa55c597161a203df48b719cea860ce88ec8235b7b15efa1b9bb448538d",
+    "version_metadata_sha256": "00d3357c380d0954c8119095352d142a7e241201ee3e291d12a084b90bf97657"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/trypto1019/skills/arc-compliance-audit",
+    "claim_id": "9dcf2dc139f05ac5e22c4aacaf790dd64190dceb18a1e1680230f8d83c613c0d",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "arc-compliance-audit",
+        "url": "https://clawskills.sh/skills/trypto1019-arc-compliance-audit"
+      }
+    ],
+    "owner_handle": "trypto1019",
+    "owner_id": "s17837yvmj7eee41cywsd26fxd885bed",
+    "published_at": 1771190305655,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968694987,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968694987,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is compliance audit logging with integrity verification, and local append/view/export behavior fits that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill appears user-directed, but its guidance should more clearly warn against putting tokens, API keys, personal data, or regulated data into free-form audit details.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No evidence was provided of hidden install hooks, background services, privilege escalation, or unrelated package-install behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Writing audit records under ~/.openclaw/audit is proportionate for a local audit tool, but those files may contain sensitive operational context and should be protected.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Durable local logs and export/view commands are disclosed and purpose-aligned, but persistence means accidental sensitive entries can remain until explicitly managed.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Persistent local file writing is central to an audit-trail skill and is disclosed; the missing explicit permission declaration is a transparency/documentation gap rather than evidence of hidden behavior.\n[SQP-2] unexpected: Plaintext logging of secrets or highly sensitive details is not necessary for the purpose; the concern is best handled as privacy guidance because the artifact does not show automatic secret collection or exfiltration.\n[SQP-2] expected: Storing and later viewing/exporting caller-provided audit details is expected for the workflow, but the lack of redaction and minimization controls increases local retention risk.\n[VirusTotal code_insight] expected: The --details JSON argument is a normal way to pass audit metadata; the reported shell-injection scenario depends on an unsafe caller concatenating shell strings, not malicious behavior in the skill itself.",
+          "guidance": "Install if you need a local tamper-evident audit trail. Treat ~/.openclaw/audit as sensitive: do not log API keys, tokens, passwords, PII, or regulated data; set appropriate file permissions and retention/deletion practices; review exports before sharing them; and ensure any agent invoking the script passes JSON arguments safely without shell string concatenation.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This appears to be a legitimate local audit-log skill, but users should avoid storing secrets or personal data in its persistent logs.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968649286,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: arc-compliance-audit\nVersion: 1.0.0\n\nThe skill bundle implements a legitimate audit trail with integrity verification. However, the `scripts/audit.py` script accepts a `--details` argument as a JSON string, which is then parsed using `json.loads()`. If the OpenClaw agent constructs the command to invoke this skill by directly concatenating unvalidated user input into the `--details` argument without proper shell escaping, it could lead to a shell injection vulnerability (e.g., `python3 ... --details \"user_input_here\"`). While the skill itself is not malicious and the `SKILL.md` provides benign examples, this design exposes a potential command injection vector if the calling agent's implementation is flawed, classifying it as a vulnerability rather than intentional malice.",
+          "checkedAt": 1779164383125,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "4f8759c95e77bd81b0f5e969bffcf948e008b50801092a0e39ae2f3930fa5ced",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4f8759c95e77bd81b0f5e969bffcf948e008b50801092a0e39ae2f3930fa5ced"
+    },
+    "slug": "arc-compliance-audit",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

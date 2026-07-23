@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "0154f637a3da29296ccf6390661f2644a51fab76d7648bdd0193bef704785680",
+    "content_hash": "35945d3e81ed177076f90398238f193f1f31ebc0bed312a3218e7036e3fd1358",
+    "precanonical_content_hash": "8547afcdc949701e814e19c692c6621f0564fe141871be1e42eefe02c643d290",
+    "skill_md_hash": "8d3272244d427081851243854e102c302ee12fe029cc39247cab487d081bad33",
+    "version_metadata_sha256": "d35ffcded3478a68fd93c01de540388672d59b4cbfc0bdd42626b3fcf26ba2b2"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/robert-janssen/skills/microsoft365",
+    "claim_id": "1e0900abf788c508a92895bc1c301bf613d3d1533a7b6a3e47e8717cba86d78e",
+    "index_entries": [
+      {
+        "index_path": "categories/communication.md",
+        "label": "microsoft365",
+        "url": "https://clawskills.sh/skills/robert-janssen-microsoft365"
+      }
+    ],
+    "owner_handle": "robert-janssen",
+    "owner_id": "s1755x1qdq5e4zc6fp1jprp0d9884e64",
+    "published_at": 1771541867187,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779936041075,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779936041075,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The code matches the stated Microsoft Graph purpose: it reads mail/calendar/contacts/OneDrive and also supports sending mail, creating events/contacts, and uploading files. These are high-impact but purpose-aligned capabilities.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Mutating actions are exposed through an interactive menu or callable functions rather than hidden automatic execution. Documentation is somewhat incomplete for contact creation and sample file upload, so users should review the menu and code before delegating actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package has no dependencies and no install/postinstall script. setup.js is an optional interactive helper that writes local Microsoft client configuration.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill requires Node.js and Microsoft client/tenant configuration, reads an optional local ms365.env file, and contacts Microsoft login and Graph endpoints. This is expected for the integration, though the OAuth scopes are broad.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "OAuth tokens, including refresh-token material when issued, are persisted locally under ~/.openclaw/credentials for session reuse. This is disclosed and purpose-aligned, but the code does not encrypt the token file or harden file permissions.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The environment and network access are expected for a Microsoft Graph integration. SKILL.md declares the required Microsoft environment variables and describes direct Microsoft 365 use, although it does not enumerate network domains in manifest metadata.\n[SQP-2] expected: The README and implementation show local token persistence. This is expected for offline Microsoft access, but the README understates sensitivity and the implementation stores plaintext tokens without permission hardening.\n[SQP-2] expected: src/config.js writes token JSON to the OpenClaw credentials directory. That is coherent with the documented session reuse but should be protected like a credential store.\n[RA2] expected: Session persistence is disclosed in SKILL.md and is normal for OAuth refresh behavior. No evidence shows background agents, hidden reuse, or persistence outside the documented token files.\n[VirusTotal code_insight] expected: The reported uploadFile path concern is bounded to user-directed OneDrive upload behavior. The filename is not sanitized, so users should avoid untrusted path input, but this does not show deception or exfiltration.",
+          "guidance": "Install only if you are comfortable granting this skill broad Microsoft Graph access to the selected account. Use your own Azure app registration, review the Microsoft consent prompt, protect ~/.openclaw/credentials, do not sync or commit token files, and revoke the app in Microsoft account settings when you stop using it.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent Microsoft 365 skill, but it should be treated as sensitive because it can access and change mail, calendar, contacts, and OneDrive after Microsoft consent.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779935969534,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: microsoft365\nVersion: 1.0.2\n\nThe skill is classified as suspicious primarily due to a potential path traversal vulnerability in the `uploadFile` function within `src/api.js`. The `fileName` parameter, which can be user-controlled, is directly interpolated into the Microsoft Graph API URL path (`/me/drive/root:/${fileName}:/content`). If the Graph API does not sufficiently sanitize or restrict `fileName` (e.g., against `../` sequences), an attacker could potentially upload files to unintended locations within the user's OneDrive. Additionally, the skill requests broad permissions (`Files.ReadWrite.All`, `Mail.Send`, `Calendars.ReadWrite`, `Contacts.ReadWrite`), which, while necessary for its stated functionality, increase the impact if any vulnerability were exploited. There is no evidence of intentional malicious behavior like exfiltration to unauthorized endpoints or prompt injection in `SKILL.md`.",
+          "checkedAt": 1779165566134,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "48e25b55647fef1e37c521a7fad067923235cfef5e2169e31fe0d51bac1d21b4",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/48e25b55647fef1e37c521a7fad067923235cfef5e2169e31fe0d51bac1d21b4"
+    },
+    "slug": "microsoft365",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

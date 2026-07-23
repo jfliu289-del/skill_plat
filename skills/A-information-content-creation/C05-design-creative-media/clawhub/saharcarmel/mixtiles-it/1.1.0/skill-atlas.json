@@ -1,0 +1,128 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.475,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:image",
+      "cross-tag:design"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "20fd315a49548c52b5a1087d3d1eff6ab06713b49e2c55ff6f5b97d61474101e",
+    "content_hash": "3163893b2555996f0a34c48f3b14bded60967c8ef95e9f87d7983e66643d4e00",
+    "precanonical_content_hash": "712f74a4eab4bccd0d48224887791223c0214c36ac83c77ef48042e6c0ab5cd8",
+    "skill_md_hash": "f064d1c8f2152ed398a2b06949b841f2d29186f76cd2f116e5643a380d68efa7",
+    "version_metadata_sha256": "6dfd101cb68420d3a88b2512066a41750a32bd33ab221e1575ce0a968ba2b0ad"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/saharcarmel/skills/mixtiles-it",
+    "claim_id": "ef1b1fa29a6c7700db45c7e4d042016d60c0a37e6eacd9410b8f5d87299d99f3",
+    "index_entries": [
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "mixtiles-it",
+        "url": "https://clawskills.sh/skills/saharcarmel-mixtiles-it"
+      }
+    ],
+    "owner_handle": "saharcarmel",
+    "owner_id": "s1797avcjqxeymrhrjygx22sc5884hdg",
+    "published_at": 1771361491762,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972874379,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972874379,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The capability matches the stated purpose: accept a local image or image URL, upload it to Cloudinary, and build a Mixtiles cart URL. The main user impact is that selected photos leave the local environment and become externally hosted.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill is scoped to cases where the user wants a photo turned into a Mixtiles order/cart link. The trigger wording includes 'or similar,' but the examples remain tied to explicit Mixtiles/tile-order intent.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no separate install mechanism, but the runtime instructions call a bundled Python script that invokes the local curl binary. That dependency is purpose-aligned but should ideally be declared.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The script reads only user-supplied local file paths or user-supplied URLs, uses optional documented environment variables for Cloudinary and fallback upload configuration, and performs network uploads/downloads that are central to the skill.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background persistence, privilege escalation, destructive behavior, or broad local indexing was found. Temporary remote downloads are deleted locally, but uploaded copies may persist on Cloudinary/Mixtiles infrastructure.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The local Python execution, environment-variable use, and network transfer are real, but they are disclosed by the skill and proportional to generating a Mixtiles cart link from a user-selected image.\n[SQP-1] expected: The trigger phrase is somewhat broad, but the surrounding text still limits use to a user sending a photo or URL with intent to make/order a Mixtile, so this is guidance rather than a Review-level concern.\n[SQP-2] expected: The privacy risk is real because photos are uploaded to Cloudinary and then referenced by Mixtiles, but the SKILL.md and script both disclose Cloudinary upload behavior; no hidden redistribution or unrelated exfiltration was found.\n[SQP-2] expected: For remote image URLs, the script downloads and uploads the image, and can optionally use a configured fallback endpoint. This is consistent with the advertised URL-handling feature and includes SSRF checks for downloaded URLs.",
+          "guidance": "Install only if you are comfortable with selected photos or image URLs being uploaded to Cloudinary and used in a Mixtiles cart link. Confirm the exact file or URL before running it, especially in batch mode, and only set the optional fallback upload URL/key for an endpoint you trust.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill does what it advertises: it uploads the user-selected photo to Cloudinary and returns a Mixtiles cart link, with privacy caveats but no evidence of hidden or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972835897,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 71,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: mixtiles-it\nVersion: 1.1.0\n\nThe skill bundle is benign. The `SKILL.md` provides clear instructions for the AI agent without attempting prompt injection for malicious purposes. The `scripts/mixtiles-cart.py` script implements the stated functionality of processing images and generating Mixtiles links. It includes robust SSRF protection via the `_validate_url` function, which checks URL schemes, blocks internal hostnames, and resolves IPs to prevent access to private networks. Shell injection risks are mitigated by using `subprocess.run` with a list of arguments (defaulting to `shell=False`) when invoking `curl`. Environment variables are used for legitimate configuration, and there is no evidence of data exfiltration, persistence, or other malicious intent.",
+          "checkedAt": 1779164905875,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "bcf1e52923fe14a3116095b1b1e1fb8c1e4b59e23a7f523501c88937032a335f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/bcf1e52923fe14a3116095b1b1e1fb8c1e4b59e23a7f523501c88937032a335f"
+    },
+    "slug": "mixtiles-it",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

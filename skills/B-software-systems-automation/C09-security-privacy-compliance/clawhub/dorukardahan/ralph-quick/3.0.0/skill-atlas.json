@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "configuration"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.4167,
+    "domains": [
+      "infrastructure",
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C08:token:deploy",
+      "category:C09:token:audit",
+      "category:C09:token:security",
+      "cross-tag:deployment",
+      "cross-tag:security",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C08"
+    ],
+    "stages": [
+      "deliver",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "deploy",
+      "operate",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "0c83074159b587875691bde2009099e97d09bcab810a9b3e0b92efe61a8b898e",
+    "content_hash": "920b9d077aba965c5888e432ad5e8b4649b7ce5d2663aaeabf053ba6b9c8cff4",
+    "precanonical_content_hash": "264fcb78971f0af4ab9488a3fe2d3214b4e130a68f0a2f88b37912d54ba0f3ef",
+    "skill_md_hash": "a717eac7cc7c3dcb8736eaf4fc8d7abed043c4dec1d580d6c9378e158634ea7f",
+    "version_metadata_sha256": "a0edd299b836515d0a06c6af819aee1dc46402b4350a5aed9422d9e5e41f30d9"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/dorukardahan/skills/ralph-quick",
+    "claim_id": "91f4ce7ebef0604a358663b807e63d12abc7b7f8922a067b94df3e7cbc6c2a91",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "ralph-quick",
+        "url": "https://clawskills.sh/skills/dorukardahan-ralph-quick"
+      }
+    ],
+    "owner_handle": "dorukardahan",
+    "owner_id": "s17ec9h02rq9dyxk1p8ndsz7ps84kpzp",
+    "published_at": 1771467433836,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779919359941,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779919359941,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is a fast security spot-check, and the checks for secrets, debug mode, injection patterns, authentication, rate limiting, containers, and CI/project structure match that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill tells the agent to inspect repository files and run `git rev-parse --show-toplevel`; that is expected for a repository security review but should only be invoked in a project the user intends to audit.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact is instruction-only Markdown plus a reference file. It includes no executable scripts, package installation, background service, credential setup, or network integration.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Reading source, configuration, Docker, CI, and possible hardcoded secrets is proportionate for this security task, but it may expose sensitive project contents to the agent during the review.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill explicitly saves `.ralph-report.md` and renames an existing report to a timestamped file. This is disclosed and narrowly scoped, but it can leave sensitive findings in the workspace.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The trigger phrase concern is reasonable to disclose, but phrases like `quick security check`, `pre-deploy audit`, and `daily security check` still align with the skill's security-review purpose and do not show hidden activation behavior.\n[SQP-2] expected: Saving a final report to `.ralph-report.md` is explicitly documented in the runtime instructions and is purpose-aligned for an audit checklist.\n[SQP-2] expected: Rotating an existing `.ralph-report.md` is a workspace modification worth noting, but it is disclosed, limited to this report file, and not destructive in the sense of deleting or overwriting project data.\n[VirusTotal code_insight] expected: VirusTotal flagged shell use and broad file access as suspicious, but the only shell command shown is repository discovery and the file access is coherent with a local security audit. Static scan was clean and there is no artifact evidence of exfiltration or unsafe execution.",
+          "guidance": "Install only if you want an agent to inspect the active repository for security issues. Run it in the intended project, review `.ralph-report.md` before committing or sharing it, and consider adding `.ralph-report*.md` to `.gitignore` if reports may contain vulnerabilities or secret-like values.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed security-check skill that reads the current project and writes a local report, with no evidence of hidden installation, exfiltration, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779919339673,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 30,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ralph-quick\nVersion: 3.0.0\n\nThe skill instructs the AI agent to execute shell commands (e.g., `git rev-parse --show-toplevel` in SKILL.md) and perform extensive file system operations (reading various project files, writing/renaming `.ralph-report.md`). While these capabilities are plausibly needed for its stated purpose of a security audit, they introduce a significant attack surface. The explicit shell execution and broad file system access, even without clear malicious intent within the skill's own instructions, classify it as 'suspicious' due to the potential for abuse if the OpenClaw agent's execution environment or user input sanitization is vulnerable to injection.",
+          "checkedAt": 1779164979121,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "6f9ef7b1a29b816e0b808d6424a050cb3901bd3070e46d6ee3c281f469112025",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6f9ef7b1a29b816e0b808d6424a050cb3901bd3070e46d6ee3c281f469112025"
+    },
+    "slug": "ralph-quick",
+    "source_type": "clawhub",
+    "version": "3.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

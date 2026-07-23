@@ -1,0 +1,164 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.1321,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:data",
+      "category:C06:token:implementation",
+      "category:C07:token:test",
+      "category:C09:token:security",
+      "category:C17:token:notes",
+      "category:C18:token:health",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "cross-tag:testing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C07",
+      "C09",
+      "C17",
+      "C18"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "secure",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "9c24315cb0611ae015df46739000e62eefe61786c03623d908505a0ce2151350",
+    "content_hash": "de77b9f74f01d369243cd8e745873b0aab63c0ce9f15ee27343416d54a539bd2",
+    "precanonical_content_hash": "4d34a3fca1f9a3a5d84ccfe219d05df34470b7dd5ddf2f4307a0f3086ae00062",
+    "skill_md_hash": "13625bce621967f23e1b291cfef469275091a050f3fd345eedf10d8a86945084",
+    "version_metadata_sha256": "d222a602f3385a7af9be71d18bd686cff1562cb99b67134b3a8ed0a98f7d28fc"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jgramajo4/skills/aave-liquidation-monitor",
+    "claim_id": "fcafc7b16c53086e4f24ace0094bef74c5c03aa20d54103500811fdbc764dff6",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "aave-liquidation-monitor",
+        "url": "https://clawskills.sh/skills/jgramajo4-aave-liquidation-monitor"
+      },
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "aave-liquidation-monitor",
+        "url": "https://clawskills.sh/skills/jgramajo4-aave-liquidation-monitor"
+      }
+    ],
+    "owner_handle": "jgramajo4",
+    "owner_id": "s1775a411wd9rgq11aw3r86q6s8855qg",
+    "published_at": 1770789188759,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968962368,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968962368,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently implement Aave liquidation monitoring by querying Aave position data, calculating health-factor risk, and formatting alerts; no private keys, signing, or position-changing behavior was found.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Manual checks and background monitoring are documented, and automatic checks start after the user enables monitoring; the skill also documents disable and remove commands.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains documentation, a config template, and straightforward Node scripts with no installer-time execution, obfuscation, dependency fetching, or hidden setup behavior observed.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network use is proportionate to the purpose: the code calls Aave's public GraphQL endpoint and relies on OpenClaw message routing for alerts, which may expose health-factor and position summaries to the chosen messaging channel.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistent cron scheduling and session/log history are expected for continuous monitoring and are disclosed, though retention and redaction details depend on OpenClaw's configured policies.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Outbound network access to Aave and OpenClaw alert routing are expected for liquidation monitoring and are documented; the lack of a separate permission declaration is a packaging/governance note, not evidence of hidden or unrelated network behavior in this artifact.\n[SQP-2] expected: Wallet addresses and Aave position lookups are inherent to the skill's purpose, and the documentation identifies the Aave API data flow; a clearer privacy notice would help users understand that wallet-derived financial metadata is sensitive.\n[SQP-2] expected: Scheduled background checks, logs, health-factor history, and alert routing are expected for this monitor and are disclosed with disable/remove controls; users should still review retention and channel privacy before enabling it.",
+          "guidance": "Install only if you are comfortable with OpenClaw periodically checking your wallet against Aave and sending liquidation-risk details through your selected Telegram, Discord, or Slack channel. Use a private channel, review OpenClaw log retention, and disable or remove the cron job when monitoring is no longer needed.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed, read-only Aave monitoring tool, but users should treat wallet checks, alerts, and logs as sensitive financial metadata.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968917368,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 32,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: aave-liquidation-monitor\nVersion: 1.0.1\n\nThe OpenClaw AgentSkills skill bundle for Aave Liquidation Monitor is benign. All code (`scripts/monitor.js`, `scripts/cron-runner.js`) and documentation (`SKILL.md`, `SECURITY.md`, `INSTALLATION.md`, `references/*`) consistently describe and implement a read-only monitoring tool. Network calls are exclusively directed to the legitimate Aave V3 GraphQL API (`https://api.v3.aave.com/graphql`). The skill explicitly states and demonstrates that it does not handle private keys or messaging credentials, relying instead on OpenClaw's secure internal mechanisms. Input validation for wallet addresses is present, and there are no signs of arbitrary command execution, data exfiltration to unauthorized endpoints, obfuscation, or prompt injection attempts against the AI agent in any of the files.",
+          "checkedAt": 1779163109356,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "df8a907ddb90cd47a3fbedabc372b8a939f7c16746ac827b834235ceae2f75cb",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/df8a907ddb90cd47a3fbedabc372b8a939f7c16746ac827b834235ceae2f75cb"
+    },
+    "slug": "aave-liquidation-monitor",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

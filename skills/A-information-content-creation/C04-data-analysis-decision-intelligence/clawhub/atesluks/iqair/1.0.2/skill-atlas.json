@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C07:token:quality",
+      "cross-tag:data-analysis",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C07"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "444df5d3a647da7dc7de02ffd3f096ac5441ee9506fd9384aa92debc02748b7a",
+    "content_hash": "8286dc54129657e3b81c29da3398b006852690ef6f837218667db2642de09f68",
+    "precanonical_content_hash": "985fd83d155f9ae48bbb091356d8a0c5ca5d21e48f09e58e6f61ca82fb695b95",
+    "skill_md_hash": "b74f62437e6519ffb8cd5372b7a2bf1cce1e6664518a9acd73e7663b9fb20bf4",
+    "version_metadata_sha256": "829f7851f803e422a78b5e20a4463b828bd9133c9c8316c7417b1059a9a688d2"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/atesluks/skills/iqair",
+    "claim_id": "5776899868573ee01040bd35f263d786e48aaebf75f6fb408c2a8bfec02e983d",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "iqair",
+        "url": "https://clawskills.sh/skills/atesluks-iqair"
+      }
+    ],
+    "owner_handle": "atesluks",
+    "owner_id": "s1738dfdpm6kf3vm62cr6f9y7183zxpm",
+    "published_at": 1771295895405,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972227235,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972227235,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently support the stated air-quality lookup purpose: the script reads location arguments, calls IQAir endpoints, and formats AQI results.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill also suggests supplementing general weather answers with AQI data, which is disclosed but broader than explicit air-quality requests and may use API quota or send a location to IQAir.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No installer, dependency fetcher, package mutation, or install-time execution is present; the script uses Python standard-library modules.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill requires the IQAIR_API_KEY environment variable and sends it with user-requested location data to api.airvisual.com, which is expected for this integration and disclosed in the skill metadata and docs.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background workers, privilege escalation, credential harvesting beyond the named IQAir key, or filesystem writes are evidenced.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The environment key and outbound IQAir call are necessary for the service integration; the IQAIR_API_KEY requirement is declared, and the IQAir API endpoint is documented, so this is guidance rather than a Review-level issue.\n[SQP-1] expected: The weather-trigger language is broad, but it is visible in the skill description and only causes purpose-adjacent AQI enrichment; users should expect possible extra IQAir calls when asking weather questions.\n[SQP-2] expected: Nearest-city mode is documented as IP-based in the reference material and is aligned with finding local AQI, but users should avoid it if they do not want IP-based location inference.",
+          "guidance": "Install if you are comfortable giving the skill a limited IQAir API key and sending queried city, coordinate, or nearest-location requests to IQAir. Prefer explicit city or coordinate lookups when privacy matters, and avoid using --nearest unless IP-based location inference is acceptable.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it uses an IQAir API key to fetch air-quality data, with no evidence of hidden persistence, destructive behavior, or unrelated data access.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972193635,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: iqair\nVersion: 1.0.2\n\nThe OpenClaw skill 'iqair' is designed to fetch air quality data from the IQAir API. The `scripts/get_aqi.py` Python script correctly retrieves the API key from environment variables, makes network calls to the legitimate IQAir API (`api.airvisual.com`), and safely constructs URL parameters using `urllib.parse.urlencode`, preventing URL injection. The `SKILL.md` instructions guide the AI agent on how to use the script with user-provided locations. There is no evidence of intentional harmful behavior, data exfiltration beyond the API key to the legitimate service, persistence mechanisms, or malicious prompt injection attempts against the agent. The skill's behavior is clearly aligned with its stated purpose and lacks meaningful high-risk behaviors or vulnerabilities within its own code.",
+          "checkedAt": 1779164715363,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "6f97a6ee022d9df3de3e87addb711d0a9ec6d1ccd50dabd3564f9d9b3602634f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6f97a6ee022d9df3de3e87addb711d0a9ec6d1ccd50dabd3564f9d9b3602634f"
+    },
+    "slug": "iqair",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C01:token:sources",
+      "category:C06:token:api",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "c331e6fa9757e7d93ca86d572a0a1635ce8ee3511ffcb21fbc133d4362cf25e6",
+    "content_hash": "4fb9f0e71110363c31ef3b184251449e91e573e3fab4275a897626b0318ed0b1",
+    "precanonical_content_hash": "f272bb62bb85126e852399b3fcff16823ff08e4f82ec7c7952c3b1d7efb85de5",
+    "skill_md_hash": "bee291dcc3b5c5b18b665cff318bc1160dc125020794f2850ef5f9b92985ea89",
+    "version_metadata_sha256": "24fec69051b1341476cb23707ca74f20444c402b473ac6a47ef79b5a026debf3"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/vmining/skills/kiro-search-aggregator",
+    "claim_id": "53441f142ee51310a415b818e74e58c51d3f1b9a4302c25242a2667a38c039b3",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "kiro-search-aggregator",
+        "url": "https://clawskills.sh/skills/vmining-kiro-search-aggregator"
+      }
+    ],
+    "owner_handle": "vmining",
+    "owner_id": "s17egwyjsr6yzmmjjyakghyvyd83mx21",
+    "published_at": 1771702966395,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779948054850,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779948054850,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The README, metadata, example command, and Python script consistently implement multi-source search aggregation across Serper, SerpAPI, YouTube via Serper, and X.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Execution is user-invoked through a CLI command with explicit query, source, result-count, top-k, and output-directory options; no hidden agent instructions or prompt-override behavior were found.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The artifact contains documentation, one Python script, and an example command; there are no install hooks, background services, package-install steps, or automatic execution mechanisms.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script reads SERPER_API_KEY, SERPAPI_API_KEY, and X_BEARER_TOKEN and sends queries to the corresponding provider APIs, which is proportionate to a multi-provider search tool and disclosed through the supported-source and API-key documentation.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The script writes latest.json and latest.md by default under outputs/search-aggregator, including the raw query and returned results; this is documented and configurable with --out-dir, but users should treat the files as potentially sensitive.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The concern about third-party query transmission is supported, but it is inherent to the advertised external search aggregation workflow and the providers/API keys are named in the documentation.\n[SQP-2] expected: The concern about local persistence is supported, but the output folder and filenames are documented, the writes are local result files, and the output location is configurable.\n[SQP-2] expected: The script sends the user-provided query only to the selected search providers and does not show hidden endpoints, credential exfiltration, command execution, or unrelated data collection.",
+          "guidance": "Install only if you are comfortable sending your search terms to Serper, SerpAPI, and X when those sources are selected. Avoid sensitive internal, personal, regulated, or secret-bearing queries, omit credentials for providers you do not intend to use, and review or delete the generated latest.json and latest.md files when results may contain private information.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed search aggregation skill that sends chosen search queries to external search APIs and saves local result files as part of its stated purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948018476,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: kiro-search-aggregator\nVersion: 1.0.0\n\nThe skill is designed to aggregate search results from multiple sources using specified API keys. The `SKILL.md` clearly outlines its purpose and required environment variables. The `search_aggregator.py` script uses standard Python libraries (`urllib.request`, `argparse`, `os.getenv`) to fetch API keys and make requests to legitimate search API endpoints (Serper, SerpAPI, X). User input for the search query is passed as a string parameter to these APIs, without any evidence of local command injection or arbitrary code execution. There are no attempts to exfiltrate sensitive data beyond the stated purpose, establish persistence, or use obfuscation. While an AI agent platform could be vulnerable to prompt injection if it poorly handles user input when executing the example command in `SKILL.md`, the skill itself does not contain malicious instructions or code designed to exploit such vulnerabilities.",
+          "checkedAt": 1779166036793,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "ae3d600d221186bde5523d2e30cbbc72994deba316b657cce3733dfc9559344c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ae3d600d221186bde5523d2e30cbbc72994deba316b657cce3733dfc9559344c"
+    },
+    "slug": "kiro-search-aggregator",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

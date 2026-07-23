@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.625,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:phrase:image generation",
+      "category:C05:token:image",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "category:C17:token:notes",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4916fc4ec439196c39c91d1178fec3a273facce02b0fab4a7080d343fcd7b11e",
+    "content_hash": "2c0f17d43f4ff2d145a917f9db144332933ed4e4d3e278f967f369fd6459d68e",
+    "precanonical_content_hash": "27defffc12a747a57c47d1e415cfc3f75672b33e1a567345b9d86db7260fdc96",
+    "skill_md_hash": "fc3efa2c1b7730b2872b7caadff5267626e0e262e204b390faebb80abe0b8468",
+    "version_metadata_sha256": "399f67b472ec748be3cc309f56bb14ea591a3f78289f7b1dccb31a2a1f18cdbb"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/pharmacist9527/skills/cheapest-image",
+    "claim_id": "71ed39005b9d5d5743f803938ebd2008c23345e5f77bd500d4259bbaca8188c7",
+    "index_entries": [
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "cheapest-image",
+        "url": "https://clawskills.sh/skills/pharmacist9527-cheapest-image"
+      }
+    ],
+    "owner_handle": "pharmacist9527",
+    "owner_id": "s17bef4n5esrpxsrx6mpa2f0r1884a6p",
+    "published_at": 1771633680649,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943565392,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943565392,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "Artifacts consistently implement text-to-image generation through the EvoLink z-image-turbo API, matching the stated purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Trigger phrases tell the agent to generate immediately from colon-suffixed prompt text, which is purpose-aligned but can spend EvoLink credits and sends prompt contents to a third party.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden installer or package setup is present; the primary Python script uses standard libraries, with documented PowerShell and curl fallbacks.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill reads EVOLINK_API_KEY and contacts api.evolink.ai, which is necessary for the advertised integration and disclosed in the metadata and instructions.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background service, privilege escalation, credential-store access, broad local indexing, or destructive behavior is shown; persistence is limited to saving generated image files locally.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The API key and outbound network use are expected for an EvoLink image-generation skill, and EVOLINK_API_KEY is disclosed; this is a transparency note rather than a material Review concern.\n[SQP-2] expected: Prompts are sent externally, but the artifact repeatedly describes use of the EvoLink API; users should still avoid sensitive prompt content.\n[VirusTotal code_insight curl heredoc JSON injection] unexpected: The optional curl fallback places a raw prompt placeholder inside JSON, so quotes or control characters could alter or break that API request. The main Python script and PowerShell fallback serialize JSON safely, and this does not show hidden, destructive, or deceptive behavior.\n[staticScan.clean] expected: Static scan reported no suspicious patterns, consistent with the artifact review.",
+          "guidance": "Install only if you are comfortable sending prompts to EvoLink and using an EvoLink API key that may consume paid credits. Prefer the Python script or PowerShell fallback; if using the curl example, JSON-escape prompt text or avoid prompts containing quotes/control characters. Do not include secrets, personal data, or confidential material in image prompts.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill does what it advertises: it sends image prompts to EvoLink using a disclosed API key and saves the generated image locally.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943528304,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: cheapest-image\nVersion: 1.0.0\n\nThe skill bundle is classified as suspicious due to a JSON injection vulnerability present in the `references/curl_heredoc.md` fallback script. The agent is instructed to directly replace `<USER_PROMPT>` into a JSON payload within a `curl` heredoc block. If a user provides input containing unescaped double quotes or other JSON-breaking characters, it could lead to the injection of arbitrary JSON fields into the API request to `https://api.evolink.ai/v1`. While this does not directly lead to local system compromise or agent prompt injection, it represents a vulnerability that could be exploited against the Evolink API itself. The primary Python script (`scripts/generate.py`) and the PowerShell fallback (`references/powershell.md`) correctly handle JSON serialization and are not susceptible to this specific vulnerability.",
+          "checkedAt": 1779165808060,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "108a97252c6fe9365563921d0d50a465ca9276c65cff1a395519224a650f56b9",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/108a97252c6fe9365563921d0d50a465ca9276c65cff1a395519224a650f56b9"
+    },
+    "slug": "cheapest-image",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,130 @@
+{
+  "classification": {
+    "artifacts": [
+      "document",
+      "website"
+    ],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C08:token:github",
+      "cross-tag:browser-automation",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "automate",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "600734552a435a7dd6722f5ee7968d224e4b1bbc92fefb5c05da90087255564a",
+    "content_hash": "fa878db35f53b2d418211ef45c26d791d17f3ddd0cb981cdea303f17628e0a32",
+    "skill_md_hash": "eb7abd0156b4eece0894cf45211d62b17a9975b5260b71148ebe2c42ea222893",
+    "version_metadata_sha256": "c4c5b2ff31bb716cdb1bef07df5fda88f775b42af1d7fa12a6883602b68b9d7c"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tradmangh/skills/token-monitor",
+    "claim_id": "c7d50dab31797f5bb916d647f85c0c1060b36be42f3cabfbb423cd1233c203aa",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "token-monitor",
+        "url": "https://clawskills.sh/skills/tradmangh-token-monitor"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "tradmangh",
+    "owner_id": "s17aaegq3rafytyraeyc72bkjx83twpg",
+    "published_at": 1771363829927,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972585520,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972585520,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose matches the artifact: a bash script runs `openclaw models status`, parses quota percentages, prints alerts, and updates a local JSON state file.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions stay within quota monitoring, but users should know that optional heartbeat/cron integration can send alert text through OpenClaw notifications and that `QUOTA_THRESHOLD` is not strongly validated.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation consists of local skill files and an included bash script; there are no remote download or package-install steps in the artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The declared filesystem permission is proportionate to the documented state-file write, and the skill does not request secrets or unrelated credential access.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "Persistence is limited to the documented state file, while cron or HEARTBEAT.md automation is optional and user-directed.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight suspicious] unexpected: The reported command-injection claim around `mkdir -p \"$(dirname \"$STATE_FILE\")\"` is not supported by shell semantics: command substitution text inside a variable is not re-evaluated when the variable is quoted. The custom state-file path can redirect where the state JSON is written, but that behavior is documented configuration, not hidden execution.\n[SkillSpector clean result] expected: No SkillSpector issues were reported, which is consistent with the artifact's narrow quota-monitoring behavior.\n[ShellCheck SC2086/SC2295] unexpected: Local shell linting found minor robustness issues, especially unvalidated threshold insertion into a jq program and a pattern-removal quoting warning. These are hardening concerns, not evidence of malicious or purpose-mismatched behavior.",
+          "guidance": "Before installing, confirm you are comfortable with a local state file under `~/.openclaw/workspace/skills/token-monitor/` and with optional cron/heartbeat alerts sending quota-alert text through OpenClaw. Use trusted values for `QUOTA_THRESHOLD` and `QUOTA_STATE_FILE`, or harden the script if those values may come from untrusted input.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed local quota monitor that reads OpenClaw model status, alerts on low quotas, and stores a small local state file.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972542661,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: token-monitor\nVersion: 1.0.3\n\nThe `scripts/check-quota.sh` file contains a shell injection vulnerability. The `mkdir -p \"$(dirname \"$STATE_FILE\")\"` command uses the `$STATE_FILE` variable, which can be controlled by user input via the `--state-file` argument or `QUOTA_STATE_FILE` environment variable. If an attacker provides a crafted path like `$(evil_command)/file`, the `evil_command` would be executed. While the skill's stated purpose is benign and the `SKILL.md` does not demonstrate exploiting this, the vulnerability itself allows for arbitrary command execution, classifying it as suspicious rather than malicious due to the lack of clear evidence of intentional self-exploitation.",
+          "checkedAt": 1779164818153,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "600734552a435a7dd6722f5ee7968d224e4b1bbc92fefb5c05da90087255564a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/600734552a435a7dd6722f5ee7968d224e4b1bbc92fefb5c05da90087255564a"
+    },
+    "slug": "token-monitor",
+    "source_type": "clawhub",
+    "version": "1.0.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

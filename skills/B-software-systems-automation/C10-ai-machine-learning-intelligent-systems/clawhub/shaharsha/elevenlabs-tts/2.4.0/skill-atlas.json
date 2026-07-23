@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C05:token:audio",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "category:C10:token:model",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05",
+      "C06"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ee92e417ba2a6c706c2442fcc440f87fe6b884cde171fd88546d835ea62dc8f0",
+    "content_hash": "fcf6fbf060d8316eb9c2dd1e06f96e2364ecccb8619ff2859d181d64b77a7d86",
+    "precanonical_content_hash": "899b9c91e402745afa51230d390f1bee6269e7e0ddd7fc8808d6e6113a2a0c3a",
+    "skill_md_hash": "1303eba382720af8800586266e3eb2dcda88bfc5ad6e2e466b7718f3586e124f",
+    "version_metadata_sha256": "59d0f1f3276b2906141459d781eec842e75b8f12ee8e44172b6132bd6ab94b04"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/shaharsha/skills/elevenlabs-tts",
+    "claim_id": "5ff370ea24e0b13fd700122038de3454de7b4c4e0b4fa15711fea73d14398e00",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "elevenlabs-tts",
+        "url": "https://clawskills.sh/skills/shaharsha-elevenlabs-tts"
+      },
+      {
+        "index_path": "categories/speech-and-transcription.md",
+        "label": "elevenlabs-tts",
+        "url": "https://clawskills.sh/skills/shaharsha-elevenlabs-tts"
+      }
+    ],
+    "owner_handle": "shaharsha",
+    "owner_id": "s1731v0zz0xz2rh03mt12r81t983g5b0",
+    "published_at": 1775035003031,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783656751209,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783656751209,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is ElevenLabs text-to-speech with WhatsApp voice-note support, and the declared tools, API key requirement, ffmpeg use, and message-sending workflow all fit that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill allows exec, tts, and message; the shell examples are limited to finding generated TTS files, converting audio, copying one audio file into the workspace, and deleting that temporary copy.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact is documentation-only Markdown with a reference file; no executable installer, package script, hidden setup, or background component was present.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use of an ElevenLabs API key, ffmpeg, temporary files, and WhatsApp delivery is proportionate for the integration, but users should understand that text/audio leaves the local environment.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, privilege escalation, credential harvesting, or background worker is shown; the main retained state is the configured ElevenLabs API key and any temporary/workspace audio files until cleanup.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The copy and rm examples operate on a named generated audio file for WhatsApp delivery; this is purpose-aligned, though users should verify paths to avoid clobbering or deleting the wrong workspace file.\n[SQP-2] expected: The ElevenLabs API key and third-party TTS processing are central to the skill, but the documentation could state more prominently that submitted text is sent to ElevenLabs and generated audio may be sent through WhatsApp.\n[VirusTotal-code_insight] expected: VirusTotal flagged exec, ffmpeg, cp, rm, and hardcoded paths as risky patterns, but the artifacts keep those commands within the disclosed audio conversion and voice-message workflow, with no engine detections or hidden behavior.\n[staticScan] expected: Static scan reported no findings, and local inspection found only Markdown documentation and reference material.",
+          "guidance": "Install only if you are comfortable configuring an ElevenLabs API key and sending the text you synthesize to ElevenLabs, then sending generated audio through WhatsApp. Before use, confirm the recipient and content, use a trusted ffmpeg installation, and keep cleanup commands pointed only at the temporary audio file created for the current task.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent ElevenLabs voice-message helper with ordinary cautions around third-party processing, WhatsApp sending, and temporary audio files.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783656723610,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 9,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: elevenlabs-tts\nVersion: 2.4.0\n\nThe skill provides ElevenLabs TTS integration but relies on the agent executing shell commands via the 'exec' tool for file discovery, audio conversion with ffmpeg, and file management (cp, rm) as detailed in SKILL.md. While these actions are plausibly necessary for the stated goal of sending WhatsApp voice notes, the use of complex shell pipelines and hardcoded paths like '/root/.openclaw/workspace/' represents a high-risk capability that could be exploited for shell injection or unauthorized file access if the agent processes unsanitized user input.",
+          "checkedAt": 1779161144879,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "58228ad4a28fb47b7172b24e9eb08b1bd60a8e4b621d98912288848e3afbecda",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/58228ad4a28fb47b7172b24e9eb08b1bd60a8e4b621d98912288848e3afbecda"
+    },
+    "slug": "elevenlabs-tts",
+    "source_type": "clawhub",
+    "version": "2.4.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

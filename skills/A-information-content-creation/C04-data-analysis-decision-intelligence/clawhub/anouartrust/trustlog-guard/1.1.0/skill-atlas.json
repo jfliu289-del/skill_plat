@@ -1,0 +1,152 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C09:token:privacy",
+      "category:C10:token:model",
+      "category:C12:token:management",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C09",
+      "C10",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "6e23353ae17496b32bd001613b64f2b4142e42414c5d2ad8b8f8d35a6c1ad7b0",
+    "content_hash": "a53ccfc485dd00d973aeb4dafc53e0d49763609674702a8dfc8ce181f0266d85",
+    "precanonical_content_hash": "a2117f8d5166a8d683078d337a73a03cc2b1d94cdaf116fc02bb647e648120f9",
+    "skill_md_hash": "ba170f2d967dd956088b0c18ab5c04e6d6764a467c46f501b341a982dda41fe6",
+    "version_metadata_sha256": "c8f9dccc23d9c9ad3ba194830240de0501c4f29bb642fbeb1a9e587ab6b079e1"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/anouartrust/skills/trustlog-guard",
+    "claim_id": "d9a7a35af054d73bb0bd2348a5b64125d4c22bae8a7a97e59cdd9a82405ba603",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "trustlog-guard",
+        "url": "https://clawskills.sh/skills/anouartrust-trustlog-guard"
+      }
+    ],
+    "owner_handle": "anouartrust",
+    "owner_id": "s1737f9xff9rdvvn6k98a2k5c9885ads",
+    "published_at": 1771887710090,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779953979454,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779953979454,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The financial-governance purpose matches the requested capabilities: reading local OpenClaw session JSONL logs for cost fields, summarizing spend, checking budgets, and detecting costly usage patterns. Session logs may contain sensitive agent history beyond cost data, so users should understand that local log access is involved.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands are scoped to spend reports, budget status, and anomaly checks. The skill discloses the budget file path and says it creates or updates that file, though the privacy wording could more clearly distinguish read-only session-log handling from local budget persistence.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact is a single non-executable SKILL.md file with no scripts, binaries, dependencies, install hooks, or automatic runtime setup.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Local access to OpenClaw session logs and a local budget configuration is proportionate to cost tracking. The artifact states no API keys, no external servers, no data transmission, and no telemetry, and I found no contrary artifact evidence.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill persists budget limits at ~/.openclaw/workspace/trustlog-guard/budgets.json. This is durable local state, but it is disclosed, narrow, user-commanded through /budget set, and aligned with budget-management functionality.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[RA2] expected: The reported persistence is the documented budgets.json file used to remember daily or monthly budget settings. It is purpose-aligned and local; lack of explicit file-permission or retention guidance is a user-awareness note rather than a Review-level concern.\n[SDI-4] expected: The privacy section says read-only while also documenting a local budget config file. In context, read-only applies to session logs, and the budget write is separately disclosed, so this is documentation clarity rather than evidence of hidden behavior.\n[SQP-2] expected: The /budget set command creates or updates a local budget file. The behavior is narrow and expected for budget management, though a first-write notice or deletion/reset guidance would improve transparency.",
+          "guidance": "Install only if you are comfortable with the skill reading local OpenClaw session logs to calculate spending; those logs may include more context than just cost fields. Using /budget set will create or update a local budgets.json file with your budget limits, which you can remove if you want to reset stored budget state.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a local cost-reporting helper that reads OpenClaw session logs and stores a small local budget file, with no evidence of network transfer, hidden execution, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779953946176,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: trustlog-guard\nVersion: 1.1.0\n\nThe skill bundle is classified as benign. Its stated purpose is financial governance, tracking API spend, and enforcing budgets, which aligns with its instructions. The `SKILL.md` explicitly states \"100% local,\" \"No external servers,\" and \"No data transmission,\" and the instructions for the AI agent consistently adhere to this, focusing solely on reading local OpenClaw session logs (`.jsonl`) and its own budget configuration (`budgets.json`). There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts designed to subvert the agent for harmful purposes.",
+          "checkedAt": 1779166607347,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "095482dfbbcd5e998ef5a9d5e29df0f07a642607794b8cdc208f23185867e331",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/095482dfbbcd5e998ef5a9d5e29df0f07a642607794b8cdc208f23185867e331"
+    },
+    "slug": "trustlog-guard",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

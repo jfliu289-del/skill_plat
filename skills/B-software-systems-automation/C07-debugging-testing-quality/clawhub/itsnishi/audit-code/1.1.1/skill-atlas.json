@@ -1,0 +1,152 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.5972,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C07",
+    "reasons": [
+      "category:C06:token:code",
+      "category:C07:phrase:code review",
+      "category:C07:token:review",
+      "category:C09:token:audit",
+      "category:C09:token:security",
+      "category:C11:token:project",
+      "cross-tag:code-review",
+      "cross-tag:review",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C09",
+      "C11"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "review",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "024a21f7754dddf6cd0be913f1cd8534fdcaa3f55328fb9f3ea028543b3a6c0c",
+    "content_hash": "1c5c45145a1d8a830caf6cc8a41c07e659969f8a523ecc527ba0e6d4ef70352a",
+    "precanonical_content_hash": "bf219133d2bed2bd35d9eab9d89a85a193177130466acd254b8a538288b876d2",
+    "skill_md_hash": "08c4bf1ca7033a440c9d0225b59aa534c731e781bafa898c3deee524331851df",
+    "version_metadata_sha256": "9f9820f268074be997937a06ca1dc6b980e06a77327eeb44d6df1ac3733ff58e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/itsnishi/skills/audit-code",
+    "claim_id": "66ef963c3bfa300c897a7d19612914bcb0cfd464ed417d9891c368804882b702",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "audit-code",
+        "url": "https://clawskills.sh/skills/itsnishi-audit-code"
+      },
+      {
+        "index_path": "categories/cli-utilities.md",
+        "label": "audit-code",
+        "url": "https://clawskills.sh/skills/itsnishi-audit-code"
+      }
+    ],
+    "owner_handle": "itsnishi",
+    "owner_id": "s1731fs5mvb843mj295egzx6rh83gzbc",
+    "published_at": 1774570886379,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783656866260,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783656866260,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill purpose matches its behavior: it runs a local Python auditor to scan source code for secrets, dangerous calls, dependency risks, sensitive files, file permissions, and exfiltration patterns.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The frontmatter discloses Read, Glob, Grep, and Bash and disables model invocation; Bash is used to launch the local auditor. Live package-registry checks are present but only indirectly reflected in SKILL.md as dependency-risk checks.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains a skill markdown file and local Python scripts only; no installer, remote download, package installation, or install-time mutation was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Recursive project reads, .env scanning, matched-text reporting, permission checks, and .gitignore review are proportionate for a security scanner. The main privacy consideration is automatic PyPI/npm lookups for package names found in install commands.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence setup, privilege escalation, credential-store access, destructive file operations, background worker, or unrelated data exfiltration path was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The skill does use Bash and filesystem-reading capabilities, but these are declared in frontmatter and used to run a local scanner over a user-selected target path.\n[TP4] expected: Repository hygiene checks, sensitive-file checks, and dependency validation fit the code-audit purpose; the live registry lookup is under-emphasized in SKILL.md but disclosed in version metadata and limited to package verification.\n[SDI-1] expected: The networked package verification is real and automatic after matching pip/npm install commands, but it is confined to PyPI/npm existence checks and supports the supply-chain audit feature.\n[SDI-2] expected: Outbound requests to PyPI and npm can disclose package names, but the implementation does not show unrelated telemetry, credential transmission, or arbitrary external destinations.\n[SQP-2] expected: Package names may be sent to public registries without an in-code consent prompt, which is a privacy note for private repositories rather than evidence of malicious behavior.\n[suspicious.dynamic_code_execution] expected: The static hit is from pattern-description text for detecting eval-like code in scanned projects, not from the skill executing dynamic code.\n[suspicious.dangerous_exec] expected: The static hit is from detection-pattern text for dangerous execution calls in scanned projects; the artifact itself does not invoke subprocess, os.system, eval, or exec.",
+          "guidance": "Install if you want a repository security scanner and are comfortable with it reading the selected project, including .env-like files, and printing matched snippets in the report. Avoid it or run it with network egress blocked if private dependency names must not be sent to PyPI or npm.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent code-auditing skill, but it may read sensitive project files and check detected package names against public registries.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783656832390,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 78,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: audit-code\nVersion: 1.1.1\n\nThe bundle is a legitimate security auditing tool designed to perform static analysis on source code to identify vulnerabilities, hardcoded secrets, and supply chain risks. The core logic in `scripts/audit_code.py` and `scripts/patterns.py` uses an extensive database of regex patterns to detect modern attack vectors, including AI-specific prompt injections and MCP tool poisoning. While the tool performs network requests to PyPI and npm registries, these are functionally justified for verifying package legitimacy to prevent 'slopsquatting' or hallucinated dependency attacks, and no evidence of data exfiltration or malicious intent was found.",
+          "checkedAt": 1779162124654,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "34acb37a9b0cdac712b29c014ce949fa9d76acc6fc957dd6c0a2a9df998dcbb3",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/34acb37a9b0cdac712b29c014ce949fa9d76acc6fc957dd6c0a2a9df998dcbb3"
+    },
+    "slug": "audit-code",
+    "source_type": "clawhub",
+    "version": "1.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

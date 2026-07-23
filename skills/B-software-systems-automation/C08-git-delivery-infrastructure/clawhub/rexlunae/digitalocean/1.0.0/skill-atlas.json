@@ -1,0 +1,152 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "configuration"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "creative",
+      "infrastructure",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C08:token:deploy",
+      "category:C08:token:kubernetes",
+      "category:C12:token:management",
+      "cross-tag:agent-management",
+      "cross-tag:deployment",
+      "cross-tag:design",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00",
+      "C06",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "deploy",
+      "design",
+      "manage",
+      "operate"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "c31528194774faa4dda4a9e32716ae1fa8ca97ae5362c4198a3627021db4e9b7",
+    "content_hash": "a28b191b9ec03a1c00d51d8a8d835ccfd693295de8637bad604228e49e58070f",
+    "precanonical_content_hash": "7e83fd48254daf44e166a397ca8fde482f88ebe2c7bac83772141a780ada39a1",
+    "skill_md_hash": "24e2a9f36183a4e0e6e1950768f7dff99c829d8c183075652cf9e8c84f8ef6b4",
+    "version_metadata_sha256": "d910d6545e54a7a610d8fa2fd7625cddb3979f717544c3d4585e2370c548d8dd"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/rexlunae/skills/digitalocean",
+    "claim_id": "f47eb030e0c807f7954fffd36b63f3b686113ae31d83c5955447db63da0e7913",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "digitalocean",
+        "url": "https://clawskills.sh/skills/rexlunae-digitalocean"
+      }
+    ],
+    "owner_handle": "rexlunae",
+    "owner_id": "s17f16r7drqg1mnp1s8trs7v1h8845fe",
+    "published_at": 1770683201496,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779963671739,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779963671739,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documentation and script coherently match the stated purpose of managing DigitalOcean infrastructure, including droplets, DNS, firewalls, databases, SSH keys, images, billing, and account information. These are high-impact administrative capabilities, but they are visible and purpose-aligned.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands are explicit and user-invoked. Destructive actions such as droplet destroy, DNS record delete, and image or snapshot delete execute without an extra confirmation step, so the operational risk should be handled by user approval and careful resource ID checks.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains a markdown guide and a Python CLI script; no installer, dependency download, startup hook, background worker, or install-time execution was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Reading ~/.config/digitalocean/token and sending requests to https://api.digitalocean.com/v2 is proportionate for a DigitalOcean API client. The token may grant broad infrastructure and billing visibility depending on how it is created.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No autonomous persistence or privilege escalation was found. The only persistent sensitive item is the user-created local bearer token file, which is disclosed and protected with chmod 600 in the setup instructions.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The local token read and outbound DigitalOcean API access are real, but they are disclosed and necessary for this integration; the lack of a separate permission declaration is a transparency note rather than evidence of hidden behavior.\n[SQP-2] expected: The delete and destroy operations identified by the scanner are present and immediate, but they are explicit infrastructure-management commands rather than disguised or automatic actions. They warrant caution, not a malicious or Review classification.",
+          "guidance": "Install only if you want the agent to administer your DigitalOcean account. Use the narrowest practical API token, keep it protected, rotate or revoke it if exposed, and require explicit human approval before create, resize, delete, DNS, billing, or direct API operations.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed DigitalOcean administration skill, but it can make powerful cloud changes with your API token.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779963622149,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 91,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: digitalocean\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills bundle for DigitalOcean is benign. The `SKILL.md` provides clear, non-malicious instructions for managing DigitalOcean resources and properly guides the user on storing the API token. The `scripts/digitalocean.py` script correctly implements a CLI client for the DigitalOcean API, reading the token from the designated path (`~/.config/digitalocean/token`) and making requests exclusively to the official DigitalOcean API endpoint (api.digitalocean.com). There is no evidence of data exfiltration, malicious execution, persistence mechanisms, prompt injection attempts against the agent, or obfuscation.",
+          "checkedAt": 1779162602827,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "920e434708067a5a5101fdc4dec8f8cd6ca02464f4e4200fa541e404571de76e",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/920e434708067a5a5101fdc4dec8f8cd6ca02464f4e4200fa541e404571de76e"
+    },
+    "slug": "digitalocean",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

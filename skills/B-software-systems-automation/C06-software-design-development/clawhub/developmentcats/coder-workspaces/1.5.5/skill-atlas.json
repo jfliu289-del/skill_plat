@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C06:token:code",
+      "category:C06:token:coding",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "9ea9448d2f1bef76059c679f3b5b6c467d71c2f614e949d4d4c7692678609450",
+    "content_hash": "abf8c36c1e284c64e9a698e5852f326087b765ce2d5ede58ff773e6605b12593",
+    "precanonical_content_hash": "82b27c3eba2e225b5875d436d9a1c615f6f043c440c8dd1da2bd577fd87ba620",
+    "skill_md_hash": "e3f0414c02dc1a398e3383adbc8315d5873f296bf6b8cf9039e90969872f7fc8",
+    "version_metadata_sha256": "4b33af822fe59a30ebdad0949518c4bc686f85e79aec880d7d76ffa32c8c3937"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/developmentcats/skills/coder-workspaces",
+    "claim_id": "1a1c56df6ee9ee20826cab4daf42d2ba8662d46f64ebc339a224ae7d695bd593",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "coder-workspaces",
+        "url": "https://clawskills.sh/skills/developmentcats-coder-workspaces"
+      }
+    ],
+    "owner_handle": "developmentcats",
+    "owner_id": "s179d1rp8zyj3wwg8fsch3b91d83hdzf",
+    "published_at": 1770415402526,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783657201120,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783657201120,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the documented capabilities: listing, starting, stopping, deleting, SSHing into, and creating AI tasks in Coder workspaces. These are high-impact remote actions, but they are disclosed and central to the skill.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are plain Coder CLI examples with no hidden automation or prompt-injection behavior. Destructive examples include force flags, so users should require explicit target confirmation before deletion, restart, or broad remote command execution.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The current artifact contains only Markdown files, no executable scripts, and installation guidance points to the Coder CLI documentation, the user's Coder instance, Homebrew, and ClawHub installation.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The required CODER_URL and CODER_SESSION_TOKEN are proportionate for a Coder CLI integration, but the session token is sensitive account access and should be protected as a secret.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill does not install local persistence or privileged host behavior, but it can create or delete remote workspaces and tasks that may persist in the user's Coder environment.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SkillSpector-clean] expected: SkillSpector reported no issues; direct artifact inspection found only Markdown documentation matching the skill purpose.\n[VirusTotal-clean] expected: VirusTotal telemetry was clean, and artifact review supports a benign verdict.\n[credential-use] expected: CODER_SESSION_TOKEN use is disclosed and necessary for Coder CLI authentication, but users should treat it as a sensitive secret.\n[remote-workspace-management] expected: Workspace deletion, task deletion, SSH, and remote command execution are high-impact but are explicitly documented and purpose-aligned.",
+          "guidance": "Install this only if you want OpenClaw to manage your Coder workspaces and tasks. Keep CODER_SESSION_TOKEN private, avoid committing or sharing it, prefer least-privilege or short-lived tokens where possible, and require explicit confirmation before deleting workspaces/tasks or running broad remote commands.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a documentation-only helper for managing Coder workspaces, with sensitive but expected Coder access clearly tied to its purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783657180845,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: coder-workspaces\nVersion: 1.5.5\n\nThe skill is designed to manage Coder workspaces and AI tasks using the `coder` CLI. It primarily serves as documentation for the AI agent on how to interact with the `coder` command. While it requires sensitive environment variables (`CODER_URL`, `CODER_SESSION_TOKEN`), this is necessary for its stated purpose. A key mitigating factor is the explicit instruction in `SKILL.md` that `coder ssh <workspace> -- <command>` executes commands within isolated Coder workspaces, not the host system. The `CHANGELOG.md` provides strong evidence that previous versions contained potentially risky patterns (e.g., `curl|bash`, helper scripts for install/auth, credential patterns) but these were intentionally removed to make the skill a 'pure documentation skill', significantly reducing its attack surface. No prompt injection attempts or malicious execution patterns are present in the current files.",
+          "checkedAt": 1779161875623,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "3fe9c5bce8b21320d323a90c64d97fae48c487b2cce1b572aec971e046850644",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/3fe9c5bce8b21320d323a90c64d97fae48c487b2cce1b572aec971e046850644"
+    },
+    "slug": "coder-workspaces",
+    "source_type": "clawhub",
+    "version": "1.5.5"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

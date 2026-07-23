@@ -1,0 +1,150 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.7,
+    "domains": [
+      "security"
+    ],
+    "needs_review": false,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:phrase:agent skill",
+      "category:C00:token:agent",
+      "category:C00:token:plugin",
+      "category:C00:token:skill",
+      "category:C08:token:ci",
+      "category:C09:phrase:security audit",
+      "category:C09:token:audit",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C10:token:llm",
+      "cross-tag:agent-management",
+      "cross-tag:review",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09",
+      "C10"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "review",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "422436707b360d3fd63b7702d3cf3ef11a4b0e49e164850ccaf231ffd8bb0c96",
+    "content_hash": "d816b552851941f022a5eb5ca6a0007fc23ceee46552918feb6b78fb547289f0",
+    "precanonical_content_hash": "b47aab664e36c8399e6de1467d1a23f86e1cc60e1792530f557affb05bce1cc1",
+    "skill_md_hash": "1f4e8b8ab04bd2048fbdad72dabeb8032bbb240bb92c549a2fda7548519abd47",
+    "version_metadata_sha256": "28b45fc7088b4003aaf531df323fec41415fad900b94b73012f04aaa732e7749"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sanguineseal/skills/aegis-audit",
+    "claim_id": "b3ffe78e66313b3d38bf0afbf844020b8a9c3dc1daf37f2fa2e4d2d87643b0fc",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "aegis-audit",
+        "url": "https://clawskills.sh/skills/sanguineseal-aegis-audit"
+      },
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "aegis-audit",
+        "url": "https://clawskills.sh/skills/sanguineseal-aegis-audit"
+      }
+    ],
+    "owner_handle": "sanguineseal",
+    "owner_id": "s17cg3rtdrhs0n8fpgaceemaps884sxj",
+    "published_at": 1770944338253,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972990430,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972990430,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The described capabilities, including reading project files and writing audit outputs, fit a security audit skill's stated purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The optional LLM analysis path expands scope by submitting scanned code to external model providers, but the supplied evidence says it is opt-in, disabled by default, and warned about.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No evidence was supplied or found of hidden install hooks, automatic execution, package mutation, or privilege escalation beyond normal skill instructions.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Access to local code and optional provider API credentials is sensitive but proportionate for this purpose when users intentionally run scans and enable integrations.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Writing reports or lockfiles is expected for an audit workflow; there is no artifact-backed evidence of background persistence, long-running workers, or elevated privileges.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[P5] unexpected: SkillSpector's harmful-content finding is not supported by the provided snippet, which only lists humorous audit personas; I treated it as a false-positive signal rather than a validated issue.\n[VirusTotal code_insight] expected: The flagged data-exposure risk comes from optional LLM analysis that may send code to Google, OpenAI, or Anthropic; that is sensitive but appears disclosed, user-enabled, and aligned with deeper audit analysis.",
+          "guidance": "Install only if you are comfortable letting the skill read the code you ask it to audit. Keep LLM analysis off for private or regulated code unless you have approved the provider and data handling terms, and avoid scanning secrets or credentials.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Aegis Audit appears to be a disclosed security-auditing skill; its main risk is an optional LLM mode that can send scanned code to third-party providers if the user enables it.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972951524,
+          "issueCount": 1,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 50,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: aegis-audit\nVersion: 0.1.10\n\nThe skill is a security auditing tool, which inherently requires extensive file system access (reading code, writing reports/lockfiles). The primary reason for classifying it as 'suspicious' rather than 'benign' is the 'Optional: LLM analysis' feature described in `SKILL.md`. This feature, if explicitly enabled by the user, sends scanned code to third-party LLM providers (Google, OpenAI, Anthropic). While this capability is opt-in, disabled by default, and accompanied by strong privacy warnings, it represents a significant data exfiltration risk if sensitive code is scanned with this feature enabled. This constitutes a risky capability that, while transparently disclosed and intended for a legitimate purpose, could lead to unintended data exposure if the user disregards the warnings, thus falling under the 'vulnerability' or 'risky capability' threshold.",
+          "checkedAt": 1779163589249,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "0d38d418d3a9f78792b12ae47667c020be9f1d523d97dcbdd241206952aa6aed",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0d38d418d3a9f78792b12ae47667c020be9f1d523d97dcbdd241206952aa6aed"
+    },
+    "slug": "aegis-audit",
+    "source_type": "clawhub",
+    "version": "0.1.10"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

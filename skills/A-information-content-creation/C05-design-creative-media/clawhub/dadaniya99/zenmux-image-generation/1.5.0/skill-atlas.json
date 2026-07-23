@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.6607,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C05:phrase:image generation",
+      "category:C05:token:image",
+      "category:C06:token:api",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a6a2b901ed698fa817e4fcb42e255d4c50531a99c16191e5150f52dd2a8f4a95",
+    "content_hash": "3ef6588527be8c57cc74b36692953c68056dce721716f4d618737f360ac118d0",
+    "precanonical_content_hash": "ab9b5c2eb467739d3603ed112660fe9d66c7fa98cf8da0243f9ea3ee976f682d",
+    "skill_md_hash": "4dd90684ee5624dbc7b7a8b572e4251fd3d4457f39aee462113ddcb6fa5a8573",
+    "version_metadata_sha256": "edc6bfd15e903ecc5329f35f7f1fbfde967c0e58372919f8e394cfdba9c92f72"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/dadaniya99/skills/zenmux-image-generation",
+    "claim_id": "ab89371dfa6dc542d4b750ba10c229ee3df5429d4386ae17be139dfb93cf12d7",
+    "index_entries": [
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "zenmux-image-generation",
+        "url": "https://clawskills.sh/skills/dadaniya99-zenmux-image-generation"
+      }
+    ],
+    "owner_handle": "dadaniya99",
+    "owner_id": "s178e9wg39md2mzzgdd57zvhyd83y6sg",
+    "published_at": 1770872263966,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779970214996,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779970214996,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently implement ZenMux image generation: a Python script sends a required prompt and optional user-specified image files to the ZenMux API, then saves returned image data locally.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Execution is explicit and argument-driven, with no role-change or hidden agent instructions. The documentation names ZenMux and the API key requirement, but could state more plainly that prompts and image contents are uploaded.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains SKILL.md, package.json, and one Python script. There are no install hooks, lifecycle scripts, remote installers, or install-time execution paths.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use of ZENMUX_API_KEY, outbound HTTPS to zenmux.ai, and reading image files passed via --images are proportionate for a cloud image-generation integration. Users should treat submitted prompts and images as third-party data disclosure.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background worker, privilege escalation, credential storage, broad file indexing, or destructive behavior is evident. The script writes only the requested output image path, which may overwrite that file.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The skill uses an environment API key and a network API, which are expected for ZenMux integration. SKILL.md discloses the ZENMUX_API_KEY requirement and ZenMux provider, though the frontmatter/package metadata does not provide a separate permission declaration.\n[SQP-2] expected: The skill necessarily sends the prompt and any user-supplied reference images to ZenMux for generation. This is purpose-aligned and visible in the script, but the user-facing docs should be clearer about third-party upload and privacy implications.\n[SQP-2] expected: The script posts the JSON payload, including base64-encoded image contents when --images is used, to the ZenMux endpoint. This is not hidden or unrelated behavior, but there is no explicit pre-upload confirmation.\n[staticScan] expected: Static scan reported no findings, and artifact inspection found no obfuscation, unrelated command execution, install-time behavior, persistence, or broad local file access.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with artifact review, but it was used only as supporting evidence rather than as the basis for the verdict.",
+          "guidance": "Install this only if you intend to use ZenMux for cloud image generation. Use a revocable ZenMux API key, avoid submitting confidential, regulated, or personal images unless ZenMux's policies are acceptable to you, and choose the output path carefully because the script writes the generated image there.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to do what it claims: use ZenMux to generate images, while sending your prompt and any chosen reference images to that service.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779970186111,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: zenmux-image-generation\nVersion: 1.5.0\n\nThe skill bundle is benign. It provides a client for the ZenMux image generation API. The `scripts/generate.py` script correctly handles arguments, reads the `ZENMUX_API_KEY` from environment variables, encodes local images to base64 for API submission, and saves the generated image from the API response. There is no evidence of data exfiltration, malicious command execution, persistence mechanisms, or prompt injection attempts in `SKILL.md` to subvert the agent's intended behavior. All actions are directly aligned with the stated purpose of generating images via the ZenMux API.",
+          "checkedAt": 1779163137173,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "b731056ecaadfa31e85316b04fa2f5468e72f25b1b0f7bbc3ba9d36dbccd2846",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b731056ecaadfa31e85316b04fa2f5468e72f25b1b0f7bbc3ba9d36dbccd2846"
+    },
+    "slug": "zenmux-image-generation",
+    "source_type": "clawhub",
+    "version": "1.5.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

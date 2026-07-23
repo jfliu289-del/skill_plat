@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "artifacts": [
+      "website"
+    ],
+    "audiences": [],
+    "confidence": 0.35,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C12:token:management",
+      "category:C19:token:automation",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C12",
+      "C19"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "automate",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "01aa82b0a5e852d5f1a35135ed41ea1ef16332f4372099bf4bd9b4a6eb08853c",
+    "content_hash": "a676b8b2534d1503cee3ba8619fc6fb69a8f36a679532d78cd7a32a27e0894a4",
+    "precanonical_content_hash": "3a135440dd74a3c09c7b35aef396738b0f35e1c5e95a9a19825fad3dd6347ea9",
+    "skill_md_hash": "042d2bd429b995fa56b0569593ad282b5dfe57907349aa3f8dce1e21da0397d4",
+    "version_metadata_sha256": "be3d3606b8fdd5a2f806768ef6a41971bb1dfe806f3466dffc3b00d9126cd99a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sarielwang93/skills/context-budgeting",
+    "claim_id": "60294947dbea07a0f7f2a9116d14f2f3fb2bf031418f644883abf652ada6dd94",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "context-budgeting",
+        "url": "https://clawskills.sh/skills/sarielwang93-context-budgeting"
+      }
+    ],
+    "owner_handle": "sarielwang93",
+    "owner_id": "s171gebaewajvke6ga4wztkken8856tq",
+    "published_at": 1770556644994,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658630066,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658630066,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is managing OpenClaw context limits, and the artifacts consistently describe checkpointing session state and triggering OpenClaw session compaction.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill instructs the agent to update memory/hot/HOT_MEMORY.md and run a bundled shell script; this is local command execution, but it is disclosed and directly tied to the skill's purpose.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains only SKILL.md and a small local shell script, with no dependency installation, remote fetch, package substitution, or obfuscated install behavior found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Environment access is limited to OpenClaw memory/checkpoint state and the internal openclaw sessions command; no credential stores, broad filesystem scanning, or network transfer behavior is present.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill intentionally changes persistent local agent memory/checkpoint state, but that persistence is expected for context recovery and is bounded to the advertised workflow.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[current SkillSpector report] expected: The current SkillSpector report lists no issues; artifact review confirmed the script and instructions are coherent with the context-budgeting purpose.\n[historical SQP-2] expected: The prior concern about modifying a memory file and running a script is artifact-supported, but those actions are disclosed, narrow, and purpose-aligned, so it does not warrant Review here.\n[VirusTotal telemetry] expected: VirusTotal telemetry is clean and consistent with the artifact review, but it was treated only as supporting signal.\n[static scan] expected: The static scan reported no suspicious patterns, and manual inspection found no remote payload fetching, destructive commands, credential handling, or exfiltration logic.",
+          "guidance": "Before installing, understand that this skill may update local OpenClaw memory/checkpoint state and run its bundled compaction script when context is high. Review the hardcoded workspace path and the script if your OpenClaw setup differs, but the reviewed artifacts do not show hidden or unrelated behavior.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to perform the context-management function it advertises, with narrow local memory/checkpoint actions and no evidence of hidden data access or exfiltration.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658611880,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: context-budgeting\nVersion: 1.0.0\n\nThe skill bundle is classified as benign. The `SKILL.md` instructs the OpenClaw agent to manage its context window by updating a specific memory file (`memory/hot/HOT_MEMORY.md`) and executing a local shell script (`scripts/gc_and_checkpoint.sh`). The script's primary action is to call the internal `openclaw sessions --active 1` command, which is directly aligned with the stated purpose of session compaction and context budgeting. There is no evidence of data exfiltration, malicious execution (e.g., remote payload fetching), persistence mechanisms, or prompt injection attempts to subvert the agent's core directives or access unrelated sensitive data. The commented-out `find` command for large temporary files is a diagnostic/cleanup step, not a security risk.",
+          "checkedAt": 1779162220732,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "bea571e9a99ab02e718e4e990ae488e72d0b642dd7375bd37dc30ba36fe8a484",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/bea571e9a99ab02e718e4e990ae488e72d0b642dd7375bd37dc30ba36fe8a484"
+    },
+    "slug": "context-budgeting",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

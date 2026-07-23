@@ -1,0 +1,137 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [],
+    "confidence": 0.625,
+    "domains": [],
+    "needs_review": false,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:phrase:multi agent",
+      "category:C00:token:agent",
+      "category:C01:token:lookup",
+      "category:C02:token:edit",
+      "category:C11:token:team",
+      "cross-tag:agent-management",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C02",
+      "C11"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1ed3df687ac6ce328d82cbbaae60ee055eaddfe388a053ce01b10f8e7984a4ec",
+    "content_hash": "8b6db3946e5a6f603b79c14d652962bbbf42cd1c372da7c27be1b3fe2b3a8bbf",
+    "precanonical_content_hash": "6fa05ae472807e54b45e3d20b28f11db3f4aabfdd1bf64a8b90d235f38fe9a44",
+    "skill_md_hash": "21a4e19dba7dc0d805764fa4f282f0f915e578be36c2627f05780a7f8bd1275f",
+    "version_metadata_sha256": "c07fdf0a2d25b179d90d2c9b6dd606e75e9182b58cadcd61f6e3bda15a7aa516"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/be1human/skills/multi-agent-en",
+    "claim_id": "5525cb820d9f52d3561e58ca67e8e3d7e790778a9853317af2ed1f5a9a20c599",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "multi-agent-en",
+        "url": "https://clawskills.sh/skills/be1human-multi-agent-en"
+      }
+    ],
+    "owner_handle": "be1human",
+    "owner_id": "s1798dprk0qksrtzsejrwbq541841fgp",
+    "published_at": 1771418725293,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779921915920,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779921915920,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The manifest and SKILL.md consistently describe a multi-agent dispatcher using sessions_spawn, round-robin assignment, and fixed sessionKey reuse; the capability matches the stated purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill tells the main agent not to use exec, file I/O, search, or message tools directly, and to delegate real work to sub-agents. Delegation and parallel spawning are central to the purpose, but users should understand sub-agents may receive full task context.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains only SKILL.md and skill.json, with no executable scripts, package installation, external downloads, or setup hooks.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "No environment variables, credentials, local profile paths, network endpoints, or broad local indexing requirements are requested by the skill artifacts.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "Fixed sessionKey reuse intentionally creates persistent sub-agent sessions that may retain context across tasks. This is clearly disclosed and purpose-aligned, but it has privacy implications for sensitive inputs.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SkillSpector:no-issues] expected: SkillSpector reported no issues, and artifact inspection supports that the package is instruction-only with no executable components.\n[VirusTotal:clean-telemetry] expected: VirusTotal telemetry is clean and consistent with the artifacts, but it was treated only as supporting signal.\n[artifact:persistent-sessionkeys] expected: The persistent alpha/bravo/charlie/delta/echo sessionKeys are an explicit feature for session continuity, not hidden persistence or exfiltration.",
+          "guidance": "Install this if you want your agent to act as a dispatcher for persistent sub-agents. Avoid sending secrets or sensitive private data unless you are comfortable with that context being passed to and potentially remembered by the fixed sub-agent sessions.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is an instruction-only dispatcher skill that transparently routes work to five persistent sub-agents and does not install code, request credentials, or hide unrelated behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779921885576,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: multi-agent-en\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle is designed as a multi-agent dispatcher. The `SKILL.md` explicitly and repeatedly prohibits the main agent from using high-risk tools such as `exec`, `file I/O`, `search`, or the `message` tool. Its sole function is to delegate tasks to sub-agents via `sessions_spawn`, ensuring session continuity with fixed `sessionKey`s. There is no evidence of intentional harmful behavior, data exfiltration, persistence mechanisms, or prompt injection attempts designed to subvert the agent for malicious purposes. The instructions are clear, consistent, and actively constrain the agent to a safe, defined role.",
+          "checkedAt": 1779165176656,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "1ed3df687ac6ce328d82cbbaae60ee055eaddfe388a053ce01b10f8e7984a4ec",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1ed3df687ac6ce328d82cbbaae60ee055eaddfe388a053ce01b10f8e7984a4ec"
+    },
+    "slug": "multi-agent-en",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

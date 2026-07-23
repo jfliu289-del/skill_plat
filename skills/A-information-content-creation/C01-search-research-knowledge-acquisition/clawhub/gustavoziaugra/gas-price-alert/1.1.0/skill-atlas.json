@@ -1,0 +1,137 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.4167,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:find",
+      "category:C01:token:search",
+      "category:C06:token:code",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "discover"
+    ],
+    "tasks": [
+      "build",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e81a17f32217e7b967fc58936b6f4c59f1a80c9bff7f1321cadf7e249f474dda",
+    "content_hash": "d612e721a16826e80bcc220ec1ec18aa6ea2b82d705c32d3214e6e7c9bf0e921",
+    "precanonical_content_hash": "e0acb051a16e91b938ad3bfae3b3ab84f11ba22980628539eb569b372b57aa64",
+    "skill_md_hash": "f9c3049feec4aaa61477debb0cbe652e80c32facad2c90dc83d6dafae987cbc6",
+    "version_metadata_sha256": "b1dad6eb1b32a3fdc449c0600a5aa72b0f5bebc23e99f322e224c223c7f91c20"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/gustavoziaugra/skills/gas-price-alert",
+    "claim_id": "9fe2c260ec4e9a0c145a8b81610276a3a25e6e62dad5404e46a3f28a162e4b30",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "gas-price-alert",
+        "url": "https://clawskills.sh/skills/gustavoziaugra-gas-price-alert"
+      }
+    ],
+    "owner_handle": "gustavoziaugra",
+    "owner_id": "s17279hbnd6py4ddnjyknrjnc9884f9y",
+    "published_at": 1770768400820,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968613492,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968613492,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts match the gas-price lookup purpose and disclose estimated pricing, but the documentation overstates full US support and built-in monitoring because Costco data is hardcoded around Columbus and most station prices are not live.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are ordinary user-run Python commands plus a user-created OpenClaw cron example; no hidden prompt override, unrelated tool use, or automatic unsafe execution was found.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation uses normal Python dependencies, with optional Playwright for GasBuddy scraping; dependency versions are not pinned, but the mechanism is disclosed and purpose-aligned.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network calls to geocoding, OpenStreetMap/Overpass, and optionally GasBuddy fit the stated purpose, but searched ZIP codes or coordinates are sent to third-party services and one Overpass endpoint uses HTTP.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill does not self-install persistence or require elevated privileges, but it documents a user-configured recurring cron alert that should be disabled when no longer wanted.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Network lookup and writing a user-specified JSON output file are expected for this skill; the lack of explicit permission metadata is a transparency note, not evidence of hidden or disproportionate behavior.\n[TP4] unexpected: The mismatch concern is partly supported: daily alerts and broad US coverage are overstated compared with the actual scripts. However, scraping, file output, estimation, and manual cron setup are disclosed, so this is a quality and expectation issue rather than Review-level abuse.\n[SDI-1] unexpected: The implementation is Columbus-biased and most prices are estimates or unavailable despite broad documentation claims. This can mislead users about accuracy, but it is not deceptive exfiltration, destructive behavior, or hidden authority.\n[SDI-4] unexpected: The distance calculation for OpenStreetMap results uses a Columbus default reference, which can make non-Columbus results inaccurate. This is a correctness bug to fix, not a security-policy escalation by itself.\n[SQP-2] expected: Repeated location-based searches and notifications are expected for daily gas alerts, but the privacy implications should be clearer because ZIP codes or coordinates may be sent to external services and summaries may be retained in notification channels.",
+          "guidance": "Install only if you are comfortable sending searched ZIP codes or coordinates to external mapping or gas-price services. Treat displayed prices as estimates unless using a real price source, be cautious with non-Columbus searches, and review any cron alert so it does not keep sending location-based requests after you no longer need it.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed gas-station lookup and optional alert helper, but users should treat prices and non-Columbus results as approximate.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968556677,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 78,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: gas-price-alert\nVersion: 1.1.0\n\nThe OpenClaw skill 'gas-price-alert' is designed to find and monitor gas prices using OpenStreetMap data and optional GasBuddy scraping. The Python scripts (`gas_alternative.py`, `gasbuddy_search.py`) use standard libraries like `requests`, `geopy`, and `playwright` to interact with legitimate public APIs and websites. All external connections are to `overpass-api.de` and `gasbuddy.com`, which are appropriate for the skill's stated purpose. Input arguments are handled safely via `argparse`, and output is written to a user-specified file. There is no evidence of data exfiltration, unauthorized command execution, persistence mechanisms, or malicious prompt injection in the `SKILL.md` or `README.md` files. The cron job payloads instruct the agent to either process a natural language request or execute the skill's own Python script, both of which are standard and benign operations for an OpenClaw agent.",
+          "checkedAt": 1779163009999,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "d30d2ab1de34c7dfd74903fcfa3c7854e2ad03e7d615cea211d3cb937dd757dd",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d30d2ab1de34c7dfd74903fcfa3c7854e2ad03e7d615cea211d3cb937dd757dd"
+    },
+    "slug": "gas-price-alert",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

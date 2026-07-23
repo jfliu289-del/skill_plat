@@ -1,0 +1,162 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "website"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.7833,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C07",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C02:token:language",
+      "category:C06:token:code",
+      "category:C07:phrase:code review",
+      "category:C07:phrase:pull request",
+      "category:C07:token:review",
+      "category:C07:token:test",
+      "category:C07:token:testing",
+      "category:C08:token:cd",
+      "category:C08:token:ci",
+      "category:C09:phrase:security audit",
+      "category:C09:token:audit",
+      "category:C09:token:security",
+      "category:C17:token:notes",
+      "category:C19:token:automation",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:code-review",
+      "cross-tag:review",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "build",
+      "manage",
+      "review",
+      "secure",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "f75f397e89faba79386a8625b2607bf9dcd83cdd8f80d13b384e13b4a6981559",
+    "content_hash": "cee3bc64cbfe1fba12f1e5f4c41a91bc5539fda148dcec71b817b26e04fff649",
+    "skill_md_hash": "d3b92248ed568696fc89e8dcd02467d588c6c95fbc360f867687871629eb9cdd",
+    "version_metadata_sha256": "0e6d82fed1e40658ee9fe8c8f4edce6df5a4b26d3a6282af8c1986837f801b7b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/ryudi84/skills/sovereign-code-review-helper",
+    "claim_id": "bf2b5c893cb6a62dea8e1c207c5ad18b26821f426049e714809b24ff93a45def",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "sovereign-code-review-helper",
+        "url": "https://clawskills.sh/skills/ryudi84-sovereign-code-review-helper"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "ryudi84",
+    "owner_id": "s179sa8mgbgqvczdvr80yyh9fh885q9b",
+    "published_at": 1771720739737,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779948575624,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779948575624,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently implement the stated purpose: generating review checklists/templates by inspecting changed files in a git repository and scanning them with standard local Unix tools.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The trigger phrases are broad and the script can read changed repository files and write to a user-supplied output path, but these behaviors are disclosed and aligned with the review-helper purpose.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is ordinary OpenClaw/manual copy plus making the bundled script executable; no hidden package install, network bootstrap, or unusual install-time behavior is shown.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Requiring git, bash, grep, sed, awk, sort, and wc is proportionate for a local code-review helper; no credential stores, account sessions, or network services are used.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No background persistence, privilege escalation, credential handling, or account authority is requested; persistence is limited to optional user-directed report/template output.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-1] expected: The generic triggers such as code review and security check are real and could cause accidental activation, but they are purpose-aligned and do not add hidden authority by themselves.\n[VirusTotal code_insight] unexpected: The shell-injection/RCE claim is not supported by the script: the --files value is passed as a quoted grep pattern, not evaled or reinterpreted as shell commands. It is still better treated as a regex filter, not a true glob.\n[StaticScan] expected: The clean static scan is consistent with artifact review showing no network exfiltration, destructive commands, credential access, or persistence.",
+          "guidance": "Install only if you are comfortable with a Bash script reading changed files in your git repository. Use explicit invocation when possible, review any --output-file path before running it, and treat --files as a grep regex filter rather than a shell glob.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a local code-review checklist tool with disclosed git/Bash use and no evidence of hidden data theft or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948532971,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: sovereign-code-review-helper\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to a critical shell injection vulnerability in `scripts/review.sh`. The `--files` argument, which accepts a glob pattern, is directly used in `grep -E \"$FILE_PATTERN\"` without proper sanitization. This allows an attacker to inject arbitrary shell commands by crafting a malicious `FILE_PATTERN` value, leading to potential Remote Code Execution (RCE).",
+          "checkedAt": 1779166085896,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "4e189be3a57a5d423c76173b9957376f28e37ca59e13373ada97c4b85392ef0f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4e189be3a57a5d423c76173b9957376f28e37ca59e13373ada97c4b85392ef0f"
+    },
+    "slug": "sovereign-code-review-helper",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

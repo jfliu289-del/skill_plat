@@ -1,0 +1,147 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.6682,
+    "domains": [
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:phrase:agent skill",
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C10:token:model",
+      "category:C11:token:project",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "7fb1d1ee00f4e68e17c30187a5c1b90836c7c52241a0220ea803634d0f9ae337",
+    "content_hash": "cb48469ff278c098dc2415280dfc3d533bac1c44216856f51f652d4653670524",
+    "precanonical_content_hash": "e856862c3d09f1a8dea18a3d245cc01bddf574b3debe9129f2bd60ba1cd5f661",
+    "skill_md_hash": "784ee929b44c12224a55d4568cf9b91011dfd2bd7c879c012fafe00f118dfd24",
+    "version_metadata_sha256": "47b8bea6306a714e24f08d6ce0c7f16ca8043ad628967ef64b9b0a7efe4a438a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/agrublev/skills/freedcamp-agent-skill",
+    "claim_id": "a78b487977111ab2affcdc662244ab471b781cc70f60df827b758388fef95d37",
+    "index_entries": [
+      {
+        "index_path": "categories/productivity-and-tasks.md",
+        "label": "freedcamp-agent-skill",
+        "url": "https://clawskills.sh/skills/agrublev-freedcamp-agent-skill"
+      }
+    ],
+    "owner_handle": "agrublev",
+    "owner_id": "s173m42csry7evz6h3hnqeasq1879nms",
+    "published_at": 1770845504790,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971373007,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971373007,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The CLI capabilities match the stated project-management purpose: it reads Freedcamp workspace data and can create tasks, update tasks, add comments, and mark notifications read.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands are explicit and scoped to Freedcamp IDs or names, but write actions are real workspace mutations and should be user-approved by the calling agent or operator.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact is a local dependency-free Node.js skill with no install hooks, background startup, or hidden package execution evident.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use of FREEDCAMP_API_KEY and FREEDCAMP_API_SECRET and network calls only to https://freedcamp.com/api/v1 are proportionate to the documented integration.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill discloses session caching behavior and uses a dedicated OpenClaw skill cache path, but the implementation writes the session file without explicitly setting owner-only permissions.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: Credential configuration is expected for a Freedcamp API skill; the documentation should more clearly warn that API key and secret values are sensitive and that config display commands may expose them.\n[SQP-2] expected: Local session-token caching supports the Freedcamp API workflow and is not hidden, but the cache should be treated as sensitive because the script does not force restrictive file permissions.\n[suspicious.env_credential_access] expected: Reading Freedcamp API credentials from environment variables is required for the stated authentication flow.\n[suspicious.potential_exfiltration] expected: The flagged file read is the skill's own Freedcamp session cache, and the network destination is the documented Freedcamp API rather than an unrelated endpoint.\n[VirusTotal code_insight] expected: VirusTotal telemetry was clean and aligned with the artifact review; it was not used as the sole basis for the verdict.",
+          "guidance": "Install this only for Freedcamp workspaces where agent access is intended. Avoid printing or sharing OpenClaw config values, protect or delete ~/.openclaw/skills/freedcamp-session.json when needed, and require explicit approval before creating tasks, changing statuses, adding comments, or marking notifications read.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent Freedcamp integration, but users should protect the stored API credentials and local session cache.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971319447,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: freedcamp-agent-skill\nVersion: 1.0.0\n\nThe OpenClaw AgentSkill bundle for Freedcamp appears benign. It provides a dependency-free Node.js CLI for managing Freedcamp tasks, projects, and notifications, using HMAC-SHA1 API credentials. The skill correctly handles sensitive API keys and secrets by requiring them as environment variables or OpenClaw config, and caches session tokens in a designated local file (`~/.openclaw/skills/freedcamp-session.json`). All network communication is directed to the legitimate Freedcamp API (`https://freedcamp.com/api/v1`). There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts in `SKILL.md` or `AGENTS.md`. The `scripts/demo.mjs` uses `execFileSync` safely to call the main script, passing arguments as an array, which prevents shell injection.",
+          "checkedAt": 1779163307027,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "0a31c0de3303c9db12f45de31730e4f3009e51f4661c825139506d4f8b9e9f95",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0a31c0de3303c9db12f45de31730e4f3009e51f4661c825139506d4f8b9e9f95"
+    },
+    "slug": "freedcamp-agent-skill",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

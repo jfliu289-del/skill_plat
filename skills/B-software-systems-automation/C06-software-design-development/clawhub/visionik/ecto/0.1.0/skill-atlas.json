@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.475,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "b89365d0a6cdd093aed3ef5f3c237a82f0cafed191576d3d180c03d7e2a806af",
+    "content_hash": "594cdadcd50c523c7e81dec677bf33e5e41b0f5e9aba2e2cf4d243dda6c95332",
+    "precanonical_content_hash": "4f28902aef6906b3ad0bd7d4845a152ddc83555fd7d427f860af3e1faab88f9d",
+    "skill_md_hash": "c99c35afc7762390fc509d8e337ea8df40b912a6efcbb7f733e1824d0e86144e",
+    "version_metadata_sha256": "f56e3496f9f83a2dcd04d88a9b4bb930e76bb7aab5fe09c061d3631c8e24f738"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/visionik/skills/ecto",
+    "claim_id": "b48b0166deffd5efb23af9be8c203e5e8f79d6e2436e0fe3730bffcd7cafe94a",
+    "index_entries": [
+      {
+        "index_path": "categories/cli-utilities.md",
+        "label": "ecto",
+        "url": "https://clawskills.sh/skills/visionik-ecto"
+      }
+    ],
+    "owner_handle": "visionik",
+    "owner_id": "s17d6xynhwg9vaetsv3nx12zhn884ee1",
+    "published_at": 1769419648757,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783650177273,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783650177273,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The tool can create, edit, publish, schedule, and delete Ghost posts, pages, tags, images, and webhooks, and can read settings, users, and newsletters; this is high-impact but coherent with a Ghost Admin API management CLI and is documented in SKILL.md, README.md, and CHANGELOG.md.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The command reference openly lists mutating and destructive operations. Delete operations prompt unless --force is used, while publishing, scheduling, image upload, and webhook creation are explicit commands that should remain user-directed in agent use.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No automatic startup, background worker, or hidden installer behavior was found. The README suggests go install github.com/visionik/ecto@latest, which is convenient but not pinned to the reviewed version.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading selected markdown/image files, stdin content, Ghost-related environment variables, and making network calls to the configured Ghost site are proportionate for this integration. The Ghost Admin API key is sensitive and grants administrative authority.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The tool persists site configuration and Admin API keys at ~/.config/ecto/config.json or XDG_CONFIG_HOME with 0600 file permissions, and supports environment-variable overrides. No unrelated privilege use, obfuscation, autorun persistence, or credential exfiltration was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Environment-variable access and local config writes are expected for a CLI that stores Ghost site credentials; the artifacts disclose the variable names and config path, and the code writes the config with restricted permissions.\n[TP4] expected: The one-line description is narrower than the full command set, but the skill and README openly list auth, settings, users, newsletters, images, webhooks, and multi-site support, so this is broader disclosed admin scope rather than hidden behavior.\n[SQP-2] expected: Admin API key setup via command-line flag, config file, or environment variable is expected for this tool. The docs could better warn about shell history, logs, and screenshots, but the credential handling is not deceptive or unrelated.\n[SQP-2] expected: Delete, publish, unpublish, schedule, and webhook actions are disclosed and purpose-aligned. Delete commands include confirmations unless --force is supplied; agent users should still require explicit approval for all state-changing production actions.\n[SQP-2] expected: The single-user command prints the user's email, which is expected for a user-detail lookup through the Ghost Admin API, but it can expose PII in terminal logs or JSON output.",
+          "guidance": "Install only from a source and version you trust, preferably pinned rather than @latest. Treat the Ghost Admin API key as a site-admin secret, protect or rotate it if exposed, and avoid putting real keys in shared terminals, scripts, logs, or screenshots. When using this through an agent, confirm the target site and require explicit approval before publishing, deleting, scheduling, bulk-changing content, uploading images, or creating webhooks.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Ecto is a disclosed Ghost Admin API CLI whose powerful site-management actions match its stated purpose, with no evidence of hidden exfiltration, unsafe persistence, or deceptive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783650142202,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 62,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ecto\nVersion: 0.1.0\n\nThe OpenClaw AgentSkills skill bundle 'ecto' is a command-line interface for the Ghost.io Admin API. Its functionality, including reading/writing files (e.g., markdown for posts, images) and making network calls to the Ghost API, is directly aligned with its stated purpose of managing blog content. Sensitive API keys are handled appropriately by storing them in `~/.config/ecto/config.json` with `0600` permissions or via environment variables. The `SKILL.md` and `--ai-help` documentation provide clear instructions for using the tool and do not contain any prompt injection attempts or instructions for the agent to perform unauthorized actions. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or obfuscation.",
+          "checkedAt": 1779160014813,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "c13e0665e8ba0485405f0c641e0dd97cc2d0487835dddf74bd5ac349ca1bae9a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/c13e0665e8ba0485405f0c641e0dd97cc2d0487835dddf74bd5ac349ca1bae9a"
+    },
+    "slug": "ecto",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

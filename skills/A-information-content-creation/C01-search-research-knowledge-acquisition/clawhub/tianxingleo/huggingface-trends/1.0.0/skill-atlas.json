@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:find",
+      "category:C01:token:research",
+      "category:C04:token:metrics",
+      "category:C05:token:image",
+      "category:C10:token:ai",
+      "category:C10:token:model",
+      "category:C17:token:notes",
+      "cross-tag:design",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C05",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover"
+    ],
+    "tasks": [
+      "design",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "9c144c3bebecb70b11800e27776d5cfa3277fa83e42b6573b808c304c40984cf",
+    "content_hash": "54778990673ae738bfdd430a867d24c9753bd22181b09bf2762cf1c16d7393eb",
+    "precanonical_content_hash": "55c02a2c939c17e8b5b482f5a2f513db692ba41feee3c01fb8bbd09b6897bd81",
+    "skill_md_hash": "8ec7fd75e80b8e0161acfd528b6f27dd8d5f251b947de1ea8be7fc6bea791ea6",
+    "version_metadata_sha256": "92ada632a671078f1071e76aa64e1b4e80b7129c446437ea9ce5f5e11ccc34f5"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tianxingleo/skills/huggingface-trends",
+    "claim_id": "0081e1444601d0bf99e930efb8b4c99ccf94f3d878464ea4e5bc1d79be74ce2d",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "huggingface-trends",
+        "url": "https://clawskills.sh/skills/tianxingleo-huggingface-trends"
+      }
+    ],
+    "owner_handle": "tianxingleo",
+    "owner_id": "s17362bbxgzt0s8r2ynqgp2nsh8852hg",
+    "published_at": 1770885123753,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971679300,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971679300,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The script fetches public model metadata from huggingface.co, sorts and filters it, formats results, and optionally exports JSON, which matches the stated trend-monitoring purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The documentation clearly shows outbound Hugging Face API access, proxy use, and optional local output, though richer permission metadata would make those capabilities easier to audit.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no installer, post-install hook, or bundled dependency execution; the only install-related instruction is to install the common requests package if missing.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to Hugging Face and optional use of a user-provided HTTP proxy are proportionate to the task, but users should trust the proxy they configure.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The code does not create persistence automatically; SKILL.md includes a manual cron-line example for daily monitoring and logging to /tmp.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The network calls and optional JSON/log file creation are disclosed and aligned with fetching and exporting Hugging Face trend data; the missing explicit permission declaration is a transparency note rather than evidence of hidden behavior.\n[RA2] expected: The cron content is a documented manual example for recurring trend checks, not code that installs persistence by itself; users should only add it intentionally and remove it when no longer needed.\n[VirusTotal code_insight] expected: The reported file-write issue is the documented user-selected JSON export path, so it can overwrite files if misused but is not hidden, automatic, or purpose-incompatible.",
+          "guidance": "Install this only if you want a command-line tool that contacts Hugging Face for public model metadata. Use a trusted proxy or omit the proxy if direct access works, choose JSON output paths carefully to avoid overwriting files, and add the cron example only if you deliberately want daily background runs and log files.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to be a straightforward Hugging Face model-trends helper with disclosed network access, optional JSON export, and an optional manual cron example.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971653463,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: huggingface-trends\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to a critical arbitrary file write vulnerability in `scripts/hf_trends.py` where the `output_file` parameter for JSON export is not sanitized, allowing for potential path traversal. Additionally, the `SKILL.md` explicitly instructs the AI agent to set up a cron job for daily monitoring, which, while used for a benign purpose in this context, demonstrates a persistence capability that could be exploited. There is no clear evidence of intentional malicious activity like data exfiltration to external C2 servers or unauthorized remote code execution.",
+          "checkedAt": 1779163420103,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "10b27360569af2d2ba6d26c0741754f15edbb4120f40a9847421ccb55cba1927",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/10b27360569af2d2ba6d26c0741754f15edbb4120f40a9847421ccb55cba1927"
+    },
+    "slug": "huggingface-trends",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

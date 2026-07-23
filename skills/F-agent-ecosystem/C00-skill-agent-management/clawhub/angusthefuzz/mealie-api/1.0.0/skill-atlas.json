@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "cross-tag:agent-management",
+      "cross-tag:planning",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "plan"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "plan",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d9dc193092bdbfc9ca0e188ebd1ec5839b8985c0d7f8155dbeba96e49a22090e",
+    "content_hash": "db46c93d13b7288e1d7ad1764c1f2d1c07b9c3cb8b9812ae22a3c2dfff27aca2",
+    "precanonical_content_hash": "8f7e3e9315f2a5b0ee2bc9c98bc504df18ff9fb258f2bceb67f3b7c7bc1e1237",
+    "skill_md_hash": "522224c1543742fe84192e5f286a893cbe1bc7d2e22180abd1468f0c535a506d",
+    "version_metadata_sha256": "f5346028c17a5bf48eb122a100e48b6d83072efa478d7e3b0d4017f50141c298"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/angusthefuzz/skills/mealie-api",
+    "claim_id": "8a727f2eafefbb748c4d4d2dad94393fe47b7327bc28ec1b88fb4419abf7d4cf",
+    "index_entries": [
+      {
+        "index_path": "categories/health-and-fitness.md",
+        "label": "mealie-api",
+        "url": "https://clawskills.sh/skills/angusthefuzz-mealie-api"
+      }
+    ],
+    "owner_handle": "angusthefuzz",
+    "owner_id": "s174z8dkzqyr3xc14wvkpart7n8815fk",
+    "published_at": 1771169569873,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968355723,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968355723,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented and implemented capabilities match a Mealie recipe, shopping-list, and meal-planning client, including expected read and write API operations.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Commands are explicit CLI actions and delete commands are named clearly, though the docs do not add confirmation guidance and mention a delete-meal command that the script does not appear to implement.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains a local Node script and no remote installer or package-fetch behavior; publisher/source provenance is limited in the supplied metadata.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The script reads only MEALIE_URL and MEALIE_API_TOKEN from the documented env files and sends authenticated requests to the configured Mealie instance; users should prefer HTTPS and a limited token.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background worker, autorun, persistence mechanism, privilege escalation, broad file indexing, or unrelated credential access is shown.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The lack of extra warnings around delete-recipe and delete-item is a real usability risk, but the delete actions are explicit, purpose-aligned Mealie management commands rather than hidden or unrelated destructive behavior.\n[SQP-2] expected: Use of a Mealie API token and remote requests is expected for this API client and is documented through required environment variables, though the skill could better explain that recipe and list data is sent to the configured server.",
+          "guidance": "Install this only for a Mealie instance you trust. Store the token in the documented env file, use HTTPS where possible, use the least-privileged Mealie token available, and review agent requests before allowing delete or edit commands because those operations change remote Mealie data.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward Mealie API client, but it can use your Mealie token to change or delete recipes, shopping-list items, and meal plans when those commands are run.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968325640,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 19,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: mealie-api\nVersion: 1.0.0\n\nThe OpenClaw Mealie skill bundle is a benign API client for the Mealie recipe manager. It reads `MEALIE_URL` and `MEALIE_API_TOKEN` from specified `.env` files, as documented in `SKILL.md`, and uses these to make authenticated HTTP/HTTPS requests to the Mealie API via `scripts/mealie.js`. There is no evidence of data exfiltration to unauthorized endpoints, malicious code execution, persistence mechanisms, or prompt injection attempts against the agent. All actions are consistent with its stated purpose of managing recipes, shopping lists, and meal plans.",
+          "checkedAt": 1779164285731,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "5ac81519541b32f6a88408277c06eacd3a3f50e8870d51e9be63005c7a2de5f7",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/5ac81519541b32f6a88408277c06eacd3a3f50e8870d51e9be63005c7a2de5f7"
+    },
+    "slug": "mealie-api",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

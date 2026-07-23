@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C06:token:api",
+      "category:C07:token:test",
+      "cross-tag:agent-management",
+      "cross-tag:software-development",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C07"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ef3e4a0353f8d36da5843e9be6b646a228a1b0beb0bb544bb758c111a1111060",
+    "content_hash": "9b9f72ab4991ffcee6b09ca4e7a2e3a402fa579d4f5b926bad87e633bded8d9a",
+    "precanonical_content_hash": "7a26476bed45f464bf0862af1e58a53361405f5550eda59c10addf045a7d764b",
+    "skill_md_hash": "89f4d50bca5e3f360900f39f9300c6c7fc9b30367cfd5104ead6199d6cc2bf6c",
+    "version_metadata_sha256": "7dc020d91012c2ae9644dfb629f1561cd89ee4a873b732e703cb5c2791309e1d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/mrscoutshub/skills/tidbyt-status",
+    "claim_id": "f5912745190d702d914badb54381b2bd9f2f8028db8257138c2aeb0b23320502",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "tidbyt-status",
+        "url": "https://clawskills.sh/skills/mrscoutshub-tidbyt-status"
+      }
+    ],
+    "owner_handle": "mrscoutshub",
+    "owner_id": "s1757c49d6ann7fzs563we70t98859c4",
+    "published_at": 1771079548285,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779966795134,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779966795134,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The Python server reads OpenClaw session file metadata under ~/.openclaw/agents/main/sessions and returns agent status, timestamps, task counts, and generated activity strings, which matches the stated Tidbyt status-display purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The documentation clearly instructs users to run a local HTTP server and optionally open firewall access for a Tidbyt device; it could better warn that anyone who can reach the port can view the status JSON.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "install.sh is menu-driven and user-directed, with no hidden package installation or automatic privilege escalation. The docs reference scout_status.star, but that file is not present in the artifact, so users should verify any separately obtained Tidbyt app code.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Binding to 0.0.0.0 with wildcard CORS is broader than localhost-only access, but it is coherent with LAN Tidbyt integration and exposes limited operational metadata rather than credentials or session contents.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Background and systemd service modes are optional and disclosed; systemd installation requires explicit sudo commands from the user.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The concern about plain HTTP and local-network exposure is valid user guidance, but the behavior is disclosed and directly supports the Tidbyt integration.\n[SQP-2] expected: The documentation's firewall and network-access steps are user-directed; the main gap is missing privacy guidance, not hidden or unrelated behavior.\n[SQP-2] expected: The server does bind to all interfaces and allows any origin, so users should restrict network reachability, but artifact evidence does not show exfiltration, credential access, mutation, or deception.",
+          "guidance": "Install only if you want your agent status visible to a Tidbyt or dashboard. Run it on a trusted LAN, avoid exposing port 8765 to the internet, restrict firewall access where possible, and use the optional background/systemd mode only if you want the API running continuously.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it claims: it runs a local status API for a Tidbyt display, but users should keep that API on a trusted network.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779966764265,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: tidbyt-status\nVersion: 1.0.0\n\nThe OpenClaw skill 'tidbyt-status' is designed to expose the agent's status via a local HTTP API for Tidbyt LED displays. The `scripts/status_server.py` file correctly implements this by reading agent session files (`~/.openclaw/agents/main/sessions/*.jsonl`) and serving status JSON on a local port (default 8765). The `install.sh` script and `SKILL.md` provide clear, user-facing instructions for setup, including options for background execution and systemd service creation, which requires explicit user `sudo` commands. There is no evidence of prompt injection against the agent, data exfiltration, unauthorized remote access, or any other malicious intent. All observed behaviors align with the stated purpose of providing an agent status display.",
+          "checkedAt": 1779164006844,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "5acc684428b6814930303bf7e20e9740ac415a5d226d9836e22adf93799ecdb6",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/5acc684428b6814930303bf7e20e9740ac415a5d226d9836e22adf93799ecdb6"
+    },
+    "slug": "tidbyt-status",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

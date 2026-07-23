@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:data",
+      "category:C06:token:code",
+      "category:C08:token:github",
+      "cross-tag:data-analysis",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C08"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d64114fa136ba890ee414c3b752d958563d696d20d306ced28047d482d453760",
+    "content_hash": "ca4cbaf88bc3b8d59e3e706d8815da1de011551aa5ca91a8f31bca0f6e469f02",
+    "precanonical_content_hash": "7705e9a3c19ab3cd97402caed21f0630197ee7572a28a3bd16f341eba25160ee",
+    "skill_md_hash": "e9917573923b3b3521c9c8a67ac15db785bf77a379650f436d2faa86777f342d",
+    "version_metadata_sha256": "79b63b7d8aa47b49cb852d36a5802f9bdbe6934d331840b5dbd03702bd7b6588"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jeromestein/skills/code-share",
+    "claim_id": "675a9f310db3741f1bd338a2cf2f0d35c0f3d4ebcfc98d1681c0fc5a7e3a3d46",
+    "index_entries": [
+      {
+        "index_path": "categories/git-and-github.md",
+        "label": "code-share",
+        "url": "https://clawskills.sh/skills/jeromestein-code-share"
+      }
+    ],
+    "owner_handle": "jeromestein",
+    "owner_id": "s17d5sgmmwjzsgwzg7e8q3mwv983h00t",
+    "published_at": 1771625163885,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943560383,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943560383,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is GitHub Gist code sharing, and the artifacts consistently implement that with gh gist create/edit commands.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill broadly prefers Gists for code over 10 lines, so users should install it only if they want longer code answers shared externally by default.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "It relies on the GitHub CLI and an authenticated GitHub account with gist capability; this is disclosed in the runtime instructions.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The scripts read only the specified file, optionally copy it to a temporary extension-matched file, and upload through gh; there is no broad local indexing, hidden endpoint, or unrelated file access.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "Created or edited Gists persist under the authenticated GitHub account, with secret as the default and public only when requested.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The external upload concern is real, but it is the disclosed core function of the skill rather than hidden behavior; SKILL.md also defaults to secret Gists and requires sensitive data removal before sharing.\n[SQP-2] expected: The helper scripts do not include their own confirmation prompt, but they are invoked as part of an explicitly GitHub Gist-based sharing workflow and use standard gh CLI commands without unrelated data access.",
+          "guidance": "Install this only if you want code to be shared through GitHub Gist. Confirm gh is logged into the intended GitHub account, review files for secrets or proprietary content before upload, and remember that secret Gists are external URLs, not private local storage.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it advertises by sharing code through GitHub Gist, but users should review content because it uploads files to GitHub.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943522331,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: code-share\nVersion: 0.2.0\n\nThe skill is designed to share code via GitHub Gist, with explicit instructions in SKILL.md for the AI agent to prioritize secret gists and strictly remove sensitive data (API keys, tokens, PII) before sharing. The accompanying shell scripts (`create_gist.sh`, `update_gist.sh`) implement this functionality using the standard `gh` CLI, employing safe practices like `mktemp` for temporary files and quoting arguments. There is no evidence of malicious intent, data exfiltration beyond the stated purpose, persistence mechanisms, or prompt injection attempts to subvert the agent's security directives.",
+          "checkedAt": 1779165784194,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "0c3fb9a62343b7493ffe7ce8e11f0bab0f4851b8846e3013da7f6dda051d2399",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0c3fb9a62343b7493ffe7ce8e11f0bab0f4851b8846e3013da7f6dda051d2399"
+    },
+    "slug": "code-share",
+    "source_type": "clawhub",
+    "version": "0.2.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

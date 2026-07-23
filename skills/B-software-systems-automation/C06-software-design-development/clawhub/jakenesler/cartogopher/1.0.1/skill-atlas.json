@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C06:token:code",
+      "category:C10:token:ai",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "23de0b40c666ec910dcb9dae6303890f3409f8cb2c052ac59b57ac70f2f8b306",
+    "content_hash": "d86242bb52808bf18d33e9464b9b98b343667767e71dc2374f68a3d1ce084545",
+    "precanonical_content_hash": "d50d707cdb1143835afe922efc43584018594200ebe3ca3899e41ece0d6d9e70",
+    "skill_md_hash": "de0215e7df22c7e3748bece7cee5115cc36b8e1c348ed4d9b087291d52f5fa0d",
+    "version_metadata_sha256": "5721a620f30e1fa53db323356b24aa29953bcca6e5e4474a0d26b216b7de1e9e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jakenesler/skills/cartogopher",
+    "claim_id": "c248d1a5dacc2589f75fd218bacf209af83816c3cc04cd09120bf7bbc155971b",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "cartogopher",
+        "url": "https://clawskills.sh/skills/jakenesler-cartogopher"
+      }
+    ],
+    "owner_handle": "jakenesler",
+    "owner_id": "s178zrxsds41jhqc2vwk7mwsw18858n0",
+    "published_at": 1771646841989,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943804603,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943804603,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to obtain a CartoGopher trial key, install its MCP server, and configure code-intelligence tools; the email request, API key use, platform download, Node dependency install, and MCP configuration all fit that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions stay focused on CartoGopher setup and do not reference unrelated endpoints, credentials, or hidden agent behavior. They do include broad codebase-analysis capability, which is expected for a code-intelligence MCP server.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill is instruction-only, but it tells the agent to download a zip from cartogopher.com, extract it under ~/.cartogopher/mcp-server, and run npm install. That is purpose-aligned but requires trusting the vendor-provided bundle and dependencies.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Collecting the user's email for a trial key and using CARTOGOPHER_API_KEY are proportionate to the service setup, but the skill does not include a prominent privacy notice before sending the email to the vendor.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill discloses persistent changes: writing the API key into a shell profile, adding MCP configuration, installing files under the home directory, and conditionally creating /etc/machine-id in Linux containers. These are not hidden, but users should apply them deliberately, especially the system-file and plaintext-secret steps.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code_insight] expected: The telemetry flagged /etc/machine-id and shell-profile modification as suspicious. The artifact does contain those steps, but they are disclosed setup instructions tied to container compatibility and MCP credential availability, so this is treated as a user-caution note rather than a Review verdict by itself.\n[SQP-2] expected: The artifact asks for an email and posts it to cartogopher.com to request a trial key. That data flow is expected for account or trial provisioning, but the skill should ideally disclose privacy implications more clearly.\n[SQP-2] expected: The artifact appends CARTOGOPHER_API_KEY to ~/.zshrc or ~/.bashrc. Persistent plaintext credential storage is disclosed and functionally related to MCP setup, but users should consider a safer secret-storage approach where possible.",
+          "guidance": "Install only if you trust CartoGopher and are comfortable sending your email to cartogopher.com for a trial key. Inspect the downloaded bundle before running it, avoid modifying /etc/machine-id on production hosts unless you know it is needed, and consider storing the API key in a dedicated secret/config mechanism rather than a general shell profile.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "CartoGopher’s skill instructions are coherent with setting up a vendor MCP code-intelligence tool, but users should understand it downloads vendor code, sends an email for a trial key, and stores an API key persistently.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943778444,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: cartogopher\nVersion: 1.0.1\n\nThe skill is classified as suspicious due to several high-risk actions, even though they are presented as necessary for its functionality. Specifically, the `SKILL.md` instructs the agent to modify system files like `/etc/machine-id` (if not present) and user shell profiles (`~/.zshrc` or `~/.bashrc`) to establish persistence for its API key. While these actions are explained as prerequisites for the CartoGopher MCP server, modifying system-level files and shell profiles represents a significant attack surface and a common technique used by malicious software, warranting a 'suspicious' classification rather than 'benign'.",
+          "checkedAt": 1779165831041,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "23de0b40c666ec910dcb9dae6303890f3409f8cb2c052ac59b57ac70f2f8b306",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/23de0b40c666ec910dcb9dae6303890f3409f8cb2c052ac59b57ac70f2f8b306"
+    },
+    "slug": "cartogopher",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

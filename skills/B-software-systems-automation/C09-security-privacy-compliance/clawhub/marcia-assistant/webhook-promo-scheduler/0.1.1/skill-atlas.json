@@ -1,0 +1,131 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C09:token:security",
+      "category:C17:token:schedule",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [
+      "validate"
+    ],
+    "tasks": [
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "15d94faba5f02b17521c3c01285b0d84761643e6836484343b401f5ad9283979",
+    "content_hash": "61bbd8bec50f2a4d801d23e82288d22076ce18e6667cf95f958502e5fe4af8db",
+    "precanonical_content_hash": "fc5d41a61099e23132dd52890e09f04221b4db54f36749e7b76ee66dfb782cb7",
+    "skill_md_hash": "d1571b9c42e26ed19a9ab112a62c22cf5817f205f8d2f46fad2aae30b6817b10",
+    "version_metadata_sha256": "ce2548e83bab6866534dc6c755ee63e12adda95bdac5442c2f91adb45b7f3030"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/marcia-assistant/skills/webhook-promo-scheduler",
+    "claim_id": "51dd3285e8ff96019159c435dc84755fdf13da4fb350fd1b2a30fccfdd4be55a",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "webhook-promo-scheduler",
+        "url": "https://clawskills.sh/skills/marcia-assistant-webhook-promo-scheduler"
+      }
+    ],
+    "owner_handle": "marcia-assistant",
+    "owner_id": "s1725w7ha581034g96h373c9p58847dk",
+    "published_at": 1771344444956,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972737482,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972737482,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the implementation: a CLI posts either a direct message or one line from a messages file to a webhook, then records posting state in a JSONL ledger.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill explicitly documents webhook posting, a messages file, dry-run mode, and the default ledger path; it does not show hidden file access, subprocess execution, credential harvesting, or unrelated endpoints.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains only Python standard-library scripts and a SKILL.md file, with no package installation, dependency download, or install-time execution mechanism.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Outbound network access and local file read/write are expected for this scheduler, but users should treat the webhook URL as a secret and choose the messages file path deliberately.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to the disclosed ledger file at ~/.openclaw/webhook-promo-ledger.jsonl by default, with an override option; there is no background service, privilege escalation, or system configuration change.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The reported file and network capabilities are real, but they are disclosed in SKILL.md and are directly tied to reading scheduled messages, sending webhook posts, and maintaining the ledger.\n[VirusTotal code_insight] expected: The arbitrary messages-file path can be misused if an attacker controls both CLI arguments, but the artifact itself requires user-supplied paths and URLs and does not hide or automate exfiltration behavior.",
+          "guidance": "Install only if you are comfortable with a tool that sends selected local message content to a webhook URL. Keep the Discord webhook private, prefer secret injection over exposing it in shell history or process lists, use --dry-run first, and point --messages-file only at files intended to be posted.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it claims: it posts user-provided promotional messages to a user-provided webhook and keeps a local posting ledger.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972697775,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: webhook-promo-scheduler\nVersion: 0.1.1\n\nThe skill is designed to post messages to a Discord webhook, which inherently involves network communication. While it includes positive security measures like redacting webhook URLs from logs and output, it has a significant vulnerability: the `scripts/promo_scheduler.py` script's `read_messages_file` function can read content from any user-specified file path (`--messages-file`). This content is then treated as messages and sent to a user-specified Discord webhook URL. An attacker who can control the `--messages-file` and `--webhook-url` arguments could exploit this to exfiltrate arbitrary local files (e.g., `/etc/passwd`, `~/.aws/credentials`) to an attacker-controlled endpoint. This constitutes a critical data exfiltration vulnerability, classifying the skill as suspicious due to the potential for misuse, even if the intent of the original author was benign.",
+          "checkedAt": 1779164863836,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "15d94faba5f02b17521c3c01285b0d84761643e6836484343b401f5ad9283979",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/15d94faba5f02b17521c3c01285b0d84761643e6836484343b401f5ad9283979"
+    },
+    "slug": "webhook-promo-scheduler",
+    "source_type": "clawhub",
+    "version": "0.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

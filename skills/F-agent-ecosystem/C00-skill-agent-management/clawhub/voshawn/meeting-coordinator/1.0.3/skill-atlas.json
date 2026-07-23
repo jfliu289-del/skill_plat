@@ -1,0 +1,153 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "document",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.1321,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C02:token:communication",
+      "category:C04:token:data",
+      "category:C07:token:quality",
+      "category:C10:token:model",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:writing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C01",
+      "C02",
+      "C04",
+      "C07",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "research",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ed1cd62ddf6f1abd228b1e5f16526cc7ee9e6bec1fc6f760093f9795dfdd6a2b",
+    "content_hash": "f6132240759b530698d90f63201ec05ac67b95516934f523119081ad4f30cdf2",
+    "precanonical_content_hash": "c216fb3f7124fc7759ce1d7bf271e7524ddb4719f60c47dec3398df24c7972e5",
+    "skill_md_hash": "545c43e3c8b553cd7b50a6d97844d02bf13fa80d46ab1a73548414b7b4a540e1",
+    "version_metadata_sha256": "a7040e5dd4017f9298ac95e3c9fb6e24ee3fe7642297718336a8ab467bdb6b8b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/voshawn/skills/meeting-coordinator",
+    "claim_id": "9713541626345d11507a06787ff31c6e2fc8eb1aca7e80b6081e157167da0949",
+    "index_entries": [
+      {
+        "index_path": "categories/communication.md",
+        "label": "meeting-coordinator",
+        "url": "https://clawskills.sh/skills/voshawn-meeting-coordinator"
+      }
+    ],
+    "owner_handle": "voshawn",
+    "owner_id": "s175177mhrqbtg2snzn01rv5t584tnrs",
+    "published_at": 1771362018451,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779973794768,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779973794768,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The purpose is executive meeting coordination, and the artifacts consistently support availability checks, venue lookup, email drafting, calendar holds, confirmations, rescheduling, cancellation, and meeting tracking.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill requires explicit human approval before sending email, creating/updating/deleting counterparty-visible calendar events, making or changing reservations, or moving conflicting events, and it instructs the agent to present exact commands before mutations.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation is a local skill folder with two small Python helper scripts and no downloader, obfuscation, or install-time execution beyond optional chmod and CLI verification.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill requires OAuth-backed gog Gmail/Calendar access, goplaces, GOG_ACCOUNT, GOOGLE_PLACES_API_KEY, and local config directories; this is sensitive but disclosed and proportionate for scheduling.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "It maintains durable records under memory/scheduling and can mutate calendar/email state after approval, but it does not define background workers, privilege escalation, or unrelated persistence.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: Verified: check-availability.py fetches calendar events and returns event summaries, times, and IDs along with free slots. This exposes private scheduling metadata to the local agent output, but calendar inspection is purpose-aligned for conflict checking and there is no artifact evidence of external exfiltration or hidden use.\n[LP3] expected: Verified: the skill uses shell-invoked local tools and scripts for gog, goplaces, and python. That authority is real and sensitive, but it is declared in metadata and README, scoped to scheduling workflows, and paired with approval gates for mutating actions.",
+          "guidance": "Install only if you are comfortable giving the agent Gmail/Calendar access through a dedicated low-privilege account. Share only the intended calendar, keep the human approval gates in place, and be aware that availability checks may reveal event titles, times, and IDs to the agent and local logs.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed scheduling assistant that uses sensitive calendar, email, and venue tools in ways that match its purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779973737213,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: meeting-coordinator\nVersion: 1.0.3\n\nThe skill bundle is benign. All files, including the `SKILL.md` instructions for the AI agent and the Python scripts, align with the stated purpose of an executive scheduling assistant. The `SKILL.md` explicitly mandates human approval for all sensitive actions (sending emails, modifying calendars, making reservations), which is a strong safeguard against prompt injection. The Python scripts (`scripts/check-availability.py`, `scripts/find-venue.py`) correctly use `subprocess.run` with a list of arguments, preventing shell injection vulnerabilities. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or obfuscation. The required external tools (`gog`, `goplaces`) and environment variables (`GOG_ACCOUNT`, `GOOGLE_PLACES_API_KEY`) are necessary for the skill's functionality and are handled with explicit verification steps.",
+          "checkedAt": 1779080988788,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "ed1cd62ddf6f1abd228b1e5f16526cc7ee9e6bec1fc6f760093f9795dfdd6a2b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ed1cd62ddf6f1abd228b1e5f16526cc7ee9e6bec1fc6f760093f9795dfdd6a2b"
+    },
+    "slug": "meeting-coordinator",
+    "source_type": "clawhub",
+    "version": "1.0.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C01:token:sources",
+      "category:C04:token:data",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C04"
+    ],
+    "stages": [
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "c36d3341851af4d735d0d689d47a8aff15859931c410811f70750260a69fcd6d",
+    "content_hash": "fb6251ea990d39b841daebf23eacb6f465e474faa7a7f1817766f7a7429fb82d",
+    "precanonical_content_hash": "3f12580d7f88656ec9ca0eae7a5c0ba36fbc275c241edc87cf3e5b18a4482e65",
+    "skill_md_hash": "ae0eb9446bd49afbae797ce1adec2200ccbaa2a545ce402f030389edea68dd43",
+    "version_metadata_sha256": "532e45f9c7b54aeaac94b393adf508960090dcaa7cde93fb8d53b9cb8b3567bd"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/cutthemustard/skills/cs-verify",
+    "claim_id": "fbef755fc14a820ecb8c1cc93aaade25be4285582ad9aeaf024e29f9e3be5e9b",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "cs-verify",
+        "url": "https://clawskills.sh/skills/cutthemustard-cs-verify"
+      }
+    ],
+    "owner_handle": "cutthemustard",
+    "owner_id": "s173h8p9g1rpxh3vdhvjvhdy9d83kfqn",
+    "published_at": 1771839455616,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779952785311,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779952785311,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The artifact consistently describes verifying factual claims through a live service and returning structured verdicts; no destructive, account-mutating, local-file, credential, or hidden capability is present.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The scope is broad and the usage sends claim text to an external endpoint; this is visible in the curl example but lacks a clear privacy, retention, or sensitive-data warning.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The reviewed skill is a single non-executable SKILL.md, but it references an optional global npm install for an MCP server that is outside the reviewed artifact and should be evaluated separately.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to the provider is proportionate to live verification, but users should avoid sending confidential, regulated, personal, or proprietary claims unless they trust the service.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact does not request local persistence, background execution, elevated privileges, or credentials; trending-claims and referral features imply provider-side aggregation or tracking.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-2] unexpected: The referral-credit mechanism is not needed for claim verification and could influence routing behavior, but it is disclosed in the artifact and does not by itself show hidden execution, exfiltration, or automatic invocation.\n[SQP-1] expected: The broad claim scope matches the stated purpose, but the lack of sensitive-data boundaries is a real user-guidance issue rather than evidence of malicious behavior.\n[SQP-2] expected: External transmission of claim text is central to the service and shown in the usage example, but the documentation should more plainly warn users about third-party processing and unknown retention.\n[VirusTotal code_insight] expected: The optional global npm install is a supply-chain consideration, but it is not automatically executed by the skill; VirusTotal engine stats showed no detections.\n[staticScan] expected: Static scan found no suspicious patterns, consistent with the artifact being a single markdown instruction file.",
+          "guidance": "Use this only for claims you are comfortable sending to a third-party service. Do not submit secrets, private business facts, personal data, health/legal/financial-account details, or regulated information without separate review. Treat the optional MCP npm package and paid x402/USDC use as separate trust decisions before installing or paying.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent external claim-checking helper, but users should treat submitted claims and the optional MCP package as third-party trust decisions.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779952742506,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 30,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: cs-verify\nVersion: 1.0.0\n\nThe skill is suspicious due to a direct instruction in `SKILL.md` to install a global npm package (`npm install -g @636865636b73756d/mcp-v1`). This represents a significant supply chain risk and a potential prompt injection vulnerability, as it instructs the AI agent to execute arbitrary code from an external source. If the specified npm package were malicious, this could lead to arbitrary code execution on the agent's host system. Additionally, the use of a hex-encoded domain name (`636865636b73756d.com` which decodes to 'checksum') is an unusual practice that could be a mild indicator of obfuscation.",
+          "checkedAt": 1779166462254,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "fbd8cdbc30214575c4b099e2e8a91ebc551baa8ac59ce1234083c4c3bfa4e03b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/fbd8cdbc30214575c4b099e2e8a91ebc551baa8ac59ce1234083c4c3bfa4e03b"
+    },
+    "slug": "cs-verify",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,127 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C17:token:resume",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "03000bd4e726b28544dcb8e5670a939e9fd69d264d7926f7b0c80478e24e06ec",
+    "content_hash": "e654d1c03eb5d26c957df9f4371c25b6ed90fe4056f30824e71835ee6969daa8",
+    "skill_md_hash": "d46322b40328839a224f4c173115b49eb4da8d7ea6f2dee18e90944b03c3673e",
+    "version_metadata_sha256": "3f393bffb51791ddcc6bee2862741970c5bd859fb925f829dd712e447893b56f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/awspace/skills/play-music",
+    "claim_id": "048e9945ba361f46156c07bf063d74e41cff0d57e6d584346cce6dbaa99e35dc",
+    "index_entries": [
+      {
+        "index_path": "categories/media-and-streaming.md",
+        "label": "play-music",
+        "url": "https://clawskills.sh/skills/awspace-play-music"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "awspace",
+    "owner_id": "s176rb1anzaaw78jd9qd65j08x884mmr",
+    "published_at": 1770649953512,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779962568010,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779962568010,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The files align with local music playback using pygame, a configurable music directory, and a localhost control server, though the advertised `play-music` wrapper is not present in the artifact.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions stay focused on playing, listing, pausing, resuming, stopping, and checking local music playback; no prompt injection, role changes, or unrelated agent instructions were found.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Setup is manual and asks the user to install pygame and make a wrapper executable, but the wrapper is missing from the bundle; there is no automatic installer, privilege escalation, or hidden dependency installation.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Use of `MUSIC_DIR`, `DEFAULT_SONG`, `MUSIC_LOCK_FILE`, local audio files, and a 127.0.0.1 socket on port 12346 is proportionate for a local music player, but users should avoid pointing the lock file at sensitive paths.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The background server is disclosed and intended to stop after playback control commands; it does not request credentials, elevated privileges, account access, or broad filesystem indexing.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[TT2] expected: The lock-file write is real and environment-configurable, with overly broad 0666 permissions, but it stores only the local control port and supports server coordination; this is a security hygiene issue rather than evidence of malicious behavior.\n[SQP-2] expected: The README's `pkill -f \"music-server.py\"` troubleshooting command is broad and could stop unintended matching processes, but it is a visible, user-run recovery step rather than hidden or automatic behavior.\n[SQP-2] expected: The unauthenticated localhost control socket is confirmed, but it binds to 127.0.0.1 and only controls local playback or shuts down this music server, so the impact is limited and purpose-aligned.",
+          "guidance": "Before installing, verify that the missing `play-music` wrapper is supplied elsewhere, install pygame only from a trusted Python package source, keep `MUSIC_DIR` limited to intended audio files, do not set `MUSIC_LOCK_FILE` to sensitive paths, and prefer the documented server-stop command over broad `pkill` troubleshooting.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a local music playback skill with disclosed localhost server behavior and no evidence of theft, exfiltration, deception, or destructive automation.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779962510455,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: play-music\nVersion: 0.1.0\n\nThe skill bundle is designed for local music playback and exhibits no malicious intent. All file operations (reading music files from `MUSIC_DIR`, writing a lock file to `/tmp/music_player.lock`) and network communications (localhost-only on port 12346) are confined to the stated purpose. The `SKILL.md` and other documentation files contain no prompt injection attempts or instructions for unauthorized actions. While the `music-server.py` sets `0o666` permissions on its lock file, this is a minor security hygiene issue for a temporary file containing only a port number, not indicative of malicious behavior or a significant vulnerability.",
+          "checkedAt": 1779162462977,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "7ffa5ce5b240abcebe54da5be1d2a44f0009f1a76090feebd59e05b3d5108efb",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/7ffa5ce5b240abcebe54da5be1d2a44f0009f1a76090feebd59e05b3d5108efb"
+    },
+    "slug": "play-music",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C03",
+    "reasons": [
+      "category:C03:token:document",
+      "category:C03:token:pdf",
+      "category:C05:token:image",
+      "category:C06:token:api",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05",
+      "C06"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "29c2a1b41ba131972082a53f47d8b77e042d719fb8a93f6a9f701fc940774893",
+    "content_hash": "80b988f6168ee02ac03b2a93de3b877d29995b78a6af6fa22ba70d708cd77902",
+    "precanonical_content_hash": "334ff6e7349f58506f41de194382d2b21ff2b29d62be8167aad68bd642e8ab81",
+    "skill_md_hash": "64956efde866fc7e2db774469150d0045233476313f457ae564b3e0f8690c48f",
+    "version_metadata_sha256": "5cff0b8803fb30e5d5c0ae803231587ceeb963451ee52123cbf8dea64337d9a4"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/hiotec/skills/paddleocr-doc-parsing-v2",
+    "claim_id": "efe0773d509e3d8b4e8113cabda9fcdaa3ab4cd07bd06679540d375ffbea45c0",
+    "index_entries": [
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "paddleocr-doc-parsing-v2",
+        "url": "https://clawskills.sh/skills/hiotec-paddleocr-doc-parsing-v2"
+      }
+    ],
+    "owner_handle": "hiotec",
+    "owner_id": "s17frnw1sa709ea7f1yc8syqgd8854dt",
+    "published_at": 1770944761798,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779973005299,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779973005299,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "Local file reading, URL handling, base64 encoding, API token use, outbound requests, and optional output files all fit the stated purpose of API-based document parsing; users should understand selected document contents or URLs are sent to the configured OCR service.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are ordinary setup and usage examples for shell/Python parsing scripts, with no prompt override, autonomous execution, hidden workflow, or unrelated agent control.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The artifact contains a skill document, metadata, and two visible parser scripts; no install-time downloader, obfuscation, package mutation, or self-modifying behavior was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The required token and endpoint variables are proportionate for an OCR API integration, though PADDLEOCR_API_URL and PADDLEOCR_JOB_URL are user-controlled and should be trusted HTTPS endpoints because documents and credentials are sent there.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background worker, privilege escalation, credential-store access, or self-starting behavior was found; disk writes occur only for temporary payload cleanup or when the user supplies an output path.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The skill declares required binaries and key environment variables in metadata; file read/write and network use are inherent to the documented OCR API workflow, though clearer capability disclosure would improve informed consent.\n[SQP-2] expected: External transmission of selected files or URLs is central to the stated PaddleOCR API purpose and is visible in setup and code; the warning could be more prominent but this does not show hidden behavior.\n[E1] expected: The curl and requests calls send document data plus an authorization token to configured endpoints, matching the integration design; the main risk is endpoint misconfiguration rather than artifact-backed exfiltration intent.\n[VirusTotal code_insight] unexpected: The reported shell injection through cat \"$input_file\" is not supported by the script because the variable is quoted and not evaluated as shell code; this telemetry alone does not justify escalation.",
+          "guidance": "Install only if you are comfortable uploading the documents you choose to the configured PaddleOCR endpoint. Verify PADDLEOCR_API_URL and PADDLEOCR_JOB_URL are trusted HTTPS endpoints, use a scoped and revocable token, and avoid confidential or regulated documents unless that external processing is approved.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill visibly sends user-selected documents to a configured PaddleOCR API for OCR, with no hidden persistence or destructive behavior found.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972984180,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 78,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: paddleocr-doc-parsing-v2\nVersion: 1.0.4\n\nThe skill is classified as suspicious due to a critical shell injection vulnerability found in `scripts/paddleocr_parse.sh`. The script uses `cat \"$input_file\"` to read local files for base64 encoding. If the `input_file` argument is controlled by an attacker (e.g., via prompt injection against the agent), a crafted string like `\"; malicious_command; #.jpg\"` could lead to arbitrary command execution. While the Python script (`scripts/paddleocr_parse.py`) handles file paths securely, the shell script's vulnerability poses a significant risk. The skill's core functionality of interacting with the PaddleOCR API, including reading local files and fetching remote URLs, is otherwise aligned with its stated purpose.",
+          "checkedAt": 1779163618217,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "6025c4bfb7c2f822f406198993b076fd89186fc8b20cf62141981793108b663d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6025c4bfb7c2f822f406198993b076fd89186fc8b20cf62141981793108b663d"
+    },
+    "slug": "paddleocr-doc-parsing-v2",
+    "source_type": "clawhub",
+    "version": "1.0.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,130 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.0,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "cross-tag:debugging",
+      "fallback:C00"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "validate"
+    ],
+    "tasks": [
+      "debug"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "253b73b6788dd9267ac9699242e407f85db2ba89f7a226e8b5771aa399c1f4c4",
+    "content_hash": "4f5eda8156771001e73d83cbd785b93d3eeb73cbfa4d97c9711c62a1ab30eee0",
+    "precanonical_content_hash": "1ab4651305948cf97e56c55d02f0db262a48eb4cbac712f2d6968187075cf7c6",
+    "skill_md_hash": "8345cd11de26470b19c4a5e9e44754cd81130b0ffdf41259c9193e8d53636088",
+    "version_metadata_sha256": "3be0fae1f8e497ea209d9b163e0643e118a9b34e555e388c4e600ba225207321"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/xinyuwang/skills/sev-attestation",
+    "claim_id": "1346c4076754d8249bc08987fae5e1a6a20433c9fe9a2179abfe21dab14bd8a1",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "sev-attestation",
+        "url": "https://clawskills.sh/skills/xinyuwang-sev-attestation"
+      }
+    ],
+    "owner_handle": "xinyuwang",
+    "owner_id": "s176q3yrpbnb2pvfbsaw6vc1h5885fq8",
+    "published_at": 1770018254373,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783653685839,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783653685839,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts and documentation consistently implement AMD SEV-SNP attestation: detect /dev/sev-guest, generate an attestation report, fetch AMD ARK/ASK/VCEK certificates, verify the certificate chain, and verify the report signature. The privileged and network capabilities are sensitive but aligned with that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are user-directed and scoped to attestation and troubleshooting. I found no prompt-injection text, role overrides, background execution, unrelated command execution, broad local indexing, or credential harvesting instructions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no automatic install hook. The documentation asks users to install normal dependencies such as snpguest, openssl, curl, and Rust/cargo tooling; dependency provenance and version pinning are left to the user.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Root or sev-group access to /dev/sev-guest and outbound HTTPS to AMD KDS are required for the stated attestation workflow. The VCEK fetch uses report-derived chip and TCB values, which is expected for SEV-SNP but privacy-relevant.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The scripts do not add persistence or run automatically. Troubleshooting documentation includes optional sudo commands, permission changes, and persistent module loading, but these are disclosed system-administration steps for enabling SEV-SNP access.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill uses shell scripts and local files, including /dev/sev-guest and generated attestation artifacts. That access is disclosed in SKILL.md and is necessary for SEV-SNP attestation, so this is guidance rather than a Review-level mismatch.\n[SQP-2] expected: The troubleshooting guide includes sudo commands such as modprobe, usermod, chmod/chown, and persistent module loading. These are sensitive but directly related to enabling SEV-SNP device access and are not executed automatically.\n[SQP-2] expected: The manual VCEK retrieval path sends CHIP_ID and TCB-derived values to AMD KDS. This is privacy-relevant and could be better warned about inline, but it is inherent to fetching chip-specific VCEK certificates and is documented across the artifact as AMD KDS certificate retrieval.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with the artifact review; it was treated as supporting signal, not as the deciding factor.\n[staticScan] expected: Static scan reported no findings, and manual inspection found the shell scripts and documentation aligned with the stated attestation workflow.",
+          "guidance": "Install only if you administer an AMD SEV-SNP VM and intend to perform attestation. Expect to run local shell scripts, install third-party tools, grant root or sev-group access to /dev/sev-guest, and contact AMD KDS with chip-specific attestation data when fetching VCEK certificates. Before relying on a PASSED result to release secrets, verify the expected measurement, REPORT_DATA or nonce, debug policy, and acceptable TCB levels.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to do what it says: run SEV-SNP attestation with expected privileged device access and AMD certificate lookups, with no hidden persistence or data theft found.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783653630366,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 28,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: sev-attestation\nVersion: 1.0.2\n\nThe skill bundle is designed to perform AMD SEV-SNP remote attestation, which inherently requires privileged access to `/dev/sev-guest` and network communication with AMD's Key Distribution Service (`kdsintf.amd.com`). All scripts and documentation (including `SKILL.md` and `README.md`) clearly state these requirements and their purpose. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, obfuscation to hide intent, or prompt injection attempts against the agent. The use of `sudo` and interaction with privileged kernel devices are necessary for the stated functionality and are transparently documented in `SKILL.md` and `references/error-codes.md`.",
+          "checkedAt": 1779160769489,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "3057ea1e00572e9756185f606597277f11a75c9f12df232de7ea085a79cca890",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/3057ea1e00572e9756185f606597277f11a75c9f12df232de7ea085a79cca890"
+    },
+    "slug": "sev-attestation",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

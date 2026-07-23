@@ -1,0 +1,127 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C17:token:notes",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8e86b71f555c51db528af8f98000da65b75248f7c0b55e5e67c42cc2ecef3fe2",
+    "content_hash": "4673fc30920a5fb260396299d1515fd5aa50cfd02b725a2509ceab49af8226ce",
+    "precanonical_content_hash": "32efe66791ab60944d02851faaebdc725091e5b4dd52b36b5c61b618f26ba476",
+    "skill_md_hash": "81ee15c3a92e3584a915c9043b125315dd016a88c58608008ea897f6e820a0ce",
+    "version_metadata_sha256": "6ee614277b4cba7fa4626cccdeb6f63c0a8ffcc0e517f868979a6da7e140a655"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/lavish0000/skills/peaq-robotics",
+    "claim_id": "4085ddcff93c530d4dbe6b0583a57c16a37c2faefac3c6d1fafc553837d36739",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "peaq-robotics",
+        "url": "https://clawskills.sh/skills/lavish0000-peaq-robotics"
+      }
+    ],
+    "owner_handle": "lavish0000",
+    "owner_id": "s17021ce2h5m918ece39ed1h65885j2a",
+    "published_at": 1771275718571,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783652403646,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783652403646,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently support the stated purpose: starting/stopping peaq ROS 2 nodes and calling DID, storage, and access-control services. These operations can mutate robot identity, storage, and roles, so they are sensitive but disclosed and purpose-aligned.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands are explicit and user-invoked. The funding-request helper, wallet address display, identity-card helpers, and optional ROS node controls are visible in SKILL.md, script usage, or the service reference rather than hidden.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No installer, remote download, package install, repo clone/build automation, or setup-script sourcing was found. The skill requires a pre-existing local peaq-robotics-ros2 environment.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The required ros2/python3 binaries and PEAQ_ROS2_ROOT environment fit the runtime purpose. @json_file inputs are limited to documented roots and size-checked before parsing.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill can launch ROS nodes in the background with PID/log files under ~/.peaq_ros2 by default, and provides stop commands. No privilege escalation, automatic startup persistence, or credential/session-store access was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Shell scripts, bounded file reads, and ROS 2 service calls are expected for this runtime helper. The manifest is minimal, but the artifacts document the effective command surface and path limits.\n[TP4] expected: Lifecycle controls, DID/storage/access operations, identity-card helpers, wallet-address display, and funding-request text are present and disclosed in the skill documentation, usage text, or reference file.\n[SDI-1] expected: The funding helper formats a request line containing address, amount, and reason; it does not initiate, sign, or send a value transfer, and SKILL.md explicitly labels it as a message template only.\n[SDI-2] expected: Wallet address exposure occurs only through explicit info/address/fund-request flows tied to the running core node. This is sensitive operational metadata, but not hidden or automatically exfiltrated.",
+          "guidance": "Install only if you want an agent to operate an already-built peaq ROS 2 workspace. Review DID, storage, access-control, and background node actions before approving them, avoid passing secrets in JSON payloads, and stop launched ROS nodes when finished.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill is a disclosed helper for operating an existing peaq ROS 2 workspace, with no hidden transfers, exfiltration, installer, or destructive behavior found.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783652362889,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 61,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: peaq-robotics\nVersion: 0.1.7\n\nThe skill is designed with strong security controls, explicitly limiting its scope to interacting with a pre-existing peaq-robotics-ros2 environment without handling installation or value transfers. It implements robust input validation, restricts file access for `@json_file` arguments to predefined safe roots (skill folder, PEAQ_ROS2_ROOT, workspace .peaq_robot), and uses `subprocess.run` with argument lists in Python to prevent shell injection when calling `ros2` commands. No evidence of data exfiltration, malicious execution, persistence mechanisms, or obfuscation was found. The SKILL.md is transparent about its capabilities and limitations, and does not contain prompt injection attempts.",
+          "checkedAt": 1779160953670,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "8861c15128bcb1ec8f55e8ee22e76ba185129eee61cf0bb0f32b5788dce34e13",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8861c15128bcb1ec8f55e8ee22e76ba185129eee61cf0bb0f32b5788dce34e13"
+    },
+    "slug": "peaq-robotics",
+    "source_type": "clawhub",
+    "version": "0.1.7"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

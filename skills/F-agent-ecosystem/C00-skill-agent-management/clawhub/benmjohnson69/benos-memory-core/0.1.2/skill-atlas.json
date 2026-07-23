@@ -1,0 +1,127 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C17:token:notes",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8ccfcedbf92ad11272cd6ec2e7d303f2062b3b7fe4a43abec5ffd8cb08d6e0cc",
+    "content_hash": "0c8773ac95b69f0e8df346c69ab475be1b2f48023300dcafeee650b923c3b489",
+    "precanonical_content_hash": "8c2c6ba50a25d252f87ad3825b3c73a220f63d6cfb9d996e1a835e1f1d2e82c3",
+    "skill_md_hash": "b42ed286d1060bccaef9ac61d13c7a81f00708414a96c563b2e762ee65f5d5fe",
+    "version_metadata_sha256": "2d8866ad98b5658aa6cee95d74057d7647f3c55f40e625d2310831c4ab4b1ccf"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/benmjohnson69/skills/benos-memory-core",
+    "claim_id": "62d5c3ed7dcc70c132865878c291618bf707c7057232330d8790db643c9599c9",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "benos-memory-core",
+        "url": "https://clawskills.sh/skills/benmjohnson69-benos-memory-core"
+      }
+    ],
+    "owner_handle": "benmjohnson69",
+    "owner_id": "s170mrxtkzt7m9g1a8fswmyrax885n30",
+    "published_at": 1771287386804,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971763019,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971763019,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill purpose is coherent: SKILL.md says it stores and retrieves BenOS runtime state, open loops, decisions, and notes, and index.js implements a hydrate function that returns local state and last-session data.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are broad for a memory module and can influence future agent context, but they are limited to BenOS runtime/session memory and do not direct unrelated behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package is a native skill with entry index.js and no install scripts, package downloads, remote code, or dependency setup in the artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "File access is fixed to ~/.openclaw/workspace/benos/runtime/state.json and last-session.md; no network access, credential handling, shell execution, or broad filesystem scanning is present.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "Persistent local memory is expected for this purpose and the storage path is disclosed, but users should treat stored session notes as sensitive agent context.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: Downgraded: the usage guidance is permissive, but it is scoped to BenOS runtime memory and does not introduce hidden or unrelated authority.\n[SQP-2] expected: Downgraded: SKILL.md permits direct edits for repairs or migration, but the code itself performs no writes and the affected runtime path is disclosed.\n[SQP-2] expected: Accepted as a cautionary note, not a Review concern: hydrate returns raw local memory files, but that is the stated function of the skill and there is no network exfiltration or credential access.",
+          "guidance": "Install this only if you want BenOS agents to reuse local session memory. Do not store secrets or untrusted instructions in the runtime files, and periodically inspect or clear ~/.openclaw/workspace/benos/runtime/ if the remembered context becomes stale or sensitive.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a small local memory helper that reads disclosed BenOS runtime files, with no evidence of exfiltration or hidden execution.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971726990,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 32,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: benos-memory-core\nVersion: 0.1.2\n\nThe skill is designed to manage the agent's runtime memory and state. All file system operations in `index.js` are strictly confined to the agent's designated workspace (`~/.openclaw/workspace/benos/runtime/`), which is explicitly documented in `SKILL.md`. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts against the agent. The code's behavior is entirely consistent with its stated purpose of storing and retrieving internal session state.",
+          "checkedAt": 1779164702193,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "def5fe7d73a4283025bb480f7132202954bd07bb6052c5ef6ae214acab7fde78",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/def5fe7d73a4283025bb480f7132202954bd07bb6052c5ef6ae214acab7fde78"
+    },
+    "slug": "benos-memory-core",
+    "source_type": "clawhub",
+    "version": "0.1.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

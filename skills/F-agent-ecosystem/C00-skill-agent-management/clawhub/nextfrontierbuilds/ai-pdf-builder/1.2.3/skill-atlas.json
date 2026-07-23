@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:prompt",
+      "category:C03:token:document",
+      "category:C03:token:pdf",
+      "category:C06:token:code",
+      "category:C10:token:ai",
+      "category:C13:token:legal",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C03",
+      "C06",
+      "C10",
+      "C13"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "fa484c417600d0836593b070ac5a44f0f251b0cc854bc5a085fe866db71e83e0",
+    "content_hash": "408dc7ae3bd3dd58c6cd2c397ce713fffcbc9f3d04b9d51d798fe8e88316cdae",
+    "precanonical_content_hash": "23935da800e0cdaa53b141b73e938d23de24322e116545261d6ca6cf5a19789b",
+    "skill_md_hash": "953cf79ae6ce80eeb34e5e651d911feb9208532965fb1f975aa837c2e6d99100",
+    "version_metadata_sha256": "ccb604da3a34691da3004ccde276eb79bd2ed3647beff1ff90a84c1bcac56c32"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/nextfrontierbuilds/skills/ai-pdf-builder",
+    "claim_id": "44f2a23116067a60591e47a94cefd9b3a5c0c185de33491c7d82d1300fa9817b",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "ai-pdf-builder",
+        "url": "https://clawskills.sh/skills/nextfrontierbuilds-ai-pdf-builder"
+      },
+      {
+        "index_path": "categories/pdf-and-documents.md",
+        "label": "ai-pdf-builder",
+        "url": "https://clawskills.sh/skills/nextfrontierbuilds-ai-pdf-builder"
+      }
+    ],
+    "owner_handle": "nextfrontierbuilds",
+    "owner_id": "s173crrwz6a8ksnw7w0q36yky18408nb",
+    "published_at": 1770798811113,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783651795005,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783651795005,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The advertised capabilities, including generating PDFs, enhancing drafts, and summarizing documents, match the stated purpose for legal, investor, and business documents.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The agent workflow is user-directed and task-scoped, but it could more clearly warn users before AI processing or returning sensitive legal and business documents.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill is Markdown-only, but it directs users to run an external npm CLI and install Pandoc/LaTeX dependencies, including sudo package-manager commands; these are proportionate for PDF generation but should be reviewed before use.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading user-specified content files and using an Anthropic API key are coherent with AI document generation, enhancement, and summarization, but prompts and document text may leave the local environment when AI commands are used.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden persistence, background worker, credential harvesting, deletion, or unrelated privilege use appears in the artifacts; privileged commands are documented setup steps for PDF dependencies.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The concern about third-party AI processing is valid user guidance, but the artifact openly describes Claude-backed AI features and an Anthropic API key rather than hiding this behavior.\n[SQP-2] expected: Sending the generated PDF back to the requesting user is part of the stated workflow; the artifact does not instruct sending documents to unrelated recipients, though sensitivity checks would improve handling.\n[VirusTotal code_insight] expected: The flagged sudo dependency installs, npx execution, and reading user-selected files are expected for local PDF generation with Pandoc/LaTeX and do not show purpose-mismatched or deceptive behavior.\n[staticScan] expected: Static scan reported no findings, and the workspace artifacts contain only Markdown instructions rather than executable scripts.",
+          "guidance": "Install only if you are comfortable running the referenced npm CLI and Pandoc/LaTeX setup commands on your machine. Use AI features only with documents you are allowed to share with Anthropic/Claude, protect the API key, and avoid processing confidential legal or investor materials unless that data sharing is approved.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed PDF-building helper, with ordinary cautions around installing document tools and using optional AI features on sensitive files.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783651773289,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 9,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ai-pdf-builder\nVersion: 1.2.3\n\nThe skill is classified as suspicious due to its instructions for high-privilege system-level dependency installations (`sudo brew install`, `sudo tlmgr install`, `sudo apt-get install`) and the agent's capability to read content from user-specified files. While these actions are plausibly necessary for the skill's stated purpose of generating PDFs using Pandoc and LaTeX, they introduce significant attack surface. A malicious user prompt or an underlying vulnerability in the agent's file handling or command execution could potentially exploit these capabilities for unauthorized file access or arbitrary command execution, even though the skill itself does not exhibit explicit malicious intent.",
+          "checkedAt": 1779160108154,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "6e24a3f8d74eacb9799d528e3fabb2a975f97e900345a1e4fafd36a9cb3c607d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6e24a3f8d74eacb9799d528e3fabb2a975f97e900345a1e4fafd36a9cb3c607d"
+    },
+    "slug": "ai-pdf-builder",
+    "source_type": "clawhub",
+    "version": "1.2.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

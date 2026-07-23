@@ -1,0 +1,156 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "configuration",
+      "website"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "creative",
+      "infrastructure",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C07",
+    "reasons": [
+      "category:C07:token:quality",
+      "category:C07:token:test",
+      "category:C08:token:deploy",
+      "category:C11:token:project",
+      "category:C14:token:seo",
+      "category:C19:token:browser",
+      "cross-tag:browser-automation",
+      "cross-tag:deployment",
+      "cross-tag:design",
+      "cross-tag:testing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C08",
+      "C11",
+      "C14",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "deploy",
+      "design",
+      "operate",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1250ef3771d530bf54ed11e03e7d4eb559fd36ccb269803e6a7a131677807353",
+    "content_hash": "599bdb635ad0e561d44ab798787489d7f9378a22bb6c1f1e308fdb18c41ea125",
+    "precanonical_content_hash": "f66dfa7dca86958d7d98be0ea26af2f50a3bf4f89b974bf5c10b720e2beadc49",
+    "skill_md_hash": "e1bf8c367727e10f770b6f72579c39076d5dc37e8df11dbd2de88ab59ccbafd1",
+    "version_metadata_sha256": "fd6dd2c8bf8f1276d70085abc3b8404044e184ef82ee43c0d7b177dcf6af659c"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/gizmo-dev/skills/qa-check",
+    "claim_id": "bcfd5d23863a0218df1fc7f614c47f06ca93547a7314ab4d0c404d2890683e21",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "qa-check",
+        "url": "https://clawskills.sh/skills/gizmo-dev-qa-check"
+      }
+    ],
+    "owner_handle": "gizmo-dev",
+    "owner_id": "s1789hyydpt1qx304myhrf6fn9885n2r",
+    "published_at": 1771355197958,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972865124,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972865124,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is pre-deployment QA, and the artifacts support that with build, warning, bundle, metadata, favicon, browser, mobile, and link-check guidance. The main caveat is that the shell script automates only a subset of the documented checks.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions stay within project QA activities: run npm build, inspect browser behavior, test mobile display, and curl external links found in project files. These are disclosed and purpose-aligned, but they rely on user-directed execution and available browser/network tooling.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains only SKILL.md and a small qa-check.sh script. It does not install dependencies, fetch remote code, modify shell profiles, or set up hooks.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script changes into the selected project directory, runs that project's npm build, reads index.html/public favicon paths, and writes /tmp/build.log. The documented curl link check makes outbound requests to discovered external links, which is expected for link validation but should be run on trusted projects.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background process, credential access, privilege escalation, broad indexing, deletion, or account mutation was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SDI-1] unexpected: Confirmed as a QA completeness issue: SKILL.md claims browser, mobile, link, and image validation, while qa-check.sh only automates build, warnings, dist size, metadata, and favicon checks. This can overstate assurance, but it is not evidence of hidden behavior, exfiltration, persistence, or malicious activity.",
+          "guidance": "Installers should treat this as a lightweight QA checklist plus partial helper script, not a full deployment gate. Run it only on projects where you are comfortable executing npm build, and remember that browser, mobile, broken-link, and broken-image checks still require manual or separate automated verification.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This QA skill is purpose-aligned and low risk, though its helper script does less than the documentation implies.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972827312,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: qa-check\nVersion: 1.0.0\n\nThe skill bundle is designed for quality assurance checks and exhibits behavior consistent with its stated purpose. The `SKILL.md` provides clear instructions for the agent without any prompt injection attempts to subvert its behavior or access unauthorized data. The `scripts/qa-check.sh` performs local file system operations, executes `npm run build`, and reads local files (`index.html`, `/tmp/build.log`). While `SKILL.md` includes a `curl` command for link validation, this is a legitimate QA step to check HTTP status codes of external links and does not involve data exfiltration or remote code execution. No evidence of intentional harmful behavior, data exfiltration, persistence, or obfuscation was found.",
+          "checkedAt": 1779164909886,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "1250ef3771d530bf54ed11e03e7d4eb559fd36ccb269803e6a7a131677807353",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1250ef3771d530bf54ed11e03e7d4eb559fd36ccb269803e6a7a131677807353"
+    },
+    "slug": "qa-check",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

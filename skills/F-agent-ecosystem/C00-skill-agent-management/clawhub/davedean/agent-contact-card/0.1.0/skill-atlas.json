@@ -1,0 +1,151 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.69,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:phrase:multi agent",
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:find",
+      "category:C07:token:test",
+      "category:C09:token:privacy",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "research",
+      "secure",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "14e67fb724a77f038411bd7ebbfcd9a495eb8bfeec63aa98657cc6d36bb55f27",
+    "content_hash": "cf37f571ecbc4c121067cddb04f26973a04536868876415ad45952b947f37c6b",
+    "precanonical_content_hash": "8407c0ba8b09598a228a57f5ed11b20266547e04cad4f0d176bcb92b6472a4ff",
+    "skill_md_hash": "efc6048fa65c230a63718653f61e6263a7f0e4859f6d30a58730dfa0f0f3f541",
+    "version_metadata_sha256": "452eb8b39c429adc3a27c0a6ac6fbd32e9502f2ddccc2218776460555c7eb5da"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/davedean/skills/agent-contact-card",
+    "claim_id": "572ea884e862504a3f6e4c3b3210a15253eb437dd0024ae1118f43e110f46745",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "agent-contact-card",
+        "url": "https://clawskills.sh/skills/davedean-agent-contact-card"
+      },
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "agent-contact-card",
+        "url": "https://clawskills.sh/skills/davedean-agent-contact-card"
+      }
+    ],
+    "owner_handle": "davedean",
+    "owner_id": "s1789e61r0d9pgtfrdmsvb8599885cfm",
+    "published_at": 1769828380394,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783652886261,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783652886261,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill's purpose is to discover and create agent contact cards, including remote card fetching and webhook/email contact channels; those network interactions are central to the stated function.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "It instructs agents to read fetched card prose as routing guidance and to try a live demo webhook, which is purpose-aligned but should be treated as untrusted external instructions and reviewed before sending messages.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains markdown documentation and examples only; no executable scripts, package installation, runtime hooks, or required binaries are present.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Fetching public well-known URLs and optionally POSTing to listed webhooks is proportionate for agent-to-agent contact discovery, but it can transmit user-provided content to third-party services.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background workers, local credential access, privilege escalation, or mutation of local agent settings appears in the artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The live-demo fetch and POST guidance is real outbound network behavior, but it is explicit and aligned with testing an agent contact webhook; the main gap is missing caution to use sanitized, non-sensitive test data.\n[SQP-1] expected: The example's live webhook POST is consistent with the skill's contact-channel purpose, but it would benefit from clearer bounds such as user confirmation, test-only payloads, and no secrets or personal data.\n[VirusTotal code_insight] expected: VirusTotal's concern about arbitrary outbound contact is valid risk context, but the artifacts show this behavior is the disclosed purpose rather than hidden exfiltration or deceptive behavior.\n[staticScan] expected: Static scan reported no suspicious patterns, consistent with the observed documentation-only artifact set.",
+          "guidance": "Install only if you want agents to discover and use external contact channels. Treat fetched agent-card content as untrusted routing information, verify the domain and recipient, and review the exact payload before sending anything personal, credential-related, financial, or business-sensitive.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This documentation-only skill explains an agent contact-card format and its outbound contact behavior is disclosed and aligned with that purpose, though users should avoid sending sensitive data to demo or discovered webhooks.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783652859995,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 23,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: agent-contact-card\nVersion: 0.1.0\n\nThe skill is designed to facilitate agent-to-agent communication, which inherently involves making outbound HTTP requests to external domains. The `SKILL.md` and `references/EXAMPLES.md` files explicitly instruct the agent to perform HTTP POST requests to an external domain (`https://city-services-api.dave-dean.workers.dev`) as part of a 'test' or demonstration. While these network calls are aligned with the skill's stated purpose, the ability to make arbitrary outbound network calls and send user-derived input to external endpoints represents a significant risk, even without clear evidence of intentional malicious data exfiltration or other harmful actions.",
+          "checkedAt": 1779160353561,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "86535d5beccd5332200e96670b9b429800b5389179c97550e072753f5af953ce",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/86535d5beccd5332200e96670b9b429800b5389179c97550e072753f5af953ce"
+    },
+    "slug": "agent-contact-card",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

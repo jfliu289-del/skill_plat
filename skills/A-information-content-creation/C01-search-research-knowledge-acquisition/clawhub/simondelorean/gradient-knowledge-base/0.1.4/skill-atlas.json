@@ -1,0 +1,163 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2227,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C01:token:sources",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C09:token:privacy",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C10:token:embedding",
+      "category:C17:token:knowledge",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C04",
+      "C06",
+      "C09",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "86327ea512c64b2b041ef7480cab217070bc1acf8746695d825d6c0eed7cf5e6",
+    "content_hash": "463e05a628289bb952de3593e7a11aed77321a25403d3b429b5790316ea9cde2",
+    "precanonical_content_hash": "afb7fd098a30e7a5125b6ca9bc76223ae212e0b068b4a0e544f44869c63ab445",
+    "skill_md_hash": "1e9c614ffed1cbd7427d2da5ee792b75cd8b0092dd323a80d93d87eabd240794",
+    "version_metadata_sha256": "faf5da2cc0677110a0c2e090d8f47273189bf0f7c73de986ec34a8350e78fb1d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/simondelorean/skills/gradient-knowledge-base",
+    "claim_id": "8ba08f959f0ec74ab8e824f49c218270268f6983cd85d56073e07c8791564bda",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "gradient-knowledge-base",
+        "url": "https://clawskills.sh/skills/simondelorean-gradient-knowledge-base"
+      }
+    ],
+    "owner_handle": "simondelorean",
+    "owner_id": "s1729jqtfk8t0ept62xsvphczd884php",
+    "published_at": 1771265252491,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779969248259,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779969248259,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the scripts: managing DigitalOcean Gradient knowledge bases, Spaces objects, retrieval queries, and optional RAG synthesis through DigitalOcean endpoints.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions disclose required environment variables, DigitalOcean endpoints, upload/query/RAG flows, and permanent KB deletion; the code does not show hidden unrelated behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation is script-plus-requirements based with requests and boto3 lower-bound dependencies; this is normal but less reproducible than pinned versions.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "DO_API_TOKEN, Spaces keys, and GRADIENT_API_KEY are proportionate to the cloud operations described, and the documentation advises minimally scoped credentials.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill has no persistence or privilege-escalation mechanism, but it can delete remote KBs and Spaces objects when explicitly invoked.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Credential and network access are expected for this DigitalOcean integration and are documented in metadata, environment tables, and endpoint sections.\n[TP4] expected: Create, list, show, delete, data-source management, retrieval, and inference are all part of the documented management/RAG workflow; deletion is called out as permanent.\n[SQP-2] expected: KB deletion is a real destructive operation and lacks an extra confirmation gate, but it requires an explicit --delete flag and KB UUID and is disclosed in the skill docs.\n[SQP-2] expected: RAG mode sends the user query and retrieved KB context to DigitalOcean's inference endpoint; this is disclosed at a high level, though users should treat indexed content as cloud-processed data.\n[SC1] expected: requests and boto3 are appropriate dependencies, but the lower-bound-only requirements reduce reproducibility and should be pinned or constrained by cautious users.\n[SC4] expected: The vulnerable-dependency concern is a dependency hygiene risk rather than evidence of malicious behavior; fresh installs would normally resolve newer versions, but pinning known-good versions is preferable.",
+          "guidance": "Use a dedicated DigitalOcean project or bucket, minimally scoped tokens, and a virtual environment. Review commands before running delete operations, because KB and Spaces deletes affect remote resources. Do not index documents you would not trust DigitalOcean's KB and inference services to process.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed DigitalOcean Knowledge Base and Spaces management tool with expected cloud credentials, network calls, and user-invoked delete actions.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779969203307,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: gradient-knowledge-base\nVersion: 0.1.4\n\nThe OpenClaw skill 'gradient-knowledge-base' is designed to interact with DigitalOcean Gradient AI and Spaces services for RAG pipelines. All network communications are directed to official DigitalOcean endpoints, and sensitive API tokens are handled as expected for cloud service interaction. The `SKILL.md` provides clear instructions and security advice, and the Python scripts (`gradient_kb_manage.py`, `gradient_kb_query.py`, `gradient_spaces.py`) implement the stated functionality without evidence of malicious intent, such as data exfiltration to unauthorized domains, arbitrary command execution, or persistence mechanisms. Notably, `gradient_kb_query.py` uses role separation to mitigate prompt injection against the LLM, which is a good security practice.",
+          "checkedAt": 1779164528331,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "86327ea512c64b2b041ef7480cab217070bc1acf8746695d825d6c0eed7cf5e6",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/86327ea512c64b2b041ef7480cab217070bc1acf8746695d825d6c0eed7cf5e6"
+    },
+    "slug": "gradient-knowledge-base",
+    "source_type": "clawhub",
+    "version": "0.1.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

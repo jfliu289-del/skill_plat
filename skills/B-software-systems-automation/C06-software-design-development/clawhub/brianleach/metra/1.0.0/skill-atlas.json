@@ -1,0 +1,155 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.25,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C01:token:sources",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C06:token:implementation",
+      "category:C09:token:privacy",
+      "category:C09:token:security",
+      "category:C17:token:notes",
+      "category:C17:token:schedule",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C04",
+      "C09",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "3d332a3460546a2dbd5a8e149800886e18b1b769bdb7cc7db7f9c5945272f45c",
+    "content_hash": "58aa7d78fa98e92cca9d7d7214845ba379965f9f96c32b61cff243e90c17f9b6",
+    "precanonical_content_hash": "7071ea43ea969dd1a1c8087db66982ca72bb0b7fc7efc3064926a7fe468dd299",
+    "skill_md_hash": "efb5f72f97d2ec032e58b322c0965ae77a0053b6f1055dcb85654816f3047521",
+    "version_metadata_sha256": "4d7da12a475be71ef8e21458646798b83de72dc41fa2fb7a1eb6105469264d0e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/brianleach/skills/metra",
+    "claim_id": "b72ea867e9a7e774b1a0594f40986e214b281484b2c8ec606f40956d2c461e0e",
+    "index_entries": [
+      {
+        "index_path": "categories/transportation.md",
+        "label": "metra",
+        "url": "https://clawskills.sh/skills/brianleach-metra"
+      }
+    ],
+    "owner_handle": "brianleach",
+    "owner_id": "s177mqbg7ea28w09hpmzr79wx988447d",
+    "published_at": 1771779553332,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779949704083,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779949704083,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The transit lookup purpose matches the script behavior: arrivals, vehicles, alerts, stops, schedules, routes, and fares use Metra GTFS/GTFS-RT data. One packaging caveat: the metadata references scripts/gtfs-realtime.proto, but that file is not present in the artifact, which may affect functionality rather than security.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are scoped to Chicago Metra commuter-rail questions, explicitly exclude CTA/Pace/Amtrak use cases, and contain no role changes, hidden prompt overrides, or unrelated agent instructions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation runs npm install for protobufjs and declares node and unzip requirements. This is disclosed and proportionate for parsing GTFS realtime protobuf and extracting the schedule ZIP, with normal npm dependency risk.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill reads METRA_API_KEY from the environment or a skill-local .env file and sends it as a Bearer token only to the documented Metra realtime HTTPS endpoints. I found no unrelated secret access or telemetry endpoints.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The refresh command creates ~/.metra/gtfs, downloads the public Metra static GTFS ZIP, extracts it with execFileSync using fixed unzip arguments, and removes the temporary ZIP. There is no background persistence, privilege escalation, or broad local indexing.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SkillSpector] expected: SkillSpector reported no issues; this aligns with the reviewed artifacts.\n[VirusTotal] expected: VirusTotal telemetry was clean; the verdict is based on artifact review, with telemetry only as supporting signal.\n[suspicious.env_credential_access] expected: Environment credential access is expected because Metra GTFS-RT requires METRA_API_KEY, and the code uses it only for the documented Metra Authorization header.",
+          "guidance": "Install only if you are comfortable providing a dedicated Metra API key, running npm install for the protobuf dependency, and allowing a public schedule cache under ~/.metra/gtfs. Keep unrelated secrets out of the skill-local .env file.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed Metra transit lookup tool that uses a Metra API key and local GTFS cache in ways that match its purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779949656704,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: metra\nVersion: 1.0.0\n\nThe OpenClaw Metra skill is designed to provide real-time Metra transit information. It uses standard Node.js practices, fetches data from official Metra API endpoints over HTTPS, and stores static GTFS data locally in the user's home directory. The `SKILL.md` and `README.md` provide clear, benign instructions for the AI agent and users. The `scripts/metra.mjs` code uses `node:util.parseArgs` for robust command-line argument parsing and `execFileSync` with fixed arguments for `unzip`, mitigating shell injection risks from user input. No evidence of intentional harmful behavior, data exfiltration, persistence, or malicious prompt injection was found.",
+          "checkedAt": 1779166263127,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "007a238a46ae3d9ccaa4464a3be350b143f963ed93281ada3cb4f45cb57cef5f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/007a238a46ae3d9ccaa4464a3be350b143f963ed93281ada3cb4f45cb57cef5f"
+    },
+    "slug": "metra",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

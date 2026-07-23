@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C02:token:language",
+      "category:C06:token:api",
+      "category:C07:token:quality",
+      "category:C12:token:management",
+      "category:C17:token:notes",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C07",
+      "C12",
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "dd68488f8b833909215edff685fea49f6fd92080f6e16364ec62728a5ba413cd",
+    "content_hash": "cc69b747b45b14579eee5cea842f3e1cb6bee10f4fc77c9b613cc90e4fd0acb9",
+    "precanonical_content_hash": "0138bcc797fef891b60a93065f5830e2e61978e4e1245c3d4803c1f3a87ba24e",
+    "skill_md_hash": "bf5e2adbac0bb716834c1dcb4daa312d890a5dfd4a498e294fc26c5210fe4b2a",
+    "version_metadata_sha256": "71ac3d35ba2a22572268764191c103f724924016cd55245ff9f18f9a8c3ad5cc"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/strrl/skills/macos-local-voice",
+    "claim_id": "16059ce92ee2ddb4ec19357fd3605e0fb27654b6ff4c67135d289e043110a782",
+    "index_entries": [
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "macos-local-voice",
+        "url": "https://clawskills.sh/skills/strrl-macos-local-voice"
+      }
+    ],
+    "owner_handle": "strrl",
+    "owner_id": "s174x7efa5yd6bfpb3dscncgs1885pxd",
+    "published_at": 1770847622026,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971377782,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971377782,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts match the stated purpose: local speech-to-text with yap, text-to-speech with macOS say, optional ffmpeg conversion, and voice discovery via osascript/AVFoundation.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Instructions are scoped to transcription, speech generation, voice listing/checking, and an example for sending generated audio as a voice note; sharing should remain user-directed.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation depends on disclosed macOS/Homebrew tools such as yap and optionally ffmpeg; there is no hidden installer or unexpected package execution in the artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The macOS-only native-tool requirement is proportionate, and the inspected files show no network calls, credential handling, broad local indexing, or elevated privilege requests.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "TTS writes generated audio to ~/.openclaw/media/outbound by default and supports a custom output path; this is disclosed and purpose-aligned, though custom paths should be used carefully.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[suspicious.dangerous_exec] expected: Static scan flagged child_process use, but the scripts invoke disclosed local audio tools with argument arrays and no shell-string interpolation; this command use is central to the skill.\n[VirusTotal code_insight] expected: The custom output path can write generated .aiff/.ogg files outside the default directory, but output_path is an explicit documented parameter, defaults to a scoped OpenClaw media folder, and shows no deceptive or destructive behavior.\n[SkillSpector] expected: The supplied SkillSpector result reported no issues; artifact review did not find hidden behavior beyond expected local STT/TTS processing and audio persistence.",
+          "guidance": "Install only on macOS and verify the Homebrew dependencies you add. Avoid transcribing or generating highly sensitive content unless you are comfortable with transcripts appearing in stdout and generated audio remaining on disk; use custom output paths deliberately and only send generated voice notes when you intend to share them.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent local macOS voice utility, with expected local command use and disclosed audio file output.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971316021,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: macos-local-voice\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to a potential arbitrary file write vulnerability in `scripts/tts.mjs`. The `output_path` argument, if provided by the user or agent, is used directly to construct the output file path. This could allow an attacker to specify a path traversal sequence (e.g., `../../../malicious.aiff`), leading to the creation of audio files in unintended file system locations. While the default output path is safe and there is no evidence of intentional malicious behavior, this represents a significant vulnerability.",
+          "checkedAt": 1779163314639,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "afd2b5dc146cc05092b6d8d8e223feb0eae1d3cb7ee272636cf356c2d9202c58",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/afd2b5dc146cc05092b6d8d8e223feb0eae1d3cb7ee272636cf356c2d9202c58"
+    },
+    "slug": "macos-local-voice",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

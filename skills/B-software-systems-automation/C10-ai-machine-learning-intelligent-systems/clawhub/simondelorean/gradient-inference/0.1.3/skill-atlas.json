@@ -1,0 +1,157 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.345,
+    "domains": [
+      "creative",
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C00:token:skill",
+      "category:C01:token:lookup",
+      "category:C06:token:api",
+      "category:C09:token:privacy",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C10:token:inference",
+      "category:C10:token:model",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C01",
+      "C06",
+      "C09",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "38640711303a3b1b2c4d70a6a416d5856d2210bed519e67db42e383bc693fc6b",
+    "content_hash": "0af98484fdeeefeab196d25777d76bfcb8329f36be85ee06f980465a65e4fa65",
+    "precanonical_content_hash": "e1d4d977cf480f26fd4a58d99d2500df2dca2007f239539efffb4f8429f2f674",
+    "skill_md_hash": "e89fc784c886d7c377fcb689dbb5e6914cae60c1b51a0007711109accce23b08",
+    "version_metadata_sha256": "eedcc530db46457261e918036b15a1ef4a184990baefaa98f4472618dc6dd6f0"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/simondelorean/skills/gradient-inference",
+    "claim_id": "9e61404b46cee5b340c589ee3774cbad199bed9676b8621d3646058ffc410a34",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "gradient-inference",
+        "url": "https://clawskills.sh/skills/simondelorean-gradient-inference"
+      }
+    ],
+    "owner_handle": "simondelorean",
+    "owner_id": "s1729jqtfk8t0ept62xsvphczd884php",
+    "published_at": 1771261009504,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779969259405,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779969259405,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts match the stated purpose: listing Gradient models, sending chat or Responses API prompts, generating images, and checking public pricing.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill clearly documents external DigitalOcean endpoints and includes a trust statement that prompts and data are sent to DigitalOcean, though the CLI itself does not repeat a runtime warning.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No installer, package-manager execution, or background setup is present; dependencies are ordinary Python packages declared in metadata.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "GRADIENT_API_KEY access is necessary and disclosed for the provider integration, but it enables billable inference requests and should be handled as a sensitive key.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to optional provider-side prompt caching when --cache is used and a non-sensitive /tmp pricing cache; generated images are saved only when the user supplies an output path.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill uses env access, network requests, and local file writes, but these are disclosed in SKILL.md through the required GRADIENT_API_KEY, listed endpoints, /tmp pricing cache, and image output behavior.\n[SQP-2] expected: Sending prompts to DigitalOcean is the core function of chat completions and is disclosed in the Trust Statement and endpoint table, so the lack of an additional runtime banner is guidance rather than a Review-level concern.\n[SQP-2] expected: Responses API caching is opt-in via --cache and documented as prompt caching with store=true; users should avoid it for sensitive prompts, but the behavior is not hidden or automatic.",
+          "guidance": "Install only if you are comfortable sending selected prompts, system messages, and image prompts to DigitalOcean Gradient with your GRADIENT_API_KEY. Use a dedicated key if possible, monitor usage, and leave --cache off for confidential or regulated content.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed DigitalOcean Gradient helper that sends chosen prompts and image prompts to DigitalOcean using the user's API key.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779969209800,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: gradient-inference\nVersion: 0.1.3\n\nThe skill bundle is benign. It provides tools to interact with DigitalOcean's Gradient AI Serverless Inference API for chat completions, image generation, and model discovery, as well as scraping public pricing information. All network requests are directed to official DigitalOcean domains (`inference.do-ai.run`, `docs.digitalocean.com`). File system operations, such as saving generated images in `scripts/gradient_image.py`, include robust path traversal protection. Caching of pricing data in `scripts/gradient_pricing.py` uses the standard `/tmp` directory for non-sensitive information. There is no evidence of malicious intent, unauthorized data exfiltration, persistence mechanisms, or prompt injection against the agent in SKILL.md.",
+          "checkedAt": 1779164527957,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "31c2706b194db838d4e96d26aeeb234ac30fd3e2778b1b0d94625c736ac374b2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/31c2706b194db838d4e96d26aeeb234ac30fd3e2778b1b0d94625c736ac374b2"
+    },
+    "slug": "gradient-inference",
+    "source_type": "clawhub",
+    "version": "0.1.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

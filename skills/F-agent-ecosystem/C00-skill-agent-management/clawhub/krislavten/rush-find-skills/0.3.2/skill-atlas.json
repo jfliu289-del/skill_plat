@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.69,
+    "domains": [
+      "security"
+    ],
+    "needs_review": false,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:phrase:agent skill",
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:find",
+      "category:C01:token:search",
+      "category:C09:token:security",
+      "category:C12:token:strategy",
+      "cross-tag:agent-management",
+      "cross-tag:planning",
+      "cross-tag:search",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01"
+    ],
+    "stages": [
+      "discover",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "plan",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "14602e66d7156ec0f9b9151a5c916525e030c775ae7373371413e70a62d37f91",
+    "content_hash": "2a9b24f3a3c8ae261af085b73f4cfc670a22e23c09cf86911b5b0304ae12be3b",
+    "precanonical_content_hash": "0fbc0fc7c379fd997c39e834d3f6310d08bdade7cf7418abca3ef2ffa3266439",
+    "skill_md_hash": "15779c0bee8eb42adcd65faf3ad2d5a1651eb3c4511723283e8cb95d024c3371",
+    "version_metadata_sha256": "46461d91d1a774d8bab19698d4c1997fe6bc3abaf0d7445474bf94ca726dae12"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/krislavten/skills/rush-find-skills",
+    "claim_id": "dde1bcd158b67b9317cf66c229e4760b001747047e98d5bbc74acb4e9255d0b8",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "rush-find-skills",
+        "url": "https://clawskills.sh/skills/krislavten-rush-find-skills"
+      }
+    ],
+    "owner_handle": "krislavten",
+    "owner_id": "s17b7g0g336qycbs1g96k6x7g1885gmv",
+    "published_at": 1771919140174,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779954892616,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779954892616,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill's purpose is to search a reskill registry and install selected skills, and the CLI commands, registry access, and agent-directory checks are aligned with that purpose. Installing skills can change future agent behavior, so it is not risk-free.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The activation language is broad enough to trigger on some ordinary help requests, but the workflow instructs the agent to search, present results, and ask before installing.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "It recommends a global reskill CLI and allows an unpinned npx reskill@latest fallback against an external registry. This is disclosed and purpose-aligned, but users should verify the registry, package, publisher, and version before approval.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Local inspection is limited to RESKILL_REGISTRY, skills.json in the current or nearby parent directories, and known agent directories. The artifact does not instruct broad file indexing, credential harvesting, or unrelated data access.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill can lead to persistent installation of additional skills, including global or agent-specific installs, but the artifact requires user confirmation and target-agent selection before installation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] unexpected: The broad trigger concern is supported by the artifact, especially for generic 'how do I' or 'can you' phrasing. I treat this as an over-invocation risk, not evidence of malicious intent, because install steps remain confirmation-gated.\n[VirusTotal code_insight] expected: The flagged shell commands, registry use, environment-variable lookup, and limited directory checks are expected for a skill package-manager assistant and are disclosed in the skill text.\n[static-scan] expected: Static scan reported no findings, and the package contains only a markdown skill file with no executable scripts or hidden install hooks.",
+          "guidance": "Install this only if you want your agent to search a reskill registry and help install other skills. Before approving any install, check the registry URL, skill name, publisher, version, and target agent, and prefer a trusted local reskill installation over automatically running the latest npx package.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed helper for finding and installing other agent skills, with normal package-manager risk but no evidence of hidden or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779954856437,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: rush-find-skills\nVersion: 0.3.2\n\nThe skill is classified as suspicious due to its explicit instructions for the AI agent to perform high-risk operations, including direct shell command execution (`npm`, `npx`, `which`, `reskill`, `mkdir`, `echo`), reading environment variables (`RESKILL_REGISTRY`), and scanning the file system for configuration files (`skills.json`) and agent directories (`.cursor/`, `.claude/`). While these actions are presented as necessary for the stated purpose of finding and installing skills via the `reskill` package manager, they introduce a significant attack surface. A lack of robust input sanitization by the agent when constructing commands from user input or discovered data could lead to shell injection or unauthorized file access, even though the `SKILL.md` itself does not instruct malicious intent.",
+          "checkedAt": 1779166688168,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "b533c4acd6f1207639ae5aac6b1ef4860d68324cc1274211c9ac835f0ee0b468",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b533c4acd6f1207639ae5aac6b1ef4860d68324cc1274211c9ac835f0ee0b468"
+    },
+    "slug": "rush-find-skills",
+    "source_type": "clawhub",
+    "version": "0.3.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

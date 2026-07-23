@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C07:token:test",
+      "category:C09:token:security",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:security",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C07",
+      "C09",
+      "C17"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "secure",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "da94d7f5a3114a22abc4706181bad204f2fc311ad35d1c4b1f96adc4815cfde9",
+    "content_hash": "cf64ed3a2adc9d7ec592c34d8bffdf56ce493bc732854ecb51282cee5ec9f6ca",
+    "precanonical_content_hash": "900420fd7b6fc8fd1a3ba09b9d9812949c3fbdb12ccec82a5cbfd5607f0796eb",
+    "skill_md_hash": "44d8a66500fe1a558307ba3eb8dfc63a37b1f2ce50ca62f1e31ecfbc21348cee",
+    "version_metadata_sha256": "cc9d5cc0d55b30c5f797e76dddcb69e75ab634422727fbab97e57e89cac29cb5"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/xiaoluoboding/skills/flomo-notes",
+    "claim_id": "af6db7dd156bba941e1678e82f8a8fabbaec49d7a2ce5ad00ae45827abcb6a68",
+    "index_entries": [
+      {
+        "index_path": "categories/notes-and-pkm.md",
+        "label": "flomo-notes",
+        "url": "https://clawskills.sh/skills/xiaoluoboding-flomo-notes"
+      }
+    ],
+    "owner_handle": "xiaoluoboding",
+    "owner_id": "s17cwm9kp91rr1hnxx2akbkryx84qe2j",
+    "published_at": 1769935718108,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783653428356,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783653428356,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is saving notes to Flomo, and the implementation performs a single JSON-encoded POST to the configured FLOMO_WEBHOOK_URL.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The activation language is mostly user-directed, though the phrase \"flomo note\" is broader than ideal; there is also a functional mismatch where documentation passes note text as an argument while the script reads from stdin.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is documented as copying the skill locally or adding an extra skill directory, with no install-time execution; dependencies on bash, curl, python3, and the webhook environment variable are disclosed in the artifacts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Outbound network transfer of note content and use of a Flomo webhook secret are proportionate to a Flomo note-saving integration and are described in SKILL.md and README.md.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No background service, privilege escalation, credential harvesting, broad file access, local indexing, self-update, or persistent state beyond the user-configured webhook URL was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The skill does invoke a shell script, but SKILL.md and README.md explicitly show that script and its curl POST behavior; this is disclosed and purpose-aligned rather than hidden authority.\n[SQP-1] expected: The trigger wording could be tighter, especially \"flomo note,\" but the documented examples and purpose are still centered on user-directed note saving, not automatic bulk or background transmission.\n[SQP-2] expected: Note content is transmitted to Flomo via webhook, which is inherent to the integration and disclosed; a more prominent privacy warning would improve user clarity but does not make the artifact suspicious.",
+          "guidance": "Install this only if you want selected note text sent to Flomo over the network. Keep FLOMO_WEBHOOK_URL private because anyone with it can post to your inbox, avoid sending secrets or highly sensitive notes, and be aware the current docs should invoke the script with note text on stdin rather than as a command argument.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill transparently sends user-selected notes to a user-configured Flomo webhook and shows no hidden access, persistence, or unrelated behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783653407458,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 36,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: flomo-notes\nVersion: 0.1.0\n\nThe skill is designed to save user-provided notes to Flomo via a user-configured webhook. The `SKILL.md` provides clear instructions for the agent to execute `scripts/save_to_flomo.sh` with the note text. The `save_to_flomo.sh` script safely handles user input by using `python3` for JSON encoding, preventing shell or JSON injection, and then uses `curl` to POST the data to the `FLOMO_WEBHOOK_URL` provided by the user. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts against the agent. All actions are directly aligned with the stated purpose.",
+          "checkedAt": 1779160644222,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "7f00ac6967b9069ce3c070c4716d403dcb0093188d578e5bf8df117e81b89266",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/7f00ac6967b9069ce3c070c4716d403dcb0093188d578e5bf8df117e81b89266"
+    },
+    "slug": "flomo-notes",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

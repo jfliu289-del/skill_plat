@@ -1,0 +1,156 @@
+{
+  "classification": {
+    "artifacts": [
+      "configuration",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "infrastructure"
+    ],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C01:token:search",
+      "category:C02:token:language",
+      "category:C02:token:translate",
+      "category:C04:token:analyze",
+      "category:C06:token:backend",
+      "category:C08:token:deployment",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:deployment",
+      "cross-tag:search",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00",
+      "C01",
+      "C04",
+      "C06",
+      "C08"
+    ],
+    "stages": [
+      "deliver",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "deploy",
+      "manage",
+      "operate",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ec736225eb0e19f62147ffcabf0de1767ff472778041c123facc17daf894adc2",
+    "content_hash": "7e845fd176bb8b5537ba0c27903f4a80f1738c7df5f5c48eecd9d3410d124fd4",
+    "precanonical_content_hash": "83ceb808ca14c81e56cdddba7e426e66e761b62ab41b3487a62528714d84171c",
+    "skill_md_hash": "086c3385d619ef646401eb5caea06ae1151414f3a7212ec99e224f8049ce2a08",
+    "version_metadata_sha256": "30e016a2c15aa3dd9cf365c3a5c6aa8a7fa5ad4e16b76ff921275a48c523a756"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tkuehnl/skills/log-dive",
+    "claim_id": "c3fe21bb1ea91a3659e54bf3a749fa074491a04ab6610ddaeb6ee194ae8884f4",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "log-dive",
+        "url": "https://clawskills.sh/skills/tkuehnl-log-dive"
+      }
+    ],
+    "owner_handle": "tkuehnl",
+    "owner_id": "s1796xcga59f855vmh35x909yh84742a",
+    "published_at": 1771717045486,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779969273971,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779969273971,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose and scripts align: search, list, and tail logs from Loki, Elasticsearch/OpenSearch, and CloudWatch using configured backends. Sensitive log access is expected for this purpose and is clearly warned about.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The workflow asks the agent to translate natural-language requests into backend queries, discover available targets when needed, and summarize rather than dump raw logs. Activation phrases are broad but log-specific.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No installer, persistence, or package mutation is present. The skill depends on local tools such as bash, jq, curl, logcli, and aws, plus environment-provided backend credentials.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Exec and network access are proportionate to querying remote log systems, and endpoints come from user environment variables rather than hardcoded third-party destinations.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The scripts output to stdout and do not cache or write log data. They do use delegated read privileges from Loki tokens, Elasticsearch tokens, or AWS credentials, so credential scope matters.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[TP4] expected: Discovery, live tailing, and agent-side query translation are documented in SKILL.md and README, so this is not hidden behavior.\n[SDI-1] expected: Elasticsearch index enumeration is explicitly documented as a target-discovery feature; it should still be used with scoped read-only credentials because index names can reveal environment details.\n[SDI-1] unexpected: The direct Elasticsearch health subcommand is not documented in the main workflow and exposes limited cluster metadata, but it is read-only, not automatically invoked, and not enough by itself to move the skill to Review.\n[SQP-1] expected: The activation phrases are broad but remain centered on log analysis and incident triage; users should be aware that casual requests like checking logs may trigger backend queries.",
+          "guidance": "Install only where the agent is allowed to query your observability systems. Use least-privilege, read-only credentials limited to the intended indices, log groups, tenants, and environments; prefer narrow time ranges and service filters; and avoid using it on logs that must not enter the agent or LLM context.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a read-only log search helper, but it can expose sensitive log data through the agent when used with production credentials.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779969188710,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 71,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: log-dive\nVersion: 0.1.3\n\nThe skill bundle is well-designed with a strong focus on security, explicitly stating and implementing 'read-only' operations, 'no caching,' and 'no exfiltration' policies across all backend scripts. Input sanitization is consistently applied using `jq --arg` for JSON payloads and URL encoding for API calls, effectively mitigating shell and prompt injection risks. The `SKILL.md` provides clear instructions to the AI agent on responsible handling of sensitive log data, further reinforcing security. All network calls are confined to the configured log backends, and there is no evidence of intentional harmful behavior, persistence mechanisms, or obfuscation.",
+          "checkedAt": 1779164515230,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a9776b5e929c1b81f90f71dd99fcf2cf44aadbd70fdf82aae40d283bcd32b0a5",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a9776b5e929c1b81f90f71dd99fcf2cf44aadbd70fdf82aae40d283bcd32b0a5"
+    },
+    "slug": "log-dive",
+    "source_type": "clawhub",
+    "version": "0.1.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

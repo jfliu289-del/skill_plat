@@ -1,0 +1,124 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C18",
+    "reasons": [
+      "category:C18:token:home"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "437cc3491aced6a3da1373cc8ab445b8d8941f4316e3c5ceb276970ec5aa275c",
+    "content_hash": "1c86e771ea3c7faecebf62722209beb523b6b241b0c57b7a0b752d712f96d6d2",
+    "precanonical_content_hash": "c5131116b0106be6e8006b9bbbe1a99d96355270ba75d1efd6e30ce02cbb2880",
+    "skill_md_hash": "b397ebde9d70e0f1cfd0a692c204527e764ff5d3c46ba45b382d2118a789d9cf",
+    "version_metadata_sha256": "ff5238caee0bdcc8ede0f7dfde2433c1faa24b6417be68afee47f1b068b6b85e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/daniel-laszlo/skills/enzoldhazam",
+    "claim_id": "99eb9f9523d6d1c36f932219d3d6d8f91ccc66ff8ae00fb2af6071d13708f2ab",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "enzoldhazam",
+        "url": "https://clawskills.sh/skills/daniel-laszlo-enzoldhazam"
+      },
+      {
+        "index_path": "categories/smart-home-and-iot.md",
+        "label": "enzoldhazam",
+        "url": "https://clawskills.sh/skills/daniel-laszlo-enzoldhazam"
+      }
+    ],
+    "owner_handle": "daniel-laszlo",
+    "owner_id": "s172xztf8e8qfyp4pxxjdc7je9885p82",
+    "published_at": 1769339516000,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783651749873,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783651749873,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The described capability is coherent: it provides a CLI-backed skill for reading and changing thermostat room settings through enzoldhazam.hu.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill can change physical thermostat state, so users should only invoke it for explicit room and temperature requests; the supplied evidence does not show hidden automatic changes.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The documented global install uses sudo to move a binary into /usr/local/bin, which is broader than a user-local install but common and disclosed for CLI tools.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to the thermostat service and local command execution are proportionate to the stated thermostat-control purpose.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "Credential storage through macOS Keychain and environment variables is purpose-aligned and disclosed; environment-variable passwords carry exposure risk, but no unauthorized persistence or exfiltration is evidenced.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Thermostat account credentials are necessary for this integration; the concern is mainly that permission/secret handling could be documented more explicitly, not that the behavior is purpose-mismatched.\n[SQP-2] expected: Environment-variable password support is a real usability/security tradeoff, but it is disclosed and paired with Keychain support rather than hidden credential collection.\n[SQP-1] unexpected: A broad activation description is worth tightening because this skill can affect a physical device, but the available evidence still points to explicit CLI commands for state changes.\n[PE3] expected: Keychain credential use is expected for an authenticated thermostat tool and is safer than plaintext storage; the risk is account sensitivity, not demonstrated misuse.\n[VirusTotal code_insight] expected: The flagged sudo install step grants elevated filesystem access during installation, but it is user-directed, disclosed, and not supported by any engine detections or malicious code evidence.",
+          "guidance": "Install only if you trust the publisher and need this thermostat integration. Prefer macOS Keychain login over exporting a password in your shell, avoid putting credentials in shell history or CI logs, and verify any requested room and temperature before allowing set commands. Use a user-local install path instead of sudo when practical.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to be a disclosed thermostat-control helper, with expected credential and install risks but no artifact-backed evidence of hidden or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783651682951,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 60,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: enzoldhazam\nVersion: 1.0.1\n\nThe skill bundle is classified as suspicious due to the installation instructions in `SKILL.md` and `README.md` that require `sudo mv enzoldhazam /usr/local/bin/`. While this is a common practice for installing CLI tools globally, it represents a 'risky capability' or 'broad permission' as it requires elevated privileges. The Go source code itself appears benign, focused on controlling thermostats via `enzoldhazam.hu` and managing credentials securely via environment variables or macOS Keychain, without any other indicators of malicious intent such as data exfiltration, persistence, or prompt injection against the agent.",
+          "checkedAt": 1779159936021,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "2dea1b4c5bcfbfa673eb873eb21d8bbe96421b4b8ce32c4bde0034287aaae2a2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/2dea1b4c5bcfbfa673eb873eb21d8bbe96421b4b8ce32c4bde0034287aaae2a2"
+    },
+    "slug": "enzoldhazam",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

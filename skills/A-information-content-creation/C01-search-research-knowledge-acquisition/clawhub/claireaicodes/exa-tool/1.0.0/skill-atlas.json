@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.75,
+    "domains": [
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:phrase:web search",
+      "category:C01:token:research",
+      "category:C01:token:search",
+      "category:C06:token:code",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create",
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "104d2dd01dfc7218adc2d132a11d7ee8ef944d424c5c549c684d2c0252c3bc0a",
+    "content_hash": "d977e72036780c91c2ee28aaa7495c65539e8d570073b57475c2119076c42bc6",
+    "precanonical_content_hash": "a9a43226e1af4a6a08fe32c6effa8bcb4cc252135eae18a61e0cafd191baa549",
+    "skill_md_hash": "8a95fabc881d2c6f6a11747094b0f79fc53f30f24816435157ce5f1c091fb9cf",
+    "version_metadata_sha256": "976569e7689b35c06735f6231708abb765802b48a01a98bec7bfbe07dbb828a1"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/claireaicodes/skills/exa-tool",
+    "claim_id": "619f8de3d5231dde9ef492536ecfb369cb3f29d6357468fa7ee0ab218afc8c50",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "exa-tool",
+        "url": "https://clawskills.sh/skills/claireaicodes-exa-tool"
+      }
+    ],
+    "owner_handle": "claireaicodes",
+    "owner_id": "s171a5ksstxcxkg2w340p2h86x885kqf",
+    "published_at": 1771390661952,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779920520815,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779920520815,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose of Exa-powered search, crawling, people/company lookup, and research matches the documented integration and the included web-search wrapper. A packaging mismatch remains because the advertised generic exa-search command is not included in the artifact set.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions disclose a broad Exa MCP tool surface, including crawling and deep research, but those capabilities are purpose-aligned for a research/search skill and there is no hidden role override or prompt-injection behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is manual and has no dependency install scripts, but package.json points to bin/exa-search and bin/exa-web-search while the artifact only includes bin/exa-web-search.mjs, so documented commands may fail or require correction.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Using EXA_API_KEY and making HTTPS requests to https://mcp.exa.ai/mcp is proportionate for an Exa MCP wrapper. The README and SKILL.md could be clearer that queries, URLs, and research targets leave the local environment.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill suggests environment-variable, shell-profile, config, or workspace .env storage for the API key. This is not hidden persistence or privilege escalation, but workspace .env storage is a leakage risk if the workspace is shared or broadly accessible.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The README describes Exa web search, crawling, company research, people search, and deep research. Sending inputs to Exa is expected for that purpose, but a clearer privacy notice would help users avoid submitting confidential queries or private URLs.\n[SQP-2] expected: The SKILL.md states this is an Exa MCP integration and the included script sends JSON-RPC requests to Exa. The lack of a prominent data-sharing warning is a documentation gap, not evidence of hidden exfiltration.\n[RA2] expected: The workspace .env suggestion stores the required API key persistently, but it is explicitly documented as one setup option and is not used for covert persistence. Users should prefer secure config or tightly permissioned environment storage.",
+          "guidance": "Install this only if you want OpenClaw agents to use Exa and are comfortable sharing search terms, crawl URLs, company/person names, and research prompts with Exa under your account. Keep the EXA_API_KEY out of prompts and logs, avoid using this with secrets or private internal URLs, and verify the missing or mismatched command files before relying on the advertised exa-search command.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This appears to be a straightforward Exa search integration, but users should understand that searches and crawl targets are sent to Exa and that the package metadata appears incomplete.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779920494540,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 30,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: exa-tool\nVersion: 1.0.0\n\nThe OpenClaw Exa MCP skill bundle appears benign. It acts as a wrapper for the legitimate Exa MCP API, requiring an `EXA_API_KEY` which is handled via environment variables or OpenClaw configuration. The `bin/exa-web-search.mjs` script makes HTTPS requests solely to `https://mcp.exa.ai/mcp` and processes JSON input/output. There is no evidence of data exfiltration to unauthorized endpoints, malicious execution (e.g., shell injection, `eval` of untrusted input), persistence mechanisms, or prompt injection attempts within `SKILL.md` or `README.md` to manipulate an AI agent.",
+          "checkedAt": 1779165038016,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "6fbfb40d17d3a0ff6682ac638cd66ccc461d003e71c57c42cbab395fdb13c9e6",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6fbfb40d17d3a0ff6682ac638cd66ccc461d003e71c57c42cbab395fdb13c9e6"
+    },
+    "slug": "exa-tool",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

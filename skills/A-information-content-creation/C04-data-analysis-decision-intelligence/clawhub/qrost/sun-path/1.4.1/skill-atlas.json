@@ -1,0 +1,135 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional"
+    ],
+    "confidence": 0.475,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:chart",
+      "cross-tag:data-analysis",
+      "cross-tag:design"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "59fae3ebccf99a76ff04afc553e0f8c4a3929d5089028f87bb08808897843c74",
+    "content_hash": "129e166dafe2708cd0bc239ada7f05a993ac062dde0141ce0bf2213485c340ca",
+    "precanonical_content_hash": "5de2c7e7d6ed0059b066d6e56b7ad2a111e195d39cd97e7f6eaa31cdda95638f",
+    "skill_md_hash": "5a9d7f1e40ce1e221cfd144c8a30f8862ea46f9242550a87ea6a87bb076dd40b",
+    "version_metadata_sha256": "14656063389060ae8c4ad4f83d3677bf4c83cfc2a76622ba4768d8f103d4d3c6"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/qrost/skills/sun-path",
+    "claim_id": "077d9fae8f19f6ab5c501c3b15647eca0c770796c33888047e5a72928c9acde3",
+    "index_entries": [
+      {
+        "index_path": "categories/pdf-and-documents.md",
+        "label": "sun-path",
+        "url": "https://clawskills.sh/skills/qrost-sun-path"
+      }
+    ],
+    "owner_handle": "qrost",
+    "owner_id": "s178f7h4jz91qjvzt9q84pekv5885hjd",
+    "published_at": 1771637502064,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779942914004,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779942914004,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The metadata, SKILL.md, and scripts coherently support sun position, sun-path plotting, 2D building shadows, annual sun/shadow hours, DEM terrain shadows, and comfort charts. I found no unrelated credential access, network exfiltration, destructive behavior, or hidden capability.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill requests shell:exec and instructs the agent to run bundled Python scripts for matching user requests without extra confirmation. That is disclosed and purpose-aligned, but agents should still constrain execution to these scripts and validate numeric, date, DEM path, and output path arguments.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Setup requires a manual pip install from requirements.txt, and the dependencies are unpinned. This is a reproducibility and supply-chain hygiene weakness, not evidence of malicious artifact behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The scripts read user-provided geospatial inputs and write PNG/JPG/GeoTIFF outputs, then may send generated images through OpenClaw media or Telegram. This matches the stated purpose, but site, terrain, and building data may be exposed in shared chat outputs.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background service, startup hook, privilege escalation, credential/session/profile access, self-modification, or covert persistence was found. Persistence is limited to installed dependencies and user-directed output files.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[TP4] expected: The broader DEM, raster, annual simulation, and comfort features are disclosed in clawhub.json and SKILL.md, even though the short frontmatter description is less complete.\n[SQP-1] expected: The invocation triggers are broad but align with the skill's environmental-analysis purpose; this warrants careful argument validation rather than a Review verdict by itself.\n[SQP-2] expected: Direct execution of bundled Python scripts is real and disclosed. The scripts use argparse and implement the advertised calculations, with no evidence of hidden shell behavior.\n[RA2] expected: Writing generated images to /tmp or OpenClaw media directories is expected so results can be sent to the user. Unique filenames and cleanup would reduce residual-file risk.\n[SC1] expected: The listed packages are appropriate for solar calculation, plotting, geometry, comfort, and DEM processing, but should be pinned for reproducible installs.\n[SC4] expected: Numpy is an expected numerical dependency and no vulnerable version is pinned; treat this as a dependency-pinning caution rather than evidence of malicious code.\n[VirusTotal/code_insight] expected: The telemetry concern is centered on shell:exec and user-influenced script arguments. Artifact review found purpose-aligned scripts and no exfiltration, persistence, or destructive behavior.",
+          "guidance": "Install only if you are comfortable letting OpenClaw run the bundled Python analysis scripts. Use a virtual environment, consider pinning dependency versions, keep outputs in /tmp or OpenClaw media directories with unique names, and avoid sending sensitive site or DEM-derived images through Telegram unless that sharing is acceptable.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to perform the advertised solar, shadow, terrain, and comfort calculations, with ordinary caution needed for local script execution and generated files.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779942879295,
+          "issueCount": 12,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: sun-path\nVersion: 1.4.1\n\nThe skill is classified as suspicious due to the `shell:exec` permission and the agent instructions in `SKILL.md` that direct the agent to execute Python scripts with user-controlled arguments. While the scripts themselves appear to perform their stated functions (solar calculations, plotting), the direct execution of `python3 scripts/*.py` with user-provided `--output` paths (e.g., `/tmp/shadow.png`) creates a potential path for shell injection if the agent were to pass unsanitized user input directly to the shell command. The `PUBLISH.md` file also contains `rsync` and `npm` commands, which, while part of a deployment process, highlight the broad shell access available. There is no clear evidence of intentional malicious behavior like data exfiltration or persistence, but the combination of `shell:exec` and user-controlled arguments represents a significant vulnerability.",
+          "checkedAt": 1779165631209,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "ea693028b758e3a8803c8a9afefb4314d73cc1b7f237bb0e2543027984fb8ef5",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ea693028b758e3a8803c8a9afefb4314d73cc1b7f237bb0e2543027984fb8ef5"
+    },
+    "slug": "sun-path",
+    "source_type": "clawhub",
+    "version": "1.4.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

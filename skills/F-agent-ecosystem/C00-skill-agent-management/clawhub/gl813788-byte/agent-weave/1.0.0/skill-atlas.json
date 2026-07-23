@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.525,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:orchestration",
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "94b1b1e5bf481b104d45cd375af4f7faed5b85d335cd3be6e90f70371026f19b",
+    "content_hash": "01134f504eeb0a4268bf0a3638413f10132cd5783e0b2acbb83ef25884ba8e00",
+    "precanonical_content_hash": "217ae20686548b6df3801cbd0f165d963f96d2fe4c7b7ddde4f8f47e64ddd40f",
+    "skill_md_hash": "adc9d8d8975c0e3c0553baabfe43311a3bc76145ab1c82b2de3f5489f19e747f",
+    "version_metadata_sha256": "26ca6ecacd3ed3fe735d067b575039968c4eb4cd97b92d816da7f7b7cecfe44d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/gl813788-byte/skills/agent-weave",
+    "claim_id": "37f5e6cf2e45936982fcde9960d7ca891c53d1aad6afce1d9b307f5fbde03c8f",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "agent-weave",
+        "url": "https://clawskills.sh/skills/gl813788-byte-agent-weave"
+      },
+      {
+        "index_path": "categories/productivity-and-tasks.md",
+        "label": "agent-weave",
+        "url": "https://clawskills.sh/skills/gl813788-byte-agent-weave"
+      }
+    ],
+    "owner_handle": "gl813788-byte",
+    "owner_id": "s17993nk66b3aw2k6snek4akns8855ra",
+    "published_at": 1771388500520,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779920569765,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779920569765,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe and implement a JavaScript master-worker agent cluster for parallel task execution, MapReduce-style workflows, and in-process EventEmitter communication.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill intentionally supports multiple and potentially long-running workers; this is purpose-aligned, but users should set their own worker counts, timeouts, and cancellation behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Documentation recommends npm/global installation, but package metadata points the CLI bin to a missing bin/weave file while only bin/weave-cli-safe.js is present; this is an install-quality/provenance issue, not malicious behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Local filesystem writes are limited to logs, state files, reports, and cleanup scripts in expected relative paths such as ./agent-logs; no credential stores, shell execution APIs, or external network calls were found in the reviewed code.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "AgentManager starts local monitoring intervals and persists agent logs/state, but there is no elevated privilege request, startup persistence mechanism, credential use, or hidden background installation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SkillSpector] expected: SkillSpector reported no issues; local artifact review did not uncover contrary evidence.\n[VirusTotal code_insight] expected: VirusTotal telemetry was clean, and the file I/O it noted is consistent with disclosed local logging and agent state management.\n[staticScan] expected: Static scan reported no suspicious patterns; direct review found no child_process, eval, credential access, or external network behavior.\n[ASI04] expected: The missing CLI entry point is a real packaging problem users should verify, but it does not show hidden or purpose-mismatched behavior.\n[ASI10] expected: Long-running workers are disclosed and aligned with the agent-cluster purpose, though they can consume local resources if left unbounded.\n[ASI06] expected: Local logs and state files may retain task details; this is expected for monitoring/debugging but users should avoid putting secrets in worker inputs or messages.",
+          "guidance": "Before installing, verify the npm package and CLI entry point because the packaged bin metadata appears inconsistent. Use project-local installation where possible, run only trusted task functions, cap worker counts/timeouts for expensive jobs, and treat generated ./agent-logs files as potentially sensitive local data.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Agent Weave appears to be a local master-worker task orchestration skill with expected logging and worker-management behavior, not evidence of theft, hidden execution, or destructive activity.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779920521117,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: agent-weave\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle 'agent-weave' appears benign. It implements a Master-Worker agent cluster for parallel task execution, with local file system operations (`fs.writeFileSync`, `fs.appendFileSync`, `fs.mkdirSync` in `agent-system.js`) used legitimately for logging and managing agent state within a configurable local directory (`./agent-logs`). The `lib/thread.js` module provides an internal, secure communication layer between agents within the cluster, not for external network connections. There is no evidence of data exfiltration, unauthorized command execution (e.g., `child_process`, `eval` of untrusted input), persistence mechanisms, or prompt injection attempts in any of the markdown files. Identified issues in `TEST_REPORT.md` relate to CLI functionality and code quality, not security vulnerabilities or malicious intent.",
+          "checkedAt": 1779165036539,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "788e693748b18fa5a1bcd45336af0e16aeb0ecd615b9ca24deae62b9239fbfcd",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/788e693748b18fa5a1bcd45336af0e16aeb0ecd615b9ca24deae62b9239fbfcd"
+    },
+    "slug": "agent-weave",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

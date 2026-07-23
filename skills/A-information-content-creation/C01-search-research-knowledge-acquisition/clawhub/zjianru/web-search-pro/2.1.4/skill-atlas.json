@@ -1,0 +1,148 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.7795,
+    "domains": [
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:phrase:web search",
+      "category:C01:token:lookup",
+      "category:C01:token:research",
+      "category:C01:token:search",
+      "category:C06:token:code",
+      "category:C10:token:model",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:software-development",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "6d2cc456efbebb6f7a25de055273f2755742dc5b3666c65e48c6ef03e84ffa42",
+    "content_hash": "6e2216b3484341e8feecb300094948f46b30aba44bce6de483ec21b339d7433a",
+    "precanonical_content_hash": "4ba9886282e125806a39ba2df0c9226982475becd317ed81488677163e5a0ff3",
+    "skill_md_hash": "c9b8ea96060f6162508dccc0035de1b5b71d9987611f75406a0c213e37e11feb",
+    "version_metadata_sha256": "e0948edda54be0848a90af25a1cf9b5beab5ff1ae710c066c9548bb28b627055"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/zjianru/skills/web-search-pro",
+    "claim_id": "053b1650b9b823337be947df23115d7f217f9bc19433cdbdd6d65e5e633dfdbe",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "web-search-pro",
+        "url": "https://clawskills.sh/skills/zjianru-web-search-pro"
+      }
+    ],
+    "owner_handle": "zjianru",
+    "owner_id": "s1792j95fyjdr7cxz6r21mqk3n83y22d",
+    "published_at": 1773473923731,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779962163326,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779962163326,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is live search, extraction, crawling, mapping, and research packs, and the implemented Node commands match that scope.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Invocation keywords and commands are broad, but they align with web search, news, docs lookup, and research use cases; no hidden role-changing or prompt-injection behavior was found.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package is a code-backed Node skill pack with no remote installer, curl-to-shell bootstrap, or unexpected install-time mutation.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Outbound requests and optional API keys are proportionate for a federated search tool. Users should understand that configured providers receive the searches, URLs, and extraction requests sent through them.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill writes cache and provider health state under the disclosed .cache/web-search-pro directory; no privilege escalation, background worker, or unbounded persistence was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: URL extraction can route requested URLs to Tavily or Exa when those providers are configured, but this is aligned with the documented extract feature and the skill also provides a no-key Safe Fetch baseline with private-network blocking.\n[SQP-2] expected: Federated search can send a query and filters to multiple configured providers, but federation is disabled by default in config and exposes provider planning/routing details when used.\n[SQP-2] expected: Research tasks receive environment context for internal routing and provider selection; artifact review found providers reading named documented credentials rather than serializing or transmitting the full environment.\n[suspicious.env_credential_access] expected: Provider API keys are documented optional credentials and are used to authenticate to the corresponding search providers, which is expected for this skill.\n[suspicious.exposed_secret_literal] unexpected: The cited Perplexity code assigns an apiKey field from environment-derived values; it does not show a hardcoded secret literal.",
+          "guidance": "Install this if you want an agent to perform live web search and retrieval. Avoid submitting private/internal URLs or secret-bearing query strings, and configure only the provider API keys and endpoints you are comfortable sending search queries, URLs, and retrieved content to.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent web search skill that uses expected network calls and optional provider API keys, with no artifact-backed evidence of deception, destructive behavior, or unrelated data access.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779962092299,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 30,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: web-search-pro\nVersion: 2.1.4\n\nThe web-search-pro bundle is a legitimate and well-architected web search and research tool for AI agents. It implements a federated search system supporting multiple providers (Tavily, Exa, Brave, etc.) and includes a robust security boundary in `scripts/lib/url-safety.mjs` and `scripts/lib/web-fetch.mjs` to prevent SSRF attacks by blocking access to localhost, private IP ranges, and cloud metadata services. While `scripts/lib/http-client.mjs` utilizes `curl` via `execFile` for network requests, it does so without spawning a shell, and the overall logic is strictly aligned with the stated purpose of providing structured retrieval and research capabilities.",
+          "checkedAt": 1779162403755,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "6eb015a4829519af1fe962c45b344eb3cc96d9c6394d231979ff41fb6e6faf6e",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6eb015a4829519af1fe962c45b344eb3cc96d9c6394d231979ff41fb6e6faf6e"
+    },
+    "slug": "web-search-pro",
+    "source_type": "clawhub",
+    "version": "2.1.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

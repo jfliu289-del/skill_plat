@@ -1,0 +1,137 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.6607,
+    "domains": [
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C07",
+    "reasons": [
+      "category:C07:phrase:pull request",
+      "category:C07:token:review",
+      "category:C08:token:github",
+      "category:C11:token:project",
+      "cross-tag:code-review",
+      "cross-tag:review"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C08",
+      "C11"
+    ],
+    "stages": [
+      "validate"
+    ],
+    "tasks": [
+      "review"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "0d97a734ae9b65ac953a92d5b3fd1ca64420ee88cc7e1e313a675ef1989e11a0",
+    "content_hash": "c94c02f177bfd1423fbf5d02c672c81e77c9ff072d9861c7517c165f58b07d27",
+    "precanonical_content_hash": "4ca9b53a0b331832c44d553d39cff22969ee6552428c7ec64ad72b7f5d7eb314",
+    "skill_md_hash": "fa572bba13876df02bf7db003c41258d91525af9ecf2fb1d9c57600327aa36e6",
+    "version_metadata_sha256": "f7e7f304e72d0409c39a9dfa7d5d289027cc5192f1fdde9495c4b13e97e9b1ba"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/patrob/skills/repo-pr-triage",
+    "claim_id": "70b5adf513f6b5cf8edfd591b2021d000d5f1970af77b3a58bdd05f76bafc064",
+    "index_entries": [
+      {
+        "index_path": "categories/git-and-github.md",
+        "label": "repo-pr-triage",
+        "url": "https://clawskills.sh/skills/patrob-repo-pr-triage"
+      }
+    ],
+    "owner_handle": "patrob",
+    "owner_id": "s17c36n6ha1dq8ramstvsarbws885w65",
+    "published_at": 1771259768951,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971407259,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971407259,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The artifacts mostly fit the stated purpose: onboarding fetches repo context, scanning scores open PR metadata, and reporting writes markdown triage files. The description overstates issue triage and deeper review capability, since the executable workflow is PR-focused and heuristic.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The workflow is user-invoked and bounded to a provided repo URL and local paths, but fetched README, release, PR title, body, and author text are reused in prompts and reports, so downstream agents should treat that content as untrusted data.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No package install or automatic startup mechanism is present. The skill discloses Python 3.10+ and authenticated gh CLI requirements, but registry-style permission declarations are not present in the artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Using gh CLI and local file writes is proportionate for PR triage. Because gh uses the user's authenticated GitHub session, it may read private repository metadata if the user targets a private repo.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No automatic persistence is installed. SKILL.md includes an optional weekly cron and Telegram example, which would create recurring scans and external summary delivery only if the user configures it.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Shell execution of included Python scripts, gh CLI access, and local output files are disclosed and purpose-aligned; the missing permission declaration is a transparency note, not evidence of hidden behavior.\n[TP4] unexpected: The scanner's mismatch concern is partly supported: the description mentions issues and broader review, while code primarily scores PR metadata heuristically. This is a capability overstatement but not malicious or high-impact mutation.\n[SQP-1] expected: The broad trigger language could cause over-selection, but the documented commands still require a repo URL and produce local triage outputs; this supports guidance rather than Review by itself.\n[SQP-2] expected: The cron and Telegram example is disclosed and optional. It should be used carefully for private repos because summaries may leave the local environment, but no automatic recurring job is installed.\n[P6] expected: Repository-controlled text is embedded into an interview prompt and report markdown. That is expected for repo triage but creates prompt-injection exposure if a downstream agent treats quoted repo content as instructions.\n[VirusTotal-code_insight] expected: The telemetry concerns about prompt/markdown injection are valid as cautionary notes. The gh calls use subprocess argument lists rather than shell=True, and no artifact-backed command injection, credential theft, or destructive action was found.\n[staticScan] expected: Static scan reported clean, consistent with direct review: no obfuscation, hidden network endpoints, destructive filesystem actions, or GitHub mutation commands were found.",
+          "guidance": "Install only if you are comfortable letting it read the target repository through your gh login. Use a least-privilege GitHub account or token, review triage reports before acting, treat README and PR text as untrusted, and avoid the optional cron/Telegram workflow for sensitive private repositories unless the destination and schedule are explicit.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed GitHub PR triage helper that reads repo and PR metadata, writes local reports, and does not show hidden mutation, exfiltration, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971366212,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: repo-pr-triage\nVersion: 1.0.0\n\nThe skill bundle is suspicious due to multiple vulnerabilities. `scripts/onboard.py` is vulnerable to prompt injection, as it embeds unsanitized GitHub repository content (e.g., README, repo description) directly into the `interview-prompt.md` which is then fed to the AI agent. Similarly, `scripts/report.py` is vulnerable to markdown injection, embedding unsanitized PR titles and authors into generated markdown reports, which could lead to secondary prompt injection against the agent. Both `onboard.py` and `scan.py` also lack robust sanitization of user-provided GitHub repository URLs before passing them as arguments to the `gh` CLI, potentially leading to unexpected `gh` behavior or information disclosure.",
+          "checkedAt": 1779164600810,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "fe768e5f7355482c5c0eda916bd2fef1b49d579498239ea59912fd27115de2c2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/fe768e5f7355482c5c0eda916bd2fef1b49d579498239ea59912fd27115de2c2"
+    },
+    "slug": "repo-pr-triage",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,151 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "website"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C06:token:coding",
+      "category:C07:token:testing",
+      "category:C11:token:project",
+      "category:C12:token:management",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:planning",
+      "cross-tag:software-development",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C07",
+      "C11",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "build",
+      "manage",
+      "plan",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "cedbb61f15adf12a243e8fd2515dd393595dce85d54cb289f626ff995e6e0e9b",
+    "content_hash": "11543b3e7d3b15254d08dc843e84bf4b42b7b58177f74a76cd5a77254a2cf774",
+    "precanonical_content_hash": "bd1584c3bb035618c67dc5018e35597a1798b75c4ddf8ac5fbb41484ceb1a12b",
+    "skill_md_hash": "b073e9cf32616d8f0dac83617b66adac29ea1a415b2d30d5a47288a1303c2af0",
+    "version_metadata_sha256": "219473ef29375c376b631316c719cfe773c61598d741388c3eb8b63497b3a3ca"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/shalomobongo/skills/codex-conductor",
+    "claim_id": "15c3a05c2d894b10346a8c71f1b32d3bfafab3d93514bdc48a020204abbf8a72",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "codex-conductor",
+        "url": "https://clawskills.sh/skills/shalomobongo-codex-conductor"
+      }
+    ],
+    "owner_handle": "shalomobongo",
+    "owner_id": "s171d1vhc8c4axz9e09b1e0w7h884nws",
+    "published_at": 1770467129107,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783657667490,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783657667490,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is spec-driven coding orchestration with gates, documentation, packaging, and agent handoffs; the included scripts and references implement that purpose directly.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Instructions ask the user to initialize docs, run gates, update impacted documentation, package the skill, and delegate to agents. These are broad but explicit workflow actions rather than hidden behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No suspicious installer, persistence hook, obfuscation, or automatic execution path is evident in the supplied metadata and artifact layout.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Workspace reads, writes, shell execution, and downstream coding-agent invocation are powerful, but they are expected for a coding workflow orchestrator and are described as user-run commands.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill creates persistent project documentation and orchestrator state files such as AGENTS.md and docs artifacts, but there is no evidence of background persistence, privilege escalation, credential harvesting, or hidden network exfiltration.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: File operations and shell execution are real capabilities, but they are coherent with an orchestration skill and surfaced through explicit scripts and command-driven workflows.\n[SQP-2] expected: The scaffold, documentation update, change-impact, and packaging workflows do write project files or output artifacts; this should be reviewed before use, but the behavior matches the documented purpose.\n[SQP-2] expected: The --no-enforce gate option can weaken workflow integrity, but it appears to be an explicit operator bypass rather than hidden privilege or malicious behavior.\n[P6] expected: run_gate.py forwards failure context into retry prompts for another coding agent, creating a prompt-injection risk from untrusted test or command output; the artifact frames this as repair orchestration and does not show prompt theft, exfiltration, or deceptive use.",
+          "guidance": "Install only if you want a workflow orchestrator that can create or update project documentation, run shell commands, and ask coding agents to make fixes. Use it in a version-controlled workspace, review diffs after scaffold and documentation steps, avoid feeding secrets into test output or failure logs, and treat the --no-enforce gate bypass as an audit exception.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill is a transparent software-delivery orchestration tool whose file writes, shell commands, and delegated-agent prompts are purpose-aligned, with review-worthy operational risks but no artifact-backed deception or exfiltration.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783657655700,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 60,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: codex-conductor\nVersion: 1.0.0\n\nThe skill bundle is designed as a highly structured software delivery orchestrator, emphasizing 'spec-driven development' and rigorous verification. While it utilizes powerful capabilities like shell command execution (`subprocess.run` with `bash -lc` in `scripts/run_gate.py`) and delegates tasks to external AI coding agents, these are transparently aligned with its stated purpose of orchestrating and validating software builds. The `SKILL.md` and supporting documentation include extensive guardrails and explicit instructions to prevent agent misbehavior, such as enforcing spec adherence, verifying documentation updates, detecting assumptions, and even checking for unauthorized file changes via `git status`. There is no evidence of intentional data exfiltration, malicious execution, persistence, obfuscation, or prompt injection against the OpenClaw agent itself; instead, the skill actively implements controls to mitigate risks from the delegated coding agents.",
+          "checkedAt": 1779162021929,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "993b089a80927355001476c1da3d7620585f46faaf29e9043f2ebd507fc10d33",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/993b089a80927355001476c1da3d7620585f46faaf29e9043f2ebd507fc10d33"
+    },
+    "slug": "codex-conductor",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

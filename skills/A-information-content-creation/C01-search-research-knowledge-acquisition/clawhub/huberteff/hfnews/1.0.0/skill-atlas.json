@@ -1,0 +1,124 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:sources",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "discover"
+    ],
+    "tasks": [
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8a9fe752efbcb67e7b8a2954a23904b659b19900b3d8ea7fda8761fe8ecca982",
+    "content_hash": "a900958f3ce11d7bff98d5d964dddb518abe23b9ad1e561c04cccf3cc0d60232",
+    "precanonical_content_hash": "5d3b70534dcac959da88472dabe9ad1dbe9a8e3a37c685e7f66df63157dc1a37",
+    "skill_md_hash": "798ffb095a2fde39e9f053fa52cb13d36f3b85cfa5142bd8f282fb34e9875f41",
+    "version_metadata_sha256": "5a592be1d96d4a9b4f0eab5c22532b3f66fdbf2f4538e671fc6303723b1eff07"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/huberteff/skills/hfnews",
+    "claim_id": "f9aafe5c7db969ce5400b1267936357ed5c5f1281e23e40363d9aaf1655baa24",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "hfnews",
+        "url": "https://clawskills.sh/skills/huberteff-hfnews"
+      }
+    ],
+    "owner_handle": "huberteff",
+    "owner_id": "s17c86gcmjakrgnsxbdeyrqm6d884zqt",
+    "published_at": 1771062085963,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974688672,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974688672,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is fetching and filtering news from listed public sources, and the artifacts implement that with hardcoded RSS/news URLs, headline extraction, category filtering, and blacklist logic.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are limited to running the news command for all or selected categories; no artifact text asks the agent to override user control, access private data, mutate accounts, or persist behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The package uses npm with a lockfile and depends on Puppeteer; the root package has no install script, but Puppeteer itself has an install script, which is expected for that dependency.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to hardcoded public news sites is proportionate, but fetcher.js launches /usr/bin/chromium with --no-sandbox and --disable-setuid-sandbox, reducing isolation when rendering external pages.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Manual inspection found no credential handling, local profile/session access, file indexing, persistence hooks, privilege escalation, destructive actions, or exfiltration behavior.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight] expected: The reported Chromium no-sandbox behavior is present and worth disclosing, but it is tied to browser-based scraping of public news sites and is not accompanied by hidden execution, credential use, persistence, or data exfiltration.\n[SkillSpector] expected: SkillSpector reported no issues; manual artifact review is consistent with a low-risk, purpose-aligned news-fetching skill.\n[staticScan] expected: The stored static scan was clean, and manual inspection found only expected public web/RSS requests plus the Chromium sandbox tradeoff.",
+          "guidance": "Install only if you are comfortable with the skill making web requests to the listed news sites. Prefer running it as a normal unprivileged user, keep Chromium/Puppeteer updated, and consider using the RSS Python script where possible because the JavaScript path disables Chromium sandboxing.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward public-news fetcher, with the main caution that its JavaScript scraper runs Chromium with browser sandboxing disabled.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974651164,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: hfnews\nVersion: 1.0.0\n\nThe `fetcher.js` script uses Puppeteer to launch a Chromium browser with the `--no-sandbox` and `--disable-setuid-sandbox` flags. This disables critical security isolation, making the host system vulnerable to potential remote code execution if a vulnerability exists in Chromium or if any of the hardcoded news sources were to serve malicious content. While the URLs are hardcoded and there's no explicit evidence of intentional malicious behavior like data exfiltration or persistence, this configuration represents a severe security vulnerability.",
+          "checkedAt": 1779081099740,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "cabb02e609ecdc5b6bfb986d32082d81c30ba2a0d4ce8781f502d2443be77ede",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/cabb02e609ecdc5b6bfb986d32082d81c30ba2a0d4ce8781f502d2443be77ede"
+    },
+    "slug": "hfnews",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

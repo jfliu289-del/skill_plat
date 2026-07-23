@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C02:token:communication",
+      "category:C05:token:audio",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C05",
+      "C06",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "80584097e482f8b2f4bd84b6a6eb1d5787f3a67ac8db69042dc7778e3b1abede",
+    "content_hash": "ec179c51a699f48037261db3a06a14787059bf170ff7d4c552a87da21aafa012",
+    "precanonical_content_hash": "c22442795790aa2e724a04443fe8b8ee46e393ea63fc0d0693e3cb4b61c5380a",
+    "skill_md_hash": "05cd2c6a58ea45114a262f966fe9738015ca0f098857d097c0a4add49cce7169",
+    "version_metadata_sha256": "e8cc742b4794c7031e8611e6f4cbe6081070b89c7192741320a9a8b570dfdf41"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/thegovind/skills/azure-ai-voicelive-py",
+    "claim_id": "3f8278db3dbfbd86d3a507b4a35dc65da1b0281d5c21f78ee2671cb46ea7dd3d",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "azure-ai-voicelive-py",
+        "url": "https://clawskills.sh/skills/thegovind-azure-ai-voicelive-py"
+      }
+    ],
+    "owner_handle": "thegovind",
+    "owner_id": "s177vrg50r2ngycghhx4d8f9wh884wmz",
+    "published_at": 1769870973125,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783652763600,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783652763600,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill is clearly about building real-time Azure AI Voice Live applications with bidirectional WebSocket audio, transcription, function calling, and avatar support; these are sensitive capabilities but coherent with the declared purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts provide SDK examples rather than agent override instructions or hidden automation. Function-calling examples use automatic tool choice, so real deployments should validate or gate side-effectful tools.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No install hooks or bundled executables are present; installation guidance is limited to an unpinned pip install of Azure-related packages.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Azure endpoint configuration, Azure credentials or API keys, microphone/audio files, transcripts, and WebRTC media are proportionate for a cloud voice SDK, but users should treat them as sensitive data flows.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background persistence, startup behavior, local indexing, privilege escalation, destructive command use, or hidden credential handling was found; one example writes returned audio to output.pcm as a disclosed local artifact.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The SKILL.md microphone audio and transcript concern is valid privacy guidance, but the artifact openly describes Azure real-time voice streaming and appending microphone audio to the Azure connection, so it is not hidden or purpose-mismatched.\n[SQP-2] expected: The Basic Voice Assistant example streams microphone chunks and prints transcripts as part of an Azure voice assistant; it would benefit from explicit consent guidance, but the behavior fits the skill purpose.\n[SQP-2] expected: The audio file example reads a user-supplied audio path, sends chunks to Azure, and writes response audio to output.pcm; this should be handled carefully, but it is disclosed in the example and aligned with audio processing.\n[SQP-2] expected: The avatar example configures WebRTC output and ICE servers for Azure avatar integration; external media connectivity is expected for that feature and is not disguised.\n[SQP-2] expected: The transcription-only example continuously streams microphone input for speech-to-text; consent and recording indicators should be added by implementers, but this is a core documented use case.",
+          "guidance": "Install only if you intend to build an Azure-hosted voice application. Use least-privilege Azure credentials, avoid hardcoded API keys, obtain consent before recording or streaming speech, minimize sensitive audio and transcripts, protect any generated audio files, and review real function or MCP tools before allowing model-selected calls to perform actions.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a documentation-only Azure voice SDK skill, and its microphone, transcription, credential, and cloud streaming behavior matches its stated purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783652726200,
+          "issueCount": 5,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: azure-ai-voicelive-py\nVersion: 0.1.0\n\nThe skill bundle provides documentation and code examples for integrating with Azure AI Voice Live SDK. All files describe legitimate usage of the SDK, including standard Python package installation (`pip install azure-ai-voicelive aiohttp azure-identity`), Azure authentication methods (environment variables, `DefaultAzureCredential`), and various real-time audio processing scenarios. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, obfuscation, or prompt injection attempts against the OpenClaw agent. The content is clearly aligned with its stated purpose of building real-time voice AI applications using Azure services.",
+          "checkedAt": 1779160462237,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "28b5692ef9022efc9ccc698a5c135dcd48dfd12d98bc4b24c725918a25ae032b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/28b5692ef9022efc9ccc698a5c135dcd48dfd12d98bc4b24c725918a25ae032b"
+    },
+    "slug": "azure-ai-voicelive-py",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "document",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.35,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C03",
+    "reasons": [
+      "category:C02:token:write",
+      "category:C03:token:document",
+      "category:C03:token:pdf",
+      "category:C04:token:data",
+      "cross-tag:data-analysis",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C04"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e81fd0f3435e1fe61c7b5c47de9811466f53f44a857eb33ba1d2450ef0e62108",
+    "content_hash": "d5ae3262c8b643308821e00b256a1f3a140eb76333e3c690ccbc08d719e2a008",
+    "precanonical_content_hash": "dfa86748bf8616fc6f71c463762e9a27157459bb20b500d4e7ed4e9d3a5b1044",
+    "skill_md_hash": "f5000cbc5f11f101a36a6bc7a3408b16bf5323d6c9ca54ee3743cf51963f4b8d",
+    "version_metadata_sha256": "d1e5e271c52bcd8efa4ca7a05cdf25ad07b68cd3d40dc19677d6e4db78abcc48"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tmigone/skills/invoice-generator",
+    "claim_id": "bc730bf97b62c96c2b33cd9ef2bc90981deeab8b46a4ba73be73aafd9a364e01",
+    "index_entries": [
+      {
+        "index_path": "categories/pdf-and-documents.md",
+        "label": "invoice-generator",
+        "url": "https://clawskills.sh/skills/tmigone-invoice-generator"
+      }
+    ],
+    "owner_handle": "tmigone",
+    "owner_id": "s17bv05cswzcr8vp9aamhzh9v5884tg3",
+    "published_at": 1769105817562,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783651229750,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783651229750,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the script: it reads invoice JSON, validates required fields, renders HTML with Handlebars, and converts it to a PDF with weasyprint. One coherence issue is that scripts/generate.sh references assets/invoice.hbs, but that template file is not present in the reviewed artifact, so the package may not run as-is or the missing template would need separate review.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Usage is user-directed through stdin, a local file path, or a named config under INVOICE_DIR; there are no instructions for automatic execution, background agents, account mutation, external posting, or prompt override behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Setup uses npm install plus local binaries node, jq, and weasyprint. package.json uses a caret range for Handlebars while package-lock.json pins the resolved version and integrity, so the supply-chain concern is worth monitoring but not evidence of malicious behavior by itself.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The INVOICE_DIR environment variable is proportionate for storing invoice configs and generated PDFs, but invoice data can include client addresses, tax IDs, and payment amounts, so users should choose a private dedicated directory.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to creating configs and invoices directories and writing generated PDFs under the user-configured INVOICE_DIR; no elevated privileges, startup hooks, credential stores, or long-running workers are evidenced.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SC1] expected: The caret dependency is a supply-chain hygiene issue, but the artifact includes a lockfile with resolved package integrity and this does not create hidden behavior or excessive runtime authority.\n[SC4] expected: Handlebars is purpose-aligned for templating invoices. The scanner's vulnerability claim should prompt dependency review, but the reviewed artifacts do not show attacker-controlled template loading, exfiltration, persistence, or destructive actions that would justify a Review verdict on their own.\n[VirusTotal:clean] expected: VirusTotal telemetry reports no suspicious or malicious detections, consistent with the local-only behavior observed in the artifacts.",
+          "guidance": "Install only if you are comfortable running a local script that processes invoice data and writes PDFs to disk. Set INVOICE_DIR to a private folder, use deterministic installs, review or supply the missing assets/invoice.hbs template before relying on the skill, and keep Handlebars updated if security advisories apply.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a local invoice PDF generator with no evidence of hidden network access, credential use, persistence, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783651142674,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 69,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: invoice-generator\nVersion: 1.0.0\n\nThe OpenClaw skill 'invoice-generator' is classified as benign. The skill's purpose is to generate PDF invoices from JSON data, which it achieves by using `node` with `handlebars` for HTML templating, `jq` for JSON parsing and validation, and `weasyprint` for HTML-to-PDF conversion. All operations are local, involving reading JSON from stdin or local files and writing PDF output to a user-defined local directory (`INVOICE_DIR`). There is no evidence of data exfiltration, malicious execution (e.g., remote payload fetching, arbitrary code execution from untrusted input), persistence mechanisms, obfuscation, or prompt injection attempts in `SKILL.md` that would manipulate the agent into unintended actions. The dependencies listed in `package.json` and `package-lock.json` are standard for the stated functionality.",
+          "checkedAt": 1779159839207,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a1a0ed99af7e3e44ee59bab473348d033cdea2c88edeba29c5808652af97dda0",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a1a0ed99af7e3e44ee59bab473348d033cdea2c88edeba29c5808652af97dda0"
+    },
+    "slug": "invoice-generator",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

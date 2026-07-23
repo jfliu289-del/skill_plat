@@ -1,0 +1,130 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10"
+    ],
+    "stages": [
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4335924b0323084006e04eb44344d847ad1bcee9144de2f324d86ac600b89fa8",
+    "content_hash": "63bd9145bdefb72d74c14197f363294921d2483802e3128c1f99e9162edf6e57",
+    "precanonical_content_hash": "055c27ba94bc2e47c63170628c986a8939f2c63721e9cff22f707ac2f48c21f0",
+    "skill_md_hash": "a3568c0878ca4a1277ca2d9e4a4a2aae289067f798914bcd5f9cffea39f7ae5b",
+    "version_metadata_sha256": "e1dc465804ea4475a29420716d90433edd7707ecf6b7ef2789593356e1db12e3"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/james-southendsolutions/skills/camino-hotel-finder",
+    "claim_id": "bf2c319930673b43efc580e1ef2439a9e0ac6f02d4ebc520a9f450ab622bde3f",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "camino-hotel-finder",
+        "url": "https://clawskills.sh/skills/james-southendsolutions-camino-hotel-finder"
+      }
+    ],
+    "owner_handle": "james-southendsolutions",
+    "owner_id": "s17dekpybzcxf10vsx8arm960n86hhnf",
+    "published_at": 1778699237393,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971752605,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971752605,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is hotel and lodging search, and the only runtime script implements that by building a Camino API query and formatting the JSON response.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use is user-directed through shell or curl examples. The documentation mentions optional companion skills and an x402 payment path, but the included hotel-finder script does not implement payments or hidden actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The docs provide both a broad GitHub install-all command and a specific install command for this skill; the broad command would add more Camino skills than needed, but it is disclosed and user-initiated.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The CAMINO_API_KEY, curl, jq, and outbound request to api.getcamino.ai are disclosed and proportionate for an API-backed lodging search tool, though travel/location queries may be sensitive.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background worker, persistence, file write, privilege escalation, broad local scanning, or unrelated credential access was found; the script reads one JSON argument and the Camino API key at invocation time.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: Shell execution and curl/jq use are part of the advertised workflow and are disclosed in the skill metadata and setup text; this is a transparency note, not a Review-level concern for this small API wrapper.\n[E1] expected: Sending the hotel query and API key to Camino is the core integration behavior and is disclosed; users should treat location and travel searches as data shared with Camino AI.\n[staticScan] expected: Static scan reported clean, and artifact inspection found only SKILL.md plus a small hotel-finder shell script.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with the inspected artifacts, but it was not used as the sole basis for the verdict.",
+          "guidance": "Install the specific hotel-finder skill rather than the whole Camino suite unless you have reviewed the other skills. Use a dedicated Camino API key if possible, keep it private, and avoid submitting confidential addresses, private itineraries, or sensitive travel plans unless you are comfortable sharing them with Camino AI.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward Camino hotel-search helper that sends your lodging search to Camino AI using your Camino API key.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971704720,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: camino-hotel-finder\nVersion: 2.0.1\n\nThe camino-hotel-finder skill is a legitimate tool for searching lodging via the Camino AI API. The shell script (scripts/hotel-finder.sh) correctly handles input validation and URL encoding using jq, and makes authenticated GET requests to a hardcoded API endpoint (api.getcamino.ai). No evidence of data exfiltration, malicious execution, or prompt injection was found.",
+          "checkedAt": 1779164660220,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "1d1e539b55dc073cb23825d1e5b41f5f9ff8fcee8d4bb1205bdb6ca6c9794582",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1d1e539b55dc073cb23825d1e5b41f5f9ff8fcee8d4bb1205bdb6ca6c9794582"
+    },
+    "slug": "camino-hotel-finder",
+    "source_type": "clawhub",
+    "version": "2.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

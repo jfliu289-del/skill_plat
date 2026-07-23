@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C08:token:repository",
+      "category:C09:token:security",
+      "category:C11:token:roadmap",
+      "cross-tag:agent-management",
+      "cross-tag:planning",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C08",
+      "C09",
+      "C11"
+    ],
+    "stages": [
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "plan",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a277d712a8e52bd3e5b410f5fe0ce0b6726a5b5cac8f5c3a695e584515fc9b1c",
+    "content_hash": "3fb31a4eb10c072b4dc43e3343ed76c16921436a219d21c4c22eba4793581df4",
+    "precanonical_content_hash": "4f096650d379374a782c607872be52ff02696d635405f4354e50ead2f4bd498a",
+    "skill_md_hash": "f0fbd62ff031d8d6533a1c9b3806350a52d2581129df19751d23b4425b1222dd",
+    "version_metadata_sha256": "c8c3e02eca7417b15b7b31780b490e236ca6580c58012ed4ceec319200f3ddae"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/anikrahman0/skills/security-skill-scanner",
+    "claim_id": "ca5830502e39339845ee306507e90dcedb254460c05fb798f2060037307a959e",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "security-skill-scanner",
+        "url": "https://clawskills.sh/skills/anikrahman0-security-skill-scanner"
+      }
+    ],
+    "owner_handle": "anikrahman0",
+    "owner_id": "s17297z3ygnss4t38p8816909n84cfpg",
+    "published_at": 1771258854102,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779961524842,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779961524842,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose and implementation align: scanner.js reads user-selected files and applies pattern checks. The included malicious skill is a test/example fixture, not the package's operational instructions. The scanner is noisy and produced false positives in its own tests, so its results should be treated as advisory.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Directory mode recursively reads .md, .js, and .ts files under the user-supplied path. That is coherent for scanning skill packages and partly disclosed by batch-scan documentation, but broader than markdown-only wording in some comments and docs.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "package.json has no dependencies and no preinstall/postinstall hooks; the only scripts are test and scan, and CLI use requires an explicit user command.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The scanner performs local file reads on paths the user provides and has no implemented outbound network, telemetry, or code execution of scanned files. Users should avoid pointing recursive scans at unrelated private directories.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background worker, persistence mechanism, privilege escalation, credential storage, file mutation, or autonomous execution was found in the operational artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SDI-1] expected: The malicious-looking productivity skill is intentionally included as a detection fixture. The scanner.js recursive .js/.ts directory scan is broader than some wording implies, but it remains local, read-only, and user-directed.\n[SDI-2] expected: Credential theft and sensitive-file access appear in examples/malicious-skill/SKILL.md as test material, not in scanner.js runtime behavior.\n[SDI-4] expected: Deceptive framing exists inside the malicious example fixture. The scanner's own documentation generally discloses offline, read-only scanning, with a minor scope mismatch around code-file scanning.\n[SQP-1] expected: The vague productivity wording belongs to the malicious sample skill, not the reviewed security scanner's metadata.\n[SQP-2] expected: Unsafe downloads, credential prompts, exfiltration examples, and shell execution are fixture content used to validate scanner detections. The only operational scope concern is recursive local reading of matching files in user-selected directories.",
+          "guidance": "Reasonable to install for manual security review, but do not treat its output as a definitive verdict. Run it on specific skill files or narrow skill directories, review false positives in context, and be aware that recursive scans read markdown, JavaScript, and TypeScript files under the path you provide.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a local, read-only security scanner; the scary malware content is an example fixture, not behavior the scanner performs.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779961473438,
+          "issueCount": 12,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: security-skill-scanner\nVersion: 2.0.0\n\nThe OpenClaw skill bundle 'security-skill-scanner' is a security tool designed to detect malicious patterns in other OpenClaw skills. Its own code (`scanner.js`) and documentation (`SKILL.md`, `README.md`, `CONTRIBUTING.md`) consistently describe a read-only, offline, no-telemetry scanner. The `SKILL.md` instructions for the AI agent are clear and focused on scanning, with no evidence of prompt injection. The `examples/malicious-skill/SKILL.md` file, while containing highly malicious patterns (e.g., external binary downloads, credential harvesting, sensitive file access, shell command execution, data exfiltration to `data-collector.xyz`, `analytics-service.tk`, `stat-collector.info`, `malicious-cdn.ml`), is explicitly provided as a test case for the scanner's detection capabilities, not as part of the scanner's operational logic or intent. The project's purpose is to identify and warn about such malicious behaviors, not to perform them.",
+          "checkedAt": 1779162337738,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a5f1bc7e16ed94657819831e00afc0971bdf6c9d60c44982f36e2b04d314f433",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a5f1bc7e16ed94657819831e00afc0971bdf6c9d60c44982f36e2b04d314f433"
+    },
+    "slug": "security-skill-scanner",
+    "source_type": "clawhub",
+    "version": "2.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

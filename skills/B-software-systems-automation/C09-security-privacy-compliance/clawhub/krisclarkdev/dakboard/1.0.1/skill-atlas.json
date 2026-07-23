@@ -1,0 +1,152 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "security-professional"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:data",
+      "category:C09:token:privacy",
+      "category:C09:token:security",
+      "category:C10:token:model",
+      "category:C19:token:device",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C04",
+      "C10",
+      "C19"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ff4bcc0679ee46327131b282f29d382562de0934e2584515a1c6443dc2804fcc",
+    "content_hash": "56632f4ce8984ac31ff944b50d433ea2a6aa4eb85b3921bb205a2514dd20e2d0",
+    "precanonical_content_hash": "aca3dc29c66bb2ba2e64c90b31374e1f9836b78f90bc4d513a2884052854a0db",
+    "skill_md_hash": "9d6587c9b2cf298723f1253b6f86fefe2795b7cbef804daa5d8236d7997d91ae",
+    "version_metadata_sha256": "18b9ca0e59f69e94b277b915f0f28c30223d398f566cf9b80754f0c53702c87e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/krisclarkdev/skills/dakboard",
+    "claim_id": "3e4a2fe6d67e4665e83983a1ca2b4aa17c05f9d3e25021e465d3e5e5008716e5",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "dakboard",
+        "url": "https://clawskills.sh/skills/krisclarkdev-dakboard"
+      },
+      {
+        "index_path": "categories/gaming.md",
+        "label": "dakboard",
+        "url": "https://clawskills.sh/skills/krisclarkdev-dakboard"
+      }
+    ],
+    "owner_handle": "krisclarkdev",
+    "owner_id": "s17f6jaxejwk7nr5v0c1m78d5n8847mh",
+    "published_at": 1771692732047,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779947345426,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779947345426,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill can list devices and screens, update a device screen, and push metrics or JSON data; these are account actions, but they match the stated DAKboard-management purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The runtime commands are explicit and limited to DAKboard devices, screens, metrics, and fetch data, with no instructions to access unrelated services or local files.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The artifact contains a markdown skill file and one standard-library Python script; there is no installer, package download, or hidden setup path.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The DAKBOARD_API_KEY and outbound calls to dakboard.com are disclosed and proportionate, though the script places the API key in the request URL query string, which can expose it in logs.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background execution, privilege escalation, local file reads, or local file writes were found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight] expected: Confirmed the script appends the DAKBOARD_API_KEY to DAKboard API URLs; this is a credential-handling risk, but it is sent only to the disclosed DAKboard endpoint and does not show hidden exfiltration.\n[SkillSpector] expected: The supplied SkillSpector report is clean with no issues.\n[staticScan] expected: Metadata reports no static scan findings, and artifact review found only the disclosed CLI and DAKboard API calls.",
+          "guidance": "Install only if you are comfortable giving the skill a DAKboard API key that can update screens and push display data. Avoid passing sensitive personal data or secrets as metrics or fetch content. Because the key is placed in the request URL, use a limited or dedicated key if possible and rotate it if you suspect logs or shared environments exposed it.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill transparently uses your DAKboard API key to manage DAKboard screens and push display data, with no evidence of hidden or unrelated behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779947298367,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: dakboard\nVersion: 1.0.1\n\nThe skill is classified as suspicious due to the handling of the `DAKBOARD_API_KEY`. While the `SKILL.md` and the Python script's internal manifest transparently declare that the API key is sent to `https://dakboard.com/api/`, the `scripts/dakboard.py` file implements this by appending the API key directly as a URL query parameter (`?api_key=...`) for every request. This method of transmitting sensitive credentials is a significant security vulnerability, as API keys in URLs can be logged by web servers, proxies, and network monitoring tools, increasing the risk of exposure and compromise of the DAKboard account. There is no evidence of intentional malicious behavior such as exfiltration to unauthorized endpoints, local file system manipulation, or prompt injection against the agent.",
+          "checkedAt": 1779165982740,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "88f2a8d1231d86bfd6b5410ca8a9f37be47ffa5e238f023fd63bac11d17d9d93",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/88f2a8d1231d86bfd6b5410ca8a9f37be47ffa5e238f023fd63bac11d17d9d93"
+    },
+    "slug": "dakboard",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

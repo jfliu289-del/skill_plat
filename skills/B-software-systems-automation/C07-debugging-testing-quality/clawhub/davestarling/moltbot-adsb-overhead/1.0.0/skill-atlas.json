@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C07",
+    "reasons": [
+      "category:C07:token:test",
+      "category:C18:token:home",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C18"
+    ],
+    "stages": [
+      "validate"
+    ],
+    "tasks": [
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "7574af8852196de314a8d3c0de7a7f1405f1dfa92ab27e6d7df632480d2f1f74",
+    "content_hash": "1c2000244acaeb7c761ec06034cd988942cf7c9750a596dd0fc450c4be42949f",
+    "precanonical_content_hash": "cb49844702d334b7561ce51d43d7501bcdff53a6a5b2c6cb308b89a5fd726397",
+    "skill_md_hash": "68e69dbd12ad56062657de24a233e388601712a40450a7256446b55b722041d9",
+    "version_metadata_sha256": "1300d4b5307ca5c2d0bb99a3dab76fe32a8317a9f4e78d7dac8747fc697fd3fc"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/davestarling/skills/moltbot-adsb-overhead",
+    "claim_id": "910db2fa1328cd58c56bfb4ddfab91e63f99dcc3ff95db44d34682b6abc905b8",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "moltbot-adsb-overhead",
+        "url": "https://clawskills.sh/skills/davestarling-moltbot-adsb-overhead"
+      },
+      {
+        "index_path": "categories/moltbook.md",
+        "label": "moltbot-adsb-overhead",
+        "url": "https://clawskills.sh/skills/davestarling-moltbot-adsb-overhead"
+      }
+    ],
+    "owner_handle": "davestarling",
+    "owner_id": "s17apwn8xbv293fb55xn9nxch983ksby",
+    "published_at": 1769960652917,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783653640259,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783653640259,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts match the stated aircraft-overhead alert purpose: they read an SBS/BaseStation feed, calculate distance from configured home coordinates, apply cooldowns, optionally add tar1090/Planespotters context, and send alerts through Clawdbot.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "SKILL.md focuses on the local feed, state file, cron, and WhatsApp flow; README.md more fully discloses optional tar1090 HTTP enrichment, Planespotters photo lookups/downloads, local caching, and tracking links.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no hidden installer or automatic setup; the README instructs the user to create a config file and manually add a user crontab entry.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Local TCP access, optional HTTP enrichment, optional external photo lookup/download, local file writes, and Clawdbot messaging are proportionate to this alerting use case, but the config can contain home coordinates and a phone target, and photo lookup discloses observed aircraft hex values to Planespotters.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to disclosed state/config/lock/photo files under ~/.clawdbot/adsb-overhead and an optional user-created cron job; it uses existing Clawdbot messaging authority but does not add privilege escalation or hidden background workers.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill does use command execution, network access, and local file writes, but those operations are visible in the artifacts and fit the cron-based alerting purpose.\n[TP4] expected: The extra enrichment, image download, caching, and filtering behavior is disclosed in README.md and config examples; it is not hidden or unrelated, though SKILL.md is less complete than README.md.\n[SDI-1] expected: Planespotters lookup and tracking links expand beyond purely local detection, but they are optional enrichment features disclosed in the README.\n[SDI-2] expected: Photo downloading is optional, stored in a configured local photo directory, and guarded by HTTPS, image content checks, and a size limit; it still increases network and storage exposure.\n[E1] expected: If photos are enabled, ICAO hex identifiers are sent to api.planespotters.net; that is a real external data flow but is disclosed and limited to alert enrichment.\n[OH1] expected: Forwarding alert captions and downloaded media to the Clawdbot CLI is the notifier's core function; the code uses subprocess arguments rather than a shell, and the media path normally originates from the bundled checker, not arbitrary remote input.",
+          "guidance": "Before installing, confirm the SBS host, home coordinates, radius, cooldown, photo setting, and WhatsApp target. Disable photo lookup if you do not want observed aircraft identifiers sent to Planespotters. Keep the config private because it can reveal your location and messaging target, and remove the cron entry or set enabled=false when you no longer want ongoing monitoring.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to do what it says: monitor a local aircraft feed, optionally enrich alerts, and send configured WhatsApp notifications.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783653596292,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: moltbot-adsb-overhead\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle is designed to detect overhead aircraft from a local ADS-B feed and send notifications via Clawdbot messaging. All file system, network, and process execution operations (e.g., connecting to local TCP feed, fetching data from planespotters.net, executing local Python scripts, and using the `clawdbot message send` CLI) are directly aligned with this stated purpose. There is no evidence of intentional harmful behavior such as data exfiltration, unauthorized command execution, persistence mechanisms, or malicious prompt injection attempts against the agent in SKILL.md or README.md. The `download_image` function in `sbs_overhead_check.py` includes a URL allowlist and size limits, demonstrating a focus on security.",
+          "checkedAt": 1779160696891,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "23db14928df36e1dfc87f6f91fe43cee8f57fb5696e257e2413d4ae53fe27692",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/23db14928df36e1dfc87f6f91fe43cee8f57fb5696e257e2413d4ae53fe27692"
+    },
+    "slug": "moltbot-adsb-overhead",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

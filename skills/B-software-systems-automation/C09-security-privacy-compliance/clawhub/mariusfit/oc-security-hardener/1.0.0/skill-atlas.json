@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "configuration"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.875,
+    "domains": [
+      "infrastructure",
+      "security"
+    ],
+    "needs_review": false,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C08:token:deployment",
+      "category:C09:phrase:security audit",
+      "category:C09:token:audit",
+      "category:C09:token:secure",
+      "category:C09:token:security",
+      "cross-tag:deployment",
+      "cross-tag:security",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [],
+    "stages": [
+      "deliver",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "deploy",
+      "operate",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "139eb832debbf4240770666fabd9156704f86f8967fb40ce74d03beca65cc77c",
+    "content_hash": "2595566f5a7671408973d31ac345a4d35da98c376bce26f9e04b7b5ba8a6433b",
+    "precanonical_content_hash": "f5211ec3cdaa3dd79097fc592acc01052e53614435a3f819d221f44692172076",
+    "skill_md_hash": "f6abc8fee8c0088601dddfa7713048e6a224a6ec7410a415194e17eb41c4794f",
+    "version_metadata_sha256": "814617a701c94cb20616c9dac33b54e62f7235a514212b561a2536190b6904ff"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/mariusfit/skills/oc-security-hardener",
+    "claim_id": "ccd7655443239b1b63ee36f6e07b67dc80b7337ab7b16c10634050432625d051",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "oc-security-hardener",
+        "url": "https://clawskills.sh/skills/mariusfit-oc-security-hardener"
+      }
+    ],
+    "owner_handle": "mariusfit",
+    "owner_id": "s17en27tt4m76ranka73sgtdfd884sb7",
+    "published_at": 1771878031536,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779953985758,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779953985758,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose is to audit and harden OpenClaw configuration, and the script implements local checks for gateway binding, auth flags, exec sandbox settings, agent permissions, file permissions, exposed keys, and reports.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Commands are explicit, including read-only audit/report/secret-scan modes and a separate fix command; however, fix applies changes immediately once run and has no dry-run or interactive confirmation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Artifacts consist of SKILL.md, README.md, _meta.json, and a Python script; no install-time execution, dependency installation, hidden downloader, or background setup was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Reading OpenClaw config and detecting API keys is sensitive but proportionate for a security hardener; detected secrets are masked in output and no network or exfiltration behavior appears in the script.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The fix command persistently edits openclaw.json and chmods openclaw.json/.env to 600, creating a JSON backup first; users should be aware that it changes live configuration and the backup may contain the original config contents.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill does not declare explicit permission metadata, but the file read/write and local command examples are plainly tied to the documented OpenClaw hardening workflow and are not hidden or unrelated.\n[SQP-2] expected: The auto-fix path really does modify configuration and permissions without an extra prompt, but this is documented as the fix command, is user-invoked, and creates a backup; this is an operational caution rather than evidence of malicious behavior.\n[VirusTotal-code_insight] expected: VirusTotal telemetry reported no detections and described the behavior as local, transparent hardening with masked secret output; this supports but does not alone determine the benign verdict.",
+          "guidance": "Install this only if you want a local OpenClaw configuration hardening helper. Start with the read-only audit or report commands, review the exact findings, and run fix only when you are comfortable with persistent changes to gateway binding, auth options, exec sandboxing, and file permissions. Treat reports and backup files as sensitive because they can reveal security posture and may include original configuration contents.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed local OpenClaw security auditing tool whose write actions are user-invoked and purpose-aligned, with operational cautions around auto-fix behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779953955822,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: oc-security-hardener\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills bundle 'oc-security-hardener' is designed for auditing and hardening OpenClaw configurations. The `SKILL.md` and `README.md` clearly describe its purpose, which aligns with the Python script's functionality. The `scripts/hardener.py` script identifies exposed API keys (masking them in output, not exfiltrating), checks and fixes file permissions (using `os.chmod` on specified config files), and modifies `openclaw.json` to apply security best practices, always creating a backup first. There is no evidence of data exfiltration, unauthorized remote execution, persistence mechanisms, or prompt injection attempts against the agent. All actions are transparent, documented, and intended for security improvement.",
+          "checkedAt": 1779166583819,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "8f453ed457cb98295157d1a66bf7e52f19455ac084e23975d67e1e1aa6c8278f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8f453ed457cb98295157d1a66bf7e52f19455ac084e23975d67e1e1aa6c8278f"
+    },
+    "slug": "oc-security-hardener",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

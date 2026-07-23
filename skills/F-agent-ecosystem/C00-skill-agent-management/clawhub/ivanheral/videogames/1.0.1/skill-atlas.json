@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:lookup",
+      "category:C05:token:video",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:design"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C05",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "design",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "c4fe0503adba6d49431770a045d20b40a66ec4ae78a4b3150c494ad44c8f70ec",
+    "content_hash": "6ba935b33951ecfd0f179af44b1650336083ec5923678f3c3d6fedf2d2084cc8",
+    "precanonical_content_hash": "0b9246c1217323f041e78cf0469ec97f5e4a0347a86bcf7d989c9e9772cc4b7a",
+    "skill_md_hash": "a907fe45b3269c3d3e2126aa5c2252ec9744bec21203d7467945c211385b513b",
+    "version_metadata_sha256": "1010a1ac3743419348089d01568c2b8c1133c451e9412ecf43eee5e612ec71f9"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/ivanheral/skills/videogames",
+    "claim_id": "811e74c7f4dec687f1f3b18773d7ec09be49c471c00e42342edbb5ef00db26d3",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "videogames",
+        "url": "https://clawskills.sh/skills/ivanheral-videogames"
+      }
+    ],
+    "owner_handle": "ivanheral",
+    "owner_id": "s1787cwpzfajeqpk81fja592a9884a8y",
+    "published_at": 1771272839516,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968621021,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968621021,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose matches the implementation: Steam, CheapShark, ProtonDB, and HowLongToBeat-related lookups for games, pricing, compatibility, reviews, news, rankings, achievements, and recommendations.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Behavior is exposed through explicit CLI subcommands; no hidden prompt manipulation, autonomous execution, destructive action, credential collection, account mutation, or unrelated local data access was found.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation is standard ClawHub/manual clone plus optional chmod, with no package installation. There is a minor metadata inconsistency: _meta.json lists version 1.1.0 while SKILL.md and registry context list 1.0.1.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to public gaming APIs is necessary for the stated purpose. The skill reads only non-secret configuration environment variables for language, currency, and country code.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill writes a 24-hour JSON response cache under ~/.openclaw/skills/videogames/.cache, which is scoped and purpose-aligned but should be understood as local persistence of lookup results.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The concern about undeclared network, file, and environment use is partially supported by the code, but the accesses are limited to public API requests, non-sensitive configuration variables, and a scoped local cache; this is proportionate to the game lookup purpose.\n[TP4] expected: An older metadata entry flagged broader Steam features than the short SKILL.md summary, but the README documents those features and the code implements game-information retrieval rather than unrelated or hidden behavior.\n[staticScan] expected: Static scan reported no suspicious findings, and manual inspection found no shell execution, eval/exec use, broad filesystem indexing, credential handling, deletion, or exfiltration logic.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with manual artifact review; it was treated only as supporting telemetry.",
+          "guidance": "Reasonable to install for normal game information and deal lookups. Be aware that game names or Steam app IDs you query are sent to public gaming services, and recent API responses may be cached locally for about 24 hours.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to be a straightforward video-game lookup tool that queries public gaming services and keeps a limited local cache.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968589032,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: videogames\nVersion: 1.0.1\n\nThe OpenClaw AgentSkills skill bundle 'videogames' is classified as benign. All network requests are directed to legitimate, well-known gaming APIs (Steam, CheapShark, ProtonDB, HowLongToBeat) for its stated purpose of providing game information. The `scripts/core/config.py` module reads environment variables (`STEAM_LANGUAGE`, `STEAM_CURRENCY`, `STEAM_CC`) for configuration, but these are not exfiltrated. A local cache is created in `~/.openclaw/skills/videogames/.cache` by `scripts/core/network.py`, which is a standard and safe practice. There is no evidence of prompt injection attempts in `SKILL.md` or `README.md`, nor any malicious code execution, data exfiltration, or persistence mechanisms.",
+          "checkedAt": 1779163050293,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "39ce57c96e9760f391446dab502faba06c4b8d927be836317dc4985ef60d9d8b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/39ce57c96e9760f391446dab502faba06c4b8d927be836317dc4985ef60d9d8b"
+    },
+    "slug": "videogames",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

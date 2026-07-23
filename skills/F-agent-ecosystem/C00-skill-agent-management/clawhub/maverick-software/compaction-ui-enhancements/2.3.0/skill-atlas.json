@@ -1,0 +1,129 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:plugin",
+      "category:C06:token:backend",
+      "category:C10:token:model",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C10"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "decca55964b7937ff33d6cf621d7253ec4d21129b72732ddc38325bfca9d4f88",
+    "content_hash": "7e310cb9d879fc47e4ae7bc4130a40a6f995a27a6089b5bdec684d01e51dd5d3",
+    "precanonical_content_hash": "ced77cf6d2ae4ceb95a7d64f4d51774812aa840b3b259eb5c13e778760b6e547",
+    "skill_md_hash": "8d1463d7ba0dd40f5311f0800bd2a5725435ba7e815b2e0bb6957fa49ae3eee7",
+    "version_metadata_sha256": "bef475548dfa7f2df58b876eed3925aaceb5791cc18411a17c5ca138c05ff1f4"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/maverick-software/skills/compaction-ui-enhancements",
+    "claim_id": "0552e3c3426edbb1792ff84b9e11652df7d823da8bd28ed26c09bdf030295026",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "compaction-ui-enhancements",
+        "url": "https://clawskills.sh/skills/maverick-software-compaction-ui-enhancements"
+      }
+    ],
+    "owner_handle": "maverick-software",
+    "owner_id": "s172zy52hz8d9fxcmyr9padghd842s7c",
+    "published_at": 1773021588859,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779955516007,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779955516007,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently target memory compaction, token gauges, model selection, auto-triggering, settings, and result review for OpenClaw chat sessions. No unrelated exfiltration, destructive payload, obfuscation, or command execution was found.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Compaction uses the existing LLM compaction path and can include custom compaction instructions; this is disclosed and aligned with the feature, but it should be limited to trusted local/session callers because it can influence what is retained in summaries.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains SKILL.md plus reference TypeScript snippets and diffs, with no standalone installer, package script, hidden downloader, or persistence mechanism outside the described OpenClaw UI/backend changes.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill uses the same chat auth/provider chain and passes session/workspace context to the compaction engine. That is proportionate for an OpenClaw session compaction feature, but it may create extra model-provider calls and expose conversation-derived content through the same path as chat.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Settings and last-compaction metadata are stored in {agentDir}/compaction-config.json; full summary text is opt-in, while auto-compaction defaults to enabled at a 60 percent threshold. The artifacts disclose these behaviors, though privacy wording could be clearer.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] expected: The LLM-based compaction path, model selection, and session context are expected for the advertised compaction feature. The workspaceDir parameter is a notable scope caveat, but the artifacts do not show independent file harvesting or exfiltration.\n[SDI-2] expected: Forwarding custom instructions is disclosed as coexisting with /compact instructions. This is a prompt-control surface for summary quality, so it should remain restricted to trusted local UI/RPC flows, but it is not hidden or purpose-mismatched.\n[SQP-2] expected: Automatic compaction after final chat events and optional local summary storage are described in SKILL.md and implemented in the references. The lack of stronger privacy warnings is a user-guidance issue rather than evidence of malicious behavior.\n[SQP-2] expected: Persisting last-result metadata and optional summary text is explicitly documented with the config file path and an example. Summary storage defaults off, with clear and view controls in the settings UI.",
+          "guidance": "Install only if you want OpenClaw to compact chat context automatically when token usage is high. Review the Compaction settings after installation, disable auto-compaction if you want manual control, leave result storage off unless you need saved summaries, and remember that compaction can send conversation-derived content through your configured chat model/auth provider.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill appears to provide the advertised OpenClaw chat compaction UI, with disclosed privacy and session-state tradeoffs users should understand.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779955467492,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 65,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: compaction-ui-enhancements\nVersion: 2.3.0\n\nThe bundle implements a memory compaction and management system for the OpenClaw UI, providing features like token usage gauges, automated background compaction, and a dedicated settings tab. The code follows standard patterns for OpenClaw skills, using local file I/O for configuration (compaction-config.json) and standard RPC methods for session interaction. The instructions provided to the AI agent in SKILL.md and compact-summary-injection.ts are strictly functional, directing the agent to generate narrative summaries of chat history to reduce context window usage, with no evidence of malicious prompt injection, data exfiltration, or unauthorized execution.",
+          "checkedAt": 1779166681540,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "d81db79cde7f38b89983e66187108b55458d7bc1604f12a779daf67fbc2e08c6",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d81db79cde7f38b89983e66187108b55458d7bc1604f12a779daf67fbc2e08c6"
+    },
+    "slug": "compaction-ui-enhancements",
+    "source_type": "clawhub",
+    "version": "2.3.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

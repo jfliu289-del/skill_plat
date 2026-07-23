@@ -1,0 +1,136 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C01:token:research",
+      "category:C09:token:security",
+      "cross-tag:agent-management",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C09"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "81445462abb7392cc7e71bfc4002c58a2b99ecdb6a15a9cb68d642daf0f18844",
+    "content_hash": "2365ceeac5e46aa6ca34efd27370a36f8619c6be1ba18b307a16fc440c75e49d",
+    "precanonical_content_hash": "24455257453bb36f5f4fecf40e52d2ea8ac35aec333c123582178f0ef70e8f20",
+    "skill_md_hash": "fc3d678096367425f8baa1c8c451ab27aa85bcd74a9df59d1a180ec91718577d",
+    "version_metadata_sha256": "f6716b83c716de5a4eeb5ff22d9b96d35715c461458a84226ee1f8dff7a21bd3"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/saikatkumardey/skills/html2md",
+    "claim_id": "5417078579e848c527444ca18be320568208e2740ad2fee5d5fa9deb25811003",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "html2md",
+        "url": "https://clawskills.sh/skills/saikatkumardey-html2md"
+      }
+    ],
+    "owner_handle": "saikatkumardey",
+    "owner_id": "s177qgtrwxk7bz7x69z1k2m9gx88574q",
+    "published_at": 1771381946852,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972759875,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972759875,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The declared purpose is HTML-to-markdown conversion, and the code implements URL fetch, local file input, stdin input, Readability extraction, Turndown conversion, token truncation, and stdout/JSON output consistent with that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill can fetch arbitrary user-supplied URLs and read arbitrary user-supplied file paths, but those capabilities are clearly documented, purpose-aligned, and accompanied by explicit SSRF, file-read, and shell-invocation guidance.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses standard npm install plus npm link to expose a global CLI. The package has no install lifecycle scripts, but it does rely on npm dependencies and normal Node supply-chain trust.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access and local file reads are proportionate for a converter that handles URLs and files. There is no declared credential use, environment-variable access, telemetry, analytics, or broad local indexing.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The only persistence is the expected linked CLI command. The artifacts show no background workers, startup hooks, privilege escalation, modification of other skills, or durable agent-behavior changes.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight] expected: The SSRF and arbitrary-file-read concerns reflect real capabilities, but they are expected for this tool, disclosed in the docs, user-directed, and not paired with hidden exfiltration or automatic execution.\n[SkillSpector] expected: SkillSpector reported no issues; this aligns with the artifact review but was not treated as determinative.\n[local_static_review] expected: Static inspection found fetch() and readFileSync() use, no child-process execution in the tool, no write/delete operations, no credential access, no telemetry, and no package install scripts.",
+          "guidance": "Install only if you are comfortable with a CLI that can fetch any URL it is given and read any file path it is given. Do not pass untrusted user-controlled URLs in sensitive networks, and avoid pointing --file at secrets or private files unless you intend their contents to be converted and shown in output.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it claims: it converts user-provided HTML, URLs, or files into markdown without hidden persistence or exfiltration behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972733157,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: html2md\nVersion: 1.0.1\n\nThe skill `html2md` is classified as suspicious due to its inherent capabilities to fetch content from arbitrary URLs and read local files, which could lead to Server-Side Request Forgery (SSRF) and arbitrary file read vulnerabilities if the input is untrusted. While the `SKILL.md` and `references/usage.md` documentation explicitly warn about these risks and advise on safe usage (e.g., input validation, using `execFileSync` to avoid shell injection when calling the tool), the presence of these powerful capabilities without robust internal input sanitization (which is often the responsibility of the calling agent) elevates it beyond benign. There is no evidence of intentional malicious behavior such as data exfiltration, unauthorized command execution, persistence mechanisms, or prompt injection against the agent itself; the documentation is transparent about the tool's functionality and potential risks.",
+          "checkedAt": 1779164900668,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "81445462abb7392cc7e71bfc4002c58a2b99ecdb6a15a9cb68d642daf0f18844",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/81445462abb7392cc7e71bfc4002c58a2b99ecdb6a15a9cb68d642daf0f18844"
+    },
+    "slug": "html2md",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

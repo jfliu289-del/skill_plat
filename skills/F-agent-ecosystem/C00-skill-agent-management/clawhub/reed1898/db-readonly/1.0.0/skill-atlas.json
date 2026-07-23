@@ -1,0 +1,135 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:data",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ca96df08e726d2f613a7e699fb6a74dd54af44b7f69b9bb39b3fdafcad678310",
+    "content_hash": "1bb4b0421d46f4e9d11bbfe0bad21fecc2116a9004ebad0a2e47590cd6aa0fc0",
+    "precanonical_content_hash": "fdcac23c487ad00d3f28aa68d363900282850321cdc24b97fdc95e4ddd2511a6",
+    "skill_md_hash": "d44fddb70b59220cebdfed7f8330c100bac4d7b4c1a881566fecf099f8f51e8d",
+    "version_metadata_sha256": "4c4319b6173336990e4767814bfa19c36e4a9f7014015fa39e8564702c8c60fe"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/reed1898/skills/db-readonly",
+    "claim_id": "77f731978dd5740cf356f72be6991b179638e8b2d52cf866956de9e59b9e8c32",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "db-readonly",
+        "url": "https://clawskills.sh/skills/reed1898-db-readonly"
+      }
+    ],
+    "owner_handle": "reed1898",
+    "owner_id": "s17053w3a6c09bkqzkan106kp1843wcx",
+    "published_at": 1770692551392,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779964141350,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779964141350,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently match the stated purpose: run PostgreSQL or MySQL read-oriented queries and optionally export results. The read-only SQL filtering is best-effort, so least-privilege database accounts remain important.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "SKILL.md limits use to read tasks, tells the agent to refuse write SQL, prefer LIMIT, and avoid printing environment secrets. It also clearly documents export behavior with --out, though it does not constrain output paths.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No installer, remote fetch, package installation, install-time execution, or hidden setup mechanism is present. The skill contains one executable shell script plus documentation.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Using PG*/MYSQL_* environment credentials is expected for database access and is disclosed in SKILL.md. Query results may contain sensitive data, and exports can place that data on disk.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background process, persistence mechanism, privilege escalation, credential storage, or unrelated local indexing is shown. The --out option can overwrite files writable by the current user, but this is a user-directed export feature rather than hidden persistence.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SDI-1] expected: The --out parameter is a local file-write capability, but exporting query results is explicitly part of the skill description and SKILL.md includes an export example. The lack of path restriction is a usability/security caveat, not evidence of deception.\n[SDI-2] expected: The PostgreSQL branch redirects query output to the caller-supplied path. This is broader than a controlled export directory, but it is visible, user-directed, and aligned with the documented export use case.\n[SQP-2] expected: The PostgreSQL and MySQL output-path findings overlap with the same documented export behavior. Users should treat --out as capable of overwriting writable files and avoid sensitive or shared destinations.\n[VirusTotal code_insight] expected: The telemetry concern about arbitrary --out writes is artifact-backed, but VirusTotal engines reported no detections and the behavior is disclosed as an export feature.\n[staticScan] expected: The static scan reported no suspicious patterns, consistent with the absence of remote downloads, hidden execution, persistence, or exfiltration code.",
+          "guidance": "Install only if you will use a dedicated read-only database account. Review each query before execution, avoid write-capable or admin database credentials, and export only to safe paths because --out can overwrite files the current user can write.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a small, disclosed database query/export helper, with the main risk being where users choose to write exported results.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779964103098,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: db-readonly\nVersion: 1.0.0\n\nThe skill is classified as suspicious primarily due to the arbitrary file write capability in `scripts/db_readonly.sh`. The `--out` parameter allows writing database query results to any specified file path. While intended for legitimate data export, this could be abused to overwrite critical system files (e.g., `/etc/hosts`, `/etc/resolv.conf`) with database output, potentially leading to denial of service or system disruption. Additionally, if sensitive data is queried, writing it to an insecure or publicly accessible location could lead to unintended data exposure. Although the `SKILL.md` and script include strong safeguards against non-read SQL, the file write capability introduces a significant risk without clear malicious intent.",
+          "checkedAt": 1779162661384,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "06ff2a88ad9fc27de86ae701d34e910603ecbcc06dc49dd07e6955ddaedbec98",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/06ff2a88ad9fc27de86ae701d34e910603ecbcc06dc49dd07e6955ddaedbec98"
+    },
+    "slug": "db-readonly",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

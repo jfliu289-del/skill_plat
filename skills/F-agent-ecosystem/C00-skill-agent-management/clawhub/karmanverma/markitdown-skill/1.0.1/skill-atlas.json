@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.7167,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:phrase:agent skill",
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C03:token:pdf",
+      "category:C05:token:audio",
+      "category:C06:token:api",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a728661b129269279574e40c1f0b972bd195a4ac418f1c1840fd9859c004da78",
+    "content_hash": "208b148d0babe98c5048fe327f88aec8fdaaf1386cef0f274034eb60589c8c36",
+    "precanonical_content_hash": "add4e8e705dd6914827240fcfaf84110252437ec3d749d9a3936c42c27ec25c9",
+    "skill_md_hash": "2e152e9690a4167f6f5f692f42e49b56564ab549cf9084122a1c5b7b142addde",
+    "version_metadata_sha256": "75b1261e333494b0474037e1d85d377575af0961cc685bac46a54dd3c40ac307"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/karmanverma/skills/markitdown-skill",
+    "claim_id": "6d74327df15897720da043a2e1f28b11933d0fdaca64df40f9b283cd0089616c",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "markitdown-skill",
+        "url": "https://clawskills.sh/skills/karmanverma-markitdown-skill"
+      }
+    ],
+    "owner_handle": "karmanverma",
+    "owner_id": "s179f99scknyhksgw0p1fxy58x885ef9",
+    "published_at": 1770741835835,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779966055327,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779966055327,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe documentation and a batch script for Microsoft's MarkItDown converter, covering local files, URLs, OCR, audio, YouTube, optional LLM descriptions, and Azure Document Intelligence.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Examples include URL fetching, output file creation, AGENTS.md usage guidance, optional plugins, OpenAI-compatible LLM use, and Azure processing; these are user-directed and fit the conversion purpose, but privacy warnings are thin.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses pip for markitdown[all] and optional system packages such as Tesseract OCR. This is proportionate for broad document conversion but expands dependency surface.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Local conversion is proportionate. URL, YouTube, LLM, and Azure examples intentionally contact external services and may process sensitive document contents, so users need to opt in deliberately.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden persistence, privilege escalation, background execution, credential harvesting, or automatic destructive behavior was found. The batch script writes Markdown outputs only to user-specified or adjacent paths.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: URL and YouTube conversion necessarily perform network requests, and the documentation advertises those capabilities rather than hiding them; better warnings would help but this is purpose-aligned.\n[SQP-2] expected: OpenAI-compatible LLM and Azure Document Intelligence examples can send document or image contents to third-party services, but they require user-supplied clients, endpoints, or options and are not automatic.\n[SQP-2] expected: Plugin enablement is documented as optional and disabled by default in the API reference and script unless the user chooses plugin flags or enable_plugins=True.\n[SQP-2] expected: Writing Markdown files is a normal converter side effect controlled by the command output path or batch script arguments.",
+          "guidance": "Install only if you trust the MarkItDown package and its dependencies. Use local-only conversion for confidential documents, avoid untrusted URLs, and enable OpenAI, Azure Document Intelligence, audio/YouTube transcription, or plugins only when you are allowed to share the relevant content and trust the provider or plugin source.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent document-to-Markdown helper, with optional network, cloud, and plugin features that users should choose carefully for sensitive files.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779966024783,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 78,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: markitdown-skill\nVersion: 1.0.1\n\nThe OpenClaw AgentSkills skill bundle 'markitdown-skill' is classified as benign. Its primary purpose is to convert various document types to Markdown using the legitimate 'markitdown' library. The `scripts/batch_convert.py` script and all documentation (SKILL.md, POST_INSTALL.md, USAGE-GUIDE.md, reference.md) consistently support this functionality, detailing file processing, optional integration with OpenAI or Azure Document Intelligence for enhanced features, and system dependencies like Tesseract OCR. There is no evidence of intentional harmful behavior such as data exfiltration, unauthorized command execution, persistence mechanisms, or malicious prompt injection attempts against the agent. All file and network access capabilities are directly aligned with the stated document conversion and processing goals.",
+          "checkedAt": 1779162863487,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "e9fcb56451afcde33e6e2cc15f9d7354d61b564a5a1fb2b7b6ac31334afd4d54",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e9fcb56451afcde33e6e2cc15f9d7354d61b564a5a1fb2b7b6ac31334afd4d54"
+    },
+    "slug": "markitdown-skill",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

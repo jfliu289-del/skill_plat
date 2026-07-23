@@ -1,0 +1,159 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "configuration",
+      "document"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.375,
+    "domains": [
+      "infrastructure",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C02:token:writing",
+      "category:C06:token:api",
+      "category:C06:token:code",
+      "category:C06:token:developer",
+      "category:C08:token:deploy",
+      "category:C08:token:git",
+      "category:C11:token:project",
+      "category:C12:token:strategy",
+      "cross-tag:deployment",
+      "cross-tag:planning",
+      "cross-tag:software-development",
+      "cross-tag:testing",
+      "cross-tag:writing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C02",
+      "C08",
+      "C11",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "deploy",
+      "operate",
+      "plan",
+      "test",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8329b59983b8a33e04d4d154552c7819e75406751ecae3cb2570c4f5ca2bd20a",
+    "content_hash": "64f4b5a1eee55f7ff68cc2d870201ef9dbac65ed00df5fd7abe4f7aa3c0bc339",
+    "precanonical_content_hash": "14f1adbfb8b7c4fbce987faa5dead073e59a7992863d87b5eec37d49f56c2746",
+    "skill_md_hash": "57afc5beb125ca99c66cb50ca0e7f4058294a154bd15e4566e6f60ed677f2dc9",
+    "version_metadata_sha256": "b46bd7260930b516cd04ecef1e5fbdf8b6d7eac7a822fdadd0cf10b8c965b479"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/seanwyngaard/skills/technical-doc-generator",
+    "claim_id": "bd3ee5eb8f026fd073a45ce322b95124d2f4c84c6bd0f8f107c4b15fd858ba29",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "technical-doc-generator",
+        "url": "https://clawskills.sh/skills/seanwyngaard-technical-doc-generator"
+      }
+    ],
+    "owner_handle": "seanwyngaard",
+    "owner_id": "s17cbgx0qmxw2p9k4mvca4z40n83mae0",
+    "published_at": 1770986113831,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779973471306,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779973471306,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to generate READMEs, API docs, architecture docs, changelogs, onboarding guides, OpenAPI YAML, and Mermaid diagrams from a codebase; read/search/write access and Bash for tasks like git history inspection fit that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "It can default to the current directory and has a broad full mode, but it accepts an explicit path and tells the agent to scan strategically rather than read every file.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact is a single instruction-only SKILL.md with no executable scripts, package installation steps, hooks, or hidden runtime components.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Scanning package files, config examples, existing docs, tests, and environment-variable references is proportionate for documentation, but generated docs may reveal internal configuration names or architecture details if not reviewed.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill writes generated documentation to output/docs/ or docs/ and may copy a README to the project root if none exists; this is disclosed and purpose-aligned, with no background persistence or privilege escalation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The workspace file creation concern is real, but writing documentation files is the core disclosed function of this skill; users should still review diffs and avoid overwriting existing docs unintentionally.\n[code_insight] expected: VirusTotal flagged Bash and broad local access, but the inspected artifact contains no destructive commands, network exfiltration, hidden behavior, or purpose-mismatched shell use.\n[staticScan] expected: The static scan reported no suspicious patterns, consistent with the inspected instruction-only artifact.",
+          "guidance": "Install only if you want an agent to inspect the selected project and create documentation files. Run it on an explicit project path, keep the repo under version control, and review generated docs for secrets, internal URLs, credentials, database details, and architecture information before publishing or sending them to clients.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward documentation-generation skill that reads a project and writes generated docs, with review-worthy but expected workspace changes.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779973445224,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: technical-doc-generator\nVersion: 1.0.0\n\nThe skill is classified as suspicious primarily due to the explicit inclusion of `Bash` in the `allowed-tools` list within `SKILL.md`. While the instructions themselves do not contain overtly malicious commands or prompt injection attempts, the ability to execute arbitrary shell commands (`Bash`) combined with broad file system access (reading codebases, config files like `.env.example`) presents a significant vulnerability. This capability could be exploited for remote code execution, data exfiltration, or other harmful actions if the agent's behavior is manipulated via prompt injection or if the skill were used by a malicious actor.",
+          "checkedAt": 1779163753201,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "87043ddab459256a52bb44d2525dca0cfdfc2e0364240c02a28c2bf33fd8a79a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/87043ddab459256a52bb44d2525dca0cfdfc2e0364240c02a28c2bf33fd8a79a"
+    },
+    "slug": "technical-doc-generator",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

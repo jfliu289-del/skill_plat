@@ -1,0 +1,159 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "configuration",
+      "document"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2389,
+    "domains": [
+      "infrastructure",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C07",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C02:token:writing",
+      "category:C06:token:frontend",
+      "category:C07:token:test",
+      "category:C07:token:testing",
+      "category:C08:token:deploy",
+      "category:C08:token:deployment",
+      "category:C11:token:project",
+      "category:C12:token:decision",
+      "cross-tag:agent-management",
+      "cross-tag:deployment",
+      "cross-tag:testing",
+      "cross-tag:writing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00",
+      "C02",
+      "C06",
+      "C08",
+      "C11",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "deploy",
+      "manage",
+      "operate",
+      "test",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4837ca268bb5ef8ae4a849280f730b8af9a525c07a904d455c094f025f9a9e15",
+    "content_hash": "a51bf58efd93c0b8cc30964ba380eb29b75471d9467aff93af87ae8883481027",
+    "precanonical_content_hash": "cea161ca8aa7ebb91e84a014f70986babdc43736721c8e0b756a4e4b494b9487",
+    "skill_md_hash": "4172373faa99842b00132bc932552326ecfae5bcdbd3ae64020c807a7a69c6c5",
+    "version_metadata_sha256": "c53f2b357215d0b8240a6beec5d6d81a30b267f6f393ffcdb58d9a9468f479d5"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/hummusonrails/skills/arbitrum-dapp-skill",
+    "claim_id": "aae064df1dea5b671f4a6b684783fa557ad6d3ebfe198b04e4274a3098207c16",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "arbitrum-dapp-skill",
+        "url": "https://clawskills.sh/skills/hummusonrails-arbitrum-dapp-skill"
+      }
+    ],
+    "owner_handle": "hummusonrails",
+    "owner_id": "s17edayykxjggjkqj7d2pgknph8849ex",
+    "published_at": 1770221624830,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783655651784,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783655651784,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The files match the stated purpose: Arbitrum dApp scaffolding, local devnode setup, Stylus and Solidity contracts, testing, deployment, and React frontend integration.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill contains explicit shell, package-install, Docker, devnode, and blockchain deployment commands; these are expected for the topic and appear as user-run examples rather than hidden automatic actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "install.sh clones or updates the GitHub repo under ~/.claude/skills and sends a disclosed GoatCounter install-count POST unless ARBITRUM_SKILL_NO_ANALYTICS is set; the README also promotes a curl-to-bash one-liner without pinning.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Git, Docker, cargo, Foundry, pnpm, RPC URLs, wallet clients, and private-key placeholders are proportionate for Arbitrum development, but live deployment and --broadcast examples can spend real funds if copied against mainnet.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to installing skill files in the Claude skills directory; no background worker, startup hook, privilege escalation, broad local indexing, destructive behavior, or unrelated credential collection was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: Shell-capable examples are part of the disclosed development workflow; the artifact would benefit from clearer permission metadata, but this is not hidden execution.\n[TP4] expected: Cloning the skill repo and cloning/running the Nitro devnode are purpose-aligned install and local-development steps; the non-core analytics ping is visible in install.sh and opt-out.\n[SDI-2] unexpected: The install-time GoatCounter POST and docs-page analytics are not required for core functionality, but the payload is limited to an install/pageview event and is disclosed rather than secret collection.\n[SDI-4] unexpected: The inconsistent http() guidance is a documentation quality issue that could cause misconfiguration, not evidence of malicious or deceptive behavior.\n[SQP-2] unexpected: The README and docs curl-to-bash install pattern is a real supply-chain risk if copied blindly, but it is a visible, user-invoked install convenience rather than covert behavior.\n[SQP-2] expected: Private-key and --broadcast deployment examples are expected in blockchain deployment docs, though they should be treated as high-impact commands and handled with stronger warnings and safer secret practices.\n[E1] unexpected: The GoatCounter POST is external telemetry and includes a bearer token, but artifact evidence shows only an install-count hit and no user-secret or file-data exfiltration.\n[SC2] unexpected: Foundry's curl-to-bash prerequisite is an upstream install pattern and a supply-chain caution, but it is not hidden and does not by itself make the skill malicious or Review-worthy.\n[suspicious.exposed_secret_literal] expected: The detected local-devnode private key is a documented public test key for localhost development; the GoatCounter token is a publisher telemetry token, not a user credential, though embedding it is poor practice.\n[suspicious.generated_source_template_injection] expected: The ${ARBITRUM_*_RPC_URL} strings are normal Foundry environment-variable placeholders in configuration examples, not prompt or code injection.\n[VT-code_insight] unexpected: VirusTotal's concern centers on the disclosed GoatCounter install ping; that telemetry warrants guidance but is not sufficient to override the coherent, purpose-aligned artifact evidence.",
+          "guidance": "Prefer ClawHub install or clone-and-review over the remote bash one-liner. Set ARBITRUM_SKILL_NO_ANALYTICS=1 before running install.sh if you do not want the install-count ping. Use disposable local/test wallets, avoid pasting real private keys into shell history, and double-check RPC URLs and network names before any --broadcast or mainnet deployment command.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent Arbitrum development guide, but its installer and deployment examples should be used carefully because they involve remote scripts, an install-count ping, and blockchain transaction commands.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783655562261,
+          "issueCount": 10,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: arbitrum-dapp-skill\nVersion: 1.1.0\n\nThe skill is generally benign, providing comprehensive documentation and scripts for Arbitrum dApp development. However, the `install.sh` script includes a network call to `arbitrum-dapp-skill.goatcounter.com` to send an anonymous install count. While the script explicitly states this is privacy-friendly with no personal data and an opt-out mechanism, any external network call from an install script represents a risky capability without clear malicious intent, thus classifying it as suspicious.",
+          "checkedAt": 1779161283819,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "4166e358f816bab86ebe4f09ccf946203a137652cb85847fa3ead5f815605fa6",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4166e358f816bab86ebe4f09ccf946203a137652cb85847fa3ead5f815605fa6"
+    },
+    "slug": "arbitrum-dapp-skill",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

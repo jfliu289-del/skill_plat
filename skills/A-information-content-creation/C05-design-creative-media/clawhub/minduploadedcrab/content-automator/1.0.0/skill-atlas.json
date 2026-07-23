@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "artifacts": [
+      "website"
+    ],
+    "audiences": [
+      "creator",
+      "security-professional"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "creative",
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:video",
+      "category:C09:token:security",
+      "category:C17:token:notes",
+      "category:C19:token:automation",
+      "cross-tag:browser-automation",
+      "cross-tag:design",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09",
+      "C17",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "design",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4a75c0f2a5012e465e22e85e2a60fde8fb39ba02e1364b2c2a9fe4642ee94e52",
+    "content_hash": "55cfdc5eb6dcdbd070899a7eb3987cf70479d916cf0cc49c6257ba7fccc2da40",
+    "precanonical_content_hash": "7f84dd711f4c7e0dd3ec34c9d5528f6f6d075c6bff474c073e2c8f6200e1c273",
+    "skill_md_hash": "ef858ad16f73d16115d412065a4e24a2b35927d45b45e0b41ac78df167b6aecd",
+    "version_metadata_sha256": "982c3bc1283cde13211d37939d03138edafa42140aca2d6360815e6d696b7b9f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/minduploadedcrab/skills/content-automator",
+    "claim_id": "671cd372b057aedbef3de501d4f81ab8db31c2ffd00c778bbfeb50295c9e43b6",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "content-automator",
+        "url": "https://clawskills.sh/skills/minduploadedcrab-content-automator"
+      }
+    ],
+    "owner_handle": "minduploadedcrab",
+    "owner_id": "s17a8wae3pbg44sd2ndtnanptn885423",
+    "published_at": 1771533602516,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779935939326,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779935939326,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The core script-to-speech-to-video and trading-update workflow matches the stated purpose, but documented news and batch features appear overstated or unimplemented in the reviewed Python file.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Execution is user-directed through CLI subcommands and explicit output paths; however, the trading command has an implicit default portfolio file path, and video titles are interpolated into an ffmpeg drawtext filter without filter-specific escaping.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No install-time script, remote loader, package install, or persistence setup is present; the artifact consists of SKILL.md and one Python script.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The ElevenLabs API key, HTTPS TTS request, and ffmpeg subprocess use are disclosed and proportionate for video generation, but generated script text, including portfolio-derived details, is sent to a third-party TTS service.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill writes user-requested output files and temporary/media artifacts in the chosen output directory; it shows no background service, privilege escalation, credential harvesting, account mutation, or self-propagation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[AST4] expected: Local ffmpeg/ffprobe subprocess use is expected for video assembly. The scanner concern about unescaped title text in the drawtext filter is valid as a parsing/filter-injection or denial-of-service risk, but the code uses an argv list without shell=True, so the supplied shell-command RCE framing is not supported by the artifact.\n[SDI-2] expected: Portfolio parsing is purpose-aligned for a trading update generator and is shown in the documentation, but the default ~/.openclaw/workspace/ECONOMIC_DASHBOARD.md path is not clearly called out in the usage text and users should treat it as sensitive financial data.\n[SQP-2] expected: Sending script text to ElevenLabs is the expected TTS integration and is disclosed at a high level, but there is no per-run consent gate or detailed warning that custom scripts and portfolio-derived text leave the machine.\n[VirusTotal code_insight] expected: The telemetry correctly points to the title being embedded into an ffmpeg filter, but arbitrary shell command execution is not evidenced because subprocess.run is called with a list and no shell invocation.",
+          "guidance": "Install only if you are comfortable with local ffmpeg processing and with ElevenLabs receiving the script text being narrated. Use a dedicated ElevenLabs key if possible, review any portfolio or script content before running TTS, pass an explicit --portfolio path for trading videos, and avoid untrusted or punctuation-heavy titles until the drawtext escaping is fixed.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it claims, but users should avoid feeding it private scripts or portfolio data unless they are comfortable sending that text to ElevenLabs.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779935901261,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: content-automator\nVersion: 1.0.0\n\nThe `scripts/content_automator.py` file contains a critical shell injection vulnerability. The `assemble_video` function directly embeds the `title` argument into an `ffmpeg` command's `drawtext` filter without proper sanitization. When the `cmd_script` function is used, the user-provided `--title` argument is passed directly to `assemble_video`, allowing an attacker to inject arbitrary shell commands (e.g., `'; rm -rf /; echo '`) via the title. This is a severe vulnerability (Remote Code Execution risk), but there is no evidence of intentional malicious behavior (e.g., data exfiltration, backdoor installation) by the skill itself, classifying it as suspicious rather than malicious.",
+          "checkedAt": 1779165537882,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "4a75c0f2a5012e465e22e85e2a60fde8fb39ba02e1364b2c2a9fe4642ee94e52",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4a75c0f2a5012e465e22e85e2a60fde8fb39ba02e1364b2c2a9fe4642ee94e52"
+    },
+    "slug": "content-automator",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

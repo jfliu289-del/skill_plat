@@ -1,0 +1,137 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C02:token:write",
+      "category:C07:token:review",
+      "cross-tag:agent-management",
+      "cross-tag:review",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C07"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "review",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "2c5562f5cc5514dcaec63fc678358387acb01b4cdfffeaefd68cd0cfbdc1a63d",
+    "content_hash": "d9977cc3af1e698035cf4d7abeb5c9d368e3c6aa85b964f1ea9603414068d145",
+    "precanonical_content_hash": "7410f797628e19438e6309c1c4f15bdc98e2f2e245745a0d0a3dbb1fb322e8ad",
+    "skill_md_hash": "28bd80b6a78dec848db6c4564c7a0973fd7ed662d0116ea5c3d90ca57d1b2c5d",
+    "version_metadata_sha256": "ffccd513655151f77130bdb9c0fef0bd54969422b84321e01e35149984b9c291"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/anikgnr/skills/task-review-workflow",
+    "claim_id": "da21077cf69821b400a2344b09f2e935d92452c45de03fb0deb5bf94317aadcd",
+    "index_entries": [
+      {
+        "index_path": "categories/git-and-github.md",
+        "label": "task-review-workflow",
+        "url": "https://clawskills.sh/skills/anikgnr-task-review-workflow"
+      }
+    ],
+    "owner_handle": "anikgnr",
+    "owner_id": "s17194easx1f52xrrr1djc4kx9885tv0",
+    "published_at": 1771253293793,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971107182,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971107182,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill tells an agent to review PRs, run validation, approve or request changes, merge acceptable work, update Trello, delete the merged task branch, and report the outcome; these are high-impact but coherent with the stated PR review purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The workflow is scoped to task-linked PRs and includes a safeguard not to delete main, but users should decide whether agent-initiated merges and branch deletion require human confirmation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains only SKILL.md instructions and no executable scripts, install hooks, package code, or hidden runtime mechanism.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Checking out a PR branch and running tests, lint, build, or changed behavior may execute code from the PR; this is normal for code review but should be done in a clean environment without unnecessary secrets.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence mechanism is present, but the workflow assumes the agent may have repository and Trello permissions to merge, move cards, and delete branches.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code_insight suspicious] expected: The telemetry flags checkout and local test/build execution as untrusted-code risk. That risk is real, but the behavior is explicit, standard for PR review, and not evidence of hidden or malicious intent.\n[SkillSpector clean] expected: SkillSpector reported no issues, which is consistent with the simple instruction-only artifact.\n[Static artifact review] expected: The workspace contains only SKILL.md plus metadata/report files, with no executable scripts or install-time behavior to inspect.",
+          "guidance": "Install this only if you want an agent to participate in PR review and post-merge cleanup. Limit its GitHub and Trello permissions to the intended repositories/projects, use protected branches, require human approval for merges if needed, and run PR validation in an isolated workspace without sensitive environment variables.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is an instruction-only PR review workflow whose risky actions are disclosed and aligned with reviewing and merging pull requests.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971085833,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: task-review-workflow\nVersion: 0.1.0\n\nThe skill is classified as suspicious due to instructions in `SKILL.md` that direct the AI agent to \"Check out the PR branch\" and \"Run relevant test/lint/build commands.\" This workflow step, while common in human-driven development, represents a significant supply chain vulnerability for an automated agent. It implies the agent will execute code from an untrusted source (the PR branch) in its environment, which could lead to arbitrary code execution if a malicious PR is submitted. While there is no explicit malicious intent within the skill's instructions, this capability poses a high risk of exploitation.",
+          "checkedAt": 1779164570698,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "6d277df63b7a7228e2975f8e68a57b00122b0126703fcd36e28da3111cde3eab",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6d277df63b7a7228e2975f8e68a57b00122b0126703fcd36e28da3111cde3eab"
+    },
+    "slug": "task-review-workflow",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

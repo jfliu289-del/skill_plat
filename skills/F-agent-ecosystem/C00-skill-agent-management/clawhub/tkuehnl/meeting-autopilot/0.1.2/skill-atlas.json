@@ -1,0 +1,129 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C10:token:llm",
+      "category:C17:token:notes",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e71ac49bd1f10c10dd92809e7a53be21b2db098c3097885f20364b1332339e91",
+    "content_hash": "f5ceb30aa17afd3b83635b272f1b648f7e11794da29979b09edbede794fee1ab",
+    "precanonical_content_hash": "240d8798109cbce80929989b55d2242b8b83671c256537be89e352e840ca8090",
+    "skill_md_hash": "9eac4c0e3cc32473777ac05dbe7a8b1d7a75dee7bd8b04a75fbe414430367df2",
+    "version_metadata_sha256": "d4b9b587535bb077aa229e34a6c07a767f297eef57362052e989b78061ad15d4"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tkuehnl/skills/meeting-autopilot",
+    "claim_id": "ee56959a195a7326ccff603a2c32fcf83e853b68ab3506b2d0e5b11cf4ba3ed4",
+    "index_entries": [
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "meeting-autopilot",
+        "url": "https://clawskills.sh/skills/tkuehnl-meeting-autopilot"
+      }
+    ],
+    "owner_handle": "tkuehnl",
+    "owner_id": "s1796xcga59f855vmh35x909yh84742a",
+    "published_at": 1771717242504,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779933024255,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779933024255,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The transcript parsing, LLM extraction, report generation, email drafts, and ticket drafts align with the stated meeting-autopilot purpose; sensitive transcript handling is inherent to that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Activation phrases are broad, but the workflow is still scoped to user-provided transcripts and produces drafts/reports rather than sending emails, filing tickets, or mutating external systems.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill uses bundled shell scripts and requires bash, jq, python3, curl, and an Anthropic or OpenAI API key; these requirements are documented in SKILL.md and README, though registry metadata appears less complete.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Read, write, exec, and network access are proportionate to processing transcript files, calling the configured LLM provider, and writing reports/history. Custom API base URLs are limited to http/https.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Extracted meeting items are saved by default under ~/.meeting-autopilot/history/, but this is disclosed and a --no-history option is provided. No privileged writes, background workers, credential-store reads, or automatic account actions were found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-2] expected: The external LLM calls in generate-outputs.sh are real data egress, but they are purpose-aligned and disclosed in README and SECURITY.md.\n[SQP-1] expected: The invocation examples are broad meeting-processing phrases; this is worth user awareness but does not show hidden or unrelated behavior.\n[SQP-2] expected: The skill sends transcript content to Anthropic/OpenAI and stores extracted history locally. Those are sensitive behaviors, but they are documented and scoped to the skill's meeting-processing function.\n[SSD-1] expected: Transcript text can influence LLM extraction results, but outputs are drafts/reports and the artifact does not show automatic downstream execution.\n[E1] expected: The curl calls to Anthropic/OpenAI are expected for this remote-LLM transcript processor and are not accompanied by evidence of unrelated exfiltration or telemetry.",
+          "guidance": "Install only if you are comfortable sending meeting transcripts or extracted meeting details to your configured Anthropic/OpenAI endpoint. Avoid using it for meetings your organization forbids sending to external AI services, review generated drafts before use, and use --no-history or delete ~/.meeting-autopilot/history/ for sensitive meetings.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it processes meeting transcripts with Anthropic or OpenAI and saves extracted meeting history locally, with those behaviors disclosed.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779932982360,
+          "issueCount": 15,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: meeting-autopilot\nVersion: 0.1.2\n\nThe OpenClaw AgentSkills skill bundle 'meeting-autopilot' is classified as benign. The code demonstrates strong security practices, including rigorous input sanitization for file paths and meeting titles (e.g., in `scripts/meeting-autopilot.sh`), safe JSON construction using `jq --arg` for all LLM API calls and history storage (e.g., in `scripts/extract-items.sh`, `scripts/generate-outputs.sh`), and piping user-provided transcript content to isolated Python parsers via stdin (e.g., in `scripts/parse-transcript.sh`) to prevent shell injection. Permissions requested (`exec`, `read`, `write`, `network`) are justified by the skill's stated purpose. The `SKILL.md` and `README.md` contain no prompt injection attempts against the agent, and the `SECURITY.md` file provides transparent and comprehensive documentation of the skill's data handling and security model, including the inherent risk of sending transcripts to third-party LLMs.",
+          "checkedAt": 1779165356669,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "724d24664bcd4dcc062d759cef970304c87ca6749f25d445231d44122e2cc576",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/724d24664bcd4dcc062d759cef970304c87ca6749f25d445231d44122e2cc576"
+    },
+    "slug": "meeting-autopilot",
+    "source_type": "clawhub",
+    "version": "0.1.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,129 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C02:token:language",
+      "category:C10:token:ai",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C10"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "850a31ab54d34154061884df3a77b5a3a0023da87884ebdbed18cda7ca13b7db",
+    "content_hash": "9d22102e369600f2cc4f0d61346e3c7af1bb35703ff6cdf8df694d3b549e43e1",
+    "precanonical_content_hash": "f41d46642b2eb4369da36c0ff2b7c85c3f590eaca0ea5111d1b62856e8b471a5",
+    "skill_md_hash": "61021f12d6b7c7576ab85319def25e2cac6d6c26320974e6d00304cfdc4d3ce8",
+    "version_metadata_sha256": "30ff410c37a6fd1c6acad1717272b016e324c76a775dbbdaeae4f7345a1f59b0"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/iammhk/skills/sarvam",
+    "claim_id": "fb7f75e16ee79936a2db624ba45106228f71fda10fd280760ad5586151a8424b",
+    "index_entries": [
+      {
+        "index_path": "categories/communication.md",
+        "label": "sarvam",
+        "url": "https://clawskills.sh/skills/iammhk-sarvam"
+      }
+    ],
+    "owner_handle": "iammhk",
+    "owner_id": "s17bgf3aqbfvw80527509preb9885s30",
+    "published_at": 1771433954406,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967920600,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967920600,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The SKILL.md purpose matches the Python CLI: TTS, STT, translation, and chat against api.sarvam.ai. I found no unrelated domains, destructive actions, arbitrary command execution, or covert collection.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Commands are user-invoked and scoped to provided text/audio and requested output files. The documentation could be clearer that submitted prompts, text, and audio are transmitted to Sarvam's hosted service.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Metadata declares SARVAM_API_KEY and a local virtual-environment Python path, but the artifacts do not include a reproducible dependency/install recipe beyond noting requests is preinstalled.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading SARVAM_API_KEY and making outbound requests to Sarvam are proportionate for this integration. Users should understand that content submitted to the commands leaves the local environment.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background service, autostart, privilege escalation, broad local indexing, or recurring worker behavior is present. The only persistent write is the user-specified TTS audio output file, with simple path traversal and absolute-path checks.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The API key and outbound network use are expected for a Sarvam API integration, and the skill metadata does declare SARVAM_API_KEY. This is a transparency note rather than a Review-level concern.\n[SQP-2] expected: The skill sends text, prompts, and audio to Sarvam as part of its stated hosted AI functionality. The lack of stronger privacy wording is worth user guidance but is not hidden or purpose-mismatched.\n[SQP-2] expected: The STT command uploads the user-specified audio file to Sarvam. That is the core function of remote speech-to-text, with no evidence of bulk file access or unrelated upload behavior.\n[SQP-2] expected: The chat command sends the provided message and optional system prompt to Sarvam's chat endpoint. This is expected for hosted chat completion, though users should avoid including secrets.",
+          "guidance": "Install only if you are comfortable using Sarvam AI with your API key and sending selected text, prompts, and audio files to Sarvam for processing. Avoid regulated, confidential, or secret material unless Sarvam's terms and your data-handling requirements allow it; consider recreating the local Python environment yourself if dependency provenance matters.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it advertises: it sends user-chosen text or audio to Sarvam AI for speech, translation, and chat, without hidden persistence or unrelated data access.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967879157,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: sarvam\nVersion: 1.0.1\n\nThe skill is benign, providing access to Sarvam AI services for TTS, STT, Translation, and Chat as described. The `scripts/sarvam_cli.py` file correctly uses the `SARVAM_API_KEY` for authentication to the intended `api.sarvam.ai` endpoint. It includes a `validate_filename` function to prevent path traversal and absolute paths when handling file inputs/outputs, demonstrating an effort to mitigate file system vulnerabilities. There is no evidence of data exfiltration to unauthorized domains, arbitrary command execution, persistence mechanisms, or prompt injection attempts in `SKILL.md`.",
+          "checkedAt": 1779164160469,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "dd49b3a2d6d03f9d26c0071c67438a97ada416385c1fa3ced178d306eddc1e0d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/dd49b3a2d6d03f9d26c0071c67438a97ada416385c1fa3ced178d306eddc1e0d"
+    },
+    "slug": "sarvam",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

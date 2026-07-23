@@ -1,0 +1,150 @@
+{
+  "classification": {
+    "artifacts": [
+      "configuration"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "infrastructure",
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C02:token:language",
+      "category:C08:token:deploy",
+      "category:C08:token:deployment",
+      "category:C09:token:security",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:deployment",
+      "cross-tag:security",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00",
+      "C02",
+      "C09",
+      "C17"
+    ],
+    "stages": [
+      "deliver",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "deploy",
+      "manage",
+      "operate",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "915201c2da22290c2e027b567d5bb25d99873248963552f621ce0073a0ee4bba",
+    "content_hash": "870f06cbb697134542eba9c1e2461ce70278ffa5b65ea476f7093e6166f6b978",
+    "precanonical_content_hash": "aa5fba7360d5076cc3d64647a06dca87ce7f8016732a4d2816f81537f6bfdcfd",
+    "skill_md_hash": "0156ac0885cc32dab324fe8beb2d106e956eb6eebb0462017500ed2cce381d55",
+    "version_metadata_sha256": "8c16745c0375ed2995ee9ceacabd3f982841cdc0e62254ef0b920ac31e0cf6f1"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/neldar/skills/webchat-voice-proxy",
+    "claim_id": "c8adcd07e548e6f525a002010281c475facebfb9ad511ec402a1c63e199067ef",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "webchat-voice-proxy",
+        "url": "https://clawskills.sh/skills/neldar-webchat-voice-proxy"
+      }
+    ],
+    "owner_handle": "neldar",
+    "owner_id": "s17fa26xrs6xbrreh4h0k2t521884byj",
+    "published_at": 1773972063970,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971808383,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971808383,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The HTTPS/WSS proxy, microphone UI injection, local faster-whisper transcription flow, and gateway WebSocket passthrough are coherent with the WebChat voice-input purpose; the skill is also marked deprecated in favor of split replacement skills.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Deployment is user-directed, defaults to localhost, and documents the LAN exposure option; the beta continuous mode auto-send behavior is documented but should be understood before use.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The deploy script copies assets, edits the OpenClaw Control UI and openclaw.json, creates a user systemd service, and installs a gateway startup hook; these changes are listed in the artifact and an uninstall script is provided.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Microphone audio is sent to a local or same-origin transcription endpoint and the OpenClaw gateway token is used for local authorization; this is sensitive but purpose-aligned and not hidden exfiltration by default.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is explicit and user-level only: a systemd service starts the proxy on boot and a gateway hook re-injects the UI script after updates; no sudo/root requirement was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[TT3] expected: Downgraded: forwarding request bodies to a transcription URL is core proxy behavior; the installed default is localhost and not HTTP-request-controlled, though URL allowlisting would be a useful hardening improvement.\n[SQP-2] expected: Microphone recording, transcription requests, and bearer-token authorization are expected for the feature and stay local/same-origin by default; users should still treat speech and tokens as sensitive.\n[SQP-2] expected: Continuous-mode auto-send after a short review window is documented as a beta shortcut, so it is not hidden, but it is a user-control risk users should opt into deliberately.\n[SQP-2] unexpected: Troubleshooting guidance that places a gateway token in a URL query parameter is a real credential-handling weakness, but it is isolated documentation rather than hidden runtime behavior.\n[RA2] expected: The persistent user service and gateway startup hook are explicitly disclosed, scoped to the voice proxy/UI reinjection purpose, and removable with the uninstall script.\n[suspicious.dangerous_exec] expected: The hook runs a bundled inject.sh script on gateway startup using a fixed path and execFileSync without shell interpolation; this is automatic code execution but purpose-aligned and disclosed.",
+          "guidance": "Prefer the newer split skills noted by the author. If installing this deprecated skill, keep it bound to 127.0.0.1 unless you truly need LAN access, remember that microphone audio is sent for transcription, avoid sharing URLs containing gateway tokens, and use the uninstall script if you no longer want the service, hook, or UI changes.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill matches its stated local voice-input purpose and discloses its persistent local proxy, UI injection, and token-authenticated transcription behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971745226,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: webchat-voice-proxy\nVersion: 0.2.3\n\nThe webchat-voice-proxy skill provides voice-to-text capabilities for the OpenClaw WebChat UI by deploying a local HTTPS/WSS reverse proxy and injecting a microphone interface. The code demonstrates high security awareness, featuring strict regex-based input validation in scripts/deploy.sh, path traversal protection in the Python-based assets/https-server.py, and secure subprocess handling in hooks/handler.ts. While it establishes persistence via a user-level systemd service and a gateway startup hook, these actions are clearly documented and necessary for the stated functionality, with no evidence of malicious intent or unauthorized data exfiltration.",
+          "checkedAt": 1779164676970,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "004291476b5637707e58d32703c2723f1100105c4c1dedd06212a60aed8c00ec",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/004291476b5637707e58d32703c2723f1100105c4c1dedd06212a60aed8c00ec"
+    },
+    "slug": "webchat-voice-proxy",
+    "source_type": "clawhub",
+    "version": "0.2.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

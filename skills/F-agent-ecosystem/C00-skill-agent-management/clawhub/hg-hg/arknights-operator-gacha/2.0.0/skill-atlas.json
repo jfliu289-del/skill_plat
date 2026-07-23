@@ -1,0 +1,148 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "security-professional"
+    ],
+    "confidence": 0.1417,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C02:token:language",
+      "category:C04:token:data",
+      "category:C08:token:git",
+      "category:C09:token:security",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C04",
+      "C08",
+      "C09",
+      "C17"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "98fa9a0ae5aaaeff0899dd7e3884ca320b3642b864e6f34970860bd0253f9abe",
+    "content_hash": "ec3d1dc2b095b39b1d31f8c7b68843fd1b36ba91414d22534ac3a7c95ea69daa",
+    "precanonical_content_hash": "be8742c733c11fc9ea13f11f7a84b8a15a06a71e006a902582ae2f059fada6d0",
+    "skill_md_hash": "e4e207cad8c42ea42b60a4348a2f6c479a94ffea348eed7e27f585f9bdcec9ca",
+    "version_metadata_sha256": "24b826e6314a7dbdfdcc33658b90088c40070db3314ebc11ae3ec2694e81324c"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/hg-hg/skills/arknights-operator-gacha",
+    "claim_id": "b772c123f22382f677ba406e24e16b35823d302dab818d6337c2cdf381d16331",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "arknights-operator-gacha",
+        "url": "https://clawskills.sh/skills/hg-hg-arknights-operator-gacha"
+      }
+    ],
+    "owner_handle": "hg-hg",
+    "owner_id": "s17dg00ct2kddk077pz8ts7g99847mg4",
+    "published_at": 1772009986590,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779957657600,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779957657600,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to create a random Arknights operator agent, and the artifacts consistently support that through gacha selection, public lore fetching, avatar download, SOUL.md generation, agent creation, and a roleplay spawn.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The workflow uses command execution, network fetches, local file writes, git commits, and session spawning; these are broad side effects, but SKILL.md and the README describe them as part of creating the operator agent.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime dependencies and side effects are documented in the skill files, but there is no separate enforceable permission declaration for shell, network, file write, git, or agent creation capability.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The worker is scoped to ~/.openclaw/workspace-{agent_name}, validates agent names, uses subprocess argument lists with shell disabled, fetches public Arknights wiki pages, and restricts avatar downloads by HTTPS, domain, content type, and size.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill intentionally creates a persistent OpenClaw agent and workspace and commits generated files; this is central to the advertised use case, but users should understand and clean it up if unwanted.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The missing permission declaration is a transparency gap, but the artifact text itself discloses shell execution, network fetches, file writes, agent creation, downloads, and git operations.\n[TP4] expected: Creating a local character agent, workspace, avatar, and commits fits the advertised 'operator agent' purpose and is described in the workflow, so this does not show deceptive tool poisoning.\n[SDI-1] expected: The worker's local state changes are visible in the code and documentation and are used to build the persistent agent, not hidden unrelated behavior.\n[SDI-2] expected: OpenClaw CLI and git calls are state-changing, but they are implemented with safe argument lists and are part of the documented agent-creation workflow.\n[SQP-2] expected: The persistence and git commit behavior would benefit from a clearer upfront warning or confirmation, but the workflow and README document these effects.\n[RA2] expected: Persistent agent/workspace creation is the core feature rather than an unrelated rogue-agent mechanism; no hidden credential access, exfiltration, or autonomous background behavior was found.\n[staticScan:clean] expected: The static scan reported no suspicious patterns, consistent with the artifact review.\n[VirusTotal:clean] expected: VirusTotal telemetry was clean and used only as supporting signal, not as the basis for the verdict.",
+          "guidance": "Install this only if you want a new persistent OpenClaw character agent under ~/.openclaw. It will fetch public Arknights wiki content, download an avatar, write generated files, run git commits in the generated workspace, and spawn the new agent for a greeting; remove the generated agent/workspace afterward if you do not want to keep it.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does create a lasting Arknights-themed OpenClaw agent, but that behavior is disclosed, purpose-aligned, and scoped to public wiki data and the generated agent workspace.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779957616127,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: arknights-operator-gacha\nVersion: 2.0.0\n\nThe OpenClaw AgentSkills bundle for 'arknights-operator-gacha' is classified as benign. The `gacha_worker.py` script, which handles all deterministic tasks, demonstrates robust security practices including strict input sanitization for agent names, explicit URL domain whitelisting for all web fetches and downloads (e.g., `arknights.fandom.com`, `prts.wiki`, `static.wikia.nocookie.net`), HTTPS enforcement, content-type validation, and file size limits for avatar downloads. All subprocess calls (e.g., `openclaw agents add`, `git commit`) use argument lists, preventing shell injection. The `SKILL.md` instructions for the LLM agent are clear, align with the stated purpose, and do not contain any malicious prompt injection attempts or instructions for unauthorized actions. Data access is confined to public wiki information and the agent's dedicated workspace, with no evidence of data exfiltration or persistence mechanisms.",
+          "checkedAt": 1779166944874,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "787ff86273466fbad38999042a574385f4a1464c8e3b38338092836dfb2a5b35",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/787ff86273466fbad38999042a574385f4a1464c8e3b38338092836dfb2a5b35"
+    },
+    "slug": "arknights-operator-gacha",
+    "source_type": "clawhub",
+    "version": "2.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

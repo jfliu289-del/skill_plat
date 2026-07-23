@@ -1,0 +1,133 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:audio",
+      "category:C06:token:api",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4977c2cb32c1690ce085e508809d34e8db7d8ee72f25ba2b323cbd2990a9194b",
+    "content_hash": "2a4b6d8e206aef1c19c9c1cea68c0b9c4434fad37de374a970335bba3be99115",
+    "precanonical_content_hash": "d0eb70400346e44468ca955d99e1d3224a9f328e17b14bb7fbebc2c3952055c6",
+    "skill_md_hash": "4b1e8a5b8e5c21f57147e0c2750f94946c760b6cc7702a30628458412b2b93e5",
+    "version_metadata_sha256": "1fb6ae63bcfb101c04eaa9c745b09d6f29b669d8873e147686510a252f06c573"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/teamtelnyx/skills/telnyx-stt",
+    "claim_id": "c68ad9efb645d2e19cfe82bb7243f9e2c18bba30d11b846f5c001665155c5a83",
+    "index_entries": [
+      {
+        "index_path": "categories/media-and-streaming.md",
+        "label": "telnyx-stt",
+        "url": "https://clawskills.sh/skills/teamtelnyx-telnyx-stt"
+      }
+    ],
+    "owner_handle": "teamtelnyx",
+    "owner_id": "s170draq1trsnzq53cd20af77s85vr4p",
+    "published_at": 1770739679608,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779966053995,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779966053995,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently implement speech-to-text: the Python script reads the provided file, posts it to Telnyx's transcription endpoint, and prints returned text.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The documentation says it uses the Telnyx Speech-to-Text API, but it could more plainly state that the audio file is uploaded to Telnyx and not processed locally.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No installer, package download, setup script, hidden execution path, or bundled dependency behavior was found; the skill contains one markdown file and one Python script.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Requiring python3 and TELNYX_API_KEY is proportionate for this API integration, but use of the key may consume Telnyx account quota and sends selected audio content to a third party.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background worker, privilege escalation, local configuration writes, deletion, or account mutation behavior was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The privacy concern is valid as user guidance because audio content leaves the local machine, but external Telnyx transcription is the disclosed core purpose of the skill.\n[VirusTotal code_insight] expected: The script can read and upload whichever path is provided on the command line, but this is a user-directed file argument for transcription rather than hidden local file harvesting.",
+          "guidance": "Install only if you are comfortable sending selected audio files to Telnyx for processing. Avoid passing confidential recordings or non-audio files, and use a revocable Telnyx API key with account limits if cost or provider access matters.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it claims: it sends a user-selected audio file to Telnyx for transcription using a Telnyx API key.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779966013732,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: telnyx-stt\nVersion: 1.0.1\n\nThe skill is classified as suspicious due to an arbitrary file read vulnerability in `scripts/telnyx-stt.py`. The script takes an `audio_path` as input and reads its content without validation, then sends it to the legitimate Telnyx API. While the script's intent is to process audio, an attacker could exploit this by providing a path to a sensitive file (e.g., `/etc/passwd`, `~/.ssh/id_rsa`), causing its contents to be read and transmitted to `https://api.telnyx.com`. This constitutes a significant data exposure risk, even if not directly exfiltrated to an attacker-controlled server, but lacks clear evidence of intentional malicious behavior by the skill's author.",
+          "checkedAt": 1779162848781,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "114e15f88389818ba547cf081f38821c656d6a4f5064ac6acb187cc853731ea2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/114e15f88389818ba547cf081f38821c656d6a4f5064ac6acb187cc853731ea2"
+    },
+    "slug": "telnyx-stt",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

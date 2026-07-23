@@ -1,0 +1,153 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.1417,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C12:token:market",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C04",
+      "C06",
+      "C12",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1216893e64f9cae4225d143583a4b648bf0faa55e8c3f50d759150c8d9524e45",
+    "content_hash": "5fb1450a10532fb1176751e4c2951f719a834493c3acc458381960935ada24e4",
+    "precanonical_content_hash": "ab7114c57a070b886ff896a175c015b5f3c638a1e5c3cb6754996f43605fb92c",
+    "skill_md_hash": "dcdce7359c6d92ee1baffa83ee212108cdc4dd63021beccc4fc0692c5f701d73",
+    "version_metadata_sha256": "413d9eb042f3564733e6fd7d98361bad02c21a117b8c2e77990507df3d4c8317"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/ouyangabel/skills/coingecko-price",
+    "claim_id": "ebba0f5ffa02497fac558a4e6fa59c519ced4f570b68342e564e5973f8437617",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "coingecko-price",
+        "url": "https://clawskills.sh/skills/ouyangabel-coingecko-price"
+      }
+    ],
+    "owner_handle": "ouyangabel",
+    "owner_id": "s17fjjxcxjjdmjjd9a8an6fd11885tv5",
+    "published_at": 1771897045903,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779953997774,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779953997774,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documentation and Python script consistently implement cryptocurrency search, price lookup, and market-cap ranking through CoinGecko, matching the stated purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are user-invoked CLI commands for search, get, and top; there are no prompt overrides, autonomous background tasks, or hidden role changes.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "No install script or dependency installation is present; the bundle contains one documented Python script using standard-library modules, though provenance details are limited.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Outbound requests to CoinGecko are necessary and disclosed by the skill purpose. User-provided coin IDs and currencies are not URL-encoded in two request builders, which could alter or break CoinGecko API queries but does not create evidence of exfiltration or arbitrary execution.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Artifacts show no credential access, local file reading, persistence, privilege escalation, destructive actions, or mutation of user accounts or external data.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The network access concern is partly valid as a transparency note because there is no explicit permission manifest, but the documentation plainly says the skill uses the CoinGecko API and the network use is core to price lookup.\n[VirusTotal code_insight suspicious] expected: The URL construction issue is a minor input-validation weakness; requests remain directed to CoinGecko and the artifact does not show malicious intent, sensitive data collection, or unsafe privilege use.",
+          "guidance": "Reasonable to install for ordinary crypto price checks. Be aware that search terms, coin IDs, and currency codes are sent to CoinGecko, and avoid entering private information into those fields.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward CoinGecko price lookup skill with minor transparency and input-handling notes but no evidence of hidden, destructive, or data-stealing behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779953974389,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: coingecko-price\nVersion: 1.0.0\n\nThe skill bundle is primarily designed for querying cryptocurrency prices via the CoinGecko API. The `SKILL.md` documentation is benign and does not contain prompt injection attempts. However, the `scripts/crypto-price.py` script exhibits a minor vulnerability: the `coin_id` and `currency` parameters, which are user-controlled inputs, are directly inserted into f-strings for URL construction in `get_simple_price` and `get_top_coins` without proper URL encoding (e.g., using `urllib.parse.quote`). While `urllib.parse.quote` is used for the `query` parameter in `search_coins`, its absence for other parameters could allow for URL parameter injection, potentially leading to malformed API requests to CoinGecko. This is a vulnerability, not clear malicious intent, hence classified as suspicious.",
+          "checkedAt": 1779166627761,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "2853e487459147d0b3b187d86d40189b7e155d1bfc77f7ad34e24e1e1027b575",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/2853e487459147d0b3b187d86d40189b7e155d1bfc77f7ad34e24e1e1027b575"
+    },
+    "slug": "coingecko-price",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

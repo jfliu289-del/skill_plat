@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C00:token:orchestration",
+      "category:C01:token:research",
+      "category:C09:token:privacy",
+      "category:C09:token:security",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C01"
+    ],
+    "stages": [
+      "validate"
+    ],
+    "tasks": [
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "b3d1ba85cf88aaef10c3d1d3b4486b3c68fd73cb1cbbbd11371dbb3a736fcbf5",
+    "content_hash": "525358f0bde7ff8738e4fa4c9c7441eeb61b47814b720d3d03b8978fe5a46af3",
+    "precanonical_content_hash": "c73d1165135059cbe738dc4f6b2fac99a298a2c919695a217403c76a1a4b6f35",
+    "skill_md_hash": "7956779f2bf690785d4021dc0f13932a1749e5768438536684420908a26c9dd9",
+    "version_metadata_sha256": "9a1d2bec377284dad86cc4237a8bd5840ff1e063b08b9a838b553bd6bcbeb933"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/lraivisto/skills/researchvault",
+    "claim_id": "e50e313c639381b2256781e39c177d21274d6122e0c16393710014c916879fb4",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "researchvault",
+        "url": "https://clawskills.sh/skills/lraivisto-researchvault"
+      }
+    ],
+    "owner_handle": "lraivisto",
+    "owner_id": "s17bn1wpkp680gff3pyzyw2v1s84c3ne",
+    "published_at": 1771245500096,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783653512281,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783653512281,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe a local-first research vault that stores project state in SQLite, ingests user-selected web content, supports search-backed verification, and offers optional portal, watchdog, and MCP services.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Most side effects are user-invoked or visibly exposed in the UI/CLI, though some convenience flows can mutate local research state automatically, such as default auto-seeding and discovery auto-planning.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is standard Python editable install; no services start at install time. The portal and optional services require explicit commands.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access, API keys, subprocess execution, and local database reads/writes are proportionate to the research-orchestration purpose and are substantially documented, with SSRF blocking enabled by default.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists SQLite data, portal state, PID files, and a portal auth token file; this is disclosed and the token file is chmod 600, but users should treat it as a local credential.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill documents its environment variables, local database use, shell commands, networking, portal, watchdog, and MCP features; these capabilities fit the stated purpose.\n[TP4] expected: The portal, authentication token, CORS settings, scraping, search APIs, exports, and subprocess-backed CLI wrapper are disclosed as manual opt-in components rather than hidden behavior.\n[SDI-1] expected: Diagnostics expose local operational metadata to authenticated portal users; useful for troubleshooting, but users should avoid exposing the portal beyond trusted localhost access.\n[SDI-2] expected: Developer-mode actions can mutate research state, but they are labeled as advanced/dev actions and require portal authentication.\n[SDI-2] expected: The private-network fetch option is a real SSRF-sensitive control, but it is off by default and labeled in the UI/CLI as an SSRF risk.\n[SDI-1] unexpected: Opening the discovery view can auto-create verification plans; this is a local state mutation and a usability shortcut, not evidence of malicious behavior.\n[SQP-2] expected: Authenticated users can trigger URL ingestion and search result caching; this is core research functionality and is mediated by typed backend routes and SSRF checks.\n[EA2] expected: Strategy execution requires an explicit execute flag and is limited to verification/synthesis paths; it does not silently run arbitrary recommendations.\n[SQP-2] expected: The portal token persists in .portal_auth for reuse and is documented, chmod 600, and only generated during manual portal startup.\n[SC4] expected: The flagged dependencies are expected for the portal and networking features; the lockfile resolves Vite and PostCSS to newer versions than the manifest floors, while Python dependencies should still be pinned/audited by users.\n[SDI-1] expected: The optional AI summary path is user-invoked with --ai; it may send project context to an OpenClaw agent process, so it is a privacy consideration rather than hidden exfiltration.",
+          "guidance": "Install only if you are comfortable with a local research vault that can fetch user-supplied URLs, use configured search APIs, and run a localhost portal. Keep the portal bound to localhost, protect or delete .portal_auth when needed, leave private-network fetching disabled unless you intentionally need it, and avoid using --ai or search/watchdog features with sensitive research unless you accept those data flows.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed local research tool with optional web fetching and portal features; its main risks are operational configuration choices rather than hidden or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783653400626,
+          "issueCount": 24,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": null,
+          "checkedAt": 1780085599025,
+          "normalizedStatus": "clean",
+          "source": "engines",
+          "status": "clean",
+          "verdict": null
+        }
+      },
+      "sha256hash": "b3d1ba85cf88aaef10c3d1d3b4486b3c68fd73cb1cbbbd11371dbb3a736fcbf5",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b3d1ba85cf88aaef10c3d1d3b4486b3c68fd73cb1cbbbd11371dbb3a736fcbf5"
+    },
+    "slug": "researchvault",
+    "source_type": "clawhub",
+    "version": "3.0.5"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

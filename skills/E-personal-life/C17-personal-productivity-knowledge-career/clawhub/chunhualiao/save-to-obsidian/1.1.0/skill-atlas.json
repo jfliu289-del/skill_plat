@@ -1,0 +1,135 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [],
+    "confidence": 0.35,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C17",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C02:token:write",
+      "category:C17:token:notes",
+      "category:C17:token:obsidian",
+      "cross-tag:agent-management",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C02"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "022c4052201f715bc1ea3ec2e75cb2add43fde71b4cd1d0afe409ce9abc435ec",
+    "content_hash": "c3fafc28e4183a8f91f435142ff634a4a0348b1a335cd267156684a7684b4208",
+    "precanonical_content_hash": "9cabf5d117ca780f6f329c1403397328cde1bcb9091efd7595d771d4700143bd",
+    "skill_md_hash": "d648bbab522863366941c1ad19c00d2f5190bad9cd4b0e179e046811fa390b94",
+    "version_metadata_sha256": "d6dd7fd3c2469a2bdd06e066c4b8530308eafc567287f0bcff81d5bb8b3169e3"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/chunhualiao/skills/save-to-obsidian",
+    "claim_id": "79ecf2b0baf881ca8062f43dc11580e4f207c556a7d94a3ecfdf79215ec6361b",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "save-to-obsidian",
+        "url": "https://clawskills.sh/skills/chunhualiao-save-to-obsidian"
+      }
+    ],
+    "owner_handle": "chunhualiao",
+    "owner_id": "s17czb50cec363y7yz4cchy9p9848424",
+    "published_at": 1771393719651,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971741850,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971741850,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The remote SSH transfer and Obsidian formatting rules are coherent with the stated purpose. The main user impact is creating or replacing markdown files in the configured vault.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Triggers are mostly explicit Obsidian save requests; a couple are broader vault phrases, but they still point to note saving rather than unrelated actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation requires SSH/scp setup and a configured script or environment, which is disclosed in the README/SKILL material but should be checked by the user.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Using existing SSH authentication is proportionate for remote vault writes, but users should scope the SSH account/key to the intended vault path.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill intentionally creates persistent files in a remote Obsidian vault and discloses that duplicate filenames overwrite silently; it does not add background agents, hidden persistence, obfuscation, or unrelated data collection.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: Remote transmission of markdown is the core function and is repeatedly disclosed as SSH/scp to a remote Obsidian vault; users should still review sensitive content before saving.\n[SQP-2] expected: Silent overwrite on duplicate filenames is a real integrity risk, but the artifact explicitly documents it as an edge case rather than hiding it.\n[SQP-2] expected: The description says remote Obsidian vault via SSH, so the privacy-sensitive transfer is disclosed enough for a benign verdict, with guidance warranted.\n[SQP-1] expected: The broadest triggers still refer to a vault or Obsidian and the tests exclude read/search/open requests, so this is a usability caution rather than evidence of purpose-mismatched behavior.",
+          "guidance": "Install only if you want OpenClaw to send selected markdown content to a remote Obsidian vault over SSH. Confirm the configured host, vault path, and SSH key are under your control, use a restricted SSH account if possible, and choose filenames carefully because matching names may overwrite existing notes.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it saves markdown notes to a configured remote Obsidian vault over SSH.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971708063,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 45,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: save-to-obsidian\nVersion: 1.1.0\n\nThe skill is designed to save markdown content to a remote Obsidian vault via SSH, a purpose clearly stated and consistently reflected across all files. The `save-to-obsidian.sh` script uses `scp` with quoted variables, which helps prevent shell injection, and includes filename sanitization for robustness. While it performs network operations and relies on pre-configured SSH keys, these are inherent to its stated functionality and are not indicative of malicious intent. There is no evidence of data exfiltration, persistence mechanisms, obfuscation, or prompt injection attempts designed to subvert the agent for harmful purposes.",
+          "checkedAt": 1779164661248,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "18adfb37312530711a1ad840905a484e49b764627d66d41859defff986a3cba2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/18adfb37312530711a1ad840905a484e49b764627d66d41859defff986a3cba2"
+    },
+    "slug": "save-to-obsidian",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

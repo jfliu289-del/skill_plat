@@ -1,0 +1,129 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C02:token:language",
+      "category:C05:token:audio",
+      "category:C10:token:inference"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05",
+      "C10"
+    ],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "b2b180938b06f2b9aaa83512a259cf6bda1cfdf8373c47a66c0bce9f34015cd3",
+    "content_hash": "cb1993c1df06c8a47125847bafa696e3c1f0c481f8e47a34e337ab7bdce56a5f",
+    "precanonical_content_hash": "61c7e13d8f99eadacbf5ad749ddf48405369ab852987b030270494479c2aca83",
+    "skill_md_hash": "9b5efc429f0a7da55fb4647e57bb7cf434f60164394d9dd77349d1221be8c258",
+    "version_metadata_sha256": "19cbb6e4be068a4edd306d0999e21744d2e6e134da4394a3e0f8d0e317cd3490"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/kylelol/skills/clawdbites",
+    "claim_id": "742661ea99bfff5e0a6ce31372af55ea5f7972fdf62f93ac526506976bef9a9a",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "clawdbites",
+        "url": "https://clawskills.sh/skills/kylelol-clawdbites"
+      },
+      {
+        "index_path": "categories/shopping-and-e-commerce.md",
+        "label": "clawdbites",
+        "url": "https://clawskills.sh/skills/kylelol-clawdbites"
+      }
+    ],
+    "owner_handle": "kylelol",
+    "owner_id": "s176hqq5mj3cmz7bjx1zqjacqx8845wp",
+    "published_at": 1769476737720,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783651723772,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783651723772,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The advertised purpose is recipe extraction from Instagram reels, and the documented caption parsing, audio transcription, frame analysis, measurement inference, and formatted output all support that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The frontmatter emphasizes captions, while the body and README clearly disclose the broader automatic workflow of downloading public reel media, transcribing audio, and using vision analysis when needed.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill requires yt-dlp, ffmpeg, and Whisper, including a pip install for openai-whisper. These are powerful local media-processing tools but are expected for the stated workflow.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill processes user-supplied public reel URLs, writes temporary media under /tmp, and may analyze frames with a vision model. It does not request Instagram login, cookies, broad local file access, or unrelated credentials.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is optional and tied to user actions such as adding to a wishlist or saving to notes; the local wishlist path and stored fields are shown in the artifact.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] expected: The broader video, audio, and frame workflow is disclosed in the main documentation and README, so this is a transparency note about the short description rather than evidence of hidden behavior.\n[SDI-1] expected: Wishlist and Apple Notes saving extend the tool into persistence, but the actions are presented as user-selected post-extraction options and the JSON storage structure is documented.\n[SQP-2] expected: Automatic audio transcription after an incomplete caption is explicitly described as the normal recipe-recovery flow and remains limited to the user-provided public reel.\n[SQP-2] expected: The local wishlist stores recipe metadata persistently, but this is disclosed and attached to the user's 'Add to wishlist' action rather than automatic collection.\n[VirusTotal code_insight] expected: The flagged shell commands and external model use are documented and purpose-aligned for media extraction, with no artifact evidence of credential theft, destructive behavior, or unrelated exfiltration.",
+          "guidance": "Install this only if you are comfortable with the agent downloading public reel media to /tmp, transcribing audio locally, and possibly sending extracted frames to a vision model for reading on-screen recipe text. Use the wishlist or notes options only for recipes you intentionally want saved.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill coherently extracts recipes from public Instagram reels using disclosed media tools, with optional user-directed saving.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783651705552,
+          "issueCount": 4,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 19,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: clawdbites\nVersion: 0.1.0\n\nThe skill is classified as suspicious due to its reliance on powerful shell commands (`yt-dlp`, `ffmpeg`, `whisper`) and external API calls (implied Claude Vision API for frame analysis), which are inherently high-risk capabilities. While these actions are plausibly needed for the stated purpose of extracting recipes from Instagram reels, and there's no clear evidence of malicious intent like data exfiltration or unauthorized remote control, the broad access to shell execution and external network communication without stringent input sanitization or sandboxing raises concerns. The `SKILL.md` also contains strong directives to the AI agent (e.g., 'ALWAYS follow this complete flow', 'Automatically proceed to audio transcription'), which, while currently aligned with the skill's purpose, demonstrate a potential for prompt injection if the instructions were to be subtly altered for malicious ends.",
+          "checkedAt": 1779160084195,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "96f8767fc1e8606bda94826df657387dee9d7e8e4d5781f64c8bf2fbf230fccc",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/96f8767fc1e8606bda94826df657387dee9d7e8e4d5781f64c8bf2fbf230fccc"
+    },
+    "slug": "clawdbites",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

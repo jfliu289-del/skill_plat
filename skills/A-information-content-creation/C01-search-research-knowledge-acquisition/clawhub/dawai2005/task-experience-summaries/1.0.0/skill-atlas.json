@@ -1,0 +1,152 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "website"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.575,
+    "domains": [
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:phrase:web search",
+      "category:C01:token:search",
+      "category:C03:token:document",
+      "category:C07:token:test",
+      "category:C17:token:notes",
+      "category:C19:token:browser",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:search",
+      "cross-tag:testing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00",
+      "C03",
+      "C07",
+      "C17",
+      "C19"
+    ],
+    "stages": [
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "manage",
+      "research",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "956e6a41fac623c40b186bdcdf247265dab3948b76c2c8dc9ff24625cd2dc440",
+    "content_hash": "e87e28da4a8ea135829c3560988e9164f4737d16e5e4751df61be15272cd72ca",
+    "precanonical_content_hash": "61aa6f09b6e964221f79d4006189f294c5b77d2bd67eafa08511899e6e3a28d0",
+    "skill_md_hash": "b8bf0fd1434082388f2698efca8008503e1590a58aadc6b56dfa6584805d54b1",
+    "version_metadata_sha256": "ae698e844b34eecf7b86c861f539d01570e89de106e3c4344266fcbfe45408df"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/dawai2005/skills/task-experience-summaries",
+    "claim_id": "07f6a6ea91be1f0cf5ea7e0499b63498dffd1c396b4c3770908a67c688e85b32",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "task-experience-summaries",
+        "url": "https://clawskills.sh/skills/dawai2005-task-experience-summaries"
+      }
+    ],
+    "owner_handle": "dawai2005",
+    "owner_id": "s1708cf0bwctsx90y322e3yhg183g9tz",
+    "published_at": 1771213455752,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968974601,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968974601,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifact is a single markdown skill for OpenClaw troubleshooting, package discovery, configuration notes, and documenting resolved task experiences; its capabilities fit that stated purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The activation text is fairly broad and includes install, publish, and troubleshooting guidance, but the commands are presented as examples for user-directed troubleshooting rather than automatic instructions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No executable scripts, install hooks, package manifests, or runtime code are present; npm and clawhub commands appear only inside documentation examples.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "API keys, service tokens, browser profiles, and global install commands are relevant to the troubleshooting purpose, but users should treat the examples as sensitive operational guidance.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill encourages updating its own SKILL.md with new experiences; this is disclosed and purpose-aligned, but additions should be reviewed because they become persistent future guidance.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad troubleshooting scope is real, but it remains centered on OpenClaw installation, configuration, and package guidance and does not by itself create hidden execution or unrelated authority.\n[SQP-2] expected: The credential/environment-variable examples are expected for configuration troubleshooting, though the skill would benefit from clearer warnings not to expose real secrets in logs, screenshots, or saved notes.\n[VT-code_insight] expected: The self-update and force-install examples are present, but they are disclosed documentation steps, not automatic behavior; VirusTotal is the only negative telemetry and is outweighed by clean static scan and artifact coherence.",
+          "guidance": "Safe to install as a reference skill. Before following examples, verify package names, avoid force or publish commands unless you intend their effects, and do not save real API keys, tokens, or copied terminal output containing secrets into the skill file or shared documentation.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a troubleshooting note skill with command and API-key examples, but it does not run code or hide behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968948972,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: task-experience-summaries\nVersion: 1.0.0\n\nThe skill's primary purpose is benign, providing troubleshooting and documentation for OpenClaw tasks. However, the `SKILL.md` contains instructions for the AI agent to 'Update relevant section in this SKILL.md' with new experiences. This creates a significant prompt injection vulnerability, as an attacker could potentially trick the agent into injecting malicious markdown or commands into its own skill definition, altering its future behavior. While the intent is for documentation, the mechanism allows for self-modification of the skill's instructions based on agent input, which is a high-risk capability. Additionally, the use of `npm i -g clawhub --force` in troubleshooting, while common, bypasses checks and could be misused if the agent is later tricked into installing a malicious package with the `--force` flag.",
+          "checkedAt": 1779164444948,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "899998ef39572dbb001b1d8d3cff7d703c1808512b38d09a22abf8df2199b5b0",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/899998ef39572dbb001b1d8d3cff7d703c1808512b38d09a22abf8df2199b5b0"
+    },
+    "slug": "task-experience-summaries",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

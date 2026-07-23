@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.465,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C06:token:coding",
+      "category:C10:token:ai",
+      "category:C10:token:llm",
+      "category:C10:token:model",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "cc8c919daff0237d65f87f7dd23eec7995ff47bc1bb5ada8594dd907357d9748",
+    "content_hash": "db242b1487e9db31ea99b46e93889c0b698adcdc3710688503833c64dde337c4",
+    "skill_md_hash": "5057c06353395f006ae354c7ef02ea5908b34d3e0f56a9c394037947e0e7f461",
+    "version_metadata_sha256": "c7b2b31672690477d3b89b05e49aadfdb7c933f4a0b9a8a592b6b3cddeb3ff04"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/xdd-xund/skills/chinese-llm-router",
+    "claim_id": "d29e5be1379445b83a3996f93e01ce2ae56464a57353bd60c3bbc50cef2ce021",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "chinese-llm-router",
+        "url": "https://clawskills.sh/skills/xdd-xund-chinese-llm-router"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "xdd-xund",
+    "owner_id": "s1772a884c28sndtzdrcv0sr31885nwb",
+    "published_at": 1771262128322,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971424896,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971424896,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifacts: setup collects provider API keys, router sends OpenAI-compatible chat requests to configured LLM endpoints, and commands list, recommend, test, or route models.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Routing and fallback behavior are user-directed and documented, but users should understand that fallback models may send prompts to a different configured provider.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no remote installer, package dependency chain, obfuscation, or hidden installation behavior; setup is a local Node script run by the user.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to third-party LLM APIs and use of provider API keys are proportionate to the router purpose, though the documentation could more explicitly warn that chat content leaves the local environment.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists API keys and routing defaults in ~/.chinese-llm-router/config.json as plaintext JSON, with no background service, privilege escalation, self-modification, or destructive behavior found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: External transmission of prompts to configured LLM providers is inherent to this router and is disclosed by the provider setup and routing documentation, but privacy warnings should be clearer.\n[SQP-2] expected: Collecting provider API keys and storing them locally is purpose-aligned, but the setup script does not mask input or harden file permissions, so users should protect and rotate keys as needed.\n[VirusTotal code_insight] expected: The router can technically use HTTP if a user edits config.json to an HTTP baseUrl, but all shipped/default provider URLs are HTTPS and there is no artifact-backed evidence of intentional insecure routing.",
+          "guidance": "Install only if you are comfortable sending prompts to the configured third-party LLM providers and storing their API keys locally. Use trusted HTTPS endpoints, avoid sensitive or regulated data unless provider policies allow it, restrict access to the config file, and use low-quota or revocable API keys where possible.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill coherently routes chats to user-configured Chinese LLM providers, with expected but important privacy and API-key handling risks.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971401596,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: chinese-llm-router\nVersion: 1.0.0\n\nThe skill's core router (`scripts/router.js`) dynamically determines whether to use HTTP or HTTPS based on the `baseUrl` provided in the configuration. While all default `baseUrl`s listed in `SKILL.md` and `scripts/setup.js` are HTTPS, this design choice means that if the `config.json` file (located at `~/.chinese-llm-router/config.json`) were tampered with to include an HTTP URL for a provider, API keys could be transmitted unencrypted. This constitutes a sensitive data exposure vulnerability, classifying the skill as suspicious due to a risky capability that could be exploited, rather than clear malicious intent.",
+          "checkedAt": 1779164609098,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "c3f85a8e9200b3d7ec30f4f08dd35033e68598bd3e2115a45d5305a650a42d54",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/c3f85a8e9200b3d7ec30f4f08dd35033e68598bd3e2115a45d5305a650a42d54"
+    },
+    "slug": "chinese-llm-router",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

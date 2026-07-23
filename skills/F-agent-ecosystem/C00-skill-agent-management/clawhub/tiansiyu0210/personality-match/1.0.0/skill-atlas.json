@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C02:token:language",
+      "category:C07:token:test",
+      "cross-tag:agent-management",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C07"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "f3f440344b74f4915a2ecbef50d1111ad85df902f763d33b38613b6cc7253d41",
+    "content_hash": "8b8d2e0c174f8c6658c97039af2b487c7c99a63ef9cfbe516c9d29b67c16f8f5",
+    "precanonical_content_hash": "4ff091490a4568246cc5056505a3872eb620948d93043f2a1ab8e3654a42d10c",
+    "skill_md_hash": "50d8d0a11bd1b4b004e98f80a91f9d15714c5778b7890cf218c19f3cda32eb8f",
+    "version_metadata_sha256": "a1765bd87b939f6665b4112d3fed2dcb473f872e85b734d6bac010b19730cb0b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tiansiyu0210/skills/personality-match",
+    "claim_id": "1cba2234c7c46628f007436c30b2ba228925b91b5ff6c41a8e5585c619680f7e",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "personality-match",
+        "url": "https://clawskills.sh/skills/tiansiyu0210-personality-match"
+      }
+    ],
+    "owner_handle": "tiansiyu0210",
+    "owner_id": "s179xhqa8ayjvk91hkgavevwm9884gg1",
+    "published_at": 1771974606032,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779957656360,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779957656360,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The curl-based personality quiz submission is coherent with the stated purpose of generating and sharing a personality match result.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill instructs the agent to generate structured answers in English and submit them externally; this is purpose-aligned but should be visible to the user before use.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No deceptive installer, package installation, privilege escalation, or automatic background execution was identified in the supplied evidence.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill reads TELEGRAM_BOT_TOKEN only to derive the bot ID prefix, not to transmit the full token, but using a credential-derived identifier for matching should be clearly disclosed.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Saving the returned botId to memory creates limited persistence for a service identifier; no broad persistence, privilege escalation, or destructive behavior is indicated.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-2] expected: The bot ID derived from TELEGRAM_BOT_TOKEN is used as an identifier for the matching service; this is not exfiltration of the full token, but users should understand that bot identity is shared.\n[SDI-2] expected: Persisting the returned botId is consistent with retaining a match/profile reference, though it would benefit from clearer retention and clearing guidance.\n[SQP-2] expected: Submitting generated quiz answers to the external API is central to the skill's matching function, but the README-level disclosure appears thin.\n[SQP-2] expected: The outbound payload of bot identity, locale, and answers is purpose-aligned for a personality match link and is not evidence of hidden or unrelated data collection.\n[SQP-3] expected: English-only answers appear to be a service compatibility requirement rather than an unsafe transformation, but it should be disclosed when the user's normal language differs.",
+          "guidance": "Install only if you are comfortable sending the bot's generated personality-test answers, locale, bot name, and bot ID prefix to the third-party aimatchforyou service. Avoid using it where SOUL.md contains private or sensitive persona details.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to do what it claims, but it shares quiz answers and a bot-derived identifier with an external matching service.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779957610101,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 45,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: personality-match\nVersion: 1.0.0\n\nThe skill's instructions in SKILL.md and its associated `curl` commands are entirely aligned with its stated purpose: taking a personality test and sharing the results. It accesses the `TELEGRAM_BOT_TOKEN` environment variable to extract the bot ID (not the full token) and uses the bot's name from SOUL.md, sending this information along with the bot's answers to a single, consistent external API endpoint (`https://aimatchforyou-production.up.railway.app`). There is no evidence of prompt injection with malicious intent, unauthorized data exfiltration, malicious execution, persistence mechanisms, or obfuscation.",
+          "checkedAt": 1779166915282,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "98161a6ef54ab1c19c03dcb605612758c1454cb53263156aad4d5ca05405cc0b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/98161a6ef54ab1c19c03dcb605612758c1454cb53263156aad4d5ca05405cc0b"
+    },
+    "slug": "personality-match",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "security-professional"
+    ],
+    "confidence": 0.4167,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C04:token:statistics",
+      "category:C09:token:audit",
+      "category:C09:token:privacy",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:security",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C04"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ac157993b97c9a08d995efd7f970f236bbcc789f1bfcfcccd64c35c21c3c8428",
+    "content_hash": "fc4731b89bdc5fdf69d1a47f99ee9fc6fdb43ef8d04034f1a0893d0cace2e7ad",
+    "precanonical_content_hash": "b641f0a3a97e119ad187ce3470ad5975091f528b1e7d1e2de25129c6ac73638c",
+    "skill_md_hash": "03396d099ed7275a90255bb3a71fb5fa9d9fc7e506d2ce8c70b03cb3d11421b4",
+    "version_metadata_sha256": "7f0c7e4526e14cc09fc9311b61327620eb1e5f6f8ff5ec793bf58892b6ebf121"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/vintlin/skills/usage-visualizer",
+    "claim_id": "9383ed64701942ece63f5a260d9db526e5cbea81478b63e314d65afb2bca4217",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "usage-visualizer",
+        "url": "https://clawskills.sh/skills/vintlin-usage-visualizer"
+      }
+    ],
+    "owner_handle": "vintlin",
+    "owner_id": "s17adgm9mk40kgfmm51yrx3bj983hymj",
+    "published_at": 1771753339893,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972299945,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972299945,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is local usage visualization; the code reads OpenClaw/Clawdbot session JSONL files, extracts usage metadata such as tokens, model names, provider, date, and cost, stores summaries in SQLite, and renders text or PNG reports. That matches the advertised capability.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill asks agents to run local Python scripts and deliver generated PNG files. The 'fetch' and default sync step are local log parsing, not network fetching, but the docs could be clearer that it scans default session-log locations under the user's home directory.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses `pip3 install -r requirements.txt` and requires Chromium. This is disclosed in metadata, but the 'zero network dependencies' wording is only accurate for observed runtime behavior, not typical first-time dependency installation.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading local session logs and writing report artifacts is proportionate for a usage-reporting skill. Chromium/html2image and Pillow increase local rendering attack surface, but the rendered HTML is generated locally from summarized usage data and no network APIs were found in the artifacts.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill creates or updates a persistent SQLite database in `OPENCLAW_WORKSPACE` or `~/.llm-cost-monitor`, plus temporary HTML/PNG files during image generation. This persistence is disclosed by the reporting workflow and is scoped to usage summaries.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Shell execution, file I/O, and environment-variable use are expected for this local reporting skill and are reflected in the install/runtime metadata; no hidden privilege path was found.\n[SDI-4] unexpected: The scanner concern is partly valid: runtime code appears local-only, but `pip3 install -r requirements.txt` can require network access, so the 'zero network dependencies' claim should be read as runtime-only.\n[SDI-1] expected: The package-level concern about a `fetch` script was not supported as network behavior; `fetch_usage.py` scans local OpenClaw/Clawdbot session files and writes local SQLite records.\n[SDI-2] expected: The default sync step is purpose-aligned local log ingestion, not an undocumented external data path based on the inspected imports and code flow.\n[SQP-2] expected: The image generator can write to a user-supplied output path and creates predictable temporary files in that output directory. This is expected for a CLI renderer, but users should avoid pointing it at sensitive directories.\n[SC1] unexpected: Dependencies are specified with lower bounds rather than exact pins, which is a supply-chain hygiene issue but not evidence of malicious behavior.\n[SC4] unexpected: The dependency advisories are general package-risk signals. The code does not use unsafe PyYAML loading, and Pillow is used for local generated PNG processing; keep dependencies updated.\n[VirusTotal:code_insight] expected: The VirusTotal narrative raised local file-write and Chromium rendering concerns but reported no malicious engines and no exfiltration or persistence beyond the reporting workflow; artifact review supports a benign verdict.",
+          "guidance": "Install this only if you are comfortable with it scanning local OpenClaw/Clawdbot session logs for usage metadata and keeping a local SQLite usage database. Treat dependency installation and Chromium rendering as normal but meaningful local attack surface; prefer a trusted environment, keep dependencies current, and avoid custom output paths in sensitive directories.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill locally reads OpenClaw usage logs to make reports, with no artifact-backed evidence of exfiltration, deception, persistence beyond its usage database, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972236744,
+          "issueCount": 12,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: usage-visualizer\nVersion: 1.1.3\n\nThe skill is classified as suspicious due to a potential arbitrary file write vulnerability in `scripts/generate_report_image.py` if the `--output` argument were user-controlled, and the heavy dependency on Chromium for image rendering, which significantly expands the attack surface. While the agent's execution flow (via `scripts/run_usage_report.py`) mitigates the arbitrary file write by constraining output to `OPENCLAW_WORKSPACE` or the project root, and the HTML content for rendering is generated locally without external network calls, these factors introduce meaningful risks. There is no evidence of intentional malicious behavior like data exfiltration or persistence.",
+          "checkedAt": 1779081758539,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "0475a116b2e94377d8e0f7fc71717ca56690b4740b8eeac5d2fb9d8a00b6d5c1",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0475a116b2e94377d8e0f7fc71717ca56690b4740b8eeac5d2fb9d8a00b6d5c1"
+    },
+    "slug": "usage-visualizer",
+    "source_type": "clawhub",
+    "version": "1.1.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

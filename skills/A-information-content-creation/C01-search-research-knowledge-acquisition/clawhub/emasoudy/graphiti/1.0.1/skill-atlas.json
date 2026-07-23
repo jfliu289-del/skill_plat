@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C13:token:operations",
+      "category:C17:token:knowledge",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C13",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover"
+    ],
+    "tasks": [
+      "build",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "58038a6e4bf4befb9e1ce951e06a48e89a9c1c09b30070c3fa84636e55ad67bc",
+    "content_hash": "1489e659f26a57e7a08a720484c0466ae9233273b4513cba51af5170daed530c",
+    "precanonical_content_hash": "a597015fcb799b7bc3cd5b71bb8ce45cb59921350f2231fd3296a5287cbec2eb",
+    "skill_md_hash": "3fafeaa23f126d6830edbd9d2fc5c9620ff807e4e2ea9152bad0ba2ffacfcd29",
+    "version_metadata_sha256": "eee6e26814142f0e3b27d68f1c8c502a66aa23648eda631424852a65eb4ab9de"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/emasoudy/skills/graphiti",
+    "claim_id": "fd81008b3dc0fd01e7e0e54635df0e99d501f0d79b3055b14987674003659bdf",
+    "index_entries": [
+      {
+        "index_path": "categories/personal-development.md",
+        "label": "graphiti",
+        "url": "https://clawskills.sh/skills/emasoudy-graphiti"
+      }
+    ],
+    "owner_handle": "emasoudy",
+    "owner_id": "s173wky9jzaf8dz71vgzr3jpkh83rr76",
+    "published_at": 1768808570301,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783650052735,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783650052735,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe Graphiti knowledge-graph use, including fact search and adding episodes or memories. The advertised entity/relationship extraction is not a separate command, but it is consistent with Graphiti's add-episode workflow.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are limited to bash examples that call a local helper, then use curl and jq against configured Graphiti REST endpoints. The write endpoint sends user-provided memory content to Graphiti, which is expected for this skill.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The manifest discloses curl, jq, Graphiti, Neo4j, and Qdrant dependencies. No remote installer script, obfuscation, automatic privileged setup, or unrelated install behavior is present.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Defaulting to localhost and allowing a configured Graphiti URL is proportionate. One documentation mismatch exists: the helper checks Clawdbot config and then localhost, but does not actually preserve a pre-set GRAPHITI_URL environment variable despite the docs mentioning it.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill does not request credentials or OS-level privileges, but graphiti_add writes persistent memory to the user's Graphiti stack. That persistence is disclosed and central to the stated purpose.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill uses bash, curl, and a small env-check helper, but the SKILL.md examples and manifest disclose the relevant commands, dependencies, services, endpoints, and write capability clearly enough to understand its authority.\n[SQP-2] expected: The /messages operation can persist or mutate graph memory, but adding memories is a core advertised function. A stronger retention or rollback warning would be useful, but the behavior is not hidden or purpose-mismatched.",
+          "guidance": "Install this only if you want the agent to query and add persistent entries to your Graphiti knowledge graph. Verify the Graphiti endpoint before use, and avoid storing secrets or untrusted content as memories.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill transparently lets an agent search and add entries to a Graphiti knowledge graph, with no hidden or malicious behavior found.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783650023226,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 23,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: graphiti\nVersion: 1.0.1\n\nThe skill bundle is benign. It provides functionality to interact with a Graphiti knowledge graph API, using standard `curl` and `jq` commands. The `env-check.sh` script (references/env-check.sh) safely discovers the Graphiti service URL via Clawdbot config, environment variables, or a localhost fallback, and performs a health check. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, obfuscation, or prompt injection attempts against the agent in SKILL.md. All actions are transparent and directly related to the stated purpose of knowledge graph operations.",
+          "checkedAt": 1779159792837,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "ec6ca9aaf0d87ea08c854f63f980c03df853d936021acaadf6d4056761354aab",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ec6ca9aaf0d87ea08c854f63f980c03df853d936021acaadf6d4056761354aab"
+    },
+    "slug": "graphiti",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

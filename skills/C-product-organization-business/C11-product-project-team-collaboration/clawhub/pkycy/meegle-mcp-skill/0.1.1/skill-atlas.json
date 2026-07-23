@@ -1,0 +1,147 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "security-professional"
+    ],
+    "confidence": 0.8588,
+    "domains": [
+      "security"
+    ],
+    "needs_review": false,
+    "primary_category": "C11",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:analytics",
+      "category:C09:token:security",
+      "category:C11:phrase:project management",
+      "category:C11:phrase:team collaboration",
+      "category:C11:token:collaboration",
+      "category:C11:token:project",
+      "category:C11:token:team",
+      "category:C12:token:management",
+      "category:C13:token:operations",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "88c2cdfc5fd47fc5d5c31d400a737e8bc3d516a2a220ad22ee5a87da22942193",
+    "content_hash": "665705bfe18cd06694a96c53fb82a7ed81c7efeab7197bd16dc89763a7a46866",
+    "precanonical_content_hash": "d9ab8534cb45ae75598db94d4a8c7de797ffe56605ad52425cdd0655dfee7970",
+    "skill_md_hash": "7a3721cecb54d5412e303fd2e633bf9d8a2af6291607be523c6a8e9337566fbe",
+    "version_metadata_sha256": "57d6d562033455df6a9c4b2cbf3ff36c55c277d3577f039f072b6aa2790440de"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/pkycy/skills/meegle-mcp-skill",
+    "claim_id": "f2320a6e5f0b4e38ae524781b509d4d8ce1bc7354a451b132dfd2b1d47950d23",
+    "index_entries": [
+      {
+        "index_path": "categories/clawdbot-tools.md",
+        "label": "meegle-mcp-skill",
+        "url": "https://clawskills.sh/skills/pkycy-meegle-mcp-skill"
+      }
+    ],
+    "owner_handle": "pkycy",
+    "owner_id": "s170q7h1zd1qz98sw1fsaq9g9x84s9sa",
+    "published_at": 1770700810268,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779964163797,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779964163797,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The advertised capabilities match a Meegle project-management MCP integration, including reading and changing projects, tasks, workflows, members, and permissions.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The examples are user-directed and aligned with the stated purpose, but users should understand that create, move, add-member, and permission prompts affect live Meegle data.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses disclosed files only: a Node.js stdio MCP proxy, example MCP config, and an optional setup script. No hidden package installation or unrelated code execution was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The proxy sends MCP requests and Meegle credentials to the disclosed Larksuite Meegle MCP endpoint, which is necessary for the integration; credentials are placed in URL query parameters, which is weaker than header-based authentication.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The setup script persistently appends MEEGLE_USER_KEY and MEEGLE_MCP_KEY to shell startup files in plaintext. This is disclosed setup behavior, not stealth persistence, but it increases credential exposure.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: README examples for creating tasks, moving workflow items, and adding members are expected for a project-management integration, though clearer live-change warnings would improve user safety.\n[SQP-2] expected: SKILL.md advertises write and access-management operations that fit the stated Meegle purpose; users should confirm high-impact actions before running them.\n[SQP-2] expected: The MCP proxy forwards stdio MCP requests to Meegle with the configured keys, which is core integration behavior; using query-string credentials is a credential-hygiene weakness rather than evidence of exfiltration.\n[SQP-2] expected: Persisting keys in shell config is a common convenience mechanism and is visible in the setup script, but it should be treated as long-lived plaintext credential storage.",
+          "guidance": "Install only if you trust this skill to act in Meegle with the permissions of the keys you provide. Prefer a least-privilege or service account, avoid syncing shell profiles that contain secrets, rotate keys if exposed, and review prompts that create projects, move tasks, add members, or change permissions.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This appears to be a legitimate Meegle connector, but it can make real workspace changes and stores Meegle keys in shell startup files if setup is used.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779964101119,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: meegle-mcp-skill\nVersion: 0.1.1\n\nThe skill is designed to integrate OpenClaw with the Meegle project management system via a Model Context Protocol (MCP) proxy. The `scripts/setup.sh` script configures user-specific environment variables (`MEEGLE_USER_KEY`, `MEEGLE_MCP_KEY`) in `~/.zshrc` or `~/.bashrc`, which is a standard setup practice. The `scripts/mcp-proxy.js` script reads these keys from environment variables and includes them in HTTPS requests to the legitimate Meegle API endpoint (`https://project.larksuite.com/mcp_server/v1`) for authentication, which is necessary for its stated purpose. There is no evidence of prompt injection in `SKILL.md` or `README.md`, nor any other malicious activities like unauthorized data exfiltration, persistence mechanisms, or arbitrary code execution.",
+          "checkedAt": 1779162679254,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "133e43949831f6e95a3cd7d09619995013085b180f984aba2f610bed30b319c7",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/133e43949831f6e95a3cd7d09619995013085b180f984aba2f610bed30b319c7"
+    },
+    "slug": "meegle-mcp-skill",
+    "source_type": "clawhub",
+    "version": "0.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

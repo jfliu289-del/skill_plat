@@ -1,0 +1,119 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:audio"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "6012dc35759cd538ac09414b37f7937d9b21339b6e6c623888cdd1683589d5d7",
+    "content_hash": "6f2c1070152219cd540dc07654a57f80a57c8959db7d6e6b00e591615619fd81",
+    "precanonical_content_hash": "7b168b6f87619592a2bc54a8f7dcc2655c686bf67b6b14d9e8c7fda3150d58e2",
+    "skill_md_hash": "21f3743c3fae626f33cb9893bd42fb5899bc9d7c8ab64af62e2f8590581f5a99",
+    "version_metadata_sha256": "8d78364fd54dfd2e299544c451d27c44c15fb34e218db4e0baae6be91242f39c"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/bolander72/skills/imessage-voice-reply",
+    "claim_id": "7b5bb4ec3369c143898c3fa9afc27d012ae960ce10173d991a467e29bcbb312a",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "imessage-voice-reply",
+        "url": "https://clawskills.sh/skills/bolander72-imessage-voice-reply"
+      }
+    ],
+    "owner_handle": "bolander72",
+    "owner_id": "s17fm6h09ww1gcsh39f3j9n5sd86ejzr",
+    "published_at": 1772171705614,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943809769,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943809769,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose matches the artifacts: generate Kokoro TTS audio, encode it as CAF/Opus on macOS or MP3 fallback elsewhere, and send it through the configured BlueBubbles channel. Messaging from the user's account is impactful but central to the stated function.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are user-directed and scoped to voice replies when the user received a voice message or explicitly wants audio. The skill advises using a text file for untrusted input and including a text reply for accessibility.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Setup creates a local virtual environment, installs kokoro-onnx, soundfile, and numpy, and downloads Kokoro model files to the user's cache. This is disclosed and purpose-aligned, though dependencies and model assets are not pinned by version or checksum.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Local file reads, temp files, audio encoders, ffmpeg or afconvert, and a model cache are proportionate for local voice generation. The BlueBubbles messaging channel requirement is disclosed.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background worker, autostart, privilege escalation, credential harvesting, or broad local indexing is shown. Persistence is limited to the virtual environment and Kokoro model cache, while sending uses the existing configured messaging channel.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill does instruct shell setup and local file use, but those actions are visible in the setup and generation workflow and are proportionate for creating audio locally. The minimal metadata is a transparency limitation, not evidence of hidden or purpose-mismatched behavior.\n[TP4] expected: The artifact explicitly discloses model downloads, the local Kokoro cache, the macOS CAF/Opus path, and MP3 fallback behavior. The front-matter wording is somewhat optimistic about native iMessage bubbles, but the body clarifies platform differences and does not support a deceptive-behavior finding.",
+          "guidance": "Install this only if you want your agent to generate synthesized voice replies and send them through your BlueBubbles/iMessage setup. Review the recipient and content before sending, and be aware that setup downloads unpinned Python packages and model files.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed local text-to-speech helper for creating and sending iMessage voice replies through BlueBubbles, with no evidence of hidden data theft or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943783582,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 45,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: imessage-voice-reply\nVersion: 1.0.3\n\nThe OpenClaw AgentSkills skill bundle for 'imessage-voice-reply' is classified as benign. The code and documentation are transparent, well-structured, and align with the stated purpose of generating local TTS voice messages for iMessage. Key security indicators include the use of virtual environments for dependencies, safe `subprocess.run` calls with list arguments in `scripts/generate_voice_reply.py` to prevent shell injection, and explicit advice in `SKILL.md` to prefer `--text-file` for untrusted input. Model downloads are performed to a standard user cache directory (`~/.cache/kokoro-onnx/`), and no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts against the agent was found.",
+          "checkedAt": 1779165830317,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "08e3ad1a9990a75dec880fb701a2304fd97618b5ea32efc68742209206521e82",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/08e3ad1a9990a75dec880fb701a2304fd97618b5ea32efc68742209206521e82"
+    },
+    "slug": "imessage-voice-reply",
+    "source_type": "clawhub",
+    "version": "1.0.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

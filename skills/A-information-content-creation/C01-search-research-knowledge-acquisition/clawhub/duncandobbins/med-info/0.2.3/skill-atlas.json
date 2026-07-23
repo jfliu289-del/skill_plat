@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "paper"
+    ],
+    "audiences": [
+      "researcher",
+      "security-professional"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "science",
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:find",
+      "category:C01:token:sources",
+      "category:C09:token:privacy",
+      "category:C17:token:notes",
+      "cross-tag:academic-research",
+      "cross-tag:search",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4bb9878a84f5488310e837a9a4820e661b63226e7fcfa79e65e3b221a2fe88f0",
+    "content_hash": "17005a5649dde4c846094dc460fe88a1a16d3d88ae7ab57514e0c0e28db21d18",
+    "precanonical_content_hash": "f603653ecf61eaca1a70cd71e99b4d8e85085b642195b94b4651237d396df77c",
+    "skill_md_hash": "22a664d90c1439b97f9989a994e377e2688820c813ba5fe3ee68891c97cf07b4",
+    "version_metadata_sha256": "b0b657997987af6236d34b2c7e7c2e63dadaca4ff2c320009bd95e05d7421e99"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/duncandobbins/skills/med-info",
+    "claim_id": "869a14386dac7607a878046204f854cb911cfe4acd767ec21ce221cdcea8326c",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "med-info",
+        "url": "https://clawskills.sh/skills/duncandobbins-med-info"
+      }
+    ],
+    "owner_handle": "duncandobbins",
+    "owner_id": "s171cbeavcd0jhdxyttrhpha39884hmb",
+    "published_at": 1772080983945,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971705897,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971705897,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts match the stated purpose: a user-run CLI resolves drug names, NDCs, RxCUIs, or SPL set IDs and returns label-backed medication information from openFDA, RxNav, DailyMed, MedlinePlus, PubChem, and public FDA datasets.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The main workflow is explicit command execution by the user. Higher-noise add-ons such as recalls, shortages, FAERS, interactions, DailyMed media, Orange Book, Purple Book, and chemical properties are exposed as opt-in flags rather than automatic background behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "No installer, postinstall hook, package manager mutation, or remote bootstrap script was found. Metadata declares only python3 as required, and the package consists of documentation plus Python scripts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to public drug-information services is central to the purpose and is disclosed. Users should not include PHI because drug names or identifiers are sent to external APIs.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The script can cache downloaded public datasets under MED_INFO_CACHE_DIR or ~/.cache/med-info and can use an optional OPENFDA_API_KEY for rate limits. The API key is used only for openFDA requests and is redacted from debug URL logs; no hardcoded secrets, privilege escalation, or unrelated credential access was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-2] expected: The older scanner concern about downloading a CDC PDF and invoking pdftotext is partly artifact-supported, but it is purpose-related to the NIOSH hazardous-drug lookup, uses a fixed URL and subprocess arguments without shell expansion, and the current CLI parses --hazardous without wiring it to execute this path. This is a maintenance hardening point, not enough for Review by itself.\n[VirusTotal code_insight] expected: The suspicious label is based on broad network/API use and pdftotext. Those capabilities are disclosed and proportionate to medication-reference lookup, and artifact review did not show hidden exfiltration, automatic execution, destructive behavior, or unsafe credential handling.\n[staticScan] expected: Static scan reported clean, which is consistent with the artifact review: the observed file I/O, networking, cache writes, and optional OPENFDA_API_KEY use align with the skill's documented purpose.",
+          "guidance": "Install this if you are comfortable with a medication-reference CLI that sends drug names or identifiers to public medical APIs and stores public reference datasets in a local cache. Do not enter patient-specific information or PHI, and only provide OPENFDA_API_KEY if you need higher openFDA rate limits.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent medication lookup skill that uses public medical APIs and a local public-data cache, with no evidence of hidden collection, destructive behavior, or privilege abuse.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971655039,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: med-info\nVersion: 0.2.3\n\nThe skill is classified as suspicious due to the presence of high-risk capabilities, specifically the execution of an external binary (`pdftotext`) via `subprocess.run` in `scripts/med_info.py` and extensive network interactions with numerous external APIs. While these capabilities are plausibly needed for the stated purpose (parsing NIOSH PDF, fetching drug info) and appear to be implemented with input sanitization and safe `subprocess.run` arguments, they inherently introduce a broader attack surface and elevate the risk profile beyond a benign classification. The `SKILL.md` and `findings.md` also acknowledge past 'Suspicious' flags related to query injection, which the developers claim to have mitigated.",
+          "checkedAt": 1779163368534,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "79b76d67f0c57a26597f6d95b70f7b64e5aeeeb13ea3c736831de02485f74915",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/79b76d67f0c57a26597f6d95b70f7b64e5aeeeb13ea3c736831de02485f74915"
+    },
+    "slug": "med-info",
+    "source_type": "clawhub",
+    "version": "0.2.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

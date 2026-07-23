@@ -1,0 +1,207 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "configuration"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "infrastructure",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C06:token:api",
+      "category:C06:token:developer",
+      "category:C10:token:ai",
+      "category:C13:token:operations",
+      "category:C17:token:knowledge",
+      "cross-tag:agent-management",
+      "cross-tag:debugging",
+      "cross-tag:deployment",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00",
+      "C10",
+      "C13",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "debug",
+      "deploy",
+      "manage",
+      "operate"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4dfe80a55024b7e3982ce26c6d7b898d5e9c0ef1768b8ef5f8f45b1cc05365bc",
+    "content_hash": "5b39d4efbd02bab7946f660c187257339ec4de578f94c286b710a86eb61fe785",
+    "precanonical_content_hash": "f934ed3dd512ae6ac8a89a760849d73bce7514d7924555b2a676c40776284bad",
+    "skill_md_hash": "28f7d6f6261fae51b2605839e6f67d93b5f42e97f93cc557cb6c4ee2f7efc8da",
+    "version_metadata_sha256": "eccac328730a96b7d3ca524e80a931de4652fdb50f21411e4078189d9586ee6b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/luksoagent/skills/lukso-expert",
+    "claim_id": "83195e862afdfaeb5a52baceeed7afb146fe5b6003d670fc490193a7e673ee7a",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "lukso-expert",
+        "url": "https://clawskills.sh/skills/luksoagent-lukso-expert"
+      }
+    ],
+    "owner_handle": "luksoagent",
+    "owner_id": "s178aath94ecg8624t2nkvzjd1884hf6",
+    "published_at": 1771514073546,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779165469566,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": [
+            {
+              "categoryId": "ASI02",
+              "categoryLabel": "Tool Misuse and Exploitation",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The reference includes copyable code for value-transferring on-chain calls. This is purpose-aligned for a blockchain developer guide, but users should not let an agent run or adapt such transactions without explicit review.",
+                "path": "references/lsp-standards.md",
+                "snippet": "await up.execute(\n  0,\n  recipient,\n  ethers.parseEther(\"1.0\"),\n  \"0x\"\n);"
+              },
+              "recommendation": "Use testnet first, verify recipient addresses and calldata, and require explicit approval before executing any transaction generated from this skill.",
+              "riskBucket": "abnormal_behavior_control",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "If copied into a live project and executed, examples like this can move funds or change blockchain state."
+            },
+            {
+              "categoryId": "ASI03",
+              "categoryLabel": "Identity and Privilege Abuse",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The examples show use of a private key and broad Universal Profile controller permissions. That is expected for LUKSO deployment guidance, but it is high-impact if used carelessly.",
+                "path": "references/dev-patterns.md",
+                "snippet": "accounts: [process.env.PRIVATE_KEY!], ... erc725.encodePermissions({ CHANGEOWNER: true, ... SUPER_TRANSFERVALUE: true, SUPER_CALL: true, ... EXECUTE_RELAY_CALL: true })"
+              },
+              "recommendation": "Keep private keys outside prompts and logs, prefer least-privilege permissions where possible, and review permission sets before deploying them.",
+              "riskBucket": "permission_boundary",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "A leaked private key or overbroad controller permission can give someone control over a Universal Profile and its assets."
+            },
+            {
+              "categoryId": "ASI04",
+              "categoryLabel": "Agentic Supply Chain Vulnerabilities",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The skill does not install or run this command, but the reference material includes a remote script piped directly to a shell.",
+                "path": "references/ecosystem.md",
+                "snippet": "LUKSO CLI | `curl https://install.lukso.network | sh` — node/validator setup"
+              },
+              "recommendation": "Inspect installer scripts before running them, use official documentation links, and avoid executing remote shell installers automatically.",
+              "riskBucket": "abnormal_behavior_control",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "If a user copies and runs the command, their shell will execute whatever the remote installer serves at that time."
+            }
+          ],
+          "checkedAt": 1777614725016,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts match the stated purpose of a LUKSO knowledge base and contain no code or install step, but the reference material includes examples for real blockchain transactions and deployments.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill directs the agent to load local reference files for LUKSO topics; no artifact-backed goal hijacking, hidden stopping conditions, or instruction override behavior was found.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill itself has no install spec or executable files, but a reference page lists a remote shell installer for LUKSO CLI that users should verify before running.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "No environment variables or credentials are required by the skill, but the development examples show use of private keys and bearer API keys as expected for blockchain development.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill has no local persistence or background behavior, but examples cover persistent on-chain actions and broad Universal Profile controller permissions.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": null,
+          "guidance": "This skill appears safe to use as a LUKSO reference. Before acting on its examples, verify contract addresses and endpoints against official LUKSO documentation, protect private keys and API keys, and require explicit human approval for deployments, permission changes, token transfers, follows/unfollows, or any command that runs a remote installer.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": {
+            "abnormal_behavior_control": {
+              "highestSeverity": "low",
+              "status": "note",
+              "summary": "The skill includes user-directed examples for blockchain transactions and a referenced remote CLI installer, but no automatic execution or hidden code is present."
+            },
+            "permission_boundary": {
+              "highestSeverity": "low",
+              "status": "note",
+              "summary": "The examples involve private keys and broad account permissions as expected for LUKSO development, with no evidence of credential collection or misuse."
+            },
+            "sensitive_data_protection": {
+              "highestSeverity": "none",
+              "status": "none",
+              "summary": "No persistent memory, broad local indexing, inter-agent messaging, or sensitive local data collection is evidenced."
+            }
+          },
+          "status": "clean",
+          "summary": "This is a coherent instruction-only LUKSO reference skill, with user-directed blockchain examples that should be reviewed before copying or running.",
+          "verdict": "benign"
+        },
+        "skillspector": null,
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: lukso-expert\nVersion: 1.0.0\n\nThe skill bundle contains instructions and code snippets that present significant vulnerabilities. Specifically, `references/ecosystem.md` includes the instruction `curl https://install.lukso.network | sh`, which is a direct shell command to download and execute a remote script. This constitutes a critical Remote Code Execution (RCE) vulnerability if the AI agent were to execute it, as it allows arbitrary code from an external source to run. Additionally, `references/dev-patterns.md` uses `process.env.PRIVATE_KEY!` in code examples, which, while common in development, exposes sensitive information if the execution environment is compromised. These are vulnerabilities that allow attacks, classifying the bundle as suspicious rather than malicious.",
+          "checkedAt": 1779165469566,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "4dfe80a55024b7e3982ce26c6d7b898d5e9c0ef1768b8ef5f8f45b1cc05365bc",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4dfe80a55024b7e3982ce26c6d7b898d5e9c0ef1768b8ef5f8f45b1cc05365bc"
+    },
+    "slug": "lukso-expert",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

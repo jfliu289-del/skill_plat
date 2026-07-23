@@ -1,0 +1,148 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.3964,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:prompt",
+      "category:C06:token:api",
+      "category:C09:token:audit",
+      "category:C09:token:security",
+      "category:C09:token:threat",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C06",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1f37d5a6362bbfce5079e76971658e0223e6ceb5fbc6bca83ef41b87c316c74d",
+    "content_hash": "90cb08fa9e28bf69a851741d5cd87381ae7ad924f79afdb69ef042e05e8fc2ca",
+    "precanonical_content_hash": "9f4439dda166ca54495d1a234f5fc9205592834b765b5628156060bf176ef14c",
+    "skill_md_hash": "97a0a11ab6bdf7ddcebb385a44a4e79255798b562f744ad44beee2695f7fcdb4",
+    "version_metadata_sha256": "7ab215c3ae10bc816fa5a9aa66279e9ae7843e374c08bf692e97dc6e9d559e4e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jd-delatorre/skills/lieutenant",
+    "claim_id": "402cc2dd253911249946071f81c31367103420186bda1c4ff99afa5465addee9",
+    "index_entries": [
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "lieutenant",
+        "url": "https://clawskills.sh/skills/jd-delatorre-lieutenant"
+      }
+    ],
+    "owner_handle": "jd-delatorre",
+    "owner_id": "s17chnp93ak0mgfzff31fwt13d88402h",
+    "published_at": 1770418801744,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783657925496,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783657925496,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill’s stated purpose is AI-agent security scanning, and the included scripts implement text scanning and agent-card verification consistent with that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Prompt-injection phrases appear as examples of threats to scan, not as instructions for the installing agent to obey.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The reviewed bundle has no hidden installer, but its documentation points to an external GitHub repo and pip package that are outside this artifact review.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Local mode is proportionate; --api mode posts scanned text or agent-card JSON to a TrustAgents endpoint and uses environment variables for API key and optional API URL configuration.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The reviewed scripts do not add persistence, request privilege escalation, modify system state, or perform destructive actions.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[TT3] expected: The environment-configured API URL and outbound POST are real, but they are limited to explicit --api remote-analysis mode rather than hidden or automatic transmission; users should avoid setting TRUSTAGENTS_API_URL to an untrusted endpoint.\n[LP3] expected: The file, URL, network, and environment-variable use matches the documented CLI workflows, though a formal permission declaration and clearer data-flow disclosure would improve transparency.\n[SQP-2] expected: scan.py sends the full scanned text when --api is selected; this is purpose-aligned for remote detection but should be treated as sharing potentially sensitive prompt or message content.\n[SQP-2] expected: verify_agent.py sends the full agent card when --api is selected; this is aligned with remote verification, but private or proprietary cards should be checked locally unless the service is trusted.\n[suspicious.prompt_injection_instructions] expected: The flagged phrase is used as a detection example for a prompt-injection scanner, not as an operational instruction.",
+          "guidance": "Install only if you trust the Lieutenant/TrustAgents ecosystem. Use local mode for confidential prompts, secrets, internal agent cards, or regulated data; use --api only when sending that content to the configured remote service is acceptable, and keep TRUSTAGENTS_API_KEY and TRUSTAGENTS_API_URL under your control.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Lieutenant is a coherent security-scanning skill, with the main caution that optional API modes send scanned content to an external service.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783657897365,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 90,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: lieutenant\nVersion: 1.0.0\n\nThe skill bundle provides a security tool designed to detect prompt injection, jailbreaks, and other AI agent threats. The `SKILL.md` clearly describes the tool's purpose and provides examples of malicious inputs that the tool is meant to detect, not instructions for the agent to execute. The Python scripts (`scripts/scan.py`, `scripts/verify_agent.py`) make legitimate network calls to `https://agent-trust-infrastructure-production.up.railway.app` for 'enhanced detection' and to fetch agent cards, as explicitly stated in the documentation. They also access `TRUSTAGENTS_API_KEY` and `OPENAI_API_KEY` from environment variables, which is standard practice for API access required by the tool's functionality. There is no evidence of data exfiltration beyond the tool's operational needs, malicious execution, persistence mechanisms, or prompt injection against the OpenClaw agent itself.",
+          "checkedAt": 1779161935306,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "73c21f9b03ce769821acdfdd8408be442202b4a155698972752b106f9b0fa146",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/73c21f9b03ce769821acdfdd8408be442202b4a155698972752b106f9b0fa146"
+    },
+    "slug": "lieutenant",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

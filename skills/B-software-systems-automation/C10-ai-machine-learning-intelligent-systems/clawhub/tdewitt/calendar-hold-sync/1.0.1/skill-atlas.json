@@ -1,0 +1,133 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C10:token:model",
+      "category:C17:token:notes",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [
+      "validate"
+    ],
+    "tasks": [
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "81a90bd5c91aa497955f2daa8f9f046a4ebbe42e723f3b1e55e475ab964ae97c",
+    "content_hash": "346c2dbbe5fcf658c726b1a97c8d588a2f446383601d40e8e3fe23210e068844",
+    "precanonical_content_hash": "1c48c9421d7314172b95bb6e34837cdf201c4a364f3029481bb67d7de9bca679",
+    "skill_md_hash": "f20bbb57b616010d84ad854e9b8cf35b10d2da132e52b0aebb0188cf61ef79b4",
+    "version_metadata_sha256": "813824e59be562bc4816123d897c2c83671aff9c7a6b8fccc1a690eb024fc62e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tdewitt/skills/calendar-hold-sync",
+    "claim_id": "345a32df5a32c95cdf501f6128c19a8a65889743a35b6402064062e13f897e9c",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "calendar-hold-sync",
+        "url": "https://clawskills.sh/skills/tdewitt-calendar-hold-sync"
+      }
+    ],
+    "owner_handle": "tdewitt",
+    "owner_id": "s17ch9znhy016bcj25gsr1v4v1884zgs",
+    "published_at": 1771296931561,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972248493,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972248493,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The purpose is coherent: mirror source Google Calendar events into private Busy holds in target calendars using gog. The capability is impactful because reconcile/backfill/watch can create, update, and delete managed hold events.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The command surface and config controls are explicit, including dry-run, maxChangesPerRun, overlap policy, exclusions, and custom gog command overrides gated by allowCustomCommands.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts require an external gog CLI and user-configured Google Calendar OAuth; this is disclosed in the skill text, though registry metadata under-declares these dependencies.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Calendar OAuth and configured account/calendar access are proportionate to the sync purpose. Source metadata fields, including title and account/calendar identifiers, are stored in target event descriptions and should be treated as sensitive.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Cron installation and polling watch mode are disclosed and purpose-aligned for ongoing sync, but they can continue making calendar changes after setup.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The scanner concern about deleting stale managed holds is supported by the artifacts, but deletion is an expected part of idempotent calendar reconciliation and is disclosed alongside dry-run and change-limit controls.\n[SQP-2] expected: The scanner concern about source metadata in target descriptions is supported by the artifacts. The fields are disclosed, but users should understand base64url is not encryption and target-calendar readers may see encoded source details.\n[VirusTotal code_insight] expected: The custom command template and install-cron concerns are real capability surfaces, but the artifacts gate custom commands, state argv execution with no shell interpolation, warn to keep overrides disabled unless audited, and describe cron/watch as normal sync features.",
+          "guidance": "Install only if you intend to let this skill read configured source calendars and write target Busy holds. Start with dry-run on a test calendar, keep maxChangesPerRun conservative, avoid shared target calendars if source titles/accounts are sensitive, leave custom gog commands disabled unless you fully trust the config, and enable cron/watch only after confirming the exact mappings and how to disable the scheduled job.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed calendar-sync skill that can change configured Google calendars, so it is usable but should be tested carefully before live automation.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972209409,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 50,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: calendar-hold-sync\nVersion: 1.0.1\n\nThe skill is classified as suspicious due to the presence of a `gog.allowCustomCommands` configuration option, which, if enabled by the user, allows overriding `gog` CLI commands with templates. While the documentation in SKILL.md and README.md claims that rendered commands are executed as `argv` tokens (no shell interpolation), this is a critical vulnerability surface if the underlying execution environment's sanitization is imperfect, potentially leading to command injection. Additionally, the `install-cron` command provides a persistence mechanism, which is a high-privilege action, though it is a legitimate feature for a sync service. The skill itself does not contain malicious instructions or attempt to exploit these capabilities, and it explicitly warns users about the risks of enabling custom commands.",
+          "checkedAt": 1779164727020,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "d3d8e9ba49f0dea63c412a805d450c345392c96cf6f2d0eb6bce2b606863b5a3",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d3d8e9ba49f0dea63c412a805d450c345392c96cf6f2d0eb6bce2b606863b5a3"
+    },
+    "slug": "calendar-hold-sync",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

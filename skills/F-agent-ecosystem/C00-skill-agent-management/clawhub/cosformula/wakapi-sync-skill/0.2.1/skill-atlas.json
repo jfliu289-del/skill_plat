@@ -1,0 +1,124 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "313a774b68f3f7ede4ad76bf45386cadab2efdea4ead20be6715484d921776a3",
+    "content_hash": "ee878a33f5be0fccd3997f192ea1b0d66c9393d52078d12a3cda880d9bbd38c2",
+    "precanonical_content_hash": "79f6a59604c92119b24a484b92bfa7027402b062accb6d84b66031259b9c18ec",
+    "skill_md_hash": "3a7705389c4ae46ae6875825af8acaf8e0b073c83e6c75be9b8c9cbe320c3d8c",
+    "version_metadata_sha256": "1f0037f4308ea74201dfc341d1aaaef9ff29ca865768a1946f61590f053cc2d9"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/cosformula/skills/wakapi-sync-skill",
+    "claim_id": "d27fd219acfc7176cb70009f7481b62bb38e9518a3894bd85b88088fc555beb5",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "wakapi-sync-skill",
+        "url": "https://clawskills.sh/skills/cosformula-wakapi-sync-skill"
+      }
+    ],
+    "owner_handle": "cosformula",
+    "owner_id": "s1779ws25xpwzg5wt17m8htzt1884ce9",
+    "published_at": 1771133245402,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974632929,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974632929,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose is daily Wakapi/WakaTime-compatible CSV export, and the script only fetches today's Wakapi status/summary endpoints and produces the stated totals, projects, and languages CSVs.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Usage is explicit and user-directed through a Node.js command; there are no hidden agent instructions, autonomous scheduling instructions, prompt overrides, or unrelated behaviors.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The artifact contains a SKILL.md and one Node.js script, with no package installer, postinstall hook, background service, or dependency download step.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill requires WAKAPI_URL, WAKAPI_API_KEY, and WAKAPI_OUT_DIR; sending the API key as Basic Auth to the configured Wakapi URL is expected, but users must trust that URL.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The script creates or rewrites only daily-total.csv, daily-top-projects.csv, and daily-top-languages.csv under the configured output directory; no scheduler or other persistence mechanism is present.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[suspicious.env_credential_access] expected: The environment credential is the documented Wakapi API key, and artifact code sends it only as Authorization to the user-configured Wakapi API endpoints.\n[VirusTotal WAKAPI_OUT_DIR path traversal claim] expected: WAKAPI_OUT_DIR is an explicitly required user-selected output directory and is combined with fixed CSV filenames; this allows writes wherever the user points it, but artifact evidence does not show attacker-controlled filenames or hidden arbitrary-file writes.\n[SkillSpector clean result] expected: SkillSpector reported no issues, which is consistent with the artifact review; the final verdict is based on the code and documentation rather than the scanner label alone.",
+          "guidance": "Install only if you are comfortable providing a Wakapi API key. Set WAKAPI_URL to a trusted Wakapi instance, preferably HTTPS, and use a dedicated WAKAPI_OUT_DIR because the script will create or replace its three named CSV files there.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it fetches daily Wakapi stats with a provided API key and writes three local CSV files to a user-chosen folder.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974604419,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: wakapi-sync-skill\nVersion: 0.2.1\n\nThe skill fetches Wakapi statistics and writes them to local CSV files. It is classified as suspicious due to a significant path traversal vulnerability in `scripts/wakapi-daily-summary.mjs`. The `WAKAPI_OUT_DIR` environment variable, which dictates the output directory for CSV files, is used directly with `path.join` without sufficient sanitization. This could allow an attacker to write files to arbitrary locations on the file system (e.g., `../../etc/malicious.csv`) if they can control this environment variable, potentially leading to unauthorized file modification or creation.",
+          "checkedAt": 1779163914360,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "ebc05b3a9ac5597d641e37430e570e3015868ed1725c5d354bf3e30722df810d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ebc05b3a9ac5597d641e37430e570e3015868ed1725c5d354bf3e30722df810d"
+    },
+    "slug": "wakapi-sync-skill",
+    "source_type": "clawhub",
+    "version": "0.2.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

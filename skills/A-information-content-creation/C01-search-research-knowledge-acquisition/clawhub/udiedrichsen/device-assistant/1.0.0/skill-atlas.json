@@ -1,0 +1,154 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.1321,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:lookup",
+      "category:C02:token:language",
+      "category:C04:token:data",
+      "category:C06:token:code",
+      "category:C10:token:model",
+      "category:C17:token:personal",
+      "category:C19:token:device",
+      "cross-tag:data-analysis",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C04",
+      "C06",
+      "C10",
+      "C17",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d0f183dbbe03fba025614b14faddd00d73ce34ee721dd4c56828fe154f0297e9",
+    "content_hash": "78898d58723df7f776e544661bab02c592f2edf0a230e4fa6b8088c43c2ddcc9",
+    "precanonical_content_hash": "81ac267036a3757c133712b2b1d8ab3907914749184e3966069e8cd8428208d3",
+    "skill_md_hash": "08a4168fe6f6decda57797f948996a463283684d1e44e90bdf4024e509698056",
+    "version_metadata_sha256": "e3f89768a9c59de7c96a1674853b2437312a1cb2ae90423fc2f56a4416dee22f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/udiedrichsen/skills/device-assistant",
+    "claim_id": "ea67520dd793c5e7a038cab738b8c312a0b2664b75e9305c1f121c4e50b1e1dc",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "device-assistant",
+        "url": "https://clawskills.sh/skills/udiedrichsen-device-assistant"
+      },
+      {
+        "index_path": "categories/personal-development.md",
+        "label": "device-assistant",
+        "url": "https://clawskills.sh/skills/udiedrichsen-device-assistant"
+      }
+    ],
+    "owner_handle": "udiedrichsen",
+    "owner_id": "s179t0qrm3e90wea1cjtkqwv55884gmn",
+    "published_at": 1769433983734,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783650283228,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783650283228,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The device registry, warranty tracking, maintenance logging, manual lookup, and error-code help all match the stated purpose. The data can include serial numbers, purchase details, locations, and notes, so users should treat it as private household inventory.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions and handler commands are scoped to device records and troubleshooting. I found no hidden role changes, credential access, obfuscation, exfiltration, destructive host actions, or unrelated behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill uses a bash handler and declares jq and curl as requirements. There is no package installer or privileged setup; the handler checks for curl but does not call it, instead generating search URLs.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "File writes under the workspace and generated manual/search URLs are proportionate to the purpose. Opening those links can disclose manufacturer, model, error code, or problem text to external services.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The handler persistently stores JSON files under $WORKSPACE/memory/device-assistant and can update or remove those records on command. There is no evidence of elevated privilege, background persistence, credential/session use, or writes outside the workspace.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Shell-capable handler commands are part of the advertised implementation, and the documented commands are scoped to workspace device data. Curl is declared but not invoked by the handler.\n[SQP-1] expected: The description includes broad natural-language examples, but install metadata lists explicit /device and /geräte triggers. This is a usability/privacy caution, not evidence of hidden automatic behavior.\n[SQP-2] expected: Persistent storage of device records is expected for a device manager and the SKILL.md includes a Data Files section naming $WORKSPACE/memory/device-assistant. The privacy implications could be made clearer near the feature list.\n[SQP-2] expected: External lookup behavior is purpose-aligned and disclosed as web search/internet use. The handler returns Google/manual/support URLs rather than making outbound requests itself, but users should review links before opening them.\n[SQP-2] expected: The handler stores serial numbers, warranty data, locations, notes, error history, and maintenance logs in workspace JSON files. This is disclosed and purpose-aligned, though retention and minimization controls are limited.\n[SQP-2] expected: Update and remove are explicit registry-management commands that modify local workspace data immediately. Lack of confirmation or undo is worth user awareness, but the behavior is not hidden or purpose-mismatched.\n[staticScan] expected: The supplied static scan reported no findings, and artifact inspection did not reveal malicious shell behavior.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with artifact review; it was used only as supporting telemetry.",
+          "guidance": "Install this if you are comfortable keeping device inventory details in workspace memory. Avoid saving unnecessary serial numbers or purchase records, and review any generated search, manual, or support links before opening them because they may reveal model numbers, error codes, or household device details to third-party sites.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent device-management skill, with the main caution that it saves household device details locally and may produce external search links containing model or error information.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783650219042,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 42,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: device-assistant\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle for 'device-assistant' is classified as benign. The `SKILL.md` clearly outlines the purpose of a device manager, requiring `jq` for JSON processing and `curl` for web lookups, which are justified by features like error code search. The core logic in `scripts/handler.sh` operates strictly within the designated `$WORKSPACE` for data storage and manipulation. While `curl` is listed as a requirement, the `handler.sh` script itself does not execute `curl` or make any outbound network requests; it only constructs Google search URLs which the AI agent might then use. There is no evidence of data exfiltration, malicious execution, persistence, prompt injection attempts, or obfuscation.",
+          "checkedAt": 1779160034545,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "18eee31e233b153180ab0c896a6713ed68395f338b8b320c3119701bfc690d97",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/18eee31e233b153180ab0c896a6713ed68395f338b8b320c3119701bfc690d97"
+    },
+    "slug": "device-assistant",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "business",
+      "marketer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "business",
+      "marketing"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:find",
+      "category:C12:token:strategy",
+      "category:C14:token:growth",
+      "cross-tag:marketing-sales",
+      "cross-tag:planning",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C12",
+      "C14"
+    ],
+    "stages": [
+      "deliver",
+      "discover",
+      "plan"
+    ],
+    "tasks": [
+      "market",
+      "plan",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "681dff2a1a7065d7116b077311506f19537f5c0fae35eb7502140757045a83e6",
+    "content_hash": "7b7ae0a014a9328b577c122e72a74c6b76f7809525d2ca3af0c6898b7efafcac",
+    "precanonical_content_hash": "b59e2c9736a191acc9da497abcd22efcd3bda0b1dac3cecbf4bfa6ed598b2ba8",
+    "skill_md_hash": "f166afe171f78ddc86e376b01164aa71cf035033623d995b394908c053ea25a6",
+    "version_metadata_sha256": "5ce72c33aab16c27f5e6f6747fde2c493a70f4715ce3ee9dc4281f573936b6da"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/lukem121/skills/find-emails",
+    "claim_id": "efccd8cee5d434cc4bc8871a96f5f86b0078395e193d35ff2576f479d23a5081",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "find-emails",
+        "url": "https://clawskills.sh/skills/lukem121-find-emails"
+      }
+    ],
+    "owner_handle": "lukem121",
+    "owner_id": "s172npwe3sjkrfwax7mak2whed884359",
+    "published_at": 1771565856077,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972519483,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972519483,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is email discovery from websites, and the documented behavior matches that purpose: crawl supplied URLs, extract emails, group by domain, and optionally save output. The contact-data collection is sensitive enough to warrant user care, but it is not hidden or purpose-mismatched.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are scoped to running a local Python script with explicit URL, depth, page-limit, JSON, output-file, and local-file options. I did not find prompt-injection, role override, deceptive routing, or unrelated high-impact actions in the visible skill documentation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Setup asks users to install crawl4ai and Playwright/browser dependencies, which is coherent for local crawling but means the skill depends on external Python/browser packages.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Shell access and outbound network crawling are broad capabilities, but they are proportionate to a CLI-based web-crawling skill and are disclosed in the usage examples. No credentials or local profile/session stores are requested.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background service, cron job, startup persistence, privilege escalation, or automatic mutation of agent configuration is evident. File writing appears limited to user-selected output paths.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The crawler makes outbound requests and collects email addresses, but that is the declared purpose and is documented with URL controls and page/depth limits. This remains a user-consent and acceptable-use consideration, not evidence of hidden behavior.\n[VirusTotal code_insight] expected: The concern centers on Shell permission. Shell is expected for running the documented Python CLI, and the supplied telemetry reports no engine detections, so this signal is not enough to move the skill to Review.\n[VirusTotal marketing-link note] unexpected: The SocialCrow example is unrelated and somewhat spammy documentation, but it does not add hidden execution, credential handling, persistence, or exfiltration.",
+          "guidance": "Install only if you are comfortable with a skill that can crawl websites and extract public contact emails. Use it on sites you are authorized to crawl, keep page/depth limits conservative, respect robots.txt and site terms, and review any saved email list before using it for outreach.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it advertises: it crawls user-provided websites to find contact emails, with no evidence of hidden persistence, credential theft, or exfiltration.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972430342,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: find-emails\nVersion: 0.1.5\n\nThe skill is classified as suspicious primarily due to the explicit allowance of the `Shell` tool in `SKILL.md`. While the Python script (`scripts/find_emails.py`) itself appears benign and performs its stated purpose of web crawling and email extraction without direct malicious code or obvious shell injection vulnerabilities, the `Shell` permission grants the AI agent the capability to execute arbitrary commands. This creates a significant attack surface for prompt injection against the agent, even if the skill's own instructions do not explicitly direct malicious shell usage. The 'Use Case Example' in `SKILL.md` also contains marketing links (e.g., socialcrow.co) which, while not malicious code, are unusual and spammy for a skill description.",
+          "checkedAt": 1779163432271,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "850c5ca6ee0501edf6c5b7e97526823ffbeb27ec02b36585ed22ecc51ad257e7",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/850c5ca6ee0501edf6c5b7e97526823ffbeb27ec02b36585ed22ecc51ad257e7"
+    },
+    "slug": "find-emails",
+    "source_type": "clawhub",
+    "version": "0.1.5"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.25,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:prompt",
+      "category:C02:token:write",
+      "category:C06:token:code",
+      "category:C06:token:coding",
+      "category:C09:token:secure",
+      "category:C17:token:resume",
+      "category:C18:token:health",
+      "cross-tag:agent-management",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C06",
+      "C09",
+      "C17",
+      "C18"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "c32a21a7466b55c7333ee3d9768042065992c48fbb2270ea73349b97330db6cd",
+    "content_hash": "19528214437c2163647c87aaae7103e9a2f22af7f893c84157506a1466ab5241",
+    "precanonical_content_hash": "bb6003b8e7991f6a5e15c89bdbccc1c29563217ebeaffbda3b39e9672fb32608",
+    "skill_md_hash": "33e46b1173e7088f7a9cda5a2a0ad527f71efca439fbae980103c0a41dbecd26",
+    "version_metadata_sha256": "c43aace569c1515ba5f492dd6eb8f77e78ddf42356f506e718e5128e57118b71"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/cosformula/skills/resilient-coding-agent",
+    "claim_id": "b20eea669f3b5dcbf959ee59a23db21cd17f53a176bbed8cd17d15688627553e",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "resilient-coding-agent",
+        "url": "https://clawskills.sh/skills/cosformula-resilient-coding-agent"
+      }
+    ],
+    "owner_handle": "cosformula",
+    "owner_id": "s1779ws25xpwzg5wt17m8htzt1884ce9",
+    "published_at": 1771379058267,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968969670,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968969670,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is resilient long-running coding-agent execution, and the required tools are limited to tmux plus one supported coding-agent CLI.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Instructions include tmux send-keys, agent resume, --full-auto/--yolo style operation, scrollback capture, and optional monitoring; these are high-impact but disclosed and aligned with the skill's resilience goal.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains only SKILL.md and no executable scripts, downloads, package installs, or hidden setup steps.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime files are limited to per-task temp prompts, event logs, session IDs, and done markers; the skill warns that logs and tmux scrollback may contain secrets and recommends restrictive permissions and cleanup.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Detached tmux sessions and optional periodic monitoring are expected for this purpose, user-directed, and include cleanup guidance and a stated monitoring stop limit.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SkillSpector] expected: Reported no issues; direct artifact review found no prompt-injection, exfiltration, destructive, or hidden behavior to elevate.\n[VirusTotal/code_insight] expected: Clean telemetry is consistent with the artifact review, but the verdict is based on the disclosed instruction-only tmux workflow.\n[Static artifact review] expected: The only sensitive behaviors found are purpose-aligned: running coding agents in detached sessions, capturing logs, resuming sessions, and optionally notifying completion.",
+          "guidance": "Install only if you are comfortable with long-running coding agents continuing inside tmux after the orchestrator disconnects. Use it on trusted projects, clean up temp directories, restrict permissions on logs, and avoid tasks that may echo API keys or other secrets into tmux scrollback.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This instruction-only skill does what it claims: it helps run long coding-agent tasks in tmux, with disclosed notes about persistence and sensitive logs.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968933430,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: resilient-coding-agent\nVersion: 0.5.0\n\nThe skill bundle appears benign and well-intentioned. It focuses on running long-running coding agents within `tmux` sessions for resilience, explicitly addressing security concerns like prompt injection prevention (by writing prompts to files and using `$(cat)` within double quotes) and secure temporary directory creation (`mktemp -d`, `chmod 700`). It also warns about sensitive output in logs and scrollback. There is no evidence of intentional data exfiltration, backdoor installation, unauthorized remote control, or prompt injection attempts against the OpenClaw agent itself. Any potential vulnerabilities (e.g., `cd <project-dir>` or the orchestrator's `write` tool behavior) are described as relying on external validation or implementation, not as malicious intent within the skill's own logic.",
+          "checkedAt": 1779164411994,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "c32a21a7466b55c7333ee3d9768042065992c48fbb2270ea73349b97330db6cd",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/c32a21a7466b55c7333ee3d9768042065992c48fbb2270ea73349b97330db6cd"
+    },
+    "slug": "resilient-coding-agent",
+    "source_type": "clawhub",
+    "version": "0.5.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

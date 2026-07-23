@@ -1,0 +1,124 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "2aca3f28355d6bfd06f095849bdd2d55c6359e24cf0af879491b113a508af303",
+    "content_hash": "91bc3ede7fdeda058f5bc46fd03bb8d3859216aed313fc5a8d84c175609947b0",
+    "precanonical_content_hash": "9f0fbb96e288995216eec545cbaa640bcb2f5ae6dfdb774cb54c2faf9d22b3ac",
+    "skill_md_hash": "b352a39353f5b24c647886db8549cd7970c39d1597abf58ef0281224a4ed1501",
+    "version_metadata_sha256": "290c82b4925ede47c5ccbd36c7bb80c2debcb4f25248ecb16a2eeb06d72f3122"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/hallwayskiing/skills/hitchhikers-guide",
+    "claim_id": "3d83a1920fdef7b03457821b857585068349bf1d0985adea8d14a920b98d3584",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "hitchhikers-guide",
+        "url": "https://clawskills.sh/skills/hallwayskiing-hitchhikers-guide"
+      }
+    ],
+    "owner_handle": "hallwayskiing",
+    "owner_id": "s172vaavv7zsr048rehjtk4wks8643p7",
+    "published_at": 1771440580824,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972879796,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972879796,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe a Hitchhiker's Guide-themed game, and the Python script only manages game state such as location, inventory, stats, flags, improbability, and history.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill tells the agent to load state and save progress after turns, including optional guide-entry persistence; these instructions are game-related and disclosed, but users should know gameplay text may be retained.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no complex installer or background setup, but the skill expects Python 3.x and local execution of scripts/game_manager.py.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "No network access, credentials, environment variables, account access, or broad filesystem indexing were found; writes are scoped to the skill's assets directory.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill persistently writes local save data and may update a guide file. The reset command can overwrite the local game save, but it is documented and the skill says not to reset unless asked.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The persistent local save behavior is central to a continuing text adventure and is disclosed in the README and SKILL.md; it is a user-awareness caveat, not evidence of unsafe behavior.\n[SQP-2] expected: Automatic guide-entry updates are local file writes related to game lore. They are under-described as a privacy notice, but they do not indicate exfiltration, credential use, or unrelated mutation.\n[SQP-2] expected: Loading or initializing local state by default is consistent with a save-game system and remains scoped to the skill directory.\n[SQP-2] expected: The atomic commands modify local game fields only. Routine state mutation is expected for this skill's purpose and is not high-impact outside the game save.\n[VirusTotal code_insight] unexpected: The shell-injection concern is hypothetical at the agent-command-construction layer; the included Python script reads argv directly, does not spawn a shell, and performs no network or credential actions.",
+          "guidance": "Install only if you are comfortable with a skill running a local Python helper and keeping game progress/history in files under its own assets folder. Avoid entering sensitive information during gameplay, and use reset only when you intentionally want to replace the local save.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent local text-adventure skill that runs a small Python save manager and stores gameplay progress locally.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972844448,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: hitchhikers-guide\nVersion: 1.1.2\n\nThe skill defines a set of CLI commands in `scripts/game_manager.py` for game state management. The `SKILL.md` and `references/mechanics.md` instruct the AI agent to use these commands, passing user-controlled strings (e.g., item names, locations, history entries) as arguments. While the `game_manager.py` script itself processes `sys.argv` safely, if the OpenClaw agent constructs the full command string and executes it via a shell (e.g., `os.system` or `subprocess.run(shell=True)`) without proper sanitization of user input, it could lead to a shell injection vulnerability. This is a prompt injection risk against the agent, enabling potential arbitrary command execution on the host, classifying it as suspicious due to a significant vulnerability rather than intentional malice.",
+          "checkedAt": 1779164905297,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "533efd451690bd320e486e2f2fe91cc66cebaf78247c768ff3fe2a4daaa54349",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/533efd451690bd320e486e2f2fe91cc66cebaf78247c768ff3fe2a4daaa54349"
+    },
+    "slug": "hitchhikers-guide",
+    "source_type": "clawhub",
+    "version": "1.1.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

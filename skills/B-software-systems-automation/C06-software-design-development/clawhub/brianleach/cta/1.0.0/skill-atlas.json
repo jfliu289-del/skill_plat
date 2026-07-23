@@ -1,0 +1,161 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "business",
+      "data-professional",
+      "developer",
+      "marketer",
+      "security-professional"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "business",
+      "marketing",
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C01:token:sources",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C06:token:implementation",
+      "category:C09:token:privacy",
+      "category:C09:token:security",
+      "category:C14:token:customer",
+      "cross-tag:data-analysis",
+      "cross-tag:marketing-sales",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C04",
+      "C09",
+      "C14"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "market",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "96ad6706fed2d764eb635dcc98dbc4f14264b3bddb7719dc3e0d73274d631ce1",
+    "content_hash": "809283f08bbb386823bbb24799c094d289adfdaf20035824659b7d9a6e927faa",
+    "precanonical_content_hash": "8f3aa6246c6def751bd7f62c5a04344c56361ee3d75d968b8f86f6eb2a00d208",
+    "skill_md_hash": "46f0acb3d04c1049042b0d74372fb5a2c3d53030c6eda20f617e186407b67737",
+    "version_metadata_sha256": "8ce90908b4e380e166f8f1d4d1848f726af23d9e20eb9bbc6668c62a18fb3342"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/brianleach/skills/cta",
+    "claim_id": "f15e0e8137de1edbac4dea70c05ad53188b42672104fc797e31f9cbc87036107",
+    "index_entries": [
+      {
+        "index_path": "categories/transportation.md",
+        "label": "cta",
+        "url": "https://clawhub.ai/brianleach/cta"
+      }
+    ],
+    "owner_handle": "brianleach",
+    "owner_id": "s177mqbg7ea28w09hpmzr79wx988447d",
+    "published_at": 1771718351998,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779948099213,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779948099213,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is CTA train, bus, alert, route, and stop lookup, and the code implements those functions without unrelated capabilities.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are limited to user-directed transit queries and an explicit GTFS refresh command; no hidden role changes, unsafe automation, or prompt-injection behavior was found.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The install step runs npm install in the skill directory, and package metadata shows no third-party dependencies.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill reads CTA_TRAIN_API_KEY and CTA_BUS_API_KEY from environment variables or a local .env file and sends them over HTTPS to documented CTA endpoints, which is expected for the purpose.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to the documented ~/.cta/gtfs/ cache for public GTFS data; no background worker, startup persistence, broad local indexing, privilege escalation, or unrelated credential/session access was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[suspicious.env_credential_access] expected: The static scan flagged environment-variable use combined with network calls; artifact review shows this is disclosed CTA API key handling for official CTA endpoints, not unrelated secret collection.\n[SkillSpector clean] expected: SkillSpector reported no issues, and artifact review did not reveal hidden behavior that conflicts with the clean result.\n[VirusTotal clean telemetry] expected: VirusTotal telemetry was clean; this supports but does not solely determine the benign verdict.",
+          "guidance": "Install this if you are comfortable storing CTA developer keys in environment variables or the skill-local .env file and letting the skill contact CTA services. Run refresh-gtfs only when you want it to create or update the local schedule cache under ~/.cta/gtfs/.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Chicago transit helper that uses CTA API keys only for official CTA lookups and caches public schedule data locally.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948032732,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: cta\nVersion: 1.0.0\n\nThe OpenClaw CTA skill is benign. It transparently documents its security and privacy practices, which are consistently upheld in the `scripts/cta.mjs` code. User input is properly sanitized using `encodeURIComponent` for API calls, preventing URL injection. The `unzip` command for GTFS data extraction is securely executed via `execFileSync` with an array of arguments, mitigating shell injection risks. All external network calls are directed to official CTA API endpoints over HTTPS, and file system operations are confined to a dedicated local cache directory (`~/.cta/gtfs/`). There is no evidence of data exfiltration, unauthorized access to sensitive files, persistence mechanisms, or malicious prompt injection attempts against the agent.",
+          "checkedAt": 1779166076228,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "4e43c80011c7b55b3af968bf37008fd7438ae668a9bf1686dd76188f7042d381",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4e43c80011c7b55b3af968bf37008fd7438ae668a9bf1686dd76188f7042d381"
+    },
+    "slug": "cta",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

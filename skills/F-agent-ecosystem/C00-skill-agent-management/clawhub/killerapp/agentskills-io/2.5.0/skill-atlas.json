@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.7795,
+    "domains": [
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:phrase:agent skill",
+      "category:C00:token:agent",
+      "category:C00:token:plugin",
+      "category:C00:token:skill",
+      "category:C02:token:writing",
+      "category:C06:token:code",
+      "category:C08:token:github",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:software-development",
+      "cross-tag:writing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "993efad4a8697a4b40da88b029c230c410c7f6e0a8c41aac9958345091520cef",
+    "content_hash": "9046462f0aa8abba673c4be71386ead725dacf4955f3dc682026da8e625194f2",
+    "precanonical_content_hash": "5a28b0f41ef44044c96a4f3752c2d7cd977050afffc6dfb8aa7839bbcf20d77c",
+    "skill_md_hash": "65853044a6d7be5205605e72eaae288b31487e2a3e94b0ad992ae443f732666e",
+    "version_metadata_sha256": "e89b3b502d38ddb4d8985a5a6b44b5a25c3d4abf490708821ad2bda3d034b313"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/killerapp/skills/agentskills-io",
+    "claim_id": "7c49339b3e5a19ed4aca9d70e10ba9676400c88d81ee1e382cb974189fe46e8d",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "agentskills-io",
+        "url": "https://clawskills.sh/skills/killerapp-agentskills-io"
+      }
+    ],
+    "owner_handle": "killerapp",
+    "owner_id": "s1749z0792n9re64h9fxreaqnh84x1m8",
+    "published_at": 1770349630322,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658756934,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658756934,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The described purpose, templates, and validation workflow fit an Agent Skills authoring aid; there is no artifact-backed evidence of credential theft, data exfiltration, destructive actions, or unrelated capabilities.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The template guidance could be more explicit about invocation boundaries, approvals, side effects, and rollback, especially for examples involving deployment or cloud credentials, but this is a documentation-quality gap rather than hidden runtime behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill directs users to run uvx or uv tool install against a GitHub-hosted validator. That is disclosed and purpose-aligned, but it is unpinned remote code execution and carries normal supply-chain risk.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Running a validator with local user permissions is proportionate for checking skill repositories, provided users run it only on intended skill directories and trust the upstream validator source.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background worker, privilege escalation, hidden persistence, or automatic credential/session use is evident. uv tool install may persist the validator as an installed tool, while uvx is user-invoked and transient aside from normal cache behavior.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-1] expected: Description-writing guidance is expected in a skill-authoring template. The lack of explicit negative invocation boundaries is worth improving, but it does not show malicious or purpose-mismatched behavior.\n[SQP-2] expected: Examples involving deployment or cloud operations should ideally require safety disclosures, permissions, verification, and rollback sections. This affects downstream documentation quality, not this skill's direct authority.\n[SQP-2] expected: The validation script's unpinned GitHub-based uvx execution is a real supply-chain risk, but it is visible, user-directed, and aligned with the validator purpose rather than deceptive or destructive.\n[VirusTotal code_insight] expected: The VirusTotal concern is consistent with the same remote-validator supply-chain risk. With no malicious detections and no artifact evidence of abuse, it supports caution rather than a Review or malicious verdict.",
+          "guidance": "Install only if you trust the agentskills upstream validator and are comfortable running GitHub-hosted code locally. Prefer pinning the validator to a commit or reviewed release for sensitive environments, and use the templates with added safety sections for permissions, external side effects, approvals, verification, and rollback.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This looks like a legitimate Agent Skills authoring and validation helper, but users should treat its validator commands as trusted code execution because they fetch and run code from GitHub.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658686367,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 29,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: agentskills-io\nVersion: 2.5.0\n\nThe skill bundle instructs the AI agent and users to download and execute code from a remote Git repository (github.com/agentskills/agentskills) using `uvx` or `uv tool install`. This occurs in `SKILL.md` for installation and one-shot validation, and in `scripts/validate-skills-repo.sh` for batch validation. While the remote code is the official `skills-ref` validator and the intent is to validate skills, fetching and executing external code introduces a supply chain risk, classifying this as a risky capability without clear malicious intent.",
+          "checkedAt": 1779161776319,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "0ea9a876a7b6f5a56ea6dd6d3a22e3ea2e9d8185fff7c3c278031e48e57389da",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0ea9a876a7b6f5a56ea6dd6d3a22e3ea2e9d8185fff7c3c278031e48e57389da"
+    },
+    "slug": "agentskills-io",
+    "source_type": "clawhub",
+    "version": "2.5.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

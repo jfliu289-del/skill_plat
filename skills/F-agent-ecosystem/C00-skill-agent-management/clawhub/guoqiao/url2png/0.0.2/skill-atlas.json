@@ -1,0 +1,124 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "57ed7133b3badae69cfe4dd4b5ac7fcf54703423c8f5c084c03727f71f1b401b",
+    "content_hash": "35b3521804c3841d258e32c16505ee472f16cabbe7d84ab3e0cec209460c399d",
+    "precanonical_content_hash": "d081a46a26c7e07e64a1ddb706a639d92b365014b0db721317eea12b8738e5c1",
+    "skill_md_hash": "8c6abe3e94ffab60f465aa2e7bde02213a9b6b724b6e9b73dc28e415890da79d",
+    "version_metadata_sha256": "717ab93deefda25b94282c6731499959e8f954bcc109a0cbb222d683d55903e5"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/guoqiao/skills/url2png",
+    "claim_id": "ec32354c05059adc1fa3335a35699e30dac268ae7c62799e2af555d71dae2ba5",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "url2png",
+        "url": "https://clawskills.sh/skills/guoqiao-url2png"
+      }
+    ],
+    "owner_handle": "guoqiao",
+    "owner_id": "s17ffveb731pj7ry6ezhyn9hts88598a",
+    "published_at": 1770776797612,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968604036,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968604036,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently support the stated purpose: install screenshot tooling, render a provided URL with shot-scraper/Chromium, and save a mobile-width PNG locally.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The natural-language triggers are broad but directly describe screenshotting or saving a URL as an image; the usage text also says the second argument is a PNG path, while the script actually treats it as an output directory.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "install.sh runs uvx shot-scraper install --browser chromium, which is disclosed and purpose-aligned but downloads third-party browser automation components without version pinning.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Fetching the user-provided URL and writing a generated image are proportionate to the purpose, but users should be aware it can make requests from their machine and create files in a chosen directory.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No credentials, privileged paths, background workers, destructive actions, broad local indexing, or hidden persistence are requested; persistence is limited to installed tooling and generated image files.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad screenshot-related triggers could cause activation from ordinary URL screenshot requests, but those requests match the skill's disclosed function and do not show deception or purpose mismatch.\n[VirusTotal-code_insight] unexpected: The unquoted output-directory variable is a real shell robustness issue, but the artifact does not support the claimed arbitrary command execution path because expanded variable contents are not re-parsed as shell control syntax.\n[staticScan] expected: Static scan reported no suspicious patterns, consistent with the small, purpose-aligned shell scripts observed in the artifact.",
+          "guidance": "Install only if you are comfortable with uvx downloading shot-scraper and Chromium. Use it for URLs you intentionally want rendered from your own environment, avoid internal or sensitive URLs unless deliberate, and use simple trusted output directory names because the script does not quote that argument.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill performs the advertised URL-to-PNG screenshot task, with ordinary dependency and input-handling cautions but no evidence of hidden or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968566059,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: url2png\nVersion: 0.0.2\n\nThe 'url2png' skill's primary function is benign, converting URLs to PNGs using legitimate tools like `shot-scraper`. However, the `url2png.sh` script is vulnerable to shell injection. The `outdir` variable, which can be controlled by user input, is directly used in `mkdir -p ${outdir}` and `cd ${outdir}` commands without proper sanitization. This allows an attacker to execute arbitrary commands by providing a specially crafted output directory path, posing a significant remote code execution risk. This is a critical vulnerability, but not evidence of intentional malicious design.",
+          "checkedAt": 1779163060867,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "231cd4632f267324d06cf7c630a8743f75504ed11527862ca4419bdbc02c8882",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/231cd4632f267324d06cf7c630a8743f75504ed11527862ca4419bdbc02c8882"
+    },
+    "slug": "url2png",
+    "source_type": "clawhub",
+    "version": "0.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

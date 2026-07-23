@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:research",
+      "category:C04:token:data",
+      "category:C08:token:git",
+      "cross-tag:data-analysis"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C08"
+    ],
+    "stages": [
+      "validate"
+    ],
+    "tasks": [
+      "analyze"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "58772c9675cbe4f81e339050ec7e03ab62e98c64a386768abc6e88fe27f7d4d2",
+    "content_hash": "17d26f263d09359c95762ef080a75a52a14fc7a00ec4a9fae018e5030be2c80f",
+    "precanonical_content_hash": "066e0a59797b47952e2e7ab8cee44490631ab780ce0698613cd3954b8f3c2feb",
+    "skill_md_hash": "e0de730020da22eafa6c6d2886bf15205156896555332ec371a4c63c049dc79d",
+    "version_metadata_sha256": "a440f4eb0ca0790f4d0d54c4354d3d4cfae0567f1edbbec268eb5f4717cd432d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/ingogiebel/skills/arc-creator",
+    "claim_id": "cb7f61df48cdf7ff74f04668d379efd22e923295d1f87805d3b2616a85d15f07",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "arc-creator",
+        "url": "https://clawskills.sh/skills/ingogiebel-arc-creator"
+      }
+    ],
+    "owner_handle": "ingogiebel",
+    "owner_id": "s1793kkyedsaw6dqmdnbsshwpd885hk5",
+    "published_at": 1770670823077,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779963129132,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779963129132,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose and artifact behavior fit together: it guides ARC creation, metadata entry, study/assay organization, file placement, git commits, and optional DataHUB synchronization.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The workflow asks users for paths, identifiers, contacts, data files, and optional remote settings, then runs ARC and git commands; this is broad but aligned with managing a research repository.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains a readable SKILL.md, one reference document, and a small shell helper that creates a directory and initializes an ARC or git repository; there is no hidden installer, obfuscation, or background execution.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Creating folders, copying selected research files, using git, and optionally pushing to DataHUB are proportionate to the stated purpose, but users should confirm paths and repository contents before commit or push.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill creates persistent local repositories and may use a DataHUB personal access token for an optional push; this is disclosed and purpose-aligned, with no evidence of unrelated credential access or token exfiltration.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The DataHUB upload concern is supported as a disclosure gap, but the artifact presents remote sync as an optional user-confirmed step that matches the skill purpose, so it warrants guidance rather than Review.\n[VirusTotal code_insight] expected: The telemetry flags user-controlled paths, file operations, and remote git pushes; artifact review shows these are central, disclosed ARC-management operations rather than hidden or purpose-mismatched behavior.\n[staticScan] expected: Static scan reported no findings, consistent with the small readable artifact set and lack of destructive, deceptive, or obfuscated behavior.",
+          "guidance": "Use a dedicated empty ARC folder, review copied files and `git status` before `git add -A`, confirm the DataHUB host and repository visibility before pushing, and use a narrowly scoped token for the intended DataHUB service.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed, user-directed helper for creating ARC research repositories, with ordinary local file and optional DataHUB sync risks users should review.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779963096337,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: arc-creator\nVersion: 1.0.0\n\nThe skill is designed to manage research contexts, involving extensive file system operations (creating directories, copying files to user-specified paths) and network activity (Git pushes to a DataHUB). While these capabilities are necessary for its stated purpose, the `SKILL.md` instructs the agent to take user input for critical paths and command arguments (e.g., `ARC_PATH` in `scripts/create_arc.sh`, file copy destinations, `git config` values). This design creates a significant attack surface, as a malicious user could exploit the agent by providing crafted input to perform unintended file system manipulations or data exfiltration, even though the skill itself does not explicitly instruct the agent to act maliciously. The reliance on user input for sensitive operations without explicit sanitization instructions for the agent makes it suspicious.",
+          "checkedAt": 1779162537305,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "6f624db3776048b4f81fc69dcfe449df69954e8292cb5dfde6f8ca5297181888",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6f624db3776048b4f81fc69dcfe449df69954e8292cb5dfde6f8ca5297181888"
+    },
+    "slug": "arc-creator",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

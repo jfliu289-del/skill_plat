@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "artifacts": [
+      "website"
+    ],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C10:token:ai",
+      "cross-tag:browser-automation",
+      "cross-tag:planning"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate",
+      "plan"
+    ],
+    "tasks": [
+      "automate",
+      "plan"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "c7507d4c007a751081c91f611b6d918b8fde20b9267f7d96ee8dd1d9d18e8e48",
+    "content_hash": "7b40af9f102b19aa967b3552fdb66cdf35cf240aa779396c1ffab5135dfaabca",
+    "precanonical_content_hash": "0fa31c8c4157dc015ac9c2faec22161f396776c74c2d5fa179d5b71b665f330e",
+    "skill_md_hash": "bb05b43a93aec9aa985bca0d4e8640176d7917deeceab35734e6d88348053972",
+    "version_metadata_sha256": "6a896e2fed45d03b14bdfe568724f5ce6da4516dbc7061d721b8f7e8f0bececc"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/capt-marbles/skills/amateur-radio-dx",
+    "claim_id": "78e941c515659d7d07f7177442b79454b6b8b1f9d7ffece3a1c844a1ed4bf52d",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "amateur-radio-dx",
+        "url": "https://clawskills.sh/skills/capt-marbles-amateur-radio-dx"
+      },
+      {
+        "index_path": "categories/media-and-streaming.md",
+        "label": "amateur-radio-dx",
+        "url": "https://clawskills.sh/skills/capt-marbles-amateur-radio-dx"
+      }
+    ],
+    "owner_handle": "capt-marbles",
+    "owner_id": "s17df5gcc5vdxfpm151a90vxyd8852kb",
+    "published_at": 1771279131413,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971773059,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971773059,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts connect to predefined DX cluster hosts, parse spots, generate digests, and optionally score spots using station/QTH configuration; these capabilities fit the stated amateur-radio monitoring purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Recurring monitoring is presented as user-run cron/OpenClaw cron examples rather than automatic setup, but the documentation is inconsistent about the state file location.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No install-time execution, remote installer, dependency download, package hook, or privilege escalation was found; usage is via included Python scripts using the standard library.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill may send a user-supplied callsign to public DX cluster nodes and stores station/QTH details locally for AI scoring; this is purpose-aligned but personally identifying.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to local config/state files and optional user-created cron jobs; it does not request credentials or elevated privileges, though /tmp state storage is weaker than a private user directory.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Local state/logging and optional cron are normal for a monitor; the artifacts disclose cron usage, though a clearer privacy/security notice would improve consent.\n[SDI-4] unexpected: The documentation conflict between home-directory state and /tmp state is real; the code uses /tmp/dx-monitor-state.json, but this is a documentation/cleanup issue rather than hidden behavior.\n[SDI-1] expected: The AI setup stores callsign, grid-derived coordinates, power, and DXCC preferences because they drive propagation scoring; users should know this local profile can reveal approximate location.\n[SQP-2] expected: Connecting to third-party DX cluster servers is central to the skill, and sending a callsign during login is expected for this workflow, but should be treated as public disclosure.\n[SQP-2] expected: Persisting AI configuration is needed for personalized scoring; the concern is lack of explicit retention and file-permission guidance, not unrelated collection.\n[SQP-2] expected: The dx-monitor script sends the selected callsign to the chosen cluster; this is coherent with DX cluster use and no unrelated exfiltration path was found.\n[SQP-2] expected: Spot history in /tmp supports duplicate filtering, but a user-private state path would be safer on shared systems.",
+          "guidance": "Install only if you are comfortable connecting to public DX cluster servers and, when you use your real callsign or AI setup, storing station/QTH details locally. Run it as a normal user, review any cron job before adding it, and note that monitor state is actually written to /tmp/dx-monitor-state.json.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill behaves like a disclosed ham-radio DX monitor, with privacy and cleanup details users should understand before enabling monitoring.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971721841,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 65,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: amateur-radio-dx\nVersion: 1.0.0\n\nThe skill bundle is benign. It connects to predefined ham radio DX cluster nodes via telnet for monitoring, saves state to `/tmp/dx-monitor-state.json`, and uses a local configuration file `dx-ai-config.json`. The `dx-ai-enhanced.py` script executes `dx-monitor.py` via `subprocess.run` with hardcoded, safe arguments. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts against the OpenClaw agent. All network and file operations are aligned with the stated purpose of a ham radio DX monitor.",
+          "checkedAt": 1779164672749,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "3b81976b7e7c6a000e515feb771829bf00be1ac667d0d67d2166e6e174a0ae9b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/3b81976b7e7c6a000e515feb771829bf00be1ac667d0d67d2166e6e174a0ae9b"
+    },
+    "slug": "amateur-radio-dx",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,147 @@
+{
+  "classification": {
+    "artifacts": [
+      "website"
+    ],
+    "audiences": [
+      "business",
+      "marketer"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "business",
+      "marketing"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:research",
+      "category:C10:token:ai",
+      "category:C14:token:marketing",
+      "category:C17:token:personal",
+      "category:C19:token:automation",
+      "cross-tag:browser-automation",
+      "cross-tag:marketing-sales",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10",
+      "C14",
+      "C17",
+      "C19"
+    ],
+    "stages": [
+      "deliver",
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "automate",
+      "market",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "fc51812e0f57f5188d1be77ccd8c59c2e11aac164e76de46b60df31dddca7b65",
+    "content_hash": "c6d2bc44141fe0506a04aec9533da8cd742d351d0189a4e55ae7882d914ff834",
+    "precanonical_content_hash": "0cadca758629eb06931bf947e196dcf629f63e7b04293e93479fe231aff72ad7",
+    "skill_md_hash": "8dc837e1c639b304a2e9ed5db48aca29011305c768718292a76015534719dd69",
+    "version_metadata_sha256": "758b82ebbf102c7d8bf4664b2848e179af7694bdd29df1c88b1ed66bcf82eccd"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/dimitripantzos/skills/rss-reader",
+    "claim_id": "0ba623d8b9592fdba0035f90799bc1c5391ed45e958f2901bd4b0e2727a73fec",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "rss-reader",
+        "url": "https://clawskills.sh/skills/dimitripantzos-rss-reader"
+      }
+    ],
+    "owner_handle": "dimitripantzos",
+    "owner_id": "s17b2q25nnb489qa8ss7b6dfhd8854bk",
+    "published_at": 1771723745290,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779948569171,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779948569171,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The files coherently implement RSS/Atom feed management: add, remove, list, check configured feeds, store feed metadata, and print item titles, links, and descriptions.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The activation language is broad around content research and competitor tracking, and the skill does not explicitly warn that feed text is untrusted, but the behavior remains scoped to RSS/Atom workflows.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden installer or privileged setup is present; the documentation mentions npm dependencies and a parser module that are not actually used or included, which is an accuracy issue rather than a security concern.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Outbound HTTP/HTTPS requests to configured feed URLs, redirect following, and local writes to the skill's feeds file are expected for an RSS reader, though the script does not block internal or private network targets.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists feed configuration and last-check timestamps and documents optional cron or heartbeat scheduling; there is no automatic persistence beyond user-run commands or user-enabled scheduling.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The outbound network access concern is valid but expected for checking RSS feeds; it would benefit from clearer warnings and internal-address safeguards, but the artifacts disclose feed URLs and do not hide network behavior.\n[VirusTotal code_insight] expected: Feed titles and descriptions are untrusted text and could contain prompt-like content, but the script only prints feed data and does not add unrelated authority, credential access, exfiltration, or command execution.",
+          "guidance": "Install this only if you want your agent to fetch RSS/Atom feeds. Review configured feed URLs, prefer trusted HTTPS feeds, avoid localhost or private-network feed URLs, treat feed item text as untrusted content rather than instructions, and enable cron or heartbeat checks only if you want ongoing background polling.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a normal RSS reader skill, but it fetches and displays untrusted feed content that users should review like any web content.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948536536,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: rss-reader\nVersion: 1.0.0\n\nThe skill is suspicious due to a significant prompt injection vulnerability. The `SKILL.md` explicitly instructs the AI agent to 'summarize new items worth reading' from RSS feeds, especially when using the `--format ideas` option. The `scripts/rss.js` script fetches content from user-controlled URLs and directly embeds the `item.title` and `item.description` (after basic HTML entity decoding) into the markdown output that the agent is instructed to summarize. This allows an attacker who controls an RSS feed to inject malicious instructions into the agent's prompt, potentially leading to unauthorized actions. While the script itself doesn't contain malicious code, this interaction creates a critical attack surface.",
+          "checkedAt": 1779166092238,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "f498c7eebaff8b5057227a2d7cfa828761cdaa179aa566a557aacae68596f101",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/f498c7eebaff8b5057227a2d7cfa828761cdaa179aa566a557aacae68596f101"
+    },
+    "slug": "rss-reader",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

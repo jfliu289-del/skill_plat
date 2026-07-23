@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.7167,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:phrase:image generation",
+      "category:C05:token:image",
+      "category:C05:token:video",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "category:C17:token:notes",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "bb2e496c902a35856dcf660b3fffabb7c833fd97103b50fedccc24ba402c05cb",
+    "content_hash": "80e0768075687af35ceeec81361cfcab4ad3c7474e8a7bf8a6acb21c2f38178b",
+    "precanonical_content_hash": "28783fee41882f0b271732f72df22b452b12101fff0d861b6144afec165d8a04",
+    "skill_md_hash": "c52616fde8e15b0976f64cba9a06439a69e0f0d51b99326cf8a56c4f61e737a5",
+    "version_metadata_sha256": "a11d0980e213a79539633ba2d7eca021286a2afcb27aeceb10ca514ba1bf3656"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/xtaq/skills/liblib-ai-gen",
+    "claim_id": "c12a79c330e38870beed9a7d49a647fb005e4522937fbe773b923e438d7da1ea",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "liblib-ai-gen",
+        "url": "https://clawskills.sh/skills/xtaq-liblib-ai-gen"
+      }
+    ],
+    "owner_handle": "xtaq",
+    "owner_id": "s17df9r7tdvkj9bnt9emh6vh65884fkh",
+    "published_at": 1770558994467,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783657737288,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783657737288,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose, CLI behavior, credential use, and API calls all align with generating images and videos through LiblibAI using Seedream and Kling models.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The trigger text can cover generic image or video generation requests, so users may want the agent to confirm LiblibAI is the intended provider before sending content.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains only SKILL.md and one Python CLI script; no install-time mutation, package replacement, hidden setup, or persistence mechanism was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script reads LIB_ACCESS_KEY and LIB_SECRET_KEY and sends prompts, generation parameters, and supplied image URLs to openapi.liblibai.cloud, which is proportionate for the stated API integration but privacy-relevant.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No evidence of background workers, privilege escalation, broad local file access, credential harvesting, destructive actions, obfuscation, or unrelated third-party endpoints was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: Environment credentials and outbound network access are used for the LiblibAI API and are disclosed in the skill documentation; the absence of a separate permission declaration is a transparency note, not evidence of hidden behavior.\n[SQP-1] unexpected: The activation description is broader than ideal for a third-party provider, but it remains within image/video generation and does not create a purpose mismatch by itself.\n[SQP-2] expected: Prompts and media URLs are transmitted to LiblibAI as required for generation; the artifacts would benefit from a clearer privacy notice, but the data flow is not hidden from the stated purpose.\n[E1] expected: The external POST request is the core API call to LiblibAI, limited to the configured LiblibAI base URL and generation/status endpoints.",
+          "guidance": "Install this if you intend to use LiblibAI for image or video generation. Avoid submitting confidential prompts, private image URLs, or sensitive media unless you are comfortable sharing that content with LiblibAI under its data-handling terms.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a normal LiblibAI image and video generation skill, with the main caveat that prompts and media URLs are sent to LiblibAI.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783657694895,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 49,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: liblib-ai-gen\nVersion: 1.0.0\n\nThe skill bundle provides a client for the LiblibAI API to generate images and videos. It requires API keys (`LIB_ACCESS_KEY`, `LIB_SECRET_KEY`) from environment variables, which is standard practice. The `SKILL.md` clearly outlines the skill's purpose and usage, without any prompt injection attempts to manipulate the agent for malicious actions. The `scripts/liblib_client.py` script only interacts with the `openapi.liblibai.cloud` domain, uses standard Python libraries and `requests`, and shows no evidence of data exfiltration, malicious execution, persistence mechanisms, or obfuscation.",
+          "checkedAt": 1779162229526,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "9d7c88550463ecfcc7b76f757d158667ae1b85fa81c7ef90371de50b8e4f7693",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/9d7c88550463ecfcc7b76f757d158667ae1b85fa81c7ef90371de50b8e4f7693"
+    },
+    "slug": "liblib-ai-gen",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

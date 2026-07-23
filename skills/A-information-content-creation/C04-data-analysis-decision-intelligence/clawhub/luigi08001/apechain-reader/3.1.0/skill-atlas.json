@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C01:token:lookup",
+      "category:C02:token:language",
+      "category:C04:token:analyze",
+      "category:C04:token:data",
+      "cross-tag:data-analysis",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C02"
+    ],
+    "stages": [
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "223d553e69d3d4e92c9a1bee6886341a4342723fca2865421c00b6ff87b32840",
+    "content_hash": "0586c9ba258b53b877a62f324873e1df68fbafe4e4a186ffc17c88ef8f539b5a",
+    "precanonical_content_hash": "0713efc2be85e46a38d01f7c014884f105c4cafe0ab45d05e5b212e6ba6fbabf",
+    "skill_md_hash": "8896aa1cb46f83f91752e91a9bdb20f862ba55719d9506bbd4547e118fbbd2fb",
+    "version_metadata_sha256": "9200676cab5753e7b7ed81703b526e803caea0c0da653ff219b27238770fa525"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/luigi08001/skills/apechain-reader",
+    "claim_id": "cde24251546c25c4b7e21a5d22e9a6f969dbd1fe24ae9d153a1a43de31e0d4b0",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "apechain-reader",
+        "url": "https://clawskills.sh/skills/luigi08001-apechain-reader"
+      }
+    ],
+    "owner_handle": "luigi08001",
+    "owner_id": "s17174ff8avnmaqgey3v7z953n885p3r",
+    "published_at": 1771501838549,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779933417271,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779933417271,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The wallet, NFT, transaction, contract, and bot-analysis purpose matches the included Node scripts and public RPC/API calls. There are functional reliability notes: ENS support is advertised but disabled in code, and some supported chains are documented as intermittent.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are user-directed CLI lookups for specified addresses and chains. The artifacts do not request signing keys, submit transactions, mutate accounts, delete data, or run hidden autonomous workflows.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The package has no dependencies or postinstall scripts and documents Node.js as required. Runtime/network capability metadata could be more explicit, but the documentation and code make the local script model visible.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill sends queried wallet/contract data to configured blockchain RPC providers, CoinGecko, and optionally Alchemy. ALCHEMY_API_KEY use is disclosed and limited to collection-name resolution; no hardcoded secrets or unrelated credential handling were found.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistent service, background worker, filesystem writes, local credential-store access, elevated privilege use, or blockchain transaction authority is shown; caching is in-memory during a script run.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: Network access and optional Alchemy API use are expected for wallet enrichment. The metadata could disclose network use more formally, but SKILL.md and README-MARKETPLACE.md describe public RPC endpoints, CoinGecko, and the optional Alchemy key.\n[SDI-4] unexpected: The older test report overstates production readiness while showing only 4 of 8 chains tested successfully. This is a reliability/documentation issue, not evidence of malicious or hidden behavior, and later docs mark several chains as intermittent.\n[SQP-2] expected: Address and contract queries being sent to third-party RPC/API providers is inherent to the stated function and is partially disclosed. A clearer privacy notice would help users understand that lookup interest may be visible to providers.\n[suspicious.env_credential_access] expected: The static finding maps to process.env.ALCHEMY_API_KEY. The key is optional, documented, and used only in the Alchemy NFT metadata URL path for collection-name resolution.\n[VirusTotal.clean] expected: VirusTotal reported no detections and its analysis aligns with the artifact review; this was used as supporting telemetry, not as the sole basis for the verdict.",
+          "guidance": "Reasonable to install for read-only wallet analysis. Be aware that queried addresses, contract addresses, chain choices, and timing can be visible to public RPC providers, CoinGecko, and Alchemy if enabled; use a dedicated Alchemy key and private/custom RPCs for sensitive investigations, and do not rely on ENS support or intermittent chains without testing them first.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a read-only blockchain wallet analysis skill with expected third-party lookups and optional Alchemy use, but no evidence of hidden mutation, persistence, or exfiltration.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779933351056,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 71,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: apechain-reader\nVersion: 3.1.0\n\nThe skill is designed for multi-chain wallet analysis, interacting with public blockchain RPCs, CoinGecko, and optionally Alchemy API for legitimate data retrieval. All network calls are to known, trusted services. Input validation is implemented for addresses and chain names, mitigating shell injection risks. The `package.json` lists no external dependencies, relying solely on Node.js built-ins. Documentation (SKILL.md, README-MARKETPLACE.md) provides clear instructions for using the skill and does not contain any prompt injection attempts to manipulate the agent into malicious actions. The `process.env.ALCHEMY_API_KEY` is used for an optional, documented feature (NFT collection name resolution) and is not exfiltrated. A critical bug related to the zero address causing indefinite hanging was identified and fixed, demonstrating a focus on robustness. While ENS resolution is explicitly disabled in `scripts/lib/rpc.js` due to a perceived dependency issue (despite the `namehash` function being present), this effectively closes a potential, albeit minor, attack vector. There is no evidence of intentional harmful behavior such as data exfiltration, unauthorized execution, or persistence mechanisms.",
+          "checkedAt": 1779165423701,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "7777db0c0a532d46f13511bc676b10761c67e7e8cc05de73e484b62325ab57a1",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/7777db0c0a532d46f13511bc676b10761c67e7e8cc05de73e484b62325ab57a1"
+    },
+    "slug": "apechain-reader",
+    "source_type": "clawhub",
+    "version": "3.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

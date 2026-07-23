@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C02:token:write",
+      "category:C03:token:document",
+      "category:C06:token:api",
+      "category:C06:token:code",
+      "category:C13:token:operations",
+      "category:C17:token:notes",
+      "cross-tag:software-development",
+      "cross-tag:writing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C02",
+      "C03",
+      "C13",
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d24235752058c10ae4ca9911f3629056a0505a7b849d8d9d4b70b3d019159245",
+    "content_hash": "ab9672409561cbb7bd390cada24bc5fcd0520f68d11f4e8d84b7191e2d4315e3",
+    "precanonical_content_hash": "9900015e8260316f912a70850cc3ede656b91b2f5ad35b04d312b66814df1dc4",
+    "skill_md_hash": "222fb3c1ddf0fe96a05ed8c218e391814e05f76ddb8f84c62d5caf527e85d4e6",
+    "version_metadata_sha256": "39885f0df4a261b8f59fefc8b27be2a49e4677a18177bdd2307719f80686bb0a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/hacksing/skills/feishu-user",
+    "claim_id": "fc51c71288dd17e5a3e3eac3ee83c8d939d83a7830e3019f17f5b3054400fe95",
+    "index_entries": [
+      {
+        "index_path": "categories/git-and-github.md",
+        "label": "feishu-user",
+        "url": "https://clawskills.sh/skills/hacksing-feishu-user"
+      }
+    ],
+    "owner_handle": "hacksing",
+    "owner_id": "s176ztvkqj8425kmfx7pqg716s83h4n5",
+    "published_at": 1771776403069,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779949692874,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779949692874,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The code and documentation match the stated purpose of Feishu document operations using user access tokens, including read, create, append, block update, and block delete operations against official Feishu API endpoints.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The high-impact document mutation methods are documented and user-invoked, though the top-level description is narrower than the full API surface and the overwrite wording is inaccurate because write_doc appends.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is limited to manually installing the requests dependency; there is no hidden installer, background service, package substitution, or automatic execution path.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to Feishu OAuth and document APIs is proportionate for the purpose. The documented search scopes appear broader than the current code requires, but they are disclosed and Feishu-related.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The token helper intentionally stores access and refresh tokens in a predictable local JSON config file. This is disclosed and purpose-aligned for refresh support, but it lacks stronger local secret-storage controls or warnings.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Network access and local token file read/write are expected for an OAuth-backed Feishu document skill and are described in the artifacts, even though formal permission metadata is not present.\n[TP4] expected: OAuth token handling, refresh, block-level operations, and local token caching are visible in the documentation or API table and fit the Feishu document-management purpose; the top-level summary could be more complete.\n[SDI-4] unexpected: write_doc is documented as overwrite but calls append_doc. This is a correctness and expectation issue, not evidence of hidden exfiltration or malicious behavior.\n[SDI-2] unexpected: The documented search scopes are broader than the implemented client methods need, since the code does not implement search. This is a least-privilege concern but remains within the Feishu document context.\n[SQP-2] expected: Update and delete examples are expected for a document editing skill, but users should require explicit confirmation before invoking destructive document actions.\n[SQP-2] expected: Local token persistence is disclosed and supports refresh, but the skill should warn that the config file contains sensitive credentials.\n[SQP-2] expected: The script writes plaintext tokens without setting restrictive permissions. This is credential-hygiene risk, but it is not hidden or unrelated to the skill purpose.",
+          "guidance": "Install only if you want an agent to operate on Feishu documents under your user identity. Use the narrowest Feishu scopes that work, protect or remove ~/.config/claw-feishu-user/config.json when not needed, avoid shared machines, and require explicit confirmation before update or delete operations.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent Feishu document helper, but it gives an agent user-token access to read and change Feishu documents, so users should handle tokens and destructive actions carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779949655257,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: feishu-user\nVersion: 1.0.1\n\nThe skill provides legitimate functionality for managing Feishu documents using user access tokens. All network communications are directed to official Feishu API endpoints (open.feishu.cn, accounts.feishu.cn). The `SKILL.md` instructions are clear and do not contain any prompt injection attempts or directives for the AI agent to perform unauthorized actions. The `feishu_client.py` script handles document operations, and `feishu_token.py` manages OAuth token acquisition and refresh, storing tokens in a standard user configuration file (`~/.config/claw-feishu-user/config.json`). While storing tokens locally carries inherent risk, and content parameters could theoretically be misused for content injection if untrusted input is provided, these are common considerations for such utilities and do not indicate malicious intent within the skill itself.",
+          "checkedAt": 1779166243277,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "c8d60ae7df2d1b148ffe0a91789e868762159bcd0254b21c4078676f70fad858",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/c8d60ae7df2d1b148ffe0a91789e868762159bcd0254b21c4078676f70fad858"
+    },
+    "slug": "feishu-user",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

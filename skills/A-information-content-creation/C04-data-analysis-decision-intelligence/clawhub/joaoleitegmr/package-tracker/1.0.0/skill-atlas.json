@@ -1,0 +1,223 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "cross-tag:data-analysis",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "0ebe64cc52d156824a555f10af37d96aa2f03a7b26184735c7185c4b154c27fc",
+    "content_hash": "465f7c29294bb7f0135fe693e0d1bab876b26b45dbe9d6abfe236ae3c29fb626",
+    "precanonical_content_hash": "04d79e3fff6a5e2aaca5be0b4fbc581eafa5ed44f8152525c2bb711b8e0fc05f",
+    "skill_md_hash": "d6c718e047af0a647b781eedd5dc5799145bbc4402db18df1c64899b7e657671",
+    "version_metadata_sha256": "9bd05a939c35f0858f3e7139a9be8246329893e46e282bca37dd2b1628a939b1"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/joaoleitegmr/skills/package-tracker",
+    "claim_id": "e60e260af82acf237cc25d3eaa942706217b0d830abfcc800a7935dd266efd69",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "package-tracker",
+        "url": "https://clawskills.sh/skills/joaoleitegmr-package-tracker"
+      }
+    ],
+    "owner_handle": "joaoleitegmr",
+    "owner_id": "s176b9k7gkfsc96y80q9883t2s8841v0",
+    "published_at": 1771516019273,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1780085600606,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": [
+            {
+              "categoryId": "ASI04",
+              "categoryLabel": "Agentic Supply Chain Vulnerabilities",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The setup script installs dependencies at setup time; the referenced requirements file lists httpx and python-dotenv without version pins. This is common for a Python CLI skill but relies on external package supply chain.",
+                "path": "scripts/setup.sh",
+                "snippet": "\"$SCRIPT_DIR/venv/bin/pip\" install -q --upgrade pip\n\"$SCRIPT_DIR/venv/bin/pip\" install -q -r \"$SCRIPT_DIR/requirements.txt\""
+              },
+              "recommendation": "Review setup.sh before running it, consider pinning dependency versions, and install only in the intended virtual environment.",
+              "riskBucket": "abnormal_behavior_control",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "Installing the skill may download current versions of Python packages from the package index."
+            },
+            {
+              "categoryId": "ASI03",
+              "categoryLabel": "Identity and Privilege Abuse",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The setup template creates local fields for a 17track API key and optional Telegram credentials. The 17track key is expected for the stated service; the Telegram fields are optional and not required by the core SKILL.md workflow.",
+                "path": "scripts/setup.sh",
+                "snippet": "SEVENTEEN_TRACK_API_KEY=\n\n# Telegram notifications (optional)\nTELEGRAM_BOT_TOKEN=\nTELEGRAM_CHAT_ID="
+              },
+              "recommendation": "Add only the credentials you actually need, keep scripts/.env private, and avoid entering optional Telegram credentials unless you intend to use direct Telegram notifications.",
+              "riskBucket": "permission_boundary",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "Anyone with access to the .env file could potentially see service tokens you place there."
+            },
+            {
+              "categoryId": "ASI06",
+              "categoryLabel": "Memory and Context Poisoning",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The skill intentionally persists tracking numbers, descriptions, event history, and API usage locally. This is disclosed and purpose-aligned, but shipment data can be personal.",
+                "path": "SKILL.md",
+                "snippet": "**Database:** `scripts/data/tracker.db` (SQLite)\n**Tables:** `packages`, `tracking_events`, `api_usage`"
+              },
+              "recommendation": "Avoid overly sensitive package descriptions, protect the skill directory, and delete the local database if you no longer want the history retained.",
+              "riskBucket": "sensitive_data_protection",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "Package details and descriptions may remain on disk after use."
+            },
+            {
+              "categoryId": "ASI07",
+              "categoryLabel": "Insecure Inter-Agent Communication",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "Update notifications are emitted to stdout for OpenClaw to forward to configured messaging channels. This is the documented notification design, but it can expose tracking status and descriptions to those channels.",
+                "path": "SKILL.md",
+                "snippet": "OpenClaw reads this output and relays it via its native message tool — which works on Telegram, Signal, Discord, WhatsApp, or whatever channel the user has configured."
+              },
+              "recommendation": "Use only trusted messaging channels and be aware that package descriptions and tracking numbers may be included in notifications.",
+              "riskBucket": "sensitive_data_protection",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "Shipment updates could appear in chat apps or logs configured for OpenClaw messaging."
+            },
+            {
+              "categoryId": "ASI10",
+              "categoryLabel": "Rogue Agents",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The skill documents optional cron/OpenClaw heartbeat use for periodic background checks. This is disclosed and user-directed, not hidden persistence.",
+                "path": "SKILL.md",
+                "snippet": "0 */3 * * * cd /root/.openclaw/workspace/skills/package-tracker && scripts/venv/bin/python scripts/check_updates.py --quiet"
+              },
+              "recommendation": "Only enable scheduled checks if you want ongoing background polling, and remove the cron/heartbeat entry when you stop using the skill.",
+              "riskBucket": "abnormal_behavior_control",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "If you add the cron job or heartbeat, the checker can continue polling 17track and producing notifications on a schedule."
+            }
+          ],
+          "checkedAt": 1778430249511,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The visible artifacts are coherent for package tracking through 17track, carrier detection, local SQLite history, and update notifications. Confidence is medium because the supplied core tracker.py content is truncated.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The documented commands are user-invoked package-management actions, with optional cron/OpenClaw heartbeat checks. No artifact instructs the agent to override user intent or run unrelated actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no registry install spec, but SKILL.md instructs users to run setup.sh, which creates a venv and installs Python dependencies from requirements.txt. This is purpose-aligned but should be reviewed before running.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill sends user-provided tracking numbers and carrier data to 17track and stores package descriptions/history locally, which is proportionate to shipment tracking but worth noticing.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists a local SQLite database and documents optional cron/heartbeat scheduling for periodic checks. The artifacts present this as user-directed rather than hidden persistence.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": null,
+          "guidance": "Before installing, review the full tracker.py file because the supplied artifact is truncated, then run setup.sh only if you are comfortable installing its Python dependencies. Use a dedicated 17track API key, keep scripts/.env private, avoid sensitive package descriptions, and enable cron or heartbeat checks only if you want ongoing background package polling.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": {
+            "abnormal_behavior_control": {
+              "highestSeverity": "low",
+              "status": "note",
+              "summary": "Manual setup installs Python dependencies, and optional scheduled checks can run periodically; both are disclosed and purpose-aligned."
+            },
+            "permission_boundary": {
+              "highestSeverity": "low",
+              "status": "note",
+              "summary": "The skill uses a 17track API key and creates optional Telegram credential fields, with no evidence in the provided artifacts of hardcoded credentials or credential leakage."
+            },
+            "sensitive_data_protection": {
+              "highestSeverity": "low",
+              "status": "note",
+              "summary": "Tracking numbers, descriptions, and event history are stored locally and may be relayed through configured messaging channels."
+            }
+          },
+          "status": "clean",
+          "summary": "This package-tracking skill appears to match its purpose, but it needs a 17track key, installs Python packages, saves shipment history locally, and optional scheduled checks can send updates to messaging channels.",
+          "verdict": "benign"
+        },
+        "skillspector": null,
+        "vt": {
+          "analysis": null,
+          "checkedAt": 1780085600606,
+          "normalizedStatus": "clean",
+          "source": "engines",
+          "status": "clean",
+          "verdict": null
+        }
+      },
+      "sha256hash": "0ebe64cc52d156824a555f10af37d96aa2f03a7b26184735c7185c4b154c27fc",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0ebe64cc52d156824a555f10af37d96aa2f03a7b26184735c7185c4b154c27fc"
+    },
+    "slug": "package-tracker",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,158 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.2389,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C17",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C01:token:find",
+      "category:C03:token:document",
+      "category:C04:token:data",
+      "category:C06:token:code",
+      "category:C10:token:ai",
+      "category:C14:token:lead",
+      "category:C17:token:knowledge",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C01",
+      "C03",
+      "C04",
+      "C06",
+      "C10",
+      "C14"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "61ede2f42a951e492b9a87e8f4d3cb7b8d9209c3e89b4d50515f196beca75649",
+    "content_hash": "e938ffc855bd347165882139f7647d25cca09d0c882a660da91a8f9fbe2ce3df",
+    "precanonical_content_hash": "51a2255e35107aae23f753323c3749b5d74cf14f11126376532771321b293dbb",
+    "skill_md_hash": "32cca53d51135ff33d24f632aad37d3facebf32bf61b39c6e90db93feed850d2",
+    "version_metadata_sha256": "4371658b679dc148051c3c49e6fdc0e94f3a54a5670e122a9ae55a06451e2d45"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/urrrich/skills/wiki-retriever",
+    "claim_id": "927fabe78b8f2fe05396a0855bede27c34e52a486756833cb663b345bc5aa0f9",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "wiki-retriever",
+        "url": "https://clawskills.sh/skills/urrrich-wiki-retriever"
+      }
+    ],
+    "owner_handle": "urrrich",
+    "owner_id": "s174f3m47j1f8t5t6ard3fw3vd885s9j",
+    "published_at": 1771146770264,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967933705,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967933705,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The purpose and behavior are coherent: enumerate wiki/uploaded files, read contents to confirm relevance, and attach selected documents. This necessarily involves access to potentially private knowledge-base content.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The workflow is scoped to the current task's knowledge base and caps final returned documents at 10, with clarification required if the scope remains too broad.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains only SKILL.md; there are no scripts, binaries, package installs, or install-time execution paths.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Optional python_code_execution is mentioned for reading uploaded files, but the instruction explicitly limits this to files listed in upload_files and accessed from the working directory.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No credentials, environment variables, background workers, persistence, elevated privileges, or unrelated local profile/session access are requested.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight suspicious] expected: The concern is based on optional Python file reading. Artifact text scopes that use to uploaded files listed in upload_files, so this is a disclosed, purpose-aligned capability rather than evidence of arbitrary local file disclosure.\n[SkillSpector clean] expected: SkillSpector reported no issues; this is consistent with the inspected artifact being instruction-only and bounded to document retrieval.\n[Static scan clean] expected: Static scan found no suspicious patterns, and local inspection found no executable files beyond the markdown skill instructions.",
+          "guidance": "Install only in workspaces where the agent may inspect relevant wiki, Feishu, or uploaded documents. The main practical risk is accidental exposure of private documents through retrieval, so keep unrelated confidential files out of the task scope and ensure Python use stays limited to declared uploaded files.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is an instruction-only wiki document retrieval skill that reads relevant uploaded or knowledge-base files and returns a limited set of matches.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967904640,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: wiki-retriever\nVersion: 0.1.0\n\nThe `SKILL.md` file instructs the AI agent to use the `python_code_execution` tool for reading files, explicitly demonstrating `open('data.csv', 'r')` and noting files will be in the working directory `./`. While there's a caveat to ensure files are listed in `upload_files`, this instruction creates a significant prompt injection vulnerability. A malicious user could potentially craft a prompt to trick the agent into using `python_code_execution` to read arbitrary local files (e.g., `/etc/passwd`, `~/.ssh/id_rsa`) if the agent's internal safeguards are insufficient or bypassed, leading to local file disclosure. This represents a high-risk capability without clear evidence of intentional malicious behavior from the skill developer.",
+          "checkedAt": 1779164209635,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "f0f896840fdb9148069c19b3cf24271a0ecd5e5f8cec180ad530d69dd5a8f064",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/f0f896840fdb9148069c19b3cf24271a0ecd5e5f8cec180ad530d69dd5a8f064"
+    },
+    "slug": "wiki-retriever",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

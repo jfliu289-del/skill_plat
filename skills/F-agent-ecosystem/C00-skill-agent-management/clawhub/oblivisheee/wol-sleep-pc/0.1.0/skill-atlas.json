@@ -1,0 +1,119 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.0,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "fallback:C00"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "fe67e3b49bb05ce56941d0b2b6959295a64bc4b447f6d92e2bcd99ac918d755d",
+    "content_hash": "3928f76b6bf31e2dfef67fcc924f7cc0d732689151e85d31f7700bfa40a14b9d",
+    "precanonical_content_hash": "cb746eaa8da889f484a0a3315bf4ca5239283e6ed50cdcb951226f5f94b2a233",
+    "skill_md_hash": "eb72c81c9e69832a2ee5a00a29f9388153ca4769b2beebad95389f52bd9d8d26",
+    "version_metadata_sha256": "f713a9e443f4699fcd164f458c87d34a1eee72c7aca516e30148a02174e30184"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/oblivisheee/skills/wol-sleep-pc",
+    "claim_id": "ac6e18316bc24de1d8870434b8670a4f7897527393b680f06e0040db77a6361c",
+    "index_entries": [
+      {
+        "index_path": "categories/cli-utilities.md",
+        "label": "wol-sleep-pc",
+        "url": "https://clawskills.sh/skills/oblivisheee-wol-sleep-pc"
+      }
+    ],
+    "owner_handle": "oblivisheee",
+    "owner_id": "s176yvzhve82h6trz1cerbcjxd8848tp",
+    "published_at": 1770839370174,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971021360,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971021360,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts send UDP broadcast packets for Wake-on-LAN and Sleep-on-LAN-style use, which matches the stated purpose but can affect a device's power state on the local network.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill instructions limit use to explicit wake, sleep, check, or configuration requests and do not contain hidden prompts, unrelated authority, or output manipulation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation is plain Python scripts with no dependency download, but the documentation references a .gitignore safeguard that is not present in the supplied artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading a documented local config file and sending configurable UDP broadcast packets is proportionate for WOL/SOL, though incorrect MAC, inverted MAC, broadcast address, or port values could target the wrong host or fail to sleep it.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background service, persistence mechanism, privilege escalation, credential harvesting, broad file access, or exfiltration behavior is shown; the scripts only read a fixed optional config path.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SDI-4] expected: Verified that send_sleep.py builds the same magic-packet structure using the supplied --mac value; the documentation tells users to provide the inverted sleep MAC separately, so this is a configuration and validation caveat rather than hidden or purpose-mismatched behavior.\n[SDI-1] expected: The sleep script does not compute an inverted MAC from the normal MAC, but the artifact consistently exposes sleep_mac/target inverted MAC configuration and does not disguise unrelated behavior.",
+          "guidance": "Install only if you want an agent to send LAN power-control packets. Configure the wake MAC, sleep/inverted MAC, broadcast address, and port carefully, and run it only for devices you control after an explicit wake or sleep request.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a small, disclosed LAN power-control utility; its main risk is misconfiguration of wake/sleep packet targets, not hidden or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779970987524,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: wol-sleep-pc\nVersion: 0.1.0\n\nThe OpenClaw AgentSkill 'wol-sleep-pc' is benign. It provides two Python scripts (`scripts/send_wol.py`, `scripts/send_sleep.py`) to send Wake-on-LAN and Sleep-on-LAN packets, respectively. The code uses standard Python libraries (`socket`, `argparse`, `json`, `os`) to perform its stated function. It reads configuration from `~/.config/wol-sleep-pc/config.json` and takes command-line arguments, with no evidence of shell injection vulnerabilities or malicious input handling. The `SKILL.md` instructions are clear, directly related to the skill's purpose, and do not contain any prompt injection attempts or directives for unauthorized actions. The design explicitly avoids hardcoding sensitive information and ignores local configuration files, demonstrating a security-conscious approach.",
+          "checkedAt": 1779163270644,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "169c3df1a2ffa45b968e374ab7918c0faf9ff6b9f07687177f7234029f980bea",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/169c3df1a2ffa45b968e374ab7918c0faf9ff6b9f07687177f7234029f980bea"
+    },
+    "slug": "wol-sleep-pc",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,164 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "website"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2227,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:sources",
+      "category:C06:token:api",
+      "category:C07:token:quality",
+      "category:C07:token:review",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C18:token:health",
+      "category:C18:token:home",
+      "category:C19:token:automation",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:review",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C06",
+      "C07",
+      "C09",
+      "C10",
+      "C18",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "build",
+      "manage",
+      "research",
+      "review",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "b4ef61b63e24a37ed757df5bcc5a8338e6a81bcc29a54822b1f6673eacce43b2",
+    "content_hash": "5fa83b0ec23f8c049531fe0079e33b8a9d429029858dd5d4af40c5a9dea57bba",
+    "skill_md_hash": "ed386ff9b0030d6ae5713a15bc4787a695c48a086d435052c7b6673c29b3d799",
+    "version_metadata_sha256": "23e14754721aeeb127a3a3f7e0d473b47a8775ee8aadbfa305f31d3c4b24c7ff"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tcsenpai/skills/lattice-protocol",
+    "claim_id": "d9a55c44e71f96ca922a86c3cdbd9dc87772446a2eded1357361798c1e493e53",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "lattice-protocol",
+        "url": "https://clawskills.sh/skills/tcsenpai-lattice-protocol"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "tcsenpai",
+    "owner_id": "s17a4qycza34hj2j7thngeqw3h8848pr",
+    "published_at": 1771092156009,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967116918,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967116918,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The CLI capabilities match the stated purpose: identity registration, posting, voting, following, reporting, attestations, feeds, topics, and reputation checks for lattice.quest.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Mutating social actions are exposed as explicit commands; the automation language is broad, but the bundled cron scripts only fetch feeds, replies, topics, EXP, and logs rather than posting or voting automatically.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The npm package has no install-time script; cron setup is performed by a separate configure.sh wizard, which asks the user but defaults the prompt to yes.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to lattice.quest or LATTICE_URL and use of ~/.lattice are proportionate to a signed social CLI; no broad local indexing, unrelated credential harvesting, or hidden external destinations were found.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill can add recurring user crontab entries and stores an Ed25519 private key in ~/.lattice/keys.json with mode 0600; both are purpose-aligned but should be consciously accepted.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The cron concern is partly supported: setup defaults to yes and creates persistent scheduled network checks, but the wizard asks first, documents disable steps, and the shipped cron jobs are read-only monitoring tasks.\n[SQP-2] expected: The local private key storage concern is supported, but it is expected for this CLI's DID signing model and the file is restricted to the user account; stronger disclosure would be useful.\n[SQP-2] expected: Registration sends a public key and optional username to the configured Lattice server, which is the advertised identity-registration function rather than a hidden data flow.\n[suspicious.env_credential_access] expected: The flagged environment variable is LATTICE_URL, a configurable service endpoint, not a credential; network requests to that endpoint are central to the skill.\n[suspicious.exposed_secret_literal] unexpected: The flagged privateKey references are generated runtime keys or dummy test data, not a bundled hardcoded API secret.\n[VirusTotal code_insight] expected: The telemetry's persistence observation is accurate, but it is opt-in through a visible configuration prompt and not sufficient on its own to make the artifact suspicious.",
+          "guidance": "Before installing, decide whether you want a local Lattice identity stored under ~/.lattice and whether to enable cron jobs. If you do enable automation, review crontab -l and the ~/.lattice/logs files periodically; choose no in the configure wizard if you only want manual CLI commands.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed Lattice social-network CLI with optional scheduled read-only monitoring, but users should notice the local key file and cron option before enabling it.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967067153,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: lattice-protocol\nVersion: 0.1.0\n\nThe skill is classified as suspicious due to its default installation of cron jobs for persistence and autonomous execution, as instructed by the `SKILL.md` and implemented in `scripts/configure.sh`. While the stated purpose of 'autonomous engagement' is benign and the cron scripts (`scripts/cron/*.sh`) only execute local binaries (`bin/*.js`) to interact with the `lattice.quest` API, the mechanism of installing system-level persistence by default via agent instructions represents a significant risky capability. This could be abused if the executed scripts were malicious, even though in this specific bundle, they are not. The scripts also read the agent's DID from `~/.lattice/keys.json` for authentication, which is necessary for their function, and log activity to `~/.lattice/logs`.",
+          "checkedAt": 1779164061574,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "4878eaacb42c20dd57a4120248b5d1b8dede8145d6a0a339eaba9855e2c6b5f9",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4878eaacb42c20dd57a4120248b5d1b8dede8145d6a0a339eaba9855e2c6b5f9"
+    },
+    "slug": "lattice-protocol",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

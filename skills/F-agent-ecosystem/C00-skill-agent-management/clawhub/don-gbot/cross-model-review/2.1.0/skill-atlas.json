@@ -1,0 +1,160 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.23,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:orchestration",
+      "category:C01:token:research",
+      "category:C04:token:data",
+      "category:C06:token:coding",
+      "category:C06:token:implementation",
+      "category:C07:token:review",
+      "category:C10:token:ai",
+      "category:C10:token:model",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:planning",
+      "cross-tag:review",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C04",
+      "C06",
+      "C07",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "plan",
+      "review"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "5b6d1d129193640656b66e2c143ab5323f20dc297ed25c1963e773a9bd1b5dae",
+    "content_hash": "85920ae461a6c368f371de7095039cfee7fa31da821948bb29d2c13ef19a67a8",
+    "precanonical_content_hash": "b2a8266acd128547e11ae897992a3b2735da851102bbda7617f51678418256b4",
+    "skill_md_hash": "0582d93ec1d26a4d8e7be8f930f431db90b9d6cf4ff9d4ed8a6965a0d18d9eda",
+    "version_metadata_sha256": "3735793f1891437f5e9db3ad0b14d20e1d8c3c81e7b154e2f65b3c804e3a9211"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/don-gbot/skills/cross-model-review",
+    "claim_id": "acdd81517d218ecdf6d290f62a351056aee2075e39692f23937af99f2af5317a",
+    "index_entries": [
+      {
+        "index_path": "categories/git-and-github.md",
+        "label": "cross-model-review",
+        "url": "https://clawskills.sh/skills/don-gbot-cross-model-review"
+      }
+    ],
+    "owner_handle": "don-gbot",
+    "owner_id": "s173jds9821pwj16nevgkfxc2h8842q1",
+    "published_at": 1772748573591,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779948080870,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779948080870,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently implement adversarial plan review using bounded model rounds, issue tracking, approval gating, and local workspaces; spawning reviewer/writer model sessions is central to the stated purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Alternating mode is explicitly autonomous after kickoff and trigger phrases are fairly broad, but the skill documents when to use it, when not to use it, max-round limits, and failure handling.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No install script, remote bootstrapper, or external npm dependency is present; the runtime requirement is Node.js 18 or newer.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill reads user-selected plan files and may send plan and context content to third-party model APIs through OpenClaw sessions; SECURITY.md warns not to include secrets or PII and notes prompt-level isolation limits.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "It persists per-run review workspaces containing plan versions, raw responses, issues, changelogs, summaries, and force-approval logs, but no credential storage, daemon, privilege escalation, destructive action, or unrelated file access was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad trigger concern is real user-awareness guidance, but the artifacts also scope activation to substantive implementation plans and disclose the autonomous bounded review loop; this does not show hidden or purpose-mismatched behavior.\n[SQP-2] expected: Review artifacts are persisted to disk, and that retention is part of the tool's stated audit/review workflow; the README documents the workspace contents and SECURITY.md gives data-handling cautions, though users should still avoid sensitive content.\n[suspicious.dangerous_exec] expected: The child_process.execSync occurrence is in the test harness invoking the local CLI, not in the skill runtime orchestration path.\n[suspicious.prompt_injection_instructions] expected: The prompt-injection phrase appears as a SECURITY.md threat example, while templates wrap plan content in untrusted delimiters and instruct reviewer models not to execute embedded instructions.\n[VirusTotal-code_insight-clean] expected: VirusTotal telemetry reported no malicious detections; this is consistent with artifact review but was not used as the sole basis for the verdict.",
+          "guidance": "Install only if you want automated multi-model review of substantial implementation plans. Do not include secrets, credentials, PII, or confidential architecture details unless the selected model providers and local workspace retention are acceptable for that data; also be aware that phrases like \"review this plan\" may start a model workflow that writes files under tasks/reviews.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed cross-model plan review skill; the main cautions are model-provider sharing, local artifact retention, and broad activation phrases.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948034966,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: cross-model-review\nVersion: 2.1.0\n\nThe cross-model-review skill bundle is a well-architected tool for adversarial AI plan reviews with a strong focus on security and robustness. The core logic in `scripts/review.js` is dependency-free and implements a structured state machine for multi-round reviews, including Jaccard-based issue deduplication and schema validation. Most importantly, the bundle includes explicit prompt-injection mitigations in its templates (e.g., `alternating-reviewer-prompt.md` and `writer-prompt.md`) by wrapping untrusted content in delimiters and providing strict system instructions to sub-agents to treat input as data rather than instructions. No evidence of data exfiltration, malicious execution, or unauthorized persistence was found.",
+          "checkedAt": 1779166071272,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "bea3b1bd86df82c0db6b28bf88db32b677c35dbdc61bad3284c5019537917933",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/bea3b1bd86df82c0db6b28bf88db32b677c35dbdc61bad3284c5019537917933"
+    },
+    "slug": "cross-model-review",
+    "source_type": "clawhub",
+    "version": "2.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

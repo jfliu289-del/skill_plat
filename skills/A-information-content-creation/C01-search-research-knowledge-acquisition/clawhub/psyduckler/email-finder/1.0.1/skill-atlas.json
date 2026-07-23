@@ -1,0 +1,128 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.55,
+    "domains": [],
+    "needs_review": false,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:find",
+      "category:C01:token:search",
+      "cross-tag:agent-management",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "522f5166c7814ef36f509e6a22361416e5b0f5413c88298153ce8fa0efd8eb7d",
+    "content_hash": "26403a40b096c7c62bc4d9f22c87dab99744c17fc42d107e366d3fd516be601c",
+    "precanonical_content_hash": "7022579c2512bd28b105a1db4421fbe84c9f464d9c2ba4003f9eb88f49e46573",
+    "skill_md_hash": "ed5ed38f6831b758d99516fae9da38761eab9ce12c729021e812fc6bc5fc39e2",
+    "version_metadata_sha256": "b04ed4241c9623d37d8b56904aabbcd4c8368a2ef418f58c27c998339448c862"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/psyduckler/skills/email-finder",
+    "claim_id": "32ddabdd8c68c46583d6233083cb8c840fa2817291c615548ba632a02135fad4",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "email-finder",
+        "url": "https://clawskills.sh/skills/psyduckler-email-finder"
+      }
+    ],
+    "owner_handle": "psyduckler",
+    "owner_id": "s17918h35fap1pyt0j2wfakqzd885fpq",
+    "published_at": 1771171696337,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968361914,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968361914,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scraping, search, pattern guessing, DNS lookup, and SMTP verification behavior matches the stated email-finding purpose, but it is dual-use contact discovery that can be misused for unsolicited outreach.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The documentation discloses the main network behaviors, rate limits, SMTP cap, and --no-verify option, though the phrase 'zero risk' for --no-verify overstates safety because web/search/DNS requests may still occur.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a normal documented pip dependency step for dnspython, but it is unpinned and therefore has ordinary package supply-chain risk.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "External HTTP/HTTPS, DNS, search-provider, and SMTP traffic is proportionate to the purpose and partly rate-limited; disabling TLS certificate verification is a security weakness that can affect result integrity on untrusted networks.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts show no credential collection, local auth/session access, persistence, background worker, privileged file mutation, or destructive behavior.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SkillSpector SQP-2 (SKILL.md)] expected: The concern about email collection and SMTP validation is valid dual-use risk, but the behavior is explicitly the skill's purpose and is described in the documentation with targeted-use guidance and rate limits.\n[SkillSpector SQP-2 (scripts/find_emails.py)] expected: The active web, DNS, search, and SMTP requests are real and visible in the code; they are not hidden, but users should understand that targets and third parties can observe this traffic.\n[VirusTotal code insight] unexpected: The disabled HTTPS certificate verification is a real security weakness, but the telemetry found no exfiltration, persistence, prompt injection, or malicious behavior, so it supports caution rather than a Review or malicious verdict.\n[Static scan] expected: Static scan reported clean findings, which is consistent with the artifact review showing no hidden privilege, persistence, credential access, or destructive actions.",
+          "guidance": "Install only if you are comfortable running a tool that contacts target websites, search/directory services, DNS infrastructure, and mail servers. Use it for small, authorized lookups, avoid bulk prospecting, prefer --no-verify when SMTP recipient checks are unnecessary, and be cautious on untrusted networks because HTTPS certificate verification is disabled for page fetches.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it finds domain email addresses using public web, DNS, search, and SMTP checks, but users should run it only for lawful targeted lookups.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968326381,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: email-finder\nVersion: 1.0.1\n\nThe skill bundle is classified as suspicious primarily due to a significant security vulnerability in `scripts/find_emails.py`: it disables SSL certificate verification (`ssl.CERT_NONE`) when fetching web pages, exposing the agent to potential Man-in-the-Middle (MITM) attacks. Additionally, the script performs extensive network requests (HTTP/HTTPS, DNS, SMTP) which, while aligned with its stated purpose of email finding, represent high-risk capabilities. There is no evidence of intentional malicious behavior like data exfiltration, persistence, or prompt injection against the agent in `SKILL.md`.",
+          "checkedAt": 1779164296177,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "79e7ea803dbebbb64b83a9d57b8663f34241e593e991c3ef8c58bf8865850da6",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/79e7ea803dbebbb64b83a9d57b8663f34241e593e991c3ef8c58bf8865850da6"
+    },
+    "slug": "email-finder",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,168 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.3341,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:research",
+      "category:C01:token:search",
+      "category:C01:token:sources",
+      "category:C02:token:edit",
+      "category:C06:token:code",
+      "category:C08:token:github",
+      "category:C09:token:privacy",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C12:token:decision",
+      "category:C12:token:management",
+      "cross-tag:agent-management",
+      "cross-tag:review",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C06",
+      "C08",
+      "C09",
+      "C10",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research",
+      "review",
+      "secure",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "c60c890af1020293c810a3ca0dd460bcf144a555fbd43cff2f786b1f04df4aeb",
+    "content_hash": "a0e51d9bfdb966ba5693920344c2e8c1a4deef106d264132c51d835c7c5a7c45",
+    "precanonical_content_hash": "228fb38be7f33d7dac313990073646634a2581f727ae31cc1e260298459674ec",
+    "skill_md_hash": "5de4ed0739da858ac117c48513780cb9f100f0cf3389be16bbb0cadf38b99730",
+    "version_metadata_sha256": "eac7df198d96390030b797aeee171e0ca746c874301c90a4cc90e158d7d33e55"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/hargabyte/skills/chaos-mind",
+    "claim_id": "764ff3fd319eb53328d2c925d575b73c2d0cb3500db059952564ea86d2c7b023",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "chaos-mind",
+        "url": "https://clawskills.sh/skills/hargabyte-chaos-mind"
+      },
+      {
+        "index_path": "categories/notes-and-pkm.md",
+        "label": "chaos-mind",
+        "url": "https://clawskills.sh/skills/hargabyte-chaos-mind"
+      }
+    ],
+    "owner_handle": "hargabyte",
+    "owner_id": "s178f5hw76rq428b8r51kgeng9884ck1",
+    "published_at": 1770410341572,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783657953676,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783657953676,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "Manual memory search/storage and optional session-transcript capture fit the stated AI-agent memory purpose. Transcript capture is sensitive, but the main docs and config describe it as local, opt-in, disabled by default, and limited to user-configured paths.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Primary runtime instructions are user-directed. Some manifest, release, and checklist text promotes auto-capture with less privacy context than SKILL.md, README.md, SECURITY.md, and the config template, so users should read the detailed setup docs before enabling it.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The shell installer is declared in metadata and mainly creates ~/.chaos, initializes a local Dolt database, downloads release archives, and copies config/scripts. The docs include curl-to-shell examples and the installer does not visibly verify downloaded archive checksums, which are supply-chain cautions rather than evidence of hidden behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Local storage, localhost Ollama processing, and no documented telemetry are proportionate for a local memory system. Users should still treat configured transcript paths as sensitive because agent sessions can contain secrets or personal data.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The systemd service setup is optional, separately invoked, requires sudo, and is not enabled or started by install.sh. If used, it creates a Restart=always background service that can continue processing configured sources until stopped.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Shell installation is explicitly declared as bash install.sh in the skill metadata, so command execution is disclosed.\n[SDI-1] expected: Auto-capture is advertised in the manifest and docs, but artifact review shows the actual config defaults to enabled: false with sources: []; the concern is documentation emphasis, not hidden capture.\n[SDI-4] unexpected: The fallback chaos-cli escapes search strings but does not validate LIMIT before interpolation into local Dolt SQL; this weakens security claims but appears limited to a local fallback CLI path.\n[SQP-1] expected: Transcript capture scope is privacy-sensitive, but primary documentation and the config template describe the activation steps and path scoping.\n[SQP-2] unexpected: Pipe-to-shell install examples and an rm -rf ~/.chaos test step are avoidable documentation safety issues; they do not show automatic destructive or covert runtime behavior.\n[SQP-2] expected: Example globs for OpenClaw session files are expected for an auto-capture memory feature, and the installed template leaves sources empty until the user edits them.\n[RA2] expected: The systemd unit is a persistence mechanism for continuous consolidation, but it is optional, user-run, requires sudo, and is presented with review/start/status steps.\n[SC2] unexpected: Mutable remote install URLs are a supply-chain risk in the documentation; users should prefer ClawHub install or reviewed, version-pinned artifacts.\n[TM2] unexpected: The pipe-to-shell examples remove an inspection step, but they are visible install guidance rather than concealed execution.\n[VirusTotal/code_insight] expected: The VirusTotal concern matches the documented high-risk features: optional transcript processing and optional service persistence. Artifact evidence supports guidance rather than a Review verdict.\n[staticScan] expected: Static scan reported no suspicious patterns, consistent with the artifact-backed review.",
+          "guidance": "Before installing, review install.sh and avoid curl | bash when possible. Keep auto-capture off unless you intentionally choose narrow transcript paths, exclude secrets or regulated data, and understand how to stop any nohup/systemd background process and audit or delete the local ~/.chaos database.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed local memory tool; its optional transcript capture and background service are privacy-sensitive but not hidden or enabled by default.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783657870490,
+          "issueCount": 24,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: chaos-mind\nVersion: 0.1.3\n\nThis skill is classified as suspicious due to its high-risk capabilities, specifically the 'auto-capture' feature designed to read agent session transcripts (`~/.openclaw-*/agents/*/sessions/*.jsonl`) and the installation of a persistent systemd service (`chaos-consolidator.service`) via `setup-service.sh`. While these features are explicitly documented as opt-in, disabled by default, and claimed to operate 100% locally without external network access (as stated in `SKILL.md`, `README.md`, and `SECURITY.md`), the inherent risk of processing sensitive session data and establishing persistence warrants a 'suspicious' classification. The `install.sh` script does demonstrate good security practices by requiring manual installation of Dolt and attempting SQL injection prevention in the fallback `chaos-cli` script, and no clear evidence of intentional malicious data exfiltration or prompt injection was found.",
+          "checkedAt": 1779161915119,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "269a45aae234de67e4140b9277a98aea98b960f52d25b37ce3dc84e8557a4b26",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/269a45aae234de67e4140b9277a98aea98b960f52d25b37ce3dc84e8557a4b26"
+    },
+    "slug": "chaos-mind",
+    "source_type": "clawhub",
+    "version": "0.1.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

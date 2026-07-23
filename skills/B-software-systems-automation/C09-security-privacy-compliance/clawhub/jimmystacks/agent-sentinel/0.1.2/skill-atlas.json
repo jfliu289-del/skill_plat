@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C09:token:privacy",
+      "category:C09:token:security",
+      "category:C10:token:model",
+      "category:C11:token:product",
+      "cross-tag:agent-management",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C10",
+      "C11"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d17559febccd9d812c4a8957c89c49cadfcf4ce842182ebdecac2b57cd0097b5",
+    "content_hash": "56908b6d63993f6e9ca086ff2a5c77efed5fbecc707b7d3fea06f2bee5adf445",
+    "precanonical_content_hash": "4939766479b78c8a8b138d4ff9422d95ed097c6ce60f350c8821ab3b98e7b0f3",
+    "skill_md_hash": "8d21a6221c3cf1d5b6b4383bb26c5a9f87ff9a6f2e499b6e2e2c9e9b9bab87f2",
+    "version_metadata_sha256": "f7b1f50ea79e6a9cef76187c0bb77c38273a7f0f5b022767ded91964a6488a13"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jimmystacks/skills/agent-sentinel",
+    "claim_id": "988d7b8e44b47c18c3529f7177123dc497363d4567697b9088a77cff6f198761",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "agent-sentinel",
+        "url": "https://clawskills.sh/skills/jimmystacks-agent-sentinel"
+      },
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "agent-sentinel",
+        "url": "https://clawskills.sh/skills/jimmystacks-agent-sentinel"
+      }
+    ],
+    "owner_handle": "jimmystacks",
+    "owner_id": "s176cht8vjz2fmrenze1fxrc11849vhs",
+    "published_at": 1775371686335,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783652052408,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783652052408,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is local budget and policy guardrails, and the artifacts implement check, status, bootstrap, reset, and sync behavior aligned with that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill documents explicit commands and says OpenClaw may invoke it for gating; sync and reset are operator-invoked actions, with reset clearing local accounting.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package is self-contained Python using standard libraries, with no dependency installer, remote script fetch, or hidden setup behavior found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "It reads AGENT_SENTINEL_API_KEY, AGENT_SENTINEL_AGENT_ID, and AGENT_SENTINEL_HOME; reads callguard.yaml; writes local state and events under .agent-sentinel by default; and posts to api.agentsentinel.dev only during sync. These accesses are proportionate to the disclosed purpose.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistent local event logs can include raw proposed command strings and are uploaded if an API key is set and sync is run. This is sensitive but disclosed and purpose-aligned rather than hidden or automatic.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The file, environment, and optional network capabilities are real, but they match the guardrail and opt-in sync design and are described in SKILL.md/README; the lack of fuller permission declaration is a transparency improvement, not a material policy concern here.\n[SQP-2] expected: The sync path uploads pending local event entries, including payload.inputs such as command text, to AgentSentinel. This is sensitive and would benefit from a pre-sync review prompt, but artifacts show it requires both AGENT_SENTINEL_API_KEY and an explicit sync command.",
+          "guidance": "Install this if you want local policy and budget checks. Treat .agent-sentinel/openclaw_events.jsonl as potentially sensitive because it can contain command text, paths, and operational context. Only set AGENT_SENTINEL_API_KEY and run sync if you trust AgentSentinel with those logged events.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "AgentSentinel is a coherent local guardrail skill with disclosed local logging and opt-in cloud sync, but its event logs may contain sensitive command details.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783652024975,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 23,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: agent-sentinel\nVersion: 0.1.2\n\nThe AgentSentinel skill is a safety and governance tool designed to provide local budget and policy guardrails for AI agents. Analysis of sentinel_wrapper.py shows it operates locally by default, tracking command costs and blocked actions in a local directory (.agent-sentinel). Remote synchronization to api.agentsentinel.dev is strictly opt-in, requiring both an environment variable (AGENT_SENTINEL_API_KEY) and an explicit 'sync' command. The code is transparent, uses only standard libraries, and contains no evidence of malicious intent, obfuscation, or unauthorized data exfiltration.",
+          "checkedAt": 1779160618417,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "82beee117ccbfc9a85cf99d09ad8ac2f24728d6bd1f7dfcab4cba9e5e9629e6d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/82beee117ccbfc9a85cf99d09ad8ac2f24728d6bd1f7dfcab4cba9e5e9629e6d"
+    },
+    "slug": "agent-sentinel",
+    "source_type": "clawhub",
+    "version": "0.1.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

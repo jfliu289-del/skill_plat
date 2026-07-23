@@ -1,0 +1,135 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.31,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:browse",
+      "category:C01:token:search",
+      "category:C03:token:document",
+      "category:C07:token:review",
+      "category:C13:token:operations",
+      "cross-tag:review",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C03",
+      "C07",
+      "C13"
+    ],
+    "stages": [
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "research",
+      "review"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "806cc49dd5c0b719cfa162328314220cc474de67c909c48001dca18566d9a39c",
+    "content_hash": "4024f3075a91798563ec8f144d640f10199054f819fdda2461703b3f57a6e41e",
+    "precanonical_content_hash": "6806bcecd8a8567825c31996e1bf1f4d973b35a5212da5849c86fab2ea5e4b71",
+    "skill_md_hash": "6cc807f220b7f726017344f5cf03418ab1cf061c7e64b4d12426864a53e2eb52",
+    "version_metadata_sha256": "a65ba8737c3247f4f11cb4a6c41b5a9d5b787fc5bc84d0b109828786ae81bdc4"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/joshuaohanlon/skills/shelv",
+    "claim_id": "0e3d91245f080d19d2e30ff6b3b0659bab592224c8a04d4f3b60650a1d2d4cf6",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "shelv",
+        "url": "https://clawskills.sh/skills/joshuaohanlon-shelv"
+      }
+    ],
+    "owner_handle": "joshuaohanlon",
+    "owner_id": "s17cz14qa4t2dg3v7sfpy2pkmh884hex",
+    "published_at": 1771742352173,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779948614283,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779948614283,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The purpose and capabilities are coherent: the skill documents PDF upload to https://api.shelv.dev, asynchronous processing, and hydration of processed Markdown into the OpenClaw workspace.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are user-directed commands and API examples. Mutating actions such as upload, retry, approve, regenerate, delete, and --force replacement are documented rather than hidden or automatic.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No remote installer, package install, obfuscation, or hidden execution path was found. The bundle contains documentation and straightforward shell scripts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Outbound network access, curl, jq, tar, checksum tools, and SHELV_API_KEY are proportionate to a cloud PDF conversion workflow, but uploaded PDFs and the API key should be treated as sensitive.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Hydration writes files under ~/.openclaw/workspace/shelves and --force can replace an existing shelf directory. The extraction script sanitizes names, checks workspace containment, rejects path traversal and symlinks, and verifies SHA256 checksums.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill declares required environment variables and binaries in metadata and documents its shell, network, and workspace file behavior. More explicit permission labeling would help, but the artifact does not hide the capability.\n[TP4] expected: The short description emphasizes workspace hydration, but SKILL.md and README.md clearly describe uploading PDFs, using api.shelv.dev, and requiring SHELV_API_KEY near the setup and workflow sections.\n[SDI-1] expected: The upload script sends only the user-specified file to Shelv, which is central to the advertised service workflow and not a hidden or unrelated data transfer.\n[SDI-2] expected: The API key and network dependency are expected for this integration and are disclosed in metadata, documentation, and script help text.\n[SQP-2] expected: The privacy and workspace-write warnings could be stronger, especially for confidential PDFs and --force usage, but the upload, hydration path, and file operations are documented.\n[E1] expected: External transmission and retrieval of processed document contents are inherent to this cloud conversion skill; no evidence shows unrelated collection, credential theft, or exfiltration beyond the stated API workflow.",
+          "guidance": "Install only if you are comfortable sending selected PDFs to shelv.dev for processing. Use a revocable Shelv API key when possible, avoid regulated or confidential documents unless approved by your organization, and use --force only when you intend to replace an existing hydrated shelf.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it describes: it uploads user-selected PDFs to Shelv for processing and saves the resulting Markdown files locally.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948578720,
+          "issueCount": 11,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: shelv\nVersion: 1.0.3\n\nThe OpenClaw AgentSkills skill bundle for Shelv is classified as benign. While it performs inherently high-risk operations such as uploading user-provided files, making network calls to an external API (`https://api.shelv.dev`), and downloading/extracting archives into the workspace, it implements robust security measures. Specifically, `scripts/shelv-hydrate.sh` includes critical checks to prevent path traversal and symlink attacks within downloaded tar archives, sanitizes user-provided directory names, and verifies archive integrity using SHA256 checksums. There is no evidence of intentional malicious behavior, data exfiltration beyond the stated purpose, persistence mechanisms, obfuscation, or prompt injection attempts against the agent in any of the provided files.",
+          "checkedAt": 1779166123687,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "3d13d18b597c9d0748e2eeda5fa3a4d7b8ffe77b5205d819291b871ab62624af",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/3d13d18b597c9d0748e2eeda5fa3a4d7b8ffe77b5205d819291b871ab62624af"
+    },
+    "slug": "shelv",
+    "source_type": "clawhub",
+    "version": "1.0.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

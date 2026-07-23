@@ -1,0 +1,155 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C01:token:sources",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C06:token:implementation",
+      "category:C09:token:privacy",
+      "category:C09:token:security",
+      "cross-tag:data-analysis",
+      "cross-tag:planning",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C04",
+      "C09"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "plan",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e4c1eef581f55a9d6b23c1e93b24773418cf15d63d82b5c31791b98aaef1186a",
+    "content_hash": "8c10f6dea0ab997cba11657e9572392a93685d35d61b186be851fe35481723ac",
+    "precanonical_content_hash": "bb4b1f223236b327c213d8bf1a428cad45e373eed6b43c3208cb7e76f2c326c7",
+    "skill_md_hash": "feaf49ee996bd732934d38d2d3a3ff90073d1e38f7fe074b309453487f07af2d",
+    "version_metadata_sha256": "b5e1fffdfd75931ee6867eb2fb8bd48838b7e05ab993148b145a8bb477062073"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/brianleach/skills/tfl",
+    "claim_id": "7095a96c239cc606fe4e57968014737404917a9b7f6313860ea1397546db95d5",
+    "index_entries": [
+      {
+        "index_path": "categories/transportation.md",
+        "label": "tfl",
+        "url": "https://clawskills.sh/skills/brianleach-tfl"
+      }
+    ],
+    "owner_handle": "brianleach",
+    "owner_id": "s177mqbg7ea28w09hpmzr79wx988447d",
+    "published_at": 1771722184408,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779948571466,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779948571466,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is real-time London TfL transit lookup, and the code implements status, arrivals, disruptions, route, stop, and journey queries against TfL endpoints.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "SKILL.md, README.md, and CLAUDE.md contain transit-focused usage and maintenance instructions, with no role override, prompt-injection, or unrelated agent-control behavior observed.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The package has no npm dependencies and only requires Node.js; installation is described as copying the skill directory, with no install scripts or package lifecycle hooks.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to api.tfl.gov.uk and optional TFL_API_KEY use are proportionate for live transit data. User station, coordinate, and journey queries are sent to TfL as part of the expected function.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No file writes, background workers, privilege escalation, shell execution, eval, obfuscation, or unrelated credential-store access were found. The script reads only a skill-local .env file if present for environment values.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[suspicious.env_credential_access] expected: The static finding is supported by code that reads .env/process.env and sends TFL_API_KEY to api.tfl.gov.uk, but this is disclosed, optional, limited to the official TfL API, and purpose-aligned.\n[SkillSpector clean] expected: SkillSpector reported no issues; local artifact review also found no material prompt-injection, persistence, or unrelated access concerns.\n[VirusTotal clean] expected: VirusTotal telemetry is consistent with the reviewed artifacts: no detections, no dependencies, no shell execution, and TfL-only network behavior.",
+          "guidance": "Reasonable to install if you want London TfL lookups. Be aware that journey searches, station names, coordinates, and the optional TFL_API_KEY may be sent to TfL; avoid putting unrelated secrets in the skill-local .env file.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to only fetch London transit information from the official TfL API, with no hidden execution, persistence, or unrelated data access found.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948540526,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: tfl\nVersion: 1.0.0\n\nThe OpenClaw skill is designed to provide real-time London TfL transit data. The `scripts/tfl.mjs` file, which contains all the logic, uses native Node.js modules and `fetch` without any external dependencies, minimizing supply chain risks. User inputs are consistently sanitized using `encodeURIComponent()` before being included in API URLs, preventing injection vulnerabilities. The skill only communicates with the official `api.tfl.gov.uk` endpoint, and the optional `TFL_API_KEY` is handled securely as a query parameter. There is no evidence of data exfiltration, malicious execution (e.g., `eval`, `child_process`), persistence mechanisms, or obfuscation. The `SKILL.md` and `README.md` files contain clear, benign instructions for the AI agent, focusing solely on the skill's intended purpose without any prompt injection attempts to subvert the agent's behavior.",
+          "checkedAt": 1779166088889,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "4df776ca100124da6d88657cb3ddcc7a6c1ba46877e941179a261f9610ce2418",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4df776ca100124da6d88657cb3ddcc7a6c1ba46877e941179a261f9610ce2418"
+    },
+    "slug": "tfl",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

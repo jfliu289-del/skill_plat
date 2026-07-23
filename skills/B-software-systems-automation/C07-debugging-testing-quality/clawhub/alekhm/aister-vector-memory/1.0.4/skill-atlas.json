@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.625,
+    "domains": [
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C07",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C06:token:code",
+      "category:C07:phrase:code review",
+      "category:C07:token:review",
+      "cross-tag:agent-management",
+      "cross-tag:code-review",
+      "cross-tag:review",
+      "cross-tag:search",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00",
+      "C01",
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research",
+      "review"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "ee223c702afc072c4b378be55347c937d8afe3adb9319369cb0a8d35174d6ddd",
+    "content_hash": "b8ddc49a1a23e636c426a94cf261ca7162a37570c471f1fb89fa327314e5ab4a",
+    "skill_md_hash": "4097ef8ff5707756a86355fb828cc41ed565c3081f1544f39ab9424b281fcb55",
+    "version_metadata_sha256": "3cd52582866d08c2fc59ea88fa5108bf9517ee884bba73bd22866013d812ffcb"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/alekhm/skills/aister-vector-memory",
+    "claim_id": "a1fa6838df1a49eee830071f322e41ffd995b58ea092f4a7c49376bc452e6a1c",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "aister-vector-memory",
+        "url": "https://clawskills.sh/skills/alekhm-aister-vector-memory"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "alekhm",
+    "owner_id": "s174h0tq1x1jne9h95xmhj8xx5884jv8",
+    "published_at": 1770933671077,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972820598,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972820598,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts coherently implement semantic memory search: memory_reindex.py reads MEMORY.md, IDENTITY.md, and USER.md from the configured memory directory, sends chunks to an embedding service, and stores content plus vectors in PostgreSQL; memory_search.py embeds queries and searches that database. This handles sensitive memory data, but the behavior matches the stated purpose and is documented.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The documentation says Aister can automatically use vector memory for context and the README mentions auto-save/store commands, while the shipped code mainly provides search, reindex, and a local embedding API. This is somewhat broad in description, but there is no artifact evidence of hidden prompt override, forced automatic execution, or unrelated data access.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is manual and disclosed: a Python virtual environment, unpinned pip dependencies, PostgreSQL/pgvector setup, and a first-run HuggingFace model download. Docker isolation is recommended, and privileged PostgreSQL/system package setup is explained rather than hidden.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill uses environment variables for database credentials, memory path, and embedding service URL. Defaults point to localhost and a specific OpenClaw memory directory, which is proportionate, but users should avoid pointing EMBEDDING_SERVICE_URL or VECTOR_MEMORY_DIR at untrusted or overly broad locations.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Memory contents persist in PostgreSQL, and INSTALL.md includes an optional ~/.bashrc autostart snippet for the embedding service. These are disclosed and purpose-aligned, but users should enable persistence deliberately and use a dedicated low-privilege database user.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[TT3] expected: Verified: memory chunks and search queries are posted to EMBEDDING_SERVICE_URL for embedding. The default endpoint is localhost and the included service binds to 127.0.0.1, so this is expected for the local embedding design; risk remains if a user configures a remote or untrusted endpoint.\n[SQP-2] expected: Verified: memory contents and queries can be sensitive and are transmitted to the embedding service and stored or retrieved through PostgreSQL. The docs disclose local file reading, database storage, network/model download, and warn against indexing secrets, though clearer wording around remote embedding would help.\n[VirusTotal code_insight] expected: The cited sudo/PostgreSQL setup, optional bashrc autostart, and local file reading are present, but they are visible in INSTALL.md/SKILL.md and align with running a local vector-memory service. No artifact-backed stealth, unauthorized exfiltration, or destructive behavior was found.",
+          "guidance": "Install only if you want your OpenClaw memory files indexed into a PostgreSQL database for semantic recall. Keep the embedding service on localhost or another trusted endpoint, do not index secrets or credentials, prefer the Docker setup, use a dedicated database user with minimal rights, and add the bashrc autostart only if you want the service to run automatically after login.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed local vector-memory search skill, with real privacy and setup risks that are expected for its purpose rather than hidden or malicious.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972780461,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: aister-vector-memory\nVersion: 1.0.4\n\nThe skill is classified as suspicious due to several high-risk behaviors, despite being well-documented and seemingly for legitimate purposes. These include the modification of the user's `~/.bashrc` for autostarting the embedding service (persistence, `INSTALL.md`), the requirement for `sudo` and PostgreSQL superuser privileges during installation (`SKILL.md`, `INSTALL.md`), and the local file reading capabilities (`memory_reindex.py`) which, while targeting specific memory files, could be manipulated if the `VECTOR_MEMORY_DIR` environment variable were compromised. There is no clear evidence of intentional malicious behavior like data exfiltration to unauthorized endpoints or stealthy backdoors, but these capabilities present a higher attack surface.",
+          "checkedAt": 1779163560885,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "16beef5d7f526e1a3632bc9f276fbebdee506fc7ca17966e252fb48834acac2d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/16beef5d7f526e1a3632bc9f276fbebdee506fc7ca17966e252fb48834acac2d"
+    },
+    "slug": "aister-vector-memory",
+    "source_type": "clawhub",
+    "version": "1.0.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

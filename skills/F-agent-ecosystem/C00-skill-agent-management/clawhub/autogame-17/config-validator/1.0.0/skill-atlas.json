@@ -1,0 +1,124 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "83c5ea48fa8a39aa9aaeefd24699a465cd5bd55b3f6b674943d2374addb5a350",
+    "content_hash": "bb963ad3ce570da08fc38e3c7f189c558b32f02f36cc6c7d1d66339e94298e98",
+    "skill_md_hash": "086d9920a0f12a283789094921682a9f72df8e0a2e0abd72da197abf87a63c2f",
+    "version_metadata_sha256": "f3d53d2ac33de19d5fdcc111581c5921fcdf62ca132e7d07684601763af8be53"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/autogame-17/skills/config-validator",
+    "claim_id": "5c24bf8092c246128320cb4cd14984e2ab8af89fcabdb1c36f736695108d839a",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "config-validator",
+        "url": "https://clawskills.sh/skills/autogame-17-config-validator"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "autogame-17",
+    "owner_id": "s174qjf2384d46r16zkn04qam183hbm3",
+    "published_at": 1771337056013,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972581215,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972581215,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The code and documentation generally align around checking .env, openclaw.json, and package.json, but the implementation is simpler than advertised and does not implement the documented --fix behavior.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill discloses that it checks .env variables and local config files; it reads the .env file locally but only reports missing variable names, not secret values.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "SKILL.md claims no dependencies, while package.json and package-lock.json include dotenv plus test dev dependencies; the runtime code does not appear to use dotenv or package scripts beyond node index.js.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading local .env, openclaw.json, package.json, and node_modules presence is proportionate for a config validator, and no network calls or data upload paths were found.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No persistence, privilege escalation, automatic background execution, file mutation, or use of the imported child_process execSync was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SDI-4] unexpected: Verified: checkEnv() returns valid true when critical environment variables are missing. This weakens the validator and could mislead automation, but it is a local fail-open validation issue rather than evidence of malicious or hidden behavior.",
+          "guidance": "Before installing, treat this as a lightweight local checker, not a strict security gate. Be aware it reads your workspace .env file, and missing critical variables may still produce a success status; review the output manually and do not rely on it alone to block deployment.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a local configuration checker with some sloppy validation behavior, but no evidence of hidden execution, exfiltration, persistence, or destructive actions.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972550075,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: config-validator\nVersion: 1.0.0\n\nThe skill bundle is classified as benign. The `index.js` script's primary function is to validate configuration files (`.env`, `openclaw.json`, `package.json`) and check for the presence of critical environment variables. Although `child_process` is imported, no functions from it (like `execSync`) are actually called in the provided code, eliminating a major potential risk. The `SKILL.md` documentation is straightforward and does not contain any prompt injection attempts or instructions for the agent to perform unauthorized actions. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or obfuscation. The only minor inconsistency is `SKILL.md` stating 'no dependencies' while `package.json` lists `dotenv`.",
+          "checkedAt": 1775880487590,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "83c5ea48fa8a39aa9aaeefd24699a465cd5bd55b3f6b674943d2374addb5a350",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/83c5ea48fa8a39aa9aaeefd24699a465cd5bd55b3f6b674943d2374addb5a350"
+    },
+    "slug": "config-validator",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

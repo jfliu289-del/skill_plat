@@ -1,0 +1,127 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C17:token:notes",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "7bd798e6939dbad246e898aac4475661cb4c307867eb57279d1bba6e9876361a",
+    "content_hash": "0510695ca3d9aea74725cfac7b00b452305ad654b15f3fa6db91e23f0d7b7007",
+    "precanonical_content_hash": "c0328daace7197d3cd609039655ec078d8bdd8a0443bb116b862b459fa211009",
+    "skill_md_hash": "d3acf8257c22e95ed8c2e6d0c72ed381643d3c8f9b31bac54afe17c91d299a1a",
+    "version_metadata_sha256": "026d9b5d6c52bb083add94e3d36bee09273ea97fc24f17fd909fc54fd2c9b95b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/oliverw/skills/linkfuse",
+    "claim_id": "917b7c63a9b43aadd09f2bcd4a4aa346f8eddec928681c4e1c1ab4e9c8b9515b",
+    "index_entries": [
+      {
+        "index_path": "categories/marketing-and-sales.md",
+        "label": "linkfuse",
+        "url": "https://clawskills.sh/skills/oliverw-linkfuse"
+      }
+    ],
+    "owner_handle": "oliverw",
+    "owner_id": "s1799j3gfx2ap6x1nfjd5vkwzs8859sv",
+    "published_at": 1771511737738,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779933401546,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779933401546,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifacts: the helper reads a URL argument, sends it to the Linkfuse API, and prints the returned short URL and title.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The workflow is user-triggered and asks for a URL if missing; the shell example should be executed with proper argument escaping because the URL is user-provided.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No install script or package manager hook is present; the skill includes a small Node.js helper and config file.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access and LINKFUSE_TOKEN are disclosed and proportionate for creating Linkfuse links, but the token grants account authority to create or recycle links.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background execution, local storage, or unrelated file access is shown; optional clipboard copying affects local clipboard state only if performed.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill lacks a formal permissions field, but its frontmatter and instructions disclose the required LINKFUSE_TOKEN, Node.js runtime, and networked Linkfuse API use.\n[SQP-2] expected: The clipboard command is presented after link creation as an offer, not as hidden or automatic behavior; users should confirm before allowing clipboard writes.\n[VirusTotal code_insight] unexpected: The shell-command example can be unsafe if an agent interpolates a malicious URL without escaping, but the included JavaScript does not shell out and the artifact otherwise remains coherent and purpose-aligned.",
+          "guidance": "Install only if you are comfortable giving the skill a Linkfuse API token and sending shortened URLs to Linkfuse. Use proper shell escaping for URLs, avoid shortening secret-bearing private URLs, and only copy the result to your clipboard when you explicitly want that.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Linkfuse does what it claims: it uses a Linkfuse API token to turn a user-provided URL into a short affiliate link.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779933336256,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: linkfuse\nVersion: 1.0.4\n\nThe skill is classified as suspicious due to a critical shell injection vulnerability identified in `SKILL.md`. The instruction `node scripts/create-link.js --url \"<url>\"` passes a user-provided URL directly into a shell command. If the OpenClaw agent does not properly sanitize or escape the `<url>` input before execution, an attacker could inject arbitrary shell commands, leading to Remote Code Execution (RCE). While the `scripts/create-link.js` script itself performs its stated function without malicious intent, and no prompt injection attempts or data exfiltration beyond the stated purpose were found, this vulnerability poses a significant risk.",
+          "checkedAt": 1779165433573,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "59b2c83c1c9e1f81cbbab9939addf12a35c843983940636996f4aecc7a604e5c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/59b2c83c1c9e1f81cbbab9939addf12a35c843983940636996f4aecc7a604e5c"
+    },
+    "slug": "linkfuse",
+    "source_type": "clawhub",
+    "version": "1.0.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

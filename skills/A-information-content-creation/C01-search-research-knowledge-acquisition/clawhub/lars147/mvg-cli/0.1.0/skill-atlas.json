@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C17:token:notes",
+      "cross-tag:planning",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "plan"
+    ],
+    "tasks": [
+      "build",
+      "plan",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "9dabf6f60b57a7e9d28a0e21031c0e75897b7b1da81d328e39569298c0f10e3e",
+    "content_hash": "3bb5c08aff6226c26bbe1dd6aac86d2f366fcfd3e7ce5241c051401b0d64f10a",
+    "precanonical_content_hash": "9705ed8fea5af6336d8027a65b2d602cd59e6e54fc245f0cb18cfdccda08d414",
+    "skill_md_hash": "135485e985e8a39d431257d179658cc664663b8ef58dc332f7f3186151982052",
+    "version_metadata_sha256": "c450f38019e96fa89840b1d6e413fff7a9c4dd5988048a3a763c55469c4f9bed"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/lars147/skills/mvg-cli",
+    "claim_id": "94a32c566d9fed877d7ebc9273ffcf56236abff98b7ea1b1f19a852dac5c631c",
+    "index_entries": [
+      {
+        "index_path": "categories/transportation.md",
+        "label": "mvg-cli",
+        "url": "https://clawskills.sh/skills/lars147-mvg-cli"
+      }
+    ],
+    "owner_handle": "lars147",
+    "owner_id": "s178rrsx57k47hhg8606d4vhf98840ba",
+    "published_at": 1771361437263,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972918916,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972918916,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe MVG station search, departures, route planning, nearby stops, alerts, lines, and S-Bahn live positions; the code performs read-only transit queries and shows no account mutation, purchasing, broad local indexing, or unrelated behavior.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The runtime instructions are scoped to transit commands. The skill documentation discloses MVG and geOps endpoints and the Node/ws live-tracking requirement, though the CLI help itself does not give a privacy notice for address or coordinate queries.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is user-directed, but the README suggests unpinned GitHub execution via uvx and an optional sudo copy into /usr/local/bin; the live feature also depends on local node and ws even though pyproject does not declare that dependency.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Sending station names, route endpoints, addresses, and coordinates to MVG/geOps is proportionate for a transit lookup tool, but those queries may reveal travel intent or location. The bundled geOps API key appears tied to the disclosed live-tracking feature, not to user credentials.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The live feature runs a short-lived local Node subprocess and writes temporary JS/result files that it attempts to delete. The code also defines helpers for a ~/.mvg_session.json file, but no active call to save session data was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill does use network access and executable CLI behavior, but those capabilities match the stated transit purpose and are substantially disclosed in SKILL.md; the main issue is documentation granularity, not hidden authority.\n[SDI-2] expected: The Node subprocess is real and increases local trust assumptions for the live command, but it executes fixed bundled code with fixed arguments for WebSocket transit data and is disclosed as requiring node/ws.\n[SQP-2] expected: Transit searches, routes, addresses, and coordinates are sent to third-party transit APIs as needed for the advertised features; users should still treat precise address or coordinate queries as sensitive.\n[SQP-2] expected: Temporary files are created for the live-tracking helper and cleaned up afterward; this is an implementation caveat rather than evidence of persistence, exfiltration, or destructive behavior.\n[VirusTotal-code_insight] expected: The telemetry flagged subprocess-based Node execution, but artifact review shows the generated JavaScript is hardcoded for geOps live S-Bahn data and not built from user-controlled code.\n[staticScan] expected: Static scan metadata reported no suspicious findings, consistent with the read-only and purpose-aligned artifact review.",
+          "guidance": "Install this if you are comfortable with your MVG searches, route endpoints, addresses, or coordinates being sent to MVG/geOps services. Use the live S-Bahn feature only in an environment where you trust the local node binary and ws module, and avoid sudo or unpinned GitHub installation unless you trust the source.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a read-only Munich transit lookup skill with expected external API use, plus a disclosed Node-based live-tracking helper that users should understand before installing.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972869066,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: mvg-cli\nVersion: 0.1.0\n\nThe skill is classified as suspicious due to the use of `subprocess.run` in `mvg_cli.py` to execute a dynamically generated JavaScript file via `node`. While the JavaScript code and its arguments are currently hardcoded and serve a legitimate purpose (fetching S-Bahn live data from `api.geops.io`), this pattern introduces a significant Remote Code Execution (RCE) risk. If an attacker could modify the hardcoded JavaScript or its execution parameters (e.g., via a supply chain attack on the skill bundle), it would lead to arbitrary code execution. This is a powerful and risky capability, even if not explicitly malicious in its current, hardcoded form. Additionally, the `README.md` and `mvg_cli.py` have inconsistent dependency information regarding the `requests` library and `node`/`ws` module, though this is a minor issue.",
+          "checkedAt": 1779164929691,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "60e0c6bbede8f651bed78505a267541a964428dfff9d48bdd50ce42789d717b2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/60e0c6bbede8f651bed78505a267541a964428dfff9d48bdd50ce42789d717b2"
+    },
+    "slug": "mvg-cli",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

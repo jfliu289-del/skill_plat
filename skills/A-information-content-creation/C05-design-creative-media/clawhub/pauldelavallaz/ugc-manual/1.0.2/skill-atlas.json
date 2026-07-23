@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.425,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:audio",
+      "category:C05:token:image",
+      "category:C05:token:video",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "category:C17:token:notes",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "07ce1e6f8229ce33ab7fa52b0ac37b046c887a0298a7c289c26d798809bb3eb3",
+    "content_hash": "b3c5f230dd254ece651ea08417dd8c6c2799bf8b75581d1a2a519aea9bac0a15",
+    "precanonical_content_hash": "0f95a3a8b20fe0bee51e55f66b36c2f50e57b7b61dbd722e384697a53b688cf9",
+    "skill_md_hash": "7b5a96b72cf9395bb766ecc89d66254eda5d8ba575e3afb93604101266e53dd1",
+    "version_metadata_sha256": "b33cdeb51231a16318731d7d561634b18b68d2d15f6046ef2fd11114fcfe2870"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/pauldelavallaz/skills/ugc-manual",
+    "claim_id": "f033f86e7a99459b7f01b3c4b42c512ae7dd1430064fb739868cb04f2bd05b97",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "ugc-manual",
+        "url": "https://clawskills.sh/skills/pauldelavallaz-ugc-manual"
+      }
+    ],
+    "owner_handle": "pauldelavallaz",
+    "owner_id": "s17es8yqc61443cxz7kbvr73rs884ggf",
+    "published_at": 1770863276520,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971398543,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971398543,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifact is coherent: it accepts explicit image and audio inputs, converts audio with ffmpeg, uploads media or passes URLs to ComfyDeploy, queues a lip-sync workflow, polls for completion, and downloads an MP4 output.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions are mostly scoped to user-directed media inputs, though the frontmatter emphasizes the user's own recording while the body also documents externally generated TTS, music, arbitrary audio, and URL inputs.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no install-time execution or package trickery. The bundle contains SKILL.md, a Python script, and a pyproject with a single requests dependency; ffmpeg is a documented runtime prerequisite.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access, ffmpeg execution, local file reads, output writing, and the COMFY_DEPLOY_API_KEY are proportionate for cloud video generation, but the privacy impact of uploading face and voice media should be clearer.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, startup hooks, background workers, privilege escalation, credential harvesting, or unrelated local data access were found. The script reads only the named ComfyDeploy API key and user-specified media paths or URLs.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: Shell execution for ffmpeg, network calls to ComfyDeploy, and environment access for the API key are real but directly tied to the documented workflow; this is disclosure guidance, not evidence of hidden authority.\n[SDI-4] expected: The broader audio-source examples are visible in SKILL.md and still fit the lip-sync purpose, but the marketplace description should better match the documented support for TTS, music, and arbitrary audio.\n[SDI-1] expected: Remote image and audio URL support is explicitly documented in the usage section, so it is not hidden; lack of URL allowlisting or size limits is a hardening gap rather than a policy-level mismatch.\n[SDI-2] expected: Downloading remote audio and processing it with ffmpeg is part of the documented URL workflow, but users should only provide trusted media URLs because the implementation does not impose download limits or sandbox ffmpeg.\n[SQP-2] expected: The upload of face images and audio is necessary for the cloud workflow and ComfyDeploy is named, but the skill should more plainly state that sensitive media leaves the local environment and may be handled by a third party.\n[E1] expected: External transmission to the hardcoded ComfyDeploy API is core functionality, not covert exfiltration; the script sends only user-specified media and workflow data needed to generate the video.",
+          "guidance": "Install only if you are comfortable sending the chosen image and audio to ComfyDeploy. Use a limited ComfyDeploy API key if possible, avoid highly sensitive or non-consensual face and voice media, install ffmpeg from a trusted source, and prefer local trusted files or trusted URLs because remote audio is downloaded and decoded locally.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill performs the advertised lip-sync video workflow, but users should understand that selected face images and audio are sent to ComfyDeploy.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971347456,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 91,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ugc-manual\nVersion: 1.0.2\n\nThe skill bundle is benign. The `SKILL.md` provides clear instructions for generating lip-sync videos using an image and audio, and does not contain any prompt injection attempts against the AI agent. The `scripts/generate.py` Python script implements this functionality by interacting with the `https://api.comfydeploy.com` API for file uploads, workflow queuing, and video downloads. It also uses `subprocess.run` to execute the `ffmpeg` command for audio conversion, which is explicitly mentioned in the documentation and implemented safely using a list of arguments, mitigating shell injection risks. All network and file system operations are directly related to the skill's stated purpose, and there is no evidence of malicious intent such as data exfiltration, unauthorized remote execution, or persistence mechanisms.",
+          "checkedAt": 1779163362993,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "cbeb5cd8e6e66dc5a6271d64efeb043bd1d60e34c9f0808b511976aa48380d82",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/cbeb5cd8e6e66dc5a6271d64efeb043bd1d60e34c9f0808b511976aa48380d82"
+    },
+    "slug": "ugc-manual",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

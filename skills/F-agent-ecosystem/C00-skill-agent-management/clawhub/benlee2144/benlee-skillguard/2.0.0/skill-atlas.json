@@ -1,0 +1,155 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C00:token:skill",
+      "category:C04:token:data",
+      "category:C06:token:code",
+      "category:C07:token:test",
+      "category:C09:token:security",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C07",
+      "C09"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "secure",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e91fa54cc03e901dfb36b860d1233dba615989eda1c8631591742e4c2174caaa",
+    "content_hash": "c00c828bb71c373d177bb186efd05dadd676fcd6296e926d4ecf6d257d919cea",
+    "precanonical_content_hash": "d3288c5c6e2eb6610b1d3aec7f03ae61dd068c31b5073a6431c932b60354ab21",
+    "skill_md_hash": "c3c03fdc7380f67a637bddfb5a8e21e36ef7436f66f6db98dc7600fb5e3b8552",
+    "version_metadata_sha256": "30f4dd587b99096d9aa682d3360278421ababfe7f69c7fa8e31328d92f2c64d9"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/benlee2144/skills/benlee-skillguard",
+    "claim_id": "963bb16d4cf84a41518ece739c8d6af31bbaee97eb11722f4d2b0015400b34bf",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "benlee-skillguard",
+        "url": "https://clawskills.sh/skills/benlee2144-benlee-skillguard"
+      }
+    ],
+    "owner_handle": "benlee2144",
+    "owner_id": "s177s7t16ermep3bgk6mtmv6ss884ntc",
+    "published_at": 1771390456962,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779920596099,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779920596099,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The main skill is a local OpenClaw skill scanner that reads skill files, computes hashes, flags risky patterns, and can emit JSON or markdown reports. The bundle includes intentionally malicious sample skills under tests/ for validation, which is coherent with the scanner purpose and explicitly documented.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Top-level instructions are user-directed scan/check/watch commands. The prompt-injection text is confined to a documented fake-helper test fixture and is evidence for detector validation, not an instruction the installed scanner tells the agent to follow.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "No install hook, package installer, background startup, or dependency execution is shown for the main scanner. The fake typosquat requirements file is part of the test corpus, not the scanner's own requirements.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "By default the scanner reads installed skills under ~/clawd/skills and records hashes for tamper detection, which is broad local inspection but proportionate to a security-auditing tool and disclosed in the documentation.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The scanner writes baselines to its baselines.json file, can write a report to a user-supplied path, and --baseline removes prior baseline state before rescanning. These are user-invoked persistence/file mutations, not hidden privilege escalation or automatic persistence.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal-code_insight] expected: The malicious label is explained by intentionally malicious files under tests/. The top-level SKILL.md explicitly lists these as fake malicious validation cases, and the main scanner reads files as text rather than executing the samples.\n[AST4] expected: Confirmed subprocess/reverse-shell examples exist in fake-formatter and fake-timebomb fixtures. They are dangerous if run directly, but they are documented test samples rather than hidden scanner behavior.\n[TT2] expected: Confirmed SSH-key-to-curl flow in the fake-timebomb fixture. This supports the scanner test corpus purpose, while also requiring users not to execute test fixtures casually.\n[SDI-1] expected: Confirmed credential, wallet, prompt-injection, SVG script, and typosquat samples under tests/. They are purpose-aligned detector fixtures and disclosed in the Test Suite section.\n[SDI-2] expected: Baseline persistence, report writing, and baseline reset are real file mutations in the scanner, but they are tied to documented scan/report/baseline features and require user-invoked commands.\n[SQP-2] expected: The --baseline mode deletes prior baseline data before rebuilding it. That discards historical tamper state, but it is a named user option rather than hidden destructive behavior.",
+          "guidance": "Install only if you are comfortable with a security scanner reading your local OpenClaw skill directories and writing baseline/report files. Do not run the files under tests/ directly or render the test SVG in a permissive browser context; they are intentionally live-looking malicious samples for scanner validation.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a security scanner whose dangerous-looking files are disclosed test fixtures, not hidden runtime behavior of the scanner itself.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779920546941,
+          "issueCount": 33,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: benlee-skillguard\nVersion: 2.0.0\n\nThe overall bundle is classified as malicious because it explicitly includes several 'fake malicious skills' within the `tests/` directory. These test skills demonstrate clear intentional harmful behavior, such as data exfiltration of crypto wallets, SSH keys, and browser tokens to external domains (e.g., `c2-malware-server.xyz`, `evil.com`, `exfil.evil.com`) via files like `tests/fake-crypto/scripts/crypto.py`, `tests/fake-weather/scripts/weather.py`, `tests/fake-timebomb/scripts/reminder.py`, and `tests/fake-svgmalware/icons/logo.svg`. It also includes malicious execution via a base64-encoded reverse shell in `tests/fake-formatter/scripts/formatter.py`, prompt injection for data exfiltration in `tests/fake-helper/SKILL.md`, and supply chain attacks through typosquatting in `tests/fake-typosquat/requirements.txt`. While the `skill-guard` scanner itself is benign and designed to detect such threats, the presence of these intentionally malicious examples in the provided file set warrants a 'malicious' classification for the entire bundle.",
+          "checkedAt": 1778403814323,
+          "normalizedStatus": "malicious",
+          "source": "palm",
+          "status": "malicious",
+          "verdict": "malicious"
+        }
+      },
+      "sha256hash": "e91fa54cc03e901dfb36b860d1233dba615989eda1c8631591742e4c2174caaa",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e91fa54cc03e901dfb36b860d1233dba615989eda1c8631591742e4c2174caaa"
+    },
+    "slug": "benlee-skillguard",
+    "source_type": "clawhub",
+    "version": "2.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

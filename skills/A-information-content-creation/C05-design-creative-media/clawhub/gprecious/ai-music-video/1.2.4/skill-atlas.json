@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:video",
+      "category:C10:token:ai",
+      "cross-tag:design",
+      "cross-tag:planning"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "plan"
+    ],
+    "tasks": [
+      "design",
+      "plan"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "2c49ca038ff5ad6afa227672d1af5a2c98bc963bdb5ffef216602438a7dc2a1a",
+    "content_hash": "b7600ff16bedc8e10a43c17cc4623395c53b80b984b6a2d79dd1731c4f309b0c",
+    "precanonical_content_hash": "fe94fbfb0502a0209b05fda84d9e6c8303cca9dbefc579f599741e1a839152a9",
+    "skill_md_hash": "5027a8006342c666ebeb974a24b4238aeb2db6d13c2895a7ccacc33f1a9225c0",
+    "version_metadata_sha256": "98e9e3eec8e67c52f0a44c91af3cae3b3732b2aa2b564d5cbe8823491657a553"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/gprecious/skills/ai-music-video",
+    "claim_id": "cc6a2c5f682eb7cd372492a42b6c9d3a5b9656f425e297971fe06a4b0865f2a9",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "ai-music-video",
+        "url": "https://clawskills.sh/skills/gprecious-ai-music-video"
+      }
+    ],
+    "owner_handle": "gprecious",
+    "owner_id": "s17cpbw53qksz1ppfwqgwp7hv9884hct",
+    "published_at": 1771292199703,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967926447,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967926447,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts generate music, visuals, subtitles, persona metadata, and assembled videos, which matches the stated purpose; the main risk is expected use of paid provider credits.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Quick-start examples are broad natural-language prompts, but the documented workflow is explicit and repeatedly recommends dry-run cost checks before generation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No install-time script, package installation, or automatic background setup was found; the bundle contains documentation, references, tests, and user-invoked shell scripts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "SUNO_API_KEY, OPENAI_API_KEY, and optional BytePlus/Together keys are disclosed and used for the advertised providers; callback behavior is documented and constrained to HTTPS or a no-op localhost URL.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Artifacts write generated media, metadata, subtitles, cost files, and temporary processing files under user-selected output paths; no privilege escalation, credential store access, autostart, or long-running persistence was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad examples could make users over-invoke a paid workflow, but artifact evidence shows explicit scripts, required API keys, cost estimates, and dry-run guidance; this is a user-control note, not enough for Review.\n[VirusTotal clean telemetry] expected: The clean telemetry is consistent with the inspected scripts, which call expected media-generation endpoints and do not show unrelated exfiltration or destructive behavior.\n[Static scan clean] expected: Static scan reported no findings, and direct inspection found no install-time execution, persistence, hidden credential handling, or purpose-mismatched network destinations.",
+          "guidance": "Install only if you are comfortable running local shell/FFmpeg workflows with AI-provider API keys that can spend credits. Use --dry-run first, keep provider keys scoped, leave SUNO_CALLBACK_URL at the default unless you control the HTTPS endpoint, and be aware the assembly script appears to have a shell syntax issue that may need fixing before the full workflow runs.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed, purpose-aligned music-video generator that uses paid AI APIs and local FFmpeg, with no evidence of hidden persistence, credential theft, or unrelated data access.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967867304,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ai-music-video\nVersion: 1.2.4\n\nThe skill bundle appears benign. All scripts (`suno_music.sh`, `gen_visuals.sh`, `assemble_mv.sh`) use standard tools (`curl`, `python3`, `ffmpeg`) for their stated purpose of AI music and video generation. API keys are handled via environment variables and sent to legitimate AI service endpoints. Notably, `suno_music.sh` includes a strong security control by validating `SUNO_CALLBACK_URL` to only allow HTTPS or `https://localhost/noop`, preventing potential data exfiltration via arbitrary HTTP callbacks. Input sanitization is also present in `assemble_mv.sh` for `ffmpeg` arguments. No evidence of malicious execution, persistence, data exfiltration, or prompt injection against the agent was found in the code or `SKILL.md`.",
+          "checkedAt": 1779164138618,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a6e68f5f8bb6486391607e416f725ed85bb4664810ab5416b2937f9e46efc32b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a6e68f5f8bb6486391607e416f725ed85bb4664810ab5416b2937f9e46efc32b"
+    },
+    "slug": "ai-music-video",
+    "source_type": "clawhub",
+    "version": "1.2.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

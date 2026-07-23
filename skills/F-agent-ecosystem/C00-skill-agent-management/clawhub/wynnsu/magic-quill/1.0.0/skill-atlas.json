@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:lookup",
+      "category:C01:token:sources",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:software-development",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "f14b956853c84425f2e3c7a3183f8afaf0a9e5cb2d04247e50c409366854687c",
+    "content_hash": "d838572018e4e53b434df256ded4cdef9b5942a5a6f28d2c5b79778933df3c55",
+    "skill_md_hash": "ea178631f23ab72d349276e7a82ab912229f21a8d63f193f21d76958e2fc6952",
+    "version_metadata_sha256": "a869b5e3d0952a8c33eb251c160bd94061685b6e289ea08f4f446788eefebc53"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/wynnsu/skills/magic-quill",
+    "claim_id": "46bdd6265ac68a53b91c3cd315c10993b9ed2e4fd9609c9e9db21c7f8c6b6942",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "magic-quill",
+        "url": "https://clawskills.sh/skills/wynnsu-magic-quill"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "wynnsu",
+    "owner_id": "s17cg2d09tztzza6k34d1rdjn9885h9h",
+    "published_at": 1771777039436,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779949748995,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779949748995,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill's purpose, documentation, and script align around generating OpenClaw Spellbook YAML mappings from a topic or URL; network discovery and YAML output are central to that purpose and are disclosed.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions tell the agent to run a local Node script, query public sources, fetch discovered spell-list references, and write the result. The behavior is broad but coherent with the stated generator workflow.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains a skill file and one script, with documented npx-based installation from a GitHub repo subpath. No postinstall script or package-level install hook is present in the inspected artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script performs outbound HTTP(S) requests to user-provided URLs, DuckDuckGo-discovered results, skills.sh, ClawHub endpoints, and Wikipedia. It does not request or read credentials, local profiles, tokens, or session stores.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to creating directories and writing the generated YAML to the default spells directory or a user-provided --out path. There is no background worker, autostart, privilege escalation, or hidden long-running process.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-2] expected: Local inspection confirms broad web discovery and bounded recursive follow-up of likely spell endpoints. This is purpose-aligned and disclosed enough for a generator, but users should avoid internal/private URLs.\n[VirusTotal code_insight] expected: The reported arbitrary output path and SSRF-style fetch capabilities are real, but they are user-directed or part of the documented discovery workflow, with no artifact-backed deception, exfiltration, or destructive behavior.\n[staticScan] expected: The static scan was clean; inspected imports are limited to fs, path, process, and fetch-based network access plus YAML file output.\n[pre-scan unicode-control-chars] unexpected: The supplied indicator was investigated; no hidden evaluator-directed prompt injection or review-manipulation instruction was found in the inspected artifacts.",
+          "guidance": "Install only if you want an agent to run a local Node generator that contacts public web/search/API sources and writes a YAML mapping file. Keep --out inside the intended spells directory, avoid using --url with localhost or private/internal services, and review the generated YAML and listed reference URLs before enabling it with the Spellbook hook.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Magic Quill is a disclosed YAML generator that uses web lookups and writes an output file, with no evidence of hidden credential access, persistence, exfiltration, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779949652446,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: magic-quill\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to several vulnerabilities. The `scripts/generate-spell-mapping.mjs` script allows for arbitrary file writes via the `--out` argument, which uses `path.resolve` without sanitization, enabling path traversal. Additionally, the skill performs Server-Side Request Forgery (SSRF) by fetching content from user-provided URLs (`--url`) and dynamically discovered URLs (via DuckDuckGo searches and recursive link following in `fetchSpellListReference` and `fetchLoreFromUrl` functions), without validating against internal network access. While these are significant risks, there is no evidence of intentional malicious behavior like data exfiltration or persistence mechanisms.",
+          "checkedAt": 1779166250034,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "eeac2ba66101a94746e109d8b08af27938a480b206b1cdfc141fc533c3c2fdf6",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/eeac2ba66101a94746e109d8b08af27938a480b206b1cdfc141fc533c3c2fdf6"
+    },
+    "slug": "magic-quill",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,135 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.4167,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C09:token:audit",
+      "category:C09:token:security",
+      "cross-tag:agent-management",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "227ba7c6d581d6b7066d9b7f09c98d22f3210709959f0d0a6c1acb4c1f06951b",
+    "content_hash": "af1f7ac2a32be9cb2f6d9a5652b65f544be9d562f733eafab295f50bd4a67d41",
+    "precanonical_content_hash": "841cab8af73765757fd4c0175d791e430365cc69928facfb60d8fadfb7e755f1",
+    "skill_md_hash": "f9e7aa82acf65ff356a0d0d52e33565a4933a30426950c147a212178b474181a",
+    "version_metadata_sha256": "e78e3522be84a215488889e781ee56547fd128f212854a8ad88ee4cea32a4f95"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jonathanjing/skills/skill-trust-auditor",
+    "claim_id": "c4a2eac5e0387ebe215159a78da89c2c655488e9379703a18bee6090ee1197f4",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "skill-trust-auditor",
+        "url": "https://clawskills.sh/skills/jonathanjing-skill-trust-auditor"
+      }
+    ],
+    "owner_handle": "jonathanjing",
+    "owner_id": "s17aah0h06a3741dypyhe3a2xd85pgsx",
+    "published_at": 1772585877191,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779953413057,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779953413057,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe and implement pre-install auditing of other ClawHub skills by fetching SKILL.md and referenced scripts, scanning known risky patterns, scoring findings, and optionally using an LLM for network-call intent review.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The trigger guidance is broad around auditing before installs, but it is coherent with the skill purpose and the audit script is invoked explicitly rather than installed as an automatic hook.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The setup script installs or upgrades Python dependencies, including requests and anthropic; this is disclosed and proportionate, but it does mutate the user's Python environment.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to ClawHub/GitHub and optional Anthropic API use are purpose-aligned. In --llm mode, flagged context and a sanitized SKILL.md excerpt may be sent to Anthropic, so sensitive private skill content should not be audited with --llm unless the user accepts that data flow.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No automatic persistence, privilege escalation, destructive actions, hidden credential harvesting, or background worker behavior was found. The shell alias is only an optional user-copied workflow example.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The shell commands, Python execution, ClawHub CLI use, and network-capable fetching are real, but they are disclosed in the runtime instructions and fit the purpose of auditing remote skill artifacts.\n[SQP-1] expected: The broad audit-before-install guidance can interpose on install workflows, but this is the core purpose of the skill and still requires an explicit audit command or user-added alias.\n[SQP-2] expected: The optional --llm path uses Anthropic only when enabled and sanitizes/truncates untrusted content; the third-party data transfer should be clearer at runtime, but it is purpose-aligned and not hidden exfiltration.",
+          "guidance": "Install only if you are comfortable running a Python-based auditor that fetches target skill files and installs dependencies. Use --llm only for skill content you are willing to send to Anthropic, and treat the trust score as an advisory screening aid rather than proof that another skill is safe.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed security-auditing skill whose shell, network, dependency, and optional LLM behavior match its stated purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779953360149,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: skill-trust-auditor\nVersion: 1.1.3\n\nThe OpenClaw skill-trust-auditor is designed to identify security risks in other skills. Its own implementation demonstrates a strong focus on security, including robust input validation and sanitization (e.g., `_sanitize_untrusted` in `scripts/analyze_skill.py`) to prevent prompt injection when using LLMs. Shell commands in `scripts/audit.sh` correctly quote user input, mitigating shell injection risks. The skill's dependencies are standard, and there is no evidence of data exfiltration, backdoor installation, or other malicious intent within its own code or instructions. All identified high-risk patterns are part of its detection logic (`scripts/patterns.json`), not actions performed by the skill itself.",
+          "checkedAt": 1779166574269,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "ea34f912cfcef1a80367aa2f87233f242da4872062b5a4359d03c076e74b34ba",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ea34f912cfcef1a80367aa2f87233f242da4872062b5a4359d03c076e74b34ba"
+    },
+    "slug": "skill-trust-auditor",
+    "source_type": "clawhub",
+    "version": "1.1.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

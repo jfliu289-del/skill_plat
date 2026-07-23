@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C13:token:operations",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C06",
+      "C13"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e187538bcec735e6773d05bf18b4a3ac02883a8469daad717029cf618908ca9b",
+    "content_hash": "a587d6992fd5d25f6cbb60b7a0e975f13c1d79029e496dd1549850301da1b356",
+    "precanonical_content_hash": "ce59a4a035eaa029f2ad97aa168a61ac819a562eb842b5b9f80bb58c5406a1f8",
+    "skill_md_hash": "1b2eb3bf983576e5415714f1bcedc3bf0c17eedc0756e5c4f19ca276c4e60234",
+    "version_metadata_sha256": "2133b26312d538fd6ff2aaac15803445a4cab01aa64b1bf5aa6120a8c78e7641"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/nikitadmitryuk/skills/tms",
+    "claim_id": "955b1233f512d761382ff0ad38a5a0487e2c374fec5094e92e14513f011d21d3",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "tms",
+        "url": "https://clawskills.sh/skills/nikitadmitryuk-tms"
+      }
+    ],
+    "owner_handle": "nikitadmitryuk",
+    "owner_id": "s17ffbz4aw2cdt3eknwspg9gps83wzag",
+    "published_at": 1781222521375,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1781227957453,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1781227957453,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill consistently describes one purpose: add, list, delete, and search TMS downloads through documented REST endpoints. The advertised homepage also resolves to a public GitHub directory for openclaw-skill-tms, matching the artifact identity. ([github.com](https://github.com/NikitaDmitryuk/telegram-media-server/tree/main/openclaw-skill-tms))",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The delete operation is destructive and removes queue/library state, local files, and qBittorrent entries, but that capability is plainly disclosed and tied to the stated download-management purpose. The artifacts would be safer with a mandatory target review and confirmation step before DELETE.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains markdown and JSON documentation only; no executable scripts, binaries, package installers, or automatic startup hooks were present in the artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use of TMS_API_URL and TMS_API_KEY is proportionate for authenticated access to a TMS instance, and the README says the key should be stored in skill config rather than chat. The screenshots README should be fixed because it suggests showing TMS_API_KEY in listing screenshots without saying to redact it.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill itself creates no persistence or background worker. Persistent API-key and webhook configuration are user-managed, but enabling the skill can allow the agent to add or remove downloads unless the user restricts model invocation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The destructive DELETE capability is real and should be handled carefully, but it is not hidden or purpose-mismatched; it is a core TMS download-management operation described in SKILL.md and README.md.\n[SQP-2] expected: The manifest advertises removing downloads everywhere. That is high-impact, but disclosed and coherent with the skill’s purpose; the missing caution language is a documentation safety gap rather than evidence of malicious behavior.\n[SQP-2] unexpected: The screenshots guidance can encourage accidental credential exposure by mentioning a config screenshot with TMS_API_KEY. No actual secret is included, and the main README gives safer secret-handling guidance, so this is a fix-before-publishing-docs issue rather than runtime exfiltration.",
+          "guidance": "Install this only for a TMS instance you control. Keep TMS_API_KEY in per-skill or agent secret configuration, never in chat or public screenshots, and redact any listing assets. Before deleting, list downloads first and confirm the exact id/title because deletion removes associated state and local files; restrict model invocation if you want only explicit user-requested actions.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is an instruction-only skill for controlling a user-configured Telegram Media Server, with real but disclosed delete and API-key risks.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1781227862264,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 45,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": null,
+          "checkedAt": 1781223706813,
+          "normalizedStatus": "clean",
+          "source": "engines",
+          "status": "clean",
+          "verdict": null
+        }
+      },
+      "sha256hash": "4e500b8a07cc7a5301e461807a57e8eadef9a0347f8e9ec8df735b43673a738c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4e500b8a07cc7a5301e461807a57e8eadef9a0347f8e9ec8df735b43673a738c"
+    },
+    "slug": "tms",
+    "source_type": "clawhub",
+    "version": "1.0.9"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

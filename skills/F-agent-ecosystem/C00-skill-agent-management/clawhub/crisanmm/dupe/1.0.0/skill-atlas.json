@@ -1,0 +1,152 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:find",
+      "category:C05:token:image",
+      "category:C11:token:product",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C05",
+      "C11"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "3fdb5184d4296370a81f22ff053f89596bd3e4d58ec0e217b8f382edf50d37d0",
+    "content_hash": "ae846482d5fbd8ca5541a1a6adc99bb29e10bde4d40cdf22153dc58c29aecdb5",
+    "precanonical_content_hash": "633666d0b4c21830ba4508b85ec6e3a85c4055c9da7412920212471f348d6fa7",
+    "skill_md_hash": "a115ed8edd86ef0a17c872ade663e8bc96a111c2ea7b72d0fa90a6cd1c2e9290",
+    "version_metadata_sha256": "0e87e2bf88311810df680598d053abf32fffde2000b8b3e8b82a64e8c604da8d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/crisanmm/skills/dupe",
+    "claim_id": "0aee7d8ef9eac35685adad2b5708c64a20f44e6f11f56780591142b7b1f6c1fa",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "dupe",
+        "url": "https://clawskills.sh/skills/crisanmm-dupe"
+      },
+      {
+        "index_path": "categories/shopping-and-e-commerce.md",
+        "label": "dupe",
+        "url": "https://clawskills.sh/skills/crisanmm-dupe"
+      }
+    ],
+    "owner_handle": "crisanmm",
+    "owner_id": "s170fpq0qf954bbn6rk39v9jc9884erk",
+    "published_at": 1770667260224,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779963124161,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779963124161,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, instructions, and examples align: the skill uses dupe.com APIs to find similar products from a user-provided product page or image URL.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions are limited to URL-based lookup and result formatting, but they ask the agent to preserve the supplied URL and do not warn users away from private, signed, internal, or token-containing URLs.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact is a single markdown SKILL.md file with no package install, executable payload, install-time scripts, or hidden files.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Internet access and curl are disclosed and proportionate to the product-lookup purpose; the main data flow is posting the supplied URL to api.dupe.com.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background workers, privilege escalation, credential storage, local file access, or account mutation authority is present in the artifact.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The skill does transmit product or image URLs to dupe.com, which is core to its advertised function. The privacy risk is real for sensitive URLs, but the behavior is visible in the instructions and not purpose-mismatched.\n[VirusTotal code_insight] unexpected: The final-response template embeds the original user URL in a dupe.com results link without sanitization. That is a formatting and privacy caveat, but the artifact does not show prompt override, code execution, open redirect behavior, exfiltration beyond the disclosed API call, or other evidence supporting a Review or malicious verdict.\n[staticScan] expected: Static scan reported no suspicious findings, consistent with the observed single markdown artifact and absence of executable install logic.",
+          "guidance": "Install only if you are comfortable sharing submitted product or image URLs with dupe.com. Use public shopping or image links, and avoid signed URLs, internal or localhost links, private CDN links, or URLs containing tokens or sensitive query parameters.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward product-similarity helper that sends user-provided product or image URLs to dupe.com, with privacy caveats but no hidden or destructive behavior found.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779963094755,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: dupe\nVersion: 1.0.0\n\nThe skill is suspicious due to a clear prompt injection vulnerability in SKILL.md. It explicitly instructs the AI agent to embed the user-provided URL into the final output string without any modification or sanitization (e.g., `https://dupe.com/<whatever-url-the-user-gave-you>`). This instruction, 'IMPORTANT! Simply replace <whatever-url-the-user-gave-you> with the URL of the product page or image URL that the user provided - do not modify the URL in any way.', bypasses crucial input validation and could be exploited for phishing, URL redirection, or client-side attacks if the agent's output is rendered in a vulnerable context or if the target domain (`dupe.com`) has an open redirect or XSS vulnerability.",
+          "checkedAt": 1779162525596,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "310aa90150d3de2cfd286822b1e02a6dcd0dac6ace3925dc167506870aba2074",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/310aa90150d3de2cfd286822b1e02a6dcd0dac6ace3925dc167506870aba2074"
+    },
+    "slug": "dupe",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

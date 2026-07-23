@@ -1,0 +1,151 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.1321,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "category:C12:token:management",
+      "category:C13:token:operations",
+      "category:C18:token:home",
+      "category:C19:token:device",
+      "cross-tag:agent-management",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C09",
+      "C12",
+      "C13",
+      "C18",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "7daea50b30500518cb0c0633517d5261e7c0a156a0d04e539b6b8b87d5a5970a",
+    "content_hash": "a9bdcd857c07f66fca6fbdc1e74051a162841d399ebefdd57598c522feab8f09",
+    "precanonical_content_hash": "1ac1ec66918d8ad45833209f6ac8cf26eafac2f01618b1b47b58e98340c41edd",
+    "skill_md_hash": "c0a33793c5c312d8a584887963a013d3d71161e8a064a2ab575cbb85c59fd05b",
+    "version_metadata_sha256": "2719625abe29860560abd3481312bf5e9148428f08695726dfca45e4c3152369"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/michaeljmoody/skills/starling-home-hub",
+    "claim_id": "3baeca38f4172d427eaf25a77f43e94a602905e161f832448714e4445482b9c0",
+    "index_entries": [
+      {
+        "index_path": "categories/productivity-and-tasks.md",
+        "label": "starling-home-hub",
+        "url": "https://clawskills.sh/skills/michaeljmoody-starling-home-hub"
+      }
+    ],
+    "owner_handle": "michaeljmoody",
+    "owner_id": "s170bjbp17pdb32n0vzkwff4dn885a5h",
+    "published_at": 1770916543631,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972799265,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972799265,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifacts: it reads and changes Nest/Google Home device state through a local Starling Home Hub API, including sensitive actions like camera snapshots, streams, lock state, thermostat settings, and home/away mode.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The shell wrapper exposes broad device get/set and stream commands, but those capabilities are central to the advertised smart-home control purpose and require the user-supplied hub IP and API key.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden installer, package download, autorun hook, or background setup behavior was found; the artifact consists of documentation, an API reference, and a local shell script.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The required Starling API key is proportionate to the purpose and declared as secret. The default HTTPS path uses curl with certificate verification disabled for a self-signed local hub certificate, but this is documented and the script supports --cacert for pinned certificate verification.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, privilege escalation, scheduled task, or long-running worker behavior was found. Camera snapshots are saved only when explicitly requested and the script attempts to restrict saved snapshot permissions to owner-only.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[TM1] expected: The curl -k behavior is real and increases local-network MITM risk, especially because commands can affect cameras and locks, but it is explicitly disclosed as a self-signed-certificate compromise and has a documented --cacert safer path.\n[VirusTotal-code_insight] expected: The telemetry concern matches the inspected artifact: TLS verification is skipped by default, while the skill also documents the risk, warns against HTTP and CLI API keys, validates IDs, and limits snapshot file permissions.\n[static-scan-clean] expected: The clean static scan is consistent with the inspected files: no exfiltration, destructive install behavior, hidden persistence, or prompt-injection instructions were found.",
+          "guidance": "Install only if you are comfortable letting an agent use your Starling API key to control local smart-home devices. Prefer a read-only or least-privilege key, avoid --http and --key, pin the hub certificate with --cacert when possible, and require manual confirmation for lock, camera, stream, and home/away changes.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed local wrapper for controlling a Starling Home Hub, with real smart-home security risks that are explained rather than hidden.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972760921,
+          "issueCount": 1,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 32,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: starling-home-hub\nVersion: 1.0.2\n\nThe skill is classified as suspicious primarily due to the default use of `curl -k` (disabling TLS certificate verification) in `scripts/starling.sh` when connecting to the Starling Home Hub via HTTPS. While this is explicitly documented in `SKILL.md` and `starling.sh` as a practical compromise for self-signed certificates on a trusted local network, it introduces a Man-in-the-Middle (MITM) vulnerability. However, the skill also includes positive security practices such as input validation (`validate_id`), explicit warnings against passing API keys via CLI arguments, and setting `chmod 600` on sensitive snapshot files. There is no evidence of intentional malicious behavior like data exfiltration, unauthorized remote execution, or prompt injection attempts against the agent.",
+          "checkedAt": 1779163508098,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "2a02339e07df62bffa1c5bea1638789070ffae3eda48dc2b9101c68c398d1a10",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/2a02339e07df62bffa1c5bea1638789070ffae3eda48dc2b9101c68c398d1a10"
+    },
+    "slug": "starling-home-hub",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

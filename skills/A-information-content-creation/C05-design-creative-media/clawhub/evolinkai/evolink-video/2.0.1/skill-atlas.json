@@ -1,0 +1,150 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "creator",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.69,
+    "domains": [
+      "creative",
+      "security",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:phrase:video editing",
+      "category:C05:token:image",
+      "category:C05:token:video",
+      "category:C06:token:api",
+      "category:C09:token:privacy",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "cross-tag:design",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "secure",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "979c11a362c0bd1467a15883605ff435264578d55658752ed5248db037895e65",
+    "content_hash": "f0eb35ebb7156f320038535316e97d44ddb0d9f79ddef2e9772de1138a8cd322",
+    "precanonical_content_hash": "7aa1ab24b90d3b357a4d8c2fba882664b4ca0a071469ee90b40c64ac2653ab37",
+    "skill_md_hash": "da537e2a981d9f144f9c55c885e68fcc7f65a4de450efea6327254455c1cc86e",
+    "version_metadata_sha256": "a4445d95b937c1b7f26f72bced927e3e7ec18b91bb84039d7176268061f34062"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/evolinkai/skills/evolink-video",
+    "claim_id": "39fc7f84be765be492eb1b7d1465fde7abc8a65d1a17061fcccb40d2d2a65041",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "evolink-video",
+        "url": "https://clawskills.sh/skills/evolinkai-evolink-video"
+      }
+    ],
+    "owner_handle": "evolinkai",
+    "owner_id": "s176k82x7tm60j2kx309p7evxs83j3z7",
+    "published_at": 1772130109387,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779959373877,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779959373877,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The advertised purpose is AI video generation, and the documented capabilities are aligned: generate videos, upload reference media, poll tasks, list models, estimate cost, and manage uploaded files.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions are user-driven and tell the agent to ask for creative parameters, but generation and uploads can consume credits and transmit user media, so use should remain intentional.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact is documentation-only with no executable scripts, but setup examples recommend running an external unpinned npm MCP package via `npx -y @evolinkai/evolink-media@latest`, which is a disclosed supply-chain consideration.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The required `EVOLINK_API_KEY`, network calls to EvoLink, prompt/image transmission, and hosted file URLs are proportionate to the video-generation workflow and are disclosed.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden local persistence, background worker, privilege escalation, or destructive local behavior is evidenced; uploaded files and result URLs are documented as expiring remotely.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The file API does return publicly accessible uploaded-file URLs and documents 72-hour expiry; this is expected for reference-image hosting, though stronger privacy wording would help users avoid sensitive uploads.\n[SQP-2] expected: The video API reference documents local file, base64, and remote URL upload mechanisms to EvoLink; this is expected for image-to-video workflows and is partly disclosed in the main privacy section.\n[VirusTotal-code_insight-suspicious] expected: The `npx -y ...@latest` setup command is real remote package execution, but it is a visible, user-directed MCP setup path rather than hidden bundled execution or deception.",
+          "guidance": "Install only if you are comfortable giving the skill an EvoLink API key and sending prompts, images, videos, and referenced URLs to EvoLink. Avoid sensitive or regulated media, delete hosted files when no longer needed, monitor credit usage, and consider reviewing or pinning the MCP package instead of blindly running the `@latest` setup command.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill coherently supports EvoLink video generation and discloses its API key, upload, and external-service behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779959328477,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: evolink-video\nVersion: 2.0.1\n\nThe skill is classified as suspicious due to the instruction to the AI agent to execute remote code via `npx -y @evolinkai/evolink-media@latest` for setting up the MCP server, as seen in `SKILL.md`. While this is plausibly needed for the skill's functionality, it represents a significant supply chain risk by fetching and executing code from an external registry. Additionally, the `references/file-api.md` documentation provides `curl` commands demonstrating direct shell and network access for uploading local files, which, while intended for reference images, highlights risky capabilities that could be misused if the agent were compromised or tricked.",
+          "checkedAt": 1779167129221,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "e9c1de3404bbe34c9caaaa87c1366a1bfcf4c27e457357cc07733280383dd861",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e9c1de3404bbe34c9caaaa87c1366a1bfcf4c27e457357cc07733280383dd861"
+    },
+    "slug": "evolink-video",
+    "source_type": "clawhub",
+    "version": "2.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

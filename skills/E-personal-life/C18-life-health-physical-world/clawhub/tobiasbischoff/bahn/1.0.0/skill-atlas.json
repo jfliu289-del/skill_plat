@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.625,
+    "domains": [],
+    "needs_review": false,
+    "primary_category": "C18",
+    "reasons": [
+      "category:C01:token:find",
+      "category:C01:token:search",
+      "category:C17:token:notes",
+      "category:C18:phrase:travel planning",
+      "category:C18:token:travel",
+      "cross-tag:planning",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C17"
+    ],
+    "stages": [
+      "discover",
+      "plan"
+    ],
+    "tasks": [
+      "plan",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "aafcee907a60bcaa00931e2211bfa5f8f3202080a85ef35bee51ed615bdea44b",
+    "content_hash": "9a7ae90d478fb0369ace7680e3ea5376bee6f03aaa9c4b8902c8b67152e412a0",
+    "precanonical_content_hash": "828f10b25c4d4ac2ea6ee213a7fa218c6f5b231355e3b5429736df6e3dd79f5e",
+    "skill_md_hash": "9370297b799ca6a6c3c69b215d3c79be6a6229581d1ee915b1f4b878822d0dbd",
+    "version_metadata_sha256": "6fb753207069b96ac4aba4a8248b35973bc3ce816bac1fa1150439d3e9d5127f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tobiasbischoff/skills/bahn",
+    "claim_id": "789b1b9d3aea9ba57d408014d7915a261abccfeff0659c2dbc30149b1a47dd8a",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "bahn",
+        "url": "https://clawskills.sh/skills/tobiasbischoff-bahn"
+      },
+      {
+        "index_path": "categories/transportation.md",
+        "label": "bahn",
+        "url": "https://clawskills.sh/skills/tobiasbischoff-bahn"
+      }
+    ],
+    "owner_handle": "tobiasbischoff",
+    "owner_id": "s17850dme4hd8sa1yvmf7d5r2h885zfd",
+    "published_at": 1769404815120,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783649808425,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783649808425,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to search Deutsche Bahn train connections, and the artifact only documents route, date, time, and result-count queries through bahn-cli.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill tells the agent to run local shell commands under ~/Code/bahn-cli, but those commands are scoped to installing and using a train-search CLI and do not request credentials or account access.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The npm install step is disclosed and plausible for a Node CLI helper, but the referenced bahn-cli project and its dependency tree are not bundled in this skill.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Requiring Node, npm, a local bahn-cli checkout, and likely network access to query train data is proportionate to the train-search purpose, though users should confirm the local path is the intended project.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact does not describe persistence, background workers, privilege escalation, credential handling, broad file access, destructive actions, or data mutation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight] expected: The flagged npm install instruction is a real supply-chain caution, but it is disclosed setup for the claimed CLI helper and is the only negative telemetry signal.\n[SkillSpector] expected: SkillSpector reported no issues and did not identify prompt-injection, persistence, credential, or exfiltration behavior.\n[staticScan] expected: Static scan reported clean with no findings, matching the simple artifact content observed in SKILL.md.",
+          "guidance": "Install this only if ~/Code/bahn-cli is the train-search project you intended to use and you trust its source. Review that project's package.json and lockfile before running npm install; this skill itself does not ask for credentials or sensitive access.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a focused Deutsche Bahn train-search helper, with the main caution that it asks you to run setup commands for a separate local Node project.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783649747062,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: bahn\nVersion: 1.0.0\n\nThe skill instructs the agent to run `npm install` within the `~/Code/bahn-cli` directory. While this command is plausibly needed for setting up the `bahn-cli` tool, it represents a risky capability as `npm install` can download and execute arbitrary code from external dependencies. Since the `bahn-cli` project itself is not included in this bundle, its dependencies and potential for supply chain compromise cannot be assessed, making the instruction to execute `npm install` (found in `SKILL.md`) suspicious due to unverified external code execution.",
+          "checkedAt": 1779159995824,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "4683d20077bca040f4110eb4fc191fea5edc4d7259f7fc64a3fe3dba946acb7a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4683d20077bca040f4110eb4fc191fea5edc4d7259f7fc64a3fe3dba946acb7a"
+    },
+    "slug": "bahn",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

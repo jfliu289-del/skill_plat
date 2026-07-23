@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.7167,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": false,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C05:phrase:image generation",
+      "category:C05:token:image",
+      "category:C05:token:video",
+      "category:C17:token:notes",
+      "category:C17:token:resume",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:planning"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "plan"
+    ],
+    "tasks": [
+      "design",
+      "manage",
+      "plan"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "b73c507c8d559b84a681d61967c83cd06a0b4073fcae481bc6e16aab2cc2bf9b",
+    "content_hash": "8444ba591739198a87aff405b4623f8de74d0ccd04ed1161078d7095a1b93071",
+    "precanonical_content_hash": "a75aaad02b2f85f07ab044789eeb34a6e8a76d0713d636903bdef2324668ce76",
+    "skill_md_hash": "f95be63cb4f5a2fd950f41400d07126bcb7065fed7ba30028f0ce1d075dae7b1",
+    "version_metadata_sha256": "c76d9a6a5318add3083276360daa96b660c8da16751feecf8f80edebb460bc22"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/kkenny0/skills/seedance-story-orchestrator",
+    "claim_id": "04257aea75a31da04179d037bbb700878c659d95cc98d5c99753a41a564e064b",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "seedance-story-orchestrator",
+        "url": "https://clawskills.sh/skills/kkenny0-seedance-story-orchestrator"
+      }
+    ],
+    "owner_handle": "kkenny0",
+    "owner_id": "s17e5sm9mfd2xfq0bhb9w9bd9n840vsx",
+    "published_at": 1772009247653,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779958928108,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779958928108,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "API key use, network calls to Seedream, delegation to the Seedance video skill, provider-returned video downloads, and FFmpeg concatenation all match the stated story-to-video orchestration purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The workflow is explicitly CLI-driven and stage-gated with checkpoint confirmation before advancing; users should still review generated storyboard/sub-agent JSON before confirming image or render stages.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden installer, package mutation, or background setup was found, but the skill depends on Python, FFmpeg, ARK_API_KEY, and a separately installed seedance-video-generation skill that the user must trust.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "It reads user-selected input files, writes project output directories, sends generation prompts to provider APIs, and stores generated metadata/videos; this is proportionate to the advertised function.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "Persistence is limited to project artifacts such as checkpoints, summaries, prompts, provider URLs, and media files; no credential storage, privilege escalation, autorun, or unrelated local indexing was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The cited env, filesystem, network, and shell capabilities are real, but they are mostly disclosed by prerequisites and commands and are coherent with video generation orchestration; a clearer permissions section would improve user clarity.\n[AST4] expected: The FFmpeg subprocess use is expected for concatenating video clips and uses argument-list execution; PATH-based tool discovery is a dependency hygiene caveat rather than evidence of hidden behavior.\n[VirusTotal code_insight] expected: Downloading provider-returned video URLs and reading ARK_API_KEY are expected for this workflow, and the artifacts do not show credential theft, arbitrary payload installation, destructive behavior, or unrelated exfiltration.",
+          "guidance": "Install only if you trust the separate Seedance video skill, your FFmpeg binary, and the external provider handling your prompts. Prefer a dedicated ARK_API_KEY, review each checkpoint before confirming, and keep project outputs in a location appropriate for retained prompts, URLs, metadata, and generated videos.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to do what it says: turn story inputs into generated images, rendered clips, and a final video using disclosed external generation services and local video tools.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779958871635,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: seedance-story-orchestrator\nVersion: 1.0.0\n\nThe skill is classified as suspicious primarily due to the `download_video` function in `scripts/orchestrate_story.py`. This function uses `urllib.request.urlretrieve` to download files from URLs provided by the `seedance.py` sub-skill's output. While intended for legitimate video downloads, this capability introduces a vulnerability: if the `seedance.py` dependency or its output were compromised, it could be leveraged to download arbitrary malicious payloads or exfiltrate data to external endpoints. Additionally, `scripts/seedream_image.py` directly accesses the `ARK_API_KEY` environment variable, which is a sensitive capability, though necessary for its stated purpose. There is no clear evidence of intentional malicious behavior such as credential theft or backdoor installation within this skill bundle; rather, these are risky capabilities that could be exploited.",
+          "checkedAt": 1779167038413,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "9f2d76d19b96a4b7e15023e9c5bf4a902778c767a45fac05395cfb94a04a8b46",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/9f2d76d19b96a4b7e15023e9c5bf4a902778c767a45fac05395cfb94a04a8b46"
+    },
+    "slug": "seedance-story-orchestrator",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

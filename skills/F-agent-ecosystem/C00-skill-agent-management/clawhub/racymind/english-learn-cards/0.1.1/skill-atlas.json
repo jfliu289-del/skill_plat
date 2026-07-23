@@ -1,0 +1,136 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.35,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:prompt",
+      "category:C16:token:learning",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C16",
+      "C17"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "0c26bb68f1eaded578580cd43fa8df2cf5c1f430be256f0b247e5801ba39c5ea",
+    "content_hash": "33d00082cf31a08bcaedd1bc0af63fe4f3941f14b190ef035924dfb686353197",
+    "precanonical_content_hash": "95e98fd714e539cfb81f0dcd3533a31b664bb528ea51dde53f38daeecea562e6",
+    "skill_md_hash": "a9170006cb231c7eccd82c207a8c50aa40c4b3492ce45f8f992ada16be4935c2",
+    "version_metadata_sha256": "706c1ee7a029288dd1091f257ae1b8fc286f1c78caad7d9aef0225d60c005f89"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/racymind/skills/english-learn-cards",
+    "claim_id": "9ee2b999dd78a87b1f409a115f28783f0d60263f045519b53d75532379539931",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "english-learn-cards",
+        "url": "https://clawskills.sh/skills/racymind-english-learn-cards"
+      },
+      {
+        "index_path": "categories/personal-development.md",
+        "label": "english-learn-cards",
+        "url": "https://clawskills.sh/skills/racymind-english-learn-cards"
+      }
+    ],
+    "owner_handle": "racymind",
+    "owner_id": "s174zxdke6dn61erkne3dqp0mn8853e6",
+    "published_at": 1770314619276,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783655202116,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783655202116,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "SQLite card storage, SRS grading, rendering, review history, and pronunciation lookup all fit the stated vocabulary-learning purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The agent prompt limits use to explicit flashcard commands, but the recommended render flow uses --fill-audio, which may contact Cambridge Dictionary when audio is missing, and short triggers like 'teach me' can activate the quiz flow in normal chat.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains a Python helper script using requests and sqlite3, with no install hook, privilege escalation, hidden setup, or background worker.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The SQLite path is controlled by ENGLISH_LEARN_CARDS_DB and documented; outbound requests are limited to dictionary.cambridge.org pronunciation lookup for queried headwords, but that network behavior is not prominently described in SKILL.md.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists cards, SRS state, review grades, and optional user answers in a local SQLite database; there is no evidence of credential access, broad filesystem scanning, destructive behavior, or elevated privileges.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Environment-variable use is documented for the database path, and the implied network access supports pronunciation audio; the main issue is disclosure quality rather than unsafe behavior.\n[TP4] expected: Cambridge Dictionary fetching is purpose-aligned audio enrichment, not unrelated data transfer; the platform-specific Slack-style renderer is a portability concern, not evidence of tool poisoning.\n[SQP-1] expected: The short commands are part of the teaching workflow and mostly read or update the local study database; installers may still want stricter command prefixes in busy chat channels.",
+          "guidance": "Install if you are comfortable running a local Python helper that writes a SQLite vocabulary database. Avoid --fill-audio or --audio-auto for sensitive words or phrases unless you are comfortable sending those headwords to Cambridge Dictionary for pronunciation lookup.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent English flashcard skill that stores study data locally and optionally looks up pronunciation audio online.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783655166670,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: english-learn-cards\nVersion: 0.1.1\n\nThe skill bundle is benign. It provides a flashcard-based English vocabulary learning tool using a local SQLite database. The `scripts/words.py` helper script makes legitimate network requests to dictionary.cambridge.org to fetch audio pronunciations, which is directly aligned with its stated purpose. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts against the OpenClaw agent to subvert its behavior or access sensitive data beyond the skill's scope. All instructions in `SKILL.md` and `AGENT_PROMPT_TEMPLATE.md` are for proper skill usage and agent interaction.",
+          "checkedAt": 1779161634755,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "cad2cc5c677aab73d60ccd6a2ee8704880788d93714fe09174a714da35143cdc",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/cad2cc5c677aab73d60ccd6a2ee8704880788d93714fe09174a714da35143cdc"
+    },
+    "slug": "english-learn-cards",
+    "source_type": "clawhub",
+    "version": "0.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

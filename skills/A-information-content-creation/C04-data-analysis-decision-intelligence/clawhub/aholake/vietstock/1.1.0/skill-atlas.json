@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report",
+      "website"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.525,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:data",
+      "category:C04:token:metrics",
+      "category:C04:token:statistics",
+      "category:C12:token:market",
+      "cross-tag:browser-automation",
+      "cross-tag:data-analysis"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C12"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "automate"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "73ef75485b67104addd770750f9692902494dc8de37a10a2a7c9a3fb91c85c0f",
+    "content_hash": "6a9d315158621d81a57bc030c463c32ee320aaf46feecfa6df2cc202ca179374",
+    "precanonical_content_hash": "ee102b7a875b0f70808005754d202715a31ece9856a4ec9b2a9d601810fab067",
+    "skill_md_hash": "a2ae20182ec1a0aa08abee5dfff58e81f631babdf6e9b1561fd6fd9f202a12b1",
+    "version_metadata_sha256": "6c40e14495363ec9baf46a1dc6e0172d13bd5f2b44a7d6728643763defc1572c"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/aholake/skills/vietstock",
+    "claim_id": "ec9aa5a3983f473d27d3be1b0ff43a2af3e8af91d0b6fbc846b16f01f2b4a7a4",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "vietstock",
+        "url": "https://clawskills.sh/skills/aholake-vietstock"
+      }
+    ],
+    "owner_handle": "aholake",
+    "owner_id": "s17ce19fkr2d5g4zzdm7mnm785885c8s",
+    "published_at": 1771285623433,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783653300469,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783653300469,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is FireAnt.vn Vietnamese stock and index lookup, and the script opens Google/FireAnt, navigates to stock pages, extracts visible market data, and formats results for that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill documents Google search and browser automation in its workflow; user symbols are inserted into a search query and FireAnt URL without validation, but subprocess calls use argument arrays and there is no shell interpolation or arbitrary command construction.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains documentation, metadata, and one Python helper script; no install-time execution, setup hook, dependency installer, or package mutation behavior was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "External network access and host OpenClaw browser automation are proportionate for live stock lookup, but users should understand it uses the OpenClaw browser profile to visit Google and FireAnt.vn.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background worker, startup persistence, credential harvesting, file writes, privilege escalation, or destructive operations were found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: Network and process execution are real, but they are disclosed by the script usage and directly support the stock lookup workflow; missing explicit permission metadata is a transparency note rather than a Review-level concern.\n[TP4] expected: The Core Workflow explicitly mentions Google search and browser automation. Some documented market metrics may exceed what the parser reliably extracts, but that is a functional limitation, not evidence of hidden behavior.\n[SDI-2] expected: The script drives OpenClaw browser commands on the host, but the reviewed commands are fixed browser open, navigate, snapshot, and act operations for Google and FireAnt lookup, with no unrelated browsing or data extraction.\n[VirusTotal code_insight] expected: Embedding stock symbols into search text and a FireAnt URL is expected for this task. The code does not use shell execution for those values and does not show exfiltration, credential access, or destructive behavior.",
+          "guidance": "Install this only if you are comfortable with a skill opening Google and FireAnt.vn through the OpenClaw browser profile to retrieve market data. Use normal stock symbols or index names as input; avoid arbitrary URLs or unusual strings.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill performs a disclosed Vietnamese stock lookup workflow using browser automation, with no evidence of hidden data access, destructive behavior, or persistence.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783653268936,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 50,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: vietstock\nVersion: 1.1.0\n\nThe skill is classified as suspicious due to the direct embedding of user-provided stock symbols into URLs and search queries within browser automation commands in `scripts/check_stock.py`. While intended for legitimate navigation to FireAnt.vn, this pattern introduces a vulnerability for potential browser-based injection attacks (e.g., cross-site scripting or URL manipulation) if the underlying OpenClaw browser environment or the target websites do not adequately sanitize or validate the user input. There is no evidence of intentional malicious behavior such as data exfiltration or unauthorized system access, but the presence of this exploitable capability warrants a 'suspicious' classification.",
+          "checkedAt": 1779160856767,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "023e5f34d35c6828a47e461a1c57af417d86d26f5d3789d673c618ee881a6d3c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/023e5f34d35c6828a47e461a1c57af417d86d26f5d3789d673c618ee881a6d3c"
+    },
+    "slug": "vietstock",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

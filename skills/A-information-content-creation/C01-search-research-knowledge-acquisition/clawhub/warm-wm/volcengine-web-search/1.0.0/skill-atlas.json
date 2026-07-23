@@ -1,0 +1,126 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.775,
+    "domains": [],
+    "needs_review": false,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:phrase:web search",
+      "category:C01:token:search",
+      "cross-tag:search",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [],
+    "stages": [
+      "discover"
+    ],
+    "tasks": [
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "89c800563d20ef156fb1ed3629d6dcfb982b1ce8dc4934669108d11f1f8d6648",
+    "content_hash": "80e68c57ec1787a86691dccb0feed4ae23a0de9a6dfd639cc8aead9783343bc2",
+    "precanonical_content_hash": "9b43b49d19f65e127b56c9f9db8f59e63975453e2ce6e0665ed133a1364a9d1d",
+    "skill_md_hash": "ebfc1fd0ee70f5306ece3bd6edecd0c9fb6d9cda68ce968b31276322129bfb90",
+    "version_metadata_sha256": "392aade7ff3a1991856e7fff464d5deceddb90a64883cb21f6b83be65edc1d3d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/warm-wm/skills/volcengine-web-search",
+    "claim_id": "c2348946dffbbb065173fdf0749a246ebfb9a88ed6b89f9b6771279eaf74dcf3",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "volcengine-web-search",
+        "url": "https://clawskills.sh/skills/warm-wm-volcengine-web-search"
+      }
+    ],
+    "owner_handle": "warm-wm",
+    "owner_id": "s175yhmvqv4bzg77ggkg1x9khx83gb77",
+    "published_at": 1770689125540,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779964108202,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779964108202,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is web search, and the script performs a single Volcengine WebSearch API request for the provided query and returns up to five summaries.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are limited to preparing a query, running the bundled script, and answering from returned summaries; no prompt override, hidden role change, or unrelated agent instruction is present.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "No installer or persistence mechanism is included, but the script depends on the external veadk Python package, so users should verify that dependency source in their environment.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The script reads Volcengine/tool-specific credentials or VeFaaS IAM credentials and sends the query to mercury.volcengineapi.com, which is proportionate for this integration and disclosed in the skill instructions.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No file mutation, background worker, credential storage, or persistence is shown; the main privilege consideration is that requests may run under the user's Volcengine account or IAM role.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Credential use is real, but SKILL.md explicitly documents VOLCENGINE credential variables and VeFaaS IAM fallback; this is a transparency note rather than evidence of hidden or purpose-mismatched behavior.\n[SDI-2] expected: The code does pull credentials from environment and IAM sources, including tool-specific variables, but that is coherent with authenticated Volcengine API use for web search.\n[SDI-1] unexpected: On parse errors, the script logs and returns the raw upstream response instead of only summaries; this is broader output than ideal, but SKILL.md discloses that failed calls print error responses and there is no evidence of credential exfiltration or destructive behavior.",
+          "guidance": "Install only if you are comfortable sending search terms to Volcengine and allowing the skill to use Volcengine credentials or VeFaaS IAM. Prefer least-privilege, tool-scoped credentials, avoid putting secrets or private data into search queries, and verify the veadk dependency before use.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward Volcengine web search helper that uses disclosed Volcengine credentials to send search queries and return summaries.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779964084269,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: volcengine-web-search\nVersion: 1.0.0\n\nThe skill bundle is benign. The `SKILL.md` provides clear instructions for using the `web_search.py` script without any prompt injection attempts. The `web_search.py` script legitimately retrieves Volcengine API credentials from environment variables or VeFaaS IAM, and then makes a standard API call to `mercury.volcengineapi.com` for web search, passing the user query as data within a JSON payload. There is no evidence of malicious execution, data exfiltration to unauthorized endpoints, or other harmful behaviors.",
+          "checkedAt": 1779162639655,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "d71d3624b5d660abd23b55d6409ae215297ba952b4bc35c877b89de9290247d0",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d71d3624b5d660abd23b55d6409ae215297ba952b4bc35c877b89de9290247d0"
+    },
+    "slug": "volcengine-web-search",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

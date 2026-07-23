@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:image",
+      "category:C06:token:api",
+      "category:C07:token:quality",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C07"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "41e5653f87df16e52544e1ba6388d72e451fca4ad31c7410cef7d615f2977e1f",
+    "content_hash": "76ad77a9d7133a1dcf8f8121d1b8c22e53cedc1a294d0ede05b20878c82927e5",
+    "precanonical_content_hash": "3b77095731cf7df39460267f9465998d4b0eb4ec62509bffe66570bfe506cc9b",
+    "skill_md_hash": "93ce37c133688085ccbb2247d1e5628f5be9831c12b2b6ef526c3debedff6dee",
+    "version_metadata_sha256": "eea628ffda12fc4b8f924cd62ff786a3a90ad16d5e847acb6929a67e608ea38f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/abhibavishi/skills/azure-image-gen",
+    "claim_id": "373d673271ec8720dd73d2c637fe5d4228ecf153c8cffe3755d540c487871b6e",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "azure-image-gen",
+        "url": "https://clawskills.sh/skills/abhibavishi-azure-image-gen"
+      }
+    ],
+    "owner_handle": "abhibavishi",
+    "owner_id": "s17cthr513m32pdbakkn7nmdtx86sp1k",
+    "published_at": 1771233177299,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779969222902,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779969222902,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documentation and script align around Azure OpenAI DALL-E image generation, using a prompt, Azure endpoint/deployment, and API key to request images and save results.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use is user-directed through CLI flags, but batch count has no maximum and generated gallery HTML does not escape prompt text, so users should avoid untrusted prompt content and large unintended counts.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden installer, package download, remote bootstrap, or automatic setup behavior is present in the inspected artifacts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Reading Azure OpenAI environment variables and making outbound requests to the configured Azure endpoint is proportionate for this purpose, but it uses paid account access and quota.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The script reads an optional .env file from the skill directory and writes PNG, manifest.json, and index.html files to the selected output directory; no background persistence or privilege escalation is shown.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill does use environment variables, outbound Azure OpenAI network access, and local file writes, but these behaviors are documented and necessary for the stated image-generation workflow; the main gap is that permissions are not summarized in a dedicated manifest section.\n[VirusTotal code_insight] unexpected: The reported unescaped prompt insertion into index.html is a real local gallery safety issue, but it appears to be a vulnerability in purpose-aligned output generation rather than deceptive or malicious behavior.\n[VirusTotal code_insight out-dir] expected: The configurable output directory is documented and user-controlled; it can write files wherever the invoking user allows, so it should be used deliberately but is not hidden or purpose-mismatched.",
+          "guidance": "Before installing, use a least-privileged Azure OpenAI key, confirm the endpoint and deployment are yours, keep batch counts small unless intentional, choose an output directory you control, and avoid opening generated galleries from prompts containing untrusted HTML or script-like text unless the script is updated to HTML-escape prompt values.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to do what it claims: generate images through a user-configured Azure OpenAI account and save local image/gallery files.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779969193409,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: azure-image-gen\nVersion: 1.0.0\n\nThe skill bundle is designed for legitimate Azure DALL-E image generation. However, the `scripts/generate.py` file contains a Cross-Site Scripting (XSS) vulnerability in the `create_gallery_html` function, where the user-provided or API-revised prompt is embedded directly into the `index.html` without sanitization, allowing for potential script execution when the HTML file is viewed. Additionally, the `--out-dir` argument allows writing files to an arbitrary path, which could be abused for path traversal if the agent is instructed to specify a sensitive directory. These are vulnerabilities, not evidence of intentional malicious behavior by the skill itself.",
+          "checkedAt": 1779164519716,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "a499943b817fb7cdffd7e43b49606bdf84fec980906c2e5e9570e39dafb9aa5e",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a499943b817fb7cdffd7e43b49606bdf84fec980906c2e5e9570e39dafb9aa5e"
+    },
+    "slug": "azure-image-gen",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

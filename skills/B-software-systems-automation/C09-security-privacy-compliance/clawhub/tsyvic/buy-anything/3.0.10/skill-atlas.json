@@ -1,0 +1,127 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C09:token:secure",
+      "category:C11:token:product"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C11"
+    ],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8004c0bcbb232e1e2804c4574355dc0c455622ab3673c9ec3601018f16f1e7eb",
+    "content_hash": "34d991a9df3263013eff00c8d8b6bdbb960af331065e577018a9c6d3238f9b63",
+    "precanonical_content_hash": "8caf492b5c38ef92df569dd4624d23ef51e2886bd0baa28e6410b311bf50cf9c",
+    "skill_md_hash": "3994b4acfc89ce5ac90bd2c3792fce0bf7b8395dcf21a433341aa7f9523e15f1",
+    "version_metadata_sha256": "ed8a1549e584187d52f218bfe32afb9273696ea5e467b245809a105439b914b2"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tsyvic/skills/buy-anything",
+    "claim_id": "05339e58aa2fd8e84e7898a6691e25eb8c85b583825c04c3602ed54af7cd37ae",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "buy-anything",
+        "url": "https://clawskills.sh/skills/tsyvic-buy-anything"
+      },
+      {
+        "index_path": "categories/shopping-and-e-commerce.md",
+        "label": "buy-anything",
+        "url": "https://clawskills.sh/skills/tsyvic-buy-anything"
+      }
+    ],
+    "owner_handle": "tsyvic",
+    "owner_id": "s175yrqanbvbcjhqqk8m64mamd84th08",
+    "published_at": 1776872913867,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783651867368,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783651867368,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill collects shipping/contact details and a BasisTheory payment token to place Amazon and Shopify orders through Rye, which is high-impact but directly matches the stated purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Activation language is somewhat broad, but SKILL.md narrows the flow to product/store links, direct user purchase intent, API validation, prompt-injection resistance, and a fresh same-turn confirmation for every purchase, including saved-token purchases.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact is markdown-only, declares only curl as a required binary, and static scan reports no findings; no install-time scripts or hidden executable components were found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill sends product URL, buyer PII, and a payment token to Rye/BasisTheory/merchant checkout services; this is sensitive but expected for checkout and disclosed in the artifacts.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill may persist address, spending limit, and a reusable BasisTheory token in agent memory, but it says saving is opt-in, deletable, and should not be used for autonomous purchases.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad purchase activation concern is real but mitigated by the requirement for a product/store link, direct user instructions, API URL validation, and fresh user confirmation before every order.\n[SQP-2] expected: The README usage example collects PII and a token, but later sections explain the BasisTheory, Rye, and merchant data flow; clearer upfront privacy wording would help, but the behavior is not hidden.\n[MP1] expected: Memory storage of spending limit and payment token metadata is sensitive, but the artifact discloses opt-in saving, host-memory uncertainty, deletion, and the option to use a fresh token each time.\n[E1] expected: External transmission to api.rye.com is the documented checkout mechanism, not unrelated exfiltration; it remains sensitive because it can place orders.",
+          "guidance": "Install only if you trust Rye, BasisTheory, and the supported store checkout flow. Use a spending limit, review item and total before confirming, and avoid saving the payment token unless faster future checkout is worth the added memory risk.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill can place real online orders, but its payment, data-sharing, and saved-token behavior are disclosed and tied to its shopping purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783651844411,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 30,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: buy-anything\nVersion: 3.0.10\n\nThe 'buy-anything' skill facilitates e-commerce purchases through the Rye API (api.rye.com) and BasisTheory payment vault. The instructions in SKILL.md demonstrate strong security awareness, specifically directing the agent to use quoted heredocs with curl to prevent shell injection, validating checkout IDs with regex, and explicitly warning the agent to ignore indirect prompt injection attempts from external product descriptions. The skill handles PII and payment tokens in a manner consistent with its stated purpose, utilizing external PCI-compliant capture pages to ensure raw card data never enters the agent's environment.",
+          "checkedAt": 1779160134483,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "8a02431e13b3e729474673390e210c52c6e7719fc42f67834970d7ff527dd4d9",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8a02431e13b3e729474673390e210c52c6e7719fc42f67834970d7ff527dd4d9"
+    },
+    "slug": "buy-anything",
+    "source_type": "clawhub",
+    "version": "3.0.10"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

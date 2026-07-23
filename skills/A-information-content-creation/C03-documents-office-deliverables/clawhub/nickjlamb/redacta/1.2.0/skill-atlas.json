@@ -1,0 +1,126 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.175,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C03",
+    "reasons": [
+      "category:C03:token:document",
+      "category:C10:token:ai",
+      "category:C17:token:notes",
+      "category:C18:token:medical"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10",
+      "C17",
+      "C18"
+    ],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e36099b3fa46e895f5349eeb615ce619b26318db010bd837a324fcc88437253b",
+    "content_hash": "ce8b92986730fe4c332a3e9e5b398f35585640b5a13855263387cb97cfbc61c1",
+    "precanonical_content_hash": "f5520437e854a02e893374e9c5eeebe107b6c791872b196a34cebd070d4c779c",
+    "skill_md_hash": "ee7f40d309d89197bd169e8455770b95543d210913998a6b933fb11ee6d51bb4",
+    "version_metadata_sha256": "1679f3e0f0d28668e23cce94e7b2320398aea08265601457aae89ce59ffe6bf0"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/nickjlamb/skills/redacta",
+    "claim_id": "5534fd4f980d5392de356904d0cea4b4e29b3b1c0112256781f9157f89f8cce0",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "redacta",
+        "url": "https://clawskills.sh/skills/nickjlamb-redacta"
+      }
+    ],
+    "owner_handle": "nickjlamb",
+    "owner_id": "s177qxep6y2q44a1e12vte74qd87fv4y",
+    "published_at": 1781276281090,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1781277456621,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1781277456621,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill's redaction, Safe Harbor mode, self-check, and re-identification capabilities are coherent with its stated purpose of pseudonymising clinical text for later processing or sharing.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Activation is described for explicit redact/de-identify requests, and re-identification is documented, but users should treat any re-identification request as intentionally restoring PHI/PII.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a normal skill clone or documented package/MCP usage; inspected package metadata showed no install-time execution hooks beyond build/test/publish scripts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Processing is local and no network behavior was found, but the workflow asks the agent to write user clinical text to a temp file and process it in-session, which is sensitive but purpose-aligned.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background persistence, privilege escalation, credential access, or broad local indexing was found; token maps and temp input files may persist locally if the user or agent saves them.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-4] expected: The Python package documentation is narrower because it describes the deterministic package layer, while the skill and MCP artifacts separately describe the agent/MCP reasoning layer; this is a disclosed separation rather than hidden capability.\n[SQP-1] expected: The README's automatic trigger is tied to user requests to redact or de-identify clinical text; I found no artifact evidence of autonomous processing outside that user-directed context.\n[SQP-2] expected: The reversible token map is real and sensitive, but it is repeatedly disclosed as the key for re-identification and is central to the skill's round-trip workflow; the risk is handling discipline, not hidden exfiltration.\n[SQP-3] expected: Re-identification restores original identifiers by design and runs locally; artifacts warn that the token map should be handled like the original data, though deployments should still require explicit user intent before using it.",
+          "guidance": "Install only where it is acceptable for the assistant to process the clinical text locally. Review outputs before sharing, do not share the token_map with redacted text unless re-identification is intended, and delete or protect temp files and token maps because they contain or can restore PHI/PII.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Redacta behaves like a local medical redaction skill, with the main caution that reversible token maps contain the original sensitive identifiers.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1781277395963,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 78,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": null,
+          "checkedAt": 1781276507505,
+          "normalizedStatus": "clean",
+          "source": "engines",
+          "status": "clean",
+          "verdict": null
+        }
+      },
+      "sha256hash": "2d249e1c0cb8da7e4109e0d22ef3de2e7ad3b5ebd45b2390a4d9407f5e0f71f1",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/2d249e1c0cb8da7e4109e0d22ef3de2e7ad3b5ebd45b2390a4d9407f5e0f71f1"
+    },
+    "slug": "redacta",
+    "source_type": "clawhub",
+    "version": "1.2.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

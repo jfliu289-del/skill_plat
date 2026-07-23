@@ -1,0 +1,133 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:audio",
+      "category:C06:token:api",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "acefee11aa8913bc5aa4c81d8c34be090b08abb407449ba02b07fd3883cbc16a",
+    "content_hash": "f8eecd343bdc9ddfec2496cc23f15f341551f2f1804c6d9f11352faeeb69e0ab",
+    "precanonical_content_hash": "ca249259465c3498133aa3d39dc2b1d125e6a2433fe5ae18bbab71200739da83",
+    "skill_md_hash": "347d94a45b6f26cce03e53c47870a9b34d65186bae1ff1220b4ee26ee86673b9",
+    "version_metadata_sha256": "222f30ec90302dec1b2da5dda84e2882f6cee51c26ecbec467ebefb9da69f60f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/guoqiao/skills/mlx-audio-server",
+    "claim_id": "f44de2e6201692489c788c0feaaaeba253a84d82e39c998298e87d00e5a14d91",
+    "index_entries": [
+      {
+        "index_path": "categories/media-and-streaming.md",
+        "label": "mlx-audio-server",
+        "url": "https://clawskills.sh/skills/guoqiao-mlx-audio-server"
+      }
+    ],
+    "owner_handle": "guoqiao",
+    "owner_id": "s17ffveb731pj7ry6ezhyn9hts88598a",
+    "published_at": 1770693372987,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783655396838,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783655396838,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The files consistently describe a local MLX-based STT/TTS OpenAI-compatible API server, and the helper scripts only send user-provided audio or text to a localhost API endpoint.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The runtime instructions are direct install and usage commands; there are no hidden role changes, prompt overrides, credential harvesting instructions, or unrelated agent behaviors.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The installer updates Homebrew, installs ffmpeg and jq if missing, installs mlx-audio-server from the external guoqiao/tap Homebrew tap, and verifies the local endpoint. This is disclosed and purpose-aligned, but users must trust that tap.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The macOS, Apple Silicon, and Homebrew requirements fit the MLX audio-server purpose. The README also shows unauthenticated use by IP address, so users should avoid exposing the service beyond trusted local access.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill starts or restarts a Homebrew LaunchAgent service for mlx-audio-server. Persistent background execution is central to the stated 24x7 server purpose and is disclosed, but it remains an ongoing local service until stopped.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The shell-based install path is real, but it is the documented setup mechanism for a Homebrew-backed local server and the skill metadata does disclose a Homebrew requirement.\n[SQP-2] expected: The persistent LaunchAgent/local HTTP service concern is valid context, but the 24x7 server purpose, service start command, and localhost verification are visible in the artifacts rather than hidden.\n[SQP-2] expected: The install script performs package installation and service restart without an interactive confirmation, which users should notice, but these actions are coherent with installing a local always-on API server.\n[VirusTotal code_insight] expected: The external Homebrew tap and LaunchAgent persistence are meaningful supply-chain and persistence notes, but VirusTotal telemetry is not backed by artifact evidence of deception, exfiltration, or destructive behavior.",
+          "guidance": "Install only if you want a persistent local audio API server on your Mac. Review or trust the guoqiao Homebrew tap before installing, keep the service bound to localhost or protected by firewall rules, and stop the Homebrew service when you no longer need it.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it installs and uses a local Mac audio API server, with notable but disclosed background-service and Homebrew tap risks.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783655377839,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 32,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: mlx-audio-server\nVersion: 0.2.2\n\nThe skill is classified as suspicious primarily due to its reliance on an external Homebrew formula from a custom tap (`guoqiao/tap/mlx-audio-server`) in `install.sh`. This introduces a supply chain risk, as the content of this external formula is not part of the analyzed bundle and could potentially be altered or malicious. Additionally, the `install.sh` script establishes persistence by setting up `mlx-audio-server` as a LaunchAgent service on macOS, a high-risk capability, even though it aligns with the stated purpose of running a local 24x7 API server. While other scripts (`run_stt.sh`, `run_tts.sh`) only make local network calls to `localhost:8899`, the external dependency and persistence mechanism elevate the risk beyond benign.",
+          "checkedAt": 1779161222068,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "85818a667413158f725db1d2668c73b9c3b70bc46d5f83380c30bac88305262c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/85818a667413158f725db1d2668c73b9c3b70bc46d5f83380c30bac88305262c"
+    },
+    "slug": "mlx-audio-server",
+    "source_type": "clawhub",
+    "version": "0.2.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

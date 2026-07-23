@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C02:token:edit",
+      "category:C07:token:test",
+      "category:C09:token:secure",
+      "category:C09:token:security",
+      "cross-tag:security",
+      "cross-tag:testing",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C07"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "secure",
+      "test",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "692cd7736b16da26cb3170913164f8952e243a95714602b9e2d2c0e5b7c966d4",
+    "content_hash": "378e22a90c8742b7c31718c2045f1e7753a2399fb4bd9a0dc10732c3f2f26be3",
+    "precanonical_content_hash": "3a64b444c9adad9f1b1b31c2eefd1c6aa8542352917d01978b441a3230b48356",
+    "skill_md_hash": "2bfbf69419e5860fcfbeba31b41777c0f00a4d255abe64a0b989efee9c0b9c8d",
+    "version_metadata_sha256": "2956e7176539858a72dd772b562832a2d0b373fbde92fbff1ba7bf5f7ce0b1db"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/topitip/skills/imap-idle",
+    "claim_id": "fec62d6b192a72b721232cdefcf1e28d56b8895a676395605b357eaa90b99a17",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "imap-idle",
+        "url": "https://clawskills.sh/skills/topitip-imap-idle"
+      }
+    ],
+    "owner_handle": "topitip",
+    "owner_id": "s17anw4mryyvr58nmd8zp5kcwx885p66",
+    "published_at": 1770801417742,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783657055626,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783657055626,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "IMAP access, long-running IDLE monitoring, email header/body-preview extraction, and webhook notification all fit the stated event-driven email monitoring purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Email-derived sender, subject, and preview text can reach OpenClaw through the webhook, so downstream agents should treat that content as untrusted input.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation and setup are user-directed; the docs disclose pip dependencies, config creation under ~/.openclaw, and optional systemd setup, though one security-doc claim about not modifying files outside the skill directory is too broad.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Mailbox credentials and webhook tokens are proportionate to the function; keyring is recommended, but plaintext config fallback remains available and requires careful file permissions.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The persistent listener and optional sudo-based systemd service are disclosed and purpose-aligned, with no evidence of stealth persistence or privilege escalation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill does not declare granular permissions in metadata, but its docs and code visibly require network access, local config/log files, and optional service persistence for the advertised mail listener.\n[SDI-1] expected: Forwarding sender, subject, and body preview to the configured webhook is sensitive, but it is core to this notification skill and no unauthorized destination or hidden exfiltration was found.\n[SQP-2] expected: Plaintext password examples, plaintext fallback, HTTP localhost examples, and systemd commands are real operational risks, but they are disclosed and accompanied by keyring/chmod/security guidance.\n[PE3] expected: Credential handling is necessary for IMAP; the keyring migration and rollback examples should be used carefully, but they do not show credential theft or privilege escalation.",
+          "guidance": "Install only if you trust the configured webhook and are comfortable letting the skill monitor the selected mailboxes. Prefer keyring or a secrets manager, run chmod 600 on any config file containing passwords or tokens, avoid remote non-HTTPS webhooks, and remember that email previews may be passed into OpenClaw automation.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a legitimate email-monitoring skill, but it handles mailbox credentials and sends email previews to a webhook the user configures.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783657018458,
+          "issueCount": 12,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 89,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: imap-idle\nVersion: 1.4.0\n\nThe OpenClaw skill 'imap-idle' is designed for event-driven email monitoring using IMAP IDLE and OpenClaw webhooks. The code (`scripts/listener.py`, `scripts/setup.py`) and documentation (`SKILL.md`, `README.md`, `SECURITY.md`) align with its stated purpose. It handles IMAP credentials, prioritizing secure storage via `keyring` and defaulting to a local OpenClaw webhook. The `SECURITY.md` is exceptionally thorough, transparently addressing potential security concerns (e.g., VirusTotal flags) and providing best practices for deployment and credential management. While `scripts/listener_old.py` contains hardcoded, personalized values and Russian text, `CHANGELOG.md` confirms these were removed in the current `1.4.0` version, indicating a cleanup of prior iterations rather than malicious intent. No evidence of data exfiltration to unauthorized endpoints, backdoors, obfuscation, or prompt injection against the AI agent was found.",
+          "checkedAt": 1779161829821,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "893b3e2e92b74bfa536c1f9c2c87d2d8b42a899eb018d2278bd678e2984d2912",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/893b3e2e92b74bfa536c1f9c2c87d2d8b42a899eb018d2278bd678e2984d2912"
+    },
+    "slug": "imap-idle",
+    "source_type": "clawhub",
+    "version": "1.4.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

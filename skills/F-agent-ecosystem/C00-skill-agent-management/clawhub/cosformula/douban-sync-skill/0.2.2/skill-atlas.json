@@ -1,0 +1,137 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:data",
+      "category:C17:token:obsidian",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C17"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "f89097c74f17b2e7f5e2426ccd697b9a3971c41da2f031128fd3a785d79470a9",
+    "content_hash": "90fef2ea5f85cce19061fb11e5319165b26e40aae9d0f8484497678be74e29ad",
+    "precanonical_content_hash": "58e5a30d8ab38bb418e8df6998bef1c757ff62490e6af9b75c088d9ea89a550c",
+    "skill_md_hash": "e7ed6f35532631868423627615a3dcea4310517a7eebfc144223151193a0d99e",
+    "version_metadata_sha256": "96171b3bd6ec3b70b51b02c20de788aaa5bd5c02eba7d6ff92b5ffd005da3516"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/cosformula/skills/douban-sync-skill",
+    "claim_id": "3a4f962e4dc40a8d54daf495220a28e3a7bf9607e520969d16ac59ba5e8c2a61",
+    "index_entries": [
+      {
+        "index_path": "categories/data-and-analytics.md",
+        "label": "douban-sync-skill",
+        "url": "https://clawskills.sh/skills/cosformula-douban-sync-skill"
+      }
+    ],
+    "owner_handle": "cosformula",
+    "owner_id": "s1779ws25xpwzg5wt17m8htzt1884ce9",
+    "published_at": 1771136322332,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779973236087,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779973236087,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifacts: the scripts fetch Douban collection or RSS pages, extract titles, URLs, dates, ratings, statuses, and comments, and save them as local CSV files.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The runtime instructions are scoped to Douban export and sync, disclose the logged-in browser mode, RSS mode, DOUBAN_USER, output directory, and optional daily cron use; a clearer privacy warning would improve disclosure.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no hidden installer, package mutation, or automatic setup mechanism. The browser scraper visibly imports puppeteer-core, so users may need to provide that dependency for browser mode.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "DOUBAN_USER is required and validated before use in Douban URLs. Browser mode connects to a user-selected/debug browser endpoint and can use an existing logged-in Douban session, which is expected for full export but should be used deliberately.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill writes CSV files and an RSS state file under the configured output directory, defaulting to ~/douban-sync/{user}; it recommends cron but does not install persistence itself.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The privacy concern is valid user guidance because Douban history, ratings, and comments are personal data, but storing that data locally is the central advertised function and the output path/fields are disclosed.\n[suspicious.dynamic_code_execution] expected: The flagged new Function usage wraps local hard-coded DOM extraction code for page.evaluate in the browser scraper; it is not loading code from the network or user input.\n[suspicious.env_credential_access] expected: The environment variable is a Douban user identifier used to construct Douban URLs and local output paths, with character validation; it is not treated as a secret or sent to unrelated services.\n[VirusTotal telemetry] expected: The supplied telemetry is clean and consistent with the artifact review, but it was not used as the sole basis for the verdict.",
+          "guidance": "Install this only if you want your Douban media history saved on this machine. Treat the generated CSV and state files as personal data, keep the output directory private, avoid cloud-shared/public folders unless protected, use browser mode only with a Douban session you are comfortable exposing to the scraper, and enable cron only if you intentionally want ongoing automatic sync.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it exports a user's Douban collection history to local CSV files, with no evidence of hidden exfiltration or unrelated behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779973190501,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: douban-sync-skill\nVersion: 0.2.2\n\nThe OpenClaw skill bundle is classified as benign. All scripts (`douban-browser-scraper.mjs`, `douban-extract.mjs`, `douban-rss-sync.mjs`, `douban-scraper.mjs`, `migrate-md-to-csv.mjs`) align with the stated purpose of exporting and syncing Douban collections to local CSV files. File system operations are confined to the user's home directory (`~/douban-sync`), and network requests are exclusively directed to `douban.com` or a local Puppeteer instance. Input validation for `DOUBAN_USER` is present, and CSV escaping is used to mitigate potential CSV injection. The `SKILL.md` instructions are functional and do not contain any prompt injection attempts or directives for unauthorized actions. There is no evidence of data exfiltration, backdoor installation, or other malicious intent.",
+          "checkedAt": 1779163673313,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "ed7ded09659e04f38bc146c702031e7c2bfdb6f74a1c6564260dafaf8fb4601c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ed7ded09659e04f38bc146c702031e7c2bfdb6f74a1c6564260dafaf8fb4601c"
+    },
+    "slug": "douban-sync-skill",
+    "source_type": "clawhub",
+    "version": "0.2.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

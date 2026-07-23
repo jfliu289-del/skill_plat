@@ -1,0 +1,154 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "creative",
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C05:token:image",
+      "category:C05:token:video",
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "category:C10:token:model",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C06",
+      "C09",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a3b44e23d45019ea9a48d265fc795251888ee5cb5260e97d9bb0a4e27e929654",
+    "content_hash": "4ff593a391810e8ffb77974c1711aaa6129ff9bb86949c22818b8f91d3f8f548",
+    "precanonical_content_hash": "b65b1a7f8354fe593744c99815dc3e0aec0f8461dee70ec81abc750c2bdf0757",
+    "skill_md_hash": "a69451dceeab8536687c32a33bc44a3f736113e381465e530cbebf4521fc3307",
+    "version_metadata_sha256": "b9c203d23c617939db4ecfd723839d70ac25d708448934b39a133327e6b77110"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/lilei0311/skills/siliconflow-video-gen",
+    "claim_id": "3299762fe451f65398473f2672eeb4ab107fed02d86ad1cb26cc336079b08714",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "siliconflow-video-gen",
+        "url": "https://clawskills.sh/skills/lilei0311-siliconflow-video-gen"
+      }
+    ],
+    "owner_handle": "lilei0311",
+    "owner_id": "s171k5jax63a1zk2r5by9a2zes885j88",
+    "published_at": 1771156156894,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968159256,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968159256,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The network call, prompt/image_url handling, and SiliconFlow API credential use are coherent with a video-generation skill.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill uses a local script and credentials from expected OpenClaw locations; users should understand this before running it, but the behavior is purpose-aligned.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No evidence was provided of unusual installation behavior, package persistence, obfuscation, or install-time execution beyond the documented skill files.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Reading SILICONFLOW_API_KEY or the OpenClaw config is sensitive, but proportionate for calling the SiliconFlow API and not shown to be used for unrelated access.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background worker, privilege escalation, durable persistence, destructive action, or credential exfiltration path beyond the SiliconFlow endpoint was evidenced.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The skill’s use of environment/config credentials and command execution is expected for an API-backed generation tool; the lack of a stricter permission declaration is a disclosure improvement, not enough for Review by itself.\n[SDI-2] expected: Fallback to ~/.openclaw/openclaw.json expands credential discovery, but it targets the expected SiliconFlow key source and remains aligned with OpenClaw configuration conventions.\n[SQP-2] expected: The API key is sent to SiliconFlow to submit a video request, which is necessary for the stated function; no alternate endpoint or unrelated credential use was evidenced.",
+          "guidance": "Install only if you intend to let this skill send prompts, image URLs, and your SiliconFlow API key to SiliconFlow. Prefer a dedicated SiliconFlow key with limited billing exposure, and review your OpenClaw config so the skill only has access to the credential you expect.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to do what it advertises: generate videos through SiliconFlow using a user-provided SiliconFlow API key.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968127485,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: siliconflow-video-gen\nVersion: 1.0.1\n\nThe skill bundle is designed to generate videos using the SiliconFlow API. It reads the API key from expected locations (`SILICONFLOW_API_KEY` environment variable or `~/.openclaw/openclaw.json`) and makes a network request to the hardcoded `https://api.siliconflow.cn/v1/video/submit` endpoint using `curl`. The `prompt` and `image_url` inputs are JSON-encoded before being passed to `curl`, mitigating direct shell injection risks. There is no evidence of data exfiltration to unauthorized endpoints, persistence mechanisms, obfuscation, or malicious prompt injection attempts in `SKILL.md` or `README.md`. The behavior aligns with the stated purpose.",
+          "checkedAt": 1779164240558,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "f91af132ff237c697bd1c1ec1212da4e4b3912107100ef81fbdc20d540778a51",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/f91af132ff237c697bd1c1ec1212da4e4b3912107100ef81fbdc20d540778a51"
+    },
+    "slug": "siliconflow-video-gen",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

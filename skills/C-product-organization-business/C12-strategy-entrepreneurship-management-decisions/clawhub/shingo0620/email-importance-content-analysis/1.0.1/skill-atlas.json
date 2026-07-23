@@ -1,0 +1,129 @@
+{
+  "classification": {
+    "artifacts": [
+      "website"
+    ],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C12",
+    "reasons": [
+      "category:C12:token:decision",
+      "category:C19:token:click",
+      "cross-tag:browser-automation"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C19"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "automate"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e914547b3968bc059392a1cd73a5205f1fa5997418b5444978e08e25025ed44b",
+    "content_hash": "e108877cf657d727a90bc90f92625654e1edcbdcc80ad491100f17b00ff2fb01",
+    "precanonical_content_hash": "2ace9a97b68bd00a1b38abcd9a69cd4b249d5cc749144ed719816f3bb21b756b",
+    "skill_md_hash": "da956cbd2044804961371d2419eb2befac4cbec2ff7bae31569a8a9966f8cd5d",
+    "version_metadata_sha256": "b8c77fbc5f7cf53cdc7488b281c12033daea7ffff5e0971f7cdf8a70ff94531f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/shingo0620/skills/email-importance-content-analysis",
+    "claim_id": "db4ed3f68a8102e96b1ccfb4189b89406d4c79dd460e102f1d4d37cd168b9689",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "email-importance-content-analysis",
+        "url": "https://clawskills.sh/skills/shingo0620-email-importance-content-analysis"
+      }
+    ],
+    "owner_handle": "shingo0620",
+    "owner_id": "s178q54pbwsz4x4fdpywn1tv3n8845yh",
+    "published_at": 1770828543844,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971015468,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971015468,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill’s purpose is coherent: judging email importance and phishing risk through subject triage, header checks, link/attachment review, and safe verification guidance. It does use sender information as a weak first-pass signal, which slightly softens the content-focused framing but is disclosed and caveated.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions tell the agent not to click email links, to treat sender identity as untrusted, and to verify sensitive actions out-of-band. The fast-drop sender heuristic could misclassify some mail, but it is visible in the workflow and not paired with hidden or high-impact actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains only markdown files, with no executable scripts, install hooks, package commands, or hidden setup behavior found in the artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill may inspect raw email headers, body content, links, attachments, or a specific Gmail message via `gog gmail get`; that is sensitive email access but proportionate to user-directed email security triage.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background workers, mailbox mutation, credential storage, sending, deletion, forwarding, or privilege escalation is described.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VT code_insight] expected: The cited `gog gmail get` usage is an optional way to retrieve email data for header verification. The artifact does not show unsafe command construction, automatic execution, exfiltration, or account mutation.\n[SDI-4] expected: The sender-triage concern is partly supported by the changelog and skill text, but the artifact explicitly labels sender as weak and spoofable and frames it as a visible first-pass triage signal rather than a hidden trust basis.\n[SDI-1] expected: The content-focused metadata and sender-based first pass are somewhat in tension, but the workflow discloses the sender signal and keeps the core security posture centered on technical verification, content risk, and safe out-of-band checks.\n[staticScan] expected: Static scan reported no findings, consistent with manual inspection of an instruction-only markdown skill.",
+          "guidance": "Install this only if you are comfortable letting the agent inspect the specific emails you ask it to triage. Prefer providing copied message text and headers yourself, and only authorize Gmail access for the particular message being reviewed. Treat its sender-based fast-drop advice as a convenience heuristic, not as proof that an email is safe or unimportant.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is an instruction-only email triage skill with disclosed, purpose-aligned email/header review and no install-time or persistent behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779970993537,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: email-importance-content-analysis\nVersion: 1.0.1\n\nThe skill is designed for email security analysis, which is a benign purpose. However, the `SKILL.md` document instructs the agent to use `gog gmail get` for technical verification. This implies the agent may execute shell commands, which introduces a potential vulnerability for shell injection if the agent's execution environment is not properly sandboxed or if inputs (e.g., from email content) are not sanitized before command execution. While the intent is not malicious, this capability is a high-risk behavior.",
+          "checkedAt": 1779163225618,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "85c8414875731f25e035a51973dbdefdfec7eb1cddc6e28e66e5424397043ecc",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/85c8414875731f25e035a51973dbdefdfec7eb1cddc6e28e66e5424397043ecc"
+    },
+    "slug": "email-importance-content-analysis",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

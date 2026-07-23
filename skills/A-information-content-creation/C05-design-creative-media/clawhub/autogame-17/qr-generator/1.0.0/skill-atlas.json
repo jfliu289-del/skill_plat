@@ -1,0 +1,137 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:image",
+      "category:C06:token:code",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "80d317704b6d53db06df9e90aadbaa5d111586485df4ebd777be72b37ed25cc0",
+    "content_hash": "1e3480c8c793e1dea03a84b9862a29ae173e71efd26b68782358062bbe5be38d",
+    "precanonical_content_hash": "eec16def9d5e8eb41ab15aea8a25bf97fb54557328debc885263aeb77aa8b38c",
+    "skill_md_hash": "37e5a6e5dc548ee260f5d0ec28e1ed8aeddb2d5a826787f4a604e83d5906b15e",
+    "version_metadata_sha256": "4ebf1812e4422e4bff573eaf291ae320e3548bc0910650fcf9749c6d97ab8dd4"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/autogame-17/skills/qr-generator",
+    "claim_id": "d24e70ac85eb9497dabc6f0c244ccbc037a26324263839f6e7ad9de47949308b",
+    "index_entries": [
+      {
+        "index_path": "categories/pdf-and-documents.md",
+        "label": "qr-generator",
+        "url": "https://clawskills.sh/skills/autogame-17-qr-generator"
+      }
+    ],
+    "owner_handle": "autogame-17",
+    "owner_id": "s174qjf2384d46r16zkn04qam183hbm3",
+    "published_at": 1771340732540,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972719520,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972719520,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose is to generate QR codes from text or URLs, and the code implements that with commander and qrcode without unrelated capabilities.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Instructions are narrow, but the Feishu sharing example could lead users to share sensitive QR payloads unless they treat the encoded content as potentially confidential.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package uses standard npm dependencies pinned in package-lock.json and defines no install-time scripts; installation still fetches third-party npm packages.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact does not request credentials, read environment secrets, access profiles, or make network calls; Feishu use is only a separate example command outside this skill.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script writes QR output to the user-supplied path when requested, which is expected for this tool, but users should avoid running it with elevated privileges or untrusted output paths.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal suspicious telemetry] expected: The reported arbitrary output-path write is real in the sense that --output is passed to file-writing APIs, but this is the disclosed core function of a CLI file generator and requires user-controlled command arguments; it is a usage caution rather than evidence of hidden or malicious behavior.\n[SQP-2] expected: The Feishu example and WiFi credential use case are disclosed and purpose-aligned, but the documentation would benefit from warning that QR payloads may contain secrets or internal links.",
+          "guidance": "Install is acceptable for normal use. Generate files in a working or temporary directory, do not encode passwords, tokens, private login links, or confidential internal URLs unless that sharing is approved, and review any separate Feishu sender skill before using the sharing example.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward QR code generator, with the main caution that QR contents and saved image files can expose sensitive data if users choose to encode or share it.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972689321,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: qr-generator\nVersion: 1.0.0\n\nThe skill's primary function is to generate QR codes, which is benign. However, the `index.js` script directly uses the user-provided `--output` path for file writing (`fs.writeFileSync`, `QRCode.toFile`) without sanitization. This creates a path traversal vulnerability, allowing an attacker to write QR code files to arbitrary locations on the filesystem (e.g., `../../../../tmp/malicious.png`) if they can control the input, which is a significant security flaw. There is no evidence of intentional malicious behavior like data exfiltration or remote code execution built into the skill itself, classifying it as suspicious due to the vulnerability.",
+          "checkedAt": 1775880495719,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "80d317704b6d53db06df9e90aadbaa5d111586485df4ebd777be72b37ed25cc0",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/80d317704b6d53db06df9e90aadbaa5d111586485df4ebd777be72b37ed25cc0"
+    },
+    "slug": "qr-generator",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

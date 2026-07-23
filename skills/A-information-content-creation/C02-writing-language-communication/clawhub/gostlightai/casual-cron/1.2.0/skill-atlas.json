@@ -1,0 +1,127 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C02:token:language",
+      "category:C17:token:schedule"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e2828d801ee4a0936745c1b860a31173d31db9df0ad51cbaeba651b235560f6b",
+    "content_hash": "bff83ac9599ace082fdf5d448e4aefc67acd2254b38105ae6123b264ff3e085d",
+    "precanonical_content_hash": "2e867cd908b6488278ae1b030e001b487ac34d4b1f9bff960ee2dcb99afc8b2d",
+    "skill_md_hash": "44400613b6b90df0676c2b9f066db9d358a9d4f6d7f54b584e014a2eb7a732eb",
+    "version_metadata_sha256": "07c9fbe154fa6855fc92c626a1e4739a866bc385ea5848cf26da7814817bce95"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/gostlightai/skills/casual-cron",
+    "claim_id": "af11ba23da1716a5e406955772de4e7a38ffa0d735e7c246ed20b926e23cc363",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "casual-cron",
+        "url": "https://clawskills.sh/skills/gostlightai-casual-cron"
+      },
+      {
+        "index_path": "categories/self-hosted-and-automation.md",
+        "label": "casual-cron",
+        "url": "https://clawskills.sh/skills/gostlightai-casual-cron"
+      }
+    ],
+    "owner_handle": "gostlightai",
+    "owner_id": "s172g9xhvf9935ycqf0gaeh7gs83sav2",
+    "published_at": 1770821435769,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783657240817,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783657240817,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts match the stated purpose: parsing reminder requests and generating OpenClaw cron commands that can deliver messages through configured channels. I found no unrelated data collection, credential access, exfiltration, destructive behavior, or hidden network calls.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The trigger scope is broad for natural-language reminders, and the skill hardcodes America/New_York for clock-time scheduling, but both delivery and the timezone default are documented and the runtime instructions require user confirmation before finalizing.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden installer, package install, or automatic execution mechanism is present. The bundle includes both root files and a nested skills/casual-cron copy with slightly different older content, which may confuse loaders or reviewers but does not add malicious behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The declared python3, openclaw, and CRON_DEFAULT_CHANNEL requirements are proportionate to building cron commands. The script reads only CRON_DEFAULT_CHANNEL and does not access local profiles, secrets, broad files, or remote APIs directly.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "Recurring cron jobs and outbound delivery are intentional capabilities of the skill. One-shot jobs include delete-after-run, while recurring jobs persist until removed by the user.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-3] expected: The America/New_York timezone behavior is real and artifact-backed in both documentation and code, but it is disclosed and coherent with scheduler behavior rather than hidden or deceptive.\n[SQP-3] expected: The documented fixed default timezone should be checked by users outside that timezone; this is a scheduling correctness risk, not evidence of malicious intent.\n[SQP-2] expected: The script always builds commands with delivery flags and a destination, but message delivery is central to the skill, explicitly documented in examples, and the instructions call for confirmation before finalizing.",
+          "guidance": "Install only if you want the agent to create OpenClaw cron jobs that can send messages to external channels. Before approving any job, verify the timezone, recipient or channel, message text, recurrence, and whether it is a one-shot job that will delete itself after running.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed reminder scheduler that creates OpenClaw cron jobs, with practical cautions around timezone, recipients, and recurring delivery.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783657201240,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 23,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: casual-cron\nVersion: 1.2.0\n\nThe OpenClaw AgentSkills skill bundle 'casual-cron' is classified as benign. The `cron_builder.py` script, which is central to the skill, robustly prevents shell injection by utilizing `shlex.quote()` for all user-controlled arguments passed to the `openclaw cron add` command (e.g., `--name`, `--message`, `--channel`, `--to`). This critical security measure is explicitly verified by comprehensive unit tests in `test_cron_builder.py`. Furthermore, the `SKILL.md` includes 'Cron Run Guard (Hard Rules)' which are defensive prompt-injection instructions for the AI agent, limiting its actions when running inside a cron job. The `_parse_message` function in `cron_builder.py` also sanitizes or replaces user-provided messages with predefined content for specific keywords, further reducing the risk of malicious content being scheduled. The skill's functionality is aligned with its stated purpose of creating scheduled reminders within the OpenClaw framework, using the `--session isolated` flag for enhanced security.",
+          "checkedAt": 1779161878311,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "74b326a65bdf11b339847f9c6ed4b8590adfb1504e4194e91dcc490a43a6015b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/74b326a65bdf11b339847f9c6ed4b8590adfb1504e4194e91dcc490a43a6015b"
+    },
+    "slug": "casual-cron",
+    "source_type": "clawhub",
+    "version": "1.2.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

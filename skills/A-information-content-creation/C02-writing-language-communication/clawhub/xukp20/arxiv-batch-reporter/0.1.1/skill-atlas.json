@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "document",
+      "paper"
+    ],
+    "audiences": [
+      "researcher"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "science"
+    ],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C02:token:language",
+      "category:C10:token:model",
+      "category:C15:token:paper",
+      "cross-tag:academic-research",
+      "cross-tag:agent-management",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10",
+      "C15"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "research",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "24dd4e00a41dbd819b244e7dd3d802f81420ee4e921027cd6a68ed59ac05856d",
+    "content_hash": "586ff510d83a4aa94fd1dfb35ade617380bdd25a9cec640e18c6e06e31169ffa",
+    "precanonical_content_hash": "a02cd729f086800965b292fbf1aeeb0ada62a04c6584d07fb4a95fdf513af7c8",
+    "skill_md_hash": "bbc8d2e3410d8e0207a5abc296b38bbbbda5ba41d82f66c188f720a05af85e63",
+    "version_metadata_sha256": "d8302b9893ab963282c2acaaf82d6e68c2a185d0f4d77ef32cdf7ec5d9e061ec"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/xukp20/skills/arxiv-batch-reporter",
+    "claim_id": "e64d77b25e34dde39122343e87326972d6b8992a6f50b82f3c273afd4bb30e10",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "arxiv-batch-reporter",
+        "url": "https://clawskills.sh/skills/xukp20-arxiv-batch-reporter"
+      }
+    ],
+    "owner_handle": "xukp20",
+    "owner_id": "s17d0z1j1dfyak54h374wncavs843hep",
+    "published_at": 1771071343764,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779966797013,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779966797013,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts match the stated purpose: collect per-paper metadata and summary.md content, ask the model to draft a report template, then render a final markdown report with brief conclusions and arXiv URLs.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The bundle intentionally mixes model task instructions with full paper summaries and task metadata, so untrusted summary text could influence the downstream report-generation step.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill includes disclosed local Python scripts and no package installation, remote download, credential setup, or hidden installer behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "File access is proportionate to the workflow, reading a user-supplied run directory and writing markdown outputs; users should keep base-dir, template-file, and output-file paths scoped to the intended workspace.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to expected generated report files, with no background worker, privilege escalation, credential access, network call, or destructive behavior found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SSD-1] expected: The prompt-injection concern is artifact-backed because full summary.md and task_meta.json content are embedded into summaries_bundle.md for model use, but this is the core disclosed data flow for a report generator and does not show hidden exfiltration, credential use, or unsafe automation.\n[VirusTotal code_insight] expected: The VT telemetry flags the same prompt-injection risk; with zero engine detections and coherent local-report behavior, it is useful guidance rather than a reason to place the skill in Review.\n[staticScan] expected: The static scan reported clean, and manual inspection found only standard library file parsing and markdown rendering consistent with the skill purpose.",
+          "guidance": "Install only if you are comfortable letting the model read the summaries in your chosen run directory. Review generated summaries_bundle.md before using it with a model when papers, metadata, or summaries came from untrusted sources, and keep custom paths inside the intended report directory.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill coherently builds local arXiv report files from user-selected summary files, with a prompt-injection caveat that users should manage when summaries are untrusted.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779966750481,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: arxiv-batch-reporter\nVersion: 0.1.1\n\nThe skill is vulnerable to prompt injection. The `scripts/collect_summaries_bundle.py` script reads content from user-controlled `summary.md` files and `task_meta.json`, then directly embeds this content into `summaries_bundle.md`. According to `SKILL.md`, this bundle is subsequently fed to the AI agent for generating the report template. This allows an attacker to inject malicious instructions into the AI agent by crafting the content of `summary.md` or `task_meta.json` files within the `--base-dir`.",
+          "checkedAt": 1779163962329,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "1a497c1c6e127126f63a11dce28b022068b1d30038c75a83e9af3a2fc8004504",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1a497c1c6e127126f63a11dce28b022068b1d30038c75a83e9af3a2fc8004504"
+    },
+    "slug": "arxiv-batch-reporter",
+    "source_type": "clawhub",
+    "version": "0.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

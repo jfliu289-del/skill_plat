@@ -1,0 +1,153 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document",
+      "website"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:prompt",
+      "category:C02:token:writing",
+      "category:C06:token:code",
+      "category:C06:token:coding",
+      "category:C07:token:review",
+      "category:C11:token:project",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:review",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C06",
+      "C07",
+      "C11"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "build",
+      "manage",
+      "review",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "0ce71e1ba9385460ddb0bb00b42f41d70a94b34e862312a7cd65cfad4e54cc93",
+    "content_hash": "9a76d21cba6e0aea03e940fb1651c10b38679d6700dabbeafeb6f8d186b8aa21",
+    "precanonical_content_hash": "ef1cfa6f366efc54cec1c7edf5525f3d55c777bbdeeab41835eaa177bf860bad",
+    "skill_md_hash": "2fc2ff58c7f76a8c6b4fdd2bb1862990a88320d8832f80502ea2a29ccd5dd56f",
+    "version_metadata_sha256": "d89d65ed8ad47852698e5746ae8d1b93eeb5b057ce88698bb2879c37aba6e0ca"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/daxingplay/skills/cursor-cli-headless",
+    "claim_id": "b564d5d00de60d7bfab1a6d7676a902107e0db19198d783028e0144ff1555993",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "cursor-cli-headless",
+        "url": "https://clawskills.sh/skills/daxingplay-cursor-cli-headless"
+      }
+    ],
+    "owner_handle": "daxingplay",
+    "owner_id": "s17c8np6jtmbs0fq3753vs60s186vc9w",
+    "published_at": 1771430900542,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779922402807,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779922402807,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill’s stated purpose is to delegate coding, refactoring, analysis, or review tasks to Cursor CLI headless mode, and the wrapper does that directly by invoking `agent -p` with a user-provided prompt.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "File modification is enabled and recommended by default through `--force`, while `--no-force` is documented for proposal-only runs; this is disclosed and purpose-aligned, but users must invoke it deliberately.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no automatic installer in the bundle, but the documentation recommends a `curl ... | bash` install command for Cursor CLI, which requires trusting Cursor’s remote installer.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The wrapper runs in the current directory or a user-supplied `-d` directory and can cause Cursor to read or write project files; that is proportionate for coding automation but not sandboxed by the skill.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill relies on Cursor authentication via `CURSOR_API_KEY` or prior `agent login`; the artifacts do not show credential logging, credential exfiltration, background persistence, or privilege escalation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The shell wrapper and local CLI invocation are expected for a headless Cursor automation skill; the capability is visible in the documentation and script, though users should understand it delegates work to another local agent process.\n[SQP-1] expected: The trigger wording is broad, but it consistently describes delegation to Cursor CLI for coding tasks rather than hiding an unrelated capability.\n[SQP-2] expected: Default write-capable mode is a real operational risk, but it is explicitly documented with a `--no-force` alternative and matches the advertised automated-code-change purpose.\n[SC2] unexpected: The remote shell install command is not part of the skill’s runtime behavior and is a supply-chain caution rather than evidence of malicious or hidden behavior in the bundle.\n[VirusTotal code_insight] expected: The telemetry flags prompt-injection and curl-to-bash risks, but also reports no engine detections and no evidence of intentional malicious behavior; the artifact review supports treating these as usage cautions.",
+          "guidance": "Install only if you intend to delegate code work to Cursor CLI. Run it from a clean, version-controlled project directory, use `--no-force` when you want review before edits, protect Cursor credentials, and avoid sending streamed output to shared logs for sensitive repositories.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Cursor CLI automation wrapper that can edit files by default, so it is acceptable but should be used only in intended workspaces.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779922365428,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 84,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: cursor-cli-headless\nVersion: 1.1.0\n\nThe skill bundle wraps the Cursor CLI, designed for automated code changes and file modifications, which inherently involves significant file system access. The `scripts/run-task.sh` script passes user-controlled prompts directly to the `agent` CLI. While the wrapper script itself is robust against shell injection, this design exposes the underlying `agent` CLI to potential prompt injection attacks, where a malicious prompt could coerce the AI agent into unintended or harmful actions (e.g., writing to sensitive system paths). Additionally, both `SKILL.md` and `scripts/run-task.sh` recommend/require installing the Cursor CLI via `curl https://cursor.com/install -fsS | bash`, a high-risk method for installing software by executing arbitrary code from the internet. There is no evidence of intentional malicious behavior within this skill bundle itself, but it facilitates risky operations.",
+          "checkedAt": 1779165217289,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "0ce71e1ba9385460ddb0bb00b42f41d70a94b34e862312a7cd65cfad4e54cc93",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0ce71e1ba9385460ddb0bb00b42f41d70a94b34e862312a7cd65cfad4e54cc93"
+    },
+    "slug": "cursor-cli-headless",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

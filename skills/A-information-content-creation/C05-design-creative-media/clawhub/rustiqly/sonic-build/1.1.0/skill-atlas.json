@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:image",
+      "category:C17:token:notes",
+      "cross-tag:debugging",
+      "cross-tag:design"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "debug",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "b5f9bcc55224ba143ca5cd8c4035663552b1aafc94fa8b6e4181b47eba00921c",
+    "content_hash": "e0b97c040e23cf29d9905a440c1a3e0e6dda6c409d50cff1d0cf8525d5ca65d9",
+    "precanonical_content_hash": "b45b415d991df8f9a21f9de0e1aca65cedae363412b6101f7efe174566fa8f08",
+    "skill_md_hash": "e16a606ae803c7b5b1c4c98faa471113ac1affa6dc086ac528c416b6a18ed04b",
+    "version_metadata_sha256": "843017e57e69abddb2e90724f6ca7ab8052b9f63f4cd77f83bfb417b5d71fe11"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/rustiqly/skills/sonic-build",
+    "claim_id": "0379dc4dab8712bd74208ffaa0d8aa6dd3a06410387916c645fc9a21ca7b8feb",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "sonic-build",
+        "url": "https://clawskills.sh/skills/rustiqly-sonic-build"
+      }
+    ],
+    "owner_handle": "rustiqly",
+    "owner_id": "s17c7r5psr6055zp5d19kf7wyd884pvx",
+    "published_at": 1771126384324,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779973257541,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779973257541,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The instructions, references, and bundled script consistently support building SONiC images, configuring Docker-based builds, troubleshooting build failures, and preparing the sonic-buildimage repository.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill includes destructive build cleanup commands, Docker image cleanup commands, and a documented default VS VM password; these are relevant to the workflow but need careful use and stronger safety warnings.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no hidden installer; the user is told to run a local prerequisites script that visibly installs packages, configures Docker, adds an apt repository, and clones the SONiC repository.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Large host requirements, Docker, sudo package installation, and external repositories are proportionate for SONiC image builds, but they are best suited to a dedicated build VM or lab host.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The script persistently adds the current user to the docker group, which is build-relevant but materially expands local privilege and should be reviewed before use.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The cleanup commands and setup-script guidance are real safety concerns, but they are visible, manual, and directly related to maintaining a SONiC build environment.\n[SQP-2] expected: The default VS VM password appears in lab testing documentation; it is not evidence of credential theft, but users should treat it as temporary and never expose the VM on an untrusted network.\n[TM1] expected: The rm -rf target/* command can delete build artifacts if run in the wrong place, but it is a conventional manual clean-build step scoped to the SONiC target directory rather than hidden destructive behavior.\n[TM2] expected: The Docker GPG key pipeline and apt repository setup are supply-chain-sensitive, but they match the disclosed Docker installation purpose and use a recognizable Docker source.",
+          "guidance": "Install only if you intend to build SONiC images. Review scripts/prerequisites.sh before running it, preferably on a dedicated VM or build host, because it uses sudo, installs Docker, adds an external apt repository, changes docker group membership, and clones external source code. Verify your current directory before running cleanup commands, and change or isolate any VS VM that uses the documented default password.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a transparent SONiC build helper, but its setup script and cleanup guidance can make real changes to a build machine.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779973233726,
+          "issueCount": 8,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: sonic-build\nVersion: 1.1.0\n\nThe OpenClaw skill bundle is classified as benign. All files, including the `SKILL.md` instructions and the `scripts/prerequisites.sh` script, align with the stated purpose of building SONiC images. The `prerequisites.sh` script performs necessary system-level installations (Python tools, Git, Docker) and clones the official SONiC repository from legitimate sources (download.docker.com, github.com/sonic-net). There is no evidence of prompt injection attempts against the agent, data exfiltration, malicious execution, persistence mechanisms, or obfuscation. All commands and instructions are transparent and directly related to setting up and managing a SONiC build environment.",
+          "checkedAt": 1779163687633,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "81e321e2a49ac018f3f1b0df8e4ab9103576d8c1fb412efa64ee97b91618be67",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/81e321e2a49ac018f3f1b0df8e4ab9103576d8c1fb412efa64ee97b91618be67"
+    },
+    "slug": "sonic-build",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

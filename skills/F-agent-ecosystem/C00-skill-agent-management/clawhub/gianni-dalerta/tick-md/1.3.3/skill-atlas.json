@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [],
+    "confidence": 0.78,
+    "domains": [],
+    "needs_review": false,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:phrase:agent management",
+      "category:C00:phrase:multi agent",
+      "category:C00:token:agent",
+      "category:C01:token:search",
+      "category:C02:token:write",
+      "category:C08:token:git",
+      "category:C10:token:ai",
+      "category:C11:phrase:project management",
+      "category:C11:token:project",
+      "category:C12:token:management",
+      "category:C13:token:operations",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C11"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "research",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "e30fcd06fb9f5da9975928bab2a80aae518811bc993b82db19e6d3f08bd82893",
+    "content_hash": "40c0c0cd258010c96730439682d6ee0cc1e39a463bccf3e0e8fcc3feff11dbe7",
+    "skill_md_hash": "b0a60eccc01ca1e033f207db7aaca6884b81d507af3327078035fe615bfb5acf",
+    "version_metadata_sha256": "fba0a189c0d0065645418e036de93157018d050b181ab4449ace231925cf68dd"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/gianni-dalerta/skills/tick-md",
+    "claim_id": "7f7ecfbc11bf672291c0e9d389d4b1f74844e14b3e258e137f3d859d71224557",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "tick-md",
+        "url": "https://clawskills.sh/skills/gianni-dalerta-tick-md"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "gianni-dalerta",
+    "owner_id": "s17cc17ezh3q3w2b25qwem3dxh884zt1",
+    "published_at": 1771475415267,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783657022122,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783657022122,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill's task creation, claiming, commenting, deletion, direct edit, undo, Git sync, and MCP access all align with Git-backed Markdown task coordination, though some operations can disrupt shared task state.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts explicitly require approval for editor MCP config edits and remote Git pushes; local task writes are treated as normal workflow behavior, so sensitive local actions like force delete, direct edit, and undo should be user-confirmed.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation requires global npm packages and optional editor MCP configuration, both disclosed in skill.json and INSTALL.md with approval guidance for config edits.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Access to local TICK.md files, Git, npm installation, optional MCP tools, and optional Git remotes is proportionate for the stated coordination workflow.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill persists task state, agent registrations, comments, and history in TICK.md/Git, and may persist editor MCP config only if approved; no hidden credential or broad local data access is shown.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-4] expected: Direct edit bypasses normal state transitions, but the artifact says this openly and frames it as a correction/recovery capability for task metadata rather than hidden behavior.\n[SDI-2] expected: Delete, edit, and undo are admin-like task maintenance operations with real blast radius, but they are disclosed and scoped to the Tick task file/workflow.\n[SQP-1] expected: Automatic task creation from natural-language work requests is central to the skill's purpose; the artifact would be safer with clearer confirmation defaults for ambiguous requests.\n[SQP-2] expected: Task deletion and force deletion are purpose-aligned but should be treated as exceptional actions with explicit user confirmation.\n[SQP-2] expected: Undo and direct field editing can affect shared coordination state; dry-run is documented for undo, but users should confirm non-dry-run undo and validation-bypassing edits.\n[staticScan] expected: The supplied static scan reports no findings, consistent with the artifact being documentation and metadata rather than executable bundled code.\n[VirusTotal] expected: VirusTotal telemetry is clean and supports, but does not determine, the benign verdict.",
+          "guidance": "Install only if you trust the tick-md and tick-mcp-server npm packages and want agents to maintain a project TICK.md file. Require explicit approval before MCP config changes, Git pushes, deletes, force deletes, direct edits, and non-dry-run undo; avoid putting secrets in task comments.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed local task-coordination skill; it can change and delete project task records, but those powers fit its stated purpose and are not hidden.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783656964164,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 41,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: tick-md\nVersion: 1.3.3\n\nThe skill is designed for multi-agent task coordination using Git-backed Markdown files. It transparently declares its requirements for `git` and network access for `npm` and `git remote`. Crucially, the `SKILL.md`, `INSTALL.md`, `CHANGELOG.md`, and role-specific instructions (`roles/ORCHESTRATOR.md`, `roles/WORKER.md`) repeatedly and explicitly instruct the AI agent to ask for user approval before performing sensitive actions like pushing to remote Git repositories (`tick sync --push` or `git push`) or modifying editor MCP configuration files. This strong emphasis on user consent and proactive security measures, including a changelog entry detailing security clarifications, indicates a design focused on safe operation rather than malicious intent. The capabilities provided are necessary for its stated purpose, and the prompt injection surface is used defensively to enforce safety boundaries.",
+          "checkedAt": 1779162158368,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "9b305c064551c5d3f2896cc196ab85dbe3e7766c72a47a0b907cffa639ebb4ba",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/9b305c064551c5d3f2896cc196ab85dbe3e7766c72a47a0b907cffa639ebb4ba"
+    },
+    "slug": "tick-md",
+    "source_type": "clawhub",
+    "version": "1.3.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

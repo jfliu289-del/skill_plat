@@ -1,0 +1,129 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C18:token:home",
+      "category:C19:token:device",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C18",
+      "C19"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "95546d46c39bc15d2a835bf74773a64f2320e1fac8c7e5ac4ef713478fce8736",
+    "content_hash": "514e95ee703a3c18a99263361df17c6d7f07d88edc53025a0d56bfad2bfd47b0",
+    "precanonical_content_hash": "d37a55cb69bdded23eb5c81cae8a82d7d7637c8bee9632a6ac1c9057b5d88291",
+    "skill_md_hash": "988287f1eb637a373c5288a6130d9ed1184c1a843c9967b9fe9e281880c0bed1",
+    "version_metadata_sha256": "ad74cafb6627e00899736e13a8296b795cab93136e22d510fce69430b5de2708"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/joneschi/skills/homeassistant-cli",
+    "claim_id": "4fdc720d595a9643e48e6389c180e50cc47f50ce33679ddc858f184952667e95",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "homeassistant-cli",
+        "url": "https://clawskills.sh/skills/joneschi-homeassistant-cli"
+      }
+    ],
+    "owner_handle": "joneschi",
+    "owner_id": "s174jrkepk9jftaqe9w1g5h1r5885t9d",
+    "published_at": 1769929870788,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783652233466,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783652233466,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill’s documented purpose is to use hass-cli for Home Assistant discovery, history, events, and service calls; those capabilities are purpose-aligned but can control real devices and security-related automations.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts are markdown guidance and examples, with no hidden automatic execution; examples include state-changing commands that users should review before running.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is disclosed through pip or Homebrew for the external homeassistant-cli package and requires the hass-cli binary; the skill bundle itself contains only markdown files.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "HASS_SERVER and HASS_TOKEN are expected for this integration, but the Home Assistant token can expose household state and device control if leaked.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The docs recommend shell-config environment variables and include troubleshooting examples that print or pass the token on the command line; this is weak secret-handling guidance, but it is disclosed and not hidden persistence.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: Long-lived Home Assistant token setup is necessary for hass-cli, but users should protect the token like a password and avoid committing or sharing shell config files.\n[SQP-2] expected: Examples that control lights, climate, covers, notifications, automations, and alarms match the skill’s purpose, but they can affect a live home environment.\n[SQP-2] unexpected: Troubleshooting advice to echo the full token or provide it through a command-line flag is avoidable and may expose credentials through terminal output, history, logs, or process listings.",
+          "guidance": "Install only if you want OpenClaw to help operate your Home Assistant instance. Prefer a dedicated or least-privileged Home Assistant account if possible, keep HASS_TOKEN out of logs, screenshots, shell history, and synced dotfiles, and review any command that changes alarms, locks, covers, climate, appliances, or automations before running it.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a legitimate Home Assistant CLI helper, but it handles a powerful smart-home token and should be used carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783652171161,
+          "issueCount": 5,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 16,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: homeassistant-cli\nVersion: 1.0.0\n\nThe skill bundle is a legitimate wrapper for the `hass-cli` tool, providing documentation and examples for Home Assistant control. It instructs the user to configure sensitive `HASS_TOKEN` and `HASS_SERVER` environment variables, which is standard for `hass-cli`. The use of `eval` for shell auto-completion in `references/autocomplete.md` is a common and expected pattern for CLI tools, not indicative of malicious execution. All commands and instructions are focused on interacting with Home Assistant and lack any evidence of data exfiltration, malicious execution, persistence, or prompt injection attempts against the agent.",
+          "checkedAt": 1779160634619,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "efd89e8ee7f548add74e8512c474edc3996ca2c6601e7e2620ea4ee6ebf2d1d2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/efd89e8ee7f548add74e8512c474edc3996ca2c6601e7e2620ea4ee6ebf2d1d2"
+    },
+    "slug": "homeassistant-cli",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

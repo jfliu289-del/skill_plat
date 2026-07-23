@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C10:token:model",
+      "category:C12:token:management",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C10",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "3e6bbb640f07b035346d510658c6672b7fd2e2ba7d7e347463a36c9297adcdb7",
+    "content_hash": "3e38ff8d4e152412cd40c7942f74a810f858bce0ce0745dc82c9a77db5ca8f0a",
+    "precanonical_content_hash": "816b55019ee7d0aa2d64dc146d5c25bce691d59826f801468cb7334159056c11",
+    "skill_md_hash": "046169fc690b09432dcbc0a9a955daa0f0eac516fb44171d35bcf24fc6a14bcf",
+    "version_metadata_sha256": "00fa41c49640267e67ba2e2362bae8a376bfdbdc327e66f671f832d37e3605fb"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/issa-me-sush/skills/openserv-client",
+    "claim_id": "6353cf367349092ba970b3744a19f7feebdc49857246c34338072764af4aa0be",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "openserv-client",
+        "url": "https://clawskills.sh/skills/issa-me-sush-openserv-client"
+      }
+    ],
+    "owner_handle": "issa-me-sush",
+    "owner_id": "s1723fny14hmpvya23s46azmxx88526w",
+    "published_at": 1771275711244,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779962084291,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779962084291,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented capabilities match the stated purpose: provisioning OpenServ agents, workflows, triggers, x402 payments, and ERC-8004 identity. These operations are account- and wallet-sensitive, but they are disclosed and purpose-aligned.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are SDK/API usage examples rather than hidden agent-control instructions. Some examples expose live trigger URLs or return credential values, which is risky in logs but consistent with setup/testing documentation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill instructs users to install @openserv-labs/client from npm and provides runnable TypeScript examples. Users should verify package provenance and use test accounts before production deployment.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Use of WALLET_PRIVATE_KEY, OPENSERV_API_KEY, auth tokens, public webhooks, x402 payments, and Base-chain operations is proportionate to the integration purpose, but sensitive.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Provisioning persists local state and writes credentials such as WALLET_PRIVATE_KEY to .env/.openserv.json, and cleanup examples can delete platform resources only when explicitly run. This is disclosed, but should be handled with strict secret and backup practices.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The cleanup examples delete workflows/agents and clear local state. This is purpose-aligned account management, but users should verify IDs and avoid --all unless they intend broad deletion.\n[SQP-2] expected: The create-agent example prints a partially masked API key. This is not exfiltration, but credentials should not be logged in shared terminals, CI, or screenshots.\n[SQP-2] expected: The example generates and returns auth token material as setup output. That is coherent for provisioning, but the returned values should be stored as secrets and not committed or pasted into logs.\n[SQP-2] expected: Examples print webhook URLs containing trigger tokens. This helps testing, but those URLs act like bearer secrets for workflow invocation and should be protected or rotated if exposed.\n[SQP-2] expected: The reference shows wallet deletion alongside ERC-8004 wallet management. The skill elsewhere warns not to clear wallet state unless a new agent ID is intended, so this is a documentation safety gap rather than malicious behavior.",
+          "guidance": "Install only if you intend to connect an OpenServ account/wallet and manage agents or workflows. Start with a test wallet/account, keep .env and .openserv.json out of source control, avoid logging API keys, auth tokens, private keys, and full webhook URLs, back up wallet material before ERC-8004 registration, and run cleanup or wallet deletion commands only after confirming the target resources.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent OpenServ client guide, but it handles real credentials, public trigger URLs, wallets, and resource deletion, so users should treat its examples carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779962049542,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 84,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: openserv-client\nVersion: 1.0.4\n\nThe OpenClaw AgentSkills skill bundle provides a client library for interacting with the OpenServ platform, including agent/workflow management, x402 payments, and ERC-8004 on-chain identity. All code and documentation align with this stated purpose, demonstrating legitimate interactions with the platform API and blockchain. While the skill handles sensitive credentials like `WALLET_PRIVATE_KEY` and `OPENSERV_API_KEY` (e.g., writing `WALLET_PRIVATE_KEY` to `.env` via `provision()`), this is a necessary function for its operation and does not show intent for unauthorized exfiltration or malicious use. No evidence of prompt injection, obfuscation, or other malicious behaviors was found in `SKILL.md`, `reference.md`, `troubleshooting.md`, or the example scripts.",
+          "checkedAt": 1779162427562,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "bfe81c4a135e1c1aeb345f8ddffade9d359b1a6672c1985dc4106045f8064f94",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/bfe81c4a135e1c1aeb345f8ddffade9d359b1a6672c1985dc4106045f8064f94"
+    },
+    "slug": "openserv-client",
+    "source_type": "clawhub",
+    "version": "1.0.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,153 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "category:C12:token:management",
+      "category:C12:token:strategy",
+      "category:C17:token:schedule",
+      "cross-tag:agent-management",
+      "cross-tag:planning",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C06",
+      "C10",
+      "C12",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "plan"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "plan"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "8fa427184def1517e05059672b4ac9454378f577b3de2b115ebf6fa347e9cf4c",
+    "content_hash": "855bc8483f13b1a6535f92583e6d4302d8d506ce90e9b84311af544c06d7bc8a",
+    "skill_md_hash": "270b06338b825b4b97d6a4c4859daa5ceb0fb6e2e69ddeea1cc2422afd902aa5",
+    "version_metadata_sha256": "9a9e7830019984c3d830e719122228391ea0cf7b85a490e6a59e25b8b7a5247e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jdrolls/skills/clawville",
+    "claim_id": "08ea47c768179e6c3007d045ba659edf6ef68da81a902a54a9b4e0f8ef391870",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "clawville",
+        "url": "https://clawskills.sh/skills/jdrolls-clawville"
+      },
+      {
+        "index_path": "categories/gaming.md",
+        "label": "clawville",
+        "url": "https://clawskills.sh/skills/jdrolls-clawville"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "jdrolls",
+    "owner_id": "s175mc6nwfr0gpqhy7f0g6kf41885vft",
+    "published_at": 1770075561691,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783656023688,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783656023688,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe playing ClawVille, and the scripts call only the documented ClawVille API for registration, status, jobs, and leaderboards.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill performs in-game actions such as working jobs and checking leaderboards; these actions are disclosed and aligned with the game purpose.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is via ClawdHub or git clone, with no install-time execution shown; the manifest references status/work scripts that are not included, which may cause command failures but is not hidden behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Use of CLAWVILLE_API_KEY and outbound requests to clawville.io is proportionate for the integration, though the documentation should handle the key more carefully than suggesting plaintext TOOLS.md storage.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Recurring check-ins and auto-work are part of the persistent-game design and are described as owner-configured, but users should intentionally choose whether to enable scheduling and automatic jobs.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The skill needs an API key to operate, but the artifact's TOOLS.md/plaintext examples and stdout display of the key create avoidable leakage risk; this supports user guidance rather than a Review verdict.\n[SQP-2] expected: Registration sends an agent name and description to the ClawVille API; defaulting the name to hostname is mildly privacy-relevant, but the destination and registration purpose are clear.\n[SQP-2] expected: Automatic job execution and scheduled check-ins match the stated persistent-game purpose and are disclosed, though users should explicitly control the schedule and frequency.\n[E1] expected: The outbound POST to clawville.io is the documented registration flow, not evidence of unrelated exfiltration.",
+          "guidance": "Install only if you want an agent to actively play ClawVille. Store CLAWVILLE_API_KEY in an environment variable or secret manager rather than TOOLS.md, avoid running registration in shared terminals or CI logs, provide a non-sensitive agent name instead of relying on hostname defaults, and review any cron schedule so the agent does not keep making game actions longer or more often than intended.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent ClawVille game skill, with some ordinary but important credential and automation precautions for users.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783655984359,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 32,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: clawville\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle for ClawVille is designed for an AI agent to interact with a persistent online game. All network calls are directed to the legitimate game API at `https://clawville.io`, as seen in `SKILL.md`, `scripts/checkin.sh`, and `scripts/register.sh`. The skill transparently uses the `CLAWVILLE_API_KEY` environment variable for authentication and proposes setting up a cron job for regular game check-ins, which is a necessary feature for a persistent game. There is no evidence of data exfiltration to unauthorized endpoints, malicious execution, obfuscation, or prompt injection attempts against the agent to perform actions beyond the stated purpose of playing the game.",
+          "checkedAt": 1779160983823,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "b29787ffdc4251be2f169b2858542539171a63ed0d842139fe2129c1d8b4bb4a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b29787ffdc4251be2f169b2858542539171a63ed0d842139fe2129c1d8b4bb4a"
+    },
+    "slug": "clawville",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

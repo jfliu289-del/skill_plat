@@ -1,0 +1,133 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:lookup",
+      "category:C06:token:api",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "c3133c9f943b1cd91408c832879f4bad305a8f2e74e3a18ed27c267286b15779",
+    "content_hash": "e19fc40f47c294671217b43313c32eb027b90c74e9a295878a81745e16edb4c1",
+    "precanonical_content_hash": "d106cf1e87e63701a4e237ffd76a2c0be26ac536d7dabc8bfdd9acbc0eb30187",
+    "skill_md_hash": "da599ab291330e8eea5bdd110a3d351687cde9a025e9a2da048a0a717fed4d71",
+    "version_metadata_sha256": "c94a83cdff0af11517a8bf6e030057981d3dae5316fbcb4ac2a33e5f980d3cf0"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/aligurelli/skills/appstore-rating-pulse",
+    "claim_id": "cdf6983c8c5b76ce0cb613deb87c614c4a83aa1ea6d42bc7ac6e1b7ff953f91b",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "appstore-rating-pulse",
+        "url": "https://clawskills.sh/skills/aligurelli-appstore-rating-pulse"
+      }
+    ],
+    "owner_handle": "aligurelli",
+    "owner_id": "s173mrkjrvj2e8q7c4h8nhvsz58845nw",
+    "published_at": 1771466539353,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779932994537,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779932994537,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to monitor App Store ratings, and the script only reads configured app IDs and country codes, queries Apple's public iTunes Lookup API, parses the JSON rating, and prints a report.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Manual execution is clearly scoped; the daily cron setup is optional and disclosed, but users should understand it will keep sending recurring reports until removed.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no hidden installer or package setup; users edit the APPS array and run a bash script. The script depends on local bash, curl, and python3, which are visible but not separately declared as requirements.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "No credentials, account access, local file indexing, sensitive data collection, or privileged paths are requested. Network use is proportionate to the purpose and limited by artifact evidence to Apple's lookup endpoint.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The only persistence is the user-created optional cron job for daily reports. It does not request elevated privileges or show hidden background execution.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code_insight shell-injection telemetry] unexpected: The reported arbitrary shell execution concern is not supported by the script as written: appId and region are expanded inside a single quoted curl URL argument, so shell metacharacters in APPS are not re-parsed as shell syntax. Unusual values could still produce bad URLs or misleading output, so users should keep app IDs numeric and country codes valid.\n[SkillSpector report] expected: SkillSpector reported no issues, which matches the small artifact set and purpose-aligned behavior observed in SKILL.md and fetch-ratings.sh.\n[Static scan] expected: Static scan reported clean, and artifact review found no hidden install steps, obfuscation, credential handling, destructive commands, or exfiltration behavior.\n[Optional recurring cron behavior] expected: The daily cron report is persistent behavior, but it is explicitly documented and directly tied to the skill's rating-monitoring purpose.",
+          "guidance": "Safe to install for checking public App Store ratings. Before enabling the cron example, make sure you want recurring daily messages and know where to disable the job. Only enter trusted app IDs and ISO country codes in the APPS array, and run it with trusted local bash, curl, and python3.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to be a straightforward App Store rating checker with a disclosed optional daily report.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779932955573,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: appstore-rating-pulse\nVersion: 1.1.0\n\nThe `scripts/fetch-ratings.sh` file contains a shell injection vulnerability. User-configured values for `appId` and `region` from the `APPS` array are directly interpolated into the `curl` command's URL string without proper shell escaping. This allows for arbitrary command execution if a user (or an attacker who modifies the user's configuration) includes shell metacharacters in these variables. While this is a significant vulnerability, it requires user-supplied malicious input into their own configuration, and there is no evidence of intentional malicious behavior (e.g., data exfiltration, backdoor installation) by the skill developer. The `SKILL.md` instructions for the AI agent are benign and do not exhibit prompt injection with malicious objectives.",
+          "checkedAt": 1779165338483,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "fe560c32e5ecb098b1639deba3bc51b71c5e56d24124ef092bbe6055a2b18e09",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/fe560c32e5ecb098b1639deba3bc51b71c5e56d24124ef092bbe6055a2b18e09"
+    },
+    "slug": "appstore-rating-pulse",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C02:token:communication",
+      "category:C06:token:api",
+      "category:C06:token:code",
+      "category:C17:token:personal",
+      "cross-tag:agent-management",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C02",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "983623d4bf02694a9ed45b32a18011432d58514ff107068177d9410957d1cafa",
+    "content_hash": "a07882eb990f6055223683ad8e8a83e33536574178464c9643c463e127b74027",
+    "precanonical_content_hash": "21809c5b72e6e9bc3f46b86e36ddfd0d95babf6edf5abab816bfae36dbc77f73",
+    "skill_md_hash": "5181f1e78f0654450840fdb6099d0d2746ec4347771adacf2cc8cc3e25d78419",
+    "version_metadata_sha256": "dd0327e628ed2f723e52c8426b90b11032eb679bbbba2333fa6c63c48c1fcd09"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/lnemail/skills/lnemail",
+    "claim_id": "6c64790b346bd3db5b4b278de631f19b54d99f255cf240018d29b6de675b7515",
+    "index_entries": [
+      {
+        "index_path": "categories/communication.md",
+        "label": "lnemail",
+        "url": "https://clawskills.sh/skills/lnemail-lnemail"
+      }
+    ],
+    "owner_handle": "lnemail",
+    "owner_id": "s171cv3490a2ye6rhx7eyes2j58848w7",
+    "published_at": 1771881284274,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779947328294,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779947328294,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill is explicitly about creating and using LNemail accounts, including inbox access, sending email, and Lightning payments; those are sensitive capabilities but match the stated purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are visible curl examples and setup steps, not hidden automation, but they would benefit from explicit user approval guidance before account creation, payments, inbox reads, or outbound mail.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains only SKILL.md with no executable installer, scripts, dependencies, background workers, or install-time mutation.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "External calls to lnemail.net and handling of message bodies, 2FA codes, and metadata are expected for an email integration, but users should treat that data as sensitive third-party service data.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The recommended local credential file stores a bearer token that grants ongoing mailbox access for an account valid up to one year; this is disclosed but should be protected like a secret.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad email-use framing is real, but the artifact is a user-facing usage guide rather than hidden autonomous behavior; add consent practices, but this does not make the skill purpose-mismatched.\n[SQP-2] expected: Bearer tokens, inbox contents, and 2FA messages are sensitive; the concern is valid user guidance, but the token and email workflows are openly documented and necessary for the service.\n[E1] expected: Network transmission to lnemail.net is inherent to creating and using a hosted email account, so it is security-relevant but expected and disclosed.\n[RA2] expected: Persistent mailbox access via a stored token is disclosed and functional for ongoing email use; the main risk is secure storage and cleanup, not hidden persistence.\n[VirusTotal code_insight] expected: VirusTotal flagged local credential storage, network use, Lightning payments, and file writes, but engines reported no detections and those behaviors are coherent with the documented workflow.",
+          "guidance": "Install only if you are comfortable with an agent using LNemail.net as a third-party email provider. Keep the access token out of logs and prompts, store it in a protected secret location, avoid sensitive or regulated email unless explicitly approved, and confirm recipient, message content, and Lightning payment before sending mail.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "LNemail is a documentation-only skill for using a third-party anonymous email service, with sensitive email, token, network, and payment behavior disclosed and aligned with that purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779947306635,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 40,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: lnemail\nVersion: 1.0.1\n\nThe skill is classified as suspicious due to instructions in `SKILL.md` that direct the AI agent to perform file system writes and handle sensitive credentials. Specifically, the agent is instructed to 'Save these credentials! Store them securely (e.g., `~/.lnemail/credentials.json`)', which involves writing an `access_token` to the local filesystem. While this action is presented as necessary for the skill's stated purpose (managing anonymous email accounts), it represents a significant prompt-injection vulnerability surface, as an agent capable of writing files based on markdown instructions could be exploited to write malicious content or exfiltrate data in other scenarios. Additionally, the skill involves external network communication with `https://lnemail.net` and financial transactions (Bitcoin Lightning payments), which are high-risk capabilities.",
+          "checkedAt": 1779165963303,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "12a61ee6bc6d58d7bd8da4f83bbbad2994e3f86892c54a3ca99b423f27d09a7d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/12a61ee6bc6d58d7bd8da4f83bbbad2994e3f86892c54a3ca99b423f27d09a7d"
+    },
+    "slug": "lnemail",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

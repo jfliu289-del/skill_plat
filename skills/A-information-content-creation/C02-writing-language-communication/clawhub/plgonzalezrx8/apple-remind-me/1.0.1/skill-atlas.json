@@ -1,0 +1,152 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C01:token:find",
+      "category:C02:token:edit",
+      "category:C02:token:language",
+      "category:C06:token:implementation",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C01",
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "9299817c8e138efdaa05e0d698d249a74fdcb5af08e881166a0e175c955772e5",
+    "content_hash": "792021f558c9adc12e3be1657a742569e8c00320ac1835087bc873827d829332",
+    "precanonical_content_hash": "6c2a16605ddff9edfbf08ea1a6f72f162a7c5307a2800f160cb6c097ab0066ef",
+    "skill_md_hash": "3b6c9d059e068afc4fe0fd546dadfd97260b303f1fcec6bcb1a917646d2048a9",
+    "version_metadata_sha256": "1349e1332e0368793a61385029c00f1aa5e2678257b3fa2b814b750f3e4cbff0"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/plgonzalezrx8/skills/apple-remind-me",
+    "claim_id": "2e32cc387517c964aeb7a1fe5e6afe9deedb2a5e2ab6b225cd5ded4d8802de99",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "apple-remind-me",
+        "url": "https://clawskills.sh/skills/plgonzalezrx8-apple-remind-me"
+      },
+      {
+        "index_path": "categories/apple-apps-and-services.md",
+        "label": "apple-remind-me",
+        "url": "https://clawskills.sh/skills/plgonzalezrx8-apple-remind-me"
+      }
+    ],
+    "owner_handle": "plgonzalezrx8",
+    "owner_id": "s173vecwjc09yssmz81twxs1qh884hns",
+    "published_at": 1769973845023,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783651743088,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783651743088,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently implement Apple Reminders management using remindctl: create, list, complete, edit, and delete. The frontmatter summary emphasizes creation, but SKILL.md clearly documents the broader management scope.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The agent guide routes reminder changes through listing reminders and then acting on IDs, which is reasonably scoped, but deletion does not require a separate confirmation step.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No installer, background setup, package download, or persistence mechanism is present; the skill consists of shell scripts and depends on local macOS tools.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Access to Apple Reminders data and iCloud-synced changes is proportionate to the stated Reminders-management purpose, and syncing behavior is disclosed.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No credential collection, privilege escalation, hidden network activity, or long-running worker is shown. Reminder changes persist through Reminders.app, and delete uses remindctl delete --force.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[TP4] expected: The top metadata is narrower than the full feature set, but the main documentation explicitly presents create, list, complete, edit, and delete as the skill's capabilities.\n[SDI-1] expected: Deletion is destructive, but it is documented in the quick reference, command section, and agent guide, so it is not hidden or purpose-incompatible.\n[SQP-1] expected: Broad natural-language delete triggers create some mis-targeting risk, but the documented workflow requires listing reminders to find an ID before deletion.\n[SQP-2] expected: Permanent deletion and immediate iCloud sync are disclosed; the missing confirmation step is user guidance rather than enough evidence for Review by itself.",
+          "guidance": "Install only if you want an agent to manage your Apple Reminders. Verify remindctl is trusted, review the matched reminder ID and title before edits, completion, or deletion, and treat deletes as permanent because they may sync across Apple devices.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed Apple Reminders helper, but it can edit, complete, and permanently delete synced reminders.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783651719067,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 84,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: apple-remind-me\nVersion: 1.0.1\n\nThe OpenClaw skill bundle for Apple Reminders is benign. All scripts (`complete-reminder.sh`, `create-reminder.sh`, `delete-reminder.sh`, `edit-reminder-message.sh`, `edit-reminder-time.sh`, `list-reminders.sh`) exclusively interact with the macOS-native `remindctl` command-line tool, `date` utility, and `python3` for JSON parsing. The `SKILL.md` documentation clearly outlines the functionality, requirements, and agent instructions, with no evidence of prompt injection attempts, data exfiltration, malicious execution, persistence mechanisms, or obfuscation. The functionality is entirely aligned with managing Apple Reminders.",
+          "checkedAt": 1779160085700,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "72c874073522ed0499c0aeb1f2680e45a66f2c24f63b82ed21dc556553865521",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/72c874073522ed0499c0aeb1f2680e45a66f2c24f63b82ed21dc556553865521"
+    },
+    "slug": "apple-remind-me",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

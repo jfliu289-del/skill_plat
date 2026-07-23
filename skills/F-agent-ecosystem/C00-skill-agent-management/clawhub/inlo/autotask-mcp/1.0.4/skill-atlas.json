@@ -1,0 +1,136 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C09:token:security",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09",
+      "C17"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1d59add225c8e19fae4b1ab8d170af1e23330e21497d418dadb4c67be0cfa1f2",
+    "content_hash": "3829dfdb48920adfeb2b02a5cd7339e021b70e9bded0d81ca4ff343a5c0d5ff8",
+    "precanonical_content_hash": "1caad89e0e10ef1a396a1ed1bc852f1d96553e8e9fb12c56a52186387525028c",
+    "skill_md_hash": "5751f9345f3c118b2bedb5ab78d26aa612720deefcca0e61181e9432f285ea4a",
+    "version_metadata_sha256": "0da08b354b179c4826717a4976856bd72531df78539d58b61245cd454bef5337"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/inlo/skills/autotask-mcp",
+    "claim_id": "1d5fadef2289c2f2571755ba3f8c1a2fdc8a4b81f81d52a297da6cc7b8edc1a5",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "autotask-mcp",
+        "url": "https://clawskills.sh/skills/inlo-autotask-mcp"
+      }
+    ],
+    "owner_handle": "inlo",
+    "owner_id": "s174p2q56g4ythqetyzjhmcr2s885f8x",
+    "published_at": 1771259216419,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971074468,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971074468,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill's purpose is to run a local Autotask MCP server for PSA data access, and the Docker service, required Autotask credentials, localhost MCP endpoint, and helper scripts all fit that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The SKILL.md includes strong credential-handling rules and a narrow command allowlist, but it later documents scheduler install and uninstall commands outside that allowlist; this is an internal consistency issue, not evidence of hidden behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses Docker Compose to pull ghcr.io/asachs01/autotask-mcp:latest and run it locally with hardening controls. The artifact references .env.example.txt and .gitignore, but those files were not present, so setup may require manual correction.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The required Autotask integration code, username, and secret are sensitive but proportionate for an Autotask MCP integration, and both metadata and runtime instructions mark or treat them as secrets.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "Optional persistence is limited to user-level LaunchAgent or systemd timers for weekly image updates, with an interactive confirmation prompt and documented uninstall script. Users should enable it deliberately because it may pull and restart containers automatically.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-4] expected: The allowlist inconsistency is real: cron_install.sh and cron_uninstall.sh are documented later but omitted from the strict command list. The scripts themselves perform disclosed user-level scheduler setup/removal with confirmation, so this remains a documentation and scoping issue rather than a Review-level concern.\n[SQP-1] expected: The invocation description is broad, but it specifically frames use around interacting with Autotask via a local MCP server and Docker setup. Users should avoid invoking it for general Autotask questions that do not require local MCP access.\n[SQP-2] expected: Automatic updates and scheduled restarts are disclosed and optional, and the installer asks for confirmation. The risk is supply-chain and persistence exposure from enabling updates, especially when using the latest tag without first pinning a reviewed digest.",
+          "guidance": "Before installing, verify that you trust the upstream Docker image publisher, manually create and edit the .env file without exposing its contents to the agent, and consider pinning a known-good image digest before enabling weekly auto-updates. Review the scheduler scripts before running them, since they create user-level persistent tasks that can pull new images and restart the local service.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed local Docker wrapper for an Autotask MCP server, with credential and auto-update risks that are mostly documented and purpose-aligned.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971012687,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: autotask-mcp\nVersion: 1.0.4\n\nThe skill bundle is a well-architected and security-conscious wrapper for an Autotask MCP server. It features extensive container hardening in docker-compose.yml (read-only FS, dropped capabilities, localhost-only binding) and includes defensive instructions in SKILL.md specifically designed to prevent the AI agent from leaking credentials. It also implements supply chain protections via image digest pinning in scripts/mcp_update.sh and uses transparent, user-confirmed OS schedulers for updates.",
+          "checkedAt": 1779163225202,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "1d59add225c8e19fae4b1ab8d170af1e23330e21497d418dadb4c67be0cfa1f2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1d59add225c8e19fae4b1ab8d170af1e23330e21497d418dadb4c67be0cfa1f2"
+    },
+    "slug": "autotask-mcp",
+    "source_type": "clawhub",
+    "version": "1.0.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

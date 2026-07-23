@@ -1,0 +1,135 @@
+{
+  "classification": {
+    "artifacts": [
+      "paper"
+    ],
+    "audiences": [
+      "researcher"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "science"
+    ],
+    "needs_review": true,
+    "primary_category": "C03",
+    "reasons": [
+      "category:C03:token:pdf",
+      "category:C15:token:academic",
+      "cross-tag:academic-research"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C15"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4e1ba2fc69ccfd5c8fa174eb8b63da1f1db5321522f87337eeb23464e3524690",
+    "content_hash": "f5f72875240d159168a3ba2576d64706204b4a7be4b099697a1eead12f3936ce",
+    "precanonical_content_hash": "a4ef2b0e36d056d318f977f4f89d3187746b7a28ebe97135030cb60b69a497ed",
+    "skill_md_hash": "84492a27550f7a87062388ca11cfe565b356094606aa74a806d7568abfacd38f",
+    "version_metadata_sha256": "8a658b386006afb270ec2e6d50890880a9d7ef0d8a118b85c5815c1e0c837af6"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/xuyuan0805/skills/xy-pubmed-pdf-downloader",
+    "claim_id": "5f32c1949a2e55456d36366ce59ced853106cf0d55e82e9763e144fab3666e93",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "xy-pubmed-pdf-downloader",
+        "url": "https://clawskills.sh/skills/xuyuan0805-xy-pubmed-pdf-downloader"
+      }
+    ],
+    "owner_handle": "xuyuan0805",
+    "owner_id": "s17btqm95n1zn1ds5ex5dzsb8n885qqp",
+    "published_at": 1771987688803,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779957636445,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779957636445,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifacts: it accepts PMC IDs, PubMed URLs, PMIDs, or DOIs, calls public NCBI/PMC services, and writes downloaded open-access PDFs locally.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are user-directed examples for single or batch downloads and do not ask the agent to hide actions, override user intent, or run automatically.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no installer or startup mechanism; the documentation tells users to manually install the unpinned Python requests package if missing.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to NCBI/Europe PMC and local PDF writes are proportionate, but the custom filename option is not sanitized and can write outside the chosen output directory if given path components.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts do not request credentials, privileged access, background persistence, session data, or broad local indexing; they only create an output directory and PDF files when run.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight path traversal concern] unexpected: Manual inspection confirms that --filename is joined directly to the output directory, so absolute paths or ../ components can write outside the intended folder. This is a real hardening issue, but it is exposed through an explicit user-controlled filename option and is not evidence of hidden behavior.\n[SkillSpector issues] expected: SkillSpector reported no issues, which matches the artifact review: no prompt injection, credential handling, persistence, or unrelated capabilities were found.\n[Static scan] expected: The static scan was clean, and manual review found only purpose-aligned HTTP requests, batch-file reading, and local PDF file writes.",
+          "guidance": "Install only in a Python environment you trust, especially if requests must be installed. Use the default downloads folder or a dedicated output directory, and avoid absolute paths or ../ in --filename to prevent overwriting files outside that folder. Article identifiers may be sent to NCBI and Europe PMC during lookup and download.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward PubMed/PMC PDF downloader, with one filename-safety caveat but no evidence of hidden or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779957607676,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: xy-pubmed-pdf-downloader\nVersion: 1.0.0\n\nThe skill's stated purpose is benign, aiming to download academic PDFs from PubMed Central. The `SKILL.md` file does not contain any prompt injection attempts or malicious instructions for the agent. However, the `scripts/download_pmc_pdf.py` script contains a path traversal vulnerability. The `--filename` argument is used directly in path construction (`self.output_dir / filename`) without sanitization, allowing a user to specify an arbitrary path (e.g., `../../../evil.pdf`) to write the downloaded PDF file outside the intended output directory. While the script downloads content from legitimate sources (NCBI, Europe PMC) and does not execute the downloaded file, this vulnerability could lead to arbitrary file writes on the system.",
+          "checkedAt": 1779166958841,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "4a0f9d111854b0f12d6b4b8ec385f78882dca5a8d1d3fc3bf36a321a10642429",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4a0f9d111854b0f12d6b4b8ec385f78882dca5a8d1d3fc3bf36a321a10642429"
+    },
+    "slug": "xy-pubmed-pdf-downloader",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

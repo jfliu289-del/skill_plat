@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "website"
+    ],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C09:token:privacy",
+      "category:C09:token:security",
+      "category:C17:token:schedule",
+      "category:C19:token:automation",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:search",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C09",
+      "C17",
+      "C19"
+    ],
+    "stages": [
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "manage",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "20c427a6846eca83dfaa5bd2e5fe61c04f482d4bf531eb137bb677072e70e03b",
+    "content_hash": "a12cc66ca3a999a31e8115190c46d6e6687d0b1cfb0d959d480edd5e69e74b65",
+    "precanonical_content_hash": "e5818e096dae68200ba3e28f8811a2f71abfc1ef2c5813effe21401172403a3d",
+    "skill_md_hash": "aa1e12969e451ba4c4298c630678ce2cb6d1f132190b9ff20ac899c87975d046",
+    "version_metadata_sha256": "fa1f2d760e65cfb06d10713bd563e9a4f98948d72af735b6b19ceec1935c6642"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/ilmimris/skills/islamic-skills",
+    "claim_id": "e0b230c4b89f3b88ab57fe890caa669e125bc0719fa8fa86913ac1a7535c059a",
+    "index_entries": [
+      {
+        "index_path": "categories/calendar-and-scheduling.md",
+        "label": "islamic-skills",
+        "url": "https://clawskills.sh/skills/ilmimris-islamic-skills"
+      }
+    ],
+    "owner_handle": "ilmimris",
+    "owner_id": "s17518c1jsnwyzb7wa3cpwz2qx87cjas",
+    "published_at": 1771316667088,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971208276,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971208276,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The short frontmatter description emphasizes prayer, fasting, and Zakat, but SKILL.md and README also disclose Quran, calendar, quotes, scheduler, caching, and configuration features; the implemented capabilities fit that broader disclosed scope.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions expose the main commands and warn that --sync and --setup generate cron schedules to review; the static agentTurn message in quote scheduling is the scheduled payload, not an evaluator instruction.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No automated installer or hidden download step was found; installation guidance is manual and requirements.txt contains only requests, though it is unpinned.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network calls to Islamic content, prayer-time, quote, and Zakat APIs are purpose-aligned, but some shell/Python Quran and shell calendar paths use plain HTTP, and Zakat API keys may be sent as query parameters.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill creates local config and cache files in its own directory and emits CRON_ADD records only from explicit scheduling commands; it does not directly edit crontab or request elevated privileges.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: File, network, shell, environment variable, and cache/config use are coherent with a CLI-style utility skill, but the documentation could state these permissions and trust boundaries more explicitly.\n[TP4] expected: The frontmatter summary is narrower than the implementation, but the body of SKILL.md and README disclose Quran, quotes, calendar, scheduler, and caching features, so this is under-summarization rather than hidden behavior.\n[SDI-1] expected: Quote retrieval is disclosed in the feature list and usage examples, so it is not unsupported scope drift in the full artifact context.\n[SDI-2] expected: CRON_ADD output is generated for explicit --setup or --sync commands and the docs warn users to review it; no direct cron installation was found, though users should still treat scheduling output carefully.\n[SQP-2] expected: External prayer, calendar, Quran, and quote lookups are expected, but the HTTP endpoints for Quran and shell calendar lookups are a real transport-security weakness.\n[SQP-2] expected: Precise location, city/country, Quran search terms, and Zakat API data are sent to third-party services as part of the requested features; users should be aware of those data flows.\n[SQP-2] expected: The Zakat API key is purpose-aligned but is placed in request parameters in both shell and Python paths, which can expose it in logs or diagnostics.\n[SQP-3] unexpected: The daily quote schedule hard-codes Asia/Jakarta; it is disclosed in output, but non-Jakarta users may get unexpected timing unless they edit the generated job.\n[E1] expected: Calendar location transmission is expected for remote prayer-calendar lookup, but the shell implementation uses HTTP, so the privacy and integrity risk is valid context.\n[SC1] expected: The requests dependency is appropriate for the Python API client, but the version is not pinned.\n[SC4] expected: The advisory signal stems from the unbounded requests version range rather than evidence that this package bundles a known vulnerable version.\n[code_insight] expected: VirusTotal's concerns about bash JSON fallback and CRON_ADD generation match artifact-backed behavior, but both are disclosed utility mechanisms and no engine detections or malicious payloads were reported.",
+          "guidance": "Before installing, be comfortable with third-party API calls for location, Quran queries, quotes, and Zakat data. Prefer ZAKAT_API_KEY over storing a key in config.json, install jq for safer parsing, review any CRON_ADD output before allowing scheduling, and consider changing HTTP endpoints to HTTPS and pinning requests.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to match its advertised Islamic utility purpose, with reviewable scheduling output and some privacy and transport-security caveats.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971136008,
+          "issueCount": 16,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: islamic-skills\nVersion: 2.0.1\n\nThe skill is classified as suspicious due to the presence of a fragile pure bash JSON parsing fallback in `lib/json.sh` when `jq` is not installed, which represents a vulnerability in input handling. Additionally, the skill generates `CRON_ADD` commands in `lib/scheduler.sh`, `src/scheduler.py`, `lib/quotes.sh`, and `src/quotes.py` for scheduling tasks, and includes a static prompt injection phrase in `src/quotes.py` to instruct the agent. While these capabilities are used for benign purposes and include explicit warnings for the user to review, they are inherently powerful and could be exploited if the payloads were crafted maliciously, fitting the criteria for 'risky capabilities without clear malicious intent'.",
+          "checkedAt": 1779164542975,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "20c427a6846eca83dfaa5bd2e5fe61c04f482d4bf531eb137bb677072e70e03b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/20c427a6846eca83dfaa5bd2e5fe61c04f482d4bf531eb137bb677072e70e03b"
+    },
+    "slug": "islamic-skills",
+    "source_type": "clawhub",
+    "version": "2.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

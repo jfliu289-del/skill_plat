@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.175,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C11:token:product",
+      "category:C12:token:management",
+      "cross-tag:agent-management",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C11",
+      "C12"
+    ],
+    "stages": [
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "cf1a0ceb0e6db143167c82b79fef20dbec48057d690502396cf5c2b0f396d4c1",
+    "content_hash": "d1945d87d8a339e8e896add982dd01d3bf9bc413dbe49cc420b66ad466b8ae82",
+    "precanonical_content_hash": "a91107f7153ad94f93a42778513a0c2c6f68dcf4db620468b7aec44f389a23e1",
+    "skill_md_hash": "7b209374381565a22612928db29a4a872952880db70d29f9ba7acab8898a6478",
+    "version_metadata_sha256": "69b597b19a673a307264e7474837e728181e55b8a5cdef5c3a3a0176a6565a75"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/lars147/skills/knuspr-cli",
+    "claim_id": "30d242a5ec8488de67bad912935d00c02f7f3bf0ea39db127fd162607edd4275",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "knuspr-cli",
+        "url": "https://clawskills.sh/skills/lars147-knuspr-cli"
+      }
+    ],
+    "owner_handle": "lars147",
+    "owner_id": "s178rrsx57k47hhg8606d4vhf98840ba",
+    "published_at": 1770554034747,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658621690,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658621690,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The CLI capabilities fit the stated grocery-shopping purpose: product search, cart/list/favorite management, delivery-slot reservation, order history, deals, account status, and meal suggestions for Knuspr.de. No checkout or purchase-completion endpoint was found.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill gives clear safety rules to never complete purchases, use JSON for parsing, confirm destructive actions, and show prices, but its trigger text includes broad grocery/shopping-list terms that could require disambiguation before account access.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle is a local Python standard-library CLI with a normal pyproject console entry point, no hidden installer, no external package dependency, and no background worker.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access is scoped to Knuspr.de and is proportionate for the integration. The skill also reads login credentials from environment variables or an optional local credential file, which is sensitive but disclosed.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The CLI persists session cookies, user/address IDs, preferences, and optionally plaintext credentials in home-directory JSON files; this supports the stated CLI workflow but requires careful local secret protection. Logout removes the session file.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Environment-variable access, local file storage, and network calls are expected for an authenticated grocery-service CLI; the artifacts disclose these behaviors, though they should be treated as sensitive.\n[TP4] expected: The broader CLI surface, including auth, account/order access, browser opening, and completions, is documented in README and command reference and remains coherent with the grocery assistant purpose; this is under-summarized in the frontmatter but not hidden or unrelated.\n[SQP-2] expected: Cart clearing, slot reservation/release, favorite changes, list mutation, and order repeat change live account state, but they are documented grocery workflows and the skill explicitly forbids purchase completion.\n[SQP-2] expected: Password flags, environment variables, and an optional plaintext credentials file are real credential-handling risks, but authentication is necessary for the service and these paths are disclosed; interactive login is presented as the recommended option.\n[SQP-2] expected: Session-cookie persistence is expected for a CLI login session and is documented in the file list, but the file should be protected because theft could expose account access.\n[SQP-1] unexpected: Generic grocery and shopping-list trigger terms are broader than necessary for a live commerce-account skill, so agents should confirm the user intends Knuspr before reading account data or making changes.\n[PE3] expected: The credential-file finding reflects optional documented authentication storage, not privilege escalation or exfiltration; the risk is local plaintext secret exposure.",
+          "guidance": "Install only if you are comfortable letting an agent use your Knuspr account for shopping workflows. Prefer interactive login, avoid passing passwords on the command line, tightly protect or avoid ~/.knuspr_credentials.json, confirm any cart/list/favorite/slot changes, and personally review checkout in Knuspr before buying.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Knuspr grocery-shopping helper, but it can access a live account and change carts, lists, favorites, and delivery reservations.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658550847,
+          "issueCount": 10,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: knuspr-cli\nVersion: 0.1.0\n\nThe skill bundle is benign. The `knuspr_cli.py` script uses only Python's standard library, eliminating external supply chain risks. All network communication is directed exclusively to `https://www.knuspr.de`, with no evidence of data exfiltration to unauthorized external endpoints. Sensitive data like session cookies and optional user credentials are stored locally in the user's home directory (`~/.knuspr_session.json`, `~/.knuspr_credentials.json`), which is standard practice for CLI tools, and the `README.md` even recommends `chmod 600` for the credentials file. The `SKILL.md` instructions include 'Critical Rules' explicitly designed to prevent the AI agent from completing purchases or performing destructive actions without user confirmation, indicating a strong intent for safe and controlled operation.",
+          "checkedAt": 1779162202695,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "66d10ae368b2b26adac4b378371e21576c1e1c9e8c106fa69fae093c742cf58c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/66d10ae368b2b26adac4b378371e21576c1e1c9e8c106fa69fae093c742cf58c"
+    },
+    "slug": "knuspr-cli",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

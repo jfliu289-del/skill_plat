@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "website"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C14:token:lead",
+      "category:C17:token:notes",
+      "cross-tag:browser-automation",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C14",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "automate",
+      "build",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "adbb90cb5b6aabb6cbe2a5e9931d08eb616e64809046151c58dacfe779577bee",
+    "content_hash": "5820480597e7b322df237a4ea795e3e82e7ff09c4e04261f5cb6212b171f1935",
+    "precanonical_content_hash": "a0ad351bd20677dffdd087dce1d3c925d26d2e0639c7e7d8e7aec2f41e9a1d8e",
+    "skill_md_hash": "675b08928b1fe8a8a5bdeaec70309c9e3f37f3f885e1084b20b1716fcfbb540b",
+    "version_metadata_sha256": "c33735f25dca916430f6e9a71a886ec70e57b7d5df2dfc14157084295dd027dd"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/danielfoch/skills/follow-up-boss",
+    "claim_id": "ae0c6a12ad0b07a445e5af59f2042ca790e6df1f1afc05bc5267ce194163bb8e",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "follow-up-boss",
+        "url": "https://clawskills.sh/skills/danielfoch-follow-up-boss"
+      }
+    ],
+    "owner_handle": "danielfoch",
+    "owner_id": "s1709aqsm1ydr5bf0sfd19mwgn8841hg",
+    "published_at": 1771090920115,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967055166,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967055166,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The code matches the stated purpose: it calls the Follow Up Boss API to manage people, notes, tasks, events, deals, communications, users, sources, and webhooks. The capabilities include live CRM mutations and webhook deletion, so impact can be high even though it is purpose-aligned.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands are explicit and user-directed, and the documentation discloses many create/update/delete operations plus automation-triggering event creation. It would benefit from stronger warnings and confirmation guidance for production CRM changes.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no installer, background setup, package install script, or persistence mechanism; usage is a local Node CLI invoked by the user.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Reading FUB_API_KEY is expected for an authenticated Follow Up Boss API client, and the code sends it only to api.followupboss.com. The documentation should still tell users to treat the key as a secret and prefer least-privilege credentials where possible.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill does not create local persistence or elevate privileges, but its API commands can create persistent CRM records, complete tasks, create events that may trigger automations, and create or delete webhooks.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The API key setup is expected for this CRM CLI, but the finding is valid as guidance: the setup lacks explicit secret-handling advice.\n[SQP-2] expected: The state-changing commands are clearly related to the advertised CRM-management purpose and are listed in the documentation, but stronger warnings or confirmations would reduce accidental production changes.\n[suspicious.env_credential_access] expected: The environment variable is used to authenticate to Follow Up Boss; artifact evidence does not show unrelated credential collection or exfiltration.\n[suspicious.exposed_secret_literal] expected: The flagged value is a placeholder example for FUB_API_KEY, not a real embedded secret in the artifact.\n[VirusTotal: code_insight suspicious] unexpected: The URL construction concern is a reasonable input-validation weakness for malformed user arguments, but it does not show hidden behavior or malicious intent; it is not enough by itself to move the coherent CLI into Review.",
+          "guidance": "Install only if you want this skill to access your Follow Up Boss account. Use a limited API key if available, keep FUB_API_KEY out of shared logs and committed files, and manually review any create, update, complete, delete, webhook, or event command before running it against production CRM data.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward Follow Up Boss CLI that uses an API key to read and change CRM data, with no evidence of hidden exfiltration or deception.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967035482,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: follow-up-boss\nVersion: 1.0.0\n\nThe skill bundle is classified as suspicious due to several input validation vulnerabilities in `fub.js`. Specifically, user-supplied arguments are directly concatenated into URL query strings (e.g., `people?${args[1] || ''}`) and URL paths (e.g., `people/${args[1]}`) without proper sanitization or encoding, except for the `search` command which uses `encodeURIComponent`. This creates a URL injection risk and potential for ID manipulation if a malicious user provides crafted input. There is no evidence of intentional malicious behavior such as data exfiltration, backdoors, or prompt injection against the agent in `SKILL.md`.",
+          "checkedAt": 1779164056220,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "ab3ffc31b764c75bcab4789ebfd3890bf24d573a0a9f3a6f361c982cd9d1305a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ab3ffc31b764c75bcab4789ebfd3890bf24d573a0a9f3a6f361c982cd9d1305a"
+    },
+    "slug": "follow-up-boss",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

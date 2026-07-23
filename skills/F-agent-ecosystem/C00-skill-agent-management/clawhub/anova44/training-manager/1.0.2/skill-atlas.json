@@ -1,0 +1,146 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "security-professional"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:analyze",
+      "category:C09:token:security",
+      "category:C10:token:training",
+      "category:C16:token:training",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C09",
+      "C10",
+      "C16"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "db37f1f5368ef25d33fa412d1575b6433571e573587772fadc46d0510ef5d416",
+    "content_hash": "8c6f70a047665086e00e9327a233ee4580fa0e6c610f649fb899fc531565f9fe",
+    "precanonical_content_hash": "bd53fd3cb81220ad8ffa7e5fa21432267574e36ecc542c8d20224b1dea9115e8",
+    "skill_md_hash": "acd19b9bfe06ca5c1e7ea4c93e2b1ad9801699b6a208169bea61cb154c0aeca8",
+    "version_metadata_sha256": "db8112fbf20c32594ee43732750c491a83eb7f20b8d1d99d166fbca6aa19707d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/anova44/skills/training-manager",
+    "claim_id": "5723fb425e24579264d5e751c5591fcb2f9cec4883275537626b18b07ff8b639",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "training-manager",
+        "url": "https://clawskills.sh/skills/anova44-training-manager"
+      }
+    ],
+    "owner_handle": "anova44",
+    "owner_id": "s173r7q6h9pjv1f05zj14hyfnx8856v1",
+    "published_at": 1771219637215,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779969027690,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779969027690,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is workspace setup, logging, validation, export, and skill generation; the artifacts and scripts align with that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill writes persistent behavior, preference, memory, and skill files under the configured OpenClaw workspace; this is disclosed and purpose-aligned, though users should avoid logging secrets or sensitive personal data.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a normal skill install or local folder copy, with only bash required and no remote downloader or obfuscated installer.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The only notable environment control is OPENCLAW_WORKSPACE, used to choose the local workspace path; no credentials or privileged system access are requested.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill intentionally persists memory, daily logs, generated skills, and backups, and some memory writes are direct-confirm-after rather than preview-before-write; this is expected for the tool but worth user awareness.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad /training-manager invocation and automatic setup are disclosed in the README and SKILL.md; they create local workspace files only and are coherent with onboarding behavior.\n[SQP-2] expected: Persistent logging to AGENTS.md, SOUL.md, USER.md, MEMORY.md, and daily logs is central to the skill and documented, but users should understand these plaintext files may influence future agent behavior.\n[SQP-1] expected: Triggers such as 'remember this' and 'next time do Y' are broad but directly match the advertised ongoing-training workflow; the skill confirms what was written and where.\n[SQP-2] expected: Interactive setup writes core workspace files after collecting user answers and previews high-impact behavioral files before writing, reducing the concern from automatic modification.\n[SQP-2] expected: The first-memory step logs user-provided context to MEMORY.md and a daily log; this is expected, but the artifact could more clearly warn users not to provide secrets.\n[SQP-2] expected: scaffold.sh creates missing workspace files and directories without a separate confirmation prompt, but it does not overwrite existing files and is a user-invoked local bootstrap script.\n[SSD-3] expected: The memory feature persists arbitrary user-supplied context by design; no exfiltration is present, but sensitive data handling is mostly left to user judgment.",
+          "guidance": "Install only if you want this skill to create and update plaintext OpenClaw workspace files. Do not store passwords, API keys, private records, or other secrets in training corrections, MEMORY.md, daily logs, generated skills, or exported backups.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it claims: it manages local OpenClaw workspace training files, with no evidence of hidden network access, credential theft, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968989985,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 91,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: training-manager\nVersion: 1.0.2\n\nThe OpenClaw Training Manager skill bundle is designed with strong security considerations. The `SKILL.md` explicitly instructs the AI agent to perform prompt injection and data exfiltration checks on user input before writing to sensitive configuration files. This is reinforced by the `scripts/generate-skill.sh` and `scripts/log-training.sh` which implement robust input validation against shell metacharacters and comprehensive pattern matching for prompt injection and data exfiltration attempts (e.g., 'ignore previous instructions', 'send all files to', 'curl .*POST'). All other scripts perform benign workspace management tasks like analysis, export, scaffolding, status, and validation, without any evidence of malicious intent or risky external communication. The design prioritizes preventing misuse rather than facilitating it.",
+          "checkedAt": 1779164465350,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "db37f1f5368ef25d33fa412d1575b6433571e573587772fadc46d0510ef5d416",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/db37f1f5368ef25d33fa412d1575b6433571e573587772fadc46d0510ef5d416"
+    },
+    "slug": "training-manager",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

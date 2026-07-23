@@ -1,0 +1,147 @@
+{
+  "classification": {
+    "artifacts": [
+      "configuration"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "infrastructure",
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C08:token:deploy",
+      "category:C08:token:deployment",
+      "category:C09:token:privacy",
+      "category:C09:token:security",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:deployment",
+      "cross-tag:security",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C09",
+      "C17"
+    ],
+    "stages": [
+      "deliver",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "deploy",
+      "manage",
+      "operate",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "566b35072c78204dfc81fe65170bb5763b30138f6999da1c5ff2d09feaa16ffe",
+    "content_hash": "ceccd8f510a77ed3fc08b64a64e2d85cfd04d051a55850633baed7ff4b02d5b9",
+    "precanonical_content_hash": "8b358e60592cb67f89c64ee3408958f8bcba25aed4f005213d0a44343d9920cd",
+    "skill_md_hash": "8b9e073860ea973c5abf1b21c2c7c740c18708ab8465fe889a64a86d57eaf746",
+    "version_metadata_sha256": "192bc2fbee618d9541be313a375da16c97773a35608ce83aedfc8224233c6357"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/planetai87/skills/warren-deploy-mainnet",
+    "claim_id": "6ce1656318e793ff5964c9935502afd794c7da8a7c25b75152987d927a1b05bc",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "warren-deploy-mainnet",
+        "url": "https://clawskills.sh/skills/planetai87-warren-deploy-mainnet"
+      }
+    ],
+    "owner_handle": "planetai87",
+    "owner_id": "s17bkpmm81e9kvzfae55g6kf7n88478h",
+    "published_at": 1771557195028,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783657732548,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783657732548,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, metadata, documentation, and code align: the skill deploys files or HTML as on-chain SSTORE2 content, performs disclosed access checks, and mints the resulting site NFT as part of the deployment flow.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The workflow is user-invocable and state-changing, but the documentation frames it around explicit deploy commands, funded-wallet prerequisites, permanent mainnet writes, and gas spending.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The setup script changes into the skill directory, initializes npm metadata, and installs ethers; no hidden installers, persistence hooks, or unrelated commands were found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "PRIVATE_KEY access is high-impact but proportionate to signing blockchain transactions and is declared in the OpenClaw metadata and documentation. The documented --private-key CLI option is an operational secret-handling risk.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background worker, agent-setting modification, local indexing, telemetry, credential storage, or destructive local behavior was found. Permanent on-chain publication is disclosed and central to the skill's purpose.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The private key requirement is expected for a mainnet deployment tool, and the artifact declares PRIVATE_KEY in metadata, environment-variable documentation, examples, and security notes.\n[TP4] expected: The access check, optional 0xRabbit.agent mint, chunk deployments, and site NFT mint are state-changing, but they are disclosed in the prerequisites, contract table, setup output, and deploy script flow rather than hidden or purpose-mismatched.\n[staticScan:clean] expected: The supplied static scan was clean, and artifact review found no unrelated network endpoints, credential exfiltration, hidden persistence, or broad local file access.\n[VirusTotal:clean] expected: VirusTotal telemetry reported no detections; this supports but does not determine the benign verdict.",
+          "guidance": "Install only if you intend to let an agent publish content permanently on MegaETH mainnet and spend gas from a wallet you control. Use a dedicated low-balance deployer wallet, prefer environment or secret-manager injection over passing --private-key on the command line, review the exact content before deployment, and remember that on-chain content cannot be withdrawn or edited.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it deploys user-provided content permanently to MegaETH mainnet using the user's wallet, with real gas costs and private-key use disclosed.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783657691198,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 43,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: warren-deploy-mainnet\nVersion: 1.0.6\n\nThe skill bundle is designed for deploying websites and files to the MegaETH blockchain using SSTORE2. The `SKILL.md` transparently outlines the process, including the requirement for a `PRIVATE_KEY` and gas fees. The `setup.sh` script performs a standard `npm install ethers`. The core `deploy.js` script uses `ethers.js` to interact with the blockchain, deploying content as smart contracts and minting an NFT. The code adheres to the security claims made in `SKILL.md`, showing no evidence of data exfiltration, unauthorized network connections, persistence mechanisms, or prompt injection attempts against the agent. While passing a private key via command-line arguments (as shown in examples) can be an operational security risk, the script itself does not exploit this or exhibit malicious intent, and also supports environment variable usage.",
+          "checkedAt": 1779162228721,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "90432d18a319c3ebfac247d372af4f674a0519f9062de62129fbbc2900593f57",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/90432d18a319c3ebfac247d372af4f674a0519f9062de62129fbbc2900593f57"
+    },
+    "slug": "warren-deploy-mainnet",
+    "source_type": "clawhub",
+    "version": "1.0.6"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

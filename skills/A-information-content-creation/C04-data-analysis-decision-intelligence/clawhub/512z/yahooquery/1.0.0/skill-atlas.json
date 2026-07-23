@@ -1,0 +1,148 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.5568,
+    "domains": [],
+    "needs_review": false,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:research",
+      "category:C01:token:search",
+      "category:C04:phrase:data analysis",
+      "category:C04:token:data",
+      "category:C12:token:market",
+      "category:C13:token:finance",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C01",
+      "C12",
+      "C13",
+      "C17"
+    ],
+    "stages": [
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "842b772fa18fab1586330a079d317f1645524a08274c547ea75781dab193d711",
+    "content_hash": "1a578f39c07aef4b1316fe1e8daf91fcc2de26e28e11ab856be968bbdc02d227",
+    "precanonical_content_hash": "7fdde4ad5ea07e937c9cce2bc9bb984fd2f83e0eb78cd360553ed1e7411cd93e",
+    "skill_md_hash": "1c77b2514f8b594d4b51cf2f9a3b1a082fef3f1aea97858cdf7af453e6fdae01",
+    "version_metadata_sha256": "f4850dce320d20484cb54987c00d96b25e3c2b9402d9fd672aeb342a68b71add"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/512z/skills/yahooquery",
+    "claim_id": "e0391c36420c4dbe9b10ac6b8fa40a9d5190e201bba0d03236e2024184205499",
+    "index_entries": [
+      {
+        "index_path": "categories/calendar-and-scheduling.md",
+        "label": "yahooquery",
+        "url": "https://clawskills.sh/skills/512z-yahooquery"
+      }
+    ],
+    "owner_handle": "512z",
+    "owner_id": "s17e0ynezdm0j2rvrsyeapmqz58854v8",
+    "published_at": 1770642451992,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779962552062,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779962552062,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is accessing Yahoo Finance data through the yahooquery Python library, and the documented capabilities are finance-data retrieval, screening, historical data, options, news, and premium research endpoints.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions disclose optional Yahoo Finance Premium username/password use, session and crumb reuse, proxy configuration, and TLS verification controls; these fit the purpose, but the examples repeatedly show inline placeholder credentials and include verify=False without strong safety framing.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package consists only of markdown documentation with no executable scripts or install hooks; it tells users to install the external yahooquery package with pip but does not pin a version.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to Yahoo Finance, optional Selenium login, and optional proxies are proportionate to the finance-data purpose, with the main risks coming from user credential handling, untrusted proxies, or disabling certificate verification.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts do not show background execution, persistence, privilege escalation, local file indexing, destructive actions, or credential exfiltration; session reuse is documented as an in-process advanced usage pattern.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The username/password examples are real documentation for Yahoo Finance Premium access and are disclosed, but users should avoid hardcoding real credentials in code, prompts, notebooks, logs, or repositories.\n[SQP-2] expected: The session and crumb reuse examples are purpose-aligned advanced usage for authenticated Yahoo Finance calls, not hidden persistence or account takeover behavior.\n[TM3] unexpected: The verify=False example is an unsafe network configuration pattern and should not be copied into normal use, but it is documentation of a configurable option rather than automatic insecure behavior by the skill.\n[VirusTotal code_insight] expected: VirusTotal's concern about credentials and proxies matches disclosed optional functionality; there were no engine detections and no artifact evidence of deception, exfiltration, or destructive behavior.",
+          "guidance": "Install only if you intentionally want yahooquery-based Yahoo Finance access. Use premium credentials only when needed, supply them through protected environment variables or a secrets manager, do not paste real passwords into shared prompts or checked-in files, keep TLS verification enabled, and avoid untrusted proxies.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a documentation-only Yahoo Finance skill with disclosed finance-data and optional premium-login usage, but users should handle credentials and TLS settings carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779962519900,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 75,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: yahooquery\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to its explicit handling of sensitive user credentials (username and password) for Yahoo Finance Premium features, as detailed in `SKILL.md`, `references/keyword_arguments.md`, `references/research.md`, and `references/ticker/premium.md`. It also allows for the configuration of network proxies, a risky capability that could be leveraged for data exfiltration or to obscure network traffic. While these features are presented as part of the skill's legitimate functionality, they expose significant attack surface for an AI agent or a malicious user.",
+          "checkedAt": 1779162446629,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "6dbb1d7bff8e6e2e7e7e488f77c8ce0b571dedb53992ac175976822abd1e8658",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6dbb1d7bff8e6e2e7e7e488f77c8ce0b571dedb53992ac175976822abd1e8658"
+    },
+    "slug": "yahooquery",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

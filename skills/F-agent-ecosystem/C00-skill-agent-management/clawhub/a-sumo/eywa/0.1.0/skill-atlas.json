@@ -1,0 +1,131 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.625,
+    "domains": [],
+    "needs_review": false,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:phrase:multi agent",
+      "category:C00:token:agent",
+      "category:C11:token:collaboration",
+      "category:C11:token:team",
+      "category:C17:token:knowledge",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C11",
+      "C17"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "88c2d3aebe79a3d6cfadba91783bca016c066a778dbc48eec139edc37052cc30",
+    "content_hash": "b3872a0260eb1f119be55b722878d2e98685a1680f499e1fe33f4f638aeb02f0",
+    "precanonical_content_hash": "bcda94af22d16b030982110c0bcdad1c812562aa2d6964b40a029aef149be007",
+    "skill_md_hash": "8f277e47b81dbf357341ae450d26ffadb345d7934ddcc08fbf14e43311138f5b",
+    "version_metadata_sha256": "5c6702c8c251c464afdebd226d5220b7e30fd8db9ce5ca087aff9cff4f1ce251"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/a-sumo/skills/eywa",
+    "claim_id": "b6e583668d899703e07f3cbb4a87367456ce763dbf3b2677e49c46677bf569cb",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "eywa",
+        "url": "https://clawskills.sh/skills/a-sumo-eywa"
+      }
+    ],
+    "owner_handle": "a-sumo",
+    "owner_id": "s17as06n7rv0jwa10qm677pda18848rp",
+    "published_at": 1770862324655,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971671465,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971671465,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The shell helper and remote HTTP call fit the stated Eywa coordination purpose: invoking room/status/knowledge tools through an external MCP-style endpoint.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill appears to rely on agent-generated tool names and JSON arguments, so users should keep calls narrowly task-directed and avoid sending secrets or private project data.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The reviewed behavior is implemented through a local shell script invoked by the skill; this is disclosed in the skill instructions, though it would benefit from clearer permission-style disclosure.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Outbound network access to the default Eywa endpoint is proportionate for a remote coordination skill, but the default third-party destination and EYWA_URL override should be understood before use.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill supports shared room context and persistent knowledge through the remote service, which is expected for its purpose but may retain sensitive information if users provide it.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Shell invocation is part of how this skill reaches the Eywa service; this is a transparency concern rather than evidence of unrelated command execution.\n[SQP-2] expected: Remote sharing and persistent knowledge are core to the coordination use case, but the artifacts should more plainly warn users that task context may leave the local machine.\n[SQP-2] expected: The script sends caller-provided tool names and JSON arguments to the remote service; that is expected behavior, with privacy risk depending on what the user or agent includes.\n[E1] expected: The curl POST is an external transmission path, but it matches the skill's remote-service design and is not artifact-backed evidence of hidden exfiltration.\n[VirusTotal code_insight] expected: The telemetry raised prompt-construction and endpoint-redirection concerns, while engine detections were zero; these are usage risks, not enough by themselves to change the verdict.",
+          "guidance": "Install this only if you are comfortable using the Eywa remote service for coordination. Do not send secrets, credentials, regulated data, or proprietary context unless you have approved that endpoint and its retention/access model; consider setting EYWA_URL only to a trusted service you control.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill appears to be a purpose-built remote coordination helper, but users should treat anything sent through it as shared with an external service.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971637480,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: eywa\nVersion: 0.1.0\n\nThe skill is classified as suspicious due to the potential for prompt injection against the AI agent when constructing JSON arguments for `eywa-call.sh`. While the `eywa-call.sh` script itself is robust against direct shell injection by quoting variables, an agent could be prompted to generate malformed JSON, leading to unexpected server behavior or errors. Additionally, the script allows overriding the `EYWA_URL` via an environment variable, which could be exploited to redirect communication to an attacker-controlled server for data exfiltration or control, although this is a common configuration pattern and not inherently malicious in the script itself. All communication is directed to an external endpoint `https://eywa-mcp.armandsumo.workers.dev` as part of its core functionality, which is not malicious per se but represents a reliance on an external service.",
+          "checkedAt": 1779163371338,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "87a0fc9dc66ef33c1ba29481a5a7a46a665aaa7f99af623e4a8176198367c5d3",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/87a0fc9dc66ef33c1ba29481a5a7a46a665aaa7f99af623e4a8176198367c5d3"
+    },
+    "slug": "eywa",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

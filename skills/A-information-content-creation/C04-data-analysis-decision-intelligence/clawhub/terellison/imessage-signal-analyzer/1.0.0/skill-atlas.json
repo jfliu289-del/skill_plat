@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.55,
+    "domains": [],
+    "needs_review": false,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:analyze",
+      "category:C04:token:data",
+      "cross-tag:data-analysis",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "7d60d935b544fb5f06953d28ef00bd0477185e5e91a0d0d9b69f6d427aa78611",
+    "content_hash": "09d868def7e5e6d0021701ce4d9f78f0862ecd7a918d78322aa3f765f0c8b862",
+    "precanonical_content_hash": "da80f99994c352fb642fe624fb9847c8b3f5d3ba53f855b1555eef59ee805ddf",
+    "skill_md_hash": "2e2d2b89f84e4d0f948d65a3606d23f96555b7e5297da32de5fbf2a65350cca0",
+    "version_metadata_sha256": "7ebe8b645cc95b79790c8601e011bd44b6e81d6f011c9f841cc1460b29148545"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/terellison/skills/imessage-signal-analyzer",
+    "claim_id": "adbe34dcdc59913bcfaec7e8db675cbb11434207f4a8e5d9c5ae56b2563dfa0a",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "imessage-signal-analyzer",
+        "url": "https://clawskills.sh/skills/terellison-imessage-signal-analyzer"
+      },
+      {
+        "index_path": "categories/apple-apps-and-services.md",
+        "label": "imessage-signal-analyzer",
+        "url": "https://clawskills.sh/skills/terellison-imessage-signal-analyzer"
+      }
+    ],
+    "owner_handle": "terellison",
+    "owner_id": "s17f856vcctyctfmw0708199yn86q96r",
+    "published_at": 1771597193739,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943012518,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943012518,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The capability matches the stated purpose: it analyzes local iMessage and Signal conversation history, including message counts, timing, gaps, and recent text samples.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Use is user-directed by a contact handle or Signal export path, but the trigger language is broad and the script prints recent message text by default.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden installer or automatic download is present; the docs disclose optional signal-cli installation and linking.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading Messages, Signal exports, and optional AddressBook data is sensitive but coherent with conversation analysis.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The script does not create persistence or escalate privileges, but Full Disk Access and signal-cli device linking may persist until the user revokes them.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill reads private message sources, but that access is central to the advertised analyzer and is described in the docs.\n[SDI-2] expected: The AddressBook lookup is an optional helper for finding a contact handle; it increases privacy exposure and should be used only with explicit user intent.\n[SQP-1] expected: The activation text is somewhat broad, but it remains tied to message-history analysis rather than an unrelated hidden behavior.\n[SQP-2] expected: The lack of a prominent consent warning and default message excerpts are real privacy concerns, but the behavior is disclosed and purpose-aligned.\n[VirusTotal code_insight] expected: The user-supplied Signal JSON path is expected for importing an export file; there is no evidence of exfiltration, persistence, or automatic arbitrary-file harvesting.",
+          "guidance": "Install only if you are comfortable letting an agent read and summarize private chat history. Use a specific contact and limit where possible, avoid granting broad Full Disk Access unless needed, protect Signal export files, and revoke Full Disk Access or unlink signal-cli when finished.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it advertises, but it works by reading very private message and contact data.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779942935106,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 97,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: imessage-signal-analyzer\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to a file path traversal vulnerability in `scripts/analyze.py`. The `analyze_signal` function takes a `json_path` argument directly from command-line input (`sys.argv[2]`) and uses `os.path.expanduser()` before opening the file. This allows an attacker to specify a path like `../../../etc/passwd` to read arbitrary files on the system, potentially exposing sensitive data. While this is a significant vulnerability, there is no clear evidence of intentional malicious behavior such as data exfiltration, persistence, or unauthorized remote control. The `SKILL.md` also contains a `sqlite3` command for AddressBook lookup that could be vulnerable to SQL injection if the AI agent's execution environment does not properly sanitize user input, but the prompt itself does not contain a malicious payload.",
+          "checkedAt": 1779165690809,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "9210bd9bef9e787db7a78a6ba335dc32661ebe6543fb1d674bf7bca9aecfbeb2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/9210bd9bef9e787db7a78a6ba335dc32661ebe6543fb1d674bf7bca9aecfbeb2"
+    },
+    "slug": "imessage-signal-analyzer",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

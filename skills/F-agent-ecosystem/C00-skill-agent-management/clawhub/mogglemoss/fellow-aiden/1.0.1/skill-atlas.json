@@ -1,0 +1,127 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C10:token:ai",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "fc75c1020423ee06450501a2068f9ea140206f581adfd0f2c833a42ae16f43f2",
+    "content_hash": "50e7be44e985af2b137f05f4e07d4838fb3535936af8899f299ceee1434314c6",
+    "precanonical_content_hash": "06919f29f9f03d6115937c6a65dc1e5e7d641b0ca4e359697e15aee0d85d896d",
+    "skill_md_hash": "3719fb013c49d00788166baf96e4b8f0ef3b2cffefcf200c57735d79204f4e07",
+    "version_metadata_sha256": "f950fab59e42305a894e7289a98a2428e8d4c3e742b208cabfd4b4dfc6b1fde7"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/mogglemoss/skills/fellow-aiden",
+    "claim_id": "da1ae2e537ee8efe1f23cdacf4f336e016f54ca51a99a4e35da22c5a3552f3f6",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "fellow-aiden",
+        "url": "https://clawskills.sh/skills/mogglemoss-fellow-aiden"
+      }
+    ],
+    "owner_handle": "mogglemoss",
+    "owner_id": "s179xf7kyvxe6p0dhg59g36n2x8854vn",
+    "published_at": 1771781845553,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779949712024,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779949712024,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The purpose is coherent: control or inspect a Fellow Aiden brewer through the Fellow API. The reviewed script only implements login plus read-style info, profile, and schedule queries, while the README and SKILL.md advertise additional create/delete/import/share actions that are not present in the code.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Agent instructions are user-directed and include confirmation before deleting profiles or schedules. README examples mention deletion and scheduling without the same warning, but the reviewed runtime does not implement those destructive commands.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill declares a shell install for the external fellow-aiden Python package and an unpinned requirements entry, although the reviewed script uses direct requests calls and does not import that package. This is broader than necessary but disclosed.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "FELLOW_EMAIL and FELLOW_PASSWORD are explicitly declared and purpose-aligned for authenticating to a cloud-connected brewer. The script sends them to a single Fellow API login endpoint and does not show unrelated credential use, local file access, or credential logging.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The reviewed code does not persist data locally, install background workers, request elevated privileges, or implement remote state-changing operations. Documented profile and schedule mutation features appear incomplete rather than hidden.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: Credential and network use are expected for this integration and the required environment variables are declared in the skill metadata; clearer endpoint and secret-handling documentation would improve transparency.\n[SQP-2] expected: The concern about deleting profiles and managing schedules is partly applicable to the documentation, but SKILL.md instructs confirmation before deletion and the reviewed script does not implement those write operations.\n[SQP-2] expected: The README's environment-variable setup lacks practical secret-handling guidance, but the credential request itself is disclosed and necessary for the stated account-based brewer integration.\n[staticScan] expected: Static scan reported clean, consistent with the observed simple API client and lack of shell execution, arbitrary file access, persistence, or obfuscation in the runtime script.\n[VirusTotal] expected: VirusTotal telemetry was clean and supports the artifact review, but it was treated only as supporting signal.",
+          "guidance": "Install only if you are comfortable giving this skill your Fellow account email and password. Store the password through a secure secret mechanism when possible, avoid putting it in shared shell profiles or logs, and be aware that several advertised profile and schedule management commands are not actually implemented in the reviewed script.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Fellow Aiden coffee brewer integration that uses account credentials for the expected API calls, with documentation and packaging rough edges but no artifact-backed malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779949667904,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: fellow-aiden\nVersion: 1.0.1\n\nThe skill is designed to control a Fellow Aiden coffee brewer via its API. It securely handles credentials by reading them from environment variables and sending them to a legitimate AWS API Gateway endpoint (l8qtmnc692.execute-api.us-west-2.amazonaws.com). The `fellow.py` script implements direct API calls and does not contain any shell injection vulnerabilities, arbitrary file access, or malicious network activity. The `SKILL.md` instructions for the AI agent are benign, focusing on improving user interaction and functionality. While `SKILL.md` advertises several commands (e.g., `profiles create`, `import`, `delete`) that are not yet implemented in `fellow.py`, this is a functional incompleteness rather than a security vulnerability in the current code.",
+          "checkedAt": 1779166265353,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "992e26502c3a8c86a1e1766eae83f16385a1ccd082e98fd872ef7c1a426c1ceb",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/992e26502c3a8c86a1e1766eae83f16385a1ccd082e98fd872ef7c1a426c1ceb"
+    },
+    "slug": "fellow-aiden",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

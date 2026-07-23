@@ -1,0 +1,160 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "website"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2389,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C07",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C07:token:test",
+      "category:C07:token:testing",
+      "category:C09:token:security",
+      "category:C12:token:decision",
+      "category:C12:token:management",
+      "category:C13:token:operations",
+      "category:C19:token:browser",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:debugging",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C06",
+      "C09",
+      "C12",
+      "C13",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "build",
+      "debug",
+      "manage",
+      "secure",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "fb1521d9ca94d1635f41360d66656db61b34fdefbfa7d2da105fc40afb46f9c6",
+    "content_hash": "049a72ed19e3ef3276247154373c7f77e29cd4993ff65475426ce258e27eb8e5",
+    "precanonical_content_hash": "cd5d908cee193d0871c81d6e3645d5cc7279afa9183eff1d67a64a979383e1a9",
+    "skill_md_hash": "a66b13b2f1395e521de71b605ff74ec307e899212b25c28e0d52398f3207e1c4",
+    "version_metadata_sha256": "22bdaef7cbab54f02e050bc0b0d712735534c080ef4cc2d7f257ab7bef5ad78a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/felipeoff/skills/stripe-cli-skill",
+    "claim_id": "1011d454390d4a025ea2c89f3507a5cea12e316124688e1a8847a46dd488077d",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "stripe-cli-skill",
+        "url": "https://clawskills.sh/skills/felipeoff-stripe-cli-skill"
+      }
+    ],
+    "owner_handle": "felipeoff",
+    "owner_id": "s17409fga9b7766vtedbmnwm0984d8v8",
+    "published_at": 1771666660650,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779947053494,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779947053494,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill purpose matches its artifacts: local/staging Stripe CLI workflows, webhook testing, event simulation, API inspection, and sandbox billing diagnostics.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Instructions include state-changing Stripe CLI commands and webhook forwarding, but they are disclosed, purpose-aligned, and paired with sandbox-first, account-checking, and live-mode confirmation guidance.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No install hook, package download, or hidden setup is present; the bundled scripts are small shell helpers for listening and redacting Stripe secrets.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use of Stripe API keys, webhook signing secrets, and webhook payload forwarding is sensitive but proportionate to the stated Stripe CLI purpose, with repeated guidance to prefer test keys and redact secrets.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill does not request persistent privileges or modify other skills; Stripe CLI login/config and a running webhook listener may persist or run locally as normal user-directed Stripe CLI behavior.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code_insight] expected: The concern about forwarding webhooks to arbitrary URLs reflects a real capability of Stripe CLI, but the artifact defaults to localhost, warns on non-localhost targets, and the behavior is central to webhook testing rather than hidden exfiltration.\n[SkillSpector SQP-2] expected: Copying a generated webhook signing secret into a local environment is expected for webhook validation; the broader artifacts already warn not to commit or share whsec values, so this is guidance-level rather than a Review concern.",
+          "guidance": "Install only if you intend to use Stripe CLI workflows. Use test or sandbox keys by default, check the active Stripe account before mutations, avoid forwarding webhooks to non-localhost URLs unless you explicitly trust the destination, and keep sk_*, rk_*, and whsec_* values out of commits, logs, and chats.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent Stripe CLI helper with expected webhook, test-event, and log-sanitizing behavior, though users should treat Stripe secrets and forwarded webhook data as sensitive.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779947020743,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 6,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: stripe-cli-skill\nVersion: 0.1.0\n\nThe skill is designed for safe Stripe CLI operations, with strong documentation (`SKILL.md`, `references/*.md`) emphasizing security guardrails, test-mode-first usage, and secret redaction (`scripts/stripe-sanitize.sh`). However, the `scripts/stripe-dev-listen.sh` script allows forwarding Stripe webhooks to arbitrary URLs, which could be exploited for data exfiltration or SSRF if the agent is compromised or given malicious instructions, despite including a warning for non-localhost targets. This constitutes a risky capability without clear malicious intent, classifying it as suspicious.",
+          "checkedAt": 1779165880587,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "fb1521d9ca94d1635f41360d66656db61b34fdefbfa7d2da105fc40afb46f9c6",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/fb1521d9ca94d1635f41360d66656db61b34fdefbfa7d2da105fc40afb46f9c6"
+    },
+    "slug": "stripe-cli-skill",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

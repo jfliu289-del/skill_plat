@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.175,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C02:token:language",
+      "category:C04:token:data",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C04",
+      "C10"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "7757702534c732966ac86d7e8d02ac9d3f4373edd451ab2e46cdd0f2055ee001",
+    "content_hash": "50b8d9c6119d74c410dedb7a76021b01fed7eadde7eca9852b6c5e505a5fcd75",
+    "precanonical_content_hash": "10a44b3da92fe8c77ae872112ee78f9db87981dc2a11c74c160c9f5747d8dd54",
+    "skill_md_hash": "0a95795160478a0a13cb4dacf28b75aa88daf78eedcf8b7101c743a803a21c3c",
+    "version_metadata_sha256": "da961e8fb7066970cc27202f2e8b9c3299a518964d2504523ce25423a3fcc09b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/nicholasrae/skills/nicholasrae-expense-tracker",
+    "claim_id": "db67909a41d59c5a153f3cfd9b6fd5e02ae51b4b3fe8566e3c2f5ca925817668",
+    "index_entries": [
+      {
+        "index_path": "categories/health-and-fitness.md",
+        "label": "nicholasrae-expense-tracker",
+        "url": "https://clawskills.sh/skills/nicholasrae-nicholasrae-expense-tracker"
+      }
+    ],
+    "owner_handle": "nicholasrae",
+    "owner_id": "s1792bvn36zr5b1535d1k1dp3x884bgd",
+    "published_at": 1771616612533,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779940199260,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779940199260,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently support expense logging, querying, categorization, budget checks, reports, refunds, corrections, and deletions. Those capabilities match the stated personal-finance purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill intentionally lets natural-language spending phrases add, update, recategorize, or delete local records. That is purpose-aligned and disclosed, but users should treat ambiguous or destructive requests carefully because pre-action confirmation is not consistently required.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a normal copy into the skills directory. The README discloses runtime dependencies on bash, jq, and bc, although metadata does not fully express those dependencies.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Scripts operate on files under the skill directory, mainly expenses/ledger.json and references/budgets.json. I found no credential access, network calls, shell obfuscation, persistence outside the skill folder, or unrelated system access.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill persists personal spending data locally in expenses/ledger.json and can modify budgets and ledger entries. This persistence is expected for an expense tracker and is documented, with no background worker or privilege escalation shown.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The natural-language examples can trigger local ledger writes, but this is the central advertised function of the skill and the data stays local.\n[SQP-2] expected: Refunds, corrections, recategorization, budget updates, and deletions are disclosed as supported behavior. The lack of mandatory confirmation is a usability/integrity caution, not evidence of hidden or malicious behavior.",
+          "guidance": "Install only if you are comfortable storing personal spending history as plain local JSON in the skill folder. Keep the folder private, back up ledger.json if the records matter, and ask the agent to confirm before deleting, recategorizing, or changing budgets.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a local expense-tracking skill that stores and changes a plain JSON ledger as advertised, with no evidence of hidden network access, credential use, or unrelated behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779940162381,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 78,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: nicholasrae-expense-tracker\nVersion: 1.0.3\n\nThe OpenClaw AgentSkills skill bundle for expense tracking is classified as benign. All shell scripts (`add-expense.sh`, `budget-check.sh`, `query.sh`) correctly utilize `jq --arg` and `jq --argjson` to pass user-controlled input as data, effectively preventing `jq` injection vulnerabilities. Input validation for dates and amounts is also implemented. The `SKILL.md` instructions explicitly guide the AI agent to use these secure `jq` methods. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts against the agent. All file operations are local and confined to the skill's directory.",
+          "checkedAt": 1779165607522,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "4ead00dc60870082c7a7909ceb4c4c2a95cfc9204344feebcd1d255bb80c2968",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4ead00dc60870082c7a7909ceb4c4c2a95cfc9204344feebcd1d255bb80c2968"
+    },
+    "slug": "nicholasrae-expense-tracker",
+    "source_type": "clawhub",
+    "version": "1.0.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

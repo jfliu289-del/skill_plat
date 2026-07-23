@@ -1,0 +1,129 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.4167,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C01:token:browse",
+      "category:C01:token:search",
+      "cross-tag:search",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00"
+    ],
+    "stages": [
+      "discover"
+    ],
+    "tasks": [
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d5036343f82b9ccf7267247cc96a3c30931a01ce70f23e184a547c4f70ace0ff",
+    "content_hash": "0bc78a97b3339ffa1110743183865ae2c66a1a83ee9a287ffa970c2467777c30",
+    "precanonical_content_hash": "fd5e992f327d36f41262343568be13c3d003cd4e758c01b35a254c3184864cda",
+    "skill_md_hash": "c098146ffa753f52de8a5f1e42d71a4a38a5bc4349e67024adcabd8afb1ddaf3",
+    "version_metadata_sha256": "6586ad2db64e4fb36ffe1c2c35dc6bea097058b36d0d54135e84384352a5303f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/rafadc/skills/opdscli",
+    "claim_id": "7fb1184fb9a5c3f60e2389f122295664ee7a75d127d86d187f2428b7b195c6c5",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "opdscli",
+        "url": "https://clawskills.sh/skills/rafadc-opdscli"
+      }
+    ],
+    "owner_handle": "rafadc",
+    "owner_id": "s176vj9sam7a42x3dg57j264sh8854a5",
+    "published_at": 1771283441412,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971746480,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971746480,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is browsing, searching, managing, and downloading ebooks from OPDS catalogs, and the documented commands all match that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Instructions are limited to opdscli catalog, search, latest, and download workflows; authenticated catalog setup is user-directed and the skill warns not to print credential-bearing config.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill installs a third-party Homebrew tap/formula for opdscli and contains no executable payload of its own, so users should trust the upstream CLI source before installing.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to OPDS catalogs, ebook downloads, and optional catalog authentication are expected for the tool; there is no broad local indexing or unrelated data access in the artifacts.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "opdscli persists catalog configuration under ~/.config/opdscli.yaml and may store credentials there in plaintext with 600 permissions; no background execution, privilege escalation, or cross-skill persistence is requested.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The referenced config example includes placeholder-style username/password fields, but the skill also tells agents to use catalog subcommands, notes plaintext credential storage, and warns against logging or echoing config; this is a user caution, not evidence of hidden behavior.\n[VirusTotal code_insight] expected: The plaintext credential concern is artifact-backed, but it is disclosed, directly tied to authenticated OPDS catalogs, and not accompanied by exfiltration, deception, or automatic credential harvesting.",
+          "guidance": "Install only if you trust the upstream opdscli Homebrew tap. Avoid adding sensitive paid-library or private-server credentials unless you accept that opdscli may store them in plaintext in ~/.config/opdscli.yaml, and do not share or commit that config file.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward OPDS ebook CLI helper, with the main caution that authenticated catalog credentials may be stored in plaintext by the underlying tool.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971713053,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: opdscli\nVersion: 0.1.0\n\nThe skill bundle itself is well-behaved and provides clear instructions for the AI agent, including a guardrail in `SKILL.md` to 'Never log or echo catalog config that may contain passwords or tokens.' However, both `SKILL.md` and `references/cli-reference.md` explicitly state that the underlying `opdscli` tool stores 'Credentials stored in config are plaintext' in `~/.config/opdscli.yaml`. While the skill bundle attempts to mitigate the risk by instructing the agent not to expose these, the reliance on a tool with this significant vulnerability makes the overall skill bundle suspicious, as it introduces a high-risk behavior (plaintext credential storage) into the environment.",
+          "checkedAt": 1779164687954,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "d5036343f82b9ccf7267247cc96a3c30931a01ce70f23e184a547c4f70ace0ff",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d5036343f82b9ccf7267247cc96a3c30931a01ce70f23e184a547c4f70ace0ff"
+    },
+    "slug": "opdscli",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

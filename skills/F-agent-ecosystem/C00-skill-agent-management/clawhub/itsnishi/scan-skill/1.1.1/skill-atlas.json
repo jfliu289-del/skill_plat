@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C09:token:security",
+      "cross-tag:agent-management",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "9d0120e28d61462f32930ba12f9a3f0b0a5c7b27580e88c882055828ba7f9a35",
+    "content_hash": "d27ce7a7501aaa809a525fa8910ae95e88d8f471579c7456082ab30163ff819c",
+    "precanonical_content_hash": "f798e48d3cbf3dde115a2f3905d7dbd6c0bafefa7c4aa9b6d0de8503a13b235d",
+    "skill_md_hash": "c84199f0c6c50bdaa11826e76f0ecfa373a3b811d71be5fecfccc6ea6a60b76a",
+    "version_metadata_sha256": "26eb37c0fdda7f63ba3c9bd6f85dae169d7559eb6425b3d26d7dcdf07b445cdf"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/itsnishi/skills/scan-skill",
+    "claim_id": "a2b4745fc4f3869c5a661fc9a37634ac4abdfb7396e1f5e3e9276b6cd0698137",
+    "index_entries": [
+      {
+        "index_path": "categories/pdf-and-documents.md",
+        "label": "scan-skill",
+        "url": "https://clawskills.sh/skills/itsnishi-scan-skill"
+      }
+    ],
+    "owner_handle": "itsnishi",
+    "owner_id": "s1731fs5mvb843mj295egzx6rh83gzbc",
+    "published_at": 1774570933238,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783656866067,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783656866067,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts implement an individual skill analyzer: it reads a user-specified skill directory, checks SKILL.md and supporting files for risky patterns, and produces a report.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill is user-directed, disables model auto-invocation, and requires Bash to run its bundled Python scanner. Registry verification runs automatically when install-command findings are present.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains SKILL.md plus two Python scripts; no install-time hook, hidden setup step, package installer, or self-modifying behavior was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Recursive reading of the selected target directory and public PyPI/npm lookups are proportionate to security scanning, but package names from private skills could be disclosed to those registries.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No artifact-backed evidence shows credential/session-store use, privilege escalation, persistence installation, destructive actions, background workers, or file mutation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SDI-1] expected: Live registry lookup is real and extends the scanner beyond purely offline analysis, but it supports the stated supply-chain security review function and is limited to package-name checks.\n[SDI-2] expected: Direct HTTP requests to PyPI/npm are purpose-aligned for detecting nonexistent or suspicious install packages; the concern is disclosure and determinism, not malicious behavior.\n[SQP-2] expected: The runtime output notes package verification, but SKILL.md does not clearly warn users before network calls; this warrants user guidance rather than a Review verdict.\n[suspicious.dangerous_exec] expected: The static match is detector text describing exec-risk patterns inside the scanner database, not evidence that this skill executes scanned code.\n[suspicious.dynamic_code_execution] expected: The static match is detector text describing eval-risk patterns inside the scanner database, not evidence that this skill dynamically evaluates target content.",
+          "guidance": "Install this if you want a user-invoked skill security scanner. Run it only on skill directories you intend to analyze, and avoid scanning private projects with confidential internal package names if contacting PyPI or npm with those names is unacceptable.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a security-scanning skill whose behavior matches its purpose, with the main caveat that it may contact PyPI or npm to verify package names found during a scan.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783656835361,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 36,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: scan-skill\nVersion: 1.1.1\n\nThe scan-skill bundle is a security auditing tool designed to perform deep analysis of other OpenClaw skills for vulnerabilities and malicious patterns. It utilizes a comprehensive database of detection signatures in scripts/patterns.py and a scanning engine in scripts/scan_skill.py to identify risks such as prompt injection, data exfiltration, and supply chain attacks. While the tool requires Bash access and performs network requests to verify package legitimacy on PyPI/npm, its behavior is transparently documented, aligned with its defensive purpose, and includes security best practices like disabling model auto-invocation in SKILL.md.",
+          "checkedAt": 1779162124114,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a5bd470bea4fd1b04b959d6206469199820749c2634e51cacbfe9af3d770ea8f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a5bd470bea4fd1b04b959d6206469199820749c2634e51cacbfe9af3d770ea8f"
+    },
+    "slug": "scan-skill",
+    "source_type": "clawhub",
+    "version": "1.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

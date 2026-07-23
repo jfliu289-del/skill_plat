@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C05:token:video",
+      "cross-tag:agent-management",
+      "cross-tag:design"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "design",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "164753849920ae1f6a412966e08ab30f3e17b77466932686d9b96e489123eedc",
+    "content_hash": "4f11c8cffbe255f56cf7297052d5f947c521e34d30e3b49b9fd488007a5b5abe",
+    "precanonical_content_hash": "31eef0550d668905976f93ff41cae8f96edbd2bf56cb24d83c0b806018b49948",
+    "skill_md_hash": "0d290e8c9a4f03abf6d01d4f84a956593fae0222747d74271a553d6ee83a57c8",
+    "version_metadata_sha256": "b4e580aaf336a6d89975d0e35213acf1e3bb89b95958e0257e4a78aee4e6f1d6"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/guoqiao/skills/dl",
+    "claim_id": "81e2e1b1cda21af4072d0c4371484922428fe455c33440a009917760d0d07f73",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "dl",
+        "url": "https://clawskills.sh/skills/guoqiao-dl"
+      }
+    ],
+    "owner_handle": "guoqiao",
+    "owner_id": "s17ffveb731pj7ry6ezhyn9hts88598a",
+    "published_at": 1770805813684,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658413770,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658413770,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently implement the stated purpose: run yt-dlp on a user-provided media URL, detect music versus video, cap download sizes, limit playlists to 30 items, and save the result to local media folders or a user-specified output directory.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The natural-language triggers are broader than a command-only invocation, but they are still tied to explicit download intent. The Telegram upload instruction is disclosed and limited to audio files in Telegram sessions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill uses uv to run a Python script and fetch runtime dependencies including yt-dlp, loguru, and python-slugify. That is expected for this purpose, but users rely on those third-party packages.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access and writes to ~/Music, ~/Movies, ~/Videos, ~/Downloads, or a chosen output directory are central to the skill and disclosed. Large persistent media files and optional media-server sharing are normal user-impact considerations.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no startup persistence, privilege escalation, background worker, deletion routine, or broad local indexing. Cookie-file support is documented as fixed-path/env-based, though the current helper only returns existing directories, so the scanner's claim of normal cookie-file consumption is not fully supported by runtime behavior.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Network downloading, environment-variable checks, and local media-folder writes are expected for a media downloader and are substantially disclosed in SKILL.md, though the metadata only declares uv rather than a fuller capability list.\n[SDI-2] expected: Authenticated-download cookie support is purpose-aligned for yt-dlp and documented in SKILL.md, but the runtime implementation appears to check for directories rather than cookie files, so automatic cookie-file consumption is overstated by the scanner.\n[SQP-1] expected: The broad triggers could misfire more easily than /dl-only usage, but they describe explicit requests to download video or music rather than unrelated conversation.\n[SQP-2] expected: Saving files into local music/video folders is the core behavior and is documented, with size caps and a playlist limit reducing but not eliminating disk-use impact.\n[SQP-2] expected: Telegram sending is disclosed in the agent procedure and limited to downloaded audio files when the user is already in a Telegram context; it is a third-party transfer users should notice, but not hidden.\n[SQP-2] expected: The cookie-location documentation should be treated as sensitive if users create those files, but the reviewed code does not substantiate broad credential harvesting or browser-profile access.\n[staticScan] expected: The supplied static scan reported no findings, and artifact review did not find obfuscation, destructive commands, persistence, or unrelated data access.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with the artifact review, but it was used only as supporting telemetry, not as the deciding signal.",
+          "guidance": "Install this if you want your agent to download media from URLs onto your machine. Expect network access, persistent files in your media folders, possible disk usage from large videos or playlists, and Telegram delivery of audio files when used from Telegram. Treat any configured cookie files as account-session secrets and avoid enabling media-server sharing unless you want downloaded media visible on your local network.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward media downloader, with disclosed local saves and no evidence of hidden, destructive, or unrelated behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658356037,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 54,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: dl\nVersion: 0.2.3\n\nThe skill is designed to download media from URLs using `yt-dlp`. While it involves network access, file system writes, and the agent sending downloaded files via Telegram, these actions are aligned with its stated purpose. Crucially, the `dl.py` script employs robust slugification (`python-slugify`) for all filenames and folder names derived from user input or media titles. This prevents path traversal and arbitrary file naming, effectively mitigating the risk of prompt injection leading to the exfiltration of sensitive system files (e.g., `~/.ssh/id_rsa`) via the agent's `message` tool, as the output path is strictly controlled and sanitized.",
+          "checkedAt": 1779162183489,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "e40a6a942afcc9bafea22aba1a1642c4e3b35d387b1343f157258759a38654ae",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e40a6a942afcc9bafea22aba1a1642c4e3b35d387b1343f157258759a38654ae"
+    },
+    "slug": "dl",
+    "source_type": "clawhub",
+    "version": "0.2.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

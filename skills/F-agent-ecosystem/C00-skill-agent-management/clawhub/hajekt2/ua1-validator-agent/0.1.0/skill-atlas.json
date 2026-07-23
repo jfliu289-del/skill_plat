@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.65,
+    "domains": [
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:phrase:agent skill",
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C03:token:pdf",
+      "category:C06:token:api",
+      "category:C06:token:code",
+      "category:C06:token:coding",
+      "category:C08:token:ci",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "7ac57a7808467ad5556fcdf9e81527835659882f8600a0c6d1ec273b46949ef8",
+    "content_hash": "0692f4343a69c84e101d40fe9f8f04192165398883349940effd847a4325824a",
+    "precanonical_content_hash": "b9a690fa2580d9a4bc050b2b208ced718dcafc56ee4d9929e600a1a89213bf58",
+    "skill_md_hash": "c47616200f5b1677ace40cc6b6a2fdd64d446e3a7552f0f31dac2355fa9cc862",
+    "version_metadata_sha256": "7a21de62457745a67eb13fdf449b85ea0e3be3215b11dfaad666619c5035516c"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/hajekt2/skills/ua1-validator-agent",
+    "claim_id": "394c99b9f841e5ec85310d2179dd257248e8c1c9d578446c33a296ef13071c0e",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "ua1-validator-agent",
+        "url": "https://clawskills.sh/skills/hajekt2-ua1-validator-agent"
+      }
+    ],
+    "owner_handle": "hajekt2",
+    "owner_id": "s17dmjpd250973tjtpk2e7fdmx885wc8",
+    "published_at": 1771334532384,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972570238,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972570238,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, instructions, and script all align around PDF/UA-1 validation; the selected PDF is sent to a remote validation API, which is core to the skill rather than hidden behavior.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are limited to health checks, validating PDFs, parsing pass/fail results, remediation planning, and CI gating; no unrelated agent behavior, credential access, broad file scanning, or autonomous persistence is requested.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The package includes a shell script and depends on local tools such as bash, curl, mktemp, and jq, but the artifact has no separate dependency or permission declaration beyond documenting the script invocation.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network upload of a chosen PDF is proportionate to a hosted validator workflow and is disclosed through the endpoint and multipart contract, but users should treat it as an off-box transfer of document contents.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background worker, privilege escalation, credential use, or long-lived local state is shown; temporary response files are removed after execution.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The skill does instruct agents to run a bash helper, but that helper is plainly documented and scoped to posting one provided PDF path to the validator; this is a metadata/disclosure caveat, not hidden command execution.\n[SQP-2] expected: The PDF upload is real and privacy-relevant, but it is consistent with the stated hosted-validation purpose and visible in both the documented API contract and the curl command.\n[E1] expected: External transmission to api.ua1.dev is the central validation mechanism, not an unrelated exfiltration path; the risk is accidental upload of sensitive PDFs, which is best handled as user guidance.\n[VirusTotal code_insight] expected: The script accepts a user-provided path, checks that it is a file, and passes it as a quoted curl form argument; no artifact evidence shows intentional command injection or malicious behavior.",
+          "guidance": "Install only if you are comfortable uploading the PDFs you validate to api.ua1.dev or to the endpoint set in UA1_API_BASE. Avoid using it on confidential, regulated, or customer documents unless that endpoint is approved for those files, and make sure bash, curl, mktemp, and jq are available locally.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it validates a user-selected PDF by uploading it to the disclosed UA1 API, with privacy and dependency caveats users should notice.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972538214,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 65,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ua1-validator-agent\nVersion: 0.1.0\n\nThe skill executes a bash script (`scripts/validate_pdf.sh`) with a user-provided file path. While the script includes a file existence check and uses `curl -F \"file=@${FILE_PATH}\"` (which is generally robust against shell injection within the filename itself), the direct execution of a shell script with an unsanitized argument from the agent's perspective poses a potential shell injection vulnerability. If the OpenClaw agent does not properly quote or sanitize the `FILE_PATH` argument before invoking the script, an attacker could inject arbitrary commands. This is a vulnerability that allows attacks, not intentional malice.",
+          "checkedAt": 1779164817472,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "8b9b7a32db9c9f8b4df424e7d42d560b4158bf1431e35b46e6a9e201971e6796",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8b9b7a32db9c9f8b4df424e7d42d560b4158bf1431e35b46e6a9e201971e6796"
+    },
+    "slug": "ua1-validator-agent",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

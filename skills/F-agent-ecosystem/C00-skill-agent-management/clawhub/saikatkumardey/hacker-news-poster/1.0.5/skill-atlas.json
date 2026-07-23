@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C02:token:edit",
+      "category:C09:token:security",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:security",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C09",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "secure",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "5044f750db7777b19df5694492825866bd30faa89e0220cbd37e212e2adf1b5c",
+    "content_hash": "2c7a9858826604a73b8dcceb10551a89ed83acdd3b1e393dfd4a3c6c47e11c7c",
+    "precanonical_content_hash": "26bc7a3f603fd456802bf8078704dd380634ee50911f486e14da53f0c056b4c7",
+    "skill_md_hash": "9b105d020323f37a3bab29d6414b4ffe8d72d49a7020c80a5cdec47e282c296e",
+    "version_metadata_sha256": "874e48a8dc86c3fd93edc175de2f83e2cb8e50eeec385b5f673b44e5abcfcbb8"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/saikatkumardey/skills/hacker-news-poster",
+    "claim_id": "8d142f7e8c9a9748fbeed7102484d9d6177483c54bd2cb5887e45ec09f4ab665",
+    "index_entries": [
+      {
+        "index_path": "categories/health-and-fitness.md",
+        "label": "hacker-news-poster",
+        "url": "https://clawskills.sh/skills/saikatkumardey-hacker-news-poster"
+      }
+    ],
+    "owner_handle": "saikatkumardey",
+    "owner_id": "s177qgtrwxk7bz7x69z1k2m9gx88574q",
+    "published_at": 1771426322042,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779921992204,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779921992204,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The code is coherent with the stated Hacker News posting purpose: it logs in to news.ycombinator.com and supports submit, comment, edit, and profile update commands only.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are user-directed, but the skill can make public account changes and does not require an explicit confirmation step before posting or editing.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The reviewed artifact is small and self-contained with no package dependencies; the README also offers an optional raw GitHub download from the main branch, which may not match the reviewed version later.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "HN_USERNAME and HN_PASSWORD are clearly disclosed as required, and network use is limited in code to Hacker News endpoints, but registry-style permission declarations are not present.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill stores reusable Hacker News session cookies in plaintext at ~/.hn_cookies.txt by default, which is disclosed and purpose-aligned but should be protected or deleted after use.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "concern"
+            }
+          ],
+          "findings": "[LP3] expected: Credential environment variables and authenticated Hacker News network actions are expected for this skill, and they are disclosed in SKILL.md; the missing explicit permission metadata is a packaging/least-privilege weakness rather than evidence of hidden behavior.\n[SQP-2] expected: README asks users to set HN credentials but gives little credential-handling guidance; this is a documentation gap, not a mismatch with the skill purpose.\n[SQP-2] expected: The cookie file is implemented exactly as disclosed and supports session reuse, but it is a sensitive plaintext bearer-token artifact and should be treated carefully.",
+          "guidance": "Install only if you are comfortable giving an agent access to your Hacker News account. Review the exact title, URL, comment text, item ID, or profile bio before running posting commands. Prefer the reviewed ClawHub install over the raw GitHub curl option, and delete or restrict access to ~/.hn_cookies.txt when finished.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it uses your Hacker News credentials to post or edit content, with a disclosed but sensitive plaintext cookie file risk.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779921940748,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: hacker-news-poster\nVersion: 1.0.5\n\nThe skill is classified as suspicious primarily due to the explicit plaintext storage of Hacker News session cookies in `~/.hn_cookies.txt` (or a configurable path via `HN_COOKIE_FILE`), as detailed in `SKILL.md` and implemented in `scripts/hn.py`. While this behavior is openly disclosed as a 'Security Note' and is intended for session persistence, it represents a significant vulnerability where session tokens could be exposed if the local filesystem is compromised. There is no evidence of malicious intent such as data exfiltration to unauthorized endpoints, arbitrary code execution, persistence mechanisms, or prompt injection attempts against the agent to perform actions beyond the stated purpose.",
+          "checkedAt": 1779165203073,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "5044f750db7777b19df5694492825866bd30faa89e0220cbd37e212e2adf1b5c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/5044f750db7777b19df5694492825866bd30faa89e0220cbd37e212e2adf1b5c"
+    },
+    "slug": "hacker-news-poster",
+    "source_type": "clawhub",
+    "version": "1.0.5"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

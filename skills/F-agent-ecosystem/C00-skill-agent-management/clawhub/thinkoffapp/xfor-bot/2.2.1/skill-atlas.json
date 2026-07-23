@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C10:token:model",
+      "category:C17:token:knowledge",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "bccd93340f0efd623ad0bc620959eb53d00592a789b3d91f7df13cb9bb067a4f",
+    "content_hash": "a91b2d3c8284ef06df3533e535ed3c10a796e29fd6bb5a4563ca38c77df14b2f",
+    "precanonical_content_hash": "730b78c78ae189577216f5f7b2db3ad30b34d6820e66f1b03e2c4dc32c60dfe3",
+    "skill_md_hash": "51197095678945d5d6ea07f43a76c0148b61515f829c421ad0e1fa96407de47d",
+    "version_metadata_sha256": "e664330334b12790c35ce527e1dbcdc916d3d8a689b8e6656a43e04bac2af416"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/thinkoffapp/skills/xfor-bot",
+    "claim_id": "cd31d3d2f437a9affe2158d0e6e89a991eeba78d4cd06a543dccd15a40e16d54",
+    "index_entries": [
+      {
+        "index_path": "categories/media-and-streaming.md",
+        "label": "xfor-bot",
+        "url": "https://clawskills.sh/skills/thinkoffapp-xfor-bot"
+      }
+    ],
+    "owner_handle": "thinkoffapp",
+    "owner_id": "s171fqjffx4b0fs9xwy44ns5n188572n",
+    "published_at": 1772452479823,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783656153272,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783656153272,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill documents posting, DMs, follows, room messages, knowledge entries, puzzle submissions, and webhook configuration across three related services. These are high-impact remote actions, but they match the described ThinkOff/xfor/Ant Farm/AgentPuzzles purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact is mainly an API reference and examples, not hidden automation. Webhook mutation is explicitly labeled advanced and requiring operator approval, though an earlier webhook section calling webhooks read-only is inconsistent with the later PUT/DELETE documentation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Only SKILL.md is present; there are no executable scripts, binaries, package install hooks, or local file operations. The skill requires the disclosed XFOR_API_KEY environment variable.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The requested API key is proportionate for an API integration, but one key controls one identity across antfarm.world, xfor.bot, and agentpuzzles.com, so exposure or misuse would affect all three services.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Remote posts, DMs, follows, room joins, knowledge entries, puzzle results, and webhook settings can persist. The artifact discloses these effects and notes that webhook forwarding can redirect event data to a specified external URL.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal:code_insight] expected: The webhook concern is real security-sensitive functionality, but the artifact describes it as an advanced operator-approved action and does not instruct exfiltration or automatic webhook changes.\n[SDI-4] expected: The webhook mutation capability is purpose-aligned and disclosed later with a security note; the earlier read-only label is a documentation inconsistency worth user attention, not enough by itself for Review.\n[SQP-2] expected: Posting, DMs, room messages, and collaboration necessarily send user-provided content to external services; the services and endpoints are clearly named, though users should still confirm sensitive content before sending.\n[SQP-2] expected: Registration transmits profile fields and creates a shared identity across the three services; this is stated in the quick start and identity notes, with no hidden credential or profile harvesting behavior found.",
+          "guidance": "Install only for agents you want acting under this xfor/Ant Farm/AgentPuzzles identity. Keep XFOR_API_KEY private, require explicit approval before public posts, DMs, follows, puzzle result sharing, persistent knowledge entries, or webhook changes, and set webhooks only to trusted endpoints you control.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is an instruction-only API skill for a social, rooms, knowledge, and puzzle platform; it can take visible account actions but those capabilities are disclosed and fit the stated purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783656133216,
+          "issueCount": 3,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 18,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: xfor-bot\nVersion: 2.2.1\n\nThe `SKILL.md` file exposes an 'Advanced: Webhook Mutation' capability via the `PUT /agents/me/webhook` endpoint. This allows the agent to set an arbitrary URL for forwarding real-time events. While the skill includes a security note warning against misuse and stating it requires operator consent, this capability presents a significant prompt-injection vulnerability. A compromised agent could be instructed to use this endpoint to exfiltrate sensitive event data to an attacker-controlled server, even though the skill itself does not explicitly instruct such malicious action.",
+          "checkedAt": 1779161168482,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "5902f4a7baec90752fa20bd764d10eecba04d17d2777d1d56dacf76759f8d3d8",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/5902f4a7baec90752fa20bd764d10eecba04d17d2777d1d56dacf76759f8d3d8"
+    },
+    "slug": "xfor-bot",
+    "source_type": "clawhub",
+    "version": "2.2.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,152 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:lookup",
+      "category:C01:token:search",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C12:token:market",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C04",
+      "C06",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e3dce117747bef232f4028394bc8d9eaab350f29ff50c5579ebbf757f875e2c5",
+    "content_hash": "13e688dd21b6216832da0deb0f1ee52bb16d20c1242c8244c2b4d2dfb8713b0b",
+    "precanonical_content_hash": "737bc93907c5571c453a1653c007594ed86ad58473c7d09eb94d4671971fd283",
+    "skill_md_hash": "c5e91c7790a12f2a9b606f9aa20cdda216ca4734141929fb4fb38a988093ad30",
+    "version_metadata_sha256": "236d818a98364f066de495308a717b3ff21ba6520b25b22e07ffe66c9be1dca1"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/olisim02/skills/coingecko",
+    "claim_id": "a10115989be1ddf5d741db8fc706bd68386a8c560774e94e23e0435bd4cc54c6",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "coingecko",
+        "url": "https://clawskills.sh/skills/olisim02-coingecko"
+      }
+    ],
+    "owner_handle": "olisim02",
+    "owner_id": "s1771kmfjfhk9hw4sp4we97k1s885v40",
+    "published_at": 1771026747919,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974316164,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974316164,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is crypto price, search, trending, and token lookup, and the scripts only perform matching CoinGecko API lookups and print JSON results.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The commands are user-directed and bounded, though price and token arguments are not consistently URL-encoded, which could cause malformed CoinGecko requests rather than broader system compromise.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains only a SKILL.md and small stdlib Python scripts; it does not install packages, alter shell startup files, or add background services.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Outbound network access to api.coingecko.com is necessary and disclosed by the skill purpose; user-entered coin IDs, search terms, platforms, and contract addresses are sent to CoinGecko.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No credential access, local file reading, persistence, privilege escalation, shell execution, or mutation of user data was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight] expected: The reported input-encoding weaknesses are real robustness concerns, but the behavior remains limited to user-controlled requests to CoinGecko and does not show exfiltration, hidden authority, or purpose mismatch.\n[LP3] expected: The skill does not include a separate permission manifest, but the artifact clearly documents CoinGecko API use and the scripts only call CoinGecko endpoints.\n[static_scan] expected: Static scan reported no suspicious patterns, consistent with review of the small Python scripts.",
+          "guidance": "Install only if you are comfortable running local Python scripts that contact CoinGecko. Do not enter sensitive private identifiers, and treat returned crypto market data as informational rather than financial advice.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a small, read-only CoinGecko lookup skill that sends user-entered crypto queries to CoinGecko and shows no hidden local access or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974284681,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: coingecko\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to a lack of proper input sanitization in `scripts/token.py` and `scripts/price.py`. In `scripts/token.py`, user-provided arguments for `platform` and `address` are directly inserted into the URL path without URL encoding, creating a path injection vulnerability against the CoinGecko API. Similarly, `scripts/price.py` directly concatenates user-provided coin IDs into the URL query string without individual encoding, which could lead to unexpected API behavior with malformed inputs. While there is no evidence of intentional malicious behavior like data exfiltration or backdoors, these input handling flaws represent significant vulnerabilities.",
+          "checkedAt": 1779163869089,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "913f39c8f4cbb81c6a2d7bcb3762fdfee7926680e022c23b15f1c0175321ae5e",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/913f39c8f4cbb81c6a2d7bcb3762fdfee7926680e022c23b15f1c0175321ae5e"
+    },
+    "slug": "coingecko",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,148 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C01:token:search",
+      "category:C09:token:audit",
+      "category:C09:token:compliance",
+      "category:C11:token:project",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:security",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00",
+      "C01",
+      "C11"
+    ],
+    "stages": [
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "b5a1be8bf4d26d69ddd3b82d26fa9008692675d93ea151edbc2db098f85e5d1d",
+    "content_hash": "16d9c55531e2f33968498043ce45f089ce8dfff1c7934e83a45474a46e867ac8",
+    "precanonical_content_hash": "9484cd656607b233ca03770495540170ae5f902d71e0623999ecd63d2ad4150a",
+    "skill_md_hash": "f07337d6fab83c050e6fc2e528681de6ba0b85026d35a6698eec9c61c6432d49",
+    "version_metadata_sha256": "10e58830da9d65f1e437a2219333e365504db9e3e72fa02941a0673f640eda37"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tristanmanchester/skills/auditing-appstore-readiness",
+    "claim_id": "784ad810b33176c388bd9a18184900768e54877f4ee0ac43622c6f1122c75a53",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "auditing-appstore-readiness",
+        "url": "https://clawskills.sh/skills/tristanmanchester-auditing-appstore-readiness"
+      },
+      {
+        "index_path": "categories/security-and-passwords.md",
+        "label": "auditing-appstore-readiness",
+        "url": "https://clawskills.sh/skills/tristanmanchester-auditing-appstore-readiness"
+      }
+    ],
+    "owner_handle": "tristanmanchester",
+    "owner_id": "s17c3xv8wvvzzbj84z9vcj498n83gnkp",
+    "published_at": 1770112715841,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783655897885,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783655897885,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The repository inspection, plist/config parsing, secret-file checks, permission checks, and readiness report generation all fit the stated iOS App Store/TestFlight audit purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The default workflow is read-only, and mutating actions such as installs, prebuilds, signing, archiving, and patches are disclosed as requiring explicit user intent or prior explanation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no installer, startup hook, or background activation; metadata declares git, while practical use also depends on Node and optional Xcode tooling.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The script enumerates files in the user-selected repo and may invoke local tools such as git, plutil, python, and optional xcodebuild; this is proportionate for an audit but should be run only on repos the user intends to inspect.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No credential harvesting, remote transfer, privilege escalation, or durable persistence is shown; the only built-in write is an optional user-specified JSON report, with other writes described as user-directed fixes or build artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight suspicious] expected: The flagged build and shell-execution capabilities are disclosed as optional local audit/build checks, not hidden automatic behavior or exfiltration.\n[SDI-2] expected: The script does invoke local tools from PATH for repo analysis, but it uses spawnSync with shell:false for active calls; the shell helper is present but not called by the script.",
+          "guidance": "Install this if you are comfortable running a local Node audit script against app repositories you choose. Review any optional Xcode build, archive, dependency install, Expo prebuild, signing, or patch step before approving it because those can execute project code or create artifacts.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent local App Store readiness auditor that mainly reads a chosen app repository and clearly flags optional build or fix steps.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783655874712,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 9,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: auditing-appstore-readiness\nVersion: 1.0.0\n\nThe skill bundle is classified as suspicious due to the presence of high-risk execution capabilities, even though the stated intent appears benign. The `SKILL.md` instructs the AI agent to execute `xcodebuild build` commands, which compile and link code from the repository, creating artifacts. While this is for a simulator and part of an 'audit', it represents a significant code execution capability. Additionally, the `scripts/audit.mjs` file defines a `runShell` function that uses the platform shell (`/bin/bash -lc` or `cmd.exe /c`), allowing arbitrary shell command execution; although this function is not called within `audit.mjs`, its presence indicates a high-risk capability. The script does include a positive security feature by actively scanning for potential secrets (e.g., `.p12`, `.env`, SSH keys) within the repository, which is a mitigating factor against malicious intent but does not negate the risky capabilities.",
+          "checkedAt": 1779161065984,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "6b3c86d39332498386c4544a7ea9d91ba357e650f3736964955af75dd9ab8c75",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6b3c86d39332498386c4544a7ea9d91ba357e650f3736964955af75dd9ab8c75"
+    },
+    "slug": "auditing-appstore-readiness",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

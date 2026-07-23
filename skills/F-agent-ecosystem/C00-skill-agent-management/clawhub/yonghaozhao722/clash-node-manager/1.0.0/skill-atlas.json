@@ -1,0 +1,119 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.0,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "fallback:C00"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "deb522cf9d9042469288ec105caff8912042f413b825e1eac5705839b7186f60",
+    "content_hash": "5d55ed1bf26b04b44861d3a70e3c2a86bf74c5858c45af647d40be7f44e3411d",
+    "precanonical_content_hash": "ca27fea7d668087d1716c14f4d2420c50c8afe1a3b2153842a0c96e7fca32159",
+    "skill_md_hash": "37f1f0c3359385c748683a824b53655bbcb09386b6aa98bee912d537c70fa7f7",
+    "version_metadata_sha256": "a14e440d02a6c9b09649260fd2fbd52f599422d5a9fd27f63fd003de5c969d9e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/yonghaozhao722/skills/clash-node-manager",
+    "claim_id": "bc95b9054571d66ebd292e1e0c715bf90f9ab08b245cf125f4308325acfc7e6f",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "clash-node-manager",
+        "url": "https://clawskills.sh/skills/yonghaozhao722-clash-node-manager"
+      }
+    ],
+    "owner_handle": "yonghaozhao722",
+    "owner_id": "s17f5k7je06wzdd9rt2r4ebjw988572e",
+    "published_at": 1771121290885,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967442369,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967442369,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose and implementation match: it checks Clash status, lists proxy groups/nodes, and can switch the selected proxy through the Clash API. Switching nodes affects active network routing, so users should treat it as a meaningful network configuration change.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions frame actions around explicit user requests to check, list, or switch nodes. They do not instruct hidden or unrelated actions, though they do not emphasize quoting/sanitizing names or confirming route changes before switching.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The manifest installs the skill into the normal skills directory and declares Python use. No post-install script, package installer, background service, or automatic execution path is shown.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script targets http://127.0.0.1:9090 by default, which is proportionate for a local Clash manager. It also exposes optional --api-url and --secret flags, so users should keep the controller local and avoid sending secrets to non-local endpoints.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, self-starting behavior, credential harvesting, or privilege escalation is present. The main privileged effect is purpose-aligned: changing the active Clash proxy selection via a PUT request.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The routing-impact concern is valid as user guidance: switching a Clash node can affect privacy, connectivity, and traffic path. It is also central to the skill's disclosed purpose, so it does not by itself warrant Review.\n[SQP-2] expected: The lack of an execution-time confirmation before switching is a usability/safety note for a routing tool, but the switch operation is explicitly documented and user-directed rather than hidden or automatic.\n[VirusTotal code_insight prompt-injection concern] expected: The skill examples place user-provided group and node names into command arguments. This supports guidance to quote arguments carefully, but the script itself uses argparse and requests rather than shelling out, and there is no artifact-backed intent to execute arbitrary commands.\n[VirusTotal code_insight api-url concern] expected: The script supports a custom --api-url, which could be misused to contact non-local HTTP services or leak a provided Clash secret. The default and documented purpose are local Clash management, with no evidence of automatic external calls or exfiltration.",
+          "guidance": "Install this only if you want an agent to read your local Clash proxy details and switch the active proxy node on request. Keep the Clash control API bound to localhost, protect any API secret, verify node/group names before switching, and quote unusual names when invoking the script from a shell.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill transparently manages a local Clash proxy controller, including switching proxy nodes, with no evidence of hidden persistence, exfiltration, or unrelated behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967417407,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 19,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: clash-node-manager\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to two primary vulnerabilities. Firstly, the `SKILL.md` instructions directly embed user-provided input (e.g., `<node_name>`, `<group_name>`) into shell commands, creating a prompt injection risk that could lead to arbitrary command execution if the AI agent does not properly sanitize or quote the input. Secondly, the `check_clash.py` script allows specifying an arbitrary `--api-url`, which introduces a Server-Side Request Forgery (SSRF) vulnerability. An attacker could exploit this to make the agent send requests to internal network resources or other local services, potentially leading to information disclosure. There is no clear evidence of intentional malicious behavior like data exfiltration to external servers or persistence mechanisms.",
+          "checkedAt": 1779164128929,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "b2d9e89595c9c01f3935757735c5254e10a3cf1e61994ae36e61a9071f0d6755",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b2d9e89595c9c01f3935757735c5254e10a3cf1e61994ae36e61a9071f0d6755"
+    },
+    "slug": "clash-node-manager",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

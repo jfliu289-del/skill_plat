@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.5286,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:analyze",
+      "category:C07:token:quality",
+      "category:C08:token:cd",
+      "category:C08:token:ci",
+      "category:C08:token:git",
+      "category:C08:token:repository",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C04",
+      "C07"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "f7795bfc236d3a43031b99dc0f383dbbdc05706e3814e3a35bb1326fbfe34ffb",
+    "content_hash": "a628b8a18147dcaa2e7ce49a0d80e8a33c78328740e6a827455bb3016fcaf4a0",
+    "skill_md_hash": "60203ab1414a62f4546bf0e8aca6cb1f06d548b5dcf296c3d77b3505c17b76da",
+    "version_metadata_sha256": "d3588e2b67103bd14d442e8d2dd1511d7ccefab1a6e6c91f7aebbe28bcf4c511"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/ryudi84/skills/sovereign-git-commit-analyzer",
+    "claim_id": "fd768aee75128a064eade0422f0b7394efab433e05ff99cb9933a1f1e9094df4",
+    "index_entries": [
+      {
+        "index_path": "categories/git-and-github.md",
+        "label": "sovereign-git-commit-analyzer",
+        "url": "https://clawskills.sh/skills/ryudi84-sovereign-git-commit-analyzer"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "ryudi84",
+    "owner_id": "s179sa8mgbgqvczdvr80yyh9fh885q9b",
+    "published_at": 1771720735388,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779948587565,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779948587565,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is commit-history analysis, and the script uses local git log data to produce commit frequency, contributor, file heatmap, and message-quality reports.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Execution is user-invoked and has scoped options for branch, author, dates, output format, top count, and heatmap; the trigger phrases are somewhat broad but still tied to repository analytics.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a normal OpenClaw/manual skill install with a Bash entry script and chmod instructions; the script has CRLF line endings that may need normalization on Unix shells but no hidden installer behavior was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading commit history, author emails, branch names, file paths, and activity patterns is proportionate for this tool, but those outputs may be sensitive in private repositories.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background persistence, privilege escalation, credential access, or network exfiltration is present; the script writes only to a user-supplied output file, and the documentation includes an optional CI artifact upload example.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The privacy concern is valid as user guidance because reports and CI artifacts can contain contributor emails, file paths, branch/activity data, and repository metadata, but this is disclosed by the report examples and central to the skill's purpose.\n[SQP-1] expected: The trigger phrases \"commit history\" and \"contributor stats\" are broad enough to cause occasional unintended activation, but they remain conceptually aligned with the skill's repository-analysis purpose and do not by themselves show hidden or unsafe behavior.\n[VirusTotal code_insight] unexpected: The shell-injection claim was not supported by artifact review: user inputs are passed as quoted arguments or arrays to git, with no eval, shell re-execution, network call, or command-construction pattern that would directly execute shell metacharacters.\n[staticScan.clean] expected: The clean static scan matches the artifact review: no credential handling, destructive commands, persistence, hidden network behavior, or prompt-injection instructions were found.",
+          "guidance": "Install this only if you want a local Bash tool to inspect the Git repository where it runs. Treat generated reports as internal unless reviewed or redacted, especially before uploading CI artifacts or sharing output from private repositories.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a local Git reporting skill whose behavior matches its purpose, though generated reports can expose private repository metadata if shared.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948533584,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: sovereign-git-commit-analyzer\nVersion: 1.0.0\n\nThe skill's stated purpose of analyzing git commit history is benign. However, the `scripts/analyze.sh` script is vulnerable to shell injection. User-controlled inputs such as `--branch`, `--author`, `--since`, `--until`, and `--days` are directly interpolated into `git log` commands without proper sanitization or quoting. This allows for arbitrary command execution if a malicious string containing shell metacharacters is provided as an argument, posing a significant remote code execution risk. The `SKILL.md` does not contain any prompt injection attempts.",
+          "checkedAt": 1779166085167,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "16330a8498315d6b7fd564e1075c6a6c980c21faf436b8de0ea5148a53d4a233",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/16330a8498315d6b7fd564e1075c6a6c980c21faf436b8de0ea5148a53d4a233"
+    },
+    "slug": "sovereign-git-commit-analyzer",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.1417,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:lookup",
+      "category:C04:token:data",
+      "category:C07:token:test",
+      "category:C12:token:market",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C04",
+      "C07",
+      "C12",
+      "C17"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "18b05bc80369bc0ae6623fe7c1563eb4294a3eaa20d0bef8cca50a155fcffb7c",
+    "content_hash": "91e63011d66b31694cdabe4b9efc21c83b9591d3b288eaa8f1f2be777347a7c9",
+    "precanonical_content_hash": "12a8cf5e80756b9e8fb5ec33cd47abb4a41c0e390021265cd528c43f6870713b",
+    "skill_md_hash": "193179575b76b1a5c5f8def0abfc6472d592779eae96f7e1f7987ce7e44163af",
+    "version_metadata_sha256": "f70e54f27901c239626b5c1e995e4a885bd7be289ac2e7197c565613294b4124"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/subway-chenyan/skills/tvscreener",
+    "claim_id": "0547afd5724b9f0c3ec0a54873ad3625dd2a553b2dc436e3abf27d9fff07a935",
+    "index_entries": [
+      {
+        "index_path": "categories/cli-utilities.md",
+        "label": "tvscreener",
+        "url": "https://clawskills.sh/skills/subway-chenyan-tvscreener"
+      }
+    ],
+    "owner_handle": "subway-chenyan",
+    "owner_id": "s177qgdke26jgsvgp7thcbqjtx8851gn",
+    "published_at": 1770779960578,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968955911,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968955911,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently support market-data lookup, custom stock-screening queries, field discovery, and documented use of the tvscreener Python package.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions stay focused on stock queries and API references, with no prompt overrides, hidden agent-control instructions, unrelated local data collection, or destructive behavior found.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill documents installing tvscreener, but run_query.sh and test_markets.sh can also run an unpinned pip install/upgrade automatically if the import check fails.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network-backed market queries and local Python scripts are proportionate for this purpose, and the artifacts do not request credentials, account sessions, private local indexing, or background workers.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "query_symbol.py and custom_query.py can write CSV results to a caller-supplied path; this is opt-in export behavior, but users should avoid paths that could overwrite important files.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] expected: Confirmed that custom_query.py writes CSV results when --csv is provided. This is purpose-related export functionality, not hidden persistence or exfiltration, though top-level docs could disclose it more clearly.\n[SQP-2] expected: Confirmed that CSV output can create or overwrite a local file when explicitly requested. The side effect is user-directed and limited to query results.\n[SQP-2] expected: Confirmed that test_markets.sh, and also run_query.sh, may install or upgrade tvscreener without prompting if it is missing. This is a supply-chain and environment-mutation caution, but it is tied to the documented dependency.\n[VirusTotal code_insight] expected: The reported arbitrary file write maps to the explicit --csv export path in the scripts. No artifact evidence shows malicious intent, credential handling, exfiltration, backdoors, or unrelated file mutation.",
+          "guidance": "Install and run this in a virtual environment, review or pin the tvscreener dependency before using the shell wrappers, and choose CSV output paths deliberately so you do not overwrite important files.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent TradingView screener helper; its main cautions are optional CSV exports to user-chosen paths and unpinned auto-install behavior in shell wrappers.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968916264,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 32,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: tvscreener\nVersion: 1.0.0\n\nThe skill bundle is classified as suspicious due to an arbitrary file write vulnerability. The scripts `scripts/custom_query.py` and `scripts/query_symbol.py` both accept a `--csv` argument, which allows a user to specify an arbitrary file path to write the query results. This could be exploited to overwrite sensitive files on the system if the agent has sufficient permissions. There is no evidence of malicious intent such as data exfiltration, backdoor installation, or prompt injection against the agent to perform unauthorized actions.",
+          "checkedAt": 1779163081733,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "4645f88dd9edf96c11645ea87a763885c6aa62c87ef176e094f82f07fd17a76c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4645f88dd9edf96c11645ea87a763885c6aa62c87ef176e094f82f07fd17a76c"
+    },
+    "slug": "tvscreener",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

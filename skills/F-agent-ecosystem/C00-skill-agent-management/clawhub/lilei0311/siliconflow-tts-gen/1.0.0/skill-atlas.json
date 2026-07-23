@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C09",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "91c773945f9185d609c11b8d8fdcc30bfb6acea932d23d9c75bbc499372ffd99",
+    "content_hash": "32427c58ec258c6b16187828c5581298a7e54fc1641eb62c2c040ea7eba4cedd",
+    "precanonical_content_hash": "51340fb6133660c77698b566b6664a5fd0ea4aeb6cda9f18e27764a66cd2818a",
+    "skill_md_hash": "6f22b90c9f1265883ad227abdfa6d3ebd40b2ede6e04ed5833fbbd92ae22f1fb",
+    "version_metadata_sha256": "c09159a79cdc8a67bca48cca81922141266876fad964563ed3c3f64758d0d567"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/lilei0311/skills/siliconflow-tts-gen",
+    "claim_id": "39d48c40d870636e79bc733e585e49c77fe4268b2b443f49b02e1a65a31f3492",
+    "index_entries": [
+      {
+        "index_path": "categories/speech-and-transcription.md",
+        "label": "siliconflow-tts-gen",
+        "url": "https://clawskills.sh/skills/lilei0311-siliconflow-tts-gen"
+      }
+    ],
+    "owner_handle": "lilei0311",
+    "owner_id": "s171k5jax63a1zk2r5by9a2zes885j88",
+    "published_at": 1771157371439,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968173965,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968173965,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The code matches the stated TTS purpose: it sends user-provided text to SiliconFlow's speech endpoint and writes the returned audio to disk. That is expected for this skill, but users should understand the text leaves the local machine.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are ordinary usage examples for listing voices and generating audio. I found no instructions to override user intent, hide behavior, run automatically, or perform unrelated actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The manifest declares exec tooling, SILICONFLOW_API_KEY, and the optional ~/.openclaw/openclaw.json config file. The skill relies on a local Python script and curl, which is consistent with the documented workflow.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading a SiliconFlow API key from the environment or a specific OpenClaw config path is proportionate for an API-backed TTS tool and is disclosed, though it is still sensitive credential access.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no background persistence, self-starting behavior, credential storage, or privilege escalation. The script writes the generated audio to a default file or a user-supplied output path, so careless paths could overwrite user-writable files.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The artifact does declare env/config access and exec use in SKILL.md and skill.json, so this is a transparency note rather than evidence of hidden or purpose-mismatched authority.\n[SQP-2] expected: The API key lookup from SILICONFLOW_API_KEY or ~/.openclaw/openclaw.json is disclosed and narrowly targeted to the SiliconFlow provider key.\n[SQP-2] expected: Sending input text to SiliconFlow and saving returned audio is the core function of the skill. The privacy implication is real but purpose-aligned and not hidden.\n[SQP-1] expected: The short trigger \"tts\" is broad, but it directly describes the skill category and does not by itself cause automatic network calls without the agent invoking the documented script.\n[VirusTotal code_insight] expected: The caller-controlled --output path can overwrite user-writable files, but saving to a chosen file is documented TTS behavior. This warrants user caution, not a suspicious or malicious verdict on its own.",
+          "guidance": "Install only if you are comfortable sending the text you convert to SiliconFlow under your API key. Use a limited API key if possible, verify any OpenClaw config key it may auto-detect, and choose output paths carefully so generated audio does not overwrite important files.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill coherently turns text into speech through SiliconFlow and saves an audio file, with the main cautions being API-key use, external text transmission, and caller-chosen output paths.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968130067,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: siliconflow-tts-gen\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to a local file write vulnerability in `scripts/generate.py`. The `--output` argument, which specifies the path for the generated audio file, is passed directly to `curl -o` without sanitization. This allows a user to specify an arbitrary file path, potentially leading to directory traversal or overwriting sensitive user-owned files (e.g., `~/.bashrc`, `~/.ssh/authorized_keys`) with audio data, limited by user permissions. While the content written is an audio file, this uncontrolled file write capability is a significant vulnerability, even without clear malicious intent for self-exploitation. The skill correctly handles API keys and uses `subprocess.run` with a list of arguments, mitigating shell injection risks for other parameters.",
+          "checkedAt": 1779164241936,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "0cb8ddd187464eeaf24a518d8d8df4321b6e2340f7d765913f326aec4107e012",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0cb8ddd187464eeaf24a518d8d8df4321b6e2340f7d765913f326aec4107e012"
+    },
+    "slug": "siliconflow-tts-gen",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

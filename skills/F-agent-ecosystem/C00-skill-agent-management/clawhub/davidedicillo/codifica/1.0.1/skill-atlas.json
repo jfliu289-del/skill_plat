@@ -1,0 +1,130 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C08:token:git",
+      "cross-tag:agent-management",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C08"
+    ],
+    "stages": [
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "683bd29dcdebc203ebe3bc80ec893c20e08d5790fac75a7b64921635f11dea72",
+    "content_hash": "b80e6612d6d7c2c28ca5f572dbc4a812d82cb9ae0ea12ef4d0cf40e54f77b323",
+    "precanonical_content_hash": "1cd62ac89cb55804228750d00e79ad36f9cf965cdfdf3d9e3b0b8685ac61dfa4",
+    "skill_md_hash": "12ad23a0bd535c0c9700e6f1ebb196bec5c46c25df149bb1c6eee5b86bca68ce",
+    "version_metadata_sha256": "1f97b32e25e488f920dbb479d78ca4772d691cff1188a03f80d89140deb6afaf"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/davidedicillo/skills/codifica",
+    "claim_id": "10730bb34d641e980e852ad949bb8b7695644b7bfd3588426fd3ef1ee04daf2c",
+    "index_entries": [
+      {
+        "index_path": "categories/productivity-and-tasks.md",
+        "label": "codifica",
+        "url": "https://clawskills.sh/skills/davidedicillo-codifica"
+      }
+    ],
+    "owner_handle": "davidedicillo",
+    "owner_id": "s174c56qt9bsywanyg8zvm1y1s885hez",
+    "published_at": 1771657880248,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943783403,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943783403,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill's behavior coherently matches its stated purpose: coordinating human and agent work through Codifica state, context, notes, and artifacts stored in the repository.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "It directs the agent to read repository-controlled Codifica files, specs, task context, and notes before working; this is central to the protocol but means those files can influence agent behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains only SKILL.md and declares git as a required binary; there are no executable scripts, package installs, hidden setup steps, or external services.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill instructs agents to pull, commit, and optionally push task-state updates using the user's available Git access; this is proportionate for a Git-based workflow but affects shared repositories.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Task state, execution notes, and handoff context persist in plain text in Git and may be reused by future agents; no credential harvesting, background process, or external exfiltration behavior is present.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code_insight] expected: The flagged risk is that repository-controlled Codifica files can influence the agent. That behavior is disclosed and core to the protocol, so it warrants user caution but does not make the skill suspicious by itself.\n[SkillSpector] expected: SkillSpector reported no issues, which is consistent with the inspected single-file, instruction-only artifact.\n[staticScan] expected: Static scan found no suspicious patterns; inspection likewise found no hidden code execution, external network service, credential collection, or destructive behavior.",
+          "guidance": "Use this skill only in repositories where you want agents to coordinate through Git-tracked Codifica files. Review codifica.json, the referenced spec, file scope, and task state before use; avoid storing secrets or private information in task notes; and use branches, protected remotes, or limited Git credentials where automatic commits and pushes should be controlled.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Codifica is an instruction-only coordination skill that uses Git-tracked text files as shared task memory, with the main risks clearly tied to that stated purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943760525,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: codifica\nVersion: 1.0.1\n\nThe skill defines a protocol that heavily relies on the AI agent reading and interpreting various user-controlled files within the repository (e.g., `codifica.json`, `codifica-spec.md`, `state` files, `context.files`, `artifacts` as detailed in `SKILL.md`). While the skill's stated purpose is benign (protocol for agent coordination), this extensive instruction to read arbitrary text from user-controlled files creates a significant prompt injection vulnerability. An attacker who can modify these files could potentially inject new instructions to the agent, leading to unintended actions. This is a vulnerability that allows attacks, rather than being an attack itself, hence 'suspicious' instead of 'malicious'.",
+          "checkedAt": 1779165852221,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "bcc8b9d325d556541cdeb7e89f25c99a61ec82f631dade4e4990f098aefd3083",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/bcc8b9d325d556541cdeb7e89f25c99a61ec82f631dade4e4990f098aefd3083"
+    },
+    "slug": "codifica",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

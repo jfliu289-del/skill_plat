@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:browse",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C17:token:notes",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover"
+    ],
+    "tasks": [
+      "build",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4e847e90e109a268050f2a918b99d0369d6e27005e4b4c112682b77496627fa3",
+    "content_hash": "0a384c57170c93321d059c2e8f6603d96268ec5cc439d0cc67363ed14489a3d0",
+    "precanonical_content_hash": "1aad72ec6bb595140345b426f921c55e03f3e4e1575a12e9b4c40451fcfade43",
+    "skill_md_hash": "640ca2ce617e1b55c4de3ccd92d643d023ca6ab3db55944d1d98e86680495cc9",
+    "version_metadata_sha256": "cf1df1f881be1f808f1f99f3b068de3f7a8dee4fb9887afc0664089744bc3af5"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tristanmanchester/skills/fabric-api",
+    "claim_id": "42282bbb28b1bc261942e3e94b5844a28552c63473832588da8510b46007ceba",
+    "index_entries": [
+      {
+        "index_path": "categories/notes-and-pkm.md",
+        "label": "fabric-api",
+        "url": "https://clawskills.sh/skills/tristanmanchester-fabric-api"
+      }
+    ],
+    "owner_handle": "tristanmanchester",
+    "owner_id": "s17c3xv8wvvzzbj84z9vcj498n83gnkp",
+    "published_at": 1772086029170,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783649945337,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783649945337,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, documentation, OpenAPI spec, and helper scripts consistently support creating, searching, uploading, deleting, and recovering Fabric resources; this is high-impact workspace access but it is disclosed and purpose-aligned.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill gives broad API-wrapper instructions, including persistent writes and destructive Fabric endpoints, and defaults unspecified creates to the inbox; these behaviors fit the skill but users should review write/delete actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No installer, dependency download, postinstall hook, self-modification, or startup registration was found; the included Node and Python helpers use built-in HTTP/file APIs.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "FABRIC_API_KEY is clearly declared and used for Fabric API calls. Helpers avoid sending it to absolute URLs by default, though FABRIC_BASE, --base, and --with-key should only be used with trusted endpoints.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No local credential storage, background worker, scheduled task, privilege escalation, or hidden persistence mechanism was found; persistence is limited to user-directed remote Fabric workspace changes.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The artifact does require an API key, local helper/spec reads, and outbound Fabric API access, but the frontmatter and setup instructions disclose FABRIC_API_KEY and helper runtime requirements.\n[SDI-2] expected: Absolute URLs are supported for presigned upload flows and do not receive the API key unless --with-key is explicitly passed; the generic override is worth user caution but is not hidden behavior.\n[SQP-1] expected: The activation text is scoped to reading or writing a user’s Fabric workspace, not generic local note handling outside Fabric.\n[SQP-2] unexpected: The bundled OpenAPI spec includes optional accessToken query parameters on several endpoints, including delete/recover, but the skill’s helpers and examples use X-Api-Key headers and do not instruct users to put tokens in URLs.\n[RA2] expected: Remote writes to Fabric create persistent workspace state, but that is the central disclosed purpose of the skill.\n[suspicious.env_credential_access] expected: Environment credential access plus network use is the documented Fabric API authentication path, not an unexpected data flow.\n[VirusTotal clean] expected: VirusTotal telemetry reported no malicious or suspicious detections, which is consistent with the artifact review but was not used as the sole basis for the verdict.",
+          "guidance": "Install only if you want an agent to access and modify your Fabric workspace. Use a scoped or revocable Fabric API key if available, avoid putting tokens in URLs, keep FABRIC_BASE/--base pointed at trusted Fabric-compatible endpoints, do not use --with-key for arbitrary URLs, and review delete, recover, bulk-write, and file-upload operations before running them.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Fabric API helper that can read and change a user’s Fabric workspace, with no hidden exfiltration or persistence found.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783649908116,
+          "issueCount": 9,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 80,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: fabric-api\nVersion: 1.0.1\n\nThe skill bundle is benign. All files, including the `SKILL.md` instructions, helper scripts (`fabric.mjs`, `fabric.py`), and API specification (`fabric-api.yaml`), align with the stated purpose of interacting with the Fabric HTTP API. The helper scripts are standard HTTP clients that read the API key from the `FABRIC_API_KEY` environment variable and include a security measure to prevent accidental API key leakage to arbitrary absolute URLs. There is no evidence of prompt injection, data exfiltration, malicious execution, persistence mechanisms, or obfuscation.",
+          "checkedAt": 1779159762018,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "2246b410f5e3a7ca240b4d05fe4f3fcb5b6aa692f08a646d5c767bb1b3020b5b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/2246b410f5e3a7ca240b4d05fe4f3fcb5b6aa692f08a646d5c767bb1b3020b5b"
+    },
+    "slug": "fabric-api",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

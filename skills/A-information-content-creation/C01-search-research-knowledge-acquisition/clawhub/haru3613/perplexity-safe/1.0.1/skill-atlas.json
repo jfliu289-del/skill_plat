@@ -1,0 +1,155 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "paper"
+    ],
+    "audiences": [
+      "developer",
+      "researcher",
+      "security-professional"
+    ],
+    "confidence": 0.25,
+    "domains": [
+      "science",
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C01:token:research",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C10:token:model",
+      "category:C17:token:notes",
+      "cross-tag:academic-research",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C06",
+      "C09",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1e404db408197ccab8ec0cec9558168a2619d47695f8e98b35ae89f7dab2c53e",
+    "content_hash": "a58a0a8262bb7e8708a0e4ec7ca5f013c9364713002441ac92fa432bf5f29df7",
+    "precanonical_content_hash": "e2270f5bfd9c8cae0ed527b4a344d35104f7a4da4fac9d4bcb3a35e56d555cc1",
+    "skill_md_hash": "eb0c3036bcf1bb847d46a05401fca58afb2b6c3563c96cf9cc3b92101f310adc",
+    "version_metadata_sha256": "73e45111b3712c8ff11fe690b63f45558c23aafaec2904bd81ab464072ff08c3"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/haru3613/skills/perplexity-safe",
+    "claim_id": "26d6e8bc316fe5d0b53b6387f16e043b6c882365cd99d18d1c777a21d7bbc68b",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "perplexity-safe",
+        "url": "https://clawskills.sh/skills/haru3613-perplexity-safe"
+      }
+    ],
+    "owner_handle": "haru3613",
+    "owner_id": "s177yws237dvsy188hp4xtjdhn8853qk",
+    "published_at": 1770955262479,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779973250538,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779973250538,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The SKILL.md and script coherently implement a Perplexity API search client with citations, model selection, input validation, and API-key use. The .claude settings grant GitHub WebFetch permissions that are not needed for the Perplexity-only workflow, but no artifact uses them for hidden behavior.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The activation text is somewhat broad for current-information or citation requests, which could cause more third-party API use than some users expect. The runtime instructions remain bounded to web-grounded search and do not contain prompt overrides or unrelated agent-control instructions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no installer, package-install step, or dependency bootstrap; the package points to a bash script and documents curl, python3, and API-key setup. Formal metadata does not declare the practical shell, network, and secret-access requirements, so transparency could be better.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Sending the query, optional system prompt, and Authorization header to api.perplexity.ai is inherent to a Perplexity API client and is substantially disclosed by the documentation. Users should treat all submitted prompts as leaving the local environment.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The script reads a user-provided config.json or PERPLEXITY_API_KEY, creates a mode-600 temporary curl config for the API key, removes it, and shows no background workers, privilege escalation, broad local indexing, destructive actions, or durable persistence beyond user-created configuration.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The shell script, environment variable, and local config API-key access are expected for this bash-based API client; the missing formal permission declaration is a transparency note rather than evidence of hidden behavior.\n[SQP-1] expected: The broad default-use wording can increase unintended cost or data sharing, but it is visible in the skill description and still tied to the stated Perplexity search purpose.\n[SQP-2] expected: Reading the Perplexity API key from config or the environment and using it for the outbound request is expected for this API client; runtime help could disclose the data flow more explicitly.\n[SQP-2] expected: The query and optional system prompt are serialized into the Perplexity request body, which is core functionality rather than an unrelated exfiltration path.\n[E1] expected: External transmission via curl is purpose-aligned with a Perplexity search skill and documented in the security notes; users should still avoid sensitive prompts.\n[VirusTotal code_insight] unexpected: The GitHub WebFetch permissions are real over-permissioning compared with the Perplexity script, but they are limited web-fetch permissions, are not exercised by the artifact, and are not enough by themselves to move the coherent skill into Review.\n[staticScan] expected: The supplied static scan reported no suspicious patterns, consistent with the artifact review.",
+          "guidance": "Install this only if you intend to use a billable Perplexity API key and are comfortable sending search prompts, plus any custom system prompt you provide, to Perplexity. Use a dedicated key, monitor usage, avoid confidential or proprietary queries, and consider removing or questioning the unused GitHub WebFetch permissions before installation.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a Perplexity search helper that does what it says, though it sends queries to Perplexity and includes an unused GitHub web-fetch permission users should notice.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779973199084,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 65,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: perplexity-safe\nVersion: 1.0.1\n\nThe `scripts/perplexity_search.sh` script is well-hardened against command injection and API key exposure, validating inputs and securely handling credentials as claimed in `SKILL.md`. However, the `_claude/settings.local.json` file grants `WebFetch` permissions to `github.com`, `raw.githubusercontent.com`, and `api.github.com`. These permissions are not utilized by the provided script, which only interacts with `api.perplexity.ai`. This over-permissioning represents a vulnerability, as it grants capabilities beyond the skill's stated purpose, making the bundle suspicious.",
+          "checkedAt": 1779163662815,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "63c477a3363a76f6882e41f1ae2bc9b5137ee57c50a47cff8181697acc319765",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/63c477a3363a76f6882e41f1ae2bc9b5137ee57c50a47cff8181697acc319765"
+    },
+    "slug": "perplexity-safe",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

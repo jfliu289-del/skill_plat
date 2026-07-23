@@ -1,0 +1,136 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C09:token:security",
+      "category:C13:token:business",
+      "cross-tag:agent-management",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09",
+      "C13"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "6b76a9110afb5cd352b7aeaccbc7d29414365da49a95dc133f1891aeba22b4eb",
+    "content_hash": "fe9418531c0be74a5f6192462d0f033de22c5d4add00edebec3d71b0a54bb0e4",
+    "precanonical_content_hash": "018c12a1a3aba5c4c689a5d9ae35fe32a20d03e52f39ffe16a2a08da0482531a",
+    "skill_md_hash": "3bcb05c4c546f3afa3557b9bc4238384bc7efe3f85dc89a7a7028911b267d734",
+    "version_metadata_sha256": "ea9b6e7787006eb01934769916f10f80e6037372f1f8053cfc152db48e17cf84"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/trendinghot/skills/openexec-skill",
+    "claim_id": "13dda7815eb1306396fa0b0006b03b922f542221d88f9ab4f09165a941d23857",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "openexec-skill",
+        "url": "https://clawskills.sh/skills/trendinghot-openexec-skill"
+      }
+    ],
+    "owner_handle": "trendinghot",
+    "owner_id": "s176d1rvz3j0sgbe6bnspw486x885vqb",
+    "published_at": 1771365686798,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779969238191,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779969238191,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently implement a FastAPI execution service with static demo handlers, replay protection, receipt generation, optional allow-listing, and ClawShield signature verification for production mode.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill clearly documents demo mode as default and ClawShield as production mode, but the short metadata phrase 'runs only with a signed approval artifact' can overstate the default behavior unless read with the mode documentation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Setup uses pip install against a pinned requirements.txt. This is disclosed in SKILL.md, README.md, and scripts/install.sh; it is installation-time dependency retrieval, not runtime dynamic downloading.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The service defaults to local SQLite and no outbound HTTP, while OPENEXEC_DB_URL can explicitly point to a remote database. That flexibility is disclosed and operator-controlled.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Execution payloads and results are stored in the execution_log table for replay protection and receipts. This fits the audit purpose but may retain sensitive input/output data without built-in redaction or TTL controls.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] expected: The health endpoint reports demo mode, disabled signature verification, and open allow-list status. This is not hidden; the docs repeatedly describe demo as default and ClawShield as production mode, so this is an operator hardening issue rather than deceptive behavior.\n[SDI-1] expected: OPENEXEC_DB_URL can select a non-SQLite backend, but the artifacts disclose that remote DB use causes outbound DB network I/O and shifts trust to the DB operator.\n[SDI-1] expected: replit.md says the engine requires external governance approval while also documenting demo mode auto-approval. The wording is imprecise, but the mode split is visible in artifact text and tests.\n[SDI-1] expected: scripts/install.sh runs pip install -r requirements.txt. This is disclosed as the installation model, with pinned dependency versions; it does not show runtime package installation or hidden downloads.\n[SDI-4] expected: Installer messaging matches the disclosed setup path. The dependency install expands supply-chain exposure, but that is ordinary for this source-distributed Python service and not concealed.\n[SQP-2] expected: The engine persists full payloads and results. That supports replay protection and receipts, but users should avoid sending secrets unless they control database retention and access.",
+          "guidance": "Install only if you understand the mode boundary: demo mode auto-approves registered actions, while production use should set OPENEXEC_MODE=clawshield, configure a trusted CLAWSHIELD_PUBLIC_KEY, bind locally or behind a firewall, set OPENEXEC_ALLOWED_ACTIONS, and keep the database local or trusted. Treat stored payloads/results as potentially sensitive audit data.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "OpenExec is a transparent, purpose-aligned execution-boundary service, with important operator configuration risks but no artifact-backed malicious or hidden behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779969190903,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: openexec-skill\nVersion: 0.1.10\n\nThe OpenExec skill bundle is designed as a security boundary for AI systems, enforcing deterministic execution, replay protection, and cryptographically signed approvals. The code implements these features robustly, using strong cryptography (Ed25519) and a static action registry. Documentation (SKILL.md, README.md, SECURITY.md) is highly transparent about its security model, limitations (e.g., no OS-level sandboxing), and operator responsibilities. There is no evidence of malicious intent, data exfiltration, backdoors, or prompt injection attempts against the AI agent. The skill's core purpose is to *govern* execution, not to perform unauthorized actions, and it explicitly avoids dynamic code loading or execution of user-supplied code.",
+          "checkedAt": 1779164489186,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "917bf1f4edaf61caf282f67d6726c7185fbe25ffd38b2a95ec22a04bbed15718",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/917bf1f4edaf61caf282f67d6726c7185fbe25ffd38b2a95ec22a04bbed15718"
+    },
+    "slug": "openexec-skill",
+    "source_type": "clawhub",
+    "version": "0.1.10"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

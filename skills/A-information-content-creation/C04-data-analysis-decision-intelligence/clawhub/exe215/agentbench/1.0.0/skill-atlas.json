@@ -1,0 +1,152 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.575,
+    "domains": [
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C01:token:research",
+      "category:C04:phrase:data analysis",
+      "category:C04:token:data",
+      "category:C06:token:code",
+      "category:C06:token:coding",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:software-development",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C01",
+      "C06",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8eaecc46f6934a880c8bf40e367c9bfa7c7fa564ff668fecf8c6412d35855fd3",
+    "content_hash": "8e358e32120e1ddb804c4e36f65f5d9d94876e3abdeee63282bbd0035dbb25ec",
+    "precanonical_content_hash": "2d1e10723155d714d21a4e28bd94db31b570a31e722a19d4e09b56f82f05d4a1",
+    "skill_md_hash": "52a66643ca3b4d447f17b78c55d94f0eb4da20f1ddfbf0d89c37c1d956231b58",
+    "version_metadata_sha256": "867856f869c9c6a3690090ec2e3355ea77b4bc595e0561ee7300b21b1bffe0ef"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/exe215/skills/agentbench",
+    "claim_id": "5e0195e982a30a04b71b45a2d8880b8b434030d5c756d1a73ff00a41a633b466",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "agentbench",
+        "url": "https://clawskills.sh/skills/exe215-agentbench"
+      }
+    ],
+    "owner_handle": "exe215",
+    "owner_id": "s170cj8rb7j7zpa9724rsanjah884aq9",
+    "published_at": 1771772733635,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779949789453,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779949789453,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill's stated purpose is benchmarking an OpenClaw agent across file, research, data, workflow, memory, error-handling, and tool-efficiency tasks. The observed capabilities—reading bundled task YAML/input files, creating temporary workspaces, running setup scripts, editing generated task files, scoring results, and producing reports—fit that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The runtime instructions explicitly say to create /tmp/agentbench-task-{task-id}/ workspaces and work only within the workspace. The setup scripts assume the provided path is safe and do not independently validate it, so they are purpose-aligned but rely on the orchestrating agent following the documented flow.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a normal skill placement or git clone into the OpenClaw skills directory. Metadata declares required binaries jq, bash, and python3; no install-time hooks or automatic execution were found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Shell execution, git initialization, file creation, and local test commands are proportionate for a benchmark suite. The skill mentions web_search/web_fetch as possible tools, but local task inspection did not find automatic outbound network calls; leaderboard submission is presented as a user action.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to benchmark artifacts such as agentbench-results/{run-id}/, temporary /tmp workspaces, and git history inside those workspaces. No background workers, credential/session-store access, privilege escalation, or host-level persistence were found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The capability concern is partly valid as documentation hardening: the skill uses local files, shell commands, temp workspaces, and possible network-capable tools. However, those capabilities are disclosed in SKILL.md and coherent with benchmarking, and metadata lists required binaries.\n[SQP-2] expected: The setup.sh execution concern is expected for this benchmark design. The scripts create fixtures and git histories inside the documented task workspace; review found no obfuscation, exfiltration, credential harvesting, or host persistence. They would be risky if manually run against the wrong directory because they lack path guardrails.\n[SQP-2] expected: The network-use concern is downgraded: SKILL.md lists web_search/web_fetch among natural tools, but inspected task artifacts are local exercises and no setup script performs curl, wget, or similar outbound calls. Users should still avoid sending private workspace content in search queries if they adapt tasks.\n[SQP-2] expected: The findings about git initialization, commits, and tags in several setup scripts are accurate operationally, but expected for creating benchmark repositories. The documented flow passes newly created /tmp task directories, so this is a containment guidance issue rather than evidence of malicious behavior.",
+          "guidance": "Install only if you are comfortable running a benchmark that creates many local files, initializes git repositories in temporary task directories, and writes result reports. Run it through the documented /benchmark commands in an isolated workspace, do not manually point setup.sh scripts at an existing project or home directory, and review any result file before uploading it to the leaderboard.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "AgentBench is a disclosed benchmark skill that creates temporary task workspaces and local result files, with no artifact evidence of hidden data theft, persistence, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779949749670,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 91,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: agentbench\nVersion: 1.0.0\n\nThis OpenClaw AgentSkills skill bundle is a benchmark suite designed to test AI agents across various tasks. The `SKILL.md` explicitly instructs the agent to 'Work ONLY within the workspace directory', a critical security boundary. Setup scripts (`tasks/*/setup.sh`) primarily create test data and code with intentional bugs (e.g., `validate.py` crashing, `auth.js` session bug, `stats.py` median bug) that are the target of the benchmark tasks, not malicious payloads. While some tasks run in `mode: 'real'`, granting broader system access, the content of the setup scripts and task instructions does not exploit this for data exfiltration, persistence, or unauthorized actions. No evidence of malicious execution, obfuscation, or prompt injection against the host system was found.",
+          "checkedAt": 1779166237381,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "919bc6de2fc299e0a4d22b20e4491195a0ecc608ea4858237275fc619ddd9956",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/919bc6de2fc299e0a4d22b20e4491195a0ecc608ea4858237275fc619ddd9956"
+    },
+    "slug": "agentbench",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

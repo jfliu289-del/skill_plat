@@ -1,0 +1,159 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "business",
+      "data-professional",
+      "developer",
+      "marketer"
+    ],
+    "confidence": 0.65,
+    "domains": [
+      "business",
+      "marketing",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C14",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C01:token:search",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C13:token:business",
+      "category:C13:token:recruiting",
+      "category:C14:phrase:lead generation",
+      "category:C14:token:lead",
+      "category:C14:token:sales",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:marketing-sales",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C13"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "market",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1e291ec9b4f4b980db5756b76b07b0094bf6c83005eae6fa5fdf7994533e738b",
+    "content_hash": "7db6f0e4fee42a80b73104dfa174964b7dffe1d6c5940e7e2ba113a6ab1f45b2",
+    "precanonical_content_hash": "5dfa36f54384987d5110ad6bb8e0c78a32a3345dd0432bc960e1005fcbec5963",
+    "skill_md_hash": "0738c28d8b1607ddd8ccf87e1a952358b81ea2e9afe6d571c789304b4301267a",
+    "version_metadata_sha256": "69da661776cf000e5a2ce666ffbb6a2b4810d898e9ed18da5cf5b8d162930c9b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/audsmith28/skills/trawl",
+    "claim_id": "f0055bb9f39b8ee7a93d0f1aa9140d0315542c9ba021bc0ffd693cddcd249286",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "trawl",
+        "url": "https://clawskills.sh/skills/audsmith28-trawl"
+      }
+    ],
+    "owner_handle": "audsmith28",
+    "owner_id": "s174wjyxjsdj9q1dqyf9axntxs88530y",
+    "published_at": 1770842660219,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783656722167,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783656722167,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts match the stated purpose: search MoltBook, score profiles, store leads, send outbound DM requests, process inbound requests, and ask qualifying questions. These are high-impact account actions, but they are central to the advertised autonomous lead-generation workflow.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The documentation discloses live sweeps, outbound DMs, inbound approval, optional auto-approval, local data files, and a reset command. Users should notice that sweep and qualify can update local trawl state even in dry-run style testing.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Setup creates configuration and state files under ~/.config/trawl and checks for a documented MoltBook API key in ~/.clawdbot/secrets.env. It does not install cron jobs, background services, package hooks, or hidden persistence.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use of a MoltBook API key, network calls to the configured MoltBook API base, profile data, lead records, and DM content is proportionate to the skill's purpose. The configurable API base should be reviewed before live use.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists leads, seen posts, conversations, sweep logs, and reports locally, and the reset command clears those local trawl files. No unrelated file deletion or privilege escalation was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Shell scripts, network access, and local files are expected for this integration and are described in the main instructions, though the metadata declares only the API-key environment requirement.\n[SDI-1] expected: The reset command affects only trawl's local state files and is documented in SKILL.md, but it lacks an interactive confirmation and the script header is less complete than the main documentation.\n[SDI-4] expected: The reset capability is purpose-aligned for testing and maintenance; the header omission is a documentation quality issue rather than hidden destructive behavior across unrelated data.\n[SDI-2] expected: Reading the documented MoltBook secret location and approving an inbound DM after a user runs decide --pursue are consistent with the documented workflow.\n[SQP-2] expected: Automated outbound outreach and the DM template are core to the advertised autonomous lead-generation purpose. The example caps new DMs per sweep and leaves inbound auto-approval disabled by default.\n[EA2] expected: Auto-approval of inbound DMs is a real high-impact mode, but it is explicitly named and defaults to false in the example configuration.\n[E1] expected: The external POSTs send DM requests and qualifying questions through the configured MoltBook API, which is expected for the skill. Payloads are constructed with jq rather than shell-concatenated JSON.\n[VirusTotal code_insight] unexpected: The jq filter interpolation concern is supported for local category/state filters, but it appears limited to local report/list query behavior and does not show shell execution, exfiltration, or purpose-mismatched activity.",
+          "guidance": "Install only if you intend to automate MoltBook lead outreach from your account. Start with a test config, review the DM template, scoring thresholds, API base, and max_new_dms_per_sweep before live runs, and keep auto_approve_inbound false unless you are comfortable accepting inbound conversations automatically.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Trawl is a clearly disclosed autonomous MoltBook lead-generation skill, but it can send and approve DMs when run live.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783656676648,
+          "issueCount": 18,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: trawl\nVersion: 1.0.2\n\nThe skill is classified as suspicious due to `jq` injection vulnerabilities found in `scripts/leads.sh` and `scripts/report.sh`. In both scripts, user-controlled filter variables (`STATE_FILTER`, `CAT_FILTER`) are directly interpolated into `jq` filter expressions without proper escaping (e.g., `select(.value.state == \"$STATE_FILTER\")`). This flaw could allow an attacker to inject arbitrary `jq` syntax, potentially leading to unauthorized disclosure or manipulation of data within the local `leads.json` or `last-sweep-report.json` files. While the external API interactions are handled more securely with URL encoding and safe JSON construction, this internal data processing vulnerability is a significant concern.",
+          "checkedAt": 1779161115893,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "38d0884f08bd97f86e49b20680defa2ce21daa23c93e891230f5b17955a5f284",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/38d0884f08bd97f86e49b20680defa2ce21daa23c93e891230f5b17955a5f284"
+    },
+    "slug": "trawl",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

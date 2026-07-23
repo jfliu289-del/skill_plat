@@ -1,0 +1,148 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "document",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.425,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C02:token:write",
+      "category:C04:token:analytics",
+      "category:C04:token:analyze",
+      "category:C04:token:data",
+      "category:C13:token:operations",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:planning",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C02",
+      "C13"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "plan",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "fa85176e5c541a1069c95569593dd9adf37f7a95e6558dfc826835f7db02dc10",
+    "content_hash": "64570e51a1f22330ca3e6a87fe4985745668960d4beeb9562dd8697899567f0a",
+    "precanonical_content_hash": "dd95c9ae384349159828ee9373f67bd5bf9885342b9eec62ecbced10964dba73",
+    "skill_md_hash": "14ce26c518730a8f521dd96fca0e8e0ca2b4111248d1252ddf42b6ec32a2aa35",
+    "version_metadata_sha256": "75526ec84b968fdcdd910b9073587988d986b01410011f0089bf2ceecde03338"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/omprasad122007-rgb/skills/lite-sqlite",
+    "claim_id": "ed87db4d8df413e81b97384eefb3069b064db2b6d21acc8e280cea5399ea97f1",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "lite-sqlite",
+        "url": "https://clawskills.sh/skills/omprasad122007-rgb-lite-sqlite"
+      }
+    ],
+    "owner_handle": "omprasad122007-rgb",
+    "owner_id": "s17ft243sgy8e22ar5zf5en8vx885gxt",
+    "published_at": 1771404667030,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779920658449,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779920658449,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The SKILL.md, CLI, and connector are coherent around local SQLite database creation, querying, mutation, optimization, persistence, and backups; no unrelated network, credential, subprocess, or hidden behavior was found.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions broadly encourage SQLite management and include raw queries plus update/delete/replace examples without confirmation guidance, so agents should treat destructive SQL as explicitly user-directed.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No package install spec, remote installer, external dependency setup, or credential collection is declared; the scripts use Python standard-library SQLite functionality.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The tool can create SQLite database files and backups at caller-provided local paths, which is proportionate for a database utility but should be scoped to agent-owned or user-authorized paths.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistent local databases, memo/session/cache storage, and backups are core advertised features; there is no evidence of privilege escalation, background workers, auto-start persistence, or credential/session-store access.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] expected: The raw query subcommand is real, but arbitrary SQL is an expected capability for a SQLite management CLI; it becomes risky if an agent passes untrusted SQL or runs destructive statements without user intent.\n[SQP-1] expected: The broad trigger language matches a general local database helper, but users should narrow when agents may invoke it and which database paths are authorized.\n[SQP-2] expected: Delete, update, replace, vacuum, and backup operations are expected database-management examples; the missing confirmation guidance is a safety note rather than evidence of hidden or malicious behavior.\n[VirusTotal-code_insight] expected: The telemetry flags raw SQL and caller-chosen backup paths as vulnerabilities, but artifact review shows they are disclosed, purpose-aligned database features and VirusTotal engine stats reported no malicious detections.",
+          "guidance": "Install only if you want agents to manage local SQLite databases. Limit use to specific approved database and backup paths, require explicit confirmation before destructive SQL such as DELETE, UPDATE without tight filters, DROP, VACUUM, restore, or migration operations, and avoid storing secrets or sensitive conversations unless retention is intentional.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a local SQLite helper whose read, write, delete, query, and backup powers match its purpose, but users should restrict it to intended database files.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779920596014,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: lite-sqlite\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to critical vulnerabilities found in `scripts/sqlite_cli.py` and `scripts/sqlite_connector.py`. The `sqlite_cli.py`'s `query` command directly passes user-supplied SQL to `SQLiteDB.query()` without sanitization, leading to a severe SQL injection vulnerability. Additionally, the `SQLiteDB.backup()` and `auto_backup()` methods in `sqlite_connector.py` allow writing database backups to arbitrary file system paths, posing an arbitrary file write vulnerability. These flaws could be exploited by an attacker to execute arbitrary SQL commands, potentially leading to data exfiltration, modification, or unauthorized file system operations.",
+          "checkedAt": 1779165085561,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "465779079c5bb2fa29217442a555dbae6f705cf1135bd1b71772a7b78c07f604",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/465779079c5bb2fa29217442a555dbae6f705cf1135bd1b71772a7b78c07f604"
+    },
+    "slug": "lite-sqlite",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

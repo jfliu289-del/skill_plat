@@ -1,0 +1,150 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:sources",
+      "category:C04:token:data",
+      "category:C07:token:quality",
+      "category:C14:token:seo",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C04",
+      "C07",
+      "C14"
+    ],
+    "stages": [
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "research",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "bd176ff94f1dc1aded66cccfe549f1f8c6fdb3ab9e66c18cf241498aa120bf2e",
+    "content_hash": "f3f8af690526a9d8470226cfdf3440d34225342474a4e22b7dca062da539ae67",
+    "precanonical_content_hash": "637509dc003e1f24c3667f0fe82ff9a7f25c710a79d5b4c4fecddcd35ffe5356",
+    "skill_md_hash": "6acea71e76564ee6d35c469fdbe907db047cb2cabea8d00672a26a0346d0005c",
+    "version_metadata_sha256": "c61962c53ff4bb78360a911761728e016af1ed23d5bb0c2826d7c147b28a8960"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/buxibuxi/skills/stock-copilot-pro",
+    "claim_id": "19ffc53c7df16a06770fde22b5eeead4a350a322056a5517d99496c0aa3ff8f1",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "stock-copilot-pro",
+        "url": "https://clawskills.sh/skills/buxibuxi-stock-copilot-pro"
+      }
+    ],
+    "owner_handle": "buxibuxi",
+    "owner_id": "s1770tz463kp5a3vvq4e6qbck983ks9j",
+    "published_at": 1772281648082,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967968013,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967968013,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The capabilities match the stated purpose: stock analysis, comparisons, watchlists, briefs, and market radar. The artifacts show research/report generation only, not brokerage access or trade execution.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill has auto_invoke enabled and includes optional cron examples for recurring briefs/radar, but the examples are disclosed and require user setup rather than automatic installation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is local Node.js execution with no external installer or package-manager dependency declared.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "It requires QVERIS_API_KEY and sends market/news/social queries to https://qveris.ai, which is proportionate for the data-gateway purpose and disclosed as read-only.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "It writes config/watchlist.json and .evolution/tool-evolution.json inside the skill directory. This is bounded and disclosed, though saved symbols and parameter templates can reveal investment interests.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-2] expected: The evolution file persists tool metadata, learned parameter templates, sample successful params, and redacted errors. This supports the stated routing reliability feature and is disclosed, but users may disable it with --no-evolution if they do not want local reuse of query patterns.\n[SQP-1] expected: auto_invoke is present without detailed trigger exclusions. In context, the skill examples and command surface are stock-analysis oriented, and scheduled runs are optional examples rather than automatically installed jobs, so this is a usage-control note rather than a Review-level concern.\n[suspicious.dangerous_exec] expected: The child_process.spawn evidence is in test files that invoke node with the skill script for e2e/regression tests; the runtime command path does not show arbitrary shell execution.",
+          "guidance": "Install only if you are comfortable giving the skill a scoped QVeris API key and sending stock symbols/watchlist-related queries to qveris.ai. Review optional cron jobs before enabling them, delete or review local watchlist/evolution files when needed, and treat generated investment analysis as research rather than financial advice.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed stock-analysis skill that uses a QVeris API key, stores local watchlist/template state, and does not show trading, exfiltration, destructive actions, or hidden installation behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967933239,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: stock-copilot-pro\nVersion: 0.3.0\n\nThe OpenClaw AgentSkills skill bundle 'stock-copilot-pro' is classified as benign. It demonstrates robust security practices, particularly in restricting all outbound network communication to `https://qveris.ai` (enforced by `scripts/lib/infra/qveris-client.mjs` and verified by `tests/architecture-modules.test.mjs`). File system writes are strictly confined to `config/watchlist.json` and `.evolution/tool-evolution.json` within the skill directory, and sensitive data (like API keys) is actively redacted from logs and persisted state. Prompt instructions in `SKILL.md` and `README.md` are benign, guiding the AI agent to generate reports based on the skill's output, with explicit directives for data grounding and transparency, and include XSS prevention for custom report blocks. There is no evidence of intentional harmful behavior or significant vulnerabilities.",
+          "checkedAt": 1779164149400,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "409e2dc0ab9666132e62a16c03798a46fbd6b487f92c6c6b8c42f8e0a237b9c4",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/409e2dc0ab9666132e62a16c03798a46fbd6b487f92c6c6b8c42f8e0a237b9c4"
+    },
+    "slug": "stock-copilot-pro",
+    "source_type": "clawhub",
+    "version": "0.3.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

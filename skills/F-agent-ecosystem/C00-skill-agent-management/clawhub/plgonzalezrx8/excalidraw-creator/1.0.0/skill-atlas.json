@@ -1,0 +1,128 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.0,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "cross-tag:design",
+      "fallback:C00"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "eb6ff6078904e37f3411be8db1eddd08c87aa69852b3263dfba1316a3da9cf5c",
+    "content_hash": "4310ae6fc8a10e18b8952ca50879cf5017415058d36747e3d5a78bf299d7f884",
+    "precanonical_content_hash": "884a010f044b1d4973bbdf18b862d4a5ea850f06ae46cdc57b17335bec4a876e",
+    "skill_md_hash": "e9708dba7d27cf2c71d02e53ea468b41738624da78bcdab02daa02ab51034561",
+    "version_metadata_sha256": "0a023707805714cb42aea6f35ff603c7aaefbe8a908bee459122cb6aa55c05f4"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/plgonzalezrx8/skills/excalidraw-creator",
+    "claim_id": "f58935025dd926c304545993da16c7d81245959fe7758cd18bbd52a3d806d925",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "excalidraw-creator",
+        "url": "https://clawskills.sh/skills/plgonzalezrx8-excalidraw-creator"
+      }
+    ],
+    "owner_handle": "plgonzalezrx8",
+    "owner_id": "s173vecwjc09yssmz81twxs1qh884hns",
+    "published_at": 1771420562079,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779921971957,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779921971957,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently support the stated purpose of generating Excalidraw JSON and rendering it to PNG images.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "SKILL.md explicitly instructs the agent to write temporary .excalidraw and .png files under /tmp and run scripts/render.js; this is purpose-aligned, though users should keep filenames controlled and scoped.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The setup script runs npm install and downloads font assets from jsDelivr and GitHub. This is expected for a renderer, but it is not fully described in the short skill description or registry install metadata.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The renderer reads the specified input file, reads bundled/downloaded fonts, and writes the requested PNG output. No broad local scanning, credential use, network calls at render time, or unrelated system access were found.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background worker, privilege escalation, credential/session access, or destructive behavior was found in the artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The local Node.js renderer execution is real and explicitly shown in SKILL.md; it expands local execution requirements but is coherent with PNG rendering and not hidden.\n[TP4] expected: setup.sh does run npm install and download fonts; this is proportionate for diagram rendering, but users should review those dependency and font sources before setup.\n[SQP-2] expected: Temporary file creation and renderer subprocess execution are part of the documented workflow, not evidence of unrelated or deceptive behavior.\n[VirusTotal code_insight] expected: The reported command/path-injection concern is a plausible operational caution if an agent derives /tmp/<name> from untrusted text without quoting or sanitization, but the artifacts do not show intentional malicious behavior or unrelated file access.",
+          "guidance": "Install only if you are comfortable running a local Node.js renderer and a setup script that installs npm dependencies and downloads fonts. Use fixed, simple temporary filenames rather than user-supplied names, review setup.sh first in restricted environments, and avoid running setup or rendering as a privileged user.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it claims: it creates Excalidraw-style diagram PNGs, but it requires local Node.js execution and setup downloads.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779921925121,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: excalidraw-creator\nVersion: 1.0.0\n\nThe skill bundle is classified as suspicious due to a critical vulnerability. The `SKILL.md` workflow instructs the AI agent to save user-generated Excalidraw JSON to `/tmp/<name>.excalidraw` and then execute `node <skill_dir>/scripts/render.js /tmp/<name>.excalidraw /tmp/<name>.png`. If the `<name>` placeholder is derived directly from unsanitized user input, it creates a shell injection and path traversal vulnerability. An attacker could craft a malicious filename (e.g., `foo; rm -rf /; #` or `../../etc/passwd`) to execute arbitrary commands or read/write arbitrary files on the host system. While this is a severe vulnerability, there is no evidence of intentional malicious behavior (e.g., data exfiltration, backdoor installation) within the provided code or instructions. The `scripts/setup.sh` script downloads fonts from legitimate CDNs (cdn.jsdelivr.net, github.com) and the `scripts/render.js` script performs its stated function without additional risky operations.",
+          "checkedAt": 1779165182063,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "48a9886b67feb10d55a90f6cf45442db304296b18d181675098f3cab239a902b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/48a9886b67feb10d55a90f6cf45442db304296b18d181675098f3cab239a902b"
+    },
+    "slug": "excalidraw-creator",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

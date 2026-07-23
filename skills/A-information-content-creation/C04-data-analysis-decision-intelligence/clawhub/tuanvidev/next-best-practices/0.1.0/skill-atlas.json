@@ -1,0 +1,186 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:data",
+      "category:C05:token:image",
+      "category:C07:token:debug",
+      "cross-tag:data-analysis",
+      "cross-tag:debugging",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05",
+      "C07"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "debug",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "96f9870e62edfd90fc845aea11d82e0bebcb163cdde4995826c2cd1c85968168",
+    "content_hash": "87ec536db10d9817134092f69aeaccb3f8ad64faee4625fa7218900665d5c9c0",
+    "precanonical_content_hash": "038f226acf97624a5353c2001d8d1e8e91d6f19232ee015f3b14b16834770387",
+    "skill_md_hash": "c78f952d4e98bf3694856dbf70c03a6037d4e258ff3701f2642bfdf108549a25",
+    "version_metadata_sha256": "a064453550719a064b21de664315f40907085986615d210fa2525ace61c1f5cc"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tuanvidev/skills/next-best-practices",
+    "claim_id": "cd665dface4948b25a6fa00c9f2d476c89670102de497fe8d7218cc93e15aaa2",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "next-best-practices",
+        "url": "https://clawskills.sh/skills/tuanvidev-next-best-practices"
+      }
+    ],
+    "owner_handle": "tuanvidev",
+    "owner_id": "s179baf9cy52rfsxrbtpv7hjfx83hmf9",
+    "published_at": 1771519351301,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779165492433,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": [
+            {
+              "categoryId": "ASI04",
+              "categoryLabel": "Agentic Supply Chain Vulnerabilities",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The documentation recommends running the latest npm-published Next.js codemod against the project. This is purpose-aligned for migration, but it downloads and executes unpinned tooling and can modify project files.",
+                "path": "async-patterns.md",
+                "snippet": "npx @next/codemod@latest next-async-request-api ."
+              },
+              "recommendation": "Run codemods only when intended, preferably from a clean version-control state; consider pinning versions where practical and review diffs before committing.",
+              "riskBucket": "abnormal_behavior_control",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "If followed, this command may change many source files and relies on the current contents of the npm package at execution time."
+            },
+            {
+              "categoryId": "ASI07",
+              "categoryLabel": "Insecure Inter-Agent Communication",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The skill documents using a local MCP endpoint that can expose route lists, project paths, errors, and log locations. This is useful for debugging, but it crosses an agent/protocol boundary and may reveal local project metadata.",
+                "path": "debug-tricks.md",
+                "snippet": "Next.js exposes a `/_next/mcp` endpoint in development for AI-assisted debugging via MCP ... `get_routes` Discover all routes by scanning filesystem ... `get_project_metadata` Get project path and dev server URL"
+              },
+              "recommendation": "Use MCP debugging only on the intended local development server, verify the port, and avoid sharing logs or project metadata publicly unless reviewed.",
+              "riskBucket": "sensitive_data_protection",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "An agent using this on the wrong dev server or sharing the results carelessly could reveal project structure or debugging details."
+            }
+          ],
+          "checkedAt": 1777614717997,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The artifacts are coherent with the stated purpose: they provide Next.js guidance on file conventions, RSC boundaries, async APIs, metadata, error handling, images, fonts, bundling, and debugging. No code files, required credentials, required binaries, install steps, or capability tags are declared.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Most instructions are documentation and code-review guidance. Some examples show user-directed shell commands and local MCP endpoint calls; these are purpose-aligned but should not be run automatically without user intent.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no install spec, no package dependency, and no helper script; the skill is instruction-only.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The guidance includes project-modifying codemods and local development-server debugging calls. These fit a Next.js debugging/migration skill, but users should review their effects before use.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The provided artifacts show no background persistence, credential handling, elevated privilege requirement, or autonomous mutation beyond documented examples.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": null,
+          "guidance": "This skill looks safe as documentation for Next.js development. Before installing or using it, be mindful that some examples are operational: only let an agent run codemods or query the local MCP debugging endpoint when you explicitly want that behavior, and review any file changes or debug output before sharing or committing.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": {
+            "abnormal_behavior_control": {
+              "highestSeverity": "low",
+              "status": "note",
+              "summary": "The only notable abnormal-control item is a user-directed npm codemod command that is appropriate for Next.js migration but should be run deliberately and reviewed."
+            },
+            "permission_boundary": {
+              "highestSeverity": "none",
+              "status": "none",
+              "summary": "No credential, token, account, or privilege-boundary issue is evidenced in the provided artifacts."
+            },
+            "sensitive_data_protection": {
+              "highestSeverity": "low",
+              "status": "note",
+              "summary": "The documented local MCP debugging endpoint can expose project metadata, routes, errors, and log paths, but this is purpose-aligned for local Next.js debugging."
+            }
+          },
+          "status": "clean",
+          "summary": "This appears to be an instruction-only Next.js best-practices skill, with only minor caution needed around optional codemod commands and local MCP debugging examples.",
+          "verdict": "benign"
+        },
+        "skillspector": null,
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: next-best-practices\nVersion: 0.1.0\n\nThe skill bundle primarily provides documentation and code examples for Next.js best practices. However, the `debug-tricks.md` file documents and provides `curl` commands to interact with the `/_next/mcp` endpoint, an AI-assisted debugging API in Next.js development mode. This endpoint allows querying for potentially sensitive local project information such as `projectPath`, `devServerUrl`, and the path to `next-development.log`. While the skill does not explicitly instruct the agent to exfiltrate this data, it exposes a high-risk capability for information disclosure if an AI agent were to be maliciously prompted to use these commands and exfiltrate the results, classifying it as suspicious rather than benign.",
+          "checkedAt": 1779165492433,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "96f9870e62edfd90fc845aea11d82e0bebcb163cdde4995826c2cd1c85968168",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/96f9870e62edfd90fc845aea11d82e0bebcb163cdde4995826c2cd1c85968168"
+    },
+    "slug": "next-best-practices",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

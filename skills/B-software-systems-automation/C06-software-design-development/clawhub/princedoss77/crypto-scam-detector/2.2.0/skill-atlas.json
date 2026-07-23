@@ -1,0 +1,132 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "category:C17:token:schedule",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1c7331b26a227d994ff09d5470c97ff50d05937eb632119b4945f46d7fe3795f",
+    "content_hash": "14084ee17fac72c9463dc65229ed0789bb66ad38f109ed6a274516cec188bd0b",
+    "precanonical_content_hash": "3bfcb560ec9e25dcbf4879439b2089b58eb9aef334cd54b525d0c4b349fa64ed",
+    "skill_md_hash": "c6df8a5572c1d5f31060968d5709175a95608717d03bb95ab0e94d588ce94f68",
+    "version_metadata_sha256": "c2d8124556d8e3da8bc226a04ebd2b181a06ce2f834f2af8be7a3647fb1e392b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/princedoss77/skills/crypto-scam-detector",
+    "claim_id": "a64439247feb9bc12ece1a6ad4fe327c00e8e18766b394f5cfbd3513aff999f9",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "crypto-scam-detector",
+        "url": "https://clawskills.sh/skills/princedoss77-crypto-scam-detector"
+      }
+    ],
+    "owner_handle": "princedoss77",
+    "owner_id": "s17838vwg83s6e1k93nh09zjwn884m26",
+    "published_at": 1771576385142,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779165506506,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5-mini",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1771576413890,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The name/description, SKILL.md, and code files align: checks are database-first and background syncer pulls data from Etherscan. The manifest declares no required env vars while the code and docs use an optional ETHERSCAN_API_KEY for background sync; this is consistent with the README (API key optional for instant DB-only checks but required for sync). Minor code hygiene issues (duplicate patterns in blockchain_detector PATTERNS) exist but do not change purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions focus on local DB checks, adding unknown addresses to a sync queue, and running a background worker that contacts Etherscan. No instructions ask the agent to read unrelated system secrets. Caveats: check_address.sh and sync instructions will require the ETHERSCAN_API_KEY to perform live syncs; SKILL.md and scripts also recommend cron/systemd examples that include putting the key into process environment — follow best practices for secret handling. install.sh runs silently which can hide errors; inspect it before running.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no remote-download install spec in the registry; package is instruction + local scripts. install.sh creates a Python virtualenv and runs pip install -r requirements.txt (typical). This is moderate-risk but standard. The installer runs in silent mode by redirecting stdout/stderr; that behavior is worth auditing before execution so you don't miss failures or prompts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Only an Etherscan API key is referenced for background syncing (ETHERSCAN_API_KEY). That credential is proportional to the stated functionality. The registry didn't mark it required because DB-only checks work without it; however many convenience scripts and the real-time sync path will fail/exit if the key is missing. No unrelated credentials or secret exfiltration endpoints are declared, but you should review secure_key_manager.py to confirm it stores keys locally and does not transmit them.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill does not request forced always-on inclusion. It stores data under the user's home config directory (~/.config/crypto-scam-detector) and suggests optional cron/systemd for a background worker — normal for this use-case. The systemd example is generic (User=ubuntu, WorkingDirectory=/home/ubuntu/...) and should be adapted to your environment; it does not automatically modify other skills or global settings.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": null,
+          "guidance": "This skill is coherent with its advertised purpose, but review the following before installing: 1) Inspect secure_key_manager.py to confirm API keys are stored locally and not exfiltrated; 2) Run install.sh interactively (or read it first) because it mutes output and could hide failures—prefer executing the pip commands by hand inside a venv if unsure; 3) Protect your ETHERSCAN_API_KEY: prefer storing it in a user-only key store or the encrypted setup wizard rather than embedding it in systemd unit files or global environment variables; 4) The background worker will make network calls to Etherscan (and possibly other listed sources like ChainAbuse per manifest). If you want strictly offline checks, avoid running the sync worker and accept 'unknown' results for addresses not yet in the DB; 5) Review requirements.txt to audit third-party dependencies; 6) Adjust any example systemd/crontab entries (they use a generic ubuntu path) to match your user and paths. If you want, I can scan secure_key_manager.py, sync_worker.py, and requirements.txt in detail and flag any specific code-level concerns.",
+          "model": "gpt-5-mini",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill appears to implement what it advertises (a local DB-first crypto scam detector that optionally syncs from Etherscan) and its files/instructions are broadly consistent with that purpose, but there are a few operational and hygiene notes you should review before installing.",
+          "verdict": "benign"
+        },
+        "skillspector": null,
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: crypto-scam-detector\nVersion: 2.2.0\n\nThe skill is designed for legitimate cryptocurrency scam detection, utilizing a local SQLite database and Etherscan API for data synchronization. Code analysis reveals standard practices for file I/O (local database and encrypted API key storage in ~/.config), network communication (only to api.etherscan.io), and dependency management. While some documentation (e.g., SECURITY.md, SUBMISSION.md) contains legacy references to a deprecated MCP server architecture and claims integration with 'ChainAbuse API' which is not present in the current code, these are documentation inconsistencies and feature gaps, not indicators of malicious intent. There is no evidence of unauthorized data exfiltration, persistence mechanisms, or prompt injection attempts against the agent. The skill's behavior aligns with its stated purpose.",
+          "checkedAt": 1779165506506,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "1c7331b26a227d994ff09d5470c97ff50d05937eb632119b4945f46d7fe3795f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1c7331b26a227d994ff09d5470c97ff50d05937eb632119b4945f46d7fe3795f"
+    },
+    "slug": "crypto-scam-detector",
+    "source_type": "clawhub",
+    "version": "2.2.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

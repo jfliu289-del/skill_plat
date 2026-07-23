@@ -1,0 +1,135 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "cross-tag:agent-management",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01"
+    ],
+    "stages": [
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "c5bf5ad44e21df9f775c0cdf36fa5662475638cfd4ef233d8f9503c118bca39c",
+    "content_hash": "61fe5d9bc274125ae9c8703b208136efc61d4a4ba5cd6cb7577dd9ef5bdd6f8e",
+    "precanonical_content_hash": "7cecb9f32d51c5d3fe2b04ddd583392c9db06fb83b7b290eb67ad66f3c5840f1",
+    "skill_md_hash": "850829d3b2f694ff20695b8952b6acb76838c08dc9cc9060d3ff17191b12db1c",
+    "version_metadata_sha256": "b30e7fdb8ac1372acec4d0dec9d20264e85ae99bb95989f8b99db9a79899325a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/qiao101660/skills/aihotel",
+    "claim_id": "cc7a5f13768811b7e12baff18a1130912bec8f32f73500b5d988848c13028a28",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "aihotel",
+        "url": "https://clawskills.sh/skills/qiao101660-aihotel"
+      },
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "aihotel",
+        "url": "https://clawskills.sh/skills/qiao101660-aihotel"
+      }
+    ],
+    "owner_handle": "qiao101660",
+    "owner_id": "s178w2jnrqdk8e61ea4j07b5sn83hgj7",
+    "published_at": 1771993435352,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779958399741,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779958399741,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The stated behavior is hotel search and booking through an external MCP service, which fits the skill purpose and does not show unrelated local data access or destructive behavior.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "No supplied evidence indicates prompt-injection behavior, hidden role changes, or instructions outside the hotel workflow.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The MCP configuration reportedly connects to https://mcp.aigohotel.com/mcp and includes a bearer token; this is coherent for a hosted integration but exposes a shared service credential in the package.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Remote service access is proportionate for hotel search, but the bundled token should be considered sensitive and should not be relied on as a private user secret.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No evidence shows background persistence, local privilege escalation, broad filesystem indexing, or use of local auth/session stores.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight] expected: The reported hardcoded bearer token is consistent with a remote MCP integration, but it is still a credential exposure risk for the publisher/service rather than evidence of user-directed harm.\n[SkillSpector] expected: SkillSpector reported no issues; this supports the absence of agentic-risk signals but does not eliminate the credential-handling concern.",
+          "guidance": "Install only if you are comfortable with the skill using the AiGoHotel remote MCP service. The publisher should rotate or replace the bundled bearer token with a scoped, revocable, documented authentication mechanism; users should avoid treating the packaged token as private or account-specific.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill appears to be a coherent hotel-search integration, but it includes a packaged bearer token for its remote MCP service that should be treated as an exposed shared credential.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779958361999,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: aihotel\nVersion: 1.0.1\n\nThe skill's stated purpose and agent instructions in SKILL.md are benign, focusing on hotel search and booking. However, the `mcp.json` file contains a hardcoded bearer token (`mcp_4fcc9465759d47fab4881c5f26be0e7e`) for the `https://mcp.aigohotel.com/mcp` service. This is a significant security vulnerability, as it exposes a secret credential that could lead to unauthorized access or abuse of the external service if the skill bundle is distributed.",
+          "checkedAt": 1779166989113,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "b11ec59bf4089fc94e6192475c93283b76e01cd7d3bb001a95516d732231cd73",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b11ec59bf4089fc94e6192475c93283b76e01cd7d3bb001a95516d732231cd73"
+    },
+    "slug": "aihotel",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

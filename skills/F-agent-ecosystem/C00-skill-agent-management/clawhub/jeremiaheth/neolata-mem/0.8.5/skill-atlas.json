@@ -1,0 +1,153 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.6682,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:phrase:multi agent",
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "5709c03402a86311a12d744d71f9895a76c6381ac23ed62cfa51c5571cb3b6f0",
+    "content_hash": "bd9e36fbd3476e0245ed09af80711ca407e9499ca2b351a958fa323dc78f077c",
+    "precanonical_content_hash": "35fe03c724ac3b68d1bff5de537c0e028ba6d545b3ae466113835a35a87d68ff",
+    "skill_md_hash": "d9d133fb18be7ef1af5ac9f86dc97e83db915c8b16d7d01edfb89876abaf6514",
+    "version_metadata_sha256": "ae75cd5743067a19c3b2030b9361ce42751cf0c08b507819e1c22a570b48565b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jeremiaheth/skills/neolata-mem",
+    "claim_id": "0b053b7657592a5adebd70b0102e0db8450d1fb4190870258ecb0e6aa1c55458",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "neolata-mem",
+        "url": "https://clawskills.sh/skills/jeremiaheth-neolata-mem"
+      }
+    ],
+    "owner_handle": "jeremiaheth",
+    "owner_id": "s174qzmk588xyewqrjzed15hbx856z8r",
+    "published_at": 1772110643720,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779956607939,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779956607939,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is agent memory with search, decay, graph links, conflict handling, and multi-agent recall; the documented capabilities fit that purpose, including cross-agent search.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact is documentation and integration guidance rather than bundled executable code; runtime helpers store and recall conversation-derived memories only when the host application calls them.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation depends on the external npm package @jeremiaheth/neolata-mem, but the skill discloses that package, gives verification steps, and the provided skill bundle itself contains only markdown files.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Node is required; API keys, Supabase, LLMs, embeddings, and webhooks are optional. The documented default is local JSON storage with no network calls.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistent plaintext memory is the core feature and is clearly disclosed, along with in-memory testing mode, Supabase/RLS guidance, webhook exfiltration warnings, and external provider data-flow notes.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-4] expected: The cross-agent context behavior is real, but the guide explicitly says context() searches all agents and the skill advertises multi-agent memory, so this is a deployment privacy consideration rather than hidden behavior.\n[SQP-2] expected: Prompt-ready context can include cross-agent memories, which users should handle carefully; the behavior is documented and purpose-aligned, though multi-user deployments should add authorization and redaction controls.",
+          "guidance": "Install only if you want persistent agent memory. Start with local or in-memory mode, avoid storing secrets or regulated data, verify the npm package before installing, scope agents carefully in shared environments, and enable Supabase, external LLM/embedding providers, or webhooks only for destinations you trust.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a transparent persistent memory skill with disclosed local storage, optional external providers, and documented cross-agent behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779956551601,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: neolata-mem\nVersion: 0.8.5\n\nThe OpenClaw AgentSkills skill bundle for 'neolata-mem' is classified as benign. The documentation (SKILL.md, references/*.md) is highly transparent about its capabilities, including potential data flows to external LLM/embedding providers and webhooks, explicitly warning users about associated risks (e.g., 'Webhook URLs are an explicit exfiltration surface'). It details robust security features such as SSRF protection (blocking cloud metadata and private IPs by default), XML-fenced user content for LLM prompt injection mitigation, and extensive input validation. There is no evidence of intentional malicious behavior, obfuscation, unauthorized data exfiltration, or prompt injection attempts against the OpenClaw agent itself; instead, the documentation serves as a comprehensive security guide.",
+          "checkedAt": 1779166799658,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "9737906bc94f41d4d24b64b58ff1d3807ef644e43c821c10e9e04f42c392120f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/9737906bc94f41d4d24b64b58ff1d3807ef644e43c821c10e9e04f42c392120f"
+    },
+    "slug": "neolata-mem",
+    "source_type": "clawhub",
+    "version": "0.8.5"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

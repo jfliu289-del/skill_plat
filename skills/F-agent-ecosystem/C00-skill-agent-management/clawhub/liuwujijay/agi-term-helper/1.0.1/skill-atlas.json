@@ -1,0 +1,146 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C07:token:debug",
+      "category:C09:token:privacy",
+      "category:C10:token:model",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:debugging",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C07",
+      "C09",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "debug",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4fbd6dc69a5bab31cd17f89eb66d9fa23a011a69a53ce044214196bffcea87aa",
+    "content_hash": "00681b757c4f9946c79b6d929e97be50d6091a443c23354ad18ed61300072056",
+    "precanonical_content_hash": "bab42de826fb6bf25777b5c47a3ddf538d188de2bdb8d837fede1d78180d922f",
+    "skill_md_hash": "755ec544b043d8cc2d94666dbc74920c342307b3e6ae125c5efe1c4e47fc3302",
+    "version_metadata_sha256": "080fb1fce6c70243c9703e0412817de2e89f9ce3cb0efc603ce7279cc4f6f4a4"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/liuwujijay/skills/agi-term-helper",
+    "claim_id": "bbfc7030ffe2be681acb91acb4f3569c4f6f51468746e632adae4f996984afc9",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "agi-term-helper",
+        "url": "https://clawskills.sh/skills/liuwujijay-agi-term-helper"
+      }
+    ],
+    "owner_handle": "liuwujijay",
+    "owner_id": "s178dhyaw1s01g70rsjhjzh81d885sjd",
+    "published_at": 1771183440343,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968648084,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968648084,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill's stated purpose is direct terminal execution through OpenClaw exec, and the artifacts clearly describe raw command forwarding as the intended capability.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The command is user-invoked and raw, but the skill sets disable-model-invocation to true and repeatedly tells users that they provide the exact command and must check unsafe commands themselves.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains only SKILL.md and _meta.json, with no executable scripts, install hooks, dependency installation, or hidden runtime files; _meta.json has a stale version value but no security-relevant behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Terminal execution can affect the user's files and system state depending on the configured exec environment, but that authority is the core disclosed purpose and is initiated by the user.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts show no persistence mechanism, background worker, credential collection, network exfiltration, privilege escalation, or automatic execution path.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code insight raw exec concern] expected: The raw exec capability is real and high impact, but it is explicit in SKILL.md, user-invocable, and model invocation is disabled, so it does not by itself justify Review.\n[SkillSpector clean result] expected: SkillSpector reported no issues; local artifact review also found only the disclosed manual terminal shortcut behavior.\n[Static scan clean result] expected: Metadata reports no static scan findings, consistent with the package containing no executable scripts or hidden files.",
+          "guidance": "Install this only if you want a power-user slash command that behaves like typing directly into a shell. Prefer read-only commands, double-check destructive paths, avoid putting secrets in commands, and do not run remote download-and-execute pipelines unless you fully trust them.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a transparent manual shortcut for running exactly the terminal command the user types; powerful, but disclosed and user-controlled.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968630215,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: agi-term-helper\nVersion: 1.0.1\n\nThe `agi-term-helper` skill provides direct, unsanitized terminal execution via OpenClaw's `exec` tool, configured by `command-tool: exec` and `command-arg-mode: raw` in `SKILL.md`. While the documentation explicitly warns users about the risks of arbitrary command execution (e.g., avoiding `curl ... | sh`) and the skill is `disable-model-invocation: true` (preventing the AI agent from autonomously misusing it), this capability represents a significant security risk due to direct arbitrary command execution on the host system. This falls under 'risky capabilities without clear malicious intent' as per the classification guidelines.",
+          "checkedAt": 1779164351864,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "97fc76f6c356a9a21d534e9a8e6ffef072f6d33be835735c164a1b7c4ff975ca",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/97fc76f6c356a9a21d534e9a8e6ffef072f6d33be835735c164a1b7c4ff975ca"
+    },
+    "slug": "agi-term-helper",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:research",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "discover"
+    ],
+    "tasks": [
+      "build",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "63d3d9211a130f3ce5c15431d5ddad5a286451790478dd2d0cc0328882a84c38",
+    "content_hash": "640ffae0d999d4fe53bf4e7585c19f6a1163487330ff7c5d62030e90110061c3",
+    "precanonical_content_hash": "51de90bcab2b6e85cc5f06a05c49bb593e91a88f89421c096e5ec6ebe803c535",
+    "skill_md_hash": "4fa6b504a90d14bccaa171656a203a3d1ee0a2f2be4bdb76c95819a9de03fe98",
+    "version_metadata_sha256": "c4212fa0033a57e798ac9da6d221ef636653c28353d8b96f4808d73b7de9c3e0"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/ide-rea/skills/baidu-search",
+    "claim_id": "2884ff3c135733aad4281ca270682ed5fd4a4c0280764e5e14b5f5e41b7dbc28",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "baidu-search",
+        "url": "https://clawskills.sh/skills/ide-rea-baidu-search"
+      }
+    ],
+    "owner_handle": "ide-rea",
+    "owner_id": "s17a4y7rpj2bmp94zpqe8r915h83gq6d",
+    "published_at": 1776338831266,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783656416849,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783656416849,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The declared purpose is web search through Baidu AI Search, and the script only builds a query/count/freshness request, sends it to the Baidu AI Search endpoint or a configured sandbox proxy, and returns trimmed search results.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are limited to invoking a Python search script with JSON input; there are no role changes, hidden agent instructions, local indexing, destructive actions, or unrelated automation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The bundle contains markdown documentation and one Python script. It does not include an installer, package-download step, setup-time execution, or background service.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Outbound network access and the BAIDU_API_KEY secret are expected for a Baidu search integration and are disclosed in the skill metadata. In sandbox deployments, requests may instead go through DUMATE_SCHEDULER_URL with DUMATE_SESSION_ID, which is visible in the code and purpose-aligned.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill itself does not persist data or escalate privileges, but the setup guide recommends storing BAIDU_API_KEY in the OpenClaw JSON configuration file without security-hardening guidance.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The network call and BAIDU_API_KEY use are expected for Baidu search and the environment requirement is declared in the skill metadata, so this is a transparency note rather than evidence of hidden or purpose-mismatched behavior.\n[SQP-2] expected: The setup guide does instruct users to store the API key in local OpenClaw configuration and does not warn about file permissions or accidental commits; this is a real user-handling risk, but it supports the stated integration and is not malicious behavior by the skill.",
+          "guidance": "Install only if you are comfortable sending search queries to Baidu or the configured sandbox proxy. Use a dedicated, revocable Baidu API key, keep ~/.openclaw/openclaw.json private and out of source control, restrict local file access where possible, and monitor Baidu usage or billing.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward Baidu web-search skill, but users should treat the Baidu API key and sent search queries as sensitive.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783656386760,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 23,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: baidu-search\nVersion: 1.1.4\n\nThe skill bundle provides a legitimate implementation for searching the web via the Baidu AI Search API. The Python script (scripts/search.py) correctly handles API authentication via environment variables, performs basic input validation on search parameters, and uses the standard requests library for communication. While it contains logic to proxy requests if specific sandbox environment variables (DUMATE_SESSION_ID) are present, this appears to be a functional requirement for specific deployment environments rather than a malicious exfiltration attempt.",
+          "checkedAt": 1779161551109,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "7c85436d6a9677f63b6ac12d8ab1b7dc3efd96462248d65283edb1afa3c68855",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/7c85436d6a9677f63b6ac12d8ab1b7dc3efd96462248d65283edb1afa3c68855"
+    },
+    "slug": "baidu-search",
+    "source_type": "clawhub",
+    "version": "1.1.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,127 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C17:token:schedule",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "757e0a53db21a572921f4e96964c0fad4b8e6265585586b955e1a33562c557a9",
+    "content_hash": "73044dde24c37385f57d7a53a3a14e2864afa5f30a0cb94fc8a062ebbca7b122",
+    "skill_md_hash": "3077ccf7916011069f0a72e356b5d6978d32d162035695f15b9d16de8ba8e85f",
+    "version_metadata_sha256": "5cdf873e9a351831957d0c492adfebf20179f9fbe9bfcc3223ccf554793e22d9"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tradmangh/skills/job-execution-monitor",
+    "claim_id": "29a7b04af1c624eb2b2a94f46a7022a1cd7b170a17db0a15b1a6ff05a938a1b6",
+    "index_entries": [
+      {
+        "index_path": "categories/communication.md",
+        "label": "job-execution-monitor",
+        "url": "https://clawskills.sh/skills/tradmangh-job-execution-monitor"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "tradmangh",
+    "owner_id": "s17aaegq3rafytyraeyc72bkjx83twpg",
+    "published_at": 1771363339988,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972584661,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972584661,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, metadata, documentation, and scripts align around monitoring configured OpenClaw cron jobs, detecting missed or never-run jobs, and sending wake alerts without auto-remediation.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions stay within the monitoring purpose and use local config/state plus openclaw cron list/wake; minor documentation gaps exist around simplified cron parsing and example wildcard jobs that the script does not fully implement.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The installer makes local, disclosed changes by copying an example config and creating either a user systemd timer or a per-user crontab entry; it does not download remote code.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Filesystem and cron permissions are proportionate for a job monitor, and inspected artifacts do not request secrets, browser profiles, broad indexing, or external network access.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill creates user-level persistence for repeated health checks, which is expected for monitoring and is documented with uninstall instructions; it refuses to run as root.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal telemetry clean] expected: The clean telemetry is consistent with artifact inspection: scripts use standard local shell commands, OpenClaw CLI calls, and workspace files for monitoring.\n[SkillSpector clean] expected: SkillSpector reported no issues, and manual review did not find hidden behavior, credential handling, exfiltration, or destructive actions.",
+          "guidance": "Review the generated config before enabling it, and be aware that installation starts a user-level systemd timer or cron entry that periodically runs the healthcheck. Confirm jq, bash, date, and openclaw are available, and test the healthcheck manually because the cron parsing is simplified.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to be a disclosed user-level monitor for OpenClaw cron jobs, with no evidence of hidden data access, exfiltration, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972558085,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: job-execution-monitor\nVersion: 1.0.3\n\nThe OpenClaw AgentSkills skill bundle 'job-execution-monitor' is designed for monitoring scheduled jobs and alerting on failures. All scripts (`healthcheck.sh`, `install.sh`) use standard shell commands (`jq`, `date`, `systemctl`, `crontab`) and OpenClaw CLI tools (`openclaw cron list`, `openclaw cron wake`) for their stated purpose. Configuration and state files are stored within the expected OpenClaw workspace. The `SKILL.md` and `README.md` provide clear instructions for the agent, without any evidence of prompt injection attempts to subvert its behavior. There are no signs of data exfiltration, malicious execution, persistence mechanisms beyond the monitoring task, or other intentional harmful actions. The identified limitations, such as the simplified cron parsing in `healthcheck.sh`, are functional bugs rather than security vulnerabilities or malicious intent.",
+          "checkedAt": 1779164819965,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "757e0a53db21a572921f4e96964c0fad4b8e6265585586b955e1a33562c557a9",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/757e0a53db21a572921f4e96964c0fad4b8e6265585586b955e1a33562c557a9"
+    },
+    "slug": "job-execution-monitor",
+    "source_type": "clawhub",
+    "version": "1.0.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

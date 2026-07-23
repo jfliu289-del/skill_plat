@@ -1,0 +1,125 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.55,
+    "domains": [],
+    "needs_review": false,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d76c0436d6fa74506b693b9a15dc9814eed9b54e66f5d3de27114d3654448f49",
+    "content_hash": "43aa0867f2ac611fc45c0fb32ebea8f226ba271ba19d0199fd6aa35924b00702",
+    "precanonical_content_hash": "edc7a41b139f2926e2ac386f1b56e5cd1075df59b7d08f09ce7483c3e7f5185c",
+    "skill_md_hash": "89c7b2c21c2a1af83b4794031f011792b37e294037b8054b19a95edf0252cb7d",
+    "version_metadata_sha256": "1075a918bda6e8527eb42e87565827db6c79796bde8420d9b77700eb1f718619"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/yalcindemir/skills/turkey-news",
+    "claim_id": "85cc63e3017e0ee7c72f7f063fffe7c04052055f92d3a2abfad1cd60028c1361",
+    "index_entries": [
+      {
+        "index_path": "categories/calendar-and-scheduling.md",
+        "label": "turkey-news",
+        "url": "https://clawskills.sh/skills/yalcindemir-turkey-news"
+      }
+    ],
+    "owner_handle": "yalcindemir",
+    "owner_id": "s1784k39vbweqvse8smza3yxgs8843wf",
+    "published_at": 1770910971080,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972496266,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972496266,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is Turkish news collection and summarization; the script only contacts the listed public RSS/news URLs, parses article metadata, and prints JSON for the agent to summarize.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Manual trigger phrases are broad, and the Telegram recipient is named as 'Usta'; these are usability and configuration concerns, but the behavior is disclosed and aligned with news alerts.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No install hook, package installation, post-install execution, or hidden setup behavior is present; it assumes Node can run the included script.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Outbound requests to news sites and optional Telegram notification are proportionate to the skill's purpose, but users should verify recipients and avoid sending anything beyond public news summaries.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Cron-based recurring use is disclosed in the description and usage text, but the artifact does not create a cron job or persistence mechanism by itself.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Network access is expected for an RSS news skill, and the feed domains are listed in both the documentation and script; lack of a separate permission declaration is a transparency note rather than a material policy concern here.\n[SQP-1] expected: The broad Turkish news trigger phrases may cause extra news fetches, but they match the skill purpose and do not introduce hidden local access, credential use, or unrelated actions.\n[SQP-2] expected: Scheduled Telegram notification is disclosed in the skill description and usage instructions, and the artifact does not include Telegram credentials, sending code, or a self-installed scheduler.\n[SQP-2] expected: The instruction to notify 'Usta' via Telegram is an external-send behavior, but it is limited to generated public news summaries and should require user-controlled Telegram configuration at runtime.",
+          "guidance": "Install this only if you want a skill that contacts the listed Turkish news feeds. Enable cron and Telegram alerts deliberately, confirm who 'Usta' maps to in your Telegram setup, and keep the message contents limited to public news summaries with an easy way to disable the schedule.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill coherently fetches public Turkish news RSS feeds and can produce Telegram news summaries, with no evidence of hidden collection, credential theft, destructive behavior, or self-installed persistence.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972470435,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: turkey-news\nVersion: 1.0.0\n\nThe skill is designed to fetch and summarize news from legitimate Turkish RSS feeds. The `SKILL.md` instructions guide the agent to execute a local script (`scripts/fetch-news.js`), filter its output, summarize the news, and notify the user via Telegram. The `scripts/fetch-news.js` script makes network requests only to the predefined, legitimate news RSS URLs, parses the content, and outputs JSON. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts to subvert the agent's security or intended function. The use of regex for XML parsing is a potential vulnerability in robustness but does not indicate malicious intent.",
+          "checkedAt": 1779163493306,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "0c4f05c5c6da08b12d7bbbf644c80e14687540e3b96fc5424e332853ffeaea9d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0c4f05c5c6da08b12d7bbbf644c80e14687540e3b96fc5424e332853ffeaea9d"
+    },
+    "slug": "turkey-news",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

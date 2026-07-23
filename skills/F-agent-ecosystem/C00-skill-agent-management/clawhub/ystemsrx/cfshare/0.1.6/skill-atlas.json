@@ -1,0 +1,127 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C09:token:audit",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "9fa42dcb42198d352a752e0871b2a2273ee98d194edee2ee790af8615b427a54",
+    "content_hash": "b8183558b5f442d642c5100774bb5648ddf36346e98b6be3225b7bf4f532ba07",
+    "precanonical_content_hash": "e4d6f06c5e89e8c76b1f1e43f21a8efd5d388ebe5b4bb76530b99fb2a360cfd4",
+    "skill_md_hash": "a213f143fefe7a5207f9f1acdd0e1e935a8c23d9374fcee28f07512340bc2655",
+    "version_metadata_sha256": "6326b0badff679345a0083c431b6f9fe5bf04811f2951d96f5394e524762b2a0"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/ystemsrx/skills/cfshare",
+    "claim_id": "670c247b79d96ce316b4f286c56b792cb2db44aa2b5db94cb135f5ddec505b71",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "cfshare",
+        "url": "https://clawskills.sh/skills/ystemsrx-cfshare"
+      }
+    ],
+    "owner_handle": "ystemsrx",
+    "owner_id": "s174gmptrk4se62f0gy3ana84d845q12",
+    "published_at": 1775180128047,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971362680,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971362680,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifact: it exposes local ports or copied files through temporary Cloudflare Quick Tunnel URLs and provides session, log, audit, and policy commands.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions document token, basic, and unauthenticated access modes and say that access:\"none\" is public, but they do not require explicit confirmation of the exact port, paths, TTL, and access mode before exposure.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill tells agents to install external tools when missing, including a global npm package and cloudflared via package manager or downloaded binary. This is purpose-aligned but should be user-approved.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Local file and localhost-port access are proportionate to a sharing/tunneling skill; the main risk is accidental exposure of the wrong file, directory, or service.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime state is disclosed under ~/.cfshare, with policy, audit, session, workspace, and export files. The artifact shows no hidden persistence, though some install paths use sudo or global installation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The concern about public exposure is valid user guidance, but the capability is central to the skill's stated purpose and the artifact discloses access modes, token preference for sensitive content, TTLs, stop commands, and ignored patterns.\n[SQP-2] expected: The unauthenticated access mode is risky, but it is documented as publicly readable by anyone with the link rather than hidden or deceptive.\n[VirusTotal code_insight] expected: The suspicious telemetry is based on public tunneling and external installs. Those behaviors are disclosed and purpose-aligned, and no artifact-backed exfiltration, destruction, or deception was found.\n[staticScan] expected: Static scan reported no suspicious patterns, consistent with the package containing only a non-executable SKILL.md artifact.",
+          "guidance": "Install only if you intentionally need temporary public Cloudflare links. Approve any global or privileged installs yourself, confirm the exact port or file paths before exposing them, prefer token or basic access for anything non-public, avoid sharing secrets or broad directories, use short TTLs, and stop exposures when finished.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a clearly disclosed Cloudflare tunnel/file-sharing helper, but users must be careful because it can intentionally make selected local ports or files reachable from the internet.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971333463,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: cfshare\nVersion: 0.1.6\n\nThe skill provides high-risk capabilities for exposing local ports and files to the public internet via Cloudflare Quick Tunnels. It includes instructions for the agent to perform system-level installations of a specific third-party npm package (@ystemsrx/cfshare) and download binaries via curl. While the skill includes some security features like a policy ignore list (e.g., for .env files), the inherent risk of automated internet exposure of local resources and the requirement to install external, user-controlled software make it suspicious. (Files: SKILL.md, _meta.json)",
+          "checkedAt": 1779163355776,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "26bed20d2cd29b250454e6a3f0fd37c6d3082611eb5b67b5334bb1e8cbf7bd3e",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/26bed20d2cd29b250454e6a3f0fd37c6d3082611eb5b67b5334bb1e8cbf7bd3e"
+    },
+    "slug": "cfshare",
+    "source_type": "clawhub",
+    "version": "0.1.6"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

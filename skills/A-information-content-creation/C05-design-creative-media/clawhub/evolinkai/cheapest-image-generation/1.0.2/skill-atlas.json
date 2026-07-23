@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.625,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:phrase:image generation",
+      "category:C05:token:image",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "category:C17:token:notes",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "7b512ccc6a488493d9e8c8d197924484c6a9e4893b33d28eb30d23ce8d7951d7",
+    "content_hash": "d20e3f9f6ea5ba803dcad26226eb6d7e6cc4cf4700a19d1054057e2a5b344d0e",
+    "precanonical_content_hash": "4fd89b39f010cd4531ff7dff3ba4a1431c25e178d068f2b89a0804383c6257ea",
+    "skill_md_hash": "eeff041e3d839b3cfe994974eaf3ae16c294a4558e2cd61acc89855e11ddd920",
+    "version_metadata_sha256": "4320332f97087e1d526155bf35dc401c346587db4c04c65d559086ea5168458f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/evolinkai/skills/cheapest-image-generation",
+    "claim_id": "981b2e44cdc8065cc529d7a73abcd9bdc4bfb8026fced8e82dee6f4a90f681bb",
+    "index_entries": [
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "cheapest-image-generation",
+        "url": "https://clawskills.sh/skills/evolinkai-cheapest-image-generation"
+      }
+    ],
+    "owner_handle": "evolinkai",
+    "owner_id": "s176k82x7tm60j2kx309p7evxs83j3z7",
+    "published_at": 1771684089493,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943796508,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943796508,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is text-to-image generation through EvoLink, and the artifacts only describe submitting prompts, polling task status, downloading the result, and printing a media path.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The trigger phrases generate immediately, which is documented and purpose-aligned, but users should understand that this can spend API credits and write an image file without an extra confirmation step.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No executable installer or persistence mechanism is present; the package contains markdown instructions and reference implementations.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The required EVOLINK_API_KEY is proportionate for a provider-backed image generation skill, and prompts plus the bearer key are sent only to the disclosed EvoLink API endpoint.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The only persistence is the expected local image output file; there is no evidence of background workers, privilege escalation, profile modification, or unrelated system changes.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The scanner's concern about prompt transmission, immediate generation, and local file writes is supported as a real data-flow note, but SKILL.md discloses the EvoLink endpoint, payload, trigger behavior, and local saving, so it does not create a Review-level concern by itself.\n[E1] expected: External transmission to api.evolink.ai and downloading the generated image are necessary for the skill's function and are not hidden or redirected to unrelated services in the artifacts.",
+          "guidance": "Install only if you are comfortable sending image prompts to EvoLink and using an EvoLink API key from your environment. Avoid putting secrets or sensitive personal/business information in prompts, and expect generated images to be saved locally and API credits to be consumed when trigger phrases are used.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward EvoLink image generator that sends prompts to the disclosed API and saves the returned image locally.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943759679,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 35,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: cheapest-image-generation\nVersion: 1.0.2\n\nThe OpenClaw AgentSkills bundle for 'cheapest-image-generation' is classified as benign. The `SKILL.md` explicitly highlights 'CRITICAL SECURITY' for output filename sanitization, which is robustly implemented across all reference scripts (`curl_heredoc.md`, `powershell.md`, `python.md`). Filenames are sanitized using `tr -cd 'A-Za-z0-9._-'` (bash) or handled safely via `[System.IO.Path]::GetFullPath` (PowerShell) and `os.path.abspath` (Python). User prompts are safely embedded in JSON payloads using `json_escape` (bash), `ConvertTo-Json` (PowerShell), or `json.dumps` (Python), preventing injection. All network activity is directed to the stated `https://api.evolink.ai` endpoint, and there is no evidence of data exfiltration, backdoor installation, or other malicious intent.",
+          "checkedAt": 1779165818445,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "ffc55520a98bf90a7ef4c3b650a1d087ceae30f8d8fe2b27a7c543dff1f081cd",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ffc55520a98bf90a7ef4c3b650a1d087ceae30f8d8fe2b27a7c543dff1f081cd"
+    },
+    "slug": "cheapest-image-generation",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

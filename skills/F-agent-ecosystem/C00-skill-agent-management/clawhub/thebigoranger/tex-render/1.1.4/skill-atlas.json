@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C05:token:image",
+      "category:C07:token:test",
+      "category:C08:token:repository",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05",
+      "C07",
+      "C08"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "design",
+      "manage",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a5e4c1d22020f3a6fb2626f1488cdde1b74b3c7dc8f541af062d6ababafc32a3",
+    "content_hash": "8d45990c999deb926dd276ee1a126cc60c6cb7b5c663190024134c649b839142",
+    "precanonical_content_hash": "16cf7200cbf21c61702508f00befa7b1d5b7be5fddf5e4364858f26f4c178692",
+    "skill_md_hash": "573d8d61cdc3d0df5533a530e4cfa8c1fa5bc613de830b47342bfc616c67b946",
+    "version_metadata_sha256": "8232ea07d91f8bc66b2c57d601b75db1c07825a05f3f42c5b99793187aa04c38"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/thebigoranger/skills/tex-render",
+    "claim_id": "8aeff4c62118e1ee806937da05080e42ada5ce58f89903a450b8506aa6f834af",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "tex-render",
+        "url": "https://clawskills.sh/skills/thebigoranger-tex-render"
+      }
+    ],
+    "owner_handle": "thebigoranger",
+    "owner_id": "s179zbxs5dt868g177kp2n7w55843vbs",
+    "published_at": 1771271704795,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968720550,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968720550,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The code and docs consistently implement LaTeX rendering through MathJax and svg2img/sharp, producing SVG and raster image files or data URLs.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill broadly tells the agent to render LaTeX automatically and without per-use permission; this is explicitly disclosed, but users should enable it only if they want that behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation requires npm dependencies from the public registry, including sharp as a native image-processing dependency; no hidden install step or remote script is shown in the skill artifacts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Local Node execution and image file creation are proportionate for the stated rendering purpose, but the optional output_base_path can direct generated files outside the default media directory if the agent or user supplies a custom path.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Generated SVG and image files persist on disk, normally under ~/.openclaw/media/tex-render; there is no evidence of background persistence, credential access, privilege escalation, or account mutation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The automatic trigger is broad and may cause extra rendering on ordinary math/science replies, but it is disclosed and directly tied to the skill's purpose rather than hidden behavior.\n[SQP-3] expected: The instruction not to ask permission is real, but it is presented as a user notice and limited to rendering/sending equation images.\n[EA2] expected: The autonomous behavior is limited to LaTeX image generation; it does not request credentials, external posting, destructive actions, or broader agent control.\n[VirusTotal code_insight] expected: The custom output path can write generated .svg and raster files outside the default directory; this is a disclosed CLI capability, but users should avoid passing untrusted or sensitive paths.\n[suspicious.dangerous_exec] expected: The child_process usage is in validate.js and runs the package's own render script with the current Node executable for tests; it is not hidden runtime command execution.",
+          "guidance": "Install this only if you want LaTeX in replies to be automatically rendered as images. Use the default output directory unless you intentionally choose another location, do not pass untrusted output paths, and review the npm dependency chain before running npm install.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed LaTeX-to-image renderer with local file-output risks, but the artifacts do not show hidden, deceptive, exfiltrating, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968656787,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 58,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: tex-render\nVersion: 1.1.4\n\nThe `scripts/render.js` file contains a path traversal vulnerability. The `output_base_path` argument, if controlled by an attacker, can be used to write files to arbitrary locations on the filesystem outside the intended `~/.openclaw/media/tex-render/` directory. While there is no explicit malicious intent (e.g., data exfiltration, persistence) within the provided code or agent instructions (`SKILL.md`), this vulnerability allows for potential arbitrary file writes, which is a significant security flaw.",
+          "checkedAt": 1779164385031,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "9f4596aa9d6f79ec82fb59d996762316efdfbe20e7874a3c58259739aa596ab5",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/9f4596aa9d6f79ec82fb59d996762316efdfbe20e7874a3c58259739aa596ab5"
+    },
+    "slug": "tex-render",
+    "source_type": "clawhub",
+    "version": "1.1.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

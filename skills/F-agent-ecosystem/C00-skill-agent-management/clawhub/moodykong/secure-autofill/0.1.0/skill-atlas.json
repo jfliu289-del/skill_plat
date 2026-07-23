@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:plugin",
+      "category:C06:token:api",
+      "category:C09:token:secure",
+      "cross-tag:agent-management",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C06",
+      "C09"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a52b8eab9ae5af8f6a40353df3de8f88a9aeb1cce2f0f0bd2849c9ca4ac5e2f9",
+    "content_hash": "d16a65a7878433741ece04ecca58f10323a9ccd16301f44f4a31ef195fea9a55",
+    "precanonical_content_hash": "ba7734a89c67d5a923e106cfedb819add1353168e7f0adea04fad6964c27b9a3",
+    "skill_md_hash": "93e957d3308a88a7b479f1f81ce0bd29df8b9bd6fe5099f3d438bb1f4cc83620",
+    "version_metadata_sha256": "493dd7e293db1fca44bd6d436206dea3bcba144fd7b5d33d12ff562f32bdaf8b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/moodykong/skills/secure-autofill",
+    "claim_id": "796ab48f2c2cfe895b8e346a25f3f615b1ac56fb26851d0aed3beaa4dac908ee",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "secure-autofill",
+        "url": "https://clawskills.sh/skills/moodykong-secure-autofill"
+      }
+    ],
+    "owner_handle": "moodykong",
+    "owner_id": "s17bmvm4mtehh962q2etg1s8w1884r8m",
+    "published_at": 1771740201437,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779948612022,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779948612022,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill is explicitly for 1Password-backed browser credential filling using vault_suggest and vault_fill; that is sensitive account access, but it is the core advertised capability and the text says the plugin handles secrets rather than exposing them to the agent.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions include selecting credential items, filling username/password/TOTP fields, and clicking login buttons. This is expected for autofill, but users should confirm the target site and account before allowing fills or submissions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Setup instructions include optional Chrome installation through Google's apt repository and an interactive onboarding script. These are disclosed, but the sudo package-install commands should be reviewed manually before use.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "DISPLAY, WAYLAND_DISPLAY, and optional OP_SERVICE_ACCOUNT_TOKEN are proportionate for WSL browser automation and 1Password integration. The token warning is visible, though file-permission guidance would make the setup stronger.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill can store environment values in skill-local and gateway env files and configure a user-level systemd EnvironmentFile override. This is persistent and sensitive, but disclosed and either manual or confirmation-driven, not hidden persistence.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-2] expected: The cited onboarding flow writes env files and may restart the user gateway service; this expands operational trust but is visible setup for the advertised browser autofill workflow and includes confirmation points.\n[SDI-2] expected: The cited Chrome install and gateway configuration commands are privileged and persistent, but they are presented as WSL prerequisites for non-headless browser use rather than hidden or unrelated behavior.\n[VirusTotal code_insight] expected: VirusTotal raised concern about sudo commands, systemd user configuration, and OP_SERVICE_ACCOUNT_TOKEN handling. Artifact review confirms those behaviors are disclosed and purpose-aligned, so the telemetry does not justify a Review or malicious verdict by itself.",
+          "guidance": "Install only if you want OpenClaw to help with real browser logins. Use a least-privilege 1Password token if you need one, avoid pasting tokens into chat, protect env files that contain secrets, review any sudo Chrome install commands before running them, and confirm the site and account before autofill submits credentials.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed 1Password autofill helper with sensitive setup steps, but its behavior matches its stated purpose and is user-directed.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948576022,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: secure-autofill\nVersion: 0.1.0\n\nThe skill is classified as suspicious due to the extensive system-level capabilities it instructs the OpenClaw agent to perform, which, while necessary for its stated purpose, introduce significant vulnerability risks. The `SKILL.md` instructs the agent to execute `sudo` commands for installing Google Chrome, modify systemd user service files (`~/.config/systemd/user/openclaw-gateway.service.d/override.conf`) to configure environment variables, and restart the `openclaw-gateway` service. Additionally, the `scripts/onboard.sh` script handles sensitive `OP_SERVICE_ACCOUNT_TOKEN` values and modifies configuration files (`config.env`, `~/.config/openclaw/env`). These capabilities, if exploited through agent compromise or prompt injection, could lead to unauthorized command execution or persistence, despite the skill's apparent benign intent for secure credential autofill.",
+          "checkedAt": 1779166125752,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "ae0f38c720c427bb50084079fd5bee7586b7bedc27757cb3b0297ab1e52cf6de",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ae0f38c720c427bb50084079fd5bee7586b7bedc27757cb3b0297ab1e52cf6de"
+    },
+    "slug": "secure-autofill",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

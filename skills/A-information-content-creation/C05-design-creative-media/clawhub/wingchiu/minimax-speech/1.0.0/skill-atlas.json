@@ -1,0 +1,119 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:audio"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "956c70958bed106746d3a97f3e0373f8ecf909af0c5b96255d7478902a7b8e8d",
+    "content_hash": "7eb40c6afdbf4f9b5c6d4899db3c7a59b2db2221c3497fa00ca7fce9ad7ab33d",
+    "precanonical_content_hash": "1dfe6184b872f8292bae6ee3e5ccaa520cde1e9bb67e28e2332fe7fec73c4f18",
+    "skill_md_hash": "c1a5d19c58c86f53173eeeec43d853aed8afa88d6bd72fd1295bbf5458e4e286",
+    "version_metadata_sha256": "3adf545ae5ea3a80cea6eae89f78303e5e5f7243499b5ada753893d1749c2a9f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/wingchiu/skills/minimax-speech",
+    "claim_id": "7e3388cd239c5dc135e60b9311f6a70731f2d72108f0130ab81049a552b80971",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "minimax-speech",
+        "url": "https://clawskills.sh/skills/wingchiu-minimax-speech"
+      }
+    ],
+    "owner_handle": "wingchiu",
+    "owner_id": "s176egwp1q3t1bzz4ycgwvx8h983tx3t",
+    "published_at": 1771070671428,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779966782721,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779966782721,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently implement MiniMax Speech 2.8 TTS generation and voice catalog lookup, matching the stated purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The CLI exposes an endpoint override; this is disclosed for regional MiniMax endpoints but should not be used with prompt-supplied or untrusted URLs.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a manual `pip install requests` step with no pinned dependency version; this is common for a small Python helper but should be done in a controlled environment.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill reads `MINIMAX_API_KEY` and sends requested text to MiniMax, which is necessary for the integration and disclosed in SKILL.md.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background persistence, privilege escalation, or hidden startup behavior is shown; file writes are limited to user-directed audio or voice-catalog outputs.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SkillSpector LP3] expected: The environment variable, outbound network calls, and output file writes are real, but they are disclosed and proportionate for a TTS API helper; the missing permission declaration is a documentation/metadata gap rather than evidence of hidden behavior.\n[VirusTotal code_insight suspicious] expected: The endpoint override, arbitrary output path, and URL audio download are valid caution points, but the artifacts disclose these controls and do not show automatic credential exfiltration, deception, destructive behavior, or unrelated data access.\n[Static scan clean] expected: The local static scan reported no suspicious patterns, consistent with the artifact review.",
+          "guidance": "Install only if you are comfortable using a MiniMax API key and sending TTS text to MiniMax. Use the default or verified MiniMax regional endpoints only, avoid confidential text unless MiniMax's terms are acceptable, install `requests` from a trusted source, and choose output paths deliberately because the script can write or overwrite the path you provide.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward MiniMax text-to-speech helper with expected API-key, network, and file-output behavior, but users should avoid untrusted endpoints and choose output paths carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779966747614,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: minimax-speech\nVersion: 1.0.0\n\nThe `scripts/minimax_tts.py` skill, while intended for legitimate MiniMax API interaction, contains several vulnerabilities. The `--endpoint` argument allows the `MINIMAX_API_KEY` to be sent to an arbitrary URL, posing a risk of credential exfiltration if the AI agent is prompted to use a malicious endpoint. Additionally, the `--output` argument in both `tts` and `voices` subcommands is vulnerable to path traversal, potentially allowing arbitrary file writes outside the intended directory. The `decode_audio` function also allows downloading content from arbitrary URLs if the `output_format` is set to `url` and the API response contains a malicious URL. These are significant vulnerabilities that could be exploited via prompt injection or malicious input, but there is no clear evidence of intentional malicious design within the code or `SKILL.md`.",
+          "checkedAt": 1779163971670,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "38088964efb6ddc4cdc4d073026de76f28ca60161cd771464fd3ac9dcd8e6e5a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/38088964efb6ddc4cdc4d073026de76f28ca60161cd771464fd3ac9dcd8e6e5a"
+    },
+    "slug": "minimax-speech",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

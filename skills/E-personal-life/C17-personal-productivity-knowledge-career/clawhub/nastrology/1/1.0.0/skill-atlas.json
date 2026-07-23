@@ -1,0 +1,151 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.3964,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C17",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C07:token:quality",
+      "category:C09:token:security",
+      "category:C13:token:operations",
+      "category:C17:token:knowledge",
+      "category:C17:token:notes",
+      "category:C17:token:personal",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C07",
+      "C09",
+      "C13"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "51ca017e0153cc6feb9f6abfa2a07423a286bed30258b9751ac6db1b260a46d6",
+    "content_hash": "436109ad0a3c9d0f3b4bde0946abd71d0537c1972838126a89c7f5ef09372230",
+    "precanonical_content_hash": "9410bbd7ea23c9f2b789b6f3525d42d4d51f1bef4142ea19dd9b7570984b3085",
+    "skill_md_hash": "ed52008bab2fa80d01b6ae22f1db3f9d4ee19d53833e6bec52056c574cdf4620",
+    "version_metadata_sha256": "528a8f10219109be1e7168e10abf6b253fb756ef7cbc40fa981dc195ae24f27a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/nastrology/skills/1",
+    "claim_id": "9e53d5a07a7d137eb85688e9b2268de9c843a3118bddae1d2a077d21a00e2ba2",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "1",
+        "url": "https://clawskills.sh/skills/nastrology-1"
+      },
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "1",
+        "url": "https://clawskills.sh/skills/nastrology-1"
+      }
+    ],
+    "owner_handle": "nastrology",
+    "owner_id": "s17f59nk3a5bkff59gvnkz3rq5884ery",
+    "published_at": 1769389571207,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783649740055,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783649740055,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated second-brain purpose matches the artifacts: instructions cover capturing, searching, updating, and deleting knowledge entries, and the wrapper only calls the Ensue API for those memory operations.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Retrieval wording is broad, including searching when relevant topics come up, but the skill gives concrete intent examples and requires confirmation before saving and deleting.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No installer, downloader, background worker, self-modification, or hidden setup is present; the package contains SKILL.md and a small shell API wrapper.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The ENSUE_API_KEY requirement and outbound call to api.ensue-network.ai are disclosed and proportionate for an Ensue integration; the skill also instructs not to log or display the key.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill can persist, retrieve, update, and delete remote knowledge entries, including private notes or journal namespaces, but that capability is central to the stated purpose and is documented.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The shell wrapper concern is partly valid as hardening guidance because the manifest does not separately declare command execution and the wrapper lacks a method allowlist, but the artifact openly documents the wrapper and it only posts the supplied JSON to Ensue’s memory API.\n[SQP-1] expected: The scope concern is partly valid for privacy guidance because retrieval can search across stored knowledge, but broad recall is expected for a personal knowledge base and state-changing operations are user-directed rather than hidden.\n[staticScan] expected: Static scan reported no suspicious patterns, which is consistent with the inspected artifacts.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with the artifact review, but it was not used as the sole basis for the verdict.",
+          "guidance": "Install only if you trust Ensue with the knowledge you choose to store. Review drafts before saving, avoid secrets, credentials, private paths, and sensitive personal details, and use a revocable Ensue API key if possible.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Ensue-backed personal memory skill whose remote storage and API-key use are purpose-aligned, though users should treat saved notes as durable remote data.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783649704430,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 24,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: 1\nVersion: 1.0.0\n\nThe skill is designed to interact with a personal knowledge base via the Ensue API. The `SKILL.md` provides clear, responsible instructions for the AI agent, emphasizing user consent and explicitly forbidding the storage or logging of sensitive data like API keys or personal file paths. The `scripts/ensue-api.sh` is a straightforward `curl` wrapper that interacts with the legitimate `https://api.ensue-network.ai/` endpoint using an environment variable `ENSUE_API_KEY`. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts to subvert the agent's intended purpose or security.",
+          "checkedAt": 1779159984699,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "8950ef4204a5fc07fad2a8b9db84b5991dbc67507db6d1b09aa5c76639bc86b7",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8950ef4204a5fc07fad2a8b9db84b5991dbc67507db6d1b09aa5c76639bc86b7"
+    },
+    "slug": "1",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

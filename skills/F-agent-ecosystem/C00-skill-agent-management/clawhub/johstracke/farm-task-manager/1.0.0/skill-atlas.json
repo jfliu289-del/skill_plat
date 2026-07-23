@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "security-professional"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:data",
+      "category:C09:token:security",
+      "category:C11:token:project",
+      "category:C12:token:management",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:planning",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C09",
+      "C11",
+      "C12"
+    ],
+    "stages": [
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "plan",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "543d888185a24892aa3bbbeaf193cc586cdb58f6dc521b5594b1015c4ef8acbd",
+    "content_hash": "3392537d8cf0c6a2b9921357e3adfb6b868971ce6a14cd1ecf87442bc968e315",
+    "skill_md_hash": "84fc95b3a263284af1a22fd3b34763f1d57a0048134edf5ef27b543f731a4abb",
+    "version_metadata_sha256": "3a3f23fefd5edbc30441069ced09108d76a8dea5fe824f7c14625a31f9ac9ad6"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/johstracke/skills/farm-task-manager",
+    "claim_id": "1bc84ffa33237bbaf1aa745cc008acb014c56bad2a0f33ff6c5fb5233f6d5aa6",
+    "index_entries": [
+      {
+        "index_path": "categories/productivity-and-tasks.md",
+        "label": "farm-task-manager",
+        "url": "https://clawskills.sh/skills/johstracke-farm-task-manager"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "johstracke",
+    "owner_id": "s173d5fsnxa2pq9qbfax6fcewd8847r5",
+    "published_at": 1770896120416,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972487498,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972487498,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documentation and Python script align around farm chore task management: add, list, show, update, complete, delete, recurring task generation, search, and export.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The delete command permanently removes a task record from the local task JSON, and export can overwrite a user-selected file; both are documented and user-directed, but users should understand the effects before invoking them.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains documentation, an example JSON file, and a Python CLI script; no hidden installer, dependency fetch, shell bootstrap, or automatic execution behavior was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Task data is stored under ~/.openclaw/workspace/farm-task-manager, while exports are allowed under the user's home directory with blocklisted system and sensitive dotfile paths. This is broader than ideal but disclosed and tied to local export functionality.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists task content, notes, assignees, and recurring templates locally in JSON. It does not request elevated privileges, install background services, or create long-running workers.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-4] expected: The concern about allowing paths under ~/ is valid as a caution because exports can overwrite user-chosen home-directory files and the blocklist is not comprehensive. However, artifact evidence shows no credential reading, broad indexing, exfiltration, or hidden access; the broad path allowance is documented and limited to local storage/export behavior.\n[SQP-2] expected: The delete command lacks confirmation or undo, but it only deletes a selected task record from the skill's local task database. This is a normal, documented task-management capability rather than destructive system behavior.",
+          "guidance": "Reasonable to install for local farm task tracking. Avoid storing secrets in task notes, and choose export paths deliberately because exports write files under your home directory and may overwrite an existing file.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a local farm task tracker with documented local storage, export, and delete behavior, and no evidence of hidden networking, credential access, or persistence beyond its task file.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972460625,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: farm-task-manager\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills bundle for 'Farm Task Manager' is classified as benign. The `SKILL.md` documentation clearly outlines the skill's purpose and explicitly states security measures, including path validation. The core Python script, `scripts/farm_task_manager.py`, implements these security controls through a `is_safe_path` function. This function correctly restricts file operations to the designated workspace and user's home directory, while actively blocking access to system directories and sensitive dotfiles/directories (e.g., `~/.ssh`, `~/.aws`). There is no evidence of data exfiltration, arbitrary code execution, persistence mechanisms, or prompt injection attempts against the agent. All operations are aligned with the stated task management and export functionalities.",
+          "checkedAt": 1779163456876,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a4460fad9ef5129a5ee85cc464a80c49ec311b819afaea1e7b0ce590db8bf1dd",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a4460fad9ef5129a5ee85cc464a80c49ec311b819afaea1e7b0ce590db8bf1dd"
+    },
+    "slug": "farm-task-manager",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

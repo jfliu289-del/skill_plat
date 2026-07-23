@@ -1,0 +1,127 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:find",
+      "category:C17:token:notes",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [
+      "discover"
+    ],
+    "tasks": [
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "3ada383cb52d6d419dbb24e15635a78e27f021ed9d255d7915eec058f932bcdd",
+    "content_hash": "36336dddf86b0dbe73f6da4d4e908b490a6b4be45d2f7195e5eb32994d5f0bff",
+    "precanonical_content_hash": "e59cda8ca56143d75230a229800ec03c26675b4ed6a1e510ce3a3c696ad22fa5",
+    "skill_md_hash": "a2331fdba065299ef95ee0ed15f7a4c25a1f7f3c32104adc148faffee70a35b2",
+    "version_metadata_sha256": "6c97ba8ec1027d26618849baad0fef1939e07342af2acd3d537341201ad77c23"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/hoyin258/skills/macos-screenshot-telegram",
+    "claim_id": "bff8cd4919249bb9b963a12c6b5555396c4b8ccfdb802f391a43c1d2688f6901",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "macos-screenshot-telegram",
+        "url": "https://clawskills.sh/skills/hoyin258-macos-screenshot-telegram"
+      }
+    ],
+    "owner_handle": "hoyin258",
+    "owner_id": "s1783q54p6rj1d4q29wxcfes1x884f7h",
+    "published_at": 1771210891339,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968995928,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968995928,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "Screen capture, local workspace file creation, reading a Telegram bot token, and uploading to Telegram all match the stated screenshot-to-Telegram purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill tells the agent to ask for the target chat ID and OpenClaw profile, but it does not add a prominent preview or privacy-confirmation step before upload.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains a markdown skill file and a readable shell helper script; there is no auto-run installer, background service, or hidden setup mechanism.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Using screencapture, curl, the OpenClaw profile config, and the OpenClaw workspace is proportionate for this integration, though screenshots and bot tokens are sensitive.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, privilege escalation, or destructive behavior is shown, but the screenshot remains in the workspace as screen.png unless removed later.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The shell commands and network upload are disclosed in the workflow and are necessary for the advertised behavior; the missing formal permission declaration is a transparency gap, not evidence of hidden behavior.\n[SQP-2] expected: Capturing and uploading the screen is the core purpose, but the artifact should make the sensitivity of visible on-screen data clearer and should encourage explicit confirmation of the destination.\n[SQP-2] expected: Reading the Telegram bot token from the OpenClaw profile config is described by the setup and workflow, and is expected for this integration.\n[E1] expected: Transmission to api.telegram.org is external data transfer, but it is the disclosed purpose of the skill rather than a hidden exfiltration path.\n[VirusTotal/code_insight] unexpected: The script does not show unquoted shell expansion that would support arbitrary command execution from the profile argument; the profile value can influence paths and should be constrained, but the telemetry alone does not justify a Review or malicious verdict.",
+          "guidance": "Install only if you intentionally want OpenClaw to capture your full macOS screen and upload it to Telegram. Before running it, verify the chat ID and profile, make sure nothing sensitive is visible, use a dedicated low-privilege Telegram bot token, and delete the saved workspace screenshot if it contains private information.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill does what it advertises: captures a macOS screenshot and sends it to a Telegram chat, with sensitive privacy implications users should understand.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968953115,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 84,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: macos-screenshot-telegram\nVersion: 1.0.0\n\nThe skill is designed for a legitimate purpose (screenshot to Telegram). However, the `scripts/screenshot-telegram.sh` file is vulnerable to shell injection and path traversal. The user-controlled `PROFILE` parameter is directly concatenated into file paths (`CONFIG_PATH`, `WORKSPACE`) without sanitization, and these paths are then used in shell commands (`grep`, `sed`, `screencapture`, `curl`). This allows an attacker to potentially execute arbitrary commands or access/write files outside the intended directories by crafting a malicious `PROFILE` value.",
+          "checkedAt": 1779164439379,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "63d5538ddff8e7f430effd82b97428c73b0b40bf55773a67351bb2ef0db561e2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/63d5538ddff8e7f430effd82b97428c73b0b40bf55773a67351bb2ef0db561e2"
+    },
+    "slug": "macos-screenshot-telegram",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

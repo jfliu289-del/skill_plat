@@ -1,0 +1,162 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "document",
+      "report",
+      "website"
+    ],
+    "audiences": [
+      "business",
+      "data-professional",
+      "marketer",
+      "security-professional"
+    ],
+    "confidence": 0.1417,
+    "domains": [
+      "business",
+      "marketing",
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C02:token:edit",
+      "category:C04:token:data",
+      "category:C09:token:privacy",
+      "category:C11:token:product",
+      "category:C12:token:market",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:data-analysis",
+      "cross-tag:marketing-sales",
+      "cross-tag:security",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C04",
+      "C09",
+      "C11",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "automate",
+      "manage",
+      "market",
+      "secure",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8253dd567536ed9e3452efb2397be274ddcfe5ef7bae63edf3f624c08882cf28",
+    "content_hash": "6ba06c296aa599d38faac34cd01fac100b2ebb4287b20a5d79ddbe4179c5a002",
+    "precanonical_content_hash": "a1e0df17a2cd9b86e0b4079f485b989d370a02956eb1eb975d51705eb1be1d87",
+    "skill_md_hash": "851507fc678b8595d369766afe49fcf1e51aa87397f47ca621e37886bc7e406c",
+    "version_metadata_sha256": "809eec306a2a823b13fc0079ec0f7aa17c84d08a687512bdd53203e5f37d3834"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/audsmith28/skills/competitor-watch",
+    "claim_id": "33c096857e103125c50fe4434506e10b592f694cda942fa2bad795970c73da89",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "competitor-watch",
+        "url": "https://clawskills.sh/skills/audsmith28-competitor-watch"
+      }
+    ],
+    "owner_handle": "audsmith28",
+    "owner_id": "s174wjyxjsdj9q1dqyf9axntxs88530y",
+    "published_at": 1770842531176,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779970239426,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779970239426,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "Monitoring user-configured public competitor pages, diffing snapshots, and reporting changes fits the stated purpose. The scripts currently simulate real web fetching and message sending, so users should verify behavior before relying on it.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The activation language is broad, but runtime actions are user-configured and aligned with competitive monitoring rather than unrelated agent behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Setup creates configuration, data, snapshot, and report directories under ~/.config/competitor-watch and depends on jq and standard shell utilities. It does not install cron jobs automatically.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact describes monitoring public web content only, with no authenticated scraping, credential use, impersonation, or deceptive collection.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "Local persistence of snapshots, diffs, change logs, last-check data, and alert history is disclosed and purpose-aligned, though retention settings are described more clearly than they are enforced in the scripts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code_insight] unexpected: The shell-injection claim is not supported by the reviewed script: check.sh only echoes the constructed clawd command, and the commented real command quotes the URL rather than evaluating it.\n[VirusTotal prompt-injection concern] expected: Reports can include text derived from fetched webpages, which is expected for a diff-alerting tool. Users should still treat competitor webpage content in alerts as untrusted.\n[SkillSpector] expected: The supplied SkillSpector result was clean with no issues.\n[static scan] expected: The static scan reported no suspicious patterns, consistent with the artifact review.",
+          "guidance": "Install only if you are comfortable storing monitored public page snapshots and diffs locally under ~/.config/competitor-watch. Review configured URLs and check frequency before adding cron or heartbeat scheduling, and treat webpage text shown in alerts as untrusted content rather than agent instructions.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed competitor-monitoring skill that stores local snapshots and reports, with operational caveats but no artifact-backed malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779970196502,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: competitor-watch\nVersion: 1.1.0\n\nThe skill bundle is highly suspicious due to critical shell injection and prompt injection vulnerabilities. The `scripts/check.sh` script directly interpolates user-controlled `$page_url` (from `config.json`) into a `clawd web_fetch` command without proper shell escaping, leading to a Remote Code Execution (RCE) risk. Additionally, `scripts/report.sh` constructs alert messages (`$formatted_report`) that include content directly from fetched web pages (`added`, `removed`) and passes them to a simulated `clawd message send` command, creating a prompt injection vulnerability against the OpenClaw agent. An attacker controlling competitor URLs or content could exploit these flaws to execute arbitrary commands or manipulate the agent's behavior.",
+          "checkedAt": 1779163195168,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "e286a97850ff197809d579b38eb37192db64b465f5eff073007f4faa425d8d08",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e286a97850ff197809d579b38eb37192db64b465f5eff073007f4faa425d8d08"
+    },
+    "slug": "competitor-watch",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

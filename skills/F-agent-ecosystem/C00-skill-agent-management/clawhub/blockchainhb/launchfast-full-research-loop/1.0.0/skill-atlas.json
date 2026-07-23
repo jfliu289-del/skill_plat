@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:research",
+      "category:C05:token:design",
+      "category:C11:token:product",
+      "cross-tag:agent-management",
+      "cross-tag:design"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C05",
+      "C11"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "design",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "9cfcdc4949c33bc112acf11a38cfabdbe7040d44dacdd3adc9d2c5b978498cc9",
+    "content_hash": "4ac3f01f17b8618b885803c57551421fdb461997757fce0ce044114d30d866dd",
+    "precanonical_content_hash": "80e5ea15ddfae9a7bf224b0bcaa77aeefa2e998c4ba8fc85ad3ae5c05d3870ed",
+    "skill_md_hash": "4d796d138b7af4ef25c89aa577920e9416849a47393e7ed7f5903838773c5ac7",
+    "version_metadata_sha256": "dba277ff1c3d909b921522c7578ee0062f91d1ce0a22aadf368bf946930717a1"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/blockchainhb/skills/launchfast-full-research-loop",
+    "claim_id": "2e6773a96f8038cfbd8806eae5bc2dc9d5ae96071ae8d8ace47fd1b71275c082",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "launchfast-full-research-loop",
+        "url": "https://clawskills.sh/skills/blockchainhb-launchfast-full-research-loop"
+      }
+    ],
+    "owner_handle": "blockchainhb",
+    "owner_id": "s170nrjvyyc0h2cdkz633m7r0x884ht1",
+    "published_at": 1771832684367,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779952160755,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779952160755,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The described behavior, collecting product keywords/competitor inputs, calling LaunchFast-style research MCP services, and producing a ranked HTML report, fits the stated research-loop purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The workflow appears user-directed, but the artifacts as summarized do not clearly call out that keywords, competitor ASINs, and sourcing inputs may be shared with external MCP services.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No install script, privilege escalation, hidden setup step, or background execution mechanism was identified in the supplied evidence.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Writing a standalone HTML report to a default or user-specified path is proportionate for a reporting skill, though the agent should confirm the destination and avoid overwriting files unexpectedly.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The only persistence described is the saved HTML report; no ongoing worker, credential store access, elevated privilege, or durable agent behavior was identified.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: Saving an HTML research report is expected for the skill's purpose, but users should choose the path deliberately and check before overwriting existing files.\n[SQP-2] expected: Sending research inputs to external MCP services is expected for an external market-research integration, but the skill should disclose that business-sensitive inputs may leave the local environment.\n[VirusTotal code_insight] expected: The arbitrary-file-write and HTML-injection concerns are plausible implementation risks for report generation, but the supplied artifacts do not show deception, exfiltration, destructive behavior, or purpose-mismatched authority.",
+          "guidance": "Before installing, treat product ideas, ASINs, supplier details, and sourcing strategy as potentially sensitive because they may be sent to external research services. When generating the report, use a specific non-sensitive output path, avoid overwriting existing files, and open the HTML report with normal caution if it contains third-party data.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to be a normal product-research workflow, but users should be aware it sends business research inputs to external services and saves an HTML report locally.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779952090535,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: launchfast-full-research-loop\nVersion: 1.0.0\n\nThe skill instructs the agent to save a generated HTML report to a user-specified path (SKILL.md, STEP 1, PHASE 5). This creates a potential arbitrary file write vulnerability if the agent's underlying file system operations do not sanitize the provided path. Additionally, the skill instructs the agent to populate an HTML template with data from external MCP calls (SKILL.md, PHASE 5). Without explicit sanitization of this data before insertion into the HTML, there is a risk of stored Cross-Site Scripting (XSS) if the external data contains malicious HTML/JavaScript. While these are significant vulnerabilities, the skill itself does not contain explicit instructions for malicious actions like data exfiltration or remote code execution, classifying it as suspicious rather than malicious.",
+          "checkedAt": 1779166441337,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "fe31aedad55de965b2aafb9c3f0240a80067665c144b7580ce4679f4f576c78a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/fe31aedad55de965b2aafb9c3f0240a80067665c144b7580ce4679f4f576c78a"
+    },
+    "slug": "launchfast-full-research-loop",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,151 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.3964,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C07",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C02:token:language",
+      "category:C04:token:data",
+      "category:C07:token:quality",
+      "category:C07:token:test",
+      "category:C07:token:testing",
+      "category:C09:token:secure",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:debugging",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C02",
+      "C04",
+      "C09"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "debug",
+      "manage",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d9670282c18c6ec99c903d880fbd79ee4bccf650ac9cde8ba822c3faa3a7453c",
+    "content_hash": "aa1dd9cc19b3039ce20cf2eb2157d6e431e1ba02c1d04c21125968a8ac0bcf5d",
+    "precanonical_content_hash": "c51300240795391c4c8b11f32da202256247b579a69f702f42a47b5dbd8ff556",
+    "skill_md_hash": "d18bd8a10590cf83fb15e63ace770f490233e22f618ba4cb2fa5a3b4e1b776be",
+    "version_metadata_sha256": "5beecd441fa2c71df4eefa1174c31d91297cdf25fb44b41595cc75d51a6a1c9e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/beanapologist/skills/goldenseed",
+    "claim_id": "49f4abdb29f75f1c9b1e473e1f5ccdd0b073cfa92cce6ce33f19faef147d63a5",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "goldenseed",
+        "url": "https://clawskills.sh/skills/beanapologist-goldenseed"
+      }
+    ],
+    "owner_handle": "beanapologist",
+    "owner_id": "s17av1nf6b23hqgwpkjq76c74s884h46",
+    "published_at": 1770561423325,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783657766573,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783657766573,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe deterministic pseudo-random byte streams for testing and procedural generation, with repeated warnings not to use it for cryptographic or security-sensitive randomness; some example claims about seeding and coordinate-stable world generation are imprecise but are functional documentation issues, not security abuse.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "SKILL.md and README.md provide usage documentation and examples only; they do not contain prompt overrides, hidden agent-control instructions, credential handling, exfiltration steps, destructive actions, or unrelated automation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "install.sh only runs `pip install golden-seed`, which is expected for this skill but unpinned and dependent on the current third-party PyPI package contents.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill does not request broad filesystem access, private indexing, account authority, local sessions, secrets, credentials, or other high-impact environmental access.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No persistence mechanism, background worker, scheduler, privilege escalation, shell obfuscation, or long-running process is evidenced in the artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SDI-4] expected: The reported seed example concern is downgraded: the code does use the numeric seed as a deterministic skip count, though it does not pass a seed into the generator constructor; this may be inefficient or less clear than true seed initialization but does not indicate hidden or unsafe behavior.\n[SDI-4] expected: The world-generation example's `chunk(x, z)` does not use the coordinates despite claiming coordinate-based determinism; this is a documentation/example correctness issue that could mislead users about reproducibility, but it is not evidence of malicious or high-impact behavior.\n[VirusTotal.clean] expected: VirusTotal telemetry is clean and aligns with the inspected artifacts, but was treated only as supporting signal.\n[staticScan.clean] expected: Static scan reported no findings, and local review found only documentation, external project links, and the expected pip install command.",
+          "guidance": "Install it like any third-party Python package: use a virtual environment where possible, pin or review `golden-seed` for controlled builds, and do not use it for passwords, keys, tokens, cryptography, or security-sensitive randomness. Treat the procedural-generation examples as illustrative and verify seeding behavior before relying on them for fairness or reproducibility guarantees.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "GoldenSeed is a straightforward reproducible-randomness helper with no evidence of hidden access, data theft, persistence, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783657729772,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 12,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: goldenseed\nVersion: 1.1.0\n\nThe skill bundle is benign. All files consistently describe and implement a deterministic pseudo-random number generator. The `install.sh` script performs a standard `pip install golden-seed` command, and both `SKILL.md` and `README.md` provide documentation and examples without any evidence of prompt injection attempts, data exfiltration, malicious execution, or other high-risk behaviors. The project explicitly states its limitations (not cryptographically secure), which is a good practice.",
+          "checkedAt": 1779162248111,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "651752c50046803312122c87ac8c67d6bf45d4a8f3cd37e3488d4201f513ed20",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/651752c50046803312122c87ac8c67d6bf45d4a8f3cd37e3488d4201f513ed20"
+    },
+    "slug": "goldenseed",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}
