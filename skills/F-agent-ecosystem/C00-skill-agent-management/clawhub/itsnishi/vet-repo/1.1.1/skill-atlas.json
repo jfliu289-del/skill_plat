@@ -1,0 +1,127 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C08:token:repository",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C08"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "0b90f97150e2210de34a6b0e93ebf22e94a318d0959e7b9d9f3d90c55dc59f99",
+    "content_hash": "acdd625ccbc3f9041aeda0ed1f857a96c8a12b2b2e1a6b96eb2c3cb1a715dfaa",
+    "precanonical_content_hash": "0801d0ff3dc55577a061ecc03d1d27cf80d14b27b60774c85688797729e429b1",
+    "skill_md_hash": "597887f31e49d3853c93918b2af2737945dabf6104b97b08b4dd466a5748a6a0",
+    "version_metadata_sha256": "dfd4e7f932fa0a058dcad5aff04c267af650a935fda6892162eb61c0d4f6a248"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/itsnishi/skills/vet-repo",
+    "claim_id": "386a96d9e4eb4d2fb5c7b679aa0f9fc672c79ec0043d89ee3639a6da9cbe40de",
+    "index_entries": [
+      {
+        "index_path": "categories/pdf-and-documents.md",
+        "label": "vet-repo",
+        "url": "https://clawskills.sh/skills/itsnishi-vet-repo"
+      }
+    ],
+    "owner_handle": "itsnishi",
+    "owner_id": "s1731fs5mvb843mj295egzx6rh83gzbc",
+    "published_at": 1774570815940,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783656888374,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783656888374,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill scans repository agent configuration and related files for malicious patterns, matching its stated security-review purpose; it also includes a dormant package-registry verification helper that is adjacent to supply-chain checking but not used by the documented entrypoint.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are user-directed and tell the agent to run one local Python scanner against a chosen project root; the implementation also scans .vscode settings, Cursor MCP config, and skill support scripts, which is broader than the short file list but still purpose-aligned.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains SKILL.md and two Python scripts only, with no installer, post-install hook, background startup step, or hidden download mechanism.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Reading local repository configuration is proportionate for this scanner. The normal vet_repo.py path appears local-only, but the bundled helper could contact PyPI or npm if separately invoked.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No artifact-backed evidence shows file mutation, deletion, credential-store access, persistence setup, privilege escalation, or long-running worker behavior.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[TP4] expected: The broader scanned files are related to repository agent and IDE security review, and artifact evidence does not show the documented workflow performing live network access.\n[SDI-1] expected: The shared patterns module contains registry verification logic, but vet_repo.py imports only scan/report helpers and does not call the verification function.\n[SDI-2] expected: Verify_Package can make fixed outbound requests to PyPI or npm with package names, but this capability is dormant in the normal documented scanner run.\n[suspicious.dynamic_code_execution] expected: The static hit is a regex pattern and description for detecting eval() in scanned content, not an eval() execution by the skill.\n[suspicious.dangerous_exec] expected: The static hit is a regex pattern and description for detecting exec() in scanned content, not executable shell behavior by the skill.",
+          "guidance": "Reasonable to install if you want a local first-pass scanner for agent configuration risks. For private repositories, be aware that the documented command appears local-only, but the bundled shared module contains an unused npm/PyPI lookup helper; avoid separately invoking registry verification unless you are comfortable sending package names to those public registries.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Vet Repo is a local repository security scanner whose documented workflow is coherent and does not show hidden execution, persistence, destructive behavior, or active data exfiltration.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783656832684,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: vet-repo\nVersion: 1.1.1\n\nThe 'vet-repo' skill is a security tool designed to scan repository configuration files for malicious patterns, such as prompt injection, hook abuse, and supply chain attacks. The bundle consists of a comprehensive pattern database (patterns.py) and a scanner script (vet_repo.py) that performs static analysis on local files like .claude/settings.json and .mcp.json. While it includes a feature to verify npm/PyPI packages via external registry APIs (registry.npmjs.org and pypi.org), this behavior is transparently documented and serves a legitimate security purpose (detecting typosquatting) rather than data exfiltration.",
+          "checkedAt": 1779162123733,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "d551fd79d432a213f0c000deebaea72fa927f4eaf0d3004675fe383c6720f2ea",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d551fd79d432a213f0c000deebaea72fa927f4eaf0d3004675fe383c6720f2ea"
+    },
+    "slug": "vet-repo",
+    "source_type": "clawhub",
+    "version": "1.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

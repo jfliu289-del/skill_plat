@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:sources",
+      "category:C06:token:api",
+      "category:C06:token:coding",
+      "category:C10:token:ai",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:planning",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C01",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "plan"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "plan",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d741091b79e40daaf13f09a3665152051d451375abb1d3433b53f4ed7ea98fe4",
+    "content_hash": "eb372c977ad645091a5e8b87774b6f520f81f10b8b5c91d32e023d16c559d91a",
+    "precanonical_content_hash": "2ce4537224a6b09bd2ebba8d98681b56b6423a6052cef477e58102a7a448f6a0",
+    "skill_md_hash": "cdb6ce093cae3ffb721fd2180b0e8f61c10dac04d1849d4a3bb4143c8a48e833",
+    "version_metadata_sha256": "950f664ad6101e9ce8c2b6b68e03dbd8196012e363cb198c26016af2efecca9f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/arthbhalodiya/skills/jules-api",
+    "claim_id": "7cc1611bcbd7652bc1f718d2496f39c0c88bd35edbf77e462abd9bc52c595e4d",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "jules-api",
+        "url": "https://clawskills.sh/skills/arthbhalodiya-jules-api"
+      }
+    ],
+    "owner_handle": "arthbhalodiya",
+    "owner_id": "s17asrwf6aq541q7h99reshk0s884a3d",
+    "published_at": 1771059346549,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974710659,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974710659,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill purpose matches the artifacts: it lists Jules sources, creates and manages sessions, approves plans, sends messages, retrieves activities/artifacts, and deletes sessions. These are high-impact because Jules can make code changes and create pull requests on connected GitHub repositories, but that capability is disclosed.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The documentation and script are user-directed and describe the main actions. The auto-PR and default auto-approve flows are purpose-aligned, but users should treat them as powerful automation rather than routine read-only API calls.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains a SKILL.md and one Bash helper script. There is no installer, hidden download, obfuscation, or local persistence mechanism; static scan and VirusTotal telemetry are clean.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Requiring JULES_API_KEY and curl is proportionate for a Jules API integration. Artifact network calls point to the documented Jules Google API endpoint and use the key as an authentication header.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "Created Jules sessions may continue remotely after the local command returns, and the delete command sends a DELETE request immediately when invoked. This is expected session-management behavior, but it lacks an extra confirmation guard.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The AUTO_CREATE_PR example is expected for a Jules automation skill and the artifact discloses that Jules can write code and create pull requests; this is a user-caution issue, not evidence of hidden or malicious behavior.\n[SQP-2] expected: The documented delete-session API call is part of normal session management, but the docs do not explain recovery or retention consequences.\n[SQP-2] expected: The helper script's delete subcommand maps directly to the Jules DELETE endpoint and runs without a confirmation prompt; this is under-guarded but still explicit and user-invoked.",
+          "guidance": "Install only if you are comfortable giving this skill a Jules API key tied to your connected GitHub repositories. Prefer plan approval for important repos, review generated plans and diffs before accepting changes, avoid AUTO_CREATE_PR unless you intentionally want autonomous pull requests, and verify session IDs before deleting sessions.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward Google Jules API helper, with repo-changing power that is disclosed and should be used carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974662294,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: jules-api\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle for the Google Jules API is benign. It provides a legitimate interface to the Jules REST API, allowing users to manage coding sessions. All network requests are directed to the official `jules.googleapis.com` endpoint, and the `JULES_API_KEY` is handled appropriately as an authentication header. The `SKILL.md` documentation and the `scripts/jules.sh` helper script contain no evidence of data exfiltration, unauthorized command execution, persistence mechanisms, or prompt injection attempts against the OpenClaw agent. User inputs for JSON payloads are properly escaped using `jq -Rs .` in `jules.sh`, mitigating potential injection risks.",
+          "checkedAt": 1779163928522,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "4ca13b56553ace08efc49d9572b58732afc032b3da0b518aeae64c1626a678ce",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4ca13b56553ace08efc49d9572b58732afc032b3da0b518aeae64c1626a678ce"
+    },
+    "slug": "jules-api",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

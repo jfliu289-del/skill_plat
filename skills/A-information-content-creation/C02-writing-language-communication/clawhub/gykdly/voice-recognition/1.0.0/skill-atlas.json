@@ -1,0 +1,123 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.4167,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C02:token:language",
+      "category:C02:token:translate",
+      "category:C17:token:notes"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "64188028b0b5860382d5dd0ef7001221783d54c4463116e38251fed6842fa4d4",
+    "content_hash": "da1164e26ec50e1cc8492d183ccf0529c3d17ad013f072847d6b952fde7d5ec1",
+    "precanonical_content_hash": "d692f8edc60560f01c8b7ad91b68f09923080248da548fcbad4318642bc50bb4",
+    "skill_md_hash": "3585ea9fcc5cf627045671a7cdec61fa4f98bd0999c423ec8930d5f2e815b81e",
+    "version_metadata_sha256": "04e8b16c74cee72fb29167153ed22237b6b7adc257128eb7a5ad3b2398c4cdc5"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/gykdly/skills/voice-recognition",
+    "claim_id": "5d87371cc57b85c16a286ee6470053802113d725696a55723f1aefda554f9db7",
+    "index_entries": [
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "voice-recognition",
+        "url": "https://clawskills.sh/skills/gykdly-voice-recognition"
+      }
+    ],
+    "owner_handle": "gykdly",
+    "owner_id": "s17frcc9x1mjfc84xjkje64245884g5a",
+    "published_at": 1770812888694,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779970243880,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779970243880,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill purpose and script behavior match: it runs the local Whisper CLI on a user-provided audio file, optionally translates, and generates a simple local summary.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Usage is user-directed and limited to explicit audio file paths, though examples use a hardcoded personal install path and the metadata does not separately declare command/file capabilities.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "It requires installing OpenAI Whisper via Homebrew and notes that the first run downloads a model to the local Whisper cache.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The script reads the selected audio file and writes a plaintext .txt transcript beside it; this is purpose-aligned but can retain sensitive speech content locally.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background service, privilege escalation, credential access, or automatic persistence is shown; the only persistence is an optional user-added shell alias in ~/.zshrc.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Local command execution and file access are visible in the usage examples and are necessary for a local transcription helper; clearer capability metadata would be useful but the behavior is not hidden or purpose-mismatched.\n[SQP-2] expected: The main transcription path creates a .txt transcript next to the audio file. This is expected for speech-to-text, but users should know it can leave sensitive plaintext on disk.\n[SQP-2] expected: The helper transcription function has the same local transcript side effect. This warrants privacy guidance, not Review, because it stays local and matches the skill purpose.\n[RA2] expected: The ~/.zshrc alias is a disclosed convenience command the user must add manually; it is not automatic startup behavior or stealth persistence.\n[staticScan] expected: Static scan reported no suspicious patterns, consistent with the inspected files.\n[VirusTotal] expected: VirusTotal telemetry was clean and supports, but does not determine, the benign verdict.",
+          "guidance": "Install Whisper only from a trusted source. Use this skill on audio you are comfortable storing locally, because transcripts are written as .txt files beside the source audio and Whisper models may be cached under your user account. Add the ~/.zshrc alias only if you trust the script path and want that persistent shortcut.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a local Whisper transcription helper with ordinary privacy caveats around saved transcript files.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779970205037,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: voice-recognition\nVersion: 1.0.0\n\nThe skill bundle is designed for local speech-to-text using the OpenAI Whisper CLI. The `SKILL.md` provides clear usage instructions without any prompt injection attempts or malicious directives for the agent. The Python script `scripts/voice识别_升级版.py` uses `subprocess.run` to execute the `whisper` command, passing user-controlled audio file paths as distinct arguments, which is the recommended secure method to prevent shell injection. Output files are written locally to the same directory as the input audio, aligning with the skill's stated purpose. There is no evidence of data exfiltration, persistence mechanisms, or other malicious behaviors.",
+          "checkedAt": 1779163174418,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "5e361f57069294bac5d6df43574ef2ca13d0a66ed998b9e33f1b41d0668fb19d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/5e361f57069294bac5d6df43574ef2ca13d0a66ed998b9e33f1b41d0668fb19d"
+    },
+    "slug": "voice-recognition",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

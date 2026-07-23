@@ -1,0 +1,128 @@
+{
+  "classification": {
+    "artifacts": [
+      "website"
+    ],
+    "audiences": [],
+    "confidence": 0.625,
+    "domains": [],
+    "needs_review": false,
+    "primary_category": "C19",
+    "reasons": [
+      "category:C19:token:browser",
+      "category:C19:token:click",
+      "category:C19:token:desktop",
+      "cross-tag:browser-automation"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "automate"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "601b652c70ece2bf51f691393807f741790a293ec16cf1dd67917d8dd8ab1ebf",
+    "content_hash": "8aa58042770b7e2298b4c419f1c28d6bbed179791e6d80e03830dd2f02eacf93",
+    "precanonical_content_hash": "adf310a84605c4109b03b921009b0420fc0bf8842a8fa1665f1912b52d5f95fb",
+    "skill_md_hash": "fe0194a1fa96066faa523d13a520878533ad65a662119a42e2577b8f03cda37c",
+    "version_metadata_sha256": "7c49733bc962f54e64ee8ffebd9bfa0abfa414ac824acf8c463a614152630c3e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/dreamtraveler13/skills/guicountrol",
+    "claim_id": "052b8458c35ad9fefa68112fad90c55e26440419622725adb4e3101812b14ffc",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "guicountrol",
+        "url": "https://clawskills.sh/skills/dreamtraveler13-guicountrol"
+      }
+    ],
+    "owner_handle": "dreamtraveler13",
+    "owner_id": "s17bxsj8479c90rxv90k3hc84x885tz9",
+    "published_at": 1769949980822,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783653505101,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783653505101,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill’s stated purpose is Linux GUI automation, and the artifacts openly provide matching primitives: window listing/activation, mouse clicks, typing, keypresses, accessibility-tree inspection, screenshots, and an Electron accessibility relaunch example.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are broad enough to affect arbitrary desktop applications and include a pkill/relaunch workflow, but the actions are user-invoked examples rather than automatic hidden behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No installer or dependency manifest is present; the skill assumes external Linux tools such as xdotool, wmctrl, dogtail, and scrot are available.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Full-desktop screenshots and accessibility inspection can expose sensitive on-screen information, but that access is inherent to the disclosed GUI-control purpose and no upload, network transfer, or unrelated data collection appears in the artifacts.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The reviewed files show no persistence, privilege escalation, credential-store access, background worker, obfuscation, self-modification, or exfiltration path.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The privacy and unintended-action concerns are valid user guidance because screenshots, typing, and keypresses can affect the wrong window or capture sensitive content; they are expected for this skill’s disclosed desktop automation purpose and are not automatic or hidden.\n[SQP-2] expected: The pkill/relaunch workflow can interrupt active apps or lose unsaved work, so users should confirm the target app is safe to restart; the example is disclosed and purpose-aligned rather than deceptive or destructive by design.\n[VirusTotal code_insight] expected: VirusTotal flagged powerful GUI-control capabilities, but artifact review supports treating them as disclosed Linux desktop automation functionality rather than suspicious behavior on its own.\n[staticScan] expected: Static scan reported no suspicious patterns, consistent with the absence of network, credential, persistence, or obfuscated behavior in the shipped files.",
+          "guidance": "Install only if you intentionally want an agent to operate your local Linux desktop. Before use, close or hide sensitive windows, verify the active target window, avoid visible passwords or private data during screenshots/UI inspection, and save work before any workflow that kills or restarts an application.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill gives an agent explicit Linux desktop-control tools, which are powerful but disclosed, purpose-aligned, and not paired with hidden collection or persistence.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783653484335,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 12,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: guicountrol\nVersion: 1.0.0\n\nThe skill bundle is classified as suspicious due to its powerful capabilities for Linux GUI control, including simulating mouse/keyboard input, managing windows, taking screenshots, and killing processes, as demonstrated by `xdotool`, `wmctrl`, `scrot`, `pkill`, and `dogtail` usage in `SKILL.md`, `scripts/gui_action.sh`, and `scripts/inspect_ui.py`. While these actions are plausibly aligned with the stated purpose of 'Linux GUI Control', they represent significant high-risk capabilities that could be misused if the agent's instructions or environment were compromised, even though no explicit malicious intent is present in the provided files.",
+          "checkedAt": 1779160664494,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "1ca3f482ad0b9d8047e655cf7f856b4956fffd912abeb777d9d0232093ca8b6d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1ca3f482ad0b9d8047e655cf7f856b4956fffd912abeb777d9d0232093ca8b6d"
+    },
+    "slug": "guicountrol",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,148 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C00:token:skill",
+      "category:C07:token:test",
+      "category:C09:token:audit",
+      "category:C09:token:security",
+      "cross-tag:agent-management",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "cross-tag:testing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C07",
+      "C09"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "secure",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "b2cd2b1c850211e89a4086b9596ae3cc4e9235456ad04553a9f149aaa2494417",
+    "content_hash": "53b70d03f2226dc4a6a53782b373ec27a0bd536f2df8d008f0679c054396790d",
+    "precanonical_content_hash": "909ebb74f3f55564756312750872786cca4044cfd7a44352a381548206103520",
+    "skill_md_hash": "b4a29b9ed71795789ddf6d2d1a57a8f64340cfb8bfb2cc05ad339c2fed5a5d52",
+    "version_metadata_sha256": "f77a5d9b8d556b0832595a047f63bba14b1164d439723ab5d22321a95669ff21"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/yoder-bawt/skills/yoder-skill-auditor",
+    "claim_id": "b76105ac9c349c0cd66c0ad808ad1940169126ba4c7637926be2f97932f9992a",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "yoder-skill-auditor",
+        "url": "https://clawskills.sh/skills/yoder-bawt-yoder-skill-auditor"
+      }
+    ],
+    "owner_handle": "yoder-bawt",
+    "owner_id": "s170re0cxhj45s27ah5h37tc59885epn",
+    "published_at": 1771258895953,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971257445,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971257445,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The main capability is scanning OpenClaw skill directories for risky patterns, generating trust scores, reports, diffs, and benchmarks; shell, Python, local file reads, and optional ClawHub downloads fit that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are user-directed and scanner-focused, but the skill makes strong claims such as definitive scanning and zero false positives that users should not treat as a guarantee.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The inspector downloads a skill to a temporary directory and does not auto-install it. The artifact includes tests despite documentation saying they are excluded by .clawignore, so users should treat the bundled tests as development fixtures only.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The declared requirements are limited to bash and python3. Broad filesystem reads occur only when the user points the scanner at a directory or runs batch/report workflows over installed skills.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No automatic privilege escalation or background persistence was found. The trust-score trend mode writes a local trust_trends.json file, and report generation writes a markdown report to /tmp or a user-specified path.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The scanner needs shell and local file access to inspect skill artifacts. It does not declare env/config credentials and I found no hidden credential use in the main runtime scripts.\n[SDI test-fixture findings] expected: The credential theft, prompt injection, download-execute, sensitive file read, symlink, time-bomb, and privilege-escalation examples are under tests/ and are documented as malicious fixtures. The test harness scans these directories with audit.sh rather than executing the fixture scripts.\n[SQP-1] expected: allowlist.json is an exact-name scanner allowlist for known integrations, not a hidden installer bypass. It can reduce scanner strictness for matching skill names, so users should review or disable it for high-assurance audits.\n[SQP-2] expected: The cited secret collection and outbound request occur in the malicious-basic fixture used to verify scanner detection, not in the scanner's normal workflow.",
+          "guidance": "Reasonable to install if you want a local OpenClaw skill auditing tool. Do not manually execute files under tests/, review the built-in allowlist before relying on results, and treat the scanner as advisory rather than a final security guarantee.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed security-scanner skill whose risky-looking code is documented test fixture material, not hidden runtime behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971170065,
+          "issueCount": 40,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: yoder-skill-auditor\nVersion: 3.1.0\n\nThis skill bundle is a security scanner designed to detect malicious patterns in other OpenClaw skills. It contains a comprehensive set of checks for credential harvesting, data exfiltration, obfuscation, prompt injection, privilege escalation, and more. The presence of malicious code patterns in the `tests/` directory is intentional, serving as test fixtures to validate the scanner's detection capabilities, and these are explicitly documented as such in `TEST-FIXTURES-WARNING.md` and excluded from the published package via `.clawignore`. The `audit.sh` script includes a `PATTERN_DEF_FILTER` to prevent self-flagging of its own detection logic. There is no evidence that the scanner itself performs any malicious actions, exfiltrates data, or attempts prompt injection against the agent running it. All functionalities are aligned with its stated purpose as a security auditing tool.",
+          "checkedAt": 1779164541179,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "d5af527a8e72c4c895f67322189d5ac5decb922d33bd655a1f336b3f517c6d59",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d5af527a8e72c4c895f67322189d5ac5decb922d33bd655a1f336b3f517c6d59"
+    },
+    "slug": "yoder-skill-auditor",
+    "source_type": "clawhub",
+    "version": "3.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

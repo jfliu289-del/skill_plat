@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:image",
+      "category:C10:token:embedding",
+      "category:C17:token:notes",
+      "cross-tag:debugging",
+      "cross-tag:design"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "debug",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1b570a2d26b175910e63321fbe4cc3a20454395167427790210d8ced48821bd1",
+    "content_hash": "672447031962502ea4183b3d43df29fe689bc753f5cadae5eccd22dabe7cadbe",
+    "precanonical_content_hash": "2e8ac9184b6e7f9b099c3f75cea7c17a1fa42d438d3a99d1a4c9353c6b7b9c5d",
+    "skill_md_hash": "56347632678af0a21665a9933974652d1661b1a1f088e0a75a241125627fa340",
+    "version_metadata_sha256": "2fe5f5b51abdf3685c03ff76dd22f8af7e94e45f465af2398f53e3a6b1480a3e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/pipedream941/skills/regex-visualizer",
+    "claim_id": "4cc0f6b1b9119feca6a12516df316a18cfcdc30e81d7fc63dc509553eaa5a72e",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "regex-visualizer",
+        "url": "https://clawskills.sh/skills/pipedream941-regex-visualizer"
+      }
+    ],
+    "owner_handle": "pipedream941",
+    "owner_id": "s17a8j6qmbc74gnf4925fqk7z58850v8",
+    "published_at": 1772008173017,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779958435830,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779958435830,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill consistently describes rendering JavaScript regexes into Regulex-style SVG/PNG diagrams, and scripts/render.mjs implements that by loading the bundled Regulex HTML asset with Puppeteer.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are user-directed CLI examples requiring a regex and output path; there are no hidden role changes, credential requests, background tasks, or unrelated workflows.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill asks the user to run npm install for puppeteer-core. package.json declares only that dependency and no install scripts or lifecycle hooks were found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Launching a local Chrome or Edge process and writing chosen SVG/PNG output files is proportionate for image export, but users should choose trusted browser paths and safe output locations.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to installed npm dependencies and generated image files. The artifacts do not create services, read browser profiles, request credentials, or perform network exfiltration.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal/code_insight] expected: The user-controlled --out path can write or overwrite <out>.svg and/or <out>.png, but this is disclosed, user-directed behavior for an export tool rather than hidden or automatic mutation.\n[SDI-2] expected: The --chrome option and CHROME_PATH/PUPPETEER_EXECUTABLE_PATH select the local browser executable for Puppeteer. This is a real safety caveat if an agent accepts an untrusted executable path, but it is disclosed and aligned with using puppeteer-core without bundled Chromium.",
+          "guidance": "Install only if you are comfortable running npm install in the skill directory and letting Puppeteer launch your local Chrome or Edge. Use a project or temporary directory for --out, avoid important existing filenames, and only pass --chrome paths you trust.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a local regex diagram exporter; its browser launch and file output behavior match its stated purpose, with normal CLI safety caveats.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779958392413,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: regex-visualizer\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to significant vulnerabilities in `scripts/render.mjs`. The script uses `writeFileSync` with a user-controlled `--out` argument, which, when combined with `path.resolve()`, could allow an attacker to write arbitrary SVG/PNG content to arbitrary file system locations (e.g., using `../` or absolute paths). Additionally, the `--chrome` argument allows specifying an executable path for the headless browser, which could lead to Remote Code Execution if a malicious path is provided. While there is no clear evidence of intentional malicious behavior like data exfiltration or persistence, these vulnerabilities present a high risk of abuse.",
+          "checkedAt": 1779167030431,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "6dc1c26f9e6af17d8c86263fb914c7fb078947d1ab73db797f8e334583e6201c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6dc1c26f9e6af17d8c86263fb914c7fb078947d1ab73db797f8e334583e6201c"
+    },
+    "slug": "regex-visualizer",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

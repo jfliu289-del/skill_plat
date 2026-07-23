@@ -1,0 +1,119 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.0,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "fallback:C00"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ce75a18141e599d1c77c7d7dcc55bd19a5d433ccbd9ba3badfef10a06efbbbcb",
+    "content_hash": "eda2f75917b0413584150184b19f7bcd75057cc7a3b0fe00f617fb79f8adf82f",
+    "precanonical_content_hash": "6b35d2a51758a7ee6410bc36b1702854eacf4ec42370e10942c3d9df0ad8077d",
+    "skill_md_hash": "3fa57d97105b38661513ee89a60934fe532350b1b2de186263e0879201fcc840",
+    "version_metadata_sha256": "8de1ea7776a6f7f171739a57b0c577644aaef9c73c0a392a34e87cfce8e1ac1c"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/1999azzar/skills/time-checker",
+    "claim_id": "5c72ac326f24e31ba92cf731e335622400ceb60ff2108d0cef52685649fcfcff",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "time-checker",
+        "url": "https://clawskills.sh/skills/1999azzar-time-checker"
+      }
+    ],
+    "owner_handle": "1999azzar",
+    "owner_id": "s17bnq7bcwrm6mwmx7ryseen81885fxg",
+    "published_at": 1770939025509,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972990990,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972990990,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is checking current time and timezone information for a user-provided location, and the script implements that by fetching a time.is page for that location.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Most instructions are task-scoped, but the SKILL.md includes an unrelated persona instruction for reporting to a named person; this is visible and low-impact style guidance, not hidden technical authority.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill documents running python3 scripts/check_time.py and the script invokes curl, but there is no richer permission or dependency declaration; this should be clearer for users and reviewers.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The only network behavior shown is a request to a fixed time.is URL path containing the requested location. It does not access local files, credentials, account data, or unrelated services.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The artifacts show no persistence, background worker, privilege escalation, destructive action, credential storage, or long-running process.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The script execution is explicitly documented and coherent with the skill purpose, though permission metadata could better disclose shell/script execution.\n[SQP-2] expected: Sending the queried location to time.is is expected for a time.is-based lookup and is disclosed by the skill description, though users should understand their location query goes to a third party.\n[VirusTotal code_insight] unexpected: The persona concern is a real but low-impact scope issue. The SSRF claim is not supported by the artifact because curl is called without a shell and the constructed URL keeps the hostname fixed to time.is.",
+          "guidance": "Before installing, understand that this skill runs a local Python script, uses curl, and sends the location you ask about to time.is. Treat the Mema persona line as optional style text and ignore it unless you specifically want that tone.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a narrow time lookup skill that runs a local script and contacts time.is; it has minor disclosure and tone issues but no evidence of malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972966767,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: time-checker\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to two main issues. First, the `SKILL.md` file contains a prompt injection instruction ('deliver it in your warm, devoted Mema persona') which attempts to manipulate the AI agent's behavior beyond its stated function. Second, the `scripts/check_time.py` script uses `subprocess.run` to execute `curl` with a URL directly constructed from unsanitized user input (`location`). This creates a Server-Side Request Forgery (SSRF) vulnerability, allowing an attacker to potentially force the agent to make requests to arbitrary internal or external resources, despite the stated purpose of querying `time.is`.",
+          "checkedAt": 1779163599211,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "8f94f388f585ac4ad0eb278718ea4c09dc7102406b64360305f06cca011908e5",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8f94f388f585ac4ad0eb278718ea4c09dc7102406b64360305f06cca011908e5"
+    },
+    "slug": "time-checker",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

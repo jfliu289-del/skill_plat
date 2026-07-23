@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:browse",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C12:token:management",
+      "category:C19:token:desktop",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C12",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "discover"
+    ],
+    "tasks": [
+      "build",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "bfd5d4310e6558d20f2a155f9ba60b75488a5d899940f92929bcd1e9a91ae32c",
+    "content_hash": "ae1968e107a66b5a4eb3ed610a96eef8bfcaf332b72332011ad3772819198015",
+    "precanonical_content_hash": "e5d5954d0b643881d47da8dd36e4035909d15efe916db170a8f4e23d84ef3594",
+    "skill_md_hash": "0a43fa4196b1e45cee972b3780878ddf04d197c004a5b3a1cb68a977f2c631eb",
+    "version_metadata_sha256": "41fd7db82fef4f9e23e52ba7a1bcdbd9865a1004214e8c903ad62bcf2c954f8a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/blqke/skills/beepctl",
+    "claim_id": "3b198c73c14668493506666c8eb00e79cbe00246737b4e13ada48eeb64892c3f",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "beepctl",
+        "url": "https://clawskills.sh/skills/blqke-beepctl"
+      }
+    ],
+    "owner_handle": "blqke",
+    "owner_id": "s179mq113pej136e2fcwk86p39884y10",
+    "published_at": 1769349691948,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783651709707,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783651709707,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented commands match the stated purpose of managing Beeper-connected messaging platforms: listing accounts and chats, searching messages, sending text, focusing chats, handling attachments, aliases, archive state, contacts, and reminders.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill explicitly requires user approval before sending messages, but other side-effecting actions such as chat creation, archiving, reminders, token changes, attachment drafts, and downloads should also be treated as user-directed operations.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains only SKILL.md and installs a global npm binary named beepctl; the skill text itself has no executable code, but the external npm/GitHub project should be trusted separately before installation.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Access to private messages, contacts, accounts, and attachments is proportionate for a unified messaging CLI, but it is sensitive and should be limited to explicit user requests.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Token storage, aliases, reminders, and downloaded attachments are disclosed and purpose-aligned, but token display and arbitrary download paths warrant user caution.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad messaging trigger is real, but it aligns with the skill's stated Beeper messaging purpose; it supports cautious invocation guidance rather than a Review verdict.\n[SQP-2] expected: Auth token setup and status commands are expected for this CLI, but the artifact does not strongly warn that tokens are secrets and should not be logged or echoed.\n[SQP-2] expected: Attachment downloads to disk are expected for a messaging tool, but users should choose safe destinations and treat downloaded files as sensitive or untrusted.\n[VirusTotal code_insight] expected: The reported attachment, local file, download, and messaging capabilities are disclosed in SKILL.md and aligned with the purpose; VirusTotal engine counts showed no detections, so this telemetry does not justify escalation by itself.",
+          "guidance": "Install only if you trust the external beepctl npm package and are comfortable letting an agent interact with Beeper-connected accounts. Never expose API tokens in transcripts or shell history, verify recipients and aliases before sending or archiving, require explicit confirmation before any account-changing action, and save attachments only to locations you choose deliberately.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Beeper messaging CLI skill, but it needs careful use because it can access chats, handle tokens, send messages, and save attachments.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783651682655,
+          "issueCount": 3,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 18,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: beepctl\nVersion: 0.1.4\n\nThe skill bundle is classified as suspicious due to its inherent capabilities that, if exploited via prompt injection against the AI agent, could lead to data exfiltration or arbitrary file writes. Specifically, the `beepctl focus -a /path/file` command allows reading arbitrary local files and preparing them as attachments, and `beepctl download <mxc-url> -o /path` allows writing downloaded files to arbitrary local paths. While the `SKILL.md` explicitly warns against sending messages without user approval, the underlying capabilities to access local files and send messages to external platforms (Telegram, WhatsApp, etc.) present a significant risk if the agent's instructions are overridden.",
+          "checkedAt": 1779159939734,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "37c3e004ef6818efae5bbfc6941332f0bcd055420ef88cb22705f61b5b1be089",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/37c3e004ef6818efae5bbfc6941332f0bcd055420ef88cb22705f61b5b1be089"
+    },
+    "slug": "beepctl",
+    "source_type": "clawhub",
+    "version": "0.1.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

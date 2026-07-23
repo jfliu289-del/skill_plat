@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C05:token:video",
+      "cross-tag:agent-management",
+      "cross-tag:design"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "design",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "55b50d2608a7265139504ce8c6687a955045607d902c403e2759c3f972dc0c96",
+    "content_hash": "929990b702f2dc2784ac58ff11c064826668453545439623db914f0f5d4bf728",
+    "precanonical_content_hash": "93f233795db6322858f94f24bbc7677d3543fab081bf596307d83d7a228e0dca",
+    "skill_md_hash": "5bc4cc037bcfc70979a383704fdb5ca2e5a4f94e9a7ce99261450560dc07a53f",
+    "version_metadata_sha256": "4153233492db1750c4ea3d7b2a766456667e1cceef7d8ba371739a4430e934c0"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/chapati23/skills/yt-summary",
+    "claim_id": "c6bc3d7972cb88a62f55af7d8f7760aad3eb8d23c95926226d2e437df6708e1e",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "yt-summary",
+        "url": "https://clawskills.sh/skills/chapati23-yt-summary"
+      }
+    ],
+    "owner_handle": "chapati23",
+    "owner_id": "s170j9rg98d3hh6ywjvbk96kth83kerm",
+    "published_at": 1771931888653,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779956070934,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779956070934,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The README, SKILL.md, and scripts align around one purpose: extract a YouTube video ID, retrieve transcript and metadata, and summarize the result.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Custom prompts are an advertised summarization feature; they should be treated as lower-priority user preferences, but the artifacts do not instruct agents to bypass safety rules or perform unrelated actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is manual pip dependency installation with unpinned requests and yt-dlp; there is no install-time execution or hidden setup behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill needs a TranscriptAPI key and makes outbound requests to TranscriptAPI and YouTube metadata endpoints, which is disclosed and proportionate to the transcript-summary purpose.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background service, autostart, persistent agent state, broad local indexing, protected-path writes, or privilege escalation is shown; optional pass usage is user-directed credential storage.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: Shell execution, an environment API key, and network access are expected for this skill; the frontmatter declares python3 and TRANSCRIPT_API_KEY, and the workflow documents the TranscriptAPI dependency.\n[SQP-1] expected: Automatic triggering on YouTube URLs is part of the advertised user experience and SKILL.md lists supported URL patterns; clearer consent language would improve transparency but this is not hidden behavior.\n[SQP-2] expected: TranscriptAPI.com use is stated near the top of README.md and in SKILL.md; a stronger privacy notice would be useful, but third-party transcript retrieval is central and disclosed.\n[SC1] expected: Unpinned requests and yt-dlp are a reproducibility and supply-chain hygiene issue, not evidence of malicious behavior or unsafe automatic installation.\n[SC4] expected: The advisory signal is relevant because historical vulnerable versions exist, but the requirements do not pin known-bad versions; users should install current patched versions or pin reviewed ones.\n[VirusTotal code_insight] expected: The custom-prompt and command-execution concerns are mitigated by the skill's stated purpose, quoted command examples, validated video ID extraction, and subprocess calls that do not use shell=True.",
+          "guidance": "Install only if you are comfortable using TranscriptAPI for transcript retrieval. Use a dedicated API key, expect video identifiers and transcript requests to leave your environment, keep requests and yt-dlp updated or pinned, and treat transcript text and custom summary instructions as untrusted summarization input rather than agent instructions.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill transparently fetches YouTube transcripts through TranscriptAPI and summarizes them, with normal dependency and privacy considerations but no evidence of hidden or harmful behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779956031446,
+          "issueCount": 8,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: yt-summary\nVersion: 1.3.2\n\nThe skill is classified as suspicious primarily due to its explicit support for 'custom prompts' which allows direct prompt injection against the underlying Large Language Model (LLM). While this is an advertised feature for customizing summaries, it represents a significant risk where a user could instruct the LLM to generate harmful content or attempt to bypass its safety mechanisms. Additionally, the `SKILL.md` file instructs the agent to execute shell commands with user-controlled input (`YOUTUBE_URL_OR_ID`). Although the `scripts/extract.py` and `scripts/utils.py` files implement robust sanitization (via `extract_video_id`) to mitigate shell injection risks, the pattern of passing unsanitized user input directly into a shell command is a design that could be vulnerable if the sanitization were ever weakened or bypassed. There is no evidence of intentional malicious behavior such as data exfiltration or backdoors.",
+          "checkedAt": 1779166723399,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "8d438b13a4122282e3de3f2ef1f68eb3dbfbf1b40bf23a8ec8d457534f0433d7",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8d438b13a4122282e3de3f2ef1f68eb3dbfbf1b40bf23a8ec8d457534f0433d7"
+    },
+    "slug": "yt-summary",
+    "source_type": "clawhub",
+    "version": "1.3.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

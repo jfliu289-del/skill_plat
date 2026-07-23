@@ -1,0 +1,152 @@
+{
+  "classification": {
+    "artifacts": [
+      "paper",
+      "website"
+    ],
+    "audiences": [
+      "researcher"
+    ],
+    "confidence": 0.25,
+    "domains": [
+      "science"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C01:token:browse",
+      "category:C01:token:research",
+      "category:C10:token:model",
+      "category:C11:token:project",
+      "category:C15:token:paper",
+      "category:C19:token:automate",
+      "category:C19:token:automation",
+      "cross-tag:academic-research",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C10",
+      "C11",
+      "C15",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8aeb51698b239017dccf6763dd128b13d21cecd3723b5bd7f6abea862f35136a",
+    "content_hash": "2783732b2d40943cfa01eb9c0cda689a1ab331035ea1ab126c9e0c58bb7fc37c",
+    "precanonical_content_hash": "7e23d49ff6ae46eec3f89019d561d63f03f89adc69ff2212ec7447aea155108b",
+    "skill_md_hash": "1705db41497c7a2d31efa80b3110b2b5a8c1bb7372608340cb396f39ea5435af",
+    "version_metadata_sha256": "7cd0e22adf9bab2b4ab13de31640f54eb34a9e9e149d9ccaafd31a8554e1e0ba"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/pors/skills/paperzilla",
+    "claim_id": "b41a38b46b44560949e788b65c9b6be647c1549b2b42f1d00f2f96f125b1364c",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "paperzilla",
+        "url": "https://clawskills.sh/skills/pors-paperzilla"
+      }
+    ],
+    "owner_handle": "pors",
+    "owner_id": "s1726anyehf7sx1t7vgh6pjnr183vjsp",
+    "published_at": 1775143177133,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943149892,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943149892,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented capabilities match the stated Paperzilla purpose: browsing projects and feeds, inspecting papers and recommendations, exporting JSON, generating Atom feed URLs, and leaving feedback. Feedback commands mutate project-specific state, but that behavior is disclosed and purpose-aligned.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are mostly user-directed CLI examples with no hidden autonomous behavior. The main gap is that the skill says `--atom` returns a personal feed URL but does not clearly warn agents to treat that URL as a secret; Paperzilla's own docs describe the feed URL as token-bearing and secret-sensitive.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill contains no executable files and relies on installing the external `pz` binary through Homebrew, Scoop, GitHub releases, or source builds. That is normal for a CLI integration, though direct release download plus `sudo mv` requires trusting the upstream Paperzilla release.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Authentication and network access are expected for Paperzilla project workflows. The artifact does not request broad local indexing, unrelated filesystem access, background workers, or cross-service data flows.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistent effects are limited to expected CLI behavior: account login/session reuse, project feedback changes, and reusable personal Atom feed URLs. These fit the purpose, but users should confirm feedback changes and avoid exposing feed URLs.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The concern is valid as user guidance: `--atom` produces a personal feed URL that may contain a token, and the skill under-explains the secrecy risk. This does not make the skill suspicious by itself because Atom feed generation is disclosed, expected, and central to the stated workflow, with no evidence of exfiltration or hidden handling.",
+          "guidance": "Install only if you trust the Paperzilla CLI source. Log in only to the intended account, ask the agent to confirm before running `pz feedback` commands, and treat any `pz feed ... --atom` URL like a password because anyone with it may be able to read that project feed.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent instruction-only skill for using the Paperzilla CLI, with expected account access and feed-token handling risks that users should manage carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943101989,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: paperzilla\nVersion: 0.3.1\n\nThe Paperzilla skill bundle provides instructions for an AI agent to use the 'pz' CLI tool for managing research papers and projects. It includes standard installation procedures via Homebrew, Scoop, and GitHub releases (github.com/paperzilla-ai/pz), and defines commands for authentication, project browsing, and feedback. No evidence of malicious intent, data exfiltration, or prompt injection was found in SKILL.md or _meta.json.",
+          "checkedAt": 1779165712630,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "0583e5edd2d9ec061a06d93364359912ee747b1d38b63752d3e9326428b78fe0",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0583e5edd2d9ec061a06d93364359912ee747b1d38b63752d3e9326428b78fe0"
+    },
+    "slug": "paperzilla",
+    "source_type": "clawhub",
+    "version": "0.3.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

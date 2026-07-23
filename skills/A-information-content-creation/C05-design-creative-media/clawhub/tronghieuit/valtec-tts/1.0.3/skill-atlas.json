@@ -1,0 +1,122 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:audio",
+      "category:C17:token:notes"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "81c6f4cce89da821e6448ca340aa464e5a45525fbc4d47ec23c424821819becd",
+    "content_hash": "1cbba3dd4c3d1fa9a3be987437107f00c2614db089c5203edbce51ea378087e8",
+    "precanonical_content_hash": "d5bfe1f66d6edef6ddcd30282aa226d27fc72f3f83ba654c3cd3318075bdfd34",
+    "skill_md_hash": "7d4e23f9ff9e027d6b55cb046fa53aff06fe470b1dd64bf6285a670d38d3791f",
+    "version_metadata_sha256": "f2bcf9cc07c2774c03d0a7524465adc16f410b0d1ca30bc890ae795189b6f3b2"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tronghieuit/skills/valtec-tts",
+    "claim_id": "6b916f1d21400dd96752d19b8291f734867493ce4eb057db45a7b82a6765930b",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "valtec-tts",
+        "url": "https://clawskills.sh/skills/tronghieuit-valtec-tts"
+      }
+    ],
+    "owner_handle": "tronghieuit",
+    "owner_id": "s17e887bh9edvz0p45y7wket3d8842b3",
+    "published_at": 1771495335515,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779933380609,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779933380609,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, local Vietnamese TTS with built-in voices and zero-shot voice cloning, matches the documented commands and the Node wrapper behavior.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill clearly instructs users to clone an external GitHub repository, install it with pip, set VALTEC_TTS_DIR, and run Python inference scripts through the wrapper; this is scoped to TTS but depends on upstream code.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses an unpinned git clone plus pip install -e ., which is common for this kind of AI tool but means repository packaging code and dependencies execute during install.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Only VALTEC_TTS_DIR is required and no credentials are requested; despite the offline/no-cloud framing, the documentation does disclose that HuggingFace model weights download on first run.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background service, automatic trigger, credential persistence, privilege escalation, or modification of other skills is requested; it creates output audio files at user-selected paths.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VT-code-insight] expected: The wrapper executes Python scripts from the user-installed TTS repository and passes text, reference audio, and output paths as arguments; this is expected for a TTS wrapper and the local wrapper uses argument arrays rather than shell interpolation.\n[SDI-1] expected: The skill advertises offline use but also states that models download from HuggingFace on first run and are cached locally, so the network behavior is disclosed though users in restricted environments should plan for it.\n[SQP-2] expected: Zero-shot voice cloning is explicitly advertised and documented, but the skill lacks consent or anti-impersonation guidance; this is a user-safety documentation gap rather than evidence of hidden or malicious behavior.",
+          "guidance": "Install only if you trust the upstream valtec-tts repository and are comfortable running pip install from it. Expect an initial HuggingFace model download, consider using an isolated Python environment, and use voice cloning only with consent or for voices you are authorized to synthesize.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a transparent local Vietnamese text-to-speech wrapper, but users should trust the upstream Python repo and only clone voices they are allowed to use.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779933341501,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: valtec-tts\nVersion: 1.0.3\n\nThe skill installs an external Python repository (github.com/tronghieuit/valtec-tts) via `git clone` and `pip install -e .` as defined in SKILL.md. The `bin/valtec-tts.js` script acts as a wrapper, executing Python scripts from this installed repository using `node:child_process.spawnSync`. While the Node.js wrapper itself uses a safer method for executing external commands (passing arguments as an array), it passes user-controlled arguments (text, reference file path, output file path) to these external Python scripts. This creates a potential vulnerability vector if the Python scripts themselves do not properly sanitize or handle these inputs, which could lead to arbitrary file operations or code execution within the Python environment, thus classifying it as suspicious due to the inherent risk of executing external code with user-controlled input.",
+          "checkedAt": 1779165394199,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "81c6f4cce89da821e6448ca340aa464e5a45525fbc4d47ec23c424821819becd",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/81c6f4cce89da821e6448ca340aa464e5a45525fbc4d47ec23c424821819becd"
+    },
+    "slug": "valtec-tts",
+    "source_type": "clawhub",
+    "version": "1.0.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

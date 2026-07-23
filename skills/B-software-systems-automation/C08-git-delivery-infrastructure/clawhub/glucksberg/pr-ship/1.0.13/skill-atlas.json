@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C08:token:github",
+      "category:C09:token:security",
+      "cross-tag:search",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09"
+    ],
+    "stages": [
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ce689a80a53ab2c90007da33d7931ad5d7cd72cf7171314a17a06276774faedb",
+    "content_hash": "7b0a28724f74a3627fc50f176a7efbeaa1aa6d4ce3734c948f3ea894ce001490",
+    "precanonical_content_hash": "a883060a819d0fc0e00e1c6ec2816bede1c2a04dbb6f7e250ca62c8a06754e41",
+    "skill_md_hash": "f8d7a07c6c2a298b555b348c12ca98643b98d8369d804da4a895fb9f0aad2edd",
+    "version_metadata_sha256": "44a220f6f23a6a8c4b35dea00e6569246924c7fb93373773ddb8fd47eee23982"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/glucksberg/skills/pr-ship",
+    "claim_id": "3d845ffff7decf101fe6efbaf53033ad9b10a53229e49cf71042e6880fa322eb",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "pr-ship",
+        "url": "https://clawskills.sh/skills/glucksberg-pr-ship"
+      }
+    ],
+    "owner_handle": "glucksberg",
+    "owner_id": "s174ntjpaez2r36rkj193c5j3183jww8",
+    "published_at": 1772581593699,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943196915,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943196915,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifacts: it reviews the current OpenClaw branch against main, runs read-only repository exploration, and outputs an informational risk report.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are scoped to the OpenClaw repository, the current branch diff, and grep/find/ls/git-based investigation; they explicitly prohibit auto-editing, unrelated history review, and build/test/codegen execution.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation is standard for a skill, but the package includes a maintainer-oriented shell script for update-pipeline validation; it is not part of normal invocation and should not be run casually.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Local repository reads and command output are proportionate for PR review, but reports may include secrets if sensitive values appear in diffs or grep results.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The normal skill workflow declares no credential use, background service installation, persistence, privilege escalation, or account mutation. The cron references are limited to disclosed maintainer/update validation context.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[staticScan.clean] expected: Static scan reported no suspicious patterns, which matches the mostly Markdown/read-only review workflow.\n[SkillSpector.clean] expected: SkillSpector reported no issues; artifact review did not uncover contradictory evidence.\n[VirusTotal.clean] expected: VirusTotal telemetry was clean and consistent with the artifact evidence, but was not used as the sole basis for the verdict.\n[local-readonly-repository-discovery] expected: The skill instructs use of git diff, grep, find, ls, and wc to inspect the local OpenClaw checkout; this is expected for a PR risk report and is disclosed.\n[maintainer-update-pipeline-script] expected: The bundled shell script uses broader local tooling and optional live cron triggering, but it is framed as a maintainer test helper and is not invoked by the normal SKILL.md workflow.",
+          "guidance": "Install only if you want an agent to inspect your local OpenClaw branch and produce a PR risk report. Review generated reports before sharing because diffs or grep output can contain secrets. Do not run scripts/test-update-pipeline.sh unless you specifically intend to validate the maintainer update/cron workflow.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent OpenClaw PR review helper that mainly reads local repository diffs and produces a report, with no evidence of hidden exfiltration or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943127295,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: pr-ship\nVersion: 1.0.13\n\nThe skill is designed for local codebase analysis using explicitly read-only commands (`grep`, `find`, `ls`, `git diff`). The `SKILL.md` and `EXPLORATION-PLAYBOOK.md` contain strong guardrails, explicitly instructing the AI agent *not* to execute commands that modify files or perform build/test actions, but only to recommend them to the user. The `scripts/test-update-pipeline.sh` script, while using more powerful commands, is for testing the skill's update mechanism and includes checks that *prevent* automated `git push` or `clawhub publish` in the cron job. A 'Security Notice' in `SKILL.md` warns users about potential secret exposure in generated reports, which is a transparency measure, not an instruction for malicious exfiltration. No evidence of intentional harmful behavior (e.g., data exfiltration, persistence, unauthorized remote control) was found.",
+          "checkedAt": 1779165745030,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "b867a8d004dc98261112436760515761b81f452621182a24e49b32e0e13ee464",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b867a8d004dc98261112436760515761b81f452621182a24e49b32e0e13ee464"
+    },
+    "slug": "pr-ship",
+    "source_type": "clawhub",
+    "version": "1.0.13"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

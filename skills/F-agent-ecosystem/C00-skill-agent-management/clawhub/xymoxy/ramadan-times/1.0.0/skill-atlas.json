@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:sources",
+      "category:C02:token:language",
+      "category:C06:token:api",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C02",
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "92ddc2d64b9fea688d4cc072aea135942935fded42c58823a82af895c7922808",
+    "content_hash": "e004c740709fe59e5e162bc9b3d2d3e23203b2f2009e4a8a0545be9b96e8d868",
+    "precanonical_content_hash": "728770a1a4f241f2300435ed67f425bbaffca6a0cd3da9fa7434f42ea4e1da07",
+    "skill_md_hash": "61fe191d8c10e5df6e691335b14872ecb24e3632acfe4d95e8584e5f88b538a3",
+    "version_metadata_sha256": "5791a757013267f555b751eda3558a018e24a29d7a66dc8b19c24758dbd0bcef"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/xymoxy/skills/ramadan-times",
+    "claim_id": "19f7a1162a7474387eefa2713a88130f5f4c445156c3f79e68fc828374f6af16",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "ramadan-times",
+        "url": "https://clawskills.sh/skills/xymoxy-ramadan-times"
+      }
+    ],
+    "owner_handle": "xymoxy",
+    "owner_id": "s172c8brsxektpnhjzjfyabqas8852rk",
+    "published_at": 1771585231991,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779942963754,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779942963754,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated Ramadan iftar/sahur purpose matches the included shell script, but the skill overstates capabilities: it claims auto-location, 100+ cities, multilingual output, weekly schedules, reminders, and accurate prayer/Ramadan times, while the script supports a small hardcoded city list and rough sunset-based calculations.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains no prompt overrides, hidden agent instructions, destructive commands, credential access, or unrelated authority; broad Ramadan/prayer-time triggers are normal for this utility.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The metadata declares curl and date, and the script also depends on jq and GNU-style date parsing; the missing jq declaration can make the API result fail and fall back to a fixed time.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The script sends hardcoded city coordinates to sunrise-sunset.org to retrieve sunset data, which is proportionate and partly disclosed under API Sources, but users should know that selected/default city coordinates leave the device.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, privilege escalation, file mutation, credential/session use, background worker, or automatic cron installation is present; the cron entry is only a documentation example.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: Shell execution and an outbound curl request are expected for this command-line time lookup, and curl/date are declared; the material issue is incomplete dependency disclosure because jq is used but not declared.\n[TP4] unexpected: The overclaim is artifact-supported: advertised auto-detection, broad city/language support, and high accuracy are not implemented. This is a reliability and transparency issue, not evidence of malicious behavior.\n[SQP-1] expected: Triggers such as ramadan, iftar, sahur, and prayer times are broad but aligned with the skill's purpose and do not by themselves create high-impact authority or sensitive access.\n[SQP-2] expected: The documentation does not provide a clear privacy notice, but it does list sunrise-sunset.org as an API source; the script sends only mapped city coordinates, not credentials or local profile data.\n[SQP-2] expected: The external request in the script is real and purpose-aligned. The data flow should be disclosed more plainly, but it is limited to selected/default city coordinates and does not show exfiltration or hidden collection.",
+          "guidance": "Install only as a casual helper. Verify fasting and prayer times with a trusted local mosque or official calendar, because the implementation is approximate and much narrower than advertised. Be aware that the selected or default city coordinates are sent to sunrise-sunset.org, and jq may be needed for the API-backed result to work correctly.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a simple Ramadan time helper with no malware-like behavior, but its documentation promises more accuracy, language support, and location support than the script actually provides.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779942916447,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 78,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ramadan-times\nVersion: 1.0.0\n\nThe skill is a legitimate utility for providing Ramadan prayer and fasting times. The shell script (scripts/ramadan.sh) uses a hardcoded list of coordinates to query a public API (sunrise-sunset.org) and performs basic time calculations using standard system utilities. There is no evidence of data exfiltration, command injection, or malicious instructions in the SKILL.md file.",
+          "checkedAt": 1779165668078,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "92ddc2d64b9fea688d4cc072aea135942935fded42c58823a82af895c7922808",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/92ddc2d64b9fea688d4cc072aea135942935fded42c58823a82af895c7922808"
+    },
+    "slug": "ramadan-times",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

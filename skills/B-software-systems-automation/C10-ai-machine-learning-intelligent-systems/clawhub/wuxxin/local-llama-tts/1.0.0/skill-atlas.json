@@ -1,0 +1,119 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C10:token:model"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "33f8e0f184d41ae276210ad8bef39fa375bcd5a2a4c7e7a8569712cf3fb1f229",
+    "content_hash": "171a44007f68b3d584e7d2eb2bcabc1e665f31b4c1321c0bcc859c1b56069d96",
+    "precanonical_content_hash": "d515c154340e7bb6e75914631f865763aeddefb09a175324edcf12640a370499",
+    "skill_md_hash": "e802efd4572b4f4bab3adade382cd3262636534f375a65f5a2937ad6f84025bb",
+    "version_metadata_sha256": "53fe83413ff5d0b912fdf2afb481b456fcba95db425d05d8fc0c098b4ba25fb9"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/wuxxin/skills/local-llama-tts",
+    "claim_id": "7d9707bfc3e32c3ece02a91de01b78757da558c6414e41eb63915204668a74dc",
+    "index_entries": [
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "local-llama-tts",
+        "url": "https://clawskills.sh/skills/wuxxin-local-llama-tts"
+      }
+    ],
+    "owner_handle": "wuxxin",
+    "owner_id": "s17c2aj7qqbm3kp5k46jcrzbm5884fdy",
+    "published_at": 1771263813545,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971433463,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971433463,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is local WAV generation using llama-tts with OuteTTS and a local vocoder, and the exposed options match that purpose: output path, speaker reference, and temperature.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill tells the agent to run a disclosed wrapper script for local TTS. VirusTotal reports an unquoted speaker-parameter expansion; that is a hardening issue because user-controlled file paths should be passed as separate quoted arguments, but the behavior remains within the disclosed TTS command path.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is presented as a normal OpenClaw/ClawHub skill install with no hidden installer, background service, credential setup, or persistence mechanism identified.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill requires a local llama-tts binary and local model files. That environment access is proportionate for offline text-to-speech and no API keys, cloud calls, or unrelated local data access are indicated.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill writes generated WAV output to a user-selected/default file and reads optional model/speaker files. No privilege escalation, autorun persistence, broad indexing, or destructive file behavior is shown.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code_insight: unquoted speaker parameter in scripts/tts-local.sh] unexpected: If present, the unquoted expansion is not needed for the TTS purpose and should be fixed to avoid argument/path handling bugs. I downgraded the RCE framing because this is the only negative signal and the artifacts show a disclosed local wrapper rather than exfiltration, deception, persistence, or destructive behavior.\n[SkillSpector: no issues] expected: The clean result is consistent with the visible artifact purpose, but it was treated only as advisory evidence, not as the basis for the verdict.",
+          "guidance": "Install only if you are comfortable running a local shell wrapper and llama-tts binary. Prefer trusted local model files, avoid passing untrusted speaker paths, and consider patching or reviewing scripts/tts-local.sh so user-controlled paths are quoted and passed safely.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent local text-to-speech skill; the reported shell-quoting issue should be fixed, but the artifacts do not show hidden behavior or malicious intent.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971344105,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: local-llama-tts\nVersion: 1.0.0\n\nThe `scripts/tts-local.sh` script is vulnerable to shell injection. The `$SPEAKER_PARAM` variable is constructed using user-supplied input (the speaker file path) and then expanded unquoted in the final `llama-tts` command. This allows an attacker to inject arbitrary shell commands by providing specially crafted input to the `-s` or `--speaker` option, leading to potential remote code execution if the agent executes this skill with untrusted input.",
+          "checkedAt": 1779164617104,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "ebbedb1f553112f2c8ac91adcfe03fb90cafe01594b69a6ac10d19279c26e63b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ebbedb1f553112f2c8ac91adcfe03fb90cafe01594b69a6ac10d19279c26e63b"
+    },
+    "slug": "local-llama-tts",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

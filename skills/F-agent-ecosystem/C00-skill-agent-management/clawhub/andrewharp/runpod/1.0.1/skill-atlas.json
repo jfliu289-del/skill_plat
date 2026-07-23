@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "configuration"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "infrastructure",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C13:token:operations",
+      "cross-tag:agent-management",
+      "cross-tag:deployment",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C13"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "deploy",
+      "manage",
+      "operate"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "41a1d47cf27b04a30b975f0c538436acf59dfad8ec177d34687d2f1c6e417313",
+    "content_hash": "5d855990bc825d7a206f274250e8c924a941e557c2c17614a03108c96ab7c100",
+    "precanonical_content_hash": "683e41a7ef31234f85b597fad52a069a17211d41f84c61015adced8314840e59",
+    "skill_md_hash": "e9cd18a3a3f4dc741e3f9057a9d4bb000a1d9825eaf5ee4571b7e3760f7d261e",
+    "version_metadata_sha256": "233e770a85e69ae8ad5cfff785218a161326c8977e57b89c13e7046063b3514a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/andrewharp/skills/runpod",
+    "claim_id": "6603b31b69e0b5d381de87fbe6b7c43b09ce8916bc7faac4b98a0e7f98839776",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "runpod",
+        "url": "https://clawskills.sh/skills/andrewharp-runpod"
+      }
+    ],
+    "owner_handle": "andrewharp",
+    "owner_id": "s1788qqj4c48sjpc9j0qpmfg2s885a7s",
+    "published_at": 1770515915744,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783656914506,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783656914506,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill is explicitly for managing RunPod GPU pods, SSH access, file transfer, and filesystem mounting; mounting root@$IP:/ is high-impact but coherent with pod administration.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are examples for user-requested RunPod lifecycle actions and mounting a selected pod; they can affect cloud costs and pod data, but there is no hidden automatic execution path.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no bundled installer or automatic dependency installation; the documentation asks the user to install runpodctl and configure their own API key.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use of a RunPod API key, SSH keys, sshfs, and an isolated RunPod known_hosts file is proportionate for dynamic RunPod SSH access, with no evidence of credential logging or unrelated network transmission.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The script creates local mount directories and a dedicated known_hosts file and establishes an SSHFS mount only when invoked; it does not add startup hooks, background services, privilege escalation, or self-persistence.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code_insight] expected: The flagged SSHFS root filesystem mount and SSH identity handling are real high-impact capabilities, but they are disclosed in SKILL.md and align with RunPod filesystem access rather than showing deception or exfiltration.\n[SkillSpector] expected: SkillSpector reported no issues; this is consistent with the small artifact set and disclosed RunPod management behavior.\n[staticScan] expected: Static scan metadata was clean, and local review found only SKILL.md plus scripts/mount_pod.sh matching the stated RunPod purpose.",
+          "guidance": "Install this only if you want an agent to operate your RunPod account and mount selected pod filesystems. Use limited credentials where possible, review pod creation/start/stop actions because they may affect costs, and unmount SSHFS mounts when finished.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill gives powerful RunPod and SSHFS access, but the behavior is disclosed, user-directed, and matches its stated purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783656883341,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: runpod\nVersion: 1.0.1\n\nThe skill is classified as suspicious due to its use of high-risk capabilities, specifically the `scripts/mount_pod.sh` script. This script utilizes `sshfs` to mount the remote RunPod instance's root filesystem (`root@$IP:/`) locally, which grants extensive file system access. It also handles SSH keys (`IdentityFile`) and uses `StrictHostKeyChecking=accept-new` with a dedicated `known_hosts` file, which, while plausibly needed for managing dynamic cloud environments, represents a significant security capability. There is no clear evidence of intentional malicious behavior, data exfiltration, or prompt injection attempts against the agent; the risky behaviors are aligned with the stated purpose of managing and interacting with RunPod instances.",
+          "checkedAt": 1779162147221,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "61a3b73ca7bfc4dc083b212733678611d528b05ce0e277bc0950e5e41ff74f5b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/61a3b73ca7bfc4dc083b212733678611d528b05ce0e277bc0950e5e41ff74f5b"
+    },
+    "slug": "runpod",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

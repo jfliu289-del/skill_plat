@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [
+      "configuration"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "infrastructure"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C04:token:metrics",
+      "category:C18:token:health",
+      "cross-tag:agent-management",
+      "cross-tag:deployment"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C18"
+    ],
+    "stages": [
+      "deliver",
+      "operate"
+    ],
+    "tasks": [
+      "deploy",
+      "manage",
+      "operate"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "cdd9e0608dfbfb2bbf0a45eab1324eafa0cf2ae74fcba652bcc4dc0145ee9ee2",
+    "content_hash": "24d2839cf17e86705bdf556a106e7ad8dfe745570e49631a15c049d2d76df32f",
+    "precanonical_content_hash": "4627becee82054c50b808dc6cbc1a4cb8ac54efdae9a453c0843eccc49ee6948",
+    "skill_md_hash": "9dc9cf7af0266875ffbe05e12778fe0057e71b09e59e533dcd95d5bafb7b7d03",
+    "version_metadata_sha256": "dbc263ea5431e20df1e11dca9d75747ec551757a6932d948090562cfc4ddcf1f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sanjay-gthb/skills/server-health-agent",
+    "claim_id": "8b9f21c2afcbfef6efea158c5765722d755e4e0808e2386893f6550380a4cd9b",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "server-health-agent",
+        "url": "https://clawskills.sh/skills/sanjay-gthb-server-health-agent"
+      }
+    ],
+    "owner_handle": "sanjay-gthb",
+    "owner_id": "s170pe22g573yk5qmkeahamgvd885evw",
+    "published_at": 1771591174025,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779942948264,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779942948264,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is VPS/server health monitoring, and the implementation collects CPU, RAM, disk, and Docker container status consistent with that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill declares shell permission and uses child_process.exec, but the commands are hardcoded read-only checks and do not incorporate user input.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a manual copy into the OpenClaw skills directory followed by restarting OpenClaw; there are no dependency installs, remote scripts, or hidden setup steps.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill can reveal local operational details, especially Docker container names and status, which is proportionate for monitoring but should be understood before use.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background worker, scheduled execution, credential access, file writes, privilege escalation, or long-running persistence is present in the artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-1] expected: The README usage phrases are somewhat broad for a shell-capable skill, but the actual behavior is fixed, disclosed, read-only server diagnostics, so this is guidance rather than a Review-level concern.\n[VirusTotal code_insight] expected: The shell permission and exec usage are real, but they are used for hardcoded monitoring commands aligned with the skill description; VirusTotal is not supported by artifact evidence of malicious or suspicious behavior.\n[staticScan] expected: The supplied static scan reported no findings, which matches the artifact review.",
+          "guidance": "Install this only on systems where OpenClaw is allowed to run local read-only health commands and see host metrics, including Docker container names and statuses. It does not show evidence of modifying the system or sending data elsewhere.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it claims: it runs fixed local health-check commands and reports server metrics, with no evidence of persistence, exfiltration, or system modification.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779942919068,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: server-health-agent\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to its explicit request for `shell` permission in `SKILL.md` and the use of `child_process.exec` in `skill.js` to run system commands (`top`, `free`, `df`, `docker ps`). While the executed commands are hardcoded, read-only, and do not incorporate user input (thus avoiding direct shell injection vulnerabilities), the broad `shell` permission and the use of a powerful primitive like `exec` represent a significant risky capability, even if plausibly needed for the stated monitoring purpose. This aligns with the guideline to classify broad permissions and risky capabilities as 'suspicious' when clear malicious intent is absent.",
+          "checkedAt": 1779165680562,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "0ea32a2604f95c615e4e94eda1f79d1d6ede0839af3a638ee0c3e6bed49b2de2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0ea32a2604f95c615e4e94eda1f79d1d6ede0839af3a638ee0c3e6bed49b2de2"
+    },
+    "slug": "server-health-agent",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

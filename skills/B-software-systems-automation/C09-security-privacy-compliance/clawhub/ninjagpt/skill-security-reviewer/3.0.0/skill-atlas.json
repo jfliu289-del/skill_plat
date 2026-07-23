@@ -1,0 +1,159 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.725,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C00:token:skill",
+      "category:C04:token:data",
+      "category:C04:token:statistics",
+      "category:C06:token:code",
+      "category:C09:phrase:security audit",
+      "category:C09:token:audit",
+      "category:C09:token:security",
+      "category:C09:token:threat",
+      "category:C10:token:ai",
+      "category:C10:token:model",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:debugging",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C04",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "debug",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "c7ae7d9a0a5fa7b575e8c9a257eee0590cc42f3bd75a59e81aa8f8403a862b5e",
+    "content_hash": "39cc73897cbaabeaebec5f584d091990d02865294fd55ec159b2c6c6eff64486",
+    "skill_md_hash": "84a577c6616cee0f62b684cce26cda9d662ebd8eec4d62ac05c8510bf3721794",
+    "version_metadata_sha256": "35f8996511efd5be45257207b4562073b9922308642851ee6c89f89a4eb2ac30"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/ninjagpt/skills/skill-security-reviewer",
+    "claim_id": "69012e728c05c07523a54b22c3f4252811043379b31289ba5a783f01b565dfd8",
+    "index_entries": [
+      {
+        "index_path": "categories/git-and-github.md",
+        "label": "skill-security-reviewer",
+        "url": "https://clawskills.sh/skills/ninjagpt-skill-security-reviewer"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "ninjagpt",
+    "owner_id": "s177y2pwycstrfbr6raxp0jvz9884mbg",
+    "published_at": 1770782196256,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968937842,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968937842,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is malicious-skill detection, and the capabilities in SKILL.md fit that purpose: locate a named target skill, read its files, decode suspicious content for analysis, apply threat checks, and generate a security report.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The artifact contains prompt-injection and malicious-code examples, including phrases like 'ignore previous instructions,' but they are presented as detection signatures and the skill explicitly forbids following target-skill instructions or executing target or decoded code.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains only SKILL.md; there are no install scripts, executable files, dependencies, hooks, or package metadata that would run code during installation.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Reading all files in the named target skill and decoding suspicious content is proportionate for a security reviewer, but generated reports may include sensitive excerpts from the reviewed skill.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No credential access, network transmission, privilege escalation, or background worker behavior is declared. Persistence is limited to a disclosed timestamped local report directory.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[suspicious.prompt_injection_instructions] expected: The flagged phrase appears in a prompt-injection detection table, not as an instruction for the user's agent to obey.\n[VirusTotal code_insight suspicious] expected: VirusTotal's concern is broad target-skill file access and processing untrusted content; the artifact discloses this behavior and constrains it with read-only, no-execution rules.\n[SkillSpector clean] expected: The supplied SkillSpector report found no issues, consistent with the artifact-backed review.",
+          "guidance": "Install this only if you want an agent to inspect other skills. Expect it to read the selected target skill's files and create a local report that may contain decoded or suspicious snippets, so treat reports as potentially sensitive.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed read-only skill-review workflow that analyzes other skills and writes a local report, with no evidence of hidden execution, exfiltration, or persistence.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968911393,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: skill-security-reviewer\nVersion: 3.0.0\n\nThe skill 'skill-security-reviewer' is designed to detect malicious skills, a benign objective. Its `SKILL.md` explicitly forbids the agent from executing any commands or scripts from the target skill or executing decoded code (Section §3, 'Execution Rules'). However, the skill requires broad file system access to read and analyze all files of a target skill, including potentially sensitive configurations and code. This constitutes a 'risky capability' (broad permissions, processing untrusted input) even though it is plausibly needed for its stated purpose. The inherent risk of processing and decoding potentially malicious content, combined with broad file access, creates a vulnerability surface for the agent or its environment, leading to a 'suspicious' classification rather than 'benign' or 'malicious'.",
+          "checkedAt": 1779163089560,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "d3abc83a9169379a19bff191a3aee4a4d0c371e46bc637f068faaaa2da17d3a9",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d3abc83a9169379a19bff191a3aee4a4d0c371e46bc637f068faaaa2da17d3a9"
+    },
+    "slug": "skill-security-reviewer",
+    "source_type": "clawhub",
+    "version": "3.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

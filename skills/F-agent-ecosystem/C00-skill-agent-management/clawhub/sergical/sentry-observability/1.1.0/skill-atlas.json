@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:plugin",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "category:C11:token:project",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C10",
+      "C11"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "fb97214ba0e782c3df61cb095ba629897b147cac4a49bcb4e86f6f1cae52e866",
+    "content_hash": "dd99b1a9bce522fe74ff9581433a5f82d280fcce54c9892c4b99d57679f1e99a",
+    "precanonical_content_hash": "5e1661a0fed5736bba994eecd1299affed20dec3bd69d858e4c6e7bbe1578b71",
+    "skill_md_hash": "377f5c77e0af61c559f587020f5b7d19bd24d50805c1f5bb502462873e349883",
+    "version_metadata_sha256": "9c6831c165b11c332718194ba1cdbf2a37bc2ff6d05c300932e2b8b1ff07edb8"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sergical/skills/sentry-observability",
+    "claim_id": "8792f2d68b7a9c44f153610d2ab1dd19ef94c5734fe01a712c7c42ac4813f255",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "sentry-observability",
+        "url": "https://clawskills.sh/skills/sergical-sentry-observability"
+      }
+    ],
+    "owner_handle": "sergical",
+    "owner_id": "s178sgyrx7bw5bj5znkqcfem618857v3",
+    "published_at": 1771342035429,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972258997,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972258997,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is clear: send OpenClaw errors, logs, and traces to Sentry and investigate them with the Sentry CLI. That third-party telemetry flow is central to the skill and is disclosed.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Most instructions are setup and investigation commands, but the CLI reference also documents Sentry API commands that can resolve, assign, create, or delete resources. These are not hidden or automatic, but users should treat POST, PUT, and DELETE examples as admin actions requiring explicit approval.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill installs the Sentry CLI globally via npm and references @sentry/node, @sentry/core, and an external plugin implementation. This is purpose-aligned, but the external implementation is outside the reviewed artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Sentry authentication, DSN configuration, log forwarding, and full trace sampling are proportionate for observability, but they can expose operational data if prompts, secrets, user identifiers, or request details appear in logs or traces.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill discloses Sentry CLI credential storage in ~/.sentry/cli.db and describes a plugin timer that flushes logs while the gateway is running. No hidden persistence, privilege escalation, or deceptive background behavior was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-2] unexpected: The raw Sentry API examples include mutation and deletion operations that go beyond read-only investigation. This is overbroad documentation, but it is visible, user-directed, and tied to Sentry administration rather than covert behavior.\n[SQP-2] expected: Forwarding errors, logs, traces, events, and event details to Sentry is the core purpose of the skill and is stated in the artifacts. The missing privacy warning is a documentation gap, not evidence of deceptive exfiltration.\n[SQP-2] unexpected: The project deletion example is a high-impact admin operation and should have an explicit warning, but it appears only as a documented CLI example and is not executed automatically.\n[SQP-2] expected: The AI root-cause commands are Sentry investigation features and the artifact notes their setup requirements. Users should still confirm that AI-assisted analysis is approved for the relevant repository and incident data.\n[SQP-2] expected: Event output containing URLs, user IDs, environment details, and stack traces is expected for observability tooling, but should be handled as potentially sensitive operational data.\n[SQP-2] expected: The plugin setup intentionally forwards structured logs and performance traces with defaults such as enabled logs and full trace sampling. This is purpose-aligned, though users should reduce scope or sampling where sensitive data may be present.",
+          "guidance": "Install this only if you want OpenClaw telemetry stored in Sentry. Use a dedicated Sentry project and least-privilege token, review the referenced plugin source before deploying it, scrub secrets and personal data from logs/traces, consider lowering trace sampling or disabling log forwarding, and require explicit confirmation before running Sentry API commands that change or delete resources.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent Sentry observability skill, but users should handle telemetry, Sentry credentials, and mutation-capable CLI examples carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972218040,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 55,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: sentry-observability\nVersion: 1.1.0\n\nThe skill bundle is designed to integrate OpenClaw with Sentry for observability, including error tracking, logging, and tracing. All instructions in SKILL.md and code snippets in reference files are directly related to installing the Sentry CLI, authenticating it, configuring OpenClaw to send data to Sentry, and querying that data. There is no evidence of intentional malicious behavior such as unauthorized data exfiltration, persistence mechanisms, or deceptive prompt injection attempts. The use of `npm` for installing the official `sentry` CLI and `jq` for JSON parsing are standard practices for the stated purpose.",
+          "checkedAt": 1779164757058,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "503d121af23ab06f31be899276c731910cc2cd27c71c6e867e31c8a82ebcb27a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/503d121af23ab06f31be899276c731910cc2cd27c71c6e867e31c8a82ebcb27a"
+    },
+    "slug": "sentry-observability",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

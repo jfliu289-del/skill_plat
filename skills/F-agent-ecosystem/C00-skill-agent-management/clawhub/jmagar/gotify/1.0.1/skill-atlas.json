@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "artifacts": [
+      "configuration"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "infrastructure"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C08:token:deployment",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:deployment",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C08",
+      "C17"
+    ],
+    "stages": [
+      "deliver",
+      "operate"
+    ],
+    "tasks": [
+      "deploy",
+      "manage",
+      "operate"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1782c03d05e45ecfe70ac9f3bc9f648a0a1d5af684646fdb7f60a2f063d537e3",
+    "content_hash": "54d844fd2f23341e018f68e4045ce55b64085a0d4d3f7f68df82a8b58d0dfc85",
+    "precanonical_content_hash": "1c26506015c09975a0640b5cc68a4ddfb37eb0a932b7dff7ae1ad71789354284",
+    "skill_md_hash": "e6356beac122235390d3915dead6d9b3c3cc303046bd61dbffe3ba9aa0ce850b",
+    "version_metadata_sha256": "6f0b8cd9b1262ca1233967344150c9d8593af739bd1ad7758590c1b415a91249"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jmagar/skills/gotify",
+    "claim_id": "3d601c328a13b0a86322de201f6c41b1195be11ff8075f17a3bb52e3dd626076",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "gotify",
+        "url": "https://clawskills.sh/skills/jmagar-gotify"
+      },
+      {
+        "index_path": "categories/self-hosted-and-automation.md",
+        "label": "gotify",
+        "url": "https://clawskills.sh/skills/jmagar-gotify"
+      }
+    ],
+    "owner_handle": "jmagar",
+    "owner_id": "s17aw25gxkyqk7nfw5dk62rg5n86k6tj",
+    "published_at": 1769203194310,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783651186310,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783651186310,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently implement sending user-provided notification text, optional title, priority, and markdown formatting to a user-configured Gotify server.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill includes broad task-completion triggers and examples that append the notification script to commands, but this is disclosed and aligned with notifying users when tasks finish.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no hidden installer or setup script; it declares curl and jq as required binaries. The README references a config.json.example file that is not present, which is a documentation issue rather than a security concern.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access and a Gotify app token are proportionate to sending push notifications; users should understand notification content is sent to the configured Gotify server.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background process, privilege escalation, or runtime persistence is shown. The only persistent sensitive material is the expected local Gotify config file containing the server URL and app token.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill invokes a visible shell helper, but that helper is the main purpose-aligned mechanism for sending the notification and uses declared curl and jq dependencies.\n[SQP-1] expected: The broad trigger language could cause notifications to be added in generic task-completion contexts, but this behavior is disclosed in the skill purpose and workflow examples rather than hidden or unrelated.",
+          "guidance": "Install this only if you want Clawbot to send Gotify push notifications. Use HTTPS, create a Gotify token limited to message creation, keep the credential file private, and avoid putting secrets or highly sensitive task details in notification messages.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward Gotify notification skill with expected network use and token storage for its stated purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783651167010,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 22,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: gotify\nVersion: 1.0.1\n\nThe skill is designed to send Gotify push notifications, which inherently requires network access and handling an API token. The `scripts/send.sh` script uses `curl` to send data to the user-configured Gotify server and `jq` for safe JSON payload construction. Credentials (`url`, `token`) are read from a dedicated local file (`~/.clawdbot/credentials/gotify/config.json`), which is a standard and expected practice for OpenClaw skills. The `SKILL.md` instructions for the agent are clear, aligned with the stated purpose, and do not contain any prompt injection attempts to subvert the agent's behavior or exfiltrate data. No evidence of malicious execution, persistence, or obfuscation was found.",
+          "checkedAt": 1779159846624,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "d6912747af63a6093da8e18f6e38d0cda7efffd8baa9f4c4ee81216fad09351b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d6912747af63a6093da8e18f6e38d0cda7efffd8baa9f4c4ee81216fad09351b"
+    },
+    "slug": "gotify",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

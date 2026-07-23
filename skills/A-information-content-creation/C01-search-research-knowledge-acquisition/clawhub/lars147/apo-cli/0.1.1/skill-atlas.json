@@ -1,0 +1,137 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.2833,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:browse",
+      "category:C01:token:search",
+      "category:C11:token:product",
+      "category:C12:token:management",
+      "category:C18:token:health",
+      "cross-tag:agent-management",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C11",
+      "C12",
+      "C18"
+    ],
+    "stages": [
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "26c282ab303d356ec7f818df9beec7b7294bedb8e4ae3aaaf4b3d824401fc415",
+    "content_hash": "de94ddfbc10160ad653a3638a954c06bac38edb6fc8e69101312dceb6ddd3fc1",
+    "precanonical_content_hash": "4308d8cc51353b0dd7116401e1d2ff43a14c58ade0fd308213088402b49ec693",
+    "skill_md_hash": "604baa7f215d661f9a0530198cac65135ea97bdb028497a084d4d9c9c22c79bc",
+    "version_metadata_sha256": "5634799497fba8a551bc6a2da6892b8bc8d796c551c46906d29e74d407d9345b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/lars147/skills/apo-cli",
+    "claim_id": "d9d54d840c4eee58d51fcfbae17790f415379a74848cb4bd5fd079d3d791c433",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "apo-cli",
+        "url": "https://clawskills.sh/skills/lars147-apo-cli"
+      }
+    ],
+    "owner_handle": "lars147",
+    "owner_id": "s178rrsx57k47hhg8606d4vhf98840ba",
+    "published_at": 1770555316190,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658606413,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658606413,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is searching apohealth.de products and managing a cart; the Python CLI implements product search, product details, category browsing, cart add/remove/clear, and browser/cart URL handoff against apohealth.de only, with no evidence of payment submission, account login automation, exfiltration, obfuscation, or unrelated execution.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The critical rules prohibit completing purchases and require cart URL handoff, but the description says 'order' and the docs expose a checkout command; this is imprecise, though the code opens a cart permalink for user-controlled browser checkout rather than completing a transaction.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no install script, no external runtime dependency in the bundled CLI, and no package lifecycle hook; pyproject metadata only defines a normal console script for apo_cli:main.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network use is proportionate to the purpose and limited in the implementation to https://www.apohealth.de, but broad trigger terms such as medication and health products could cause unnecessary use unless the agent confirms shopping intent.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The CLI writes apo_cookies.json and apo_cart.json in its own directory and prints partial status information; this supports cart continuity but should be treated as private pharmacy-shopping session data and is under-disclosed in the main skill instructions.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The network access and local cart/session files are expected for a stateful apohealth cart CLI; the valid issue is missing explicit permission disclosure, not hidden unrelated capability.\n[SDI-2] unexpected: The Storefront API token appears in research notes as a public Shopify token and is not used by the Python CLI; it is poor documentation hygiene but not evidence of credential theft or malicious runtime behavior.\n[SDI-4] expected: The 'order' and 'checkout' wording is imprecise, but artifact evidence shows the skill builds or opens a cart URL and instructs the agent not to complete purchases.\n[SQP-2] expected: Cart add, update, remove, and clear mutate a live apohealth cart, which is part of the stated cart-management purpose; users should confirm these actions, especially clear/remove.\n[SQP-3] expected: Using de-DE Accept-Language is consistent with a German pharmacy site, though a configurable locale would be better.\n[SQP-1] unexpected: The trigger language is broader than shopping intent and could activate during general health discussion; agents should only use it for explicit product lookup or cart requests.\n[SQP-2] expected: Persisting cookies and cart tokens supports session continuity, but the files are not permission-hardened or clearly disclosed in SKILL.md, so users should treat them as sensitive.\n[suspicious.exposed_secret_literal] unexpected: The static scan token finding is limited to a research document and is not referenced by the runtime code; it does not change the verdict by itself.",
+          "guidance": "Install only if you want agent-assisted apohealth.de product lookup and cart management. Do not use it for medical advice, review any add/remove/clear action before it runs, complete checkout yourself in the browser, and treat apo_cookies.json and apo_cart.json as private session files.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent apohealth.de shopping-cart helper, but users should understand it can change a live cart and stores session data locally.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658573520,
+          "issueCount": 10,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: apo-cli\nVersion: 0.1.1\n\nThe skill is designed to interact with apohealth.de for product search and cart management. The `apo_cli.py` script uses standard Python libraries to make HTTP requests exclusively to `https://www.apohealth.de`. It stores session cookies and cart tokens in local JSON files (`apo_cookies.json`, `apo_cart.json`) within its own directory, which is a legitimate practice for a CLI tool. The `SKILL.md` explicitly instructs the agent to 'NEVER complete a purchase' and to provide a cart URL for the user to checkout themselves, which is supported by the `webbrowser.open()` call in `apo_cli.py`. There is no evidence of data exfiltration, malicious execution, persistence, obfuscation, or prompt injection attempts to subvert the agent's intended behavior.",
+          "checkedAt": 1779162206641,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "ffe4ba06ece3f456a4a5f55218aa8e8094b801c4e39c0dbe87f123312baedb5a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ffe4ba06ece3f456a4a5f55218aa8e8094b801c4e39c0dbe87f123312baedb5a"
+    },
+    "slug": "apo-cli",
+    "source_type": "clawhub",
+    "version": "0.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

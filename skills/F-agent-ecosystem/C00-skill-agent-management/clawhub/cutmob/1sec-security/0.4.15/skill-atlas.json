@@ -1,0 +1,158 @@
+{
+  "classification": {
+    "artifacts": [
+      "configuration"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.6214,
+    "domains": [
+      "infrastructure",
+      "security"
+    ],
+    "needs_review": false,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:phrase:agent skill",
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C08:token:deploy",
+      "category:C08:token:deployment",
+      "category:C09:token:privacy",
+      "category:C09:token:secure",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C12:token:management",
+      "category:C13:token:operations",
+      "cross-tag:agent-management",
+      "cross-tag:deployment",
+      "cross-tag:security",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C08",
+      "C09"
+    ],
+    "stages": [
+      "deliver",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "deploy",
+      "manage",
+      "operate",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "492788599f2c7089381adfd9f54f6133985c21496d2e1db62bfbbe4f12b8a772",
+    "content_hash": "08a7f32853686708738c14838590611b7df355c57bffa3b15492dbf9a540d62e",
+    "precanonical_content_hash": "e849ef836701d479e7007c273639818eeaddeae8aac1e8398b843599ed015628",
+    "skill_md_hash": "d180ff8032033a51d9dcd52b983723cc68bab6cdb7062f723c7733534507fcf3",
+    "version_metadata_sha256": "f0e56d5fc7dd7b96fc980bf393080e68dbb3acaf935f406c3326ac5c42b37055"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/cutmob/skills/1sec-security",
+    "claim_id": "d7a86d8a4c911a1d301b8553d90879253a78306607dc8571044e09fb2a855359",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "1sec-security",
+        "url": "https://clawskills.sh/skills/cutmob-1sec-security"
+      },
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "1sec-security",
+        "url": "https://clawskills.sh/skills/cutmob-1sec-security"
+      }
+    ],
+    "owner_handle": "cutmob",
+    "owner_id": "s17339tppw2mtktdxx3av56qrd885jw7",
+    "published_at": 1771925775668,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779949076633,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779949076633,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill coherently installs and operates 1-SEC for host security monitoring and defense; capabilities such as IP blocking, process termination, and file quarantine are high-impact but expected for this purpose and explicitly described.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Activation language includes broad requests like securing a server or hardening a VPS, so users should confirm they want this specific product before installation or enforcement changes, but the scope remains security-purpose aligned.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses a versioned GitHub Releases binary with SHA256 verification and does not pipe remote scripts to a shell; users still need to trust the upstream release and should review the pinned version before deployment.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Linux, curl or wget, sudo/root for full enforcement, optional API keys, and optional external endpoints for cloud, webhooks, and Gemini are disclosed and proportionate to the stated security-platform role.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "A long-running local security engine, local state under ~/.1sec, self-update commands, root enforcement, and uninstall cleanup are disclosed; live enforcement and vps-agent mode should be treated as operationally sensitive.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Privileged shell, network download, filesystem install, and enforcement operations are real, but the skill discloses the privilege needs, endpoints, and root-dependent actions in its documentation.\n[SQP-1] expected: The broad trigger wording is real, but it maps to the stated server-security purpose; the practical mitigation is user confirmation before installing or changing live enforcement.\n[SQP-2] expected: Alert export commands are expected operations tooling; exported security data can be sensitive, so handling guidance could be clearer but this is not hidden exfiltration.\n[SQP-2] expected: Webhook examples send alert payloads to third-party services only when configured by the user, and the top-level skill discloses this external data flow.\n[SQP-2] expected: The vps-agent preset’s kill and quarantine behavior is aggressive, but it is explicitly described as intended for unattended AI-agent hosts and paired with dry-run validation guidance.\n[SQP-2] expected: Approval gates being disabled for vps-agent mode is disclosed and purpose-aligned for unattended deployments, though users should validate carefully before enabling live mode.\n[suspicious.destructive_delete_command] expected: The destructive delete command appears in manual uninstall instructions scoped to removing 1-SEC files and local state, not as automatic runtime behavior.",
+          "guidance": "Install only on a Linux host you administer. Verify the GitHub release and checksum, begin with dry-run or the safe preset, review enforcement history, and enable live or vps-agent enforcement only after accepting the risk of automatic IP blocks, process kills, file quarantine, and configured alert data leaving the host via webhooks, cloud, or AI services.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a transparent Linux server-security skill with powerful but disclosed enforcement features that should be enabled deliberately.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779949000057,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 78,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: 1sec-security\nVersion: 0.4.15\n\nThe skill bundle is for '1-SEC', an open-source cybersecurity platform. It securely installs a pre-built binary from GitHub Releases, verifying SHA256 checksums before execution, as detailed in `SKILL.md` and `scripts/install-and-configure.sh`. The `SKILL.md` explicitly instructs the AI agent to use this secure manual installation method. While the 1-SEC tool itself has high-risk capabilities (e.g., `kill_process`, `quarantine_file`, `block_ip`) and can be configured aggressively (e.g., `vps-agent` preset), these are clearly declared, opt-in, and intended for security enforcement. The documentation (`SECURITY.md`, `references/*.md`) is highly transparent about permissions, data handling, and recommends starting in dry-run mode. There is no evidence of malicious intent, unauthorized data exfiltration, or deceptive prompt injection attempts against the agent.",
+          "checkedAt": 1779166204422,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "972e136d83c0faf71308248f2eb45755b889d76a0a60fbea97f6f99cb5afca4c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/972e136d83c0faf71308248f2eb45755b889d76a0a60fbea97f6f99cb5afca4c"
+    },
+    "slug": "1sec-security",
+    "source_type": "clawhub",
+    "version": "0.4.15"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C04:token:analyze",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "9c238334149f415f92d24d042b87996a4cbadcb4537d215a08480bce0b8c4eb8",
+    "content_hash": "1492fad12d95d3295b915802918763ea32bdb77b3138782a0519d280e0b48bef",
+    "precanonical_content_hash": "a314b6e3bbc6138faf6fd9b39ebcf1957de711a7a105e0110c87d454f1e6db8a",
+    "skill_md_hash": "c9a762a5cdf1fcee17f541f64f5c53cef38d92e2db1801eb342f7dc203257ec8",
+    "version_metadata_sha256": "9af506be80c5cca5233d842acb5c5ffc6fcb4d80aba0c69d24bd6987640960a5"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/wxtsky/skills/readx",
+    "claim_id": "dc6e025fc69e5344f2d72926d1ee8a773d502c2273b5ab501d05ef625908efe6",
+    "index_entries": [
+      {
+        "index_path": "categories/communication.md",
+        "label": "readx",
+        "url": "https://clawskills.sh/skills/wxtsky-readx"
+      }
+    ],
+    "owner_handle": "wxtsky",
+    "owner_id": "s1747wp3zq0jvwxrjd7bkczq05885ex0",
+    "published_at": 1771822091177,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779952093718,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779952093718,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe Twitter/X data lookup and analysis through readx MCP tools or readx.cc API calls, with no unrelated destructive, covert, or exfiltration behavior found.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill allows curl-based fallback calls to readx.cc and encourages parallel data requests; this is purpose-aligned but may consume API credits and should stay user-directed.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no executable installer; setup is a remote MCP URL configuration, but the examples put the API key in the URL query string.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Requiring READX_API_KEY is proportionate for a third-party data API, and the instructions restrict key use to readx.cc, but the key is still a reusable secret.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill may read or save the API key in standard config paths or editor MCP config only with user consent; no hidden background persistence or privilege escalation is evidenced.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The README's API-key-in-MCP-URL setup is real and should be handled carefully, but it is disclosed and tied to the documented readx.cc remote MCP integration rather than hidden behavior.\n[SQP-1] expected: The setup trigger wording is broad for Twitter/X analysis requests, but the artifacts still require asking the user for the key or setup choice, so this supports caution rather than a Review verdict.\n[SQP-2] expected: Local credential persistence is documented and gated on user consent; the missing stronger warning is a credential-hygiene issue, not evidence of covert collection.\n[VirusTotal-code_insight] expected: VirusTotal flagged file read/write and curl capability, but the artifact evidence shows these are disclosed fallbacks for readx.cc API access, and engine statistics showed no malicious detections.",
+          "guidance": "Install only if you trust readx.cc with your Twitter/X data queries and API usage. Prefer an environment variable or secure config for READX_API_KEY, avoid sharing MCP config files or screenshots containing the key, rotate the key if exposed, and be mindful that broad or parallel analyses may use API credits.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "readx is a coherent Twitter/X analysis skill, but users should handle its readx API key carefully because setup can expose or store that credential.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779952071196,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 30,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: readx\nVersion: 1.1.4\n\nThe skill is classified as suspicious due to instructions for the AI agent to perform file system read/write operations and shell execution, which are high-risk capabilities. Specifically, `SKILL.md` instructs the agent to read and potentially write an API key to `~/.config/readx/credentials.json` (or Windows equivalent) and to execute `curl` commands for API interaction and fetching API documentation from `https://readx.cc`. While these actions are plausibly needed for the skill's stated purpose and `SKILL.md` includes explicit safeguards against API key exfiltration to unauthorized domains, these capabilities introduce an attack surface for potential vulnerabilities (e.g., shell injection, arbitrary file access) if the agent's execution environment or input sanitization is flawed.",
+          "checkedAt": 1779166404953,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "dfef33670c4deab68733a401964c49a462f1bd076e2f81a21a7821e9708bfde0",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/dfef33670c4deab68733a401964c49a462f1bd076e2f81a21a7821e9708bfde0"
+    },
+    "slug": "readx",
+    "source_type": "clawhub",
+    "version": "1.1.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

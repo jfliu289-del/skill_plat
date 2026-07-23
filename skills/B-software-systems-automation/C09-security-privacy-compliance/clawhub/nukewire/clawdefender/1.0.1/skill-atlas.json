@@ -1,0 +1,169 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report",
+      "website"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.61,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C00:token:skill",
+      "category:C01:token:sources",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C08:token:cd",
+      "category:C08:token:ci",
+      "category:C09:phrase:security audit",
+      "category:C09:token:audit",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C19:token:automation",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00",
+      "C08"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "automate",
+      "build",
+      "manage",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "49b277d65823fdabf452352cc35e90fcfbb717984628317ec2cf2ef4e2652eaf",
+    "content_hash": "c33bbdb5ad991de80289c21bfc5d0be555ac0e390c3c5a834604dc2f7d37015b",
+    "precanonical_content_hash": "15e21332a8a509a1cc184116f5950aa2cb3f8e5a4044fd5e605e7b2cb75c5aee",
+    "skill_md_hash": "64e2c06324cc8aaa93f6e04fdad07faf2dffb1fe3257afe78fd55c946a8088ff",
+    "version_metadata_sha256": "a04379aa2863e727b89c9550692532d0d83acc96590090d6147548bf042ef308"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/nukewire/skills/clawdefender",
+    "claim_id": "4f4e95b0cc8aa231ee212791d02a10d08b8fa4ea60fe1cbdd1c4ed5a61c9a9f5",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "clawdefender",
+        "url": "https://clawskills.sh/skills/nukewire-clawdefender"
+      },
+      {
+        "index_path": "categories/clawdbot-tools.md",
+        "label": "clawdefender",
+        "url": "https://clawskills.sh/skills/nukewire-clawdefender"
+      }
+    ],
+    "owner_handle": "nukewire",
+    "owner_id": "s173hnbtmph52y67ezpzxbnj8h884k2b",
+    "published_at": 1769980686291,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783652609712,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783652609712,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts and documentation consistently target prompt-injection, command-injection, SSRF, credential-exfiltration, path-traversal, and skill-audit detection. Some protections are heuristic, especially URL validation and the claimed JSON mode.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions to ignore flagged content and optionally add HEARTBEAT guidance are security-purpose aligned, but they can influence future agent behavior if the user chooses to persist them.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The manual install is script copying plus chmod, and the --install command is user-directed. It runs npx clawhub install before scanning the installed skill, so it is a post-install scan rather than a pre-install security gate.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Audit behavior reads installed skills and scripts under a hard-coded workspace path and stats .env permissions; this is broad but proportionate for a workspace security scanner and does not read or transmit .env contents.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The audit appends a small report to a security-scans memory file, whitelist listing reads a local JSON file, and flagged post-install cleanup can delete the newly installed skill directory after user confirmation. No hidden background execution or privilege escalation was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The artifacts do not declare a formal permissions block, but the visible documentation and scripts disclose the main file scanning, sanitizer, URL-checking, audit, and install-helper capabilities.\n[TP4] expected: The install helper, local audit log, and optional cleanup are operational capabilities beyond pure scanning, but they are documented in SKILL.md and fit the stated security-workflow purpose.\n[SDI-2] expected: Installing a named ClawHub skill and then scanning it is user-directed and disclosed; it should be treated as package-management assistance, not hidden behavior.\n[SDI-4] expected: The documentation states the scan happens after npx clawhub install, so the main issue is user expectation: this is not a pre-install sandbox or guarantee of safety.\n[SQP-2] expected: The rm -rf use targets the just-installed skill directory only after scan findings and an interactive keep/remove prompt; clearer deletion wording would be better, but the behavior is scoped and user-controlled.\n[E1] expected: The api.example.com URLs are examples of external input being piped into the sanitizer; the skill itself does not send data to that endpoint.\n[PE2] expected: chmod 777 and similar strings appear as dangerous-command detection patterns and documentation examples, not as privileged commands the script executes.\n[PE3] expected: Credential-path strings are detection signatures, and the only .env runtime check observed is a permission stat check rather than reading or exporting secrets.\n[P1] expected: Prompt-injection phrases such as 'ignore previous instructions' are scanner signatures and examples for detecting hostile content, not instructions for the agent to follow.\n[TM1] expected: Dangerous command strings such as rm -rf / are used as detection patterns and examples; the actual cleanup command is separately scoped to an installed skill path with confirmation.\n[suspicious.prompt_injection_instructions] expected: The static scan hit is expected for a prompt-injection scanner that documents and tests the phrases it detects.",
+          "guidance": "Install only if you want a local heuristic security helper that scans workspace skills/scripts and can assist with skill installation. Do not treat --check-url or --install as a complete safety boundary: --install installs first and scans afterward, and the URL allowlist is simple pattern matching. Review findings manually before acting on them, and only add HEARTBEAT or cron usage if you want persistent future behavior.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "ClawDefender is a coherent defensive scanner/sanitizer, with disclosed but imperfect install, URL-checking, and logging behavior users should understand before relying on it.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783652560736,
+          "issueCount": 30,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: clawdefender\nVersion: 1.0.1\n\nThe skill bundle 'clawdefender' is a security tool designed to protect AI agents from various attacks, including prompt injection, command injection, SSRF, credential exfiltration, and path traversal. The `SKILL.md` clearly outlines its defensive purpose and instructs the agent to be cautious of flagged content. The `clawdefender.sh` script implements extensive detection patterns for malicious activities and performs audits, input validation, and safe skill installation. The `sanitize.sh` script acts as a wrapper for prompt injection detection. All observed behaviors are consistent with a legitimate security scanner and lack any evidence of intentional harmful actions by the skill itself.",
+          "checkedAt": 1779160753291,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "8c33484c5b72d90d689123c9bb020f4a4b3dd2949bd105edd679056eb052fc53",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8c33484c5b72d90d689123c9bb020f4a4b3dd2949bd105edd679056eb052fc53"
+    },
+    "slug": "clawdefender",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

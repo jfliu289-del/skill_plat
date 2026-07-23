@@ -1,0 +1,154 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.1417,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C04:token:analytics",
+      "category:C06:token:api",
+      "category:C12:token:management",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C01",
+      "C04",
+      "C06",
+      "C12",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "9f6b524931d45c024b95a35f69e59f8835ecf51d863c3283ed49ee528675dab9",
+    "content_hash": "336b92b57fac0fd288496d2071d5de7bed808ef852bb36e8e264348118ccf901",
+    "precanonical_content_hash": "8f90969ae930fb0e43eb0add800ce2c8beba36fe2e75180c76f2b4c610df696d",
+    "skill_md_hash": "470bb659acd4e81fb403c91d2f3151bc6d895f72e607ad9ac92a8b813ad00ac0",
+    "version_metadata_sha256": "7db8a9e32ab11e00edade7c4c1443e0575b7cc9af981a6e61f6793f5ed2da1f4"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/klemenska/skills/twitter-x-api",
+    "claim_id": "017bca05e2d7873f69ba1c374f9f281297a8210a71986cc1116912a211a15ce4",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "twitter-x-api",
+        "url": "https://clawskills.sh/skills/klemenska-twitter-x-api"
+      }
+    ],
+    "owner_handle": "klemenska",
+    "owner_id": "s17ej3c36s8g4re8b70mnsye3583kz6q",
+    "published_at": 1771354756373,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972883605,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972883605,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifacts: the skill reads timelines, searches tweets, posts tweets/replies/threads, uploads media, reads DMs, sends DMs, and shows analytics through Tweepy.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands are explicit and user-invoked, but write actions and DM access do not include an added confirmation or dry-run gate inside the script.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a manual unpinned `pip install tweepy`; no hidden installer, auto-run step, obfuscation, or unrelated package behavior is shown.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Twitter/X API credentials are necessary for the stated functionality and are read only from documented TWITTER_* environment variables or the documented credentials file.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no background persistence or privilege escalation; the only persistent state is an optional plaintext credentials file under `~/.config/twitter/credentials.json` with chmod 600 guidance.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Credential access is expected for this API integration and is disclosed in SKILL.md, though the package metadata does not appear to provide a separate capability declaration.\n[SQP-2] expected: Posting tweets, replies, threads, reading DMs, and sending DMs are all advertised capabilities; the main risk is accidental use because the script itself does not ask for confirmation.\n[SQP-2] expected: The DMs command prints message contents to stdout, which fits a read-DM command but can expose private communications to logs or the agent transcript.\n[SQP-2] expected: The send-DM command sends immediately after resolving the username, which is purpose-aligned but should be controlled by user confirmation before execution.\n[RA2] expected: The optional credentials file is documented and chmod-protected, but it is still local plaintext storage for long-lived account tokens.",
+          "guidance": "Install only if you want an agent to help manage Twitter/X through your account. Use the least-privileged tokens possible, prefer environment variables or a secret manager over a plaintext credentials file, and require explicit review of the exact tweet, reply, media, recipient, or DM text before allowing write commands.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Twitter/X API helper that can act on your account, so it is usable but should be run only with deliberate approval for posts and DMs.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972838008,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 65,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: twitter-x-api\nVersion: 1.0.0\n\nThe skill bundle provides a legitimate interface for interacting with the Twitter/X API using the `tweepy` library. It loads API credentials from standard environment variables or a user-configured JSON file (`~/.config/twitter/credentials.json`), which is necessary for its functionality. There is no evidence of intentional malicious behavior such as data exfiltration to unauthorized third parties, installation of backdoors, or prompt injection attempts in `SKILL.md` designed to subvert the agent's instructions for harmful purposes. The ability to upload media via `scripts/tweet.py` involves reading local files, which is a legitimate feature for posting images/videos, not an indicator of malice.",
+          "checkedAt": 1779164909503,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "22a99c32ec4008586ced0bb0fa3bafb8c5fc3100b9867f9452d0cc4a072597da",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/22a99c32ec4008586ced0bb0fa3bafb8c5fc3100b9867f9452d0cc4a072597da"
+    },
+    "slug": "twitter-x-api",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

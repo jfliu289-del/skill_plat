@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C04:token:metrics",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "category:C18:token:health",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C10",
+      "C18"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "f3f3526a5a5848cee79d44435934b918ac6c38fab2130ed92644c7e2657b12a6",
+    "content_hash": "6675c03d6363135071330dc43de67ec5ad8b088a18373b02b8cc1511287c5ce2",
+    "precanonical_content_hash": "2eccbb5dc4943171ce99a8b3764eebd13ec1e8740e4dc0431487a622d9a7c84f",
+    "skill_md_hash": "589e23db9d03b4389cb2f893e81e052030a6ccc6e6790bd9257ad4786d890274",
+    "version_metadata_sha256": "43dc5b87cd77ff4dea59c4e380f8674775353e43aa248ef791290ae1f35377a5"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/majestyatenkhu/skills/immortal",
+    "claim_id": "f3bb8e9ea89117d3cff84f481a80a314fd05e96b690b4555a14e6fcc37bae7a6",
+    "index_entries": [
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "immortal",
+        "url": "https://clawskills.sh/skills/majestyatenkhu-immortal"
+      }
+    ],
+    "owner_handle": "majestyatenkhu",
+    "owner_id": "s177menkgvz0tw6ytsef2szm1d83gv97",
+    "published_at": 1771412941479,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779921865244,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779921865244,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is crypto asset vitality assessment, and the only runtime capability found is fetching metrics for requested coin IDs and classifying the returned data.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Usage is user-directed through a CLI with explicit coin, day-window, and API endpoint options; the unrestricted --api option should only be used with trusted endpoints.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains only SKILL.md and one Python script. SKILL.md discloses Python 3.10+, optional httpx, and internet access, though the openclaw requires metadata lists no bins or packages.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access is central to the advertised function and disclosed. The apparent outbound data is limited to the configured API host plus asset IDs and day ranges.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background worker, privilege escalation, credential access, file writes, package installation, or account mutation behavior appears in the artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The network/API behavior is real, but it is disclosed in the skill description and dependency section and matches the skill's purpose; the metadata under-declaration is a transparency note, not evidence of hidden behavior.\n[SQP-2] expected: The skill does not prominently warn that asset queries go to a third-party service, but SKILL.md repeatedly names the live Majestify API and internet requirement.\n[VirusTotal code_insight] expected: The unrestricted --api option can direct requests to a user-chosen URL, but it is documented as a custom endpoint feature and the script does not send credentials or local file contents; this alone does not justify Review.\n[staticScan] expected: Static scan reported clean, and local inspection found only the documented HTTP lookup script and skill instructions.",
+          "guidance": "Install only if you are comfortable sending requested coin IDs and time-window parameters to the Majestify crypto-health API or another endpoint you explicitly choose. Avoid custom API URLs you do not trust, and do not treat the financial classifications as automatic investment instructions.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed crypto-risk lookup tool that contacts an external API and does not show hidden local access, persistence, credential use, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779921836088,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 19,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: immortal\nVersion: 1.0.0\n\nThe skill is designed to fetch crypto asset vitality metrics from an external API. While its core functionality is benign, the `scripts/assess_vitality.py` script accepts an `--api` argument, allowing the agent to be prompted to make network requests to an arbitrary URL. This capability, without explicit input validation or restrictions on the target URL, presents a vulnerability (e.g., potential Server-Side Request Forgery or data exfiltration if pointed to a malicious endpoint) that could be exploited by a compromised agent prompt, classifying it as suspicious rather than benign due to this risky capability.",
+          "checkedAt": 1779165128509,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "1e28dd14aceb07a889f3f196a749506fcdf9fcfa685993d868d0596239e75609",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1e28dd14aceb07a889f3f196a749506fcdf9fcfa685993d868d0596239e75609"
+    },
+    "slug": "immortal",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,148 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C07:token:quality",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C06",
+      "C07"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "c19e0ced14f0b4131277669e93e32c5d09dbc855940dec685b71db4f5bb34c4c",
+    "content_hash": "99d7578b4075e2e990169515d16905719ebc227d2c8e9e4a1e55fa46a3ffe800",
+    "skill_md_hash": "6cdea811e21d55b34014b59259d4d52e46cfe6a7c0cd1961b55e9065c1458808",
+    "version_metadata_sha256": "e05b42531c6b6e00c7416798930ce8cc75857a73d1f9d94ae85f0df1eae3a247"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jrojas537/skills/flight-pricer",
+    "claim_id": "23c91d92713d0a3c960b9052cbbbf7455ecc69b1dac0904d92171b695742eaa4",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "flight-pricer",
+        "url": "https://clawskills.sh/skills/jrojas537-flight-pricer"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "jrojas537",
+    "owner_id": "s17b79g2w2jv4zw8c6vg9mbys9885dkj",
+    "published_at": 1771293445469,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968990339,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968990339,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The code implements the documented config and flight-search commands, sends requests only to Duffel's offer-request API endpoint, and does not show unrelated data collection, destructive behavior, obfuscation, or hidden execution.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions are user-directed setup and command examples; they do not ask the agent to override user intent, persist autonomously, or perform unrelated actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation uses a normal editable Python package install with ordinary CLI dependencies, but dependency versions are not pinned, so reproducibility depends on package-index resolution at install time.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to Duffel and local configuration storage are proportionate to a flight-pricing CLI that needs authenticated API calls.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill stores a Duffel API key in plaintext at ~/.config/flight-pricer/config.yaml and reuses it for searches; this is disclosed and purpose-aligned, but users should protect the file and rotate the key if needed.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The plaintext local API-key file is real and should be documented more carefully, but credential storage is disclosed, limited to the advertised Duffel integration, and not evidence of hidden misuse.\n[SC1] expected: The unpinned Python dependencies are a dependency-hygiene issue, not a purpose mismatch or malicious behavior in the skill artifacts.\n[SC4] expected: The dependency vulnerability concern is downgraded in context because no vulnerable versions are pinned, PyYAML is used through safe_load, and requests is used against a fixed Duffel HTTPS endpoint.",
+          "guidance": "Install this in a virtual environment, use a Duffel key with the least privileges available, and check permissions on ~/.config/flight-pricer/config.yaml because the key is stored on disk. Consider pinning dependencies or installing from a controlled lockfile if you need stronger supply-chain reproducibility.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill is a straightforward flight-price CLI that uses a Duffel API key for its advertised purpose, with manageable credential-storage and dependency hygiene caveats.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968964077,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: flight-pricer\nVersion: 1.0.1\n\nThe skill is a command-line interface for searching flight prices using the Duffel API. It securely stores the user's API key in `~/.config/flight-pricer/config.yaml` and uses it to make requests to the legitimate Duffel API endpoint (`https://api.duffel.com`). The Python code (`flight_pricer.py`) uses standard libraries and safe practices (e.g., `yaml.safe_load`, `requests` for API calls). There is no evidence of data exfiltration, malicious execution, persistence mechanisms, obfuscation, or prompt injection attempts in `SKILL.md` or `README.md`.",
+          "checkedAt": 1779164450479,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "36f236619eee6887842df9663adec6dab3699aa7d494a55e8f8d72f5a255029b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/36f236619eee6887842df9663adec6dab3699aa7d494a55e8f8d72f5a255029b"
+    },
+    "slug": "flight-pricer",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

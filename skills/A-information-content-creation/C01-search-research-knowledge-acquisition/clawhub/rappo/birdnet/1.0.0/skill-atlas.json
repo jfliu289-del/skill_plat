@@ -1,0 +1,136 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "discover"
+    ],
+    "tasks": [
+      "build",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "5083d7c4b4bd70c2c3246f2486e19fcc992279dde34add56b05a7ce1e16503a7",
+    "content_hash": "4bba2119b301a20ea199865d75c18e01d29a4b10206c27e88266044f969e3975",
+    "precanonical_content_hash": "09273564277f427d6475e85d148f0b9e5f2a6bc6e670f47fa6d44d3d474c0fbd",
+    "skill_md_hash": "20ad72dc6ebf02bd08b27008feabf8e87a7eafa465e0095ff0237f9c22a9f22a",
+    "version_metadata_sha256": "de2f66fb8fb72bc4f922f7ab91de98d7e1a7fc6e8a6506ada8decbe08f5b7f2b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/rappo/skills/birdnet",
+    "claim_id": "a2072e5a6314bb4ce165bee76bae33c2913b914fae70bbe07aa3655d5ca59b2d",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "birdnet",
+        "url": "https://clawskills.sh/skills/rappo-birdnet"
+      }
+    ],
+    "owner_handle": "rappo",
+    "owner_id": "s171e6ck5anp9ed3y29g8amv75885h9y",
+    "published_at": 1770256937165,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783654948830,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783654948830,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to query BirdNET-Go detections and species data, and the script only performs read-style GET requests for detections, species information, daily summaries, and statistics.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Commands are explicit and user-invoked; the setup documents the config file, example endpoint, and API endpoints used, with no hidden agent instructions or unrelated behavior found.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no installer or package-management behavior; the skill declares curl and jq requirements and documents optional local configuration.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access is necessary for this integration and is disclosed, but the default URL is plain HTTP on a private LAN address, so detection metadata and query activity may be visible on that network path.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The script reads one config file but does not create persistence, spawn background workers, escalate privileges, mutate files, or call write/delete API endpoints.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: A prior metadata concern about reading the BirdNET config and sending network requests is purpose-aligned and disclosed by the setup and endpoint documentation, so it is a privacy note rather than a Review-level issue.\n[staticScan:clean] expected: The static scan reported no suspicious patterns, which matches the artifact review.\n[VirusTotal:clean] expected: VirusTotal telemetry was clean and is consistent with the observed read-only wrapper behavior.\n[SkillSpector:clean] expected: The supplied SkillSpector report lists no active issues; this was treated as advisory support, not as the basis for the verdict.",
+          "guidance": "Install this only if you want the agent to read detection records from your BirdNET-Go instance. Configure the URL to a trusted endpoint you control, and prefer localhost or HTTPS where available because plain HTTP can expose species, timestamps, weather data, and query activity on the network.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward read-only helper for querying a BirdNET-Go instance, with the main caution that it sends requests to a configured HTTP endpoint.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783654917747,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: birdnet\nVersion: 1.0.0\n\nThe skill bundle is a legitimate wrapper for the BirdNET-Go API. It uses standard OpenClaw credential management (`~/.clawdbot/credentials/birdnet/config.json`) to configure the API URL, defaulting to a local IP. The `scripts/birdnet.sh` script uses `curl` for API interaction and `jq` for JSON parsing and output formatting. User inputs are handled safely, with `jq --arg` for search queries and explicit URL encoding (`jq -sRr @uri`) for species names, preventing injection vulnerabilities. There is no evidence of data exfiltration, malicious execution, persistence, or prompt injection against the agent in `SKILL.md`.",
+          "checkedAt": 1779161389620,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "2e83a2a6df04939193490fba71e7e41fb0e232b176b72d9d565c2b18ba2b4a4f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/2e83a2a6df04939193490fba71e7e41fb0e232b176b72d9d565c2b18ba2b4a4f"
+    },
+    "slug": "birdnet",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

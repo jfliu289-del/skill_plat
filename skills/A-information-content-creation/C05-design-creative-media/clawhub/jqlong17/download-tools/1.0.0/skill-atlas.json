@@ -1,0 +1,124 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:audio"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "0479b4b9e51fa3e8845030ddd2b97077ba336042002323de23b2bf03ebea886d",
+    "content_hash": "7f0d413434caa9fb00aaf9c91df4e3da3c7682439187fa48483f833953027ae6",
+    "precanonical_content_hash": "ac85dcd1ab48b4b76f0d5a34bd9678f78e2a91c28d08eb42d9c5db6c69a3276f",
+    "skill_md_hash": "ee64134e16df2c46cc4c01c52293961f18bad3f557ff3f76f309d107f5e83eec",
+    "version_metadata_sha256": "19447b6f2c80bc1821feeee3719ad74c34c716c6ae4e349100e3a36a21fad4d5"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jqlong17/skills/download-tools",
+    "claim_id": "233d731771c5fd883ad8b24d873f500b1a0797adaf535fefef6b1609e642f812",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "download-tools",
+        "url": "https://clawskills.sh/skills/jqlong17-download-tools"
+      },
+      {
+        "index_path": "categories/media-and-streaming.md",
+        "label": "download-tools",
+        "url": "https://clawskills.sh/skills/jqlong17-download-tools"
+      }
+    ],
+    "owner_handle": "jqlong17",
+    "owner_id": "s176exbzsgdyxyk6gadhgfx5qn884knm",
+    "published_at": 1771200555177,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968979262,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968979262,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts are coherent with the stated purpose: SKILL.md describes WeChat-to-TXT and YouTube-to-MP3 helpers, and the two shell scripts implement those functions without unrelated collection, persistence, or destructive behavior.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The scripts take user-provided URLs and output names. Output names are used directly as file paths, so a caller can write outside the current directory if they provide path components, but this is user-directed local output rather than hidden behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The metadata and documentation disclose Homebrew installation of yt-dlp and ffmpeg and required curl/yt-dlp binaries. These dependencies are purpose-aligned but require trusting third-party CLI tooling.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Outbound network requests and local file writes are proportional to a downloader skill. No automatic credential, token, browser profile, or session-cookie access is performed; cookie use is only mentioned as manual troubleshooting text.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no daemon, privilege escalation, sudo use, or background persistence. The skill creates user-requested output files and uses a predictable /tmp/wechat_tmp.html temporary file, which is weak hygiene on shared systems.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Executable shell scripts and local CLI invocation are expected for this downloader, and SKILL.md discloses the relevant commands and dependencies; this remains a transparency note rather than a Review-level concern.\n[VirusTotal-code_insight] expected: The reported path traversal issue is artifact-backed because output names are used directly in file paths, but the write target is controlled by the user running the script and there is no privilege escalation, exfiltration, or hidden overwrite behavior.\n[staticScan] expected: The static scan reported no suspicious findings, which is consistent with the inspected artifacts.",
+          "guidance": "Install this only if you are comfortable adding yt-dlp and ffmpeg through Homebrew and making network requests to the URLs you provide. Use simple output names rather than paths, avoid running it in sensitive directories, and do not use browser-cookie troubleshooting options unless you intentionally want yt-dlp to access an authenticated browser session.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward local downloader for YouTube audio and WeChat articles, with ordinary downloader risks around third-party tools and local file output paths.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968941016,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: download-tools\nVersion: 1.0.0\n\nThe skill bundle is classified as suspicious due to path traversal vulnerabilities in both `wechat-dl.sh` and `yt-audio.sh`. Both scripts take an output filename from user input (`$2`) and use it directly to construct file paths (e.g., `\"${OUTPUT}.txt\"`, `\"${OUTPUT_NAME}.%(ext)s\"`). This allows an attacker to specify paths like `../../etc/passwd` to write files to arbitrary locations on the system. While the core functionality is benign, these vulnerabilities could be exploited for unauthorized file modification or creation, making the skill suspicious rather than malicious, as there is no clear evidence of intentional harmful behavior like data exfiltration or persistence.",
+          "checkedAt": 1779164411458,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "6c75e0770bb3a93050f100c7f8d669377fe8ec8d2c2038100b9326450a4ae280",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6c75e0770bb3a93050f100c7f8d669377fe8ec8d2c2038100b9326450a4ae280"
+    },
+    "slug": "download-tools",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,124 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.0,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "fallback:C00"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8ea3c6de835aa4a4a24b14b484083eecffa164d2c7f16e88bc46b3ae6603b90c",
+    "content_hash": "3162192153eb9d98bd259d0fa833b473cdbf4f2fda2868b8d50ea0c82c438401",
+    "precanonical_content_hash": "d47a3446417456b51069ec0404060b15cae12a6764f68f0bc29b585020189949",
+    "skill_md_hash": "9724e42c1991d40488abe5e18fe3e6f40bd8e623dc91fdddd2ac2685dba57971",
+    "version_metadata_sha256": "2a4f0c04b3fc7414df1c4274aea5e9acf8d7ab141b084975c5d2894a9b019211"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/antgly/skills/control-ikea-lightbulb",
+    "claim_id": "870cd5089dbdfc9565419977f3a8eab07e728485ab7de0f2ed7b96877f1acbd9",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "control-ikea-lightbulb",
+        "url": "https://clawskills.sh/skills/antgly-control-ikea-lightbulb"
+      },
+      {
+        "index_path": "categories/smart-home-and-iot.md",
+        "label": "control-ikea-lightbulb",
+        "url": "https://clawskills.sh/skills/antgly-control-ikea-lightbulb"
+      }
+    ],
+    "owner_handle": "antgly",
+    "owner_id": "s171yjmghjd0esda3ccmg6qgth884xr8",
+    "published_at": 1770316747659,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783655363587,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783655363587,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "Artifacts coherently implement LAN control for Kasa-compatible smart bulbs: on/off, brightness, HSV color, and timed light-show behavior. The IKEA branding is somewhat imprecise, but SKILL.md discloses that true IKEA TRADFRI support is not implemented.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The scripts can change a real local device, including flashing or color sequences, but actions are disclosed and require user-supplied command arguments such as --ip, --on, --off, --brightness, --hsv, --duration, or --off-flash.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The wrapper scripts run Python through uv, and pyproject.toml declares only python-kasa as a runtime dependency, which is proportionate for local smart-bulb control but relies on the normal Python package supply chain.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reviewed code uses the kasa library against a user-provided LAN IP address and does not show cloud credential use, broad local file access, secret handling, unrelated outbound destinations, or local indexing.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No startup persistence, background service, privilege escalation, credential storage, destructive file operations, or long-running agent behavior appears in the artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SkillSpector] expected: SkillSpector reported no issues; direct artifact review is consistent with that clean result.\n[StaticScan] expected: Static scan metadata reports clean status with no findings, and the reviewed files did not show hidden execution, exfiltration, or persistence.\n[VirusTotal] expected: VirusTotal telemetry is clean; its high-entropy/eval note did not correspond to obfuscated or hidden behavior in the reviewed plain Python and shell scripts.",
+          "guidance": "Install only if you want an agent to control a Kasa-compatible bulb on your local network. Verify the IP address before running commands, use caution with flashing light-show modes, and rely on a trusted uv/Python package source for python-kasa.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill appears to do what it says: control a user-specified local smart bulb without hidden data access or persistence.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783655324212,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: \nDeveloper: \nVersion: \nDescription: OpenClaw Agent Skill\nSuspicious High-Entropy/Eval files: 5\n\nThe skill bundle is designed to control local smart bulbs using the `python-kasa` library. All scripts (`control_kasa_light.py`, `light_show.py`, `light_show_verbose.py`) interact solely with a user-provided local IP address, as expected for LAN device control. The shell scripts (`run_control_kasa.sh`, `run_test_light_show.sh`) are simple wrappers to execute the Python scripts via `uv run`. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts in `SKILL.md`. The dependencies listed in `pyproject.toml` are appropriate for the stated purpose.",
+          "checkedAt": 1779161335551,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "453fcebe486e3b659809e0d7d3ffc6b0382fe703e58ead50f453ce6ebfadc7f6",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/453fcebe486e3b659809e0d7d3ffc6b0382fe703e58ead50f453ce6ebfadc7f6"
+    },
+    "slug": "control-ikea-lightbulb",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

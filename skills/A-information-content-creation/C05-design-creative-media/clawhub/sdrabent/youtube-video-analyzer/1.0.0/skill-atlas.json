@@ -1,0 +1,159 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.375,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C02:token:language",
+      "category:C04:token:analyze",
+      "category:C05:token:audio",
+      "category:C05:token:image",
+      "category:C05:token:video",
+      "category:C06:token:code",
+      "category:C12:token:strategy",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:design",
+      "cross-tag:planning",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C02",
+      "C04",
+      "C06",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "design",
+      "manage",
+      "plan"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "84c0b97d004db4e842356e35d40a3910e5db421c7e51c3e763ffa0b65921ad0c",
+    "content_hash": "f904609fd60651764b23e6a34b184f0829cb63289a661551bf23de6c663bfc09",
+    "precanonical_content_hash": "9fb1ac7fa6978108fa791680d7e839a02f8b2e08aa1bad967c472e310ee4d275",
+    "skill_md_hash": "d817ac8504d681327039eece5a68fcc6cc167426d277178f775579a7fb36b73a",
+    "version_metadata_sha256": "76ca7753170b35fbb31c90f150a7185cb70418b7975dbfa13bea897d3d9de86f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sdrabent/skills/youtube-video-analyzer",
+    "claim_id": "89fcc0f470f2003573092b1becc363dac6ddefa505cb76b173114e91b89dcfec",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "youtube-video-analyzer",
+        "url": "https://clawskills.sh/skills/sdrabent-youtube-video-analyzer"
+      }
+    ],
+    "owner_handle": "sdrabent",
+    "owner_id": "s17b3ghftjfp9ha4awkxqm8kmx884khv",
+    "published_at": 1771119189131,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967452077,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967452077,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The workflow, dependencies, and commands all align with multimodal YouTube analysis: yt-dlp for metadata/media, curl for subtitle JSON, ffmpeg/ffprobe for frame extraction, and local image/transcript review.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The trigger language is somewhat broad and the workflow performs network retrieval plus local temporary file creation, but those side effects are visible in the artifact and are central to the stated purpose.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The install metadata pulls yt-dlp via uv and requires ffmpeg, python3, and curl; these are standard tools for this purpose, though users should trust and maintain those dependencies.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill creates a scoped /tmp working directory, downloads video/transcript data, extracts frames, and instructs cleanup with rm -rf \"$WORK_DIR\"; long videos may consume bandwidth, disk, and processing time.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background service, broad local indexing, credential storage, or privilege escalation is present; however, the troubleshooting note suggesting --cookies-from-browser for restricted/private videos would involve sensitive browser session material and should be used only with explicit user intent.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The activation language is broader than ideal, but it is tied to YouTube URLs and analysis intent; this supports guidance rather than a Review verdict.\n[SQP-2] expected: Network access, temporary files, transcript download, and media processing are expected for video analysis and are described in the skill workflow.\n[SQP-2] unexpected: The optional --cookies-from-browser suggestion is sensitive because it can use browser session cookies; the artifact does not make this automatic or hidden, so it is a cautionary note rather than evidence of malicious behavior.",
+          "guidance": "Install only if you are comfortable with the agent downloading YouTube media/subtitles into a temporary local directory and processing frames. Avoid using --cookies-from-browser unless you deliberately want the tool to use your browser login state for a specific video, and clean up temporary files after analysis.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it claims: it analyzes YouTube videos by downloading transcript/video data locally and extracting frames, with no evidence of hidden scripts, exfiltration, or persistence.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967412283,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 45,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: youtube-video-analyzer\nVersion: 1.0.0\n\nThe OpenClaw skill bundle `youtube-video-analyzer` is designed for multimodal YouTube video analysis. It utilizes standard and legitimate tools like `yt-dlp`, `ffmpeg`, `ffprobe`, `curl`, and `python3` to download videos, extract transcripts, and process frames. All shell commands and Python scripts are directly related to the stated purpose of video analysis and temporary file management. While the `SKILL.md` suggests using `yt-dlp --cookies-from-browser` as a troubleshooting step for age-restricted videos, this is a legitimate feature of `yt-dlp` for users to access content they have rights to, and there is no evidence of malicious intent to steal or exfiltrate credentials. The instructions for the AI agent are detailed and task-oriented, without any signs of prompt injection for harmful objectives.",
+          "checkedAt": 1779164127107,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "0c71d7ce9ff08a99901b5881682c545db75cc6f32066a291c084bbba80ebff56",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0c71d7ce9ff08a99901b5881682c545db75cc6f32066a291c084bbba80ebff56"
+    },
+    "slug": "youtube-video-analyzer",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,133 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:lookup",
+      "category:C06:token:api",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "739f338acd0adf4fc5d15d76d511eeaa33301c28135aaec3a0274dabf10735af",
+    "content_hash": "e1d1734b3d89a4007b2fd44e45d3d088db329771d8ef3add1a4be7963230842c",
+    "precanonical_content_hash": "1c6bd6da0632ac538dd7e806f0876943a2dcb49340975110046e03ccfbbcbe6d",
+    "skill_md_hash": "d8a137f982c17cf0d9f7fabcdb2cfbe673a0ff3d73e3826e61903ea1d6535b3b",
+    "version_metadata_sha256": "981caf16d9bd794752f966803bf496453473eded1a943d5633bcbeeaef3f4b49"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/setdemos/skills/lmfiles",
+    "claim_id": "297f483eded3c2771336f9f94e7d52d8f0183e54af903eb07165ee579c2e27e3",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "lmfiles",
+        "url": "https://clawskills.sh/skills/setdemos-lmfiles"
+      }
+    ],
+    "owner_handle": "setdemos",
+    "owner_id": "s1774yr46eyp06hexnd3zyd55x83rzhj",
+    "published_at": 1771858336475,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779953342091,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779953342091,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill’s stated purpose, documentation, and scripts consistently cover lmfiles.com registration, upload, listing, metadata lookup, download, and deletion.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Upload and delete actions are user-directed and documented, including public-link warnings, though the helper scripts do not add an interactive confirmation prompt at execution time.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains SKILL.md and small bash curl wrappers only; no installer, background setup, package install, or hidden execution path is present.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use of LMFILES_API_KEY and LMFILES_BOOTSTRAP_TOKEN is expected for the service operations and is documented as secret material.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no local persistence or privilege escalation; uploaded files persist on lmfiles.com and download URLs are public to anyone with the link.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The invocation text is somewhat broad, but it still centers on explicit file hosting, share links, lmfiles.com API usage, and account operations rather than ordinary local-only file handling.\n[SQP-2] expected: Uploading local files and sending the API key to lmfiles.com is the core disclosed purpose. The lack of a runtime confirmation prompt is user-impact guidance, not evidence of hidden or mismatched behavior.\n[E1] expected: External transmission of tokens and files is a real security boundary, but it is disclosed and necessary for account registration and file hosting.\n[VirusTotal code_insight] unexpected: The reported shell-injection claim is not supported by the artifacts: variables are passed inside quoted curl arguments. register.sh could produce malformed JSON for unusual characters, but that is not command execution or malicious behavior.\n[staticScan] expected: Static scan reported no findings, consistent with the small disclosed curl-wrapper implementation.",
+          "guidance": "Install only if you trust lmfiles.com and intend to upload files there. Review each file before upload, assume returned links are public, verify file IDs before deletion, and keep LMFILES_API_KEY and LMFILES_BOOTSTRAP_TOKEN out of chat logs and shared transcripts.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "LMFiles is a disclosed helper for uploading files to lmfiles.com, but users should only use it for files they intentionally want to make publicly shareable.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779953309461,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: lmfiles\nVersion: 1.0.2\n\nThe skill bundle is designed for legitimate file hosting operations with lmfiles.com. However, it contains multiple shell injection vulnerabilities in its helper scripts and example commands. Specifically, `scripts/upload.sh` directly interpolates user-provided file paths into `curl -F 'file=@${FILE}'`, and `scripts/register.sh` interpolates username and bootstrap token into a JSON string within a `curl -d` argument, both without proper sanitization. These flaws could allow an attacker to execute arbitrary commands on the agent's host system if they can control the inputs to these scripts or commands, classifying it as suspicious due to critical vulnerabilities.",
+          "checkedAt": 1779166524988,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "3d74418b97b87e553dce3ed016ae0d5355c4025da775ff3073c4f0d1fb97720b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/3d74418b97b87e553dce3ed016ae0d5355c4025da775ff3073c4f0d1fb97720b"
+    },
+    "slug": "lmfiles",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

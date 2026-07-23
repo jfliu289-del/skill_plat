@@ -1,0 +1,130 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "cross-tag:agent-management",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01"
+    ],
+    "stages": [
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "fc32ace7b147426c6d4a3b9120cb081f77e7de10ff59a51e528d99faa2421291",
+    "content_hash": "2764bf280a3d30525ebd08cc0e1da99b2e7dbb61960b3f64a3f1a6bbbc4b10a0",
+    "precanonical_content_hash": "76ed10dfd84036fac6dde849d4ddbf82c8bff88243f4b541ce2374d99deceb0e",
+    "skill_md_hash": "2392e3f7ffe4c272b54881b22014f3b393e353a79975e5da56829e3919893a3d",
+    "version_metadata_sha256": "acaeb00ea24b488ed4180754acd10fe0baec4b5d4429a7bca2f0ec332fdc2056"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/foobarraz/skills/stashdog",
+    "claim_id": "7ae4043f11b707b871496a6b019b5212925268236ea1e6c7963efebcf1a39fb5",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "stashdog",
+        "url": "https://clawskills.sh/skills/foobarraz-stashdog"
+      }
+    ],
+    "owner_handle": "foobarraz",
+    "owner_id": "s17f7ga9btkradamhawx3d118x884a2p",
+    "published_at": 1771028596893,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974326122,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974326122,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill purpose is coherent: connect to a StashDog inventory MCP server and use inventory tools. The frontmatter description names list/search/add, while the body discloses get/edit/delete too, so the short description is incomplete but the capability is not hidden.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are scoped to one HTTPS MCP endpoint and named inventory tools. The skill does not include explicit guardrails for edit/delete confirmation, but there is no evidence of unrelated or automatic tool use.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no bundled executable or install script. The recommended config uses `npx -y mcp-remote`, which is purpose-aligned for MCP OAuth proxying but leaves users with normal npm supply-chain risk unless they pin or vet the package.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "OAuth and remote MCP traffic are expected for this connector and are disclosed. Inventory records may be read, added, edited, or deleted through the remote service.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "OAuth access may persist through the user's MCP/OAuth client setup, but the artifacts show no local credential scraping, privilege escalation, background workers, or hidden persistence.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] expected: The broader get/edit/delete tool surface fits an inventory-management connector and is disclosed in the tool list, though the frontmatter should more fully describe it.\n[SQP-1] expected: The invocation guidance is broad but still tied to the StashDog inventory endpoint and common inventory actions; no unrelated use is instructed.\n[SQP-2] expected: `delete_item` is a purpose-aligned inventory action and is disclosed, but the skill should warn users to confirm item IDs and understand reversibility before deletion.\n[VirusTotal code_insight] expected: The `npx -y mcp-remote` concern is a supply-chain caution, not artifact-backed malicious behavior; it directly supports the documented MCP connection.",
+          "guidance": "Install only if you trust the StashDog MCP endpoint and intend to grant OAuth access to that inventory account. Review item IDs before edit or delete actions, and consider pinning or vetting `mcp-remote` instead of relying on the unpinned `npx -y` command.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "StashDog is a disclosed MCP connector for an inventory service, with normal cautions around OAuth access, remote data changes, unpinned npx use, and deletion.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974289121,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 30,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: stashdog\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to the use of `npx` in `SKILL.md` to download and execute the `mcp-remote` package from the npm registry. While this action is intended for connecting to the specified MCP server, executing remote code via `npx` introduces a supply chain risk, as the `mcp-remote` package itself could be compromised. There is no evidence of intentional malicious behavior within the skill's instructions or configuration.",
+          "checkedAt": 1779163873670,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "fc32ace7b147426c6d4a3b9120cb081f77e7de10ff59a51e528d99faa2421291",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/fc32ace7b147426c6d4a3b9120cb081f77e7de10ff59a51e528d99faa2421291"
+    },
+    "slug": "stashdog",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

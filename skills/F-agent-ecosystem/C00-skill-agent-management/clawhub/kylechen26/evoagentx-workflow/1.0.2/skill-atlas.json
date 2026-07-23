@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:research",
+      "category:C09:token:security",
+      "cross-tag:agent-management",
+      "cross-tag:planning",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C09"
+    ],
+    "stages": [
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "plan",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "241a5bee03354d41d1008c6fde884199b71b26817a42cf3a2d379c8130b73512",
+    "content_hash": "129f83c105930a86e2df1479fad01a98f140035119d58728b2dfe8669d155594",
+    "precanonical_content_hash": "12296ba299c7f4d33ace4d7dc7409e7d637b0e30808bba2c4a93ddd913619b31",
+    "skill_md_hash": "1433815e69b641be97df585245a391755c2e16a61838423f4ca7c88f4e62189d",
+    "version_metadata_sha256": "bef8660a15bda0a094f2a21d8a5b4cb7cc2841786b3772ef4bea07084b88914c"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/kylechen26/skills/evoagentx-workflow",
+    "claim_id": "a7fa531b4537dcb880dc552029858ad7d4808d91de1f92270384dc6507caca63",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "evoagentx-workflow",
+        "url": "https://clawskills.sh/skills/kylechen26-evoagentx-workflow"
+      }
+    ],
+    "owner_handle": "kylechen26",
+    "owner_id": "s172qqhbh55mcwxj9yaj3vzjxd884b1c",
+    "published_at": 1771617446335,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943623609,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943623609,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The artifacts align with helping users install EvoAgentX, check its availability, show examples, and scaffold workflow files. Some description language overstates the included implementation: the bundled CLI does not itself implement full workflow evolution, GEP, or optimization algorithms beyond examples and delegating to the external EvoAgentX package.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Usage is user-directed through explicit CLI commands. The examples mention web, browser, and file tools for workflows, so real deployments should scope those tools deliberately.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The metadata and documentation disclose a pip-based EvoAgentX install and Python/pip requirements. The package is unpinned, so installation depends on trusting the current external PyPI package and its transitive dependencies.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Local file generation is proportionate for a workflow scaffolding skill, but the helper writes a filename derived from the user-supplied workflow name without path validation, allowing unsafe names to create or overwrite files outside the intended directory.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No artifact-backed evidence shows credential harvesting, background persistence, privilege escalation, destructive automation, or exfiltration. Persistence is limited to user-invoked generated workflow files.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: Package installation and local template creation are expected and mostly disclosed for this skill. The concern is downgraded because the metadata declares Python/pip and an EvoAgentX pip install, though file-write behavior is not explicitly permission-scoped.\n[TP4] unexpected: The concern is partially supported: the skill advertises broad OpenClaw integration and self-evolving capabilities, while the bundled CLI is mostly status checks, examples, and a template generator. This is overstatement rather than evidence of hidden or malicious behavior.\n[VirusTotal path traversal telemetry] unexpected: The reported path traversal is artifact-backed: create-workflow writes to a lowercased --name plus .py without sanitizing path components. It is user-triggered local file-write risk, not evidence of exfiltration or intentional abuse.\n[staticScan] expected: The static scan found no suspicious patterns, which is consistent with the limited local helper behavior observed in the artifacts.",
+          "guidance": "Install EvoAgentX in a virtual environment, pin or review the package version for important projects, and run create-workflow only from the intended project directory using a simple class-style name such as ResearchWorkflow. Review generated Python before running it, and do not rely on the skill itself to provide full production workflow optimization or OpenClaw integration beyond the external EvoAgentX package and examples.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill is a coherent EvoAgentX helper, but users should treat it as a lightweight installer/scaffolder and be careful with generated file names and the unpinned Python package.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943561438,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 45,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: evoagentx-workflow\nVersion: 1.0.2\n\nThe skill integrates the EvoAgentX framework, with installation via `pip install evoagentx` as instructed in `SKILL.md`. The `scripts/evoagentx_cli.py` provides utility functions, but its `create_workflow_template` function is vulnerable to path traversal. If the `--name` argument is crafted (e.g., `../../evil`), it could lead to arbitrary file creation outside the intended directory, which is a significant vulnerability. There is no evidence of intentional malicious behavior such as data exfiltration or unauthorized remote execution, aligning with the 'suspicious' classification for vulnerabilities rather than 'malicious' intent.",
+          "checkedAt": 1779165750358,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "6b01715b3a2d96115a7551eb6a844a68b22cd84ff09a58a5b333b08be6a6d0e7",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6b01715b3a2d96115a7551eb6a844a68b22cd84ff09a58a5b333b08be6a6d0e7"
+    },
+    "slug": "evoagentx-workflow",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:implementation",
+      "category:C17:token:notes",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4811f4aebe84c9fb29ad5759b69ca361568fa564579f4d479791d55bdf6de924",
+    "content_hash": "857aa93ee31248cff042b5db4d8fb3671ba80b9ff6164052e0e7ce482b7ce8e6",
+    "precanonical_content_hash": "86435a5fbe1e0eef3ccc2b038f86369e2a90d0173e5923a2cba26cb4ab3fa1b2",
+    "skill_md_hash": "6e45b857673834dd5ccb5ef303de3e2dc6e29af7d02e2c7fd3047ed37decf9ee",
+    "version_metadata_sha256": "5f28bba59a491c28cb66bce612443dd1037e03290c8c0e3b6b955ec7ca3386e1"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/darkdevelopers/skills/bring-add",
+    "claim_id": "8a1a727cbba78992e6735078709a5567d2f833f6d6238e3238be8c108e26f973",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "bring-add",
+        "url": "https://clawskills.sh/skills/darkdevelopers-bring-add"
+      },
+      {
+        "index_path": "categories/smart-home-and-iot.md",
+        "label": "bring-add",
+        "url": "https://clawskills.sh/skills/darkdevelopers-bring-add"
+      }
+    ],
+    "owner_handle": "darkdevelopers",
+    "owner_id": "s178jkr1jk1w2q3tgx0dtkt9nh8855td",
+    "published_at": 1769531045914,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783651885692,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783651885692,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The code, README, and SKILL.md consistently describe adding items to Bring! shopping lists, with documented support for batch input, stdin, interactive mode, dry-run, JSON output, and list selection.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime behavior is bounded to Bring! list discovery and item-add operations; there is no shell execution, broad local file access, hidden prompt behavior, or unrelated data handling in the artifact.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation is standard npm-based and no install scripts were found, but package.json uses a wildcard dependency for bring-shopping and semver ranges for chalk and commander, so dependency resolution is less reproducible than ideal.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Requiring BRING_EMAIL and BRING_PASSWORD is proportionate for a Bring! API CLI and is disclosed, but the documentation gives plaintext export examples without much warning about protecting those secrets.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background worker, privilege escalation, destructive local action, or credential storage was found; the main privilege is user-invoked Bring! account access that can add items and list shopping-list metadata.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] expected: The lists subcommand does enumerate Bring! list names and may show UUIDs, but this is documented in SKILL.md and README.md and supports choosing the correct target list for the add workflow.\n[SQP-2] expected: Environment-variable credentials are expected for this CLI integration, but the scanner's documentation hygiene concern is valid: users should avoid exposing real passwords in shared shells, logs, scripts, or CI.\n[SQP-1] unexpected: The wildcard bring-shopping dependency is not needed for the skill's purpose and weakens reproducibility, but it is a supply-chain hygiene issue rather than evidence of hidden or malicious behavior.\n[SC1] unexpected: The unpinned bring-shopping dependency materially deserves review because it handles the Bring! API path, but the artifact itself does not show deceptive install behavior or malicious runtime logic.\n[SC1] unexpected: The chalk semver range is a low-impact reproducibility concern for terminal formatting and does not change the verdict by itself.\n[SC1] unexpected: The commander semver range is a normal but less strict dependency practice; no artifact evidence shows unsafe argument handling beyond the documented CLI behavior.",
+          "guidance": "Install only in a trusted local environment. Treat BRING_EMAIL and BRING_PASSWORD as secrets, prefer a password manager or short-lived local environment setup, avoid putting them in shared shell history, scripts, CI logs, or committed files, and review/pin dependencies if you need reproducible installs. Use --dry-run and --list to confirm the target shopping list before making changes.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to do what it says: use disclosed Bring! account credentials to add user-requested items to shopping lists.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783651853401,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 34,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: bring-add\nVersion: 1.0.0\n\nThe skill 'bring-add' is a CLI tool designed to add items to Bring! shopping lists. It explicitly requires `BRING_EMAIL` and `BRING_PASSWORD` environment variables for authentication with the Bring! API, which is clearly documented in `SKILL.md` and `README.md` and handled in `index.js`. The code uses standard Node.js I/O and the `bring-shopping` library to perform its stated function. There is no evidence of data exfiltration beyond necessary API credentials, malicious execution (e.g., `eval`, `exec` of untrusted input), persistence mechanisms, or prompt injection attempts against the AI agent. The dependencies are standard for a CLI application, and the overall behavior is strictly aligned with its described purpose.",
+          "checkedAt": 1779160137790,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "053c6c138015ecf4d624936a16928b52dcd030819816eeb31adb0174473957d1",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/053c6c138015ecf4d624936a16928b52dcd030819816eeb31adb0174473957d1"
+    },
+    "slug": "bring-add",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

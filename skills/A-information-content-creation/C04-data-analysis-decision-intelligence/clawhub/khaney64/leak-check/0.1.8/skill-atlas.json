@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "security-professional"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:data",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "cross-tag:data-analysis",
+      "cross-tag:security",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C09",
+      "C10"
+    ],
+    "stages": [
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4f6504528c0613b361ffd9ccd9a32e1a1f2f899dcb66b23f0eacfc6cd0857b85",
+    "content_hash": "a87527fcccafb61c2f25c8de06cd7801cc63c2f7f1f8fa3f4b788408a9a8fa06",
+    "precanonical_content_hash": "c2c982159787f57f036659f62f6d6252b3f0ea4c301048bd5c087d57e7196ff9",
+    "skill_md_hash": "04ad7a1129098fbc5cdb99c0a982954bc86e21d04d0a760fee0d20674df94516",
+    "version_metadata_sha256": "e128dcf8cf111caf58a14d637825591984ac71c877ba12613715f8dfc6c59356"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/khaney64/skills/leak-check",
+    "claim_id": "bdab88fd6f7985a4d7927b0152fa5e600c9cdf530a1ff7a6d66b2dfa77d12524",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "leak-check",
+        "url": "https://clawskills.sh/skills/khaney64-leak-check"
+      }
+    ],
+    "owner_handle": "khaney64",
+    "owner_id": "s179ww0mv835j5w7wqfbddkea983k1sb",
+    "published_at": 1774199909273,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972242652,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972242652,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the implementation: it scans local OpenClaw JSONL session logs for user-provided credential fragments and reports matching sessions/providers.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Instructions are user-directed and disclose the sensitive local files involved; the optional rm command for clearing config echoes is destructive but explicitly scoped to a chosen session log.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill requires Node only and includes a local script; there is no install script, package dependency, remote download, or automatic setup action.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Reading ~/.openclaw/agents/main/sessions and ~/.openclaw/credentials/leak-check.json is sensitive but proportionate to checking whether credentials appeared in OpenClaw sessions.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "It recommends a persistent user-created config under ~/.openclaw/credentials, but the script itself performs no writes, privilege escalation, background execution, or network calls.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SkillSpector.clean] expected: SkillSpector reported no issues; direct artifact review is consistent with that result.\n[staticScan.clean] expected: Static scan reported no suspicious patterns; code review found only built-in fs/path/os use and read/list/exists filesystem operations.\n[VirusTotal.clean] expected: VirusTotal telemetry is clean and aligns with the local-only, no-dependency implementation, though it was not used as the sole basis for the verdict.\n[artifact.sensitive_session_log_read] expected: The script intentionally reads local session logs and credential-fragment config data, which is sensitive but clearly disclosed and necessary for the leak-checking function.\n[artifact.optional_session_delete_guidance] expected: The documentation shows a user-run command to delete a specific session log to clear config echoes; it is not automatic behavior but users should verify the session ID before using it.",
+          "guidance": "Install only if you are comfortable letting the script inspect local OpenClaw session logs. Store only partial credential fragments in the config, keep that file private, and be careful with the documented session-log deletion command because deleting the wrong file can remove local history.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a local, read-only leak checker that scans OpenClaw session logs for configured credential fragments and does not show hidden network or write behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972202507,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: leak-check\nVersion: 0.1.8\n\nThe 'leak-check' skill is a security utility designed to scan local OpenClaw session logs for accidental credential leaks. The script 'scripts/leak-check.js' strictly adheres to the security claims made in 'SKILL.md', using only built-in Node.js modules (fs, path, os) with no network access, no external dependencies, and no file-writing capabilities. It includes logic to distinguish between actual leaks and 'config echoes' where the tool's own configuration is discussed in a session.",
+          "checkedAt": 1779164740883,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "cdcd7f0f2cc1268f529f9687a2d06c565527dc57827177852c936ca96e27f2af",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/cdcd7f0f2cc1268f529f9687a2d06c565527dc57827177852c936ca96e27f2af"
+    },
+    "slug": "leak-check",
+    "source_type": "clawhub",
+    "version": "0.1.8"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

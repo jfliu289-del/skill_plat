@@ -1,0 +1,129 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C09:token:audit",
+      "category:C17:token:notes",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09",
+      "C17"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "43d9f136f27c22de8de49d507ceb5ccaa48ac880cdc3f38ea12cf5c87d2563c9",
+    "content_hash": "170d1594ae1051ac790d0844c78f47b5f76d91b066043867b6e8fd6bf3975013",
+    "precanonical_content_hash": "838b316b1a4dbaa978197bd50dcc2ccf02c42e6ba7103f0a4f341af771f94f4b",
+    "skill_md_hash": "99115bc7381fdfb0a8321314e28c56579b3d00080f61913bc4d9e4df339c4778",
+    "version_metadata_sha256": "5a4e34944a2a42fd6ac57211617eb53d645df4f54774d0cba07c05f7f281d992"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tkuehnl/skills/feed-diet",
+    "claim_id": "6da717e951fd62985fa5408fe12a3c529115589e13baac1f0043f5f257fe8bca",
+    "index_entries": [
+      {
+        "index_path": "categories/health-and-fitness.md",
+        "label": "feed-diet",
+        "url": "https://clawskills.sh/skills/tkuehnl-feed-diet"
+      }
+    ],
+    "owner_handle": "tkuehnl",
+    "owner_id": "s1796xcga59f855vmh35x909yh84742a",
+    "published_at": 1771717266531,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779969220350,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779969220350,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "Fetching HN submissions or OPML-derived RSS items, classifying titles/URLs, and generating reports are coherent with the stated feed-audit purpose; sending item metadata to an LLM is privacy-relevant but purpose-aligned.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill asks for a Hacker News username or OPML path and runs scoped audit/digest commands; broad trigger phrases are mitigated by the requirement to obtain a data source before execution.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "No suspicious install behavior is shown, though runtime dependencies such as bash, curl, python3, and jq are not fully reflected in install metadata.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to HN, RSS feed URLs, OpenClaw LLM, Anthropic, or OpenAI is proportionate to the feed audit, but users should understand that reading metadata may leave the local machine.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The scripts create local cache files under the feed-diet cache directory and temporary files during execution; there is no background persistence, privilege escalation, or account mutation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The concern about titles and URLs being sent to LLM providers is artifact-backed, but the README and SKILL.md disclose LLM classification and fallback behavior, so this is a privacy note rather than a Review-level concern.\n[SQP-1] expected: Trigger phrases include broad language, but the skill does not automatically fetch or classify data without a user-provided HN username or OPML path, reducing unintended-activation risk.\n[E1] expected: The Anthropic and OpenAI curl calls are real external transmissions, but they are limited to classification payloads, use configured provider keys, and match the documented LLM classification feature.",
+          "guidance": "Install if you are comfortable with the skill fetching HN/RSS data and possibly sending feed item titles and URLs to your configured LLM provider. Use the keyword fallback or avoid setting provider access if feed privacy matters, and clear the local feed-diet cache after sensitive audits.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it claims: it audits HN/RSS reading habits, with privacy-relevant but disclosed feed fetching, local caching, and optional LLM classification.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779969186261,
+          "issueCount": 9,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: feed-diet\nVersion: 0.2.1\n\nThe OpenClaw Feed Diet skill is classified as benign. While the `SKILL.md` instructions show user-provided inputs (HN username, OPML file path, goal) being passed to `bash` scripts, a detailed analysis of `feed-diet.sh`, `hn-fetch.sh`, and `opml-parse.sh` reveals robust sanitization and safe handling. Arguments are correctly quoted when passed between scripts, and variables are used in contexts (e.g., as URL components for trusted APIs, as Python environment variables, or as file paths for XML parsing) that prevent shell injection. Crucially, `opml-parse.sh` includes explicit URL scheme validation (`http://` or `https://` only) to prevent Server-Side Request Forgery (SSRF). The skill uses LLM API keys (Anthropic/OpenAI) if available, which is a necessary capability for its stated purpose of content classification, not a malicious act. Prompt instructions in `SKILL.md` are benign and align with the skill's functionality.",
+          "checkedAt": 1779164514842,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "6dab7dfd089b54b0b5597c6dba02e9a3e13f97bdb77eb5fd6e7573e784e5448b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6dab7dfd089b54b0b5597c6dba02e9a3e13f97bdb77eb5fd6e7573e784e5448b"
+    },
+    "slug": "feed-diet",
+    "source_type": "clawhub",
+    "version": "0.2.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

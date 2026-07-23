@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C07:token:review",
+      "cross-tag:data-analysis",
+      "cross-tag:review",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C07"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "review"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4b425df0292cc058a6397f7b1472880e990d7e8a08c8fdc9452af7cb72c75dd5",
+    "content_hash": "e2012b5c9889ea8b3f4a72bed65ac798e2184d878ae91bc857ebeb8575cbd496",
+    "precanonical_content_hash": "093ea0a0eb786ebac9ec46f0db009e2ae630e80aa1639dea4a30c8375d98f47f",
+    "skill_md_hash": "60c37c044cfc78466dba40ccebe6e1cc348e34ca9c3ab6a9e1c534e65a356813",
+    "version_metadata_sha256": "a80521d9f3c779e4331d4b82acd34d1e7e7a993b149cbd5358b434508fe78def"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/rosasalberto/skills/didit-proof-of-address",
+    "claim_id": "f15f371f27715ea33742885332e9f9f8bff924364a17ce1edaa2483719d5e3da",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "didit-proof-of-address",
+        "url": "https://clawskills.sh/skills/rosasalberto-didit-proof-of-address"
+      }
+    ],
+    "owner_handle": "rosasalberto",
+    "owner_id": "s17fenh76mn5y28mwva6bcmn0h8858fw",
+    "published_at": 1772514922369,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967049897,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967049897,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, documentation, and script all align around submitting a user-selected proof-of-address document to Didit's verification API.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script requires an explicit document path and optional vendor identifier; the documentation also includes setup examples for account registration, email verification, balance checks, and top-up links, which users should treat as manual account-management steps rather than automatic skill behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No installer, background process, package hook, obfuscation, or automatic execution path is present; the artifact contains SKILL.md and one small Python helper script.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "A DIDIT_API_KEY and outbound network request to Didit are proportionate for this integration, but the selected document may contain names, home addresses, account statements, and other personal data.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No local persistence, privilege escalation, or credential storage is shown. The documentation states Didit's save_api_request parameter defaults to true, so submitted requests may be saved in the Didit Business Console unless configured otherwise.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code_insight suspicious] expected: The flagged registration, email verification, billing balance, and top-up examples are disclosed setup/account-management documentation, not hidden code or automatic execution. They are broader than the core helper script, so users should approve any account or billing action explicitly.\n[SkillSpector SQP-2 SKILL.md] expected: External transmission of proof-of-address documents is central to the skill and is visible through the Didit API endpoint, request examples, and response fields, though a clearer privacy warning would improve user understanding.\n[SkillSpector SQP-2 scripts/verify_address.py] expected: The script uploads only the file path supplied by the user and optional vendor_data to Didit's PoA endpoint; it does not bulk-scan files, persist data locally, or send data to unrelated services.\n[Static scan clean] expected: The static scan reported no suspicious patterns, consistent with the small readable script and disclosed API workflow.",
+          "guidance": "Install only if you intend to use Didit for proof-of-address checks. Use a Didit API key you are comfortable exposing to this workflow, confirm the exact document before upload, avoid unnecessary vendor_data, and review Didit's privacy, retention, and billing behavior before submitting utility bills, bank statements, or government documents.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward Didit proof-of-address helper, but it uploads sensitive address documents to Didit and uses the user's API key.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967015490,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: didit-proof-of-address\nVersion: 1.1.0\n\nThe `SKILL.md` file contains explicit API call instructions for account registration, email verification, and billing management (e.g., `POST https://apx.didit.me/auth/v2/programmatic/register/`, `GET /v3/billing/balance/`, `POST /v3/billing/top-up/`). These instructions, while presented as 'Getting Started' steps, could be interpreted by an AI agent as actionable commands, leading to prompt injection vulnerabilities. This allows the agent to perform network calls and potentially create accounts or interact with billing systems beyond the core skill's stated purpose of verifying address documents. The `scripts/verify_address.py` file itself is benign and performs only the intended address verification.",
+          "checkedAt": 1779164016987,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "e4c8cfbe40a07514bc9e36ecb57994e59ec12db59b3665efc4a0aa2f3a1cdcdc",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e4c8cfbe40a07514bc9e36ecb57994e59ec12db59b3665efc4a0aa2f3a1cdcdc"
+    },
+    "slug": "didit-proof-of-address",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

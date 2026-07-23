@@ -1,0 +1,159 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report",
+      "website"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.23,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:analyze",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C06:token:frontend",
+      "category:C07:token:review",
+      "category:C09:token:secure",
+      "category:C15:token:study",
+      "category:C16:token:learning",
+      "category:C17:token:notes",
+      "category:C19:token:browser",
+      "cross-tag:browser-automation",
+      "cross-tag:data-analysis",
+      "cross-tag:review",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C07",
+      "C09",
+      "C15",
+      "C16",
+      "C17",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "automate",
+      "build",
+      "review"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "02a2154f80348faa4ff948150fe75512fd0d6d2d49387273895b3931f4dbc526",
+    "content_hash": "1b15a8d80ac3bf45a64e000bf15e000c9461e789d82e5f8e4c28d91cb607bfff",
+    "precanonical_content_hash": "0be4237ab0a09ee4abc52145ae7aa23d381d4643e2144a872e74c5a76e34777b",
+    "skill_md_hash": "a791dcba6dd85597778a4ca862635c60df1329621316f81624c283b01a60fd9b",
+    "version_metadata_sha256": "1bb6006113a71bdf78e4317f5a08021527e240eb6362d9e2cc933b6cdd880d10"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/mart1n-xyz/skills/bunpro-sync",
+    "claim_id": "ba84e444175f6a8c2fa3628009694d598fa4804817930f0dd3c2ca4279256c08",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "bunpro-sync",
+        "url": "https://clawskills.sh/skills/mart1n-xyz-bunpro-sync"
+      }
+    ],
+    "owner_handle": "mart1n-xyz",
+    "owner_id": "s173v1m6sq7skzy2eq4pb7ehks885nma",
+    "published_at": 1771252698489,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971168922,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971168922,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, documentation, and executable scripts align: fetch Bunpro learning progress from the Bunpro frontend API and store it locally for analysis.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Instructions are user-directed and disclose the unofficial frontend token requirement, but the token-handling warnings should be stronger because the token is a live bearer credential.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No remote installer, auto-execution, or obfuscated setup was found. The package is readable Python and Markdown, though the declared env var BUNPRO_FRONTEND_API_TOKEN does not match the script's BUNPRO_API_TOKEN lookup.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to api.bunpro.jp, use of a Bunpro bearer token, and local SQLite writes are proportionate to syncing account progress; the local database may contain private learning/account data.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to a local bunpro.db database in the current or chosen directory. No background worker, scheduler, privilege escalation, or self-persistence was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-2] expected: The artifact does instruct users to obtain a browser frontend bearer token. That is sensitive, but it is disclosed and used only for the stated Bunpro API sync in the executable code.\n[SQP-2] expected: The token can be supplied by environment variable or CLI flag, and the docs mention direct token passing is less secure. The warning is not ideal, but this is a credential-handling guidance issue rather than evidence of exfiltration or deception.\n[SQP-3] expected: The unofficial browser-token flow is central to the documented Bunpro frontend API approach. It should be treated cautiously, but the artifacts do not hide the token source or use it for unrelated endpoints.\n[TM1] unexpected: The reference file lists some mutating API endpoints such as settings and bookmark changes, which are broader than a read-only sync purpose. The executable sync script only performs GET requests and local database updates, so this remains guidance rather than a Review-level hold.",
+          "guidance": "Install only if you are comfortable using Bunpro's unofficial frontend API. Treat the frontend token like a password: prefer an environment variable or secure secret store, avoid CLI arguments and chat/log sharing, refresh it if exposed, and keep bunpro.db out of shared folders or source control.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to be a coherent Bunpro progress sync tool, but users must handle the browser-derived Bunpro token and local database as private credentials/data.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971118761,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 97,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: bunpro-sync\nVersion: 1.0.0\n\nThe OpenClaw skill 'bunpro-sync' is designed to fetch Japanese grammar learning progress from the Bunpro API and store it in a local SQLite database for analysis. All files (SKILL.md, scripts/sync.py, scripts/queries.py, references/api-structure.md) align with this stated purpose. The `sync.py` script uses `requests` to interact with the legitimate Bunpro API (`https://api.bunpro.jp/api/frontend`) and `sqlite3` to store data locally in `bunpro.db`. The `queries.py` script provides tools to analyze this local data. There is no evidence of data exfiltration to unauthorized endpoints, malicious execution (e.g., `curl|bash`), persistence mechanisms, or prompt injection attempts against the AI agent in `SKILL.md`. The handling of the API token via environment variables is a standard and secure practice, and the code uses parameterized SQL queries to prevent injection vulnerabilities. The skill appears to be a well-intentioned utility.",
+          "checkedAt": 1779164566036,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "7d02e87d8c4a1b0955577d61b5bdf02b7fd4febe62e6a9187b03ad0904855eee",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/7d02e87d8c4a1b0955577d61b5bdf02b7fd4febe62e6a9187b03ad0904855eee"
+    },
+    "slug": "bunpro-sync",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

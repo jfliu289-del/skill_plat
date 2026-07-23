@@ -1,0 +1,133 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C09:token:security",
+      "category:C10:token:model",
+      "category:C19:token:device",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10",
+      "C19"
+    ],
+    "stages": [
+      "validate"
+    ],
+    "tasks": [
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "89870ad828e4f750f02c174d73d056786e27cb0afa048392a6e153486f2c479a",
+    "content_hash": "13700bf7b08342a70c3d0dd3d22aecd42b0a170b0f3aeb26ef61ca5ec20bdcd0",
+    "precanonical_content_hash": "92bcea2569e5c3b97297ad0d9f117ad54f005c2412d904ec442a1567ac539e64",
+    "skill_md_hash": "11cc3a2348bdf5b60551b74a2db3857cfbd8cc0e2ab97c7553ecf4bf236d06d3",
+    "version_metadata_sha256": "060386475e36c62d7778ff00d008980ddbf2ccf0375af376fea068b7ea156903"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/markeljan/skills/codex-multi-subscription-auth-fallbacks",
+    "claim_id": "1d82ba1e05c6e9c9f232abff6ba5062793c481efe914c0a1bbeb5c5317144964",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "codex-multi-subscription-auth-fallbacks",
+        "url": "https://clawskills.sh/skills/markeljan-codex-multi-subscription-auth-fallbacks"
+      }
+    ],
+    "owner_handle": "markeljan",
+    "owner_id": "s175gp6xftj25qjw80131jwsk98408d7",
+    "published_at": 1771370678503,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972889203,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972889203,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently focus on importing Codex OAuth profiles into OpenClaw and configuring model fallback; token handling and model switching are central to that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The script is user-run and prompts before clearing Codex auth; the cron job is optional but, once enabled, can periodically run a local status command and change the active model.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no hidden installer, but the skill depends on the external Codex CLI installed via npm, so users should verify the package source.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Access is scoped to expected Codex and OpenClaw auth files, but those files contain live access and refresh tokens.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists tokens into OpenClaw auth profiles and leaves timestamped backups; it does not request sudo or show privilege escalation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-4] expected: The cron template's use of `openclaw models status` and session model updates matches the optional auto-switching feature. The claim that it does not contact external services is not proven by the artifact and should be treated cautiously, but this alone does not show hidden behavior.\n[SQP-2] expected: The schema includes access and refresh token fields because reusable OAuth fallback profiles are the feature. The skill does disclose live token storage, though it would benefit from stronger warnings about permissions, logs, backups, and version control.\n[PE3] expected: The script does copy Codex OAuth access and refresh tokens into OpenClaw's auth profile file. This is sensitive, but it is stated in the README, frontmatter, and script comments rather than concealed.\n[RA2] expected: The script creates timestamped backups of credential files and leaves them on disk. That increases local exposure, but the backup behavior is disclosed and used for recovery rather than stealthy persistence.",
+          "guidance": "Install only if you intentionally want OpenClaw to reuse Codex OAuth sessions. Treat `auth-profiles.json` and all `.bak-*` files as secrets, restrict their permissions, exclude them from git and logs, remove stale backups when no longer needed, and enable the optional cron job only if you want unattended model switching.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is sensitive because it copies OAuth tokens for failover, but the behavior is coherent with its stated purpose and is largely disclosed to the user.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972850100,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 71,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: codex-multi-subscription-auth-fallbacks\nVersion: 1.1.0\n\nThe skill is classified as suspicious due to the use of direct prompt injection instructions within the `SKILL.md` and `references/config-templates.md` files, which instruct the AI agent to execute local commands (`openclaw models status`) and modify its internal state (`session_status`). While these actions are aligned with the skill's stated purpose of managing multi-provider authentication and model failover, they represent high-risk capabilities. The `scripts/codex-add-profile.sh` script also handles sensitive OAuth tokens by reading from `~/.codex/auth.json` and writing to `~/.openclaw/agents/main/agent/auth-profiles.json`, although it includes safety measures like backups and user confirmation. There is no evidence of intentional malicious behavior such as data exfiltration or unauthorized remote control.",
+          "checkedAt": 1779164951218,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "39818b97d974cd579fad2f7e39f7a219f07684601f253462a4944ae921ee4f42",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/39818b97d974cd579fad2f7e39f7a219f07684601f253462a4944ae921ee4f42"
+    },
+    "slug": "codex-multi-subscription-auth-fallbacks",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

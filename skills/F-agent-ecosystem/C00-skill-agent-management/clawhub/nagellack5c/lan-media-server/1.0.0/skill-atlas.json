@@ -1,0 +1,151 @@
+{
+  "classification": {
+    "artifacts": [
+      "website"
+    ],
+    "audiences": [
+      "creator",
+      "security-professional"
+    ],
+    "confidence": 0.1417,
+    "domains": [
+      "creative",
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C12:token:management",
+      "category:C17:token:notes",
+      "category:C19:token:browser",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:design",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09",
+      "C10",
+      "C12",
+      "C17",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "design",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "0d733f411667dae71c59516807d005442a99bd5109f54c257206ca84e2424ac0",
+    "content_hash": "4b4fe6998db9c2fdc2fd6271e4ef7ddb0f0452c9118582dec46b7ed1df3d021c",
+    "precanonical_content_hash": "c6921611516c7612d2ee8a454743b6c8bf89334ad3223cffd1421fdcce6a0e46",
+    "skill_md_hash": "679a48127145fca66dc2828ea2cccba34e429cb5323fe295dbd17def79d235b0",
+    "version_metadata_sha256": "cb841f6327df2e41091b3ae8c6b5c0c3f8c7d8f23f7313500de7639b865bf89b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/nagellack5c/skills/lan-media-server",
+    "claim_id": "9d60efb4520d24292d218a8e5ba8feb186f94930d12d2feba6b933d1ed5011b3",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "lan-media-server",
+        "url": "https://clawskills.sh/skills/nagellack5c-lan-media-server"
+      }
+    ],
+    "owner_handle": "nagellack5c",
+    "owner_id": "s17ekpadydtaatdfh6ydaqwyv18842j1",
+    "published_at": 1770648434763,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779962563046,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779962563046,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is LAN sharing of screenshots, images, and other agent-generated files, and the artifacts implement a small Node.js static file server for that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are limited to creating a shared directory, copying intended files into it, and sharing links; there are no instructions to collect credentials, crawl unrelated files, or contact external services.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The setup script creates $MEDIA_ROOT and writes/enables/restarts a user-level systemd service at ~/.config/systemd/user/media-server.service; this is disclosed in SKILL.md and coherent with a persistent media server.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Binding to 0.0.0.0 and serving without authentication is the intended LAN-sharing behavior and is documented, but it means the chosen shared directory must contain only files meant to be visible to other reachable hosts.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The service uses systemd --user with Restart=always and continues until disabled; it does not automatically use sudo or install a root service, though it suggests an optional sudo lingering command for reboot survival.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The reported 0.0.0.0 listener is real network exposure, but it is central to the advertised LAN media-sharing function and is disclosed along with the lack of authentication, so it is guidance-worthy rather than a Review-level mismatch.",
+          "guidance": "Install only if you want a persistent, unauthenticated file server on your local network. Keep MEDIA_ROOT pointed at a dedicated folder, place only files you intend to share there, and stop or disable the media-server user service when you no longer need it.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill openly sets up a local-network file-sharing server, with the main risk being that anything placed in its shared folder is accessible without a password.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779962509290,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: lan-media-server\nVersion: 1.0.0\n\nThe skill bundle is benign. It sets up a local Node.js HTTP server via a systemd user service to share files from a designated directory on the LAN. The `SKILL.md` clearly describes the purpose and usage, with no prompt injection attempts. The `scripts/setup.sh` script correctly configures and starts the service, and the `scripts/server.js` implements robust path traversal prevention, blocks directory listing, and sets appropriate security headers (e.g., CSP, X-Content-Type-Options). There is no evidence of data exfiltration, malicious execution, or unauthorized persistence.",
+          "checkedAt": 1779162460069,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "42f60e999266dfcd60f64be85bd46b356f0b15837749306b14c3efe9da740de6",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/42f60e999266dfcd60f64be85bd46b356f0b15837749306b14c3efe9da740de6"
+    },
+    "slug": "lan-media-server",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

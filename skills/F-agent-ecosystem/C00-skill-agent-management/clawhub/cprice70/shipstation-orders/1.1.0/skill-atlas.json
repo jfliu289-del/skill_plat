@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C06:token:api",
+      "category:C07:token:test",
+      "category:C12:token:management",
+      "cross-tag:agent-management",
+      "cross-tag:software-development",
+      "cross-tag:testing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C06",
+      "C07",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "975b559647884d434bce74364eb175e96af61bf83daef1fade0b77e427803e89",
+    "content_hash": "9f34fafe7f4034130ac5f891f4d4929d876732df98eaaa4fff048ae66807fc58",
+    "precanonical_content_hash": "8a579cbb9157f9e1b7277519e4cedbace061a02091aaf729f7488cb3a29d2ad6",
+    "skill_md_hash": "90e387b329c685357942467c89fa50111e57abf96248d6060a8736f59077e86d",
+    "version_metadata_sha256": "8fe1942d81a17edc756e558e7307c4163392f37251092dfa975033888a5c5e05"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/cprice70/skills/shipstation-orders",
+    "claim_id": "06f9317c4736eb6b7541fad3a90b9392ffa9aad44369c900dfacb6b36147c0c5",
+    "index_entries": [
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "shipstation-orders",
+        "url": "https://clawskills.sh/skills/cprice70-shipstation-orders"
+      }
+    ],
+    "owner_handle": "cprice70",
+    "owner_id": "s176srhdvh8c61y51mjc629dvh88495z",
+    "published_at": 1771849001868,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779947335299,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779947335299,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts perform read-only ShipStation API checks for recent orders, delayed/on-hold orders, and expedited shipping signals, then print alert summaries; this matches the stated monitoring purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The documentation suggests optional heartbeat or cron-based recurring checks and notification via sessions_send; that is purpose-aligned but should be enabled intentionally because it can continuously expose order details to alert channels.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact consists of markdown documentation and two Node.js scripts, with no installer hook, dependency downloader, remote code loading, or automatic execution mechanism observed.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "ShipStation API key and secret access is proportionate to order monitoring, but the scripts handle business order data, customer names, totals, and marketplace information in local output.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The scripts write state.json and shipping-state.json to suppress duplicate alerts and prune tracked order IDs; this local persistence is disclosed, though users should treat those files as sensitive workspace data.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: Local state persistence is real and purpose-aligned. The documentation identifies state.json, shipping-state.json, and .env, but a stronger privacy and retention warning would be useful because order IDs and operational state can be sensitive.\n[suspicious.exposed_secret_literal] unexpected: The static scan's hardcoded-secret concern was not supported by artifact review: the referenced code loads SHIPSTATION_API_KEY and SHIPSTATION_API_SECRET from .env or process environment, and no embedded credential value was found.",
+          "guidance": "Install only in a workspace where ShipStation credentials and order/customer details can be stored and viewed safely. Keep .env plus generated state files out of source control and backups where possible, restrict alert destinations, and enable heartbeat or cron monitoring only if continuous order checks are intended.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill coherently monitors ShipStation orders using user-provided credentials and local state files, with no evidence of hidden exfiltration, destructive actions, or unrelated behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779947299063,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 6,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: shipstation-orders\nVersion: 1.1.0\n\nThe OpenClaw skill 'shipstation-orders' is designed to monitor ShipStation orders for new activity and issues. It legitimately requires ShipStation API credentials (key and secret) which are read from a local `.env` file or environment variables and used to communicate with the official ShipStation API (`https://ssapi.shipstation.com`). The skill manages its state using local `state.json` and `shipping-state.json` files. All instructions in `SKILL.md` and `README.md` are benign, guiding the AI agent to execute the scripts and process their output as intended for order monitoring and alerting. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts against the agent. The custom `loadEnv` function is a minor robustness flaw but not a security vulnerability.",
+          "checkedAt": 1779165970555,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "3be280631239e1c4618f1188e7bef2d8283d1f363321023d25eab244c693aec1",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/3be280631239e1c4618f1188e7bef2d8283d1f363321023d25eab244c693aec1"
+    },
+    "slug": "shipstation-orders",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,153 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.425,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:code",
+      "category:C08:token:cd",
+      "category:C08:token:ci",
+      "category:C08:token:github",
+      "category:C09:token:security",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00",
+      "C06",
+      "C09"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "34cd529c02bdb61d76faac7bbb72bc84f584f0107926b2cee661f2b91d2a78de",
+    "content_hash": "af0a2e71883cb62e4de3a9dc17b79f348b4f1ecf815c54ba5275f6b15c3cf91a",
+    "precanonical_content_hash": "737d6bd1615fb34ed5a0271103f5c6f2af8f282334de9680434d20f31ec453ec",
+    "skill_md_hash": "f307251247e2e8717b15321e2bc5ed43ae6fde6d761b0357a0160f450f22a29d",
+    "version_metadata_sha256": "1a8c3a5e432dabb89316fd971311fc4f498eec15ca6ad17eb04e5cb9d6c570fa"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tnbradley/skills/crabukit",
+    "claim_id": "ff400437160b1a664989bd9dcfb47e394ebecf9c26de930b6a225736ceb3dda0",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "crabukit",
+        "url": "https://clawskills.sh/skills/tnbradley-crabukit"
+      }
+    ],
+    "owner_handle": "tnbradley",
+    "owner_id": "s177n5j15ahwwzwtjtnte6s8f188541e",
+    "published_at": 1771720410393,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943876198,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943876198,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The purpose, README, SKILL.md, package entry point, and code are coherent: it scans OpenClaw skills for risky patterns. The `install` workflow can install another skill after scanning, but that behavior is documented and user-directed.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are scanning, reporting, rule listing, and a named safe-install flow. I found no artifact-backed hidden instruction to override user control or bypass review in the real skill instructions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation is a disclosed local pip package from source with a `crabukit` console script. The optional wrapper and install command use `clawdhub install`, so users should treat them as environment-mutating commands.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading SKILL.md files and scripts is proportionate for a scanner. Optional Clawdex integration may send the scanned skill name to `clawdex.koi.security` when Clawdex is installed, which is disclosed at a high level but not deeply scoped.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden persistence or privilege escalation was found. The shell wrapper can be sourced from shell startup files and defines an alias, but this is optional and explicitly documented.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[AST1] expected: The `exec()` finding is in `tests/fixtures/malicious-skill/scripts/exploit.py`, a malicious test fixture used to validate detection, not normal scanner execution.\n[AST2] expected: The `eval()` finding is also in the malicious fixture; the real scanner code defines detection rules for eval-like patterns rather than evaluating scanned code.\n[AST4] expected: Subprocess use in fixtures is expected test material. The real `curl` subprocess contacts the Clawdex API with an argument list, so it is not shell injection, though it has a metadata-disclosure consideration.\n[AST5] expected: The `os.system()` finding is confined to the malicious test fixture.\n[TT5] expected: The tainted input-to-shell paths are fixture examples for scanner tests, not invoked by the package entry point or scan workflow.\n[LP3] expected: File reading, subprocess calls, and optional network lookup are consistent with scanner and safe-install functionality; the main remaining issue is clearer permission/data-flow disclosure, not purpose mismatch.\n[TP4] expected: The safe-install capability is documented in SKILL.md, README, and CLI help, and is scoped to a named skill with a scan gate and confirmation unless `--yes` is used.\n[SDI-1] expected: The purpose-mismatch claim is not supported for the actual skill because the cited behavior is in a directory explicitly named as a malicious fixture for tests.\n[SDI-2] expected: Outbound requests to `evil.com` appear only in test fixtures. The actual outbound lookup is to the disclosed Clawdex reputation API.\n[SQP-2] expected: Fixture social-engineering and destructive-command examples are expected scanner test inputs. The Clawdex lookup and shell wrapper are real but disclosed and purpose-aligned.\n[SSD-1] expected: The deceptive wording appears inside `tests/fixtures/malicious-skill/SKILL.md`, a test artifact designed to trigger detections, not the installed skill's own instructions.\n[suspicious.dynamic_code_execution] expected: Static scan hits are on detector pattern text and malicious fixtures, consistent with a defensive scanner.\n[suspicious.prompt_injection_instructions] expected: Prompt-injection phrases appear in research and rule documentation as examples to detect, not as instructions to the user's agent.",
+          "guidance": "Install only from the intended GitHub/PyPI or ClawHub source. Use `crabukit scan` as read-only analysis when possible; use `crabukit install` or the shell wrapper only when you intend to let it install a named skill. For private skill audits, be aware that Clawdex integration may disclose the scanned skill name when that integration is available.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Crabukit is a disclosed defensive security scanner; the dangerous-looking code is mainly scanner rules and test fixtures, with some expected install and lookup features users should understand.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943826498,
+          "issueCount": 20,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: crabukit\nVersion: 0.1.3\n\nThe OpenClaw skill 'crabukit' is a security scanner designed to detect malicious patterns, vulnerabilities, and prompt injection attempts in *other* OpenClaw skills. While its codebase contains numerous patterns for highly malicious activities (e.g., RCE, data exfiltration, backdoors, `curl|bash`, `eval`/`exec`, prompt injection phrases), these are consistently implemented as *detection rules* within its analyzers and pattern definitions (`crabukit/rules/patterns.py`, `crabukit/analyzers/*.py`), or as *test fixtures* (`tests/fixtures/malicious-skill/`) to validate its detection capabilities. The `SECURITY.md` explicitly addresses potential false positives from antivirus software due to its defensive nature. The only external network call identified (`crabukit/external_scanners.py`) is a legitimate query to the Clawdex threat intelligence API (`https://clawdex.koi.security`) to check the reputation of the *skill being scanned*, not to exfiltrate user data. The `scripts/claw-safe-install.sh` wrapper also implements a defensive 'scan-before-install' mechanism. There is no evidence of intentional harmful behavior by the 'crabukit' skill itself; its purpose is to enhance security.",
+          "checkedAt": 1779165845694,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "cf660dbbb16ffbba1292a0cb907ede2bda20be973af095ffb2de89deb36e2879",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/cf660dbbb16ffbba1292a0cb907ede2bda20be973af095ffb2de89deb36e2879"
+    },
+    "slug": "crabukit",
+    "source_type": "clawhub",
+    "version": "0.1.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.3964,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:analyze",
+      "category:C04:token:data",
+      "category:C04:token:metrics",
+      "category:C07:token:quality",
+      "category:C08:token:github",
+      "category:C18:token:fitness",
+      "category:C18:token:health",
+      "cross-tag:data-analysis"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C07",
+      "C08",
+      "C18"
+    ],
+    "stages": [
+      "validate"
+    ],
+    "tasks": [
+      "analyze"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "721a3b8338e31123d95030960932abeb9518b1605b48471fc85d2de1b5600233",
+    "content_hash": "1c6e073092dcc1c1f86ba999c06b4680118a90f35b9a2b71cebdf5a9e13e4888",
+    "precanonical_content_hash": "823c4ef1091ffed337fcc32f9a0d9f757a53d7c1f32eed0402908fa3b71fee9a",
+    "skill_md_hash": "a671e164b6bfd1dda333a62d8c25cccee2578392c051aca75aa6921d8ce3fd4d",
+    "version_metadata_sha256": "2bf49d54b314c0e550bdcf11af59c2c355c8a1094ccb888ecfef6779585ce073"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/luisgot/skills/whoo-cli",
+    "claim_id": "8f07c23eb00a24b09145d4cd29acc3fa9b4284c04725814e3d120da5f92f3592",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "whoo-cli",
+        "url": "https://clawskills.sh/skills/luisgot-whoo-cli"
+      }
+    ],
+    "owner_handle": "luisgot",
+    "owner_id": "s17edjmtyfv05pg68bj1h8n5qn884fw2",
+    "published_at": 1771785266295,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779950234827,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779950234827,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The purpose matches the documented capabilities: retrieving and interpreting WHOOP recovery, sleep, strain, SpO2, profile, and body metrics. The data is sensitive health information, but that access is explicit and central to the skill.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are scoped to specific whoo commands for overview, recovery, sleep, user status, login, and logout, and the skill warns agents to treat JSON output as data rather than instructions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill asks the user to install @luisgot/whoo globally via Bun or npm and discloses the GitHub source. This creates normal third-party CLI supply-chain risk, but it is user-directed and purpose-aligned.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "WHOOP API access, local/manual OAuth login, and a local callback URL are proportionate for fetching WHOOP data, with a clear data notice telling the agent not to forward raw health output.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill discloses that OAuth tokens persist in the OS config directory and refresh automatically, and it documents whoo logout to clear stored credentials.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code_insight suspicious telemetry] expected: The concern is the external global CLI dependency. Artifact review found this disclosed, user-directed, and necessary for the stated CLI workflow, with no evidence of hidden behavior or malicious instructions in the skill files.\n[SkillSpector clean report] expected: SkillSpector reported no issues, consistent with the local artifact review: the package contains markdown instructions and reference docs, not executable scripts.\n[local artifact review: OAuth token persistence] expected: Persistent OAuth tokens are expected for a WHOOP API CLI and are disclosed along with a logout cleanup command.",
+          "guidance": "Install only if you trust the @luisgot/whoo CLI and are comfortable granting it access to WHOOP health data. Verify the package source before installing, avoid sharing raw health data outside the conversation, and run whoo logout or revoke the WHOOP app when you no longer need access.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill is a disclosed guide for using a third-party WHOOP CLI, with expected risks around sensitive health data, OAuth tokens, and global package installation.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779950185034,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: whoo-cli\nVersion: 0.1.1\n\nThe skill is classified as suspicious primarily due to the supply chain risk introduced by instructing the agent to install an external, globally available package (`@luisgot/whoo`) via `bun add -g` or `npm install -g` in `SKILL.md`. While this is a common pattern for CLI-based skills and the skill itself demonstrates good security practices (e.g., explicit prompt injection defense for JSON output and a data privacy notice), the act of installing an arbitrary external package from a public registry presents a significant vulnerability if the upstream package were to be compromised or malicious. There is no direct evidence of malicious intent within the provided files, but the reliance on an external, globally installed dependency elevates the risk beyond benign.",
+          "checkedAt": 1779166286146,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "721a3b8338e31123d95030960932abeb9518b1605b48471fc85d2de1b5600233",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/721a3b8338e31123d95030960932abeb9518b1605b48471fc85d2de1b5600233"
+    },
+    "slug": "whoo-cli",
+    "source_type": "clawhub",
+    "version": "0.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

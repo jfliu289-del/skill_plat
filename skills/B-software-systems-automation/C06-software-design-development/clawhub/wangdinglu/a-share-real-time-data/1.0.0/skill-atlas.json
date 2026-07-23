@@ -1,0 +1,147 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C06:token:code",
+      "category:C12:token:market",
+      "cross-tag:data-analysis",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4cae1b1f8eea70ad41348ce5c52c6e94c73f305ee7baa1daaf015372cf507eb8",
+    "content_hash": "818986dfa42939b25e3df03b3ec9c974cac230bff743269f72f7cb00d8d1dd5a",
+    "precanonical_content_hash": "755e27a88f2d6a401b36fe6a9d249c7c2e65583730310de3697cc254361d8ea0",
+    "skill_md_hash": "80a83eeb23a84f8e0294c405b94090e54ae122c09c3d908adf8b82e0fbc31fbc",
+    "version_metadata_sha256": "afdf5e4814802b02a62895e1863a9d3c7054ffb86971019c5f1d8061768e83e2"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/wangdinglu/skills/a-share-real-time-data",
+    "claim_id": "29cfd3ce41f054386c9a55e0657a1cf4d7b59c7b5a1531cee596e50651ac7e0f",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "a-share-real-time-data",
+        "url": "https://clawskills.sh/skills/wangdinglu-a-share-real-time-data"
+      },
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "a-share-real-time-data",
+        "url": "https://clawskills.sh/skills/wangdinglu-a-share-real-time-data"
+      }
+    ],
+    "owner_handle": "wangdinglu",
+    "owner_id": "s17cmvntwhd2p8p4fkcft0gq1d8857nr",
+    "published_at": 1770645859434,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779962559440,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779962559440,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe fetching China A-share bars, real-time quotes, and transaction data through mootdx/TDX, and the observed code supports setup, verification, connectivity testing, and demos for that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill explicitly documents and implements a tdxpy.hq.time_frame monkey patch to bypass trading-hour checks; this changes library semantics during the Python process, but it is disclosed and tied to the stated timezone/data-access problem.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The setup script runs pip install mootdx unless --check is used, so users inherit normal dependency and supply-chain risk from installing mootdx, tdxpy, pandas, and their transitive packages.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The script connects to external TDX market-data services and sends requested stock symbols as part of market-data retrieval, which is expected for this skill; no credential use or private local-file access is evidenced.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background service, autostart behavior, credential storage, privilege escalation, destructive action, or persistent system modification is shown; the monkey patch is runtime-only.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The reported monkey patch is real and automatic in the setup/demo flow, but it is openly described in SKILL.md and printed by the script; it is a data-correctness and library-semantics caveat rather than evidence of hidden or malicious behavior.",
+          "guidance": "Use this in an isolated Python environment and consider pinning/reviewing the mootdx dependency versions. Be aware that the trading-hour bypass may return empty, stale, or unexpected data outside normal market conditions, so validate timestamps and trading calendars before relying on the output for financial automation.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a read-only China stock-data helper with a clearly disclosed runtime patch that may affect market-data behavior but does not show hidden access or theft.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779962503000,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: a-share-real-time-data\nVersion: 1.0.0\n\nThe skill bundle is designed to fetch China A-share stock market data using the `mootdx` library. The `SKILL.md` and `scripts/setup_and_verify.py` files clearly document and implement a monkey-patch (`tdxpy.hq.time_frame = lambda: True`) to bypass a timezone-related trading hour check in the underlying `tdxpy` library. While monkey-patching can be a risky capability, it is openly declared, explained with a clear functional justification, and limited to a specific function, not indicating malicious intent. There is no evidence of data exfiltration, persistence, unauthorized execution, or prompt injection against the agent beyond the stated purpose of fetching stock data.",
+          "checkedAt": 1779162455353,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "b6a7b6546ed5dbc4b60160856722b244420b0d51defecdd9a66480cd5bee5885",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b6a7b6546ed5dbc4b60160856722b244420b0d51defecdd9a66480cd5bee5885"
+    },
+    "slug": "a-share-real-time-data",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

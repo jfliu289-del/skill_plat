@@ -1,0 +1,154 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.575,
+    "domains": [
+      "creative",
+      "security",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C05:phrase:image generation",
+      "category:C05:token:image",
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "category:C10:token:model",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C06",
+      "C09",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "643c68cb65db511223a2587de093405af898ed93db665e1b919b0513741d3c02",
+    "content_hash": "4429f0155f9c528ef9de9fa76c9f0ae3a40e6b1a181b12dd1ec74972d9f1b83b",
+    "precanonical_content_hash": "e1c5bdbc88a53ce6b2aca90a20cf955a5471418199e89de621e689a39443b72e",
+    "skill_md_hash": "8dac9361bfe6d3ac2afa6105573a50cdc3c2b1b427c306ddc4f665a817c2a5cb",
+    "version_metadata_sha256": "b79913c6244e302d75d0346cf436f1c54796ac17ac4cfea78090f99865a4b18a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/lilei0311/skills/siliconflow-image-gen",
+    "claim_id": "3c8c19e8e3a0805d3c961409f3263599c2749b9a3e912299ee037568e9c1430c",
+    "index_entries": [
+      {
+        "index_path": "categories/git-and-github.md",
+        "label": "siliconflow-image-gen",
+        "url": "https://clawskills.sh/skills/lilei0311-siliconflow-image-gen"
+      }
+    ],
+    "owner_handle": "lilei0311",
+    "owner_id": "s171k5jax63a1zk2r5by9a2zes885j88",
+    "published_at": 1771156325888,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968167424,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968167424,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "Image generation, model selection, SiliconFlow API calls, and optional image download all match the stated purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions are limited to setup and usage; there are no hidden role changes, prompt overrides, destructive commands, or unrelated automation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill declares the exec tool, SILICONFLOW_API_KEY, and the OpenClaw config path, though users should notice that it relies on local curl subprocesses.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading an API key from the environment or ~/.openclaw/openclaw.json and sending prompts to api.siliconflow.cn is sensitive but expected and disclosed for this integration.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no background persistence or privilege escalation; the only write is an optional user-provided output path for saving the generated image.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[AST4] expected: The subprocess calls are used to run curl for the disclosed API request and image download, with argument lists rather than shell interpolation; the remaining risk is choosing a safe output path.\n[LP3] expected: Credential and config access are purpose-aligned and disclosed in SKILL.md and skill.json, although the skill depends on broad exec rather than a narrowly scoped API client.\n[SQP-2] expected: Saving downloaded output to a caller-specified path is part of the advertised local-save feature; it can overwrite files if misused, so users should avoid sensitive destinations.\n[SQP-2] expected: The manifest combines exec and an API key, but the artifacts disclose the SiliconFlow credential use and the reviewed script shows no unrelated credential handling or exfiltration.",
+          "guidance": "Install only if you are comfortable sending image prompts to SiliconFlow and using a SiliconFlow API key that may incur charges. Prefer a dedicated, revocable API key, and save generated images only to paths you intentionally choose.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it claims: it uses a SiliconFlow API key to generate images and optionally save them locally.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968134289,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 45,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: siliconflow-image-gen\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle is classified as benign. The `scripts/generate.py` script correctly implements its stated purpose of generating images via the SiliconFlow API. It accesses the `SILICONFLOW_API_KEY` from environment variables or `~/.openclaw/openclaw.json` as declared in `SKILL.md` and `skill.json`. Network calls to `api.siliconflow.cn` and subsequent image downloads are performed using `subprocess.run` with a list of arguments, effectively preventing shell injection vulnerabilities from user-controlled inputs (prompt, model, size, output path). No evidence of intentional harmful behavior, data exfiltration beyond the stated API interaction, persistence mechanisms, or prompt injection attempts against the agent were found in any of the files.",
+          "checkedAt": 1779164241012,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "48a19452fae1988a766dc069c6b23ffed6036c827ed5c3e43489ed5003988f57",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/48a19452fae1988a766dc069c6b23ffed6036c827ed5c3e43489ed5003988f57"
+    },
+    "slug": "siliconflow-image-gen",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

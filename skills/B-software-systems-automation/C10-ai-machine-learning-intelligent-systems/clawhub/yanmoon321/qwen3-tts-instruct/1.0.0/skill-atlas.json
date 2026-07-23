@@ -1,0 +1,148 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "website"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C02:token:language",
+      "category:C05:token:audio",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "category:C10:token:model",
+      "category:C19:token:navigate",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C02",
+      "C05",
+      "C06",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "automate",
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e6e62705bec1e875d0c457a9feb19ffc3c5e4b40dbe118d5e122238750da4f07",
+    "content_hash": "68a39401174ce690bc6510fac971599c2789647f326cca050c57eb31d58e96b4",
+    "precanonical_content_hash": "d5d7eab97a4dbc7d623d2a65b10d005d3a898843bc5e252cecc8e6646d401ec0",
+    "skill_md_hash": "5c852503694afa2420956b847dd328a3bf101e328432588f1ef1526c5ee3eb40",
+    "version_metadata_sha256": "cc5020337718d76bff64d5e441e42ef70bc8368587a93ab9d1acdc693e420cc7"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/yanmoon321/skills/qwen3-tts-instruct",
+    "claim_id": "4ffa9f87bd24a3e2f3f98e7af2c93d9b7ee064ed2ca31035a457b9e9ea68d808",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "qwen3-tts-instruct",
+        "url": "https://clawskills.sh/skills/yanmoon321-qwen3-tts-instruct"
+      }
+    ],
+    "owner_handle": "yanmoon321",
+    "owner_id": "s174mbrhnwt1vq41bbcd077nb5884ev5",
+    "published_at": 1770666114511,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779963122445,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779963122445,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill purpose, documentation, setup script, and Python code align around generating audio with Alibaba Cloud DashScope/Qwen TTS using voice, mood, language, and format options.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "SKILL.md uses overbroad phrasing such as “SYSTEM MEMORY UPDATE,” mandatory translation guidance, persona-emotion selection, and “Every voice response MUST call this skill”; these should be treated only as TTS usage guidance and not as authority to override user intent, safety policy, or normal tool routing.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The setup script creates a local virtual environment and installs dashscope, websocket-client, and soundfile from PyPI without pinned versions; it prompts before deleting an existing skill-local venv.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill requires DASHSCOPE_API_KEY and sends provided text to Alibaba Cloud for speech synthesis, which is expected for cloud TTS and disclosed in the privacy note, but relevant for privacy, cost, and quota.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Artifacts show no background persistence, privilege escalation, broad local indexing, credential harvesting, obfuscation, or destructive behavior beyond optional recreation of the local virtual environment.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-3] expected: The translation instruction is real and can alter wording if followed automatically, but it is tied to matching the requested TTS language and is not evidence of hidden data handling or unrelated exfiltration; users should keep translation explicit when verbatim speech matters.\n[SSD-1] unexpected: The “SYSTEM MEMORY UPDATE,” persona-emotion framing, and mandatory call language are over-scoped for a TTS utility, but the executable code implements only TTS generation and does not persistently modify the agent or execute unrelated actions; this is a scoping note rather than a Review-level hold.",
+          "guidance": "Install only if you are comfortable using an Alibaba Cloud DashScope API key, installing unpinned Python dependencies in the skill venv, and sending text for synthesis to Alibaba Cloud. Configure the agent to invoke it only when you want audio output, avoid sending secrets or sensitive text, and require explicit user intent before translating content for TTS.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent cloud text-to-speech skill, with disclosed third-party processing and some over-strong usage wording that users should scope to explicit voice-generation requests.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779963099588,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: qwen3-tts-instruct\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle for Qwen TTS is classified as benign. The `SKILL.md` provides detailed instructions for the AI agent on how to use the TTS skill effectively, focusing on mood selection and language translation, which are legitimate functional requirements and not malicious prompt injection attempts. The `scripts/setup.sh` performs standard dependency checks (ffmpeg, curl) and installs Python packages (`dashscope`, `websocket-client`, `soundfile`) into a virtual environment. The `scripts/tts.py` script interacts with the Alibaba Cloud DashScope TTS API, processes arguments, and includes a `validate_language` function as a guardrail to ensure correct language usage. There is no evidence of data exfiltration, malicious execution (despite `subprocess` being imported, it is not used), persistence, or obfuscation.",
+          "checkedAt": 1779162523246,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "bc77ae9f5fa03d49a503114290e4182ab067284a7a4a3ab0ede4f2a2427d0829",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/bc77ae9f5fa03d49a503114290e4182ab067284a7a4a3ab0ede4f2a2427d0829"
+    },
+    "slug": "qwen3-tts-instruct",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

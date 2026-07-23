@@ -1,0 +1,135 @@
+{
+  "classification": {
+    "artifacts": [
+      "paper"
+    ],
+    "audiences": [
+      "researcher"
+    ],
+    "confidence": 0.7929,
+    "domains": [
+      "science"
+    ],
+    "needs_review": false,
+    "primary_category": "C15",
+    "reasons": [
+      "category:C01:token:research",
+      "category:C15:phrase:research paper",
+      "category:C15:token:academic",
+      "category:C15:token:paper",
+      "cross-tag:academic-research"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1b7c2c3bfb01d35be65a625d337091fab8be205e210b9a8977b37e1e9b9e127d",
+    "content_hash": "1bec3edbae4da1afcdbbb197fe4c706f972ea297ca2c2016821567791334cb2e",
+    "precanonical_content_hash": "7deb321ecdd2225cbc52a3373e699fe8b377f6aceb8fa4d61685ea35bebe117c",
+    "skill_md_hash": "e2e3b43a72b36998e3da79f8e7f1b97aac7eacf10be0d1a83e6310d26011dfa5",
+    "version_metadata_sha256": "98665a9bb1bc3722e9bfd6923925f052bd563f65d9914867779a10aa3f43691d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/biohackerrrrrr/skills/paper-fetcher",
+    "claim_id": "f3cc4756e94c33532187575eb3b88ce4bd4078b43bdc88bcbe8c9dea35e4f24a",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "paper-fetcher",
+        "url": "https://clawskills.sh/skills/biohackerrrrrr-paper-fetcher"
+      }
+    ],
+    "owner_handle": "biohackerrrrrr",
+    "owner_id": "s172qa8m55k4saxet8275341c9885est",
+    "published_at": 1770634798196,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779962028883,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779962028883,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose and implementation align: it accepts DOI-style input, contacts Sci-Hub, extracts a PDF path, and downloads a PDF. The Sci-Hub source and local download behavior are central to the advertised function, not hidden.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The documentation says papers are saved to research/papers/ and mentions PubMed requests, while the helper script defaults to the current directory unless an output directory is supplied and does not implement PubMed lookup itself. This is a documentation and scoping mismatch, not evidence of deception or unrelated behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains a SKILL.md file and one Python helper script. There are no install hooks, package-install steps, startup changes, or hidden setup behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to Sci-Hub and writing downloaded PDFs are proportionate to a paper-fetching skill. Users should still treat the downloaded PDFs as untrusted third-party content and be aware the helper can be called with a caller-selected output directory.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No credential access, privilege escalation, background worker, broad indexing, destructive action, or exfiltration behavior is present. Persistence is limited to the downloaded PDF and a temporary HTML file that the script attempts to remove.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: Network access and filesystem writes are real capabilities, but they are disclosed in the skill description and are necessary for the advertised DOI-to-PDF workflow.\n[TP4] unexpected: The scanner correctly identified a mismatch: the docs promise research/papers/ and PubMed-related use, while the script defaults to '.' and only accepts DOI input. This supports a user caution, but not a Review verdict by itself because the core behavior remains coherent and visible.\n[SDI-2] expected: The script uses subprocess.run with curl for fetching, but it passes arguments as a list rather than shell=True and does not show command injection, credential access, or unrelated execution.\n[SQP-2] expected: Automatic third-party downloads and local writes are part of the advertised workflow. The skill could disclose legal/source-trust risks more plainly, but the behavior is not hidden.\n[VirusTotal code_insight] expected: The telemetry concern is based on Sci-Hub use and flexible output paths. VirusTotal engine detections were otherwise all undetected, and artifact evidence does not show malicious behavior.\n[staticScan.clean] expected: The clean static scan is consistent with the simple helper implementation and absence of persistence, credential harvesting, or exfiltration logic.",
+          "guidance": "Install only if you are comfortable with the skill contacting Sci-Hub, downloading PDFs from that third-party source, and writing files into your workspace. Check applicable legal or institutional rules before using Sci-Hub, open downloaded PDFs with normal caution, and prefer a dedicated output folder such as research/papers/.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill openly downloads PDFs from Sci-Hub and saves them locally, which matches its stated purpose but carries legal, source-trust, and file-write cautions.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779962008184,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 84,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: paper-fetcher\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to its interaction with `sci-hub.su`, a domain known for copyright infringement, which introduces inherent supply chain risks (e.g., potential for serving compromised content, though the script only downloads PDFs). Additionally, the `scripts/fetch_paper.py` script allows writing downloaded files to an arbitrary `output_dir` specified via command-line arguments, which could lead to path traversal vulnerabilities if the agent passes untrusted input, despite the `SKILL.md` suggesting a contained path. There is no clear evidence of intentional malicious behavior like data exfiltration or persistence.",
+          "checkedAt": 1779162421612,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "48ae4198e27505bdfdab653a47a86616918e3b8c945b6dc712de3d7bd39db130",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/48ae4198e27505bdfdab653a47a86616918e3b8c945b6dc712de3d7bd39db130"
+    },
+    "slug": "paper-fetcher",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

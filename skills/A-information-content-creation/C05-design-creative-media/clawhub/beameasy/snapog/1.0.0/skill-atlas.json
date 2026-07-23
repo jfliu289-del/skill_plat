@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.7083,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:phrase:image generation",
+      "category:C05:token:image",
+      "category:C06:token:api",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "42d181522ced1213168b90cf2ae94a24a81621c68ca394fb79eedd7e7eff978d",
+    "content_hash": "298673bd88f837b45f606f9bcfd82a11c43a799633b1089ac812f4f87787d633",
+    "precanonical_content_hash": "9828c55f8eb1420f0bca7e38f948589482088dee798c887d6668558e5c3fbee4",
+    "skill_md_hash": "5e73b8208c3549d0b76d74373bba9aa885a2baf757981f0528c4409bf66ae140",
+    "version_metadata_sha256": "ac397c68e5d320a438b938757055deffac4a37a099a5a992d108903ddd4d4808"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/beameasy/skills/snapog",
+    "claim_id": "666d2d8a02ec282c1807cb79fc5a0d5b5448b6486a83cad04cb7ce0fa307746e",
+    "index_entries": [
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "snapog",
+        "url": "https://clawskills.sh/skills/beameasy-snapog"
+      }
+    ],
+    "owner_handle": "beameasy",
+    "owner_id": "s178z2pw7j0cw6484s5xw7h3x98850ax",
+    "published_at": 1770911475250,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972497168,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972497168,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented capabilities match the stated purpose: listing templates, generating social/OG images, previewing templates, creating signed URLs, and batch image generation through the SnapOG API.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions stay focused on SnapOG API workflows and do not direct the agent to override user intent, hide behavior, access unrelated data, or perform unrelated actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The package contains a single non-executable SKILL.md file with curl examples; there are no install scripts, binaries, package hooks, or automatic execution paths.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill requires SNAPOG_API_KEY and sends template parameters, text, image URLs, formatting options, and optional callback URLs to api.snapog.dev, which is expected for a hosted image-generation service but should be treated as third-party data sharing.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill may save generated image files locally and create signed URLs with expirations, but it does not request privilege escalation, broad filesystem access, background persistence, or autonomous long-running behavior.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The scanner concern about user content and optional webhook URLs leaving the local environment is valid user guidance, but the external API data flow is central to the skill's purpose and is disclosed through the API-focused instructions.\n[SQP-2] expected: The bearer token guidance is sparse, but use of SNAPOG_API_KEY from an environment variable is purpose-aligned and not evidence of hidden credential handling or credential exfiltration.\n[VirusTotal webhook_url telemetry] expected: The optional webhook_url field can cause SnapOG to POST completion information to a provided endpoint, but the artifact does not instruct automatic webhook use, attacker-controlled URLs, exfiltration, or prompt-injection behavior.\n[staticScan] expected: Static scan reported no suspicious patterns, consistent with the artifact being instruction-only markdown.",
+          "guidance": "Install only if you are comfortable giving the agent access to a SnapOG API key and sending generation text, titles, tags, image/logo URLs, and template parameters to SnapOG. Use webhook URLs only when you control or trust the destination, avoid secrets or sensitive internal content in generated images and URLs, and monitor API usage if the account has quota or billing impact.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "SnapOG is a straightforward image-generation helper that uses a disclosed third-party API and API key, with privacy and webhook cautions users should understand.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972481541,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: snapog\nVersion: 1.0.0\n\nThe skill is designed to interact with the SnapOG API for image generation, requiring an API key. While the instructions in SKILL.md are descriptive and functional, the API's `/v1/generate` endpoint includes a `webhook_url` parameter. This parameter allows the agent to specify an arbitrary URL to POST to upon generation completion, presenting a significant prompt injection vulnerability. An attacker could potentially instruct the AI agent to use this feature to exfiltrate data or trigger actions on an attacker-controlled server, even though the skill itself does not explicitly instruct malicious use.",
+          "checkedAt": 1779163493795,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "963237cacb009b211c5217c926b4075a8757adfcdf5d4c9f4793fbaab9a5933b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/963237cacb009b211c5217c926b4075a8757adfcdf5d4c9f4793fbaab9a5933b"
+    },
+    "slug": "snapog",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

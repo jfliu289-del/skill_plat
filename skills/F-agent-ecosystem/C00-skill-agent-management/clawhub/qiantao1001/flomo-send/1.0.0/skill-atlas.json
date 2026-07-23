@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "3bcebcd2e7c1b3d531ded405f70549377ad896a31c24dc451cd71819c1f2938e",
+    "content_hash": "70799d8dc8d75c1a58eb68fa960c8fc8eac039406392e92916c008c1f3f9b81b",
+    "precanonical_content_hash": "873bb76042ccee5c637b5397b7aeed4d80c14adae8a1b5f4eb6527db394a129a",
+    "skill_md_hash": "f6309253795654e1e5d99e4390eba5b5d23b58b6aca7f0f2b0943c37c7d1ae8e",
+    "version_metadata_sha256": "5f6cfde028a65bfb6a73d48f421d87ce61d1e949c675c7e2a75d5f004bd946d2"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/qiantao1001/skills/flomo-send",
+    "claim_id": "757d7a5c4db1ce15921972a76cce0c6e14781434163155399416ceaebdcaa8e6",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "flomo-send",
+        "url": "https://clawskills.sh/skills/qiantao1001-flomo-send"
+      }
+    ],
+    "owner_handle": "qiantao1001",
+    "owner_id": "s171z7r297mpm9wdrn42c6vqw18857be",
+    "published_at": 1770536899304,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658373683,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658373683,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The implemented capability is a webhook-based note sender, which fits the flomo-send purpose; however SKILL.md still advertises URL-scheme-first delivery even though the script is webhook-only.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The README and scripts disclose webhook use, clipboard/stdin examples, and PRO token configuration, but the primary skill instructions should more clearly say that note content is sent over the network.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Configuration is interactive, skips in non-interactive mode, and only writes token configuration after user input.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Using curl and a flomo webhook token is proportionate for this integration, though FLOMO_WEBHOOK_URL can point to a user-supplied destination and should be treated carefully.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The token may be stored in a local .env file with chmod 600 or appended to a shell profile only by explicit user choice; this is disclosed but still plaintext secret persistence.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[TP4] unexpected: The URL-scheme fallback mismatch is supported by the artifacts and should be fixed, but the actual webhook behavior is still aligned with sending notes to flomo rather than evidence of deception or unrelated capability.\n[SQP-2] expected: A reusable webhook token is expected for this feature, but the docs should warn that the token is secret and that anyone with it can post into the user's flomo inbox.\n[E1] expected: External transmission of the note content is inherent to webhook delivery and is shown in the script and docs; it is not unrelated exfiltration.\n[PE3] expected: Plaintext local token storage is an expected configuration mechanism here and uses restricted permissions by default, though a platform secret store would be stronger.",
+          "guidance": "Install only if you intend notes passed to this skill to be sent to flomo over the network. Prefer the local .env option over shell profile storage, keep the webhook token private, and avoid sending secrets or highly sensitive clipboard contents through quick-capture commands.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill sends notes to flomo using a user-configured webhook, with a documentation mismatch but no hidden or destructive behavior found.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658331567,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 77,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: flomo-send\nVersion: 1.0.0\n\nThe skill is designed to send user-provided notes to the flomo service via its webhook API. The `configure.sh` script interactively prompts the user for a flomo webhook token and offers to save it either to a local `.env` file with restricted permissions (chmod 600) or, with explicit user consent, to their shell configuration file (~/.zshrc, ~/.bashrc). The `flomo_send.sh` script loads this token and uses `curl` to send the note content to the flomo webhook URL, employing `python3 -c 'import sys,json;print(json.dumps({\"content\": sys.stdin.read()}))'` for safe JSON payload construction. There is no evidence of data exfiltration beyond the stated purpose, malicious execution, or prompt injection against the agent. The actions are transparent and aligned with the skill's description.",
+          "checkedAt": 1779162174666,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "2040f3b81c1e39d5256988ade6826095717c3e0d1769f407c8375d57b42fb921",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/2040f3b81c1e39d5256988ade6826095717c3e0d1769f407c8375d57b42fb921"
+    },
+    "slug": "flomo-send",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

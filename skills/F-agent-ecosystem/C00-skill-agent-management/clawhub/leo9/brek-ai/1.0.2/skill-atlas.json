@@ -1,0 +1,152 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C04",
+      "C06",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "2889a15d0ae3de865ebc8a548df78d51146bcfcd3de7794292c193ce4157bdce",
+    "content_hash": "fefafc68393529758cfc797ad8fa6f377362f0e6bd7e37461dcd403ccd5bdb0a",
+    "precanonical_content_hash": "7d8bbc7e75a0e6b9264669ef88ed3e85bdb13f8f759502e79d9ab16a8013d0ca",
+    "skill_md_hash": "01f98cb8120a03953f63135e74cf1999f88a4da9c23f6471ed0dc13018402ae2",
+    "version_metadata_sha256": "bdb798e176d626b69e37c39fb1d381ba7e8489514d82f370f0a20d39a7ebce75"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/leo9/skills/brek-ai",
+    "claim_id": "a037b7744d81d47c17aa617b36a4271d27fa5b0a9cc76ce7d658c985b0d8d268",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "brek-ai",
+        "url": "https://clawskills.sh/skills/leo9-brek-ai"
+      }
+    ],
+    "owner_handle": "leo9",
+    "owner_id": "s17edn3gssyp7cvv8jntrx8tpn83h0wb",
+    "published_at": 1771884229956,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779953955512,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779953955512,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is hotel-search and booking through Brek Partner Core Chat, and the described capabilities match that purpose, including sessions, events, bookings, cancellations, and payment confirmation. These actions can affect real bookings and payments, so they require careful operator controls.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill requires runtime inputs, idempotency keys, rate limits, circuit breakers, and explicit confirmation for booking and payment-card confirmation. Cancellation and price-change events are idempotency-controlled, but users should apply the same explicit confirmation standard to them.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains markdown and YAML guidance only, with no executable install scripts, package installs, background workers, or hidden setup behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "BREK_BASE_URL and BREK_PARTNER_API_KEY are disclosed and proportionate for a partner API integration. The base URL should be pinned to the approved Brek endpoint rather than treated as arbitrary user input.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The requested durable idempotency store, budget counters, and usage logs are aligned with abuse prevention and billing, but they include partner, actor, session, and request identifiers that need retention and access controls.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The transport template sends requests with a partner API key, which is expected for the disclosed Brek integration. The finding is best treated as a documentation-hardening note about secret handling, not evidence of hidden or unrelated behavior.\n[VirusTotal code_insight SSRF] expected: The cited URL concatenation appears in a markdown example using a configured BREK_BASE_URL and relative API paths. It would benefit from endpoint allowlisting and path validation, but the artifacts do not show automatic untrusted URL fetching, internal-network probing, or exfiltration.\n[staticScan] expected: Static scan reported no suspicious findings, consistent with the artifact being non-executable documentation and configuration.",
+          "guidance": "Install only if you trust the Brek partner integration and intend to let an agent assist with real booking workflows. Store BREK_PARTNER_API_KEY in a secret manager, restrict BREK_BASE_URL to the official Brek endpoint, require human confirmation for bookings, cancellations, price changes, and payment confirmation, and define retention/access controls for usage logs.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent Brek hotel-booking API integration that discloses its network calls, API key use, booking/payment authority, and storage needs.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779953935982,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 5,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: brek-ai\nVersion: 1.0.2\n\nThe skill bundle is classified as suspicious due to a potential Server-Side Request Forgery (SSRF) vulnerability identified in the `brekRequest` function within `references/api-templates.md`. The function constructs a URL by concatenating `BREK_BASE_URL` and a `path` variable. If dynamic parts of the `path` (e.g., `{sessionId}` as used in `GET /sessions/{sessionId}`) are derived from unsanitized user input by the AI agent, an attacker could inject arbitrary URLs or paths, potentially leading to unauthorized internal network access or data exfiltration. While the `SKILL.md` provides strong security instructions (e.g., never request raw card data, never request secrets via unapproved channels) and the overall intent appears benign, this code pattern represents a significant vulnerability.",
+          "checkedAt": 1779166591514,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "a13ef6611eaf2dca01b43f6e5c6a594b652e5a3d253fa2bbc66a6a296ad748f0",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a13ef6611eaf2dca01b43f6e5c6a594b652e5a3d253fa2bbc66a6a296ad748f0"
+    },
+    "slug": "brek-ai",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

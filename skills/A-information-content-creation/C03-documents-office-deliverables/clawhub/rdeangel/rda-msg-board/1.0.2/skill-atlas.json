@@ -1,0 +1,124 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C03",
+    "reasons": [
+      "category:C03:token:office",
+      "category:C10:token:ai",
+      "category:C11:token:project"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10",
+      "C11"
+    ],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "436d51d94f94135377c6bc73285ce35612aab0143f2c431d6dc03691960ff89d",
+    "content_hash": "40f68bf7a862a75ef412689c0ebd6b7d0e62a6e3fca42a2686072576fb780531",
+    "precanonical_content_hash": "0e50b6c7f05a6420003711f986c0500c0e0bad2c81356f3772e3dbd9e94eeacc",
+    "skill_md_hash": "68b96440c9752578077b6681657125c3a2adf2a13584da6a99c65eb505166aab",
+    "version_metadata_sha256": "1eb1f251f6f2c093338aa31ff868bdce1ed5aea655a3946351af498c3db2c963"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/rdeangel/skills/rda-msg-board",
+    "claim_id": "ab129177f6c7debfb52891a947f450908f7aabec58c9aeee6694cac20901bd06",
+    "index_entries": [
+      {
+        "index_path": "categories/communication.md",
+        "label": "rda-msg-board",
+        "url": "https://clawskills.sh/skills/rdeangel-rda-msg-board"
+      }
+    ],
+    "owner_handle": "rdeangel",
+    "owner_id": "s17cgbvvsyqg7wdhm7rca2vt3983ga1f",
+    "published_at": 1771835914647,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779950833643,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779950833643,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose, scripts, and data flow are coherent: send_message.py posts a JSON message to a configured board API, and manage_boards.py manages local board profiles for that same workflow.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill gives broad trigger examples such as generic 'Send [message]', which could cause unintended posting if an agent applies it too loosely; however, the board-control behavior is disclosed and includes command-injection precautions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no installer, background service, auto-run hook, or package-install script. The metadata declares python3 and relevant environment variables, with PyYAML described as optional for profile support.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access and board credentials are proportionate for controlling a physical message board, but bare IPs default to HTTP and Basic Auth credentials and message text may travel unencrypted on the local network.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Profile support writes board IPs, usernames, and passwords to boards.yaml in plaintext. This is disclosed and purpose-aligned, but the documentation's 'secure credential storage' wording overstates the protection actually implemented.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill uses environment variables, local profile files, and HTTP/JSON because those are the documented mechanisms for reaching the board; this is not hidden or unrelated authority.\n[TP4] expected: Profile management is described in the artifact, including add/list/remove workflows and boards.yaml storage, so it is not a concealed capability, though the top-level summary is narrower than the full feature set.\n[SDI-1] expected: Plaintext credential storage is a real exposure risk, but it supports the documented multi-board profile feature and does not show exfiltration, deception, or unrelated persistence.\n[SDI-2] expected: The add command stores credentials locally as part of explicit profile setup. Users should understand this retention risk, but it remains user-directed and purpose-aligned.\n[SQP-1] unexpected: The broad 'Send [message]' trigger is under-scoped for a visible physical display and should be used with confirmation when intent or target board is ambiguous.\n[SQP-2] expected: HTTP/JSON transmission and local credential use are inherent to this board integration, but users should treat the network path and boards.yaml as sensitive because the implementation does not enforce encryption or protected secret storage.",
+          "guidance": "Install only if you want your agent to control this physical LED board. Use a unique board password, keep the board on a trusted network, prefer an HTTPS URL if the device supports it, avoid storing credentials in boards.yaml on shared or backed-up machines, and confirm the board and message before sending to a public or shared display.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it claims: it sends messages to an RDA LED board, with expected but important risks around plaintext local credentials and plain-HTTP transmission.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779950809357,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: rda-msg-board\nVersion: 1.0.2\n\nThe OpenClaw AgentSkills bundle 'rda-msg-board' is classified as benign. The `SKILL.md` clearly defines the purpose of sending messages to an LED board and explicitly includes a 'CRITICAL SECURITY INSTRUCTION' warning the AI agent against command injection, providing safe `argv` list invocation examples. The Python scripts (`manage_boards.py`, `send_message.py`) use `yaml.safe_load()` for secure YAML parsing, handle credentials via environment variables or a local `boards.yaml` file for the stated purpose of authenticating to the message board, and make standard HTTP requests using `urllib.request`. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or any attempt to subvert the agent's behavior beyond its intended function.",
+          "checkedAt": 1779166373388,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a7a1dec16983f2220c131d5e312d60b06efdf994ec7cc045c9f561ad110becc9",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a7a1dec16983f2220c131d5e312d60b06efdf994ec7cc045c9f561ad110becc9"
+    },
+    "slug": "rda-msg-board",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

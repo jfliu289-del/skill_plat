@@ -1,0 +1,147 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C12",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C05:token:audio",
+      "category:C07:token:debug",
+      "category:C12:token:decision",
+      "category:C12:token:management",
+      "category:C19:token:desktop",
+      "cross-tag:agent-management",
+      "cross-tag:debugging",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C05",
+      "C07",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "debug",
+      "manage",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "91888f609bc7b5fc4ea1764b0b87fc2588cd1de74fda74f00a826b9254f1b821",
+    "content_hash": "0f896d68796cf86d948d4677e84cd9652582b4ca1d56f17624d7960ec1988f13",
+    "precanonical_content_hash": "dc8472f37d550326cd9caf34a184ec76e01e6d6949c26466fadf244bd071c6ba",
+    "skill_md_hash": "715565c80117c38bb8c7d98f2f210a2871d1718b5e82d6b69d9d071386cefae4",
+    "version_metadata_sha256": "62f7d3804dee379fe4e384ef6c64a00a8ab563718746d55d6dbd17cf1f887abe"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/achals-iglu/skills/omarchy",
+    "claim_id": "a6820f31732c29cb424e4f1c05e5fd46d6c03591af1a2f84d8cbd2dbf6046d0f",
+    "index_entries": [
+      {
+        "index_path": "categories/apple-apps-and-services.md",
+        "label": "omarchy",
+        "url": "https://clawskills.sh/skills/achals-iglu-omarchy"
+      }
+    ],
+    "owner_handle": "achals-iglu",
+    "owner_id": "s17fhw77tcq0d8a84h1a4hh27x83j3cs",
+    "published_at": 1770915243877,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972779737,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972779737,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose and artifact content align: it is an Omarchy operating guide and command catalog for local system tasks such as refresh, restart, packages, themes, and updates.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The activation language is broad because it tells the agent to assume the host is Omarchy for local system work, but that scope is disclosed and paired with static inspection, read-only checks first, and confirmation before high-impact actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains only a non-executable SKILL.md file with no install hooks, scripts, package manifest, hidden files, or runtime code.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The Omarchy-specific assumptions and hardcoded local script path are proportionate on an Omarchy host but could be misleading if installed on a non-Omarchy system.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill does not request persistence, credentials, or elevated access itself, but it recommends workflows that may invoke privileged local wrappers for installs, removals, updates, sudo reset, password setup, shutdown, or log upload.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad Omarchy-default trigger is artifact-supported and worth user attention, but it is disclosed, central to the skill's purpose, and mitigated by instructions to inspect scripts first and ask before impactful commands.\n[VirusTotal code_insight suspicious] expected: The telemetry concern mainly describes the intended behavior of preferring omarchy-* wrappers; the artifact contains no executable wrapper code and explicitly warns not to run scripts until their purpose is understood.\n[static scan clean] expected: Static scan found no suspicious patterns, consistent with the single Markdown-only artifact.",
+          "guidance": "Install this only on systems where you actually want Omarchy-native workflows. Before approving actions, confirm the host is Omarchy and review any package, update, setup, reset, password, power, or log-upload command before it runs.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a documentation-only Omarchy helper that steers an agent toward Omarchy-specific system commands and asks for caution before impactful actions.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972752252,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: omarchy\nVersion: 0.1.1\n\nThe `SKILL.md` file exhibits strong prompt injection techniques designed to restrict the AI agent's autonomy and steer its behavior towards a predefined set of `omarchy-*` wrapper scripts. It explicitly instructs the agent to avoid generic Linux commands (e.g., `pacman`, `pkill`) and discourages standard inspection methods like `--help` flags, instead forcing reliance on internal documentation of the `omarchy-*` scripts. While not directly containing malicious code, this setup creates a highly vulnerable environment where the agent is compelled to use potentially unverified, controlled scripts for critical system operations (e.g., `omarchy-pkg-install`, `omarchy-update-system-pkgs`, `omarchy-reset-sudo`, `omarchy-upload-log`), increasing the risk of hidden malicious actions or system compromise if those underlying scripts were untrustworthy.",
+          "checkedAt": 1779163502032,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "150fc3e06ff348e4a923eaabccd7b08df61bde7f45a6e29f2c9f1516b1659d9e",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/150fc3e06ff348e4a923eaabccd7b08df61bde7f45a6e29f2c9f1516b1659d9e"
+    },
+    "slug": "omarchy",
+    "source_type": "clawhub",
+    "version": "0.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

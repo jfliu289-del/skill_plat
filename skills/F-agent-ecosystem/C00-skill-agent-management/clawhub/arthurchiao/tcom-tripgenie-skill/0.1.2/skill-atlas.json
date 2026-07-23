@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C18:token:travel",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C06",
+      "C18"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "9d2e2685552be17f92b7fb7ea6d57a1e9927610b09b61263cd96855876157cc9",
+    "content_hash": "78a7b5987fd2a51a82b2f4390d49b3a224df4a72a8f30b42293985436b62ffac",
+    "precanonical_content_hash": "59a35652de081e85a4857fa294f9b0245e01d524ee38bc130eb6d9eb9d1c0627",
+    "skill_md_hash": "f3f88a3c8c0ccf77ce3280552881c32aae3184435ced92d6f70b04070fc759d2",
+    "version_metadata_sha256": "44311b7fe35f1f79cac37659885e5b23c8c6e2e6df1c6f45a4063ab32a5832b8"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/arthurchiao/skills/tcom-tripgenie-skill",
+    "claim_id": "7ae0bab089d564e0776a2724c76bf42012e4da99d9550b5bfbb8b52b7f8fe68a",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "tcom-tripgenie-skill",
+        "url": "https://clawskills.sh/skills/arthurchiao-tcom-tripgenie-skill"
+      }
+    ],
+    "owner_handle": "arthurchiao",
+    "owner_id": "s172v0am91tfwf4k91ktvvwfg583k18w",
+    "published_at": 1773193525892,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967448935,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967448935,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is hotel, flight, attraction, and travel assistance, and the artifact only documents TripGenie API calls for those travel functions.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill asks to be preferred broadly for travel queries and to return provider responses as-is; this is disclosed and travel-related, but users should understand it may route ordinary travel questions to TripGenie.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no executable installer or package code. Setup requires a TRIPGENIE_API_KEY, and the documentation suggests entering it in OpenClaw, so users should store it through secure secret handling where possible.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Sending the user query, locale, and TripGenie token to a Trip.com endpoint is proportionate for a live travel search integration, though it is a third-party data flow.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts show no persistence, background worker, privileged installation, local credential store access, or destructive file behavior; temporary /tmp output is used only for API responses in examples.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad preference for TripGenie on travel queries is real and disclosed; it is somewhat broad, but it aligns with the skill's travel-assistant purpose and does not show hidden control or unrelated routing.\n[SQP-1] expected: Generic travel trigger examples could cause more travel prompts to use the TripGenie API, but the triggers remain within hotels, flights, accommodation, and travel planning.\n[SQP-2] expected: The artifact clearly documents POSTing query text, locale, and the API token to the TripGenie endpoint; a stronger privacy notice would help, but the data flow is not hidden or purpose-mismatched.\n[SSD-3] expected: Returning full API responses is explicitly documented and fits a search/results workflow, though users should treat provider output and links as third-party content and avoid exposing sensitive details unnecessarily.",
+          "guidance": "Install this only if you want Trip.com-powered travel results. Avoid putting highly sensitive personal details in travel prompts, protect and rotate the TRIPGENIE_API_KEY if exposed, and treat returned booking links or provider text as third-party content rather than local OpenClaw-generated advice.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "TripGenie is a disclosed Trip.com travel API wrapper, with expected third-party data sharing and API-key use but no evidence of hidden, destructive, or unrelated behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967424141,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 40,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: tcom-tripgenie-skill\nVersion: 0.1.2\n\nThe TripGenie skill is a standard API wrapper for Trip.com travel services, facilitating hotel and flight searches. It uses shell commands (curl, jq) to interact with a legitimate-appearing API endpoint (tripgenie-openclaw-prod.trip.com) and requires a specific environment variable (TRIPGENIE_API_KEY) for authentication. No evidence of data exfiltration, unauthorized command execution, or malicious prompt injection was found in SKILL.md or _meta.json.",
+          "checkedAt": 1779164134072,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a3f11cec76a4e1cab55cc5f6a1b8a037c9f13d1450f4ee65530b6dcaa7c30dfe",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a3f11cec76a4e1cab55cc5f6a1b8a037c9f13d1450f4ee65530b6dcaa7c30dfe"
+    },
+    "slug": "tcom-tripgenie-skill",
+    "source_type": "clawhub",
+    "version": "0.1.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

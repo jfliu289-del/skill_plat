@@ -1,0 +1,131 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.175,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C02:token:language",
+      "category:C10:token:ai",
+      "category:C12:token:management",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C10",
+      "C12"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a52a9b303b55699c0060ab92ca4af800b01c6ac5e90c238a1618839bbc43e452",
+    "content_hash": "8c88572eae84a15dc2179454de0703e81e5a25798f92515b86301ddb22bffc37",
+    "precanonical_content_hash": "104bd485cd49dcb52e665568584f902c72513d75196743897134516847b15f19",
+    "skill_md_hash": "60df556e63d85ad51350fa448c097a1473d2e6e0adf4aad6e1a6c22eb536cfe9",
+    "version_metadata_sha256": "b42392b5a57bfeacbc7dc366166b7b3a51f8f4d2afd474a7573b366db50a244e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/elihuvillaraus/skills/excalidraw-diagram-generator",
+    "claim_id": "96d2aa8f0deac73d0c12067df8323e20da22442e583b5825236d1ac0de9a4c32",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "excalidraw-diagram-generator",
+        "url": "https://clawskills.sh/skills/elihuvillaraus-excalidraw-diagram-generator"
+      }
+    ],
+    "owner_handle": "elihuvillaraus",
+    "owner_id": "s175tahk6rf89pp0jdv4agfz41885gmq",
+    "published_at": 1771475282442,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779933018575,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779933018575,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to generate Excalidraw diagram JSON from user descriptions, and the main instructions align with that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Most instructions are scoped to creating .excalidraw files; the optional icon section asks the agent to inspect skill-local icon libraries and run helper scripts, which is broader than pure JSON generation but still purpose-aligned and disclosed.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains only markdown/reference files; SKILL.md references scripts and templates that are not present in the artifact, which looks like a packaging or documentation inconsistency rather than malicious behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Optional icon support involves local file reads under a libraries directory and user-directed library setup/download from Excalidraw, but there is no evidence of credential access, broad local indexing, or unrelated network use.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background persistence, privilege escalation, account mutation, credential handling, or autonomous long-running behavior is present in the artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SDI-2] expected: The local Python/script workflow is disclosed and tied to optional icon insertion for diagrams; however, the referenced scripts are absent from the artifact, so users should verify any local scripts before running them.\n[SDI-2] expected: Reading icon library reference files and selected icon JSON is expected for icon-enhanced Excalidraw output and is scoped in the text to skill library directories, not arbitrary private files.\n[VirusTotal code_insight] expected: The concern about script execution is acknowledged but not enough to escalate because no executable scripts are bundled, no VT engines flagged the artifact, and the commands are optional diagram-helper workflows.\n[VirusTotal code_insight] unexpected: The fontFamily mismatch appears to be an output correctness bug in the skill instructions, not a security issue.",
+          "guidance": "Reasonable to install for generating Excalidraw diagrams. Treat the optional icon workflow carefully: only run helper scripts you can inspect and trust, keep icon libraries inside the skill’s intended libraries directory, and review generated diagrams before sharing if the prompt included sensitive architecture or business details.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a diagram-generation helper with some optional local file/script workflows, but the reviewed artifacts do not show hidden data access, credentials use, persistence, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779932977377,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 15,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: excalidraw-diagram-generator\nVersion: 1.0.0\n\nThe skill is suspicious due to instructions in `SKILL.md` for the AI agent to execute local Python scripts (`add-icon-to-diagram.py`, `add-arrow.py`, `split-excalidraw-library.py`) located within the skill bundle. While presented as utility functions for diagram generation, this capability introduces a significant vulnerability risk (potential RCE via shell injection) if user-controlled input is passed unsanitized to these scripts. Additionally, `SKILL.md` repeatedly instructs the agent to use `fontFamily: 5` for text elements, which contradicts the valid font family IDs (1, 2, 3) documented in `references/element-types.md` and `references/excalidraw-schema.md`, indicating a bug that could lead to malformed output.",
+          "checkedAt": 1779165363869,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "1363dcbeb6a43df7974b2a07671fa9b48ec013572d2f965cb412b82e066f9272",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1363dcbeb6a43df7974b2a07671fa9b48ec013572d2f965cb412b82e066f9272"
+    },
+    "slug": "excalidraw-diagram-generator",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

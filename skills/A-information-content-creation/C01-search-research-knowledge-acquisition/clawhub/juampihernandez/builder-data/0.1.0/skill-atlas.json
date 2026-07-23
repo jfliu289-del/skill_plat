@@ -1,0 +1,147 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C08:token:github",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C08"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8bf29579f211c39aa1ded1c2706fc20990e5c3cbdb7cdc2593d9a15fb235c8bf",
+    "content_hash": "d1478a747a389ce4b1335f4379ef872d7c15029713c14d4097edd0373c6f57e9",
+    "precanonical_content_hash": "3c48129c6be4bd343da0471159ae1fae48ef3c8e358c138cd90e39d185445dd2",
+    "skill_md_hash": "2db044357c142e9ed6e41aacc4d2f2f5b2c816bc3dfecd514eca2f8654c5e775",
+    "version_metadata_sha256": "4eb12b9ebb1e7a68fa210ffd428faa348816f5456262ab6fd0ff07368e525251"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/juampihernandez/skills/builder-data",
+    "claim_id": "f5c88a811d9d445a95b4ee54dcfdd240fcfc097fa559c8e82e1323c48ac3c792",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "builder-data",
+        "url": "https://clawskills.sh/skills/juampihernandez-builder-data"
+      }
+    ],
+    "owner_handle": "juampihernandez",
+    "owner_id": "s176xf487ntgt393vzkssjk6hh8859xm",
+    "published_at": 1771257641288,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971167153,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971167153,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented capabilities match the stated purpose: querying builder reputation, identities, wallets, social profiles, credentials, location filters, human-verification status, and GitHub activity. These are sensitive profiling capabilities, but they are disclosed and central to the skill.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are scoped to user-directed API queries and include some limiting guidance, such as using ranks by default and human-checkmark filters only when requested. The location examples rely on user-derived regex patterns and would benefit from input validation guidance, but there is no hidden or automatic unsafe execution.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact is documentation-only markdown with no executable install script. It requires TALENT_API_KEY and optionally uses GITHUB_TOKEN; those credentials are disclosed in the skill text, though users should treat both as secrets.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network calls to Talent Protocol and optionally GitHub are necessary for the stated purpose. No local file access, broad local indexing, destructive commands, or system modification are shown.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background workers, privilege escalation, account mutation, self-modification, or stored memory behavior is evidenced.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The privacy concern is real in the sense that identifiers and returned profile data may involve people, wallets, locations, credentials, and social accounts. The artifacts do disclose the APIs, credentials, and data categories, so this is user guidance rather than a Review-level mismatch.\n[E1] expected: External transmission to Talent Protocol and GitHub is the core function of the skill. The calls are read-only and explicitly documented, with no evidence of unrelated exfiltration or hidden destination use.\n[VirusTotal/code_insight] expected: The regex-based location filter is documented as the API-supported method for country searches. It should be handled carefully to avoid malformed or overly broad patterns, but the artifact does not show deceptive behavior, local code execution, or malicious payload construction.",
+          "guidance": "Install only if you are comfortable sending queried handles, wallet addresses, locations, and profile identifiers to Talent Protocol, and GitHub usernames to GitHub when enrichment is used. Keep TALENT_API_KEY and GITHUB_TOKEN in environment variables or a secret store, avoid pasting tokens into chats or logs, and use the GitHub token only when higher rate limits are needed. Be cautious with broad location or credential searches because they can reveal and correlate personal profile data at scale.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a read-only helper for Talent Protocol and GitHub lookups, with privacy considerations because it can query and correlate identity, wallet, reputation, location, and public GitHub data.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971132304,
+          "issueCount": 18,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: builder-data\nVersion: 0.1.0\n\nThe skill is classified as suspicious due to a significant prompt injection vulnerability. The instructions in `SKILL.md` and `references/use-cases.md` explicitly guide the AI agent to construct a regex value for location filtering (e.g., `\"value\": \".*{country}.*\"`) by directly substituting user input for `{country}`. This lack of input sanitization creates a high-risk attack surface, allowing a malicious user to inject arbitrary regex patterns (potentially leading to ReDoS) or manipulate the JSON payload, thereby exploiting the agent's execution flow.",
+          "checkedAt": 1779164588528,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "feaf939c7a34d815e46ea57f81521957eb29290ab117caa8cb6755d50a4b5877",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/feaf939c7a34d815e46ea57f81521957eb29290ab117caa8cb6755d50a4b5877"
+    },
+    "slug": "builder-data",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

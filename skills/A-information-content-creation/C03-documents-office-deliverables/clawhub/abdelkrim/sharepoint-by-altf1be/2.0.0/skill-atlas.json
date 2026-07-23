@@ -1,0 +1,155 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.725,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C03",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C02:token:edit",
+      "category:C02:token:write",
+      "category:C03:phrase:office document",
+      "category:C03:token:document",
+      "category:C03:token:office",
+      "category:C03:token:pdf",
+      "category:C06:token:api",
+      "category:C09:token:secure",
+      "category:C09:token:security",
+      "category:C13:token:operations",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "cross-tag:writing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C02",
+      "C09"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "research",
+      "secure",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "28be9e21702281730273d445e119c986dad4980468cd2a6fc2a3b17a7b228d73",
+    "content_hash": "760f90a1f04b79aba9aad373b7f4f096d666571073968b6528fd8812ca21c617",
+    "precanonical_content_hash": "b850a127430a53ade0ac87d8ed1d422b8685d32acdcba10b3282b8daf1eb4200",
+    "skill_md_hash": "9c179b9d94deda0d008f198ca4b4eeb304a23d0cfb0c498bfafa8fd0efd51d21",
+    "version_metadata_sha256": "397dcfb146509c374b12c4b3c86d509ac853ef2b2edf486313715fe18b6896d9"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/abdelkrim/skills/sharepoint-by-altf1be",
+    "claim_id": "1b451de096d11ae4d2aa1a6e2c1a4fcf6f9af980f3a3f807a154b8881c5a36d5",
+    "index_entries": [
+      {
+        "index_path": "categories/pdf-and-documents.md",
+        "label": "sharepoint-by-altf1be",
+        "url": "https://clawskills.sh/skills/abdelkrim-sharepoint-by-altf1be"
+      }
+    ],
+    "owner_handle": "abdelkrim",
+    "owner_id": "s172w1sgvkex0h7wnrbwy5dcmd83qhzb",
+    "published_at": 1773103841317,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779954011829,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779954011829,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The script implements SharePoint list, read, upload, search, folder creation, delete, checkout/checkin, edit, and edit-link commands. These are powerful business-document actions, but they fit the stated SharePoint file-operations purpose and are documented in SKILL.md.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands require explicit CLI options, and delete requires --confirm. The README's natural-language examples are broad, so agent users should make SharePoint site, library, path, and operation explicit before invoking write or sharing actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a normal npm flow with no install hooks or obfuscated startup behavior found. package.json uses caret dependency ranges, but a package-lock.json is present and resolves the flagged auth and document parser packages to newer versions than the vulnerable examples reported by the scanner.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The required tenant ID, client ID, certificate path, and site ID are proportionate for Microsoft Graph certificate authentication, but they grant enterprise SharePoint access according to the configured Entra app permissions.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background worker, self-starting persistence, unrelated local indexing, credential exfiltration, destructive local filesystem behavior, or hidden privilege escalation was found. Privilege comes from the configured Microsoft Graph app and certificate.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SDI-1] expected: The write, delete, checkout/checkin, and edit capabilities are high-impact but are listed in the skill command reference and align with SharePoint file operations; keep as a user guidance issue rather than a Review verdict.\n[SDI-2] expected: The organization-scoped edit-link command is permission-affecting and deserves caution, but it is an explicit user-invoked command documented in SKILL.md, with no hidden automatic sharing behavior found.\n[SQP-1] expected: Broad natural-language examples could cause ambiguity in an agent setting, but the artifacts consistently frame the skill as SharePoint access and the runtime commands require concrete arguments.\n[SC1] unexpected: Caret dependency ranges reduce reproducibility and should be tightened, especially for auth and document parsing packages. This is supply-chain hardening guidance, not evidence of malicious or hidden behavior.\n[SC4] unexpected: The scanner's vulnerable-version examples are not supported by the included lockfile for @azure/identity and mammoth, which resolves to newer versions. Users should still install from the lockfile and monitor advisories.",
+          "guidance": "Install only if you want OpenClaw to access the configured SharePoint site. Use a dedicated Entra app with Sites.Selected, grant the minimum site-level permission needed, protect the certificate and optional password, install with the lockfile, and require human review for upload, delete, checkout, checkin, edit, and organization edit-link creation.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed SharePoint integration, but it should be installed only with tightly scoped Microsoft Graph permissions.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779953974308,
+          "issueCount": 14,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: sharepoint-by-altf1be\nVersion: 2.0.0\n\nThe SharePoint skill bundle provides legitimate integration with Microsoft Graph API for document management. It implements several security best practices, including certificate-based authentication, path traversal checks in the 'safePath' helper, file size limits, and a mandatory confirmation flag for delete operations. The code in 'scripts/sharepoint.mjs' is well-structured, lacks obfuscation, and uses standard libraries for parsing Office documents (mammoth, exceljs, jszip, pdf-parse) to provide text content to the AI agent.",
+          "checkedAt": 1779166618623,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "2eead98dd6add955eb8db796dbb164ad0dc8bfc726aa20856e41f3cfaf96e43a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/2eead98dd6add955eb8db796dbb164ad0dc8bfc726aa20856e41f3cfaf96e43a"
+    },
+    "slug": "sharepoint-by-altf1be",
+    "source_type": "clawhub",
+    "version": "2.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

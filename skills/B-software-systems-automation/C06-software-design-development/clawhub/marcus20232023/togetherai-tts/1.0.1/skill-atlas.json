@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C08:token:cd",
+      "category:C10:token:model",
+      "category:C18:token:home",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C08",
+      "C10",
+      "C18"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "3cc504ba6a03b1b6f7013675e320ab17d7819833115e81fe638b9d69c26dd403",
+    "content_hash": "7fb6ca43a98ea283ed9100ee236caae36b6921b3b66df940c72c76c1153e1919",
+    "skill_md_hash": "201c6d67b805b90adfa94a092c091ffe76b8503d625ec785909d375402011835",
+    "version_metadata_sha256": "ece99b62432635c93ab2c779c9cc0f0d540535c50259090b6fceb5609ef564d2"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/marcus20232023/skills/togetherai-tts",
+    "claim_id": "e6927480593f004e62e87ea0efcc93720efb4b9b2ae052a3ee442939b064ed24",
+    "index_entries": [
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "togetherai-tts",
+        "url": "https://clawskills.sh/skills/marcus20232023-togetherai-tts"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "marcus20232023",
+    "owner_id": "s1745j0kz3v8zgyv5pm26z9wf583m0he",
+    "published_at": 1771646605342,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943798944,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943798944,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The code is coherent with the stated TTS purpose: it posts the supplied text to https://api.together.ai/v1/audio/speech and writes the returned base64 audio to a local output file. No unrelated endpoints, hidden commands, credential logging, or destructive behavior were found.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "SKILL.md gives a simple CLI usage pattern and documents the TogetherAI API key and model/format/voice settings. It could more explicitly warn that submitted text leaves the local machine, but the external API dependency is apparent from the stated purpose.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package has no install scripts and only lists axios and dotenv dependencies. Versions use caret ranges and no lockfile is present, so dependency reproducibility is not pinned, but this is not suspicious by itself.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading TOGETHERAI_API_KEY from the environment or .env is expected for a TogetherAI API client, and the key is only used as a Bearer token for the TogetherAI endpoint.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background process, persistence, privilege escalation, broad local indexing, or auth/session store access is shown. The only local mutation is writing the caller-selected output audio file.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The privacy concern is real but purpose-aligned: TTS through TogetherAI necessarily sends the input text to that provider. Documentation should be clearer, but this does not show hidden or unrelated data handling.\n[E1] expected: The outbound request to api.together.ai is the core function of the skill, not an unexpected exfiltration path; no additional destinations were found.\n[suspicious.env_credential_access] expected: The environment credential is the TogetherAI API key used for the documented API call. There is no evidence of credential theft, logging, or transmission to unrelated services.\n[VirusTotal: arbitrary file write] expected: The output path is caller-controlled and could overwrite a file if misused, but saving generated audio to a requested path is normal CLI behavior and is not hidden, automatic, or privilege-escalating.",
+          "guidance": "Install only if you are comfortable sending the text you synthesize to TogetherAI under that service's terms. Use a scoped or low-risk API key if possible, keep .env private, and choose an output filename in a safe working directory so you do not overwrite an important file.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it sends user-provided text to TogetherAI to generate an audio file, with ordinary privacy and file-path cautions.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943759976,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: togetherai-tts\nVersion: 1.0.1\n\nThe skill's primary function is legitimate text-to-speech generation using the TogetherAI API. However, the `index.js` script directly uses `process.argv[3]` as the `outputFile` for `fs.writeFileSync` without any input sanitization. This creates an arbitrary file write vulnerability, allowing a malicious agent or user to specify a path traversal sequence (e.g., `../../../../tmp/malicious.sh`) and write files to arbitrary locations on the system, which could lead to remote code execution or other system compromise. This is a critical vulnerability, classifying the skill as suspicious.",
+          "checkedAt": 1779165831970,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "18bb33a72b8e33da44fdbb0c7ffb41f41bc4380b765e890b20ca3f4b3857f436",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/18bb33a72b8e33da44fdbb0c7ffb41f41bc4380b765e890b20ca3f4b3857f436"
+    },
+    "slug": "togetherai-tts",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

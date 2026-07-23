@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:find",
+      "category:C04:token:data",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C10"
+    ],
+    "stages": [
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "bcbd430145e53910747551c24aa506febfd2dae06bae12ef88dbf63593a4eaad",
+    "content_hash": "c3530b6166c261d5d340ffc4ecda733912d4e4b5ecb521283dfeb5a8a2741206",
+    "precanonical_content_hash": "ff2dc412db2c95b8de45b752b5a8a3d4ce402cec7cc90017398e02e7f882cc53",
+    "skill_md_hash": "3312b3733ae3bbaddb77c71f426dfbbd1dc75dcc655bd33a8faa58fdb88b2a45",
+    "version_metadata_sha256": "a8f7862808e708a04f7c51391a2cc4d6cd63dfb4e56ab89669b020c61243c7fd"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/james-southendsolutions/skills/camino-ev-charger",
+    "claim_id": "934d28c572ffe3d68a5978592559676ceaca47983a2876acfb6dc477996f0172",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "camino-ev-charger",
+        "url": "https://clawskills.sh/skills/james-southendsolutions-camino-ev-charger"
+      },
+      {
+        "index_path": "categories/transportation.md",
+        "label": "camino-ev-charger",
+        "url": "https://clawskills.sh/skills/james-southendsolutions-camino-ev-charger"
+      }
+    ],
+    "owner_handle": "james-southendsolutions",
+    "owner_id": "s17dekpybzcxf10vsx8arm960n86hhnf",
+    "published_at": 1778699230075,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971748791,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971748791,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The script matches the stated purpose: it builds an EV charger query from JSON input and sends it to https://api.getcamino.ai/query using curl and CAMINO_API_KEY. Location/search data leaves the local machine, but that is disclosed and necessary for the feature.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are user-directed examples. The documentation suggests optionally installing the full Camino skill suite, which is broader than this single skill but clearly presented as optional.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No automatic install or post-install execution is shown. Installation is via user-run npx/clawhub commands; dependencies on curl, jq, and CAMINO_API_KEY are disclosed.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The required API key and network call are proportionate to authenticated location-intelligence lookups. The script sends the key only as an X-API-Key header to Camino's API.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background worker, privilege escalation, filesystem scanning, credential harvesting, or local persistence is present. The only persistent setup guidance is user-directed storage of CAMINO_API_KEY in Claude settings.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight suspicious] unexpected: The reported shell-injection claim is not supported by the script as written: QUERY_STRING is expanded inside an already double-quoted curl URL argument, and shell metacharacters inside parameter values are not re-parsed as shell syntax. The script could still improve by validating or URL-encoding lat/lon/radius/limit, but that is not evidence of command execution or malware.\n[SkillSpector clean] expected: SkillSpector reported no issues, which is consistent with the small, disclosed curl/jq wrapper behavior.\n[static scan clean] expected: The platform static scan found no suspicious patterns, and artifact review found no hidden execution, destructive behavior, exfiltration beyond the disclosed API request, or persistence.\n[capability requires-sensitive-credentials] expected: CAMINO_API_KEY is required for Camino API access and is clearly documented.\n[capability can-make-purchases] expected: The documentation mentions x402 paid endpoints for other clients but explicitly says these skills do not use that path; the provided script contains no payment logic.",
+          "guidance": "Install only if you are comfortable sending EV charger searches, coordinates, and related location details to Camino AI. Use a dedicated Camino API key, avoid sharing settings files containing it, and prefer installing only this skill unless you intentionally want the full Camino skill suite.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent EV charger lookup skill that calls Camino AI with user-provided location data and an API key, with no artifact-backed evidence of malware.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971703727,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: camino-ev-charger\nVersion: 2.0.1\n\nThe skill is classified as suspicious due to a shell injection vulnerability in `scripts/ev-charger.sh`. While the script uses `jq` to parse JSON input, it only URI-encodes the `query` parameter, leaving `lat`, `lon`, `radius`, and `limit` unsanitized before they are concatenated into a `curl` command string. An attacker can provide a value containing a double-quote and a command separator (e.g., `\" ; command ; #`) to break out of the shell's quoting and execute arbitrary commands. This appears to be a significant security oversight rather than intentional malware. The script interacts with the domain `api.getcamino.ai`.",
+          "checkedAt": 1779164659071,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "a0e51b9ecd364326edc4e4ca4edc5815fa5d2a8cdbd3d7e84ebbd1b558234ef8",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a0e51b9ecd364326edc4e4ca4edc5815fa5d2a8cdbd3d7e84ebbd1b558234ef8"
+    },
+    "slug": "camino-ev-charger",
+    "source_type": "clawhub",
+    "version": "2.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

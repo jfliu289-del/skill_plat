@@ -1,0 +1,129 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C02:token:language",
+      "category:C05:token:audio",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C05"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "6520310b4963b4545aa6f2f286e98e54f05516e18c9b9daa1edabe54f5603805",
+    "content_hash": "fda8851aa42303a3b738d47fe2b8f9d3a9f1587dd4f433f467bf854096af79f5",
+    "precanonical_content_hash": "be93c4497a48e058542fb233c5817b87dae08c67e455a88c1f5ecb56dae5ebde",
+    "skill_md_hash": "acacbd81f46a04bab476c23f15b2f45a12d376660bd6d25152bef47e1c270718",
+    "version_metadata_sha256": "79a865d05e5b8682c5ca03b2ded3f484cf3e8106a63579169dfa1010c278c639"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/pengling9405/skills/telegram-multilingual-voice-reply",
+    "claim_id": "895cb19601e9ee80f917af8641dc4c15364722d3a4e0558aedacf3db0d6c81f5",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "telegram-multilingual-voice-reply",
+        "url": "https://clawskills.sh/skills/pengling9405-telegram-multilingual-voice-reply"
+      }
+    ],
+    "owner_handle": "pengling9405",
+    "owner_id": "s176phvbgtnam19dxeqxe534an884krc",
+    "published_at": 1771666909514,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779947081840,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779947081840,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The local ASR/TTS scripts and Telegram message sending are directly aligned with the multilingual voice-reply purpose, but users should expect private audio and reply text to be processed locally.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The workflow is scoped to Telegram text or voice replies and documents user overrides for text-only, voice-only, and language choice.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no hidden installer, but the skill depends on local Python, mlx_audio, ffmpeg, and external model IDs that users must obtain and trust separately.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Running local audio-processing commands is proportionate for speech transcription and synthesis; the helper scripts use argument parsing and subprocess argument lists rather than shell execution internally.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background persistence, privilege escalation, credential harvesting, or unrelated account access was found; temporary audio/transcript files may remain in local temp directories, and Telegram sending uses the user's messaging authority.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code_insight shell-injection concern] expected: The skill includes command examples that pass audio paths, language, and reply text into local Python scripts. This is expected for the workflow, and the scripts themselves call subprocess without shell=True; users should still rely on normal command quoting when invoking them.\n[SkillSpector clean] expected: SkillSpector reported no issues, which is consistent with the artifact review.\n[staticScan clean] expected: The static scan reported no suspicious patterns, and artifact review did not find hidden network calls, destructive actions, or persistence.",
+          "guidance": "Install only if you are comfortable letting OpenClaw process Telegram voice notes locally, run mlx_audio and ffmpeg, and send Telegram replies on your behalf. Use a trusted Python environment and periodically clear temp files if voice messages may contain sensitive content.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it transcribes Telegram voice messages locally, generates replies, and can send voice replies with captions.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779947033296,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: telegram-multilingual-voice-reply\nVersion: 0.1.0\n\nThe `SKILL.md` file instructs the AI agent to execute `python3` scripts (`scripts/mlx_asr.py` and `scripts/mlx_tts_voice.py`) with arguments directly derived from user input (e.g., audio file paths, language, generated reply text). This creates a significant shell injection vulnerability if the OpenClaw agent does not rigorously sanitize or escape user-controlled input when constructing and executing these shell commands. While the Python scripts themselves use `subprocess.run` with lists (generally safer), the risk lies in how the agent constructs the initial command string, which could lead to arbitrary code execution on the host system.",
+          "checkedAt": 1779165885651,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "3f03800b3716118f996c0dd75c980838f0f1f8c3128623facf6cee7f28f4b892",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/3f03800b3716118f996c0dd75c980838f0f1f8c3128623facf6cee7f28f4b892"
+    },
+    "slug": "telegram-multilingual-voice-reply",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

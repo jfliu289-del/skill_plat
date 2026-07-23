@@ -1,0 +1,157 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.1417,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:sources",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "category:C10:token:model",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C04",
+      "C06",
+      "C09",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "b1323916f67605525398dc98aed7e2b7f58bfd26b196e42696559e178299778f",
+    "content_hash": "8cdcb7d96a8cc1ee13e44b271de504b2ff390eb61b12f55f1a056fe16523438e",
+    "precanonical_content_hash": "8633a1d5ac1652ab0ea90c6b9154462b8ca7fc022cd564298be2bd61af4570e6",
+    "skill_md_hash": "a22e6f7be494bcce182409160d647a8f5dafac8110e503ae1bfd5d21f8200c0c",
+    "version_metadata_sha256": "35738d56ada10ca08c24a5f1dff1db033146056bf1d5ad7169df8c536fa8b959"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/nantes/skills/mcp-client",
+    "claim_id": "ed6388765067628052d866651e81ab86ebe7a1c152ab2537213fa6170af8d723",
+    "index_entries": [
+      {
+        "index_path": "categories/clawdbot-tools.md",
+        "label": "mcp-client",
+        "url": "https://clawskills.sh/skills/nantes-mcp-client"
+      }
+    ],
+    "owner_handle": "nantes",
+    "owner_id": "s170qwtzgq9bfexvxw8e5ws1ms83g6qn",
+    "published_at": 1771783972794,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779949668953,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779949668953,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill connects to configured MCP servers, lists tools/resources/prompts, calls tools, and reads resources; these are broad capabilities but match the stated MCP-client purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Use is user-directed through CLI/Python parameters and the documentation warns to use trusted MCP servers, though it does not enforce allowlists or confirmations for risky server-side tools.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation declares Python and the requests dependency and uses a simple pip install; this is disclosed, with dependency pinning left to the user environment.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access and optional bearer API keys are proportionate for an MCP client, but users must trust the configured server because the key is sent to that endpoint and server resources may be sensitive.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background persistence, privilege escalation, local credential harvesting, destructive local file operations, or hidden startup behavior was found in the artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The MCP/network permission concern maps to real capability, but the artifacts disclose remote server connections, requests usage, API-key handling, resource reads, and file:// server-side risk; this is guidance-worthy rather than suspicious on its own.\n[SQP-1] expected: The skill is broad because it is a generic MCP client, but operations require user-provided server URLs, tool names, arguments, or resource URIs, and the documentation tells users to inspect tools/resources and trust the server before use.",
+          "guidance": "Install only if you intend to connect an agent to MCP servers. Use trusted HTTPS server URLs, use least-privilege API keys, inspect exposed tools and resources before calling them, and treat server-provided prompts or resources as untrusted unless you control the server.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward MCP client whose remote tool, resource, and API-key behavior is disclosed and aligned with its purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779949627961,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: mcp-client\nVersion: 1.0.3\n\nThe OpenClaw AgentSkills bundle implements a client for the Model Context Protocol (MCP). The code in `mcp_client.py` and the documentation in `SKILL.md` are straightforward, focusing on connecting to a remote MCP server, listing/calling tools, and accessing resources. Both files explicitly warn about the `file://` URI scheme, clarifying that it allows reading local files from the *MCP server* (the remote endpoint), not from the agent's local machine. There is no evidence of malicious intent, data exfiltration from the agent's host, unauthorized execution, persistence mechanisms, or prompt injection attempts against the agent. The skill functions as a legitimate client for a defined protocol.",
+          "checkedAt": 1779166217742,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "6bb791de7c2603f2c431c9b0cd5afa3d2a0dd02ea6feb9d92415f89319611f9f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6bb791de7c2603f2c431c9b0cd5afa3d2a0dd02ea6feb9d92415f89319611f9f"
+    },
+    "slug": "mcp-client",
+    "source_type": "clawhub",
+    "version": "1.0.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

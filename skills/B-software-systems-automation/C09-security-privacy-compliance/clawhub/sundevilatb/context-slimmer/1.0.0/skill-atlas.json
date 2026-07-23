@@ -1,0 +1,124 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C09:token:audit",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1d66437cec39acbd4a434fc06d98c42412a889e1c0ffd19cf6564f4e802f3ee2",
+    "content_hash": "cc388c55210bd0108abbd01bb8d5423e4ec0dd6b8fa8bd048d8ca33bc3c9aae9",
+    "precanonical_content_hash": "723f64a03130f324f493c0ebdc7145176974c5821ad9978c82a6de5420165a48",
+    "skill_md_hash": "de6fa0c0f276a23713b2a21f54542a8965bb9e7fe2695f750a43b83e36235500",
+    "version_metadata_sha256": "82614ab7d7b1750abae8ac1cea3728ce1d0283824def75bed0c1d1d2091dfdae"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sundevilatb/skills/context-slimmer",
+    "claim_id": "65aa512da95b7e29d0a61ead0e743d33c5632f6643332199fcfe2b235de5dc41",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "context-slimmer",
+        "url": "https://clawskills.sh/skills/sundevilatb-context-slimmer"
+      }
+    ],
+    "owner_handle": "sundevilatb",
+    "owner_id": "s17d6h5qgr762wwk98qvwnqh7d884tg8",
+    "published_at": 1770763678377,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968093798,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968093798,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The purpose is coherent: measure and audit always-loaded context files such as AGENTS.md, USER.md, MEMORY.md, SOUL.md, and IDENTITY.md. Those files can be sensitive and behavior-shaping, but that access is directly tied to the stated function.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are limited to running scripts/measure.sh, optionally with --audit. The artifact asks the agent to report recommendations, not to automatically rewrite, delete, upload, or persist changes.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "No installer, dependency setup, package manager hook, or background process is present. The only executable artifact is a disclosed Bash measurement script.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script checks only a fixed list of filenames under the current or supplied workspace path. It does not request credentials, network access, privileged paths, broad filesystem indexing, or environment secret access.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill targets persistent context files and user-applied recommendations could affect future agent behavior, but the artifact itself does not create persistence, elevate privileges, or mutate files automatically.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal/code_insight] unexpected: The RCE claim is not supported by artifact review: workspace-derived paths are quoted in wc and grep calls, and the script does not use eval, unquoted shell execution, or command substitution on user-controlled input. The script has rough argument parsing, but not the claimed shell injection.\n[SQP-1] expected: The trigger language is somewhat broad for a skill that audits behavior-shaping context files, but the skill only measures and recommends changes. This is a user-control consideration, not enough for Review on its own.\n[staticScan] expected: Static scan reported no findings, consistent with direct inspection showing no hidden network calls, destructive commands, credential handling, or automatic file edits.",
+          "guidance": "Install only if you are comfortable with a local Bash script reading your context files and reporting size/audit information. Review recommendations manually before editing those files, because trimming persistent context can change future agent behavior.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a local context-file audit helper; it reads a fixed set of context files and reports size/audit guidance without hidden sharing or automatic edits.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968065504,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: context-slimmer\nVersion: 1.0.0\n\nThe `scripts/measure.sh` file contains a shell injection vulnerability. The `WORKSPACE` variable, which can be supplied as the second argument to the script, is used directly in shell commands (e.g., `wc -c < \"$filepath\"`, `grep`). This allows for arbitrary command execution if an attacker can control the `WORKSPACE` argument, making it a critical Remote Code Execution (RCE) vulnerability. While the skill's stated purpose and other functionalities are benign, this lack of input sanitization makes the skill suspicious.",
+          "checkedAt": 1779162989561,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "74c0cd7eff84f951e7b66b935a5e8027a6cee13db78a679e20355a2e022bdf4e",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/74c0cd7eff84f951e7b66b935a5e8027a6cee13db78a679e20355a2e022bdf4e"
+    },
+    "slug": "context-slimmer",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

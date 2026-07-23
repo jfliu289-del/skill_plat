@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C05:token:audio",
+      "category:C06:token:api",
+      "category:C07:token:quality",
+      "category:C10:token:ai",
+      "category:C10:token:model",
+      "category:C17:token:notes",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05",
+      "C06",
+      "C07",
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "c3b273143452405a9dbdbbd117c1c07a367fa0d14eddfa0636c6c5a9eaeaded6",
+    "content_hash": "1de5232ce901abd0d52d81465f1d0591e486d9ddff9eb6e4c291d2c6c0f4ac1e",
+    "precanonical_content_hash": "53606bf98785600e410f109d653607657bb990045ee681c7369cb4151e1088c2",
+    "skill_md_hash": "2cc8e388fa63d2e18f8cd43be47e3fd1109fed31f54b79c377933319b20ef4eb",
+    "version_metadata_sha256": "0219ed55afc71149562faec945a0966b10121b697300849029a3f229738fdf68"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/franklu0819-lang/skills/zhipu-tts",
+    "claim_id": "08d3d6516f3327ff76835403d808a8123f666414194c7f76a31ef0deedb963a7",
+    "index_entries": [
+      {
+        "index_path": "categories/git-and-github.md",
+        "label": "zhipu-tts",
+        "url": "https://clawskills.sh/skills/franklu0819-lang-zhipu-tts"
+      }
+    ],
+    "owner_handle": "franklu0819-lang",
+    "owner_id": "s178vhkrfj7fyecavdqnte98p583hvqc",
+    "published_at": 1771684745050,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779947059774,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779947059774,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, documentation, metadata, and script behavior align: it converts user-supplied text into audio using Zhipu AI's GLM-TTS endpoint.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Instructions are limited to setup and explicit command-line usage; there are no prompt overrides, hidden role changes, automatic background behavior, or unrelated agent instructions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "No install-time script or persistence mechanism is present. The declared requirements are jq and a user-provided ZHIPU_API_KEY.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script sends the provided text and API key to https://open.bigmodel.cn/api/paas/v4/audio/speech, which is expected for cloud TTS but should be understood as third-party data processing.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The script writes audio to a caller-selected output file and removes that path if the API request fails; this is user-directed but users should avoid pointing it at important existing files.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The privacy disclosure concern is valid as user guidance: the docs identify Zhipu AI and require an API key, but they could more plainly state that input text leaves the local environment.\n[SQP-2] expected: The same concern in SKILL.md does not indicate hidden exfiltration; transmitting the text to Zhipu AI is the core cloud TTS function and is visible in the script's curl request.",
+          "guidance": "Install only if you are comfortable sending the text you synthesize to Zhipu AI. Use a dedicated, revocable API key, avoid submitting secrets or regulated/confidential content unless approved, and choose output filenames carefully to avoid overwriting or deleting existing files.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward Zhipu AI cloud text-to-speech helper, with the main caution that submitted text is sent to a third-party API.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779947037019,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: zhipu-tts\nVersion: 1.0.0\n\nThe OpenClaw skill bundle for Zhipu AI Text-to-Speech is classified as benign. The `scripts/text_to_speech.sh` script correctly handles user-provided input by using `jq --arg` for JSON payload construction, which safely escapes text, and consistently quotes all variables (`\"$VAR\"`) when passed to shell commands like `curl`, `file`, and `ls`. This prevents shell injection vulnerabilities. The `ZHIPU_API_KEY` is securely read from environment variables and sent only to the legitimate Zhipu AI API endpoint, with no evidence of data exfiltration or other malicious activities. The `SKILL.md` and `README.md` files contain only descriptive instructions without any prompt injection attempts.",
+          "checkedAt": 1779165935714,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "e21c0de676ea79d8eb786288cf7dff5d84305b6675613cdfb4df8d577475809c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e21c0de676ea79d8eb786288cf7dff5d84305b6675613cdfb4df8d577475809c"
+    },
+    "slug": "zhipu-tts",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

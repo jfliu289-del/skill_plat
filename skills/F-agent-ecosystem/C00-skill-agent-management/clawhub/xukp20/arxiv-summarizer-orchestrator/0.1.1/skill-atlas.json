@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "paper"
+    ],
+    "audiences": [
+      "researcher"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "science"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:orchestration",
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C02:token:language",
+      "category:C12:token:strategy",
+      "category:C15:token:paper",
+      "cross-tag:academic-research",
+      "cross-tag:agent-management",
+      "cross-tag:planning",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C02",
+      "C12",
+      "C15"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "plan",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "cf7685a5d4e3d206e47d824ac4d01fde2b0885b8968e072aa14d8c87ac502ae0",
+    "content_hash": "5e6129a70a96e5d3f0b99741be225dc9c25809dd5d07cec73dd56dd337836c97",
+    "precanonical_content_hash": "001844aada1fd83b85df4ef69151836e842725485d8c79b59efe3867981e1ae7",
+    "skill_md_hash": "ce31e86e2a1f69396fa2228d666c9a8aadaa2c1a80ad8eae0fcd2d60c1c59c46",
+    "version_metadata_sha256": "02b05d9350d973c8799facaf5d1c2cf8479dd20ebec606828ac2d068c994eef1"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/xukp20/skills/arxiv-summarizer-orchestrator",
+    "claim_id": "fbb9356457519fd0783b81b305acf28de76614a9722067393f6a3a5cac7c2ba3",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "arxiv-summarizer-orchestrator",
+        "url": "https://clawskills.sh/skills/xukp20-arxiv-summarizer-orchestrator"
+      }
+    ],
+    "owner_handle": "xukp20",
+    "owner_id": "s17d0z1j1dfyak54h374wncavs843hep",
+    "published_at": 1771071086590,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779966766412,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779966766412,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose and artifact instructions align: collect arXiv results, download paper artifacts through required sub-skills, write per-paper summaries, and generate a final report.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill directs a full multi-stage workflow with local helper scripts, sub-skill invocation, and optional parallel paper processing; these actions are disclosed and bounded by documented concurrency limits.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact itself contains only instructions and metadata, but it depends on three separately installed sub-skills whose scripts and permissions should be reviewed independently.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network retrieval from arXiv and file writes under a run/output directory are proportionate to the summarization workflow, with no request for credentials or broad local indexing.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill mentions run-local throttle state and optional scheduled execution, but does not install persistence itself or hide background behavior.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The default prompt is broad and starts the full workflow, but that matches an orchestrator skill and is not hidden or automatic by itself; users should provide explicit topic, date range, language, and mode when invoking it.\n[VirusTotal/code_insight] expected: The flagged `--language <LANG>` shell examples are normal placeholder-style script invocations for this workflow; the artifacts do not instruct unsafe shell evaluation or obfuscation, though callers should avoid passing untrusted shell metacharacters as parameter values.\n[static_scan] expected: Static scan reported no suspicious patterns, consistent with the reviewed artifact set containing only markdown/YAML instructions and no executable code.",
+          "guidance": "Install this only if you also trust the three required arXiv sub-skills. Run it in a dedicated output directory, keep the documented parallelism limits, use simple explicit parameter values such as a plain language name, and enable scheduling only when you want recurring automated arXiv collection.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill transparently orchestrates arXiv paper collection, summarization, and reporting, with no evidence of hidden access, credential use, exfiltration, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779966735452,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: arxiv-summarizer-orchestrator\nVersion: 0.1.1\n\nThe skill bundle is designed for a legitimate purpose (arXiv summarization orchestration). However, it repeatedly instructs the AI agent to pass user-controlled parameters (e.g., `--language <LANG>`) directly to Python scripts executed via the shell (e.g., `python3 script.py --language <LANG>`). This pattern, found in `SKILL.md` and `references/workflow-checklist.md`, creates a significant command injection vulnerability if the OpenClaw agent does not rigorously sanitize the `<LANG>` input before constructing the shell command. While there is no evidence of intentional malicious behavior from the skill's author, this high-risk vulnerability makes the skill suspicious.",
+          "checkedAt": 1779163968908,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "6ef39643ac4f79f7af7f68b8d4c85bb2b3f66de1e7bcecc0de662fa180ffe2ae",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6ef39643ac4f79f7af7f68b8d4c85bb2b3f66de1e7bcecc0de662fa180ffe2ae"
+    },
+    "slug": "arxiv-summarizer-orchestrator",
+    "source_type": "clawhub",
+    "version": "0.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

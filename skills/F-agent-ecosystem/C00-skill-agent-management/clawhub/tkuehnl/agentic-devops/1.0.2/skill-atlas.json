@@ -1,0 +1,147 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.2833,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C04:token:analyze",
+      "category:C12:token:management",
+      "category:C13:token:operations",
+      "category:C18:token:health",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C12",
+      "C13",
+      "C18"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "37328870f3d87a128acc4d032926b7ecce13a56697322abf235c63acad895961",
+    "content_hash": "647760e14b785a4a4e607f84e806dad2a4760a01b94e8d3a27050ecfb085e49c",
+    "precanonical_content_hash": "5992efa0ff9cb0c119bc779da56b317eec0a16da93fc0cc1b299dc63626a7b39",
+    "skill_md_hash": "fd57d109ff9f421a386f0c112ffe7e056a8e8b12d07b7e227c174bf8a0f7f10b",
+    "version_metadata_sha256": "2a4d9858aee2d0f1251f7c793ce6fb86896b75f978865831d38f5b0e99cdf7a0"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tkuehnl/skills/agentic-devops",
+    "claim_id": "891e5b75a62e7f891b85e4f85a7b5a7770994a00f2be6de53f0e68137978a594",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "agentic-devops",
+        "url": "https://clawskills.sh/skills/tkuehnl-agentic-devops"
+      },
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "agentic-devops",
+        "url": "https://clawskills.sh/skills/tkuehnl-agentic-devops"
+      }
+    ],
+    "owner_handle": "tkuehnl",
+    "owner_id": "s1796xcga59f855vmh35x909yh84742a",
+    "published_at": 1771717029366,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779935965961,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779935965961,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The advertised purpose is Docker/process/log/health diagnostics, and the implementation performs those same functions without unrelated destructive actions or data exfiltration paths.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill can reveal sensitive local operational data through log reads, process listings, Docker status, localhost port probes, and HTTP response snippets; these are disclosed as core features but should be treated as sensitive on production hosts.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package is an instruction-plus-Python skill with no install-time downloader, dependency installer, persistence hook, or background service; metadata only requires python3.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Host introspection, arbitrary user-supplied log-file reads, Docker CLI use, and outbound GET health checks are proportionate to a DevOps toolkit, though broad and not restricted by allowlists.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No evidence of persistence, privilege escalation, credential harvesting, file mutation, deletion, scheduled tasks, or modification of other skills was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[AST4] expected: The subprocess helper uses shell=True, but reviewed call sites use fixed commands or shell-quoted/stringently typed arguments; this is a hardening concern rather than evidence of arbitrary command execution or malicious intent.\n[LP3] expected: Broad file, process, Docker, and network capabilities match the stated DevOps purpose, but the skill does not provide machine-readable scoping or trust-boundary declarations.\n[SQP-2] expected: README/SKILL.md advertise log inspection, port checks, and HTTP health checks; the missing security warning is a disclosure gap, not hidden behavior.\n[SQP-2] expected: Defaulting to diagnostics when no subcommand is supplied can expose host metadata and common log snippets, but this behavior is consistent with the documented quick diagnostics feature.\n[SQP-2] expected: The health-check command performs user-directed HTTP GET requests and prints a short response snippet; this is expected for endpoint diagnostics but users should avoid internal or sensitive URLs unless authorized.",
+          "guidance": "Install only if you want an agent to perform local DevOps diagnostics. Use it on systems you are authorized to inspect, review target log paths and URLs before running commands, and avoid sharing outputs from production hosts because logs, process lists, Docker metadata, and health-check responses may contain sensitive information.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a powerful but coherent local DevOps diagnostics skill, with expected access to logs, processes, Docker, ports, and user-specified health-check URLs.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779935933278,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 58,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: agentic-devops\nVersion: 1.0.2\n\nThe skill is classified as suspicious due to its extensive use of `subprocess.run(..., shell=True)` for executing various system commands (e.g., `ps`, `ss`, `docker`) and its ability to read arbitrary file paths (`cmd_logs_analyze`, `cmd_logs_tail`, `cmd_logs_frequency`) and make arbitrary network requests (`cmd_health_check`). While `shlex.quote()` is used in some instances to sanitize user-provided inputs for Docker commands, the general `shell=True` primitive and the broad access to file system and network resources present a significant attack surface for potential prompt injection or misuse by a compromised AI agent. There is no clear evidence of intentional malicious behavior (e.g., data exfiltration to external endpoints, persistence mechanisms) by the skill developer, but the inherent capabilities are high-risk.",
+          "checkedAt": 1779165552444,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "37328870f3d87a128acc4d032926b7ecce13a56697322abf235c63acad895961",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/37328870f3d87a128acc4d032926b7ecce13a56697322abf235c63acad895961"
+    },
+    "slug": "agentic-devops",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.2833,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C17",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:find",
+      "category:C02:token:language",
+      "category:C04:token:data",
+      "category:C17:token:knowledge",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C01",
+      "C02",
+      "C04"
+    ],
+    "stages": [
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ee311585f1ee5632458e84d52994a48401434a9cc654c8adb2a7b6ea181fba10",
+    "content_hash": "c18522e5c59b8366a703c09193e82b74f6c8b6da94c2a014dd4edecd491db0b6",
+    "precanonical_content_hash": "cc965a41bb386d3cd4c4860d8007d35e8e55939f6afbe2a727f194886460b88e",
+    "skill_md_hash": "aa0577aea679345f6fcd03a5f176af378dda18066418838ae09586fd9ae167d8",
+    "version_metadata_sha256": "8965477d6835e8b8a5171ee0ef9e50568156aaa8980c779841dfed8439e78196"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/pigfoot/skills/taiwan-calendar",
+    "claim_id": "520fb66a3227bb87aba4c7cbe484c8faf628a5579ad25eab0ca51d883fe436aa",
+    "index_entries": [
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "taiwan-calendar",
+        "url": "https://clawskills.sh/skills/pigfoot-taiwan-calendar"
+      }
+    ],
+    "owner_handle": "pigfoot",
+    "owner_id": "s175x2j7kdjv2xwwjaykqv7r8187az6w",
+    "published_at": 1770804262506,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779970243415,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779970243415,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifact's stated purpose is Taiwan working day and holiday lookup, and the Python code implements that through fixed public calendar data sources, date parsing, and formatted responses.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Most activation guidance is Taiwan-calendar specific, but one example for general current date/time could cause unnecessary use when Taiwan context is not intended.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The files describe normal skill/plugin installation and invoke a local script with fixed subcommands; no hidden install steps, startup hooks, or unrelated package changes are present.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to public calendar APIs and a temporary cache file are proportionate for fresh calendar lookup and are documented in the skill and README.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script writes a one-hour JSON cache in the system temp directory; this is disclosed and limited, with no credential access, background process, privilege escalation, or durable persistence.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill metadata only lists Bash, but the README and skill text disclose internet use, dependencies, data sources, and temp-directory caching; the behavior is purpose-aligned and not hidden.\n[SQP-1] unexpected: The generic current-date/current-time example is broader than the Taiwan calendar purpose and could over-trigger, but the resulting action is limited to public calendar lookup.\n[SQP-1] expected: The catch-all for Taiwan calendar questions is broad but still bounded to the skill's stated domain and does not add sensitive authority.",
+          "guidance": "Install if you want Taiwan-specific holiday and working-day answers. Be aware it runs a Python script, fetches public calendar data from the internet, installs script dependencies through uv as needed, and stores a short-lived cache in the system temp directory.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed Taiwan calendar helper that queries public calendar data and keeps a short local cache.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779970192753,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: taiwan-calendar\nVersion: 0.0.1\n\nThe skill bundle is benign. It provides Taiwan calendar information by querying government open data APIs. The `SKILL.md` correctly defines the `Bash` tool usage to execute the Python script with specific arguments, preventing arbitrary shell command injection from user input. The `scripts/taiwan_calendar.py` fetches data from legitimate government sources (cdn.jsdelivr.net/gh/ruyut/TaiwanCalendar, data.ntpc.gov.tw) and caches it in the system's temporary directory. While the script uses `verify=False` for one API source, which is a minor security vulnerability (MITM risk for that specific API call), it is a common workaround for problematic public APIs and does not indicate malicious intent. There is no evidence of data exfiltration, persistence mechanisms, or prompt injection attempts designed to mislead the agent into performing unauthorized actions.",
+          "checkedAt": 1779163150026,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "b20c162f1eccce7584a6466b431dd677ef8870f797d6e1fb5ca912e13d20dfe2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b20c162f1eccce7584a6466b431dd677ef8870f797d6e1fb5ca912e13d20dfe2"
+    },
+    "slug": "taiwan-calendar",
+    "source_type": "clawhub",
+    "version": "0.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

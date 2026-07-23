@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C02:token:write",
+      "category:C06:token:api",
+      "category:C09:token:secure",
+      "cross-tag:software-development",
+      "cross-tag:writing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C06",
+      "C09"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "c42e75cf2ff972d02128839d0ce2f20537d6c48b2183871e3fdd1ee9ede24eb7",
+    "content_hash": "f7cca9de0cde9b1eaabd75008309499173860a80376c0c531c828023b2cc970b",
+    "precanonical_content_hash": "a6fd55afdb71270b9f83d54e59a07165fc3a930058ca8ab5af8d4b125820df5f",
+    "skill_md_hash": "92a8d14fa7abe6584d6aff2ec7d822c2fe71008f760cae21233555e6f66f478b",
+    "version_metadata_sha256": "c8e641b532e246b13ee4931df1d7fddc2db7698aa3a8861c7e062c54ef95d979"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/eric8810/skills/authy",
+    "claim_id": "c26cd64292157f342147dad12f905659ce3147d54836cd64417e2069c5efbe35",
+    "index_entries": [
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "authy",
+        "url": "https://clawskills.sh/skills/eric8810-authy"
+      }
+    ],
+    "owner_handle": "eric8810",
+    "owner_id": "s17827dcnv7hcnzsh1fn924ctd884dtg",
+    "published_at": 1771463246071,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972753914,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972753914,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is secret injection into subprocesses, and the artifacts consistently describe that capability, including that wrapped commands receive real credentials as environment variables.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions emphasize scoped use, run-only tokens, listing names without values, and not logging or writing secrets; the remaining risk is that `authy run` can wrap arbitrary user commands.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package is text-only and contains no executable scripts, but it depends on an external `authy` binary on PATH that is outside these artifacts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Requiring `AUTHY_TOKEN`, `AUTHY_KEYFILE`, and the keyfile path is proportionate for a secret manager integration, but those credentials are high-impact and should be tightly scoped.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background service, auto-start behavior, persistence mechanism, or storage of secret values is shown; examples create temporary task scripts only as user-directed command wrappers.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight suspicious] expected: The warning is about arbitrary subprocesses and shell-script examples using injected secrets; those are disclosed and central to the skill's purpose, with safety rules limiting scope and secret exposure.\n[SkillSpector clean] expected: The advisory scan found no issues and matches the artifact review: sensitive secret handling exists, but it is stated, scoped, and purpose-aligned.\n[Static scan clean] expected: The static scan reported no findings, and the artifact set contains only markdown instructions and references.",
+          "guidance": "Install only if you trust the `authy` binary on your PATH and intend to let the agent run selected commands with scoped secrets. Use narrow policies, avoid unreviewed scripts or network commands, and do not allow wrapped commands to print, log, or write secret environment variables.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill transparently helps run user-chosen commands with injected secrets, so it is sensitive but coherent and disclosed.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972713978,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: authy\nVersion: 0.3.0\n\nThis skill is suspicious due to its inherent design enabling arbitrary command execution and file manipulation, which creates a significant prompt injection vulnerability for the AI agent. The `SKILL.md` and `references/commands.md` explicitly demonstrate how to create and execute shell scripts (`cat > task.sh ... chmod +x task.sh ... ./task.sh`) that can perform network operations (e.g., `curl`, `psql`). While the skill's stated purpose is legitimate (secret injection), these capabilities, combined with the agent's ability to interpret instructions, provide a direct vector for a malicious prompt to instruct the agent to exfiltrate data or execute arbitrary code, despite the 'Rules' attempting to guide secure usage.",
+          "checkedAt": 1779164890459,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "066abb64fa857eeb4a7ae8529a3f9585be2d0ad972e151e672364f75ff01a624",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/066abb64fa857eeb4a7ae8529a3f9585be2d0ad972e151e672364f75ff01a624"
+    },
+    "slug": "authy",
+    "source_type": "clawhub",
+    "version": "0.3.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

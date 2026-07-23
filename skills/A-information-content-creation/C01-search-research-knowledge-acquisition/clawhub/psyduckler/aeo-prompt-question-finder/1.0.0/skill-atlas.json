@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.525,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C01:token:find",
+      "category:C01:token:research",
+      "category:C01:token:search",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00"
+    ],
+    "stages": [
+      "discover"
+    ],
+    "tasks": [
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "04ad197ab640161083e9e2ee8bbd0acc4f6b00beca6ccf7d3eee1fe132060834",
+    "content_hash": "df6bdc4de44a61881956d01fead7811d9422a96eb1fd5cc3cd55f12ba68a41e0",
+    "precanonical_content_hash": "535855dad4406781b4c73455849b897c6736592042278886ad951b784061f2d4",
+    "skill_md_hash": "904e57bcfedfa7cc37785d38828faf701eeac2f33a2f7ad4a5c10d949e8e2f3a",
+    "version_metadata_sha256": "829a399697ea6251e098443d8f1b85587eba8986ca5b05d9dca61cb24c1abba7"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/psyduckler/skills/aeo-prompt-question-finder",
+    "claim_id": "98af5f525b06458a3724aa7a39c0c98836ca6aaf7672081351c0c59b8820aeb4",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "aeo-prompt-question-finder",
+        "url": "https://clawskills.sh/skills/psyduckler-aeo-prompt-question-finder"
+      },
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "aeo-prompt-question-finder",
+        "url": "https://clawskills.sh/skills/psyduckler-aeo-prompt-question-finder"
+      }
+    ],
+    "owner_handle": "psyduckler",
+    "owner_id": "s17918h35fap1pyt0j2wfakqzd885fpq",
+    "published_at": 1771176861489,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968362451,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968362451,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The core autocomplete behavior and optional DataForSEO volume enrichment are coherent with AEO and keyword research; the privacy-relevant data flow is that topics and generated keywords are sent to external services.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are user-directed examples for running a local script and do not include hidden control flow, prompt overrides, or automatic execution.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The artifact contains a markdown skill file and one visible Python script; there is no installer, dependency bootstrap, or concealed setup behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script reads DataForSEO credentials from environment variables or macOS Keychain only when the user enables --volume, using specific service names documented in SKILL.md.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background workers, file mutation, privilege escalation, broad local indexing, or destructive behavior is shown in the artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: Network access and local command execution are present, but the artifacts show narrow use: Google autocomplete requests and a specific macOS Keychain lookup for optional DataForSEO authentication.\n[TP4] expected: The optional third-party volume lookup is not hidden: SKILL.md documents --volume, DataForSEO, the credential sources, and related location/language options.\n[PE3] expected: Credential access is sensitive but scoped to DataForSEO service entries or matching environment variables and is only reached from the explicit --volume path.\n[VirusTotal code_insight] expected: The VirusTotal concern is based on the same Keychain credential access; artifact review supports treating it as disclosed, optional, and purpose-aligned rather than suspicious by itself.",
+          "guidance": "Install only if you are comfortable sending search topics to Google Autocomplete. Use --volume only when you intentionally want DataForSEO enrichment, and prefer dedicated DataForSEO credentials because that mode reads local credentials and sends keyword lists to DataForSEO.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it queries Google Autocomplete for question ideas, with a clearly documented optional search-volume lookup that uses DataForSEO credentials.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968338186,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 78,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: aeo-prompt-question-finder\nVersion: 1.0.0\n\nThe skill accesses macOS Keychain credentials (`dataforseo-login`, `dataforseo-password`) using `subprocess.check_output` in `scripts/find_questions.py`. While this is for the stated purpose of authenticating with the DataForSEO API (https://api.dataforseo.com), the direct programmatic access to system credential stores is a high-risk capability. This capability, even if for a legitimate purpose, makes the skill suspicious due to the potential for misuse if the agent's permissions are overly broad or if the skill were to be invoked with malicious intent.",
+          "checkedAt": 1779164320641,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "f19b1c3339cf86fd18ef2c34bf1d4b0890fbf2e95cbe2bd5654aa3bd30adf0bf",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/f19b1c3339cf86fd18ef2c34bf1d4b0890fbf2e95cbe2bd5654aa3bd30adf0bf"
+    },
+    "slug": "aeo-prompt-question-finder",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

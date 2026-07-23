@@ -1,0 +1,137 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:data",
+      "category:C10:token:ai",
+      "category:C17:token:notes",
+      "cross-tag:data-analysis",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ecf1b97b9cd3a6850b6c7df417370dd877ad502192cc1919e37af1a8e41ea478",
+    "content_hash": "4d577e620503eb3bc378c4b054f60f9cd826cedc44b913aca75672b0b1f965ce",
+    "precanonical_content_hash": "c3c2bf7d54779a7318d8ee9afeaaba577cc936a4e38b07bfdb9781939e4ea86d",
+    "skill_md_hash": "17032a4e7e8eeb4513c9f0b91ee5fdf9b96bd3940b791a8b7783f0cdb1aa85f0",
+    "version_metadata_sha256": "70d2de51c6966455d7cd525d060c895aef7010d667e38bcb5d328456847e6ea2"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/ruigomeseu/skills/ffcli",
+    "claim_id": "1216a69bca44c3111d26876fa5b50ed40f2bf9d9a2d1f282521a1bf4b47f3a15",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "ffcli",
+        "url": "https://clawskills.sh/skills/ruigomeseu-ffcli"
+      }
+    ],
+    "owner_handle": "ruigomeseu",
+    "owner_id": "s174xn1zzbs9esbjnp3a4ag7m9884jtb",
+    "published_at": 1771255265819,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972998784,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972998784,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented capability is read-oriented access to Fireflies.ai meetings, transcripts, summaries, and action items, which matches the stated purpose but can expose sensitive meeting data.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The commands are scoped to listing and showing Fireflies meeting data, account info, and user-directed export; the trigger wording includes some broad phrases such as transcript and meeting summary, so users should be deliberate when invoking it.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill requires installing the external ffcli binary from a Homebrew tap or npm package, and the artifact explicitly discloses that this is a third-party CLI and recommends source verification.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Requiring FIREFLIES_API_KEY is proportionate for the Fireflies integration, but that key gives the CLI and agent access to whatever meeting data the Fireflies account can read.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Authentication may store the API key locally under ~/.config/ffcli/ or use an environment/OpenClaw config value; no background service, privilege escalation, destructive command, or hidden persistence appears in the skill artifact.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SkillSpector SQP-1] expected: The broad trigger concern is artifact-supported and worth user caution because the skill can access sensitive meeting records, but the behavior is disclosed and aligned with the meeting lookup purpose, so it does not by itself require Review.\n[VirusTotal code_insight] expected: The suspicious telemetry is based on third-party package installation risk; the install sources are disclosed, the skill warns users to verify them, and the artifact does not show deception, exfiltration, destructive behavior, or hidden commands.",
+          "guidance": "Install only if you trust the @ruigomeseu ffcli package and are authorized to let an agent access Fireflies meeting metadata, transcripts, summaries, and action items. Prefer a limited or dedicated API key if available, avoid broad or accidental meeting queries, and rotate the key if local config or OpenClaw settings may have been exposed.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed Fireflies.ai meeting lookup helper, with real but proportionate risks from a third-party CLI, API key use, and sensitive meeting content.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972962012,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ffcli\nVersion: 1.0.1\n\nThe skill bundle instructs the OpenClaw agent to install a third-party CLI tool named `ffcli` via external package managers (Homebrew from `ruigomeseu/tap/ffcli` or npm from `@ruigomeseu/ffcli`). This introduces a significant supply chain vulnerability, as the agent is directed to fetch and execute arbitrary code from external sources. While the `SKILL.md` file explicitly warns the user to verify the source of this third-party tool, the agent itself is still instructed to perform these installations, which constitutes a risky capability without clear malicious intent within the skill bundle itself. There is no direct evidence of malicious prompt injection or harmful commands within the provided files, but the reliance on external, potentially untrusted code makes it suspicious.",
+          "checkedAt": 1779163619457,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "8460285c3898ba842a378fa99519f5a3aaac47a449ad92fb19da875915705fb9",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8460285c3898ba842a378fa99519f5a3aaac47a449ad92fb19da875915705fb9"
+    },
+    "slug": "ffcli",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,153 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document",
+      "website"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C02:token:edit",
+      "category:C05:token:video",
+      "category:C06:token:api",
+      "category:C07:token:test",
+      "category:C19:token:automation",
+      "cross-tag:browser-automation",
+      "cross-tag:design",
+      "cross-tag:software-development",
+      "cross-tag:testing",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05",
+      "C06",
+      "C07",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "build",
+      "design",
+      "test",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "50cd666d139bc1645c030e492e37e6fa713b469e7b2e9083e0b350a88eb15f66",
+    "content_hash": "e090b151e189d0aef62b8c868180ed214f3940e4dbd27f0c227e65000357ec81",
+    "precanonical_content_hash": "5421f1e087b59fb3012d769afc74eda2cf77b526a94d32991a05acdc884f5bd7",
+    "skill_md_hash": "dd7381b81dcce2b5be19e46d2241be81cbd4279a1a77fefdf0e7bfe40473bc7b",
+    "version_metadata_sha256": "abf689b4d99f5ba3cf657980be39937e170407f5362f07a528aacd78e559ccce"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/vinlow/skills/web2labs-studio",
+    "claim_id": "1c0571402a2799c6406d13bddf5de70b2559baa7ffdd30b5214303d15abc9b1c",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "web2labs-studio",
+        "url": "https://clawskills.sh/skills/vinlow-web2labs-studio"
+      }
+    ],
+    "owner_handle": "vinlow",
+    "owner_id": "s179ce87qy1yqpmcypawdtj85s8840bm",
+    "published_at": 1771948573602,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779956758572,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779956758572,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The broad tool surface includes upload/download, thumbnails, analytics, brand settings, reusable assets, referrals, project deletion, and channel watch mode; these are declared in claw.json and described in SKILL.md/README, so they fit the advertised 'full Studio' video workflow rather than appearing hidden.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions include cost checks, rights/ownership reminders, retention notes, API-key handling, and watch-mode management. Watch checks can auto-upload new videos when run or scheduled, so cost-sensitive users should use explicit spend policy and review watchers.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package is a Node MCP server with normal dependencies and no evident install-time persistence, obfuscation, destructive setup step, or unrelated execution path.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network and filesystem permissions are proportionate for uploading videos to Web2Labs, downloading outputs, using yt-dlp for supported URLs, and storing results locally. The implementation strips auth headers for non-Web2Labs URLs and sanitizes downloaded artifact filenames in the exposed download flow.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill stores its API key locally in OpenClaw config with chmod 600 and stores watcher state under the OpenClaw config directory. It does not create its own background daemon, but user-scheduled watcher checks can repeatedly download and upload channel videos, and project/asset deletion tools are available.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] expected: Scope-mismatch concerns were mostly downgraded because the allegedly extra tools, including analytics, brand, assets, delete, referral, and watch, are explicitly listed in the manifest and documented in SKILL.md/README.\n[SDI-2] expected: File upload/download, URL downloading, credential storage, and referral/account actions are real, but they are purpose-aligned for a cloud video workflow and are substantially disclosed; no artifact evidence showed unrelated exfiltration or deceptive behavior.\n[SQP-1] expected: The batch-processing example is broad, but the artifact also instructs the agent to confirm total credit cost before batch jobs, so this is guidance-worthy rather than a policy hold by itself.\n[SQP-2] expected: The scanner's disclosure concerns map to real behaviors: media is uploaded to Web2Labs, webhooks send status to user-provided URLs, API keys are saved locally, and watch mode can automate future uploads. These are disclosed enough for a benign verdict, with user caution.",
+          "guidance": "Install this only if you trust Web2Labs with the videos and metadata you process. Use `WEB2LABS_SPEND_POLICY=explicit` if you want approval before paid actions, avoid watcher/cron automation unless you want recurring processing, review any webhook URL before using it, and treat the saved API key in `~/.openclaw/openclaw.json` as a secret.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill is a disclosed Web2Labs video-editing integration, but it can upload local media, store an API key, delete projects, and run watcher-based automation, so users should enable it deliberately.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779956664742,
+          "issueCount": 30,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: web2labs-studio\nVersion: 1.0.1\n\nThe OpenClaw Studio skill is designed with strong security controls, explicitly addressing common attack vectors. It prevents credential leakage by stripping authentication headers for non-Web2Labs domains (`src/lib/api-client.mjs`), sanitizes remote filenames to prevent path traversal during downloads (`src/tools/download.mjs`), and uses `execFileAsync` for `yt-dlp` execution with carefully constructed arguments to mitigate shell injection risks (`src/lib/downloader.mjs`). API keys are stored locally with restricted permissions (`~/.openclaw/openclaw.json`, `chmod 600`). The `SKILL.md` instructions guide the AI agent in a safe and cost-aware manner, reinforcing guardrails against misuse. There is no evidence of intentional harmful behavior, obfuscation, or unauthorized data exfiltration.",
+          "checkedAt": 1779166817403,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "934ca0b4400532cc39dd25ac7674739bef2979a5c251537e5934082907abb9d0",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/934ca0b4400532cc39dd25ac7674739bef2979a5c251537e5934082907abb9d0"
+    },
+    "slug": "web2labs-studio",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

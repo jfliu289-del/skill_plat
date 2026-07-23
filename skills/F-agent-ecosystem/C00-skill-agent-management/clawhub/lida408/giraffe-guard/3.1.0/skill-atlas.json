@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:code",
+      "category:C09:token:security",
+      "cross-tag:agent-management",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C09"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "109bd9eca4fd36848db4628e549e63d40ad7789da46afe4635e294438ad3ecff",
+    "content_hash": "34f1591d17b2b383b5792aa4ee38272f27512338363b9ac04c92fe98c283005c",
+    "skill_md_hash": "e199de3f9972119a2b235d8cb606a18a75079a8feb6550ceffa70f1b004a5efc",
+    "version_metadata_sha256": "62f84026d2d39dee4f93fae68654a7e3c9a13ded48babf041560624c71ef64cd"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/lida408/skills/giraffe-guard",
+    "claim_id": "e3d968b06fddaae9f9ecb1db85d018975d7ea74ef56d64974862e4677316f3e1",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "giraffe-guard",
+        "url": "https://clawskills.sh/skills/lida408-giraffe-guard"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "lida408",
+    "owner_id": "s17c32ytpcbb5ftwab7j8wfczh884gq2",
+    "published_at": 1771043347518,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974682341,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974682341,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The SKILL.md, README, audit.sh, and ast_analyzer.py consistently implement a supply-chain and malicious-code scanner for OpenClaw skill directories.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The scanner is user-invoked against a supplied directory or repository URL; verbose, JSON, and SARIF reports can include matched lines from scanned files, so outputs may contain sensitive snippets.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden installer, lifecycle hook, or automatic execution path is present. README examples use explicit git clone and bash commands, and pre-install mode clones a user-supplied repository into a temporary directory for scanning.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use of bash, grep, sed, find, file, awk, readlink, perl, optional python3, and optional git clone is proportionate for a local code scanner.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No hidden persistence, privilege escalation, credential/session use, or destructive action was found. The README suggests an optional user-added TOOLS.md policy to require scans before skill activation, which is disclosed and user-directed.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[suspicious.dynamic_code_execution] expected: The static scan hit eval/exec-related text in ast_analyzer.py and audit.sh, but inspection shows those are rules and messages for detecting dynamic code execution in scanned target files, not code that dynamically executes payloads.",
+          "guidance": "Install only from a source you trust, run it only on directories or repositories you intend to scan, and treat generated reports as sensitive because they may include private source lines, secrets, or credential-like strings found in the scanned content.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Giraffe Guard is a disclosed local security scanner, and the risky-looking patterns are detection rules for scanning other code rather than hidden behavior by the skill itself.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974636440,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: giraffe-guard\nVersion: 3.1.0\n\nThis OpenClaw skill bundle, 'Giraffe Guard', is a security scanner designed to detect supply chain attacks and malicious code. Both `SKILL.md` and `README.md` clearly describe its purpose and usage, without any prompt injection attempts or malicious instructions for the AI agent. The core scripts (`scripts/audit.sh` and `scripts/ast_analyzer.py`) implement a wide array of detection rules targeting common malicious patterns (e.g., RCE, data exfiltration, persistence, obfuscation) in *other* code, not performing these actions themselves. The tool explicitly includes a rule to detect prompt injection in `SKILL.md` and uses only standard system utilities and Python's standard library, indicating a well-intentioned security utility.",
+          "checkedAt": 1779163896893,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "fadf48de3e9b782ed9b1211f175438f428f25569532cba2e7074d2568636c320",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/fadf48de3e9b782ed9b1211f175438f428f25569532cba2e7074d2568636c320"
+    },
+    "slug": "giraffe-guard",
+    "source_type": "clawhub",
+    "version": "3.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

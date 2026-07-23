@@ -1,0 +1,127 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C10:token:ai",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "dee84e3d762515bc4ab4a4cb966d1861df0af5346281792367c339352f7fd61f",
+    "content_hash": "258cecfd5e23fb1a5622a76ef936993bfffd9014d2435d2fad449e04925d380f",
+    "precanonical_content_hash": "771515100245d31f67938990033df6d58144d3c6f1069527fd208d7a3f67ee3d",
+    "skill_md_hash": "fc4f2f617b8704fe09e826e78342c422500fafb7b8f5f7a16118c0c1fbea9a8d",
+    "version_metadata_sha256": "af00b26f081bf11a00ab27ec3dd9bcb86492a3031a983af8fa77eac5156895ac"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/globalcaos/skills/subagent-overseer",
+    "claim_id": "620155f7f6fbd2377fcc7cf14ecb63bad4a4a9525eada1be71aa1f85170257f1",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "subagent-overseer",
+        "url": "https://clawskills.sh/skills/globalcaos-subagent-overseer"
+      }
+    ],
+    "owner_handle": "globalcaos",
+    "owner_id": "s17324vfeqe0ptzp84z2z9vttx883zdg",
+    "published_at": 1780764642927,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1780765275857,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1780765275857,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to monitor sub-agent health using OpenClaw session state, gateway process checks, and workspace file-change activity; the script behavior matches that purpose and does not include network calls, credential access, destructive actions, or data exfiltration.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Instructions are operationally scoped to starting the overseer, reading /tmp/overseer/status.json, and interpreting health state. The Quick Start includes --voice, so users may enable spoken local alerts unless they remove that flag.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains documentation, metadata, and one bash script. There is no remote bootstrapper, package install, self-modifying install flow, or automatic execution at install time.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script reads /proc, runs openclaw sessions list, and scans the user-specified workdir for modified files while excluding some common large directories. It records counts and up to five recent basenames, not file contents, but filenames can still reveal sensitive project activity.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The recommended command starts a detached local daemon and writes status/log files under /tmp/overseer. This is disclosed and purpose-aligned, and the process self-exits after no sub-agents are seen for two cycles, but cleanup/stop guidance and per-user runtime-directory guidance are limited.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-2] expected: The workdir scan is real: it recursively counts recently changed files and records recent basenames. This is disclosed as the filesystem-diff mechanism for inferring sub-agent liveness, so it is purpose-aligned, but users should scope --workdir narrowly when filenames are sensitive.\n[SQP-2] expected: The background daemon and /tmp/overseer status files are disclosed in the architecture and Quick Start. The concern is downgraded because persistence is central to the tool and not hidden, though stop and cleanup instructions would improve user control.\n[SQP-2] expected: Voice mode is optional in the script but included in the Quick Start. It can speak agent counts and recent filenames locally; this is not exfiltration, but it deserves a privacy warning before use.",
+          "guidance": "Install only if you want a local background monitor for OpenClaw sub-agents. Use the narrowest practical --workdir, omit --voice in shared or sensitive environments, and periodically check or clean /tmp/overseer if you no longer need the daemon.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed local sub-agent monitor, but users should be aware it runs a background process and can expose workspace activity metadata.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1780765205140,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": null,
+          "checkedAt": 1780764713690,
+          "normalizedStatus": "clean",
+          "source": "engines",
+          "status": "clean",
+          "verdict": null
+        }
+      },
+      "sha256hash": "dee84e3d762515bc4ab4a4cb966d1861df0af5346281792367c339352f7fd61f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/dee84e3d762515bc4ab4a4cb966d1861df0af5346281792367c339352f7fd61f"
+    },
+    "slug": "subagent-overseer",
+    "source_type": "clawhub",
+    "version": "1.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,136 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C01:token:lookup",
+      "category:C06:token:api",
+      "category:C06:token:code",
+      "category:C17:token:notes",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "44a4dbb186f6c017e700d5e839bd370af5b64b2ccd047c65bc21a1e155070442",
+    "content_hash": "a59d7004a609e843803262fd952561725a2e18b0466990651652fc28e923009e",
+    "precanonical_content_hash": "7bf3f0ea1dcf9f99298c06b8a87692b5097eed57b5343dd0469bd04f93dac879",
+    "skill_md_hash": "2f6e6921309377a9f29f6698d5eb0274b22d19121d3eec50c0223e1399208e56",
+    "version_metadata_sha256": "6ff3edc57ac107b2ca15a92cb6fda72d6ff0cc79a0b06d3a1df729dd01d7f497"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/kim-dongchul/skills/opendart-disclosure",
+    "claim_id": "3e113eb45193fa24e3c0cdac76048ddd1d6b3eb434aac93985ee8c8f9cabe62b",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "opendart-disclosure",
+        "url": "https://clawskills.sh/skills/kim-dongchul-opendart-disclosure"
+      }
+    ],
+    "owner_handle": "kim-dongchul",
+    "owner_id": "s17178zf0ndd8xspyz49wwzab1884zs3",
+    "published_at": 1771332279330,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972562489,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972562489,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is fetching Korean corporate disclosures, and the script only performs company lookup and disclosure-list retrieval from documented OpenDART/DART endpoints.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are bounded to resolving a company, fetching recent disclosures, sorting/filtering results, and returning filing metadata and source links.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no package installer or dependency download; the bundled executable script uses Python standard-library modules.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill requires an OpenDART API key and sends it to the official OpenDART API, which is expected for the purpose; the CLI key option is less safe than the documented environment variable option.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The script writes a scoped local cache at ~/.cache/opendart/corpcode.json containing public company-code metadata; it shows no credential persistence, privilege escalation, background execution, or broad local indexing.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: Verified: the skill documents both --api-key and OPENDART_API_KEY. API-key use is necessary for OpenDART access, and the artifacts do not log or store the key, but users should prefer the environment variable to avoid command-history or process-list exposure.\n[staticScan.clean] expected: The static scan reported no findings, matching the artifact review: no subprocess execution, destructive file operations, obfuscation, or unrelated network endpoints were found.\n[VirusTotal.clean] expected: VirusTotal telemetry was clean and consistent with the inspected artifacts, though it was not used as the sole basis for the verdict.",
+          "guidance": "Safe to install if you are comfortable using an OpenDART API key. Prefer setting OPENDART_API_KEY instead of passing the key on the command line, and be aware the tool caches public company-code data under ~/.cache/opendart until refreshed or deleted.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent OpenDART lookup tool that needs an API key and stores a small public company-code cache, with no evidence of hidden or unsafe behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972530726,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 6,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: opendart-disclosure\nVersion: 1.2.0\n\nThe OpenClaw AgentSkills skill bundle is designed to interact with the Korea OpenDART API to fetch corporate disclosures. The `SKILL.md` provides clear, benign instructions for the AI agent, outlining the workflow and command usage without any prompt injection attempts. The `scripts/opendart.py` script uses standard Python libraries for API interaction, JSON/XML parsing, and local caching of corp codes in `~/.cache/opendart/`. All network requests are directed to the official `opendart.fss.or.kr` domain. There is no evidence of data exfiltration to unauthorized endpoints, malicious code execution, persistence mechanisms, or other harmful behaviors. The code is well-structured and adheres to its stated purpose.",
+          "checkedAt": 1779164812135,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "971735d07a4b63957ab802c55f809365c6490a1b6088706e8011a0d473211a35",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/971735d07a4b63957ab802c55f809365c6490a1b6088706e8011a0d473211a35"
+    },
+    "slug": "opendart-disclosure",
+    "source_type": "clawhub",
+    "version": "1.2.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

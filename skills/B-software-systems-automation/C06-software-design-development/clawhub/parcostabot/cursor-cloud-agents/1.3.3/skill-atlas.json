@@ -1,0 +1,168 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "configuration",
+      "document"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.6523,
+    "domains": [
+      "infrastructure",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C00:phrase:agent skill",
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C02:token:write",
+      "category:C06:phrase:write code",
+      "category:C06:token:backend",
+      "category:C06:token:code",
+      "category:C06:token:implementation",
+      "category:C07:token:review",
+      "category:C07:token:testing",
+      "category:C08:token:deploy",
+      "category:C08:token:github",
+      "category:C08:token:repository",
+      "category:C10:token:ai",
+      "category:C10:token:model",
+      "category:C11:token:collaboration",
+      "cross-tag:agent-management",
+      "cross-tag:deployment",
+      "cross-tag:review",
+      "cross-tag:software-development",
+      "cross-tag:testing",
+      "cross-tag:writing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00",
+      "C07",
+      "C08",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "deploy",
+      "manage",
+      "operate",
+      "review",
+      "test",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a0140c75ea85fe146bf176b759cc2157129796215e1cfefb4a728fb45e159b0f",
+    "content_hash": "0c361f865fdf03a93e56cea49c28f4b740aba168fabe5a1861e80dcbefce8412",
+    "precanonical_content_hash": "6b5b5c33c9a4daf9598cd760a3107ab07fbaa712019e62e5dfe0abffde145fb9",
+    "skill_md_hash": "b3227796ab223a9eff8003de90a3cffb42ea7acd2cc9bd43003c1edc4cd389fd",
+    "version_metadata_sha256": "3247bae5b4521544cfc4b92bfbe6726ca8d74984fbe363fd68b7cf2746391fb1"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/parcostabot/skills/cursor-cloud-agents",
+    "claim_id": "70d3957195981b5971bfb5e9f220e91fec0b6b405eb2e33b0423912857728f0d",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "cursor-cloud-agents",
+        "url": "https://clawskills.sh/skills/parcostabot-cursor-cloud-agents"
+      }
+    ],
+    "owner_handle": "parcostabot",
+    "owner_id": "s175fvjc143z012s35ybmaazsh884yc1",
+    "published_at": 1771040542127,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1780085598966,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972881914,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill launches, monitors, follows up with, stops, and deletes Cursor cloud agents for GitHub repositories, including PR-oriented work; this is high impact but matches the advertised API-wrapper purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Operations are user-directed by repository, agent ID, or task ID, and the script validates those identifiers. Deletion is irreversible and documented, but examples lack a confirmation step.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is standard skill installation or manual clone. Optional shell aliases require explicit sourcing or an explicit user command to modify a shell profile; there is no hidden install-time persistence.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Shell, curl, jq, base64, network access to Cursor, and local credential lookup are proportionate for this API wrapper. Credential discovery from project .env and Cursor config is broader than ideal but disclosed and limited to CURSOR_API_KEY.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill writes unencrypted cache and background task metadata under ~/.cache/cursor-api/, including prompts for background tasks and cached API responses; this is disclosed generally and can be cleared, but users should treat it as sensitive local data.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-2] expected: Credential lookup is used to authenticate to Cursor and is disclosed in SKILL.md. The script extracts only CURSOR_API_KEY rather than reading whole secret files, though the project .env fallback can select an unintended key.\n[SQP-2] expected: The delete command and API reference describe permanent agent and conversation deletion, and the runtime requires an explicit delete command with an ID. The lack of confirmation is a usability risk, not evidence of hidden or unrelated behavior.\n[SQP-2] expected: Webhook material appears in reference documentation as an optional API feature using a user-supplied URL; the reviewed runtime script does not automatically configure or send webhooks.\n[SQP-2] expected: Background task metadata persists full prompts, and GET caching may store conversation data locally. This is tied to background monitoring and caching, is generally disclosed as unencrypted cache behavior, and should be handled carefully on shared systems.\n[TM1] expected: The destructive DELETE endpoint is part of agent lifecycle management and is invoked only through an explicit command after ID validation. It warrants caution but does not show misuse by itself.",
+          "guidance": "Install only if you intend to let Cursor cloud agents operate on selected GitHub repositories using your Cursor account. Prefer setting CURSOR_API_KEY explicitly or in a dedicated protected file, restrict env-file permissions, avoid sensitive prompts unless approved for Cursor cloud processing, review generated PRs before merging, confirm agent IDs before deletion, and clear ~/.cache/cursor-api/ on shared machines.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Cursor Cloud Agents wrapper with real account and repository impact, but the sensitive behavior is aligned with its stated purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972809370,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 91,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": null,
+          "checkedAt": 1780085598966,
+          "normalizedStatus": "clean",
+          "source": "engines",
+          "status": "clean",
+          "verdict": null
+        }
+      },
+      "sha256hash": "e60e985ab8f792792f860ed1948ad37e5178928b9f923e65a90ffe36a17bac64",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e60e985ab8f792792f860ed1948ad37e5178928b9f923e65a90ffe36a17bac64"
+    },
+    "slug": "cursor-cloud-agents",
+    "source_type": "clawhub",
+    "version": "1.3.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

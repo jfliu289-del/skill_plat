@@ -1,0 +1,133 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.155,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C10:token:ai",
+      "category:C11:token:project",
+      "category:C12:token:management",
+      "category:C17:token:notes",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10",
+      "C11",
+      "C12",
+      "C17"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "841ca2abf60e8664e4aa34234090aff0d8c37e79ac514c17309fa0a2dbea152f",
+    "content_hash": "74db170d97ed0edd38ec2b4e92de97e9876598e507c07cec08aa0fac35712bef",
+    "skill_md_hash": "722703bb2eff381781119ec51a1d9711bb6daf214d4046017cb85b6047461fde",
+    "version_metadata_sha256": "ef76b5953e47bb80f8d44dbcf78951df0f89be12f4df7641cf053fe136058604"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/imraxy/skills/auto-context-manager",
+    "claim_id": "1bf27192716d87f0191fa8809978836a8247894b5ecc9b867233874c94b93083",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "auto-context-manager",
+        "url": "https://clawskills.sh/skills/imraxy-auto-context-manager"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "imraxy",
+    "owner_id": "s17aar2znzjqff6gtw499k2csd884eev",
+    "published_at": 1771093573666,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967102543,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967102543,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is project context detection and switching, and the code implements local keyword matching, project listing, and project switching around a projects.json file.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Activation guidance is broad and examples encourage using detected context to prioritize skills or memory, so users should avoid generic keywords and confirm ambiguous matches.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The only dependency is an unpinned chromadb lower-bound requirement, but the shipped code does not import or use chromadb; this is a supply-chain hygiene issue rather than evidence of malicious behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The runtime behavior is local file I/O and string matching; there are no API keys, network calls, telemetry, subprocess execution of user input, or credential/session store access in the implementation.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill creates and updates ~/.auto-context/projects.json and a vectordb directory, which is disclosed and proportionate for local context management, though users should know it persists project metadata on disk.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad auto-detection and project-keyword concerns are valid usability and context-misclassification risks, especially with generic default keywords, but they align with the skill's disclosed purpose and do not show hidden behavior or high-impact authority by themselves.\n[SC1] unexpected: The unpinned chromadb dependency is not needed by the current implementation and should be tightened or removed, but it is not enough to override the coherent local-only artifact evidence.",
+          "guidance": "Before installing, review and edit ~/.auto-context/projects.json after first use, replace generic keywords like hello/help/status with project-specific terms, and treat low-confidence detections as suggestions rather than automatic authority to switch context or load unrelated memory. Consider removing or pinning chromadb if you do not need vector matching.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a local keyword-based project context helper with some ambiguity risks, but no evidence of hidden access, exfiltration, destructive behavior, or unrelated authority.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967045541,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 58,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: auto-context-manager\nVersion: 1.1.0\n\nThe skill is designed for local project context management, storing configuration in `~/.auto-context/projects.json`. It performs keyword-based string matching on user input for project detection and does not execute user-controlled data. There are no network calls, external API integrations, or any evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts in `SKILL.md` aimed at subverting the agent. The `requirements.txt` lists `chromadb`, but the current `auto_context_manager.py` does not utilize it, which is a minor inconsistency but not a security risk.",
+          "checkedAt": 1779164067310,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "841ca2abf60e8664e4aa34234090aff0d8c37e79ac514c17309fa0a2dbea152f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/841ca2abf60e8664e4aa34234090aff0d8c37e79ac514c17309fa0a2dbea152f"
+    },
+    "slug": "auto-context-manager",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

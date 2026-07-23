@@ -1,0 +1,159 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.1417,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "category:C12:token:decision",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C09",
+      "C12",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a608717dea23906fab8885453ab888e3ff4bfd07f0836cb60092858d3dad0bf5",
+    "content_hash": "f5ebf5e05027bd1fad09b9b88636646e26108fe60590a5cb9f20d3aa3a3781b0",
+    "precanonical_content_hash": "ba963605d46c571f99d890b053e0e176e0096b65739c3385c2e68a747a13a401",
+    "skill_md_hash": "747dfa92291aace10463fc937519cb2fb54274c4052db07e5eb376918520fed1",
+    "version_metadata_sha256": "778767848de1b4cfb22ea2dd9ab1f28669320d9a20364d008dd561bded44d733"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/authensor/skills/authensor-gateway",
+    "claim_id": "16d2a70181afdd5a03f7c8676f9b5407615b0495ee6b88e949f11a31e8ba0ef7",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "authensor-gateway",
+        "url": "https://clawskills.sh/skills/authensor-authensor-gateway"
+      },
+      {
+        "index_path": "categories/security-and-passwords.md",
+        "label": "authensor-gateway",
+        "url": "https://clawskills.sh/skills/authensor-authensor-gateway"
+      }
+    ],
+    "owner_handle": "authensor",
+    "owner_id": "s1765556qg8bv05ybeb70hhcvh885ymd",
+    "published_at": 1770791806927,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783656481571,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783656481571,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The broad gating behavior matches the stated purpose: classify tool calls, allow low-risk reads, require approval for higher-risk actions, deny dangerous or sensitive actions, and record audit receipts.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill instructs the agent to check every tool call and fail closed if the control plane is unavailable; this is high-impact but clearly disclosed and central to the security-gateway function.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The scanned artifact contains only SKILL.md, declares required environment variables, and includes no bundled executable code, install script, hidden hook, or automatic setup behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "It sends action type, redacted resource metadata, tool name, and the Authensor API key to a configured external control plane; this is privacy-relevant but disclosed and proportionate for policy enforcement.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact discloses remote storage of receipts and policy rules and describes limited demo-tier retention; it shows no hidden local persistence, privilege escalation, or background process.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SC2] expected: SkillSpector flagged that a curl-to-shell example is classified as approval-gated rather than always denied. The artifact presents it as a risky action to be caught by policy, not as a command the skill runs itself; this is a policy-hardening gap to understand, but not evidence of malicious or hidden behavior.\n[VirusTotal] expected: VirusTotal telemetry was clean and described the skill as defensive and instruction-only; this supports, but does not determine, the benign verdict.\n[staticScan] expected: Static metadata reports no suspicious findings, and local inspection found no executable scripts or bundled hook in the scanned artifact.",
+          "guidance": "Install this only if you want Authensor to mediate tool calls through its external control plane. Verify the control-plane URL, use a dedicated Authensor API key, understand that file paths and action metadata may be logged as receipts, and review your policy for high-risk patterns such as download-and-execute commands.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Authensor Gateway is a disclosed, instruction-only security gate that checks tool-call metadata with an external policy service before allowing risky actions.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783656454650,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 32,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: authensor-gateway\nVersion: 0.7.0\n\nThe Authensor Gateway skill is designed to enhance security by acting as a policy gate for OpenClaw tool calls. Its `SKILL.md` provides explicit instructions to the AI agent to classify actions, redact sensitive data (like API keys and credentials) before sending metadata to an external control plane (authensor-control-plane.onrender.com), and enforce a 'fail-closed' policy if the control plane is unreachable. The skill's instructions are entirely defensive, aiming to prevent data exfiltration and malicious execution, and it explicitly states it is 'instruction-only' with no executable code. There is no evidence of malicious intent or harmful behavior.",
+          "checkedAt": 1779161091395,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "2515d7db1c7d9d67086b43f07405b6d7276945e21ba742fde709ec0756313d31",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/2515d7db1c7d9d67086b43f07405b6d7276945e21ba742fde709ec0756313d31"
+    },
+    "slug": "authensor-gateway",
+    "source_type": "clawhub",
+    "version": "0.7.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,132 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C05:token:image",
+      "cross-tag:design",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C05"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4dfb699c87dd9c3278f45e4db00350ae317b185288b0e9c56f189163cab6544f",
+    "content_hash": "40694d500f7937bb3cb84e73fc1a0e78283c2fe0d1e9acd2b770106eafb84294",
+    "precanonical_content_hash": "de02546716d798d3ab88923c96081e0cff16f1fa293ef0393e2a31d814d4183c",
+    "skill_md_hash": "db9a633f4a977b4f5a45818fe49a6e5f00188810c22ee731c7cd59ebb259e5cf",
+    "version_metadata_sha256": "9d0bfc147cec499f89e7e913cf59428b10c4f96be140d09e4d801af938947a37"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/warm-wm/skills/volcengine-image-generate",
+    "claim_id": "fbef72be240f010191cf3b245d8e5469902a63f32b779707fed04a2031444d46",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "volcengine-image-generate",
+        "url": "https://clawskills.sh/skills/warm-wm-volcengine-image-generate"
+      }
+    ],
+    "owner_handle": "warm-wm",
+    "owner_id": "s175yhmvqv4bzg77ggkg1x9khx83gb77",
+    "published_at": 1770689057375,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779964115201,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779964115201,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is text-to-image generation, and the script does that through the Volcengine Ark SDK; the main mismatch is that the skill says it returns an image URL, while the script downloads generated PNGs and prints local file paths.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The runtime instructions are narrow: prepare a prompt and run one Python script. I found no hidden role changes, prompt-injection text, broad local indexing, destructive actions, or unrelated automation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no install manifest, but the script imports volcenginesdkarkruntime, so users may need to install that dependency separately from a trusted source.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Using API-key environment variables is proportionate for an image-generation provider integration. The skill discloses MODEL_IMAGE_API_KEY and ARK_API_KEY, though its stated VOLCENGINE_ACCESS_KEY/VOLCENGINE_SECRET_KEY fallback is not implemented in the script.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no background persistence or privilege escalation. The script creates the output directory if needed and writes generated image files to the current directory by default or IMAGE_DOWNLOAD_DIR if set.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The concern is valid as a documentation gap: prompts are sent to an external Volcengine/Ark service, which is expected for this skill but should be clearer to users.\n[staticScan] expected: Static scan reported clean, and local review found only purpose-aligned SDK use, environment-variable credentials, and generated image downloads.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with artifact review; it was not used as the sole basis for the verdict.",
+          "guidance": "Install only if you are comfortable sending prompts to Volcengine/Ark and using your API quota. Do not include secrets or confidential data in prompts, set only the intended API key environment variables, install the SDK from a trusted source, and run the script from a directory where saving generated PNG files is acceptable.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward Volcengine image generator, with minor documentation gaps about remote prompt processing and local downloads.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779964079607,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: volcengine-image-generate\nVersion: 1.0.0\n\nThis skill is designed to generate images using the Volcengine API. The `SKILL.md` provides clear instructions and describes the use of environment variables (`MODEL_IMAGE_API_KEY`, `ARK_API_KEY`) for authentication, which is a standard practice. The `scripts/image_generate.py` script implements this functionality, reading API keys from environment variables, making API calls to Volcengine, and downloading the generated images to a local directory. There is no evidence of prompt injection against the agent, malicious execution, data exfiltration beyond the intended API interaction, or persistence mechanisms. All observed behaviors are aligned with the stated purpose of image generation.",
+          "checkedAt": 1779162638565,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "f884ece8446aa875f23f379579ed3691dc49a2c8d90304e0b8a926aaa176d042",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/f884ece8446aa875f23f379579ed3691dc49a2c8d90304e0b8a926aaa176d042"
+    },
+    "slug": "volcengine-image-generate",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

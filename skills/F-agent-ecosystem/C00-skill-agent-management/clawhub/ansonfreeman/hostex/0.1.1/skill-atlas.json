@@ -1,0 +1,148 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C02:token:write",
+      "category:C06:token:api",
+      "category:C13:token:operations",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:review",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C06",
+      "C13",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "review",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "6788fdf2450fb9ca18ab8cc5f864efbcf1489b0ef1036e25057a3245f4993926",
+    "content_hash": "8e84e225f42691c207b5a01ee8ab429b6600f7b97523f776067e3cd9f05017ee",
+    "precanonical_content_hash": "314775c129775dc75352af49b763b8370deb471a791ef47a2d6edb90093d64a0",
+    "skill_md_hash": "a8da97bce348aaf60374c21b78280dbb5d37336f33c9616e947aa3213fd2b1e4",
+    "version_metadata_sha256": "7bb374ef25294d0a8e5dcc23026dcd8ec427372c030b6118b4af344f6283b4b5"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/ansonfreeman/skills/hostex",
+    "claim_id": "1bdd74a17cab5a0e7bd2219c6aa2b48f0e76a1d0cbaaf1e205e9d7d40ec728f6",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "hostex",
+        "url": "https://clawskills.sh/skills/ansonfreeman-hostex"
+      }
+    ],
+    "owner_handle": "ansonfreeman",
+    "owner_id": "s179j0gyd19sz6d3xyzt0pk4zx83hy6y",
+    "published_at": 1770107375732,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783655866291,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783655866291,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill’s Hostex read and management capabilities match its stated purpose, including reservations, messages, availability, prices, and bookings; those are sensitive business and guest-data operations but are not hidden or unrelated.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "SKILL.md recommends a read-only PAT and requires explicit confirmation for writes, and the write script enforces HOSTEX_ALLOW_WRITES plus --confirm; read commands can still print raw reservation and conversation JSON containing PII or lock/access details.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No install-time execution, package installer, obfuscated bootstrapper, or background service was found; the OpenAPI sync script only fetches Hostex’s public OpenAPI JSON when manually run.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "HOSTEX_ACCESS_TOKEN is proportionate for a Hostex API integration and tokens are redacted in error objects; HOSTEX_BASE_URL is an advanced override that could send authenticated requests to another endpoint if misconfigured.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, privilege escalation, broad filesystem indexing, local credential scraping, or self-starting behavior was found; account authority is bounded by the Hostex token the user supplies.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SDI-1] expected: The OAuth token and revocation endpoints are present in the cached OpenAPI reference, but the helper scripts are PAT-based and do not expose OAuth flows directly; this is a credential-handling caution, not evidence of deception or exfiltration.\n[SQP-2] expected: Reservation responses can include guest contact details, ID fields, lock codes, check-in data, and financial details; this is expected for a reservation-management integration but should be handled with minimization.\n[SQP-2] expected: Conversation endpoints can expose guest contact details and message bodies; this fits the guest-messaging purpose, though message content should be treated as private and potentially untrusted.\n[SQP-2] expected: OAuth client secrets and token values in the OpenAPI reference are sensitive, but there is no runtime path that automatically collects or logs them; users should avoid putting those secrets into chats or logs.\n[suspicious.env_credential_access] expected: The static finding reflects HOSTEX_ACCESS_TOKEN being read from the environment and sent as the documented Hostex authentication header, which is expected for this API client.",
+          "guidance": "Install only if you intend to let an agent access Hostex account data. Use a read-only or least-privilege Hostex token where possible, keep HOSTEX_ALLOW_WRITES unset except for a specific approved change, review dry-run/planned write output before confirming, avoid broad reservation or conversation retrieval unless needed, and do not set HOSTEX_BASE_URL unless it points to a trusted Hostex endpoint.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent Hostex API helper, but it can expose guest data and perform account changes if the user enables writes.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783655816179,
+          "issueCount": 4,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 18,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: hostex\nVersion: 0.1.1\n\nThe skill bundle is designed for legitimate interaction with the Hostex API, providing both read and guarded write operations. Key security indicators include explicit 'Operational guardrails' in SKILL.md instructing the AI agent to summarize changes and require user confirmation for write operations, and the `scripts/hostex-write.mjs` code enforces these by checking `HOSTEX_ALLOW_WRITES=true` and a `--confirm` flag. The `scripts/hostex-client.mjs` file also includes `redactSecret` for token handling in logs. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or obfuscation. The `openapi-sync.mjs` script fetches the OpenAPI spec from a legitimate Hostex domain (hostex.io) for local caching.",
+          "checkedAt": 1779161048837,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "acce7c4de91ccbfb736a99a4aced9c4805331cc9a13dccd194c0013847237f7b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/acce7c4de91ccbfb736a99a4aced9c4805331cc9a13dccd194c0013847237f7b"
+    },
+    "slug": "hostex",
+    "source_type": "clawhub",
+    "version": "0.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

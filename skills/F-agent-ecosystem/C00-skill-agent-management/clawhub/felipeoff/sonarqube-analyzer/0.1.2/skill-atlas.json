@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:analyze",
+      "category:C07:token:quality",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C07"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "abd1775e02c0688009ff1de7c57034f0f20f8cc92e7e7882efd2515a72588d24",
+    "content_hash": "fa9bc5c35c610b1bb3da40406458640b15238d378536f1a00d8b5beff451e9e9",
+    "skill_md_hash": "f7b4e6851b1b0c5f51d0ba2597f98d65e5fe7cdfd61b6d077d8a65b8de9c4d12",
+    "version_metadata_sha256": "97fa3ed06b6a1176bb6644f230de4ff5089bb28d2936c37494626e08be24f033"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/felipeoff/skills/sonarqube-analyzer",
+    "claim_id": "50de1049ccd69da80c2875a158439fbb849b22079c33657e8bc7cd7c481a4996",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "sonarqube-analyzer",
+        "url": "https://clawskills.sh/skills/felipeoff-sonarqube-analyzer"
+      },
+      {
+        "index_path": "categories/self-hosted-and-automation.md",
+        "label": "sonarqube-analyzer",
+        "url": "https://clawskills.sh/skills/felipeoff-sonarqube-analyzer"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "felipeoff",
+    "owner_id": "s17409fga9b7766vtedbmnwm0984d8v8",
+    "published_at": 1770735817367,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783657403596,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783657403596,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documentation, manifest, and code consistently support fetching SonarQube issues, checking Quality Gate status, classifying issues, and generating reports.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The autoFix and --suggest-fixes wording implies possible code modification, but inspected runtime code only labels issues as auto-fixable and prints suggestions; no file-write or fix-application path was found.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is user-directed through npm, npx, git clone, or OpenClaw plugin configuration; package.json has no install lifecycle scripts and no runtime dependencies.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Reading SONAR_HOST_URL and SONAR_TOKEN and sending requests to the configured SonarQube API is expected for this purpose, but examples using SONAR_TOKEN=admin are weak credential guidance.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background worker, persistence mechanism, credential storage, shell execution, broad local indexing, destructive action, or repository mutation was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The autoFix concern is only partly supported: the docs and manifest use write-suggestive wording, but the implementation does not modify files in this version.\n[SQP-2] expected: The SONAR_TOKEN=admin example is poor security guidance, but credential configuration is expected for a SonarQube integration and the code does not expose tokens beyond authenticating to the configured server.\n[SQP-1] expected: The tool descriptions are broad, but the tools require a project key and perform expected SonarQube read/report operations rather than unrelated actions.\n[SQP-2] expected: The manifest's autoFix parameter is under-explained, but source review found no automatic code modification or silent repository changes.\n[suspicious.env_credential_access] expected: Environment credential access plus network use is expected because the skill authenticates to a user-configured SonarQube server.\n[suspicious.install_untrusted_source] expected: The flagged 127.0.0.1 URL is the default SonarQube server configuration, not an install source or hidden download endpoint.",
+          "guidance": "Install only if you intend to connect an agent or CLI to your SonarQube instance. Use a real least-privilege SonarQube token from environment or secret storage, do not commit tokens, and review any future version carefully if it adds real auto-fix behavior that writes to source files.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent SonarQube analysis integration with weak credential guidance and confusing auto-fix wording, but no evidence of hidden writes, persistence, exfiltration, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783657352309,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 23,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Package: SonarQube Analyzer (mcp)\nVersion: 1.0.0\nDescription: Analyze SonarQube issues and suggest intelligent solutions for code quality improvement\n\nThe SonarQube Analyzer package provides a CLI tool and OpenClaw plugin for interacting with a SonarQube server. It fetches code quality issues, analyzes them based on predefined rules, suggests solutions (categorizing them as auto-fixable or manual), and generates reports in JSON, Markdown, or CLI summary formats. It also supports checking Quality Gate status. The package uses environment variables (`SONAR_HOST_URL`, `SONAR_TOKEN`) for configuration, which is a standard practice for sensitive credentials. The code logic is straightforward, primarily involving HTTP requests to a user-configured SonarQube instance, data processing, and string generation for reports. There are no external runtime dependencies beyond Node.js built-in modules (like `fetch` in Node.js 18+). The only minor observation is the default `SONAR_TOKEN` value of 'admin' in `src/api.js` if the environment variable is not set, which is a weak default but is a configuration concern rather than a code vulnerability, and is mitigated by the expectation that users will provide a proper token for production use. The package's functionality aligns entirely with its stated purpose, and no malicious or suspicious code patterns were identified.",
+          "checkedAt": 1779162001550,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "dc05b6db8785bf44f66cef32c646fafb987d0fb4066b0badde06a4dd6575e3b4",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/dc05b6db8785bf44f66cef32c646fafb987d0fb4066b0badde06a4dd6575e3b4"
+    },
+    "slug": "sonarqube-analyzer",
+    "source_type": "clawhub",
+    "version": "0.1.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

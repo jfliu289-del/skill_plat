@@ -1,0 +1,154 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C12",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C12:token:market",
+      "category:C12:token:strategy",
+      "category:C13:token:operations",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:planning",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C04",
+      "C06",
+      "C13",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "plan"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "06fa4d44315213c556b2750f49db223e9a505cde0dd3ee5be62b2e45edb9c6fb",
+    "content_hash": "1a172e02eeb151888af0d5867c1f62a7dee613d34e7dcfd0aecb05930ce34480",
+    "precanonical_content_hash": "fb3f735bcf2d20286c00d657b74105c93c5e5726248390ce458e5c6bcb028ad1",
+    "skill_md_hash": "8c12b87fdb0f3edbdaae1a9affba69714159734a64ad0541a88f698e0193b400",
+    "version_metadata_sha256": "d8219406f9490fed7aee3739d07facf7cab3ecc6e28e9867cfab388a6e541cb0"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/htranbee/skills/beetrade",
+    "claim_id": "6d7c1c52acf3011fa3ecea8e6ba86eca4e35aec98d1421a04763836b52c7d5a0",
+    "index_entries": [
+      {
+        "index_path": "categories/productivity-and-tasks.md",
+        "label": "beetrade",
+        "url": "https://clawskills.sh/skills/htranbee-beetrade"
+      }
+    ],
+    "owner_handle": "htranbee",
+    "owner_id": "s17azfna5kqrbv4bg8tryjt3pn8857vz",
+    "published_at": 1772378318292,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779958421827,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779958421827,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill purpose matches the documented beecli capabilities: authentication, market data, portfolios, bots, strategies, alerts, accounts, and live or paper trading. Live trading, deletes, and account credential updates are high-impact, but they are expected for this trading CLI purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "SKILL.md limits the agent to beecli operations, requires read-only discovery first, previews exact commands, prefers paper/backtest over live, and requires explicit confirmation before live trading, deletes, credential updates, order placement, or schedule changes.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The reviewed bundle contains only Markdown instructions and references, but installation depends on the external npm package @beelabs/beetrade-cli to provide the beecli binary.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Use of Beetrade's production API and beecli authentication state is proportionate to the stated purpose, and the skill explicitly disallows custom API endpoints, unrelated shell commands, and external services beyond the default Beetrade API.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "beecli stores access and refresh tokens under ~/.beecli/config.json, which is sensitive, but the skill repeatedly prohibits reading, copying, displaying, redirecting, or exposing files under ~/.beecli/ and requires redaction of credential-like fields.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The command reference lists live trading, delete, stop, schedule, and account-update commands. This is high-impact authority, but it is purpose-aligned and mitigated by the main SKILL.md confirmation, preview, safer-default, and scope-boundary rules.\n[SQP-2] expected: The reference documents token storage and includes a password-on-command-line login example. That is a credential-handling weakness to avoid, but the runtime instructions direct interactive login first and prohibit exposing credentials or reading ~/.beecli/ files.",
+          "guidance": "Install only if you trust Beetrade and the @beelabs/beetrade-cli npm package. Use status, list, paper, and backtest commands before approving live trading or account changes. Do not put passwords in shell commands, and do not share or expose files under ~/.beecli/.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Beetrade CLI helper with strong safeguards, but it can still affect real trading accounts if the user approves those actions.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779958387846,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: beetrade\nVersion: 0.1.4\n\nThe skill bundle is designed for safe interaction with the Beetrade CLI. The `SKILL.md` file contains exceptionally strong and explicit security rules for the AI agent, including robust prompt injection resistance, strict prohibitions against reading/exfiltrating sensitive files (`~/.beecli/config.json`), redacting credentials from output, preventing piping output to external URLs, and requiring explicit user confirmation for all high-risk actions (e.g., live trading, deletions, credential updates). These measures demonstrate a clear intent to prevent malicious behavior and secure the agent's operations, classifying it as benign despite the inherent power of a trading CLI.",
+          "checkedAt": 1779167031677,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "556337bf839ae05bb3406ff294e05eece5fda2ac787eac786655453554b27d4a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/556337bf839ae05bb3406ff294e05eece5fda2ac787eac786655453554b27d4a"
+    },
+    "slug": "beetrade",
+    "source_type": "clawhub",
+    "version": "0.1.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

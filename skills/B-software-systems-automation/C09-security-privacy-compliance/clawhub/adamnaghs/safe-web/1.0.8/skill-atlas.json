@@ -1,0 +1,159 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "website"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2389,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C01:token:search",
+      "category:C08:token:cd",
+      "category:C09:token:secure",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C10:token:model",
+      "category:C18:token:home",
+      "category:C19:token:automation",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C01",
+      "C08",
+      "C10",
+      "C18",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "build",
+      "manage",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "1f5d78dfb7ed9badef46a3c5fb149e830f360f32076fec68c0270295034db6bb",
+    "content_hash": "5a7a6d4087dd9bd5494c644f028c51eb385589ad1ed0c2e99ad2292721a2e0b5",
+    "skill_md_hash": "5482831bda532f74238561812eef81dd03a7d5a4e876f4af092a1d1793074b60",
+    "version_metadata_sha256": "9d2db0aa92da82b11c4f7f0fc95d99da8d581eb325ba0c5e8922b8520141e991"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/adamnaghs/skills/safe-web",
+    "claim_id": "997eedea4d56d7054b58983d7b82c5b47b7198d85cc9d215c06db76d2dd08352",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "safe-web",
+        "url": "https://clawskills.sh/skills/adamnaghs-safe-web"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "adamnaghs",
+    "owner_id": "s171pakk9stg0nd05bpss3yrqs884c0c",
+    "published_at": 1770824097491,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968938620,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968938620,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to fetch or search web content, scan it with PromptGuard, and block risky content; the script implements that with requests, BeautifulSoup text extraction, PromptGuard analysis, severity thresholds, and optional JSON/file output.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The README recommends disabling native OpenClaw web tools so browsing goes through Safe-Web. This changes agent browsing behavior, but it is disclosed and aligned with the security purpose.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The manifest installs normal Python dependencies and requires prompt-guard. Documentation suggests pip --break-system-packages and an optional sudo symlink into /usr/local/bin, which is user-directed but broader than a user-local install.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access, arbitrary user-supplied URL fetching, and optional BRAVE_API_KEY use are proportionate for a web fetch/search tool. Brave searches send the query and API token to Brave when configured.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The executable does not create background services, scheduled jobs, or autonomous persistence. Persistence or privilege changes are limited to documented user setup choices such as a system-wide symlink or disabling native web tools.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The sudo symlink recommendation is real and should be documented more carefully, but it is an optional, disclosed install convenience rather than hidden or automatic privileged behavior.\n[suspicious.prompt_injection_instructions] expected: The flagged phrases appear as examples of prompt-injection attacks the skill is meant to detect, not as instructions for the agent to follow.\n[VirusTotal code_insight] expected: VirusTotal telemetry was clean and consistent with artifact review, but it was treated only as supporting signal.",
+          "guidance": "Before installing, review and trust the PromptGuard dependency and this script, prefer a virtual environment or user-local bin path where possible, and only use the sudo symlink or disable native web tools if you intentionally want Safe-Web to affect browsing system-wide.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Safe-Web is a disclosed web-fetch/search safety wrapper with no artifact-backed evidence of hidden data theft, destructive behavior, or automatic persistence.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968912782,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: safe-web\nVersion: 1.0.8\n\nThis skill is designed to enhance the security of an AI agent by providing a 'safe' web fetching and searching mechanism that scans content for prompt injection attacks using PromptGuard. The code (`scripts/safe-web.py`) correctly implements its stated purpose, including content sanitization (removing scripts/styles) and local scanning. It accesses the Brave Search API using an environment variable, which is standard, and can write fetched content to a user-specified file path, a common CLI feature. The documentation (`SKILL.md`, `README.md`) consistently promotes security, even recommending disabling native OpenClaw web tools to force the use of this secure alternative. There is no evidence of malicious intent such as data exfiltration, unauthorized command execution, persistence, or prompt injection against the agent itself; instead, the skill actively defends against such attacks.",
+          "checkedAt": 1779163105779,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "cf85f9fd9b1272a4a62c37331de21b420042c570db87d3c01b62ef0e6fa1ad39",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/cf85f9fd9b1272a4a62c37331de21b420042c570db87d3c01b62ef0e6fa1ad39"
+    },
+    "slug": "safe-web",
+    "source_type": "clawhub",
+    "version": "1.0.8"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

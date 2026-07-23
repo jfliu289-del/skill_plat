@@ -1,0 +1,161 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.23,
+    "domains": [
+      "creative",
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C03:token:presentation",
+      "category:C04:token:analyze",
+      "category:C04:token:data",
+      "category:C05:token:design",
+      "category:C06:token:api",
+      "category:C07:token:quality",
+      "category:C09:token:audit",
+      "category:C09:token:compliance",
+      "category:C12:token:management",
+      "category:C13:token:operations",
+      "cross-tag:data-analysis",
+      "cross-tag:design",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C03",
+      "C05",
+      "C06",
+      "C07",
+      "C09",
+      "C12",
+      "C13"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "design",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4bbc383968e67cb94f824590cb252ffd73a757321a06f5a0e54599a7cbce85dd",
+    "content_hash": "109fde62810a09a5ca418059415a70db7245cd74dce4a90dd1105a5b224a86ab",
+    "precanonical_content_hash": "2193509c65a7ebae87debf0daaecc76abe87593375b19eac56af0a2d78e0f8cd",
+    "skill_md_hash": "c35f45d9ff33561d1cb6bede85ba73b1a825639cbbe3d835d33d12660e42cc5a",
+    "version_metadata_sha256": "42134f1b31a0a2fc784979ee801cc2cbe243dc850e978003d60228f7a8aac5c9"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/maddiedreese/skills/figma",
+    "claim_id": "c0a80c8996b4937464bbe66d1246f731e4868af3cee528b685114f5a95858988",
+    "index_entries": [
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "figma",
+        "url": "https://clawskills.sh/skills/maddiedreese-figma"
+      }
+    ],
+    "owner_handle": "maddiedreese",
+    "owner_id": "s17e5sz567edmz7gm243172ff188594a",
+    "published_at": 1769380900543,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783649687554,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783649687554,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts are aligned with Figma design analysis, asset export, accessibility checking, and style auditing. Runtime API calls use read-oriented Figma REST endpoints and Figma/CDN downloads; no Figma file modification, destructive action, hidden exfiltration, or obfuscated behavior was found.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The main instructions clearly describe export and reporting workflows and state that Figma files are not modified. A reference document includes Plugin API examples that can create or modify Figma objects, but those examples are not implemented by the scripts and are offset by the skill's stated read-only Figma-file scope.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no installer, background service, or persistence mechanism. requirements.txt uses loose lower-bound dependencies, which is supply-chain hygiene risk but not evidence of malicious behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "A Figma access token is required and can expose whatever private Figma files, teams, components, styles, and user metadata the token can access. This is proportionate for a Figma integration, but users should treat the token and resulting exports as sensitive.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill writes exported assets, manifests, JSON/CSS/SCSS/JS token files, and HTML reports to caller-selected output paths. That is expected for export/report generation, though paths are not strongly constrained and existing files may be overwritten.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Network access, environment-token use, and local output files are coherent with a Figma API export/reporting skill; the metadata could disclose permissions more explicitly, but this is not hidden behavior.\n[SDI-1] expected: Local writes are tied to documented export and report workflows. The 'read-only' claim is best interpreted as not modifying Figma files, not as no local filesystem side effects.\n[SDI-2] expected: Team, project, component, style, and user lookup methods broaden the API surface, but they are read-only Figma metadata operations consistent with design-system analysis when the user's token authorizes them.\n[SQP-2] expected: The token and output-path concerns are real operational cautions: prefer environment or secret-manager storage, avoid committing .env files, and choose output paths deliberately.\n[PE3] expected: The --token CLI option can expose credentials through shell history or process listings, but it is an explicit user-supplied option rather than credential harvesting. Environment-variable use is the safer path.\n[SC1] expected: Unpinned dependencies are a reproducibility concern, not a purpose mismatch or malicious indicator.\n[SC4] expected: The dependency lower bounds may allow vulnerable versions depending on resolution, but no bundled vulnerable package or exploit behavior is present in the artifact.",
+          "guidance": "Install only if you are comfortable granting a Figma token to read the files and team resources it can access. Keep the token out of source control and logs, prefer environment or secret-manager injection over --token, and direct exports/reports to a dedicated folder to avoid overwriting local files.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it advertises: reads Figma data, exports assets, and writes user-requested reports, with ordinary cautions around tokens and output files.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783649647811,
+          "issueCount": 15,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: figma\nVersion: 2.1.0\n\nThe OpenClaw AgentSkills skill bundle for Figma is benign. All Python scripts (`figma_client.py`, `export_manager.py`, `accessibility_checker.py`, `style_auditor.py`) are focused on interacting with the Figma API for read-only operations like data extraction, asset export, and design auditing, as explicitly stated in `SKILL.md`. Authentication is handled securely via `FIGMA_ACCESS_TOKEN` environment variable. Network calls are exclusively directed to `api.figma.com` or Figma's CDN, and file system operations are limited to writing exported assets and reports to user-specified directories, with filename sanitization in place. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, obfuscation, or prompt injection attempts in the `SKILL.md` or any other files.",
+          "checkedAt": 1779159972044,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "7622d5a56b4987d278d76fc3663fbeb6b776417cdbbe1d531423472a8bfa5232",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/7622d5a56b4987d278d76fc3663fbeb6b776417cdbbe1d531423472a8bfa5232"
+    },
+    "slug": "figma",
+    "source_type": "clawhub",
+    "version": "2.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

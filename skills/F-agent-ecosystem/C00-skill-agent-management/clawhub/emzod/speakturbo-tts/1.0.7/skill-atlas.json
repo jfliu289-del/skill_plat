@@ -1,0 +1,146 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C05:token:audio",
+      "category:C09:token:security",
+      "category:C12:token:management",
+      "cross-tag:agent-management",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05",
+      "C09",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "c553a84edcb1487931dc3219dbdc7a5065a3760f8bad2fe49a1c783c95d8ffd8",
+    "content_hash": "4a3faefc0eb0af51fb437618325417596852035c22e3eda3618364e20345dff9",
+    "precanonical_content_hash": "5070a01f97fea07e2f2e8f20befcaaa5aa635b9e7d09b9855fe159123875e97f",
+    "skill_md_hash": "68b384e376e1c67a308bdb9ba5827bb15c01189a1a9db28fa1ba4e6b4c7cfb03",
+    "version_metadata_sha256": "96e3a25567caf28f7430ee532e50c19b06c2dbb4b6a8054e2ed0473585ea2a20"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/emzod/skills/speakturbo-tts",
+    "claim_id": "5e141180efa224abb164ae1045e7a4779150bfe2ddc800cf4a7a943d86abb512",
+    "index_entries": [
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "speakturbo-tts",
+        "url": "https://clawskills.sh/skills/emzod-speakturbo-tts"
+      }
+    ],
+    "owner_handle": "emzod",
+    "owner_id": "s174nggkgq7d1srr15wzvkrv79885k29",
+    "published_at": 1771673322379,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943176218,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943176218,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The audio playback, WAV file output, local daemon, and localhost HTTP flow all match the stated text-to-speech purpose and are documented in the skill materials.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions stay focused on using and troubleshooting the TTS tool; they do not ask the agent to access unrelated data, override user intent, or perform hidden actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The install script installs Python dependencies, may build a Rust CLI, and copies an executable to ~/.local/bin; this is purpose-aligned but changes the local environment.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The service binds to 127.0.0.1 with Host-header checks, and file output is constrained by an allowlist with explicit override paths; users should still treat spoken text and saved audio as potentially sensitive.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The daemon can remain running in the background for up to one hour idle and writes a PID/config under ~/.speakturbo, but this is disclosed and no elevated privileges or credential access are shown.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill uses local commands, file output, and localhost HTTP as part of its TTS design. The artifacts disclose these behaviors, so the missing explicit permissions section is a documentation note rather than a policy concern.\n[SQP-2] expected: Immediate speaker playback is the core function and is clearly shown in the quick start. Users should be aware that sensitive text may be audible nearby.\n[SQP-2] expected: Both CLIs send text to a local daemon at 127.0.0.1:7125. That local trust boundary is disclosed in the architecture, and the daemon does not show external transmission.\n[RA2] expected: Persistent allowed-output directories are user-configured through ~/.speakturbo/config rather than silently added by the skill. This is a reasonable convenience feature, with a caution against broad allowlists.",
+          "guidance": "Install only if you are comfortable with a local TTS daemon, audible playback by default, and local WAV file creation. Avoid speaking highly sensitive text in shared spaces, and do not add broad directories such as your whole home folder to the permanent output allowlist unless you intend that access.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent local text-to-speech skill that plays or saves audio and runs a disclosed localhost daemon.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943131207,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 58,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: speakturbo-tts\nVersion: 1.0.7\n\nThe OpenClaw AgentSkills skill bundle 'speakturbo-tts' is classified as benign. The code and documentation demonstrate strong security practices, notably the daemon binding exclusively to `127.0.0.1` with DNS rebinding protection (in `speakturbo/daemon_streaming.py`) and robust output path validation for the `-o` flag (in `speakturbo-cli/src/main.rs` and `speakturbo/cli.py`). This validation includes canonicalizing paths to prevent symlink and path traversal attacks, and providing clear instructions for users/agents on how to manage allowed directories. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts in `SKILL.md` or `AGENTS.md`. All network communication is confined to localhost, and `subprocess` calls are for controlled daemon management and audio playback.",
+          "checkedAt": 1779165740022,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "cc4743bb69db9821ffc113fd02f319b99d386cd0b847e7efbdfefb6dac2b4748",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/cc4743bb69db9821ffc113fd02f319b99d386cd0b847e7efbdfefb6dac2b4748"
+    },
+    "slug": "speakturbo-tts",
+    "source_type": "clawhub",
+    "version": "1.0.7"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

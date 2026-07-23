@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report",
+      "website"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.465,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:analyze",
+      "category:C04:token:dashboard",
+      "category:C04:token:metrics",
+      "category:C18:token:health",
+      "category:C19:token:automation",
+      "cross-tag:browser-automation",
+      "cross-tag:data-analysis"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C18",
+      "C19"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "automate"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ce909daffb7129696a52f2beabf187ab1fc8c86c77af748a70aaf3f0ffa75e7d",
+    "content_hash": "9b6bcca6a4b3b82504747dafb8ac85b5fd8cd5488ce52d32d9270c51c3cd1e86",
+    "precanonical_content_hash": "00e980d1c1b5bd6d6789e69f52a198ab412f3e2acc4814ece93a96e69dc99cb0",
+    "skill_md_hash": "216b28bad494ef4450809beb39b072a4aeb6edc368dc8c55c566ee7700f89f23",
+    "version_metadata_sha256": "4955966ac3356ba96bedbec1016b35f311026d6fed2d3cb85c84ac69265eb5fd"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/pfrederiksen/skills/email-intelligence",
+    "claim_id": "ebb951ef7209c2546ac1a95fd6bc5c2057f7f0d7df4e69a7b327bc18920b256d",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "email-intelligence",
+        "url": "https://clawskills.sh/skills/pfrederiksen-email-intelligence"
+      }
+    ],
+    "owner_handle": "pfrederiksen",
+    "owner_id": "s17fk3ter6h1bve6rnejmqxjfx83eymx",
+    "published_at": 1771634742746,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943596784,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943596784,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is inbox health analysis, classification, debt scoring, and ghost detection; the code implements that by calling the configured himalaya email CLI and analyzing envelope metadata.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use is user-invoked through documented Python commands, but text and JSON reports may include sender names, email addresses, subjects, dates, and response-delay inferences.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no installer or package mutation; the skill depends on Python and an already configured himalaya IMAP setup, which is disclosed, though not expressed as a formal permissions manifest.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Email metadata access is sensitive, but it is proportionate to the inbox-analysis feature and limited to himalaya folder listing for INBOX plus discovered archive/all-mail folders.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts do not create persistence, elevate privileges, install background workers, or modify mailbox state; cron is mentioned only as an optional user-directed integration idea.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The shell and himalaya IMAP dependency is real and sensitive, but it is disclosed and necessary for the advertised mailbox analysis.\n[SQP-2] expected: The skill should be clearer about privacy impact, but accessing and summarizing mailbox metadata is central to the stated inbox-health and ghost-report functions.\n[SQP-2] expected: The script can output identifiable correspondents and subjects; this is sensitive output, but it is not hidden, unrelated, or sent to an external service.",
+          "guidance": "Install or run this only for an email account you intend to analyze. Treat generated reports as private because they may show names, addresses, subjects, and who is waiting for a reply; avoid sharing terminal logs or JSON output without redaction.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill locally analyzes a configured email inbox and can reveal sensitive sender and subject details, but its behavior matches its stated purpose and shows no hidden exfiltration or persistence.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943574934,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: email-intelligence\nVersion: 1.0.0\n\nThe skill bundle is classified as benign. The `SKILL.md` provides clear instructions and descriptions without any prompt injection attempts. The `scripts/email_classify.py` script securely executes the `himalaya` CLI tool using `subprocess.run` with a list of arguments, preventing shell injection. The script's actions are directly aligned with its stated purpose of analyzing email inbox health and do not involve data exfiltration, unauthorized remote control, persistence mechanisms, or access to unrelated sensitive files. It relies on the user having `himalaya` configured, but the script itself introduces no new vulnerabilities or malicious behavior.",
+          "checkedAt": 1779165812724,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "c438748a3ae2bad9a85be9f81180de06f60a221a92c815a12acefffa35c7b275",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/c438748a3ae2bad9a85be9f81180de06f60a221a92c815a12acefffa35c7b275"
+    },
+    "slug": "email-intelligence",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

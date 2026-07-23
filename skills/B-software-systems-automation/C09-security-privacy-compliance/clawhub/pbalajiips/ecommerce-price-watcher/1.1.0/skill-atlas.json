@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C09:token:security",
+      "category:C11:token:product",
+      "category:C12:token:strategy",
+      "category:C17:token:notes",
+      "cross-tag:planning",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C11",
+      "C12",
+      "C17"
+    ],
+    "stages": [
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "plan",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "adb8c21e53a59eee9aa01b3282db95619a22602d8bf65350b98345e494e2e783",
+    "content_hash": "aa4488cb1698046582fc16171f39e56d77620cb0fc25527adfecca84b1c7133c",
+    "precanonical_content_hash": "dfbd307b88c7741e2e091a3091290837750ca6c3852c52950aea81760a815082",
+    "skill_md_hash": "0bf9a7668f07565b7a499df83d70b0a83eb3f9c6be4abcd96df32d9be151fac6",
+    "version_metadata_sha256": "7278febf5737e127d78f79bfa04b9ee22ec18919707f61124c4d05ed33d77b80"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/pbalajiips/skills/ecommerce-price-watcher",
+    "claim_id": "0968e6d969382cf77e4691a30b8706e1239e5cf79272fcd13fea5a67dac78891",
+    "index_entries": [
+      {
+        "index_path": "categories/communication.md",
+        "label": "ecommerce-price-watcher",
+        "url": "https://clawskills.sh/skills/pbalajiips-ecommerce-price-watcher"
+      }
+    ],
+    "owner_handle": "pbalajiips",
+    "owner_id": "s17cz0xd2agfjc67gbdpbxfx8s8850v9",
+    "published_at": 1771010925091,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974319158,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974319158,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose matches the artifacts: it tracks product URLs or item queries, fetches pages, extracts prices, stores history, and emits alert-ready JSON.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill documents URL and item-query monitoring, but item-query discovery sends the raw query to DuckDuckGo without naming that provider in SKILL.md.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no install script, package install, hidden setup step, or automatic execution mechanism; the user runs the Python script explicitly.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Outbound HTTP/HTTPS requests and local state writes are proportionate to price monitoring, and the script includes URL scheme validation, timeouts, response-size limits, content-type checks, and no remote JavaScript execution.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to a dedicated local watcher file under ~/.openclaw/state/price-watcher/watchers.json; scheduled cron usage is suggested but not installed automatically.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The network access and local read/write behavior are real, but they are directly tied to price checking and watch-state storage, and the artifacts disclose the script, storage behavior, and operational limits sufficiently for a benign verdict with guidance.\n[SQP-2] expected: The add-item flow sends product queries to DuckDuckGo for discovery; this is purpose-aligned, but users should know shopping queries may be visible to that third party.\n[staticScan] expected: Static scan reported no suspicious patterns, and artifact review found no command execution, credential collection, destructive actions, or hidden persistence.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with artifact review, but it was not used as the sole basis for the verdict.",
+          "guidance": "Install only if you are comfortable with the skill fetching ecommerce pages and, in item-query mode, sending your product search terms to DuckDuckGo. Use direct product URLs or --trusted-only for tighter control, and remember that watched URLs, queries, and price history remain in the local state file until removed.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a normal price watcher with expected web lookups and local watch history, with minor disclosure gaps rather than Review-level risk.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974259324,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ecommerce-price-watcher\nVersion: 1.1.0\n\nThe OpenClaw skill 'ecommerce-price-watcher' is classified as benign. Its code and documentation are clearly aligned with its stated purpose of tracking product prices. The `SKILL.md` explicitly outlines security standards such as accepting only `http`/`https` URLs, enforcing request timeouts and response body size caps, and not executing remote JavaScript. The `scripts/price_watch.py` script implements these safeguards, including URL validation, content size limits, and a `TRUSTED_DOMAINS` list for URL discovery. File system access is limited to a dedicated state file (`~/.openclaw/state/price-watcher/watchers.json`), and there is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts against the AI agent.",
+          "checkedAt": 1779163840938,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "7e7ff23163862bc1715ada372dc05c6514f7127b12729a58ab40f3c06719f493",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/7e7ff23163862bc1715ada372dc05c6514f7127b12729a58ab40f3c06719f493"
+    },
+    "slug": "ecommerce-price-watcher",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

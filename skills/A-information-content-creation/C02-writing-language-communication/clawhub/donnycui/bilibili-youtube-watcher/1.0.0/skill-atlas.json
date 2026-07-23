@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C02:token:language",
+      "category:C05:token:video",
+      "category:C17:token:notes",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05",
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "21a3281cc7acc8b7fe2798ad8e580a98ed5392412311659691bd5141b8c1f5e8",
+    "content_hash": "043a80dcf3f687e2a8d34d332b22472733a2aa9a411c761706e3a05bd685669b",
+    "precanonical_content_hash": "b68906bf92b69af20669173f2f5dd87e5efbc4d73bd55d427f215887886d6cdc",
+    "skill_md_hash": "6bf8e0a81277a2940cd86b5d5402a38a7098e6f71902d0f304752eaef1225071",
+    "version_metadata_sha256": "8201806214b2abee762190e27094dec130a7199b1ed707c129d836aa03654280"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/donnycui/skills/bilibili-youtube-watcher",
+    "claim_id": "43abe2f84216b800867e7d62327daa810ca527d148365fabac97c35241f20059",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "bilibili-youtube-watcher",
+        "url": "https://clawskills.sh/skills/donnycui-bilibili-youtube-watcher"
+      }
+    ],
+    "owner_handle": "donnycui",
+    "owner_id": "s179xd0wkabq67t3rgd7n8yjxd884556",
+    "published_at": 1771437611626,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779922410597,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779922410597,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, documentation, and script all align around fetching video transcripts for summarization, Q&A, and content extraction from YouTube/Bilibili.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill runs yt-dlp against a user-provided URL and can contact external video services; this is expected for transcript fetching, though the trigger phrase 'analyze video' is broad.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Metadata declares yt-dlp as a required dependency with brew and pip install options. The README also documents a sudo curl install path for Linux, which users should treat as higher-risk than package-manager installation.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access and temporary subtitle files are proportionate to the skill purpose. The script rejects unsupported platforms, uses subprocess arguments without a shell, and does not show broad local indexing or unrelated file access.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The main script uses a temporary directory and has no persistence mechanism. The README includes optional troubleshooting advice to use browser cookies with yt-dlp, which is sensitive but disclosed and not part of the default workflow.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The network access and yt-dlp subprocess are purpose-aligned and disclosed through the dependency metadata and usage docs. I downgraded this from a material concern because the script uses an argument list, temporary files, and no unrelated local data collection.\n[SQP-1] expected: The 'analyze video' trigger is broader than ideal, but it matches the described summarization and Q&A use case. This is a scope note rather than a Review-level concern because the workflow remains centered on user-provided video transcript retrieval.",
+          "guidance": "Install only if you are comfortable with the agent contacting YouTube or Bilibili through yt-dlp for videos you ask it to analyze. Prefer brew or pip for installing yt-dlp, and avoid using the optional browser-cookie troubleshooting command unless you intentionally want yt-dlp to access your logged-in browser session.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it claims: it uses yt-dlp to fetch subtitles from user-provided YouTube or Bilibili videos, with no evidence of hidden persistence, exfiltration, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779922365026,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: bilibili-youtube-watcher\nVersion: 1.0.0\n\nThe skill bundle is benign. The `scripts/get_transcript.py` uses `subprocess.run` with a list of arguments to execute `yt-dlp`, which prevents shell injection from user-controlled `url` or `language` inputs. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts against the OpenClaw agent in `SKILL.md` or `README.md`. The skill's functionality is clearly aligned with its stated purpose of fetching video transcripts.",
+          "checkedAt": 1779165254171,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "91802a21044e741ae522641e5a1d39a41671794c7db10e1ae69e3dc6e2d8cc88",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/91802a21044e741ae522641e5a1d39a41671794c7db10e1ae69e3dc6e2d8cc88"
+    },
+    "slug": "bilibili-youtube-watcher",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

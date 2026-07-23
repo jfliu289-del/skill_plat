@@ -1,0 +1,157 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.1321,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C02:token:write",
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C13:token:operations",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:planning",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C06",
+      "C09",
+      "C10",
+      "C13",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "plan",
+      "secure",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "250da2ce13ec618f020bca47fc85af3085a3d770a8fdfa9d4b959dbf61db4e66",
+    "content_hash": "1b37303834a338cdac8e7a737e21a245a956853daa869096d307456bf80ea48f",
+    "precanonical_content_hash": "9ea9298c4ca34b4937bc94c501a2d0fc542355be18f3d04161039a14976d1da6",
+    "skill_md_hash": "3fc1f41fd3fa9b7f80ef81ffc4cb4d9d384d7d90cfe27560179bcc9e41e8253c",
+    "version_metadata_sha256": "ab032068391f9573fe61d1612b1d483cba74aa2c812833455e6c280ba04fb464"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tkuehnl/skills/pager-triage",
+    "claim_id": "edd342b1cb3487bb74a9233c836e3db77f0af601611385f303c7d7b92766b1eb",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "pager-triage",
+        "url": "https://clawskills.sh/skills/tkuehnl-pager-triage"
+      }
+    ],
+    "owner_handle": "tkuehnl",
+    "owner_id": "s1796xcga59f855vmh35x909yh84742a",
+    "published_at": 1771717089279,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779933071343,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779933071343,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill reads PagerDuty incidents, services, on-call data, timelines, alerts, and notes, and can acknowledge, resolve, or add notes to incidents. These are sensitive operational capabilities, but they match the stated triage purpose and are documented throughout the artifacts.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions say read operations can run without confirmation, while write operations require explicit --confirm and user approval. Some activation phrases are broad, so accidental reads are possible in ambiguous ops conversations, but the behavior is disclosed and purpose-aligned.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The install path is a normal ClawHub skill install with shell scripts and documentation. The extracted scripts were not executable in this review environment and registry metadata appears to under-declare curl, jq, and PagerDuty credential needs, but the docs clearly describe those requirements.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Use of PAGERDUTY_API_KEY and optional PAGERDUTY_EMAIL is proportionate for a PagerDuty integration. The artifacts recommend read-only or scoped keys and reserve the email for audited write operations.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No artifact-backed persistence, background workers, local credential harvesting, disk caching, privilege escalation, destructive local actions, or self-modifying behavior was identified. Network calls in the implementation are constrained to HTTPS PagerDuty API use.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SDI-2] unexpected: The SPEC.md failover row mentions a possible local pd CLI fallback, but the implemented script does not call pd, check which pd, or fall back to local CLI execution. Current runtime behavior fails through the HTTPS API path, so this is a design-note concern rather than implemented risky behavior.\n[SQP-1] expected: SKILL.md activation guidance includes broad incident and service-health phrases. That could cause unexpected PagerDuty reads in ambiguous conversations, but the phrases are related to incident triage and do not create hidden write behavior.\n[SQP-1] expected: SPEC.md also includes broad phrasing such as \"what's wrong?\" and \"what's firing?\". The strongest runtime file narrows this mostly to PagerDuty, pager, on-call, incident, alert, and service-health contexts, so this is guidance-worthy rather than a Review-level concern.\n[pre-scan:ignore-previous-instructions] expected: The prompt-injection phrase appears as a quoted threat-model example in SECURITY.md, not as an instruction to the agent or evaluator.",
+          "guidance": "Install only in workspaces where PagerDuty incident and on-call data may be shown to the agent. Prefer a read-only or team-scoped PagerDuty key unless the agent truly needs to acknowledge, resolve, or note incidents, and review the exact incident before allowing any --confirm write action.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent PagerDuty triage skill with sensitive but disclosed access, and the scanner concerns do not show hidden or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779933002392,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: pager-triage\nVersion: 0.1.2\n\nThis skill bundle is classified as benign. It demonstrates a strong security-first design, implementing robust input sanitization for incident/service IDs (e.g., `^[A-Za-z0-9]+$` regex in `scripts/pager-triage.sh`), mandatory `--confirm` flags for all write operations (acknowledged in `SKILL.md`, `SECURITY.md`, `SPEC.md`), and secure handling of API keys (read from environment variables only, masked in error messages, never outputted). The `pd_api` function in `scripts/pager-triage.sh` strictly enforces HTTPS for all API calls, preventing arbitrary network requests. Comprehensive `SECURITY.md`, `OPERABILITY.md`, `SPEC.md`, and `TESTING.md` files further detail the security model, threat mitigations, and testing of these controls, indicating a highly security-conscious development process.",
+          "checkedAt": 1779165355996,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "250da2ce13ec618f020bca47fc85af3085a3d770a8fdfa9d4b959dbf61db4e66",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/250da2ce13ec618f020bca47fc85af3085a3d770a8fdfa9d4b959dbf61db4e66"
+    },
+    "slug": "pager-triage",
+    "source_type": "clawhub",
+    "version": "0.1.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

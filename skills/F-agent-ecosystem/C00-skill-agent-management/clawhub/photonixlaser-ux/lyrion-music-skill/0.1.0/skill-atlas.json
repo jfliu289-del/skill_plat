@@ -1,0 +1,136 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "aecdd65c18643fa4df87ac3dcf04f8b1a255d08fda4b8c46d561487c875c37f9",
+    "content_hash": "b3efdbd72b5dfd8c472033839736f0c2936274274af3539485377ea2b6f85302",
+    "precanonical_content_hash": "97a3e50bd360cc4eac81aea5315e5084afe9476972bebd6871d35432a1fb1191",
+    "skill_md_hash": "9ac687f5fe16661a80f6d3df5572304182ce1a080c90b3dab6e0e3805f5bbb36",
+    "version_metadata_sha256": "9fb0c5e657b301c1745af2950a4445295cc343b7fa1ccad9fff0658445e8c7d0"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/photonixlaser-ux/skills/lyrion-music-skill",
+    "claim_id": "9f3577138b020eb765ae0c4e642db57b2fef55ccb4a43e68f74c7eb87c3e6be3",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "lyrion-music-skill",
+        "url": "https://clawskills.sh/skills/photonixlaser-ux-lyrion-music-skill"
+      }
+    ],
+    "owner_handle": "photonixlaser-ux",
+    "owner_id": "s1734j59gytyx02wsvqffdt501885g16",
+    "published_at": 1770564644060,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783657779938,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783657779938,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill’s stated purpose is to control Lyrion Music Server playback, volume, players, playlists, and library searches, and the artifacts implement those same capabilities. Some commands can change real device state or clear playlists, but that is disclosed and purpose-aligned.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are explicit and limited to using scripts/lyrion.sh with documented LMS commands. I found no prompt injection, role-change language, hidden instructions, or unrelated agent behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The package contains documentation, an API reference, and one shell script. There is no install-time downloader, package installer, self-update logic, or obfuscated setup behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "HTTP JSON-RPC to a configurable LMS host and port is proportionate for controlling a local music server, but it is plaintext and the documented default host differs from the script default, so users should set LYRION_HOST deliberately.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts show no background workers, scheduled persistence, privilege escalation, credential or session-store access, broad filesystem reads, or destructive local commands.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The skill does direct the agent to run a local shell script, but that script is the disclosed control mechanism and only dispatches enumerated LMS JSON-RPC operations using curl plus optional JSON formatting with python3.\n[E1] expected: The curl POST over HTTP to LYRION_HOST:LYRION_PORT is necessary for the LMS integration. It is a network trust-boundary note rather than evidence of exfiltration because no unrelated endpoint, sensitive file access, or credential collection was found.",
+          "guidance": "Install this only if you intend the agent to control an LMS instance on your network. Set LYRION_HOST and LYRION_PORT explicitly, use it on a trusted network, and remember that playback, volume, power, playlist add, and playlist clear commands make real changes to your music system.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward local music-server control skill with expected network commands and no hidden persistence or unrelated data access.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783657748334,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: lyrion-music-skill\nVersion: 0.1.0\n\nThe OpenClaw skill 'lyrion-music' is designed to control a Lyrion Music Server (LMS) via its JSON-RPC API. The `SKILL.md` provides clear, benign instructions for using the skill and contains no prompt injection attempts. The core script `scripts/lyrion.sh` uses `curl` to send JSON-RPC requests to a configurable host (defaulting to a private IP `192.168.20.10` or `192.168.20.40`). It does not access sensitive files, exfiltrate data to unauthorized external endpoints, or execute arbitrary remote code. The use of `python3 -m json.tool` is solely for formatting output, which is a benign debugging/readability practice. All observed behaviors are aligned with the stated purpose of controlling a local music server.",
+          "checkedAt": 1779162256465,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "fc3390d058972578142545c316bdb55d2daedcaf480b77faa8400f31c33adac2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/fc3390d058972578142545c316bdb55d2daedcaf480b77faa8400f31c33adac2"
+    },
+    "slug": "lyrion-music-skill",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

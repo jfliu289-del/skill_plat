@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C01:token:lookup",
+      "category:C08:token:github",
+      "category:C10:token:ai",
+      "category:C10:token:llm",
+      "category:C11:token:project",
+      "category:C16:token:learning",
+      "cross-tag:agent-management",
+      "cross-tag:debugging"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C01",
+      "C08",
+      "C11",
+      "C16"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "debug",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "99e80c9f6b844d5878f82ac9a5eb43da437507f0338e81fe47f859942688bfc7",
+    "content_hash": "e809f94f8e00adc18e944a987213a3f48b6f7254dbb12d3606e49ab15be49399",
+    "skill_md_hash": "ed8d787e12ea42568aaeffaf6c2039fbf658d136aaf9d4de775dc23421fb050f",
+    "version_metadata_sha256": "083a01f017234e6a581de1e44ac5e2c87f8f114fb541be01620a6792a578f86b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/zerone0x/skills/docs-feeder",
+    "claim_id": "56c1ba9086127478087d446087c26fa60aac8848896b5c3b2c43ddb1ebb678ac",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "docs-feeder",
+        "url": "https://clawskills.sh/skills/zerone0x-docs-feeder"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "zerone0x",
+    "owner_id": "s1771e5fk8445gc0rks23vq7cd885wxv",
+    "published_at": 1771513364588,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779933668073,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779933668073,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts and registry match the stated purpose: fetch project documentation from known sites, direct URLs, GitHub READMEs, or configured local docs paths, then print or optionally save it.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Direct URL fetching and smart domain discovery are disclosed and purpose-aligned, but the skill does not clearly warn that hostnames, paths, and fetched content may expose private project context or introduce untrusted text into the agent context.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden install mechanism is present; setup metadata is sparse because SKILL.md mentions Node.js, while the optional shell helper also needs curl and jq.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Outbound network access and registry-scoped local documentation reads are proportionate for a docs-fetching tool; there is no credential use, account authority, destructive behavior, or broad local indexing shown.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background worker, persistence, privilege escalation, credential storage, or automatic startup behavior is present; the only write behavior is user-directed saving under /tmp.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The arbitrary URL and discovery behavior is real and should be documented more clearly, but it is central to the skill's stated documentation-fetching purpose rather than hidden or unrelated behavior.\n[VirusTotal code_insight] expected: The SSRF and local-file concerns are downgraded because the artifacts disclose URL fetching, local reads are registry-configured documentation paths, and no evidence shows credential theft, exfiltration, or automatic internal probing.\n[staticScan] expected: Static scan reported no findings, consistent with the artifact review: no shell execution beyond the helper itself, no obfuscation, no secrets, and no destructive commands were found.",
+          "guidance": "Install only if you are comfortable with the agent making outbound requests to documentation sites you name or that the tool guesses. Prefer registry project names or trusted documentation URLs, avoid private/internal URLs, and treat fetched text as reference material rather than instructions.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill fetches documentation as advertised, but users should treat fetched web or local documentation as untrusted content.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779933624817,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: docs-feeder\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to its broad network and file access capabilities, which, while aligned with its stated purpose of fetching documentation, present significant security risks. Specifically, the 'smart discovery' feature in both `fetch-docs.sh` and `fetch-docs.js` allows the agent to construct and fetch from arbitrary URLs (e.g., `https://docs.${input}.com`) based on user input, creating a potential Server-Side Request Forgery (SSRF) vulnerability. Additionally, the skill can read local files from paths specified in `docs-registry.json` (e.g., `/usr/lib/node_modules/clawdbot/docs`), which could be abused for arbitrary file reading if the registry entries were manipulated or pointed to sensitive system files.",
+          "checkedAt": 1779165463267,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "8351794a29342d3c94b48a20152a8ba0987be78442e397e6bae523e8f972b234",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8351794a29342d3c94b48a20152a8ba0987be78442e397e6bae523e8f972b234"
+    },
+    "slug": "docs-feeder",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

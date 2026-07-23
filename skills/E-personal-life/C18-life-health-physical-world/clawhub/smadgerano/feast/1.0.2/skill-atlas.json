@@ -1,0 +1,131 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.4167,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C18",
+    "reasons": [
+      "category:C07:token:review",
+      "category:C18:token:food",
+      "category:C18:token:health",
+      "cross-tag:planning",
+      "cross-tag:review"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C07"
+    ],
+    "stages": [
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "plan",
+      "review"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "7183468c19714f3e675353e202b3e86b22e86f9f8e8bcdc7670a556228c32a42",
+    "content_hash": "39761d438a6578a5836ac33996c40ae05077b7454ee601e973d3f1d0ddf8f2d5",
+    "precanonical_content_hash": "22fd06cf37ff485877a3b5ecd57c38ff0d5e3df4cc4c73e63b25d4ab38e7c02f",
+    "skill_md_hash": "d831c75445a167a6565f9277403fa5ea2c0675642b01436065f61b40691b891f",
+    "version_metadata_sha256": "610c18d8c2d2236c0d7c5fe753c625aa9979badc105db45d890d46d43a12e687"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/smadgerano/skills/feast",
+    "claim_id": "5c7709d87c6dcd3f23800988aac0a3bf61d287a20f3f72c62ba3c6e269d0eefb",
+    "index_entries": [
+      {
+        "index_path": "categories/health-and-fitness.md",
+        "label": "feast",
+        "url": "https://clawskills.sh/skills/smadgerano-feast"
+      }
+    ],
+    "owner_handle": "smadgerano",
+    "owner_id": "s175mkty5bty83hkq8249yynnn885cjc",
+    "published_at": 1770051912161,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783653711333,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783653711333,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "Meal planning, recipe research, shopping lists, nutrition tracking, favourites, failures, and meal history are consistent with the stated purpose; the skill does collect lifestyle, dietary, schedule, budget, store, and location details to provide those features.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are broad but meal-related, including onboarding, research, price checking, reminders, and history updates. Ambiguous trigger phrases could activate it during ordinary food conversations, but the resulting behavior remains tied to Feast workflows.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package has no suspicious install script and static scan is clean. The README includes a manual GitHub clone path, so users who install manually should verify the source.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The included Python script only updates meal history YAML under a user-supplied meals directory. External messaging and price/research activity are disclosed and proportionate to meal planning, though users should configure channels carefully.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill intentionally stores profile, history, favourites, failures, weekly plans, and cron job IDs in workspace/meals, and it creates cron reminders that spawn isolated agents. This persistence is disclosed, purpose-aligned, and includes update/removal guidance.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Workspace file reads/writes are expected for a persistent meal planner and are scoped in documentation to workspace/meals, though an explicit permission declaration would improve visibility.\n[SDI-2] expected: Recurring notifications, message channels, optional Pushbullet, and ntfy are disclosed reminder features. They are higher sensitivity because they persist and communicate externally, but the artifact ties them to user-configured meal reminders rather than hidden automation.\n[SQP-1] expected: The activation examples are broad food-planning phrases, which can increase accidental invocation risk, but they do not support a finding of malicious or purpose-mismatched behavior.\n[SQP-2] expected: Collection of dietary, schedule, location, budget, and preference data is central to the meal-planning purpose. The artifacts disclose local storage and channel configuration, but users should be aware external reminders may reveal some routine or dietary context.\n[RA2] expected: Persistent profile/history storage and scheduled reminders are expected for this skill and are documented, including storing cron IDs for later update or removal.\n[VirusTotal code_insight] expected: The VT concern about cron jobs, messaging, ntfy, and cross-skill Pushbullet execution is artifact-supported, but those capabilities are disclosed, optional or configurable, and aligned with notification delivery; no engine detections or artifact-backed deception were present.\n[staticScan] expected: Static scan reported no suspicious findings, and inspection of the only executable helper found local YAML history updates only.",
+          "guidance": "Before installing, be comfortable with Feast keeping meal history, dietary restrictions, allergies, location, schedule, budget, store preferences, and notification settings in workspace/meals. Use an explicit notification channel instead of auto if privacy matters, only enable Pushbullet or ntfy if you understand those services, and remove the stored cron jobs if you stop using Feast.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Feast is a coherent meal-planning skill, but users should understand that it stores personal food preferences and can create scheduled reminders through configured channels.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783653673585,
+          "issueCount": 10,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 67,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: feast\nVersion: 1.0.2\n\nThe skill is classified as suspicious due to its use of persistent cron jobs that spawn isolated agents capable of external communication and cross-skill execution. Specifically, the `references/onboarding.md` and `SKILL.md` files instruct the agent to create cron jobs for notifications, which utilize OpenClaw's message tool for channels like Telegram, Discord, and Signal, and can perform HTTP POST requests to `ntfy.sh` or execute scripts from other skills (e.g., `pushbullet-notify`). While these actions are described as legitimate for notification delivery, they represent high-risk capabilities that could be leveraged for unauthorized activities if the agent were compromised or given malicious instructions.",
+          "checkedAt": 1779160779363,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "f74fb72dc207a9dc08273ad97be24460fae6c2ea52cf1062f937beff247171cd",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/f74fb72dc207a9dc08273ad97be24460fae6c2ea52cf1062f937beff247171cd"
+    },
+    "slug": "feast",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

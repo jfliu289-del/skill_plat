@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [
+      "website"
+    ],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C08:token:github",
+      "category:C08:token:repository",
+      "category:C09:token:security",
+      "category:C17:token:notes",
+      "cross-tag:browser-automation",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09",
+      "C17"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "78cf5ff8ff44bd1a136f7bc8598f1705471985c365e3e6a06714fc00f33e1e41",
+    "content_hash": "56947c774ba20114f5b040006528ca51a2be4d3cfc3b4b13b16f06079033e2ae",
+    "precanonical_content_hash": "549903d9c181e454b97247f357ada31a3523d659c2187b57c715c4e4a22b0efd",
+    "skill_md_hash": "b4cc9ddca71b0fcabf9b5180f2e14e7a69402b558163e73be07d6f2143e85b04",
+    "version_metadata_sha256": "421bc7f04bba46dd2f0d6b6b2e18222568acac5f7061cbc8acf6208a4b450b0d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jo9900/skills/release-tracker",
+    "claim_id": "7b641413563294c6dd4783c1c652dbcbb20983f597ed1ea475e1b6b89a8de9e2",
+    "index_entries": [
+      {
+        "index_path": "categories/git-and-github.md",
+        "label": "release-tracker",
+        "url": "https://clawskills.sh/skills/jo9900-release-tracker"
+      }
+    ],
+    "owner_handle": "jo9900",
+    "owner_id": "s17b1hs2zqdmng8ty7g9m8284h884x8m",
+    "published_at": 1771935377579,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779956065593,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779956065593,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "GitHub release checks, changelog summarization, priority filtering, and optional Discord/Telegram/Slack/text delivery all fit the stated release-tracking purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The workflow is mostly scoped to configured repositories and workspace state, but the local CHANGELOG fallback uses an undefined package placeholder and should be treated cautiously.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The setup script checks for gh authentication and creates default config/state files only if absent; it does not install packages or directly create a cron job.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Using an authenticated gh CLI and selected chat channels is proportionate for release monitoring, but private repo release notes or local fallback content could be shared if configured that way.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistent state and recurring cron execution are explicitly described as part of automated monitoring, but users must remember to disable the cron when no longer wanted.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-2] unexpected: The local CHANGELOG read is a real loose-scoping issue because the package placeholder is not defined or validated, but it is disclosed, limited to a changelog fallback, and does not show broad local indexing or credential theft.\n[SQP-1] expected: The trigger language is broad, but it still centers on release/version/changelog monitoring and does not by itself create hidden side effects.\n[SQP-2] expected: Config/state files, cron monitoring, and external delivery are central to this skill and are described in the artifacts; the main gap is that confirmations and privacy warnings could be clearer.\n[VirusTotal code_insight] expected: The command-use concern is not strongly supported by the artifacts: the skill uses ordinary gh release commands and one fixed-path cat example with placeholders. Inputs should be sanitized, but there is no evidence of intentional command injection, exfiltration, or destructive behavior.\n[staticScan] expected: The static scan reported no findings, which is consistent with the reviewed artifacts.",
+          "guidance": "Install this only if you want release monitoring that may run on a schedule. Use a least-privileged GitHub login, start with text output or a private channel, verify every outputChannel before enabling Discord/Telegram/Slack posting, and avoid the local CHANGELOG fallback unless you explicitly approve the exact file path.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill coherently tracks GitHub releases and posts summaries, with disclosed scheduling and chat-delivery behavior, though users should configure it carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779956039222,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: release-tracker\nVersion: 1.1.0\n\nThe skill is classified as suspicious due to potential command injection vulnerabilities. Specifically, the SKILL.md instructions for fetching release content and changelogs involve executing `gh` and `cat` commands with parameters derived from external sources (user configuration, GitHub API). The `cat /opt/homebrew/lib/node_modules/<package>/CHANGELOG.md` instruction is particularly concerning as the `<package>` variable is not clearly defined and could be susceptible to path traversal or command injection if the OpenClaw agent does not rigorously sanitize inputs before executing shell commands, posing a Remote Code Execution risk. There is no clear evidence of intentional malicious behavior like data exfiltration or backdoor installation, but the presence of these RCE-prone instructions makes the skill suspicious.",
+          "checkedAt": 1779166752880,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "5c95c523acee48977d92df0315052970b0336adc1080d784a3b63a1a47a0dead",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/5c95c523acee48977d92df0315052970b0336adc1080d784a3b63a1a47a0dead"
+    },
+    "slug": "release-tracker",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

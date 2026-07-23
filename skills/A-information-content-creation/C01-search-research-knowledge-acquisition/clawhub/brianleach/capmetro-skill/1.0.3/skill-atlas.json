@@ -1,0 +1,162 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.25,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C01:token:sources",
+      "category:C04:token:data",
+      "category:C06:token:implementation",
+      "category:C09:token:privacy",
+      "category:C09:token:security",
+      "category:C17:token:schedule",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:planning",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C04",
+      "C06",
+      "C09",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "plan",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "f846835bec0d6e86ddaa663efbac1229776aa4b75988022e410c2a41b8fb67ed",
+    "content_hash": "b384555fed6454d7f7404ad4d09a395e41e9bd47136aad814df27845b1be44ee",
+    "precanonical_content_hash": "a9c057c642428bce0cacc44e51a33cd6913d979727982b6f2733b2124a3942c5",
+    "skill_md_hash": "436a05c1e51753305addfd56259bb1ca8b5319b84d33eaf3c3dff55fa4445413",
+    "version_metadata_sha256": "2428e69a7acb4f4215b3a1c899e0a1102ecee30bfcc7f0550eb5c11f5cd3c821"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/brianleach/skills/capmetro-skill",
+    "claim_id": "e39516af28193426321c5f8991789cf7dc4331af60f32429e9838ce2af54f4bc",
+    "index_entries": [
+      {
+        "index_path": "categories/transportation.md",
+        "label": "capmetro-skill",
+        "url": "https://clawskills.sh/skills/brianleach-capmetro-skill"
+      }
+    ],
+    "owner_handle": "brianleach",
+    "owner_id": "s177mqbg7ea28w09hpmzr79wx988447d",
+    "published_at": 1772508104085,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971160159,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971160159,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is Austin CapMetro transit lookup, and the code implements public GTFS/GTFS-RT feed fetching, route/stop search, arrivals, vehicles, alerts, and schedule fallback.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are task-scoped and user-invoked; I found no hidden role changes, prompt-injection behavior, autonomous background activity, or approval bypass instructions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation uses npm to install protobufjs, which is disclosed and purpose-aligned for parsing protobuf transit feeds, but still introduces ordinary npm supply-chain exposure.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill uses Node, unzip, read-only GET requests to data.texas.gov, and local GTFS CSV reads; this is proportionate to the transit-data purpose.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The only persistence found is the disclosed GTFS cache under ~/.capmetro/gtfs/ and a temporary zip file removed after extraction; no credentials, privileged paths, or background services are used.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SkillSpector issues] expected: SkillSpector reported no issues, and artifact review did not surface hidden behavior or suspicious autonomy.\n[staticScan findings] expected: Static scan reported no findings; review confirmed the sensitive operations are limited to public fetches, local cache writes, and a fixed unzip invocation.\n[VirusTotal clean telemetry] expected: VirusTotal telemetry was clean and consistent with the artifact evidence, but it was not used as the sole basis for the verdict.\n[npm dependency install] expected: The protobufjs dependency install is disclosed in metadata and package files and supports the advertised GTFS-RT parsing capability.\n[local unzip/cache behavior] expected: The refresh command downloads the public GTFS zip and extracts it to ~/.capmetro/gtfs/ using fixed arguments; users should run it only when they intend to refresh local schedule data.\n[packaging completeness note] unexpected: The code and metadata reference scripts/gtfs-realtime.proto, but the inspected artifact does not include that file, so protobuf-based commands may fail; this appears to be a functionality/package issue rather than malicious behavior.",
+          "guidance": "This is reasonable to install if you want Austin CapMetro lookups. Expect it to install a Node dependency, contact public data.texas.gov feeds, and store schedule files in ~/.capmetro/gtfs/. Verify the missing gtfs-realtime.proto file is present in the installed copy if you need alerts or trip-update features.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed CapMetro transit helper that fetches public transit feeds and caches schedule data locally without asking for credentials.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971112746,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: capmetro-skill\nVersion: 1.0.3\n\nThe OpenClaw AgentSkills skill bundle for CapMetro transit appears benign. It adheres to its stated purpose of fetching and displaying public transit data from the Texas Open Data Portal. The `SKILL.md` and `scripts/capmetro.mjs` explicitly declare security and privacy practices, which are consistent with the code's behavior: no credentials required, no user data transmitted, and data is cached locally in `~/.capmetro/gtfs/`. The use of `execFileSync` for `unzip` to extract GTFS static data is a standard practice, with arguments passed as an array, mitigating shell injection risks. User inputs are used for internal filtering and searching, not for constructing shell commands or external URLs. There is no evidence of data exfiltration, persistence mechanisms, or malicious prompt injection attempts against the AI agent.",
+          "checkedAt": 1779164577752,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "260f976db6e430c9bdfa8691f5b958e8e73b100d689bd16a62a32a4882b2ffdd",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/260f976db6e430c9bdfa8691f5b958e8e73b100d689bd16a62a32a4882b2ffdd"
+    },
+    "slug": "capmetro-skill",
+    "source_type": "clawhub",
+    "version": "1.0.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

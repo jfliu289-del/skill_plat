@@ -1,0 +1,128 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.475,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:image",
+      "cross-tag:design"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "06860e54a761900b23465b4a60a3e615e2478fc122c010536dc03766f5ff394a",
+    "content_hash": "eba5b3f672397854b3e8b71bd37f88ccc6fab17f815b07e9de639217cc6f7efa",
+    "precanonical_content_hash": "44687b5ea2b34ef83374ae471e5086a994574da38f6acf07879df842e97c4700",
+    "skill_md_hash": "c5f8ab5583c44841d3c024e10ddc3804f2ffece77c9f7fd12f4937389c2ffe4a",
+    "version_metadata_sha256": "931695b095f19381a945f66c5a934d62a34cd98169a6a94b56102eac16b3c112"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/qrost/skills/color-palette",
+    "claim_id": "5185fe2ee6029860ec84338708986d1d57deb70540a8b2abcdf639c10f61b296",
+    "index_entries": [
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "color-palette",
+        "url": "https://clawskills.sh/skills/qrost-color-palette"
+      }
+    ],
+    "owner_handle": "qrost",
+    "owner_id": "s178f7h4jz91qjvzt9q84pekv5885hjd",
+    "published_at": 1771637608347,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943573904,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943573904,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The manifest, SKILL.md, and Python script consistently describe extracting HEX/RGB colors from a user-provided image and optionally creating a swatch PNG.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill requests shell execution and tells the agent to run the bundled script without confirmation for palette requests; this is purpose-aligned but should be understood as automatic local file processing.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Dependencies are installed manually from requirements.txt and are not pinned, so installs may resolve to different package versions over time.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading image files, saving temporary uploaded images, and writing swatch files under /tmp or OpenClaw media paths is proportionate for the feature, but users should avoid untrusted or oversized images.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts show no credential handling, network calls, background workers, broad indexing, privilege escalation, deletion, or durable persistence beyond optional output image files.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-1] expected: Directly invoking the bundled Python script is the advertised mechanism for this utility; the artifact does not show unrelated command execution, though agents should pass paths safely rather than interpolate shell strings.\n[SC1] unexpected: Unpinned Pillow and matplotlib are real reproducibility and supply-chain hygiene issues, but they are standard dependencies for the stated image/swatch workflow and do not show malicious behavior.\n[SC4] expected: Pillow is expected for image parsing, and advisory risk is relevant for crafted images; however the artifact does not pin a known vulnerable version or include exploit-like behavior.\n[VirusTotal code_insight suspicious] expected: The VT concern about shell execution and potential agent mishandling is plausible as a usage risk, but artifact review found shell use scoped to the palette script with no exfiltration, persistence, or destructive actions.",
+          "guidance": "Install only if you are comfortable with the agent running a local Python script on images you provide and writing an optional swatch file. For stricter security, pin and keep Pillow updated, process only trusted or sandboxed images, and avoid ambiguous file paths.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill matches its stated purpose: it runs a local image-processing script to extract color palettes, with no evidence of hidden data access, persistence, or exfiltration.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943524442,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 91,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: color-palette\nVersion: 1.1.1\n\nThe skill is classified as suspicious due to its reliance on the `shell:exec` permission and instructions in `SKILL.md` for the agent to directly execute a Python script with user-provided input (image path, output path) without confirmation. While the Python script (`scripts/extract_palette.py`) itself appears benign and the `SKILL.md` attempts to guide the agent towards safe output directories, the combination creates a significant vulnerability for prompt injection or shell injection if the OpenClaw agent fails to properly sanitize user input before constructing the shell command. There is no clear evidence of intentional malicious behavior like data exfiltration or persistence, but the potential for remote code execution via agent mishandling of parameters elevates it beyond benign.",
+          "checkedAt": 1779165796555,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "9445bee2dff7918948b046a5ee614877cab584be7e08cd11701eb5bb643d15d0",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/9445bee2dff7918948b046a5ee614877cab584be7e08cd11701eb5bb643d15d0"
+    },
+    "slug": "color-palette",
+    "source_type": "clawhub",
+    "version": "1.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

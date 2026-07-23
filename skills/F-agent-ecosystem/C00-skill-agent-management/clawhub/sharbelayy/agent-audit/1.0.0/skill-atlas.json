@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.2643,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:find",
+      "category:C09:token:audit",
+      "category:C10:token:ai",
+      "category:C10:token:model",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C09",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4cbc8d76f0b973206dd49104521f3ab526f1eba9d8e2c68132416353f296c5f7",
+    "content_hash": "5a3da306b619b57a41b6ff2ddd7b77bee472b4258a214d675a80cd696ddfc1f8",
+    "precanonical_content_hash": "d8750e6b0fe3fddd6e866707b6b2ca4a6ac9a60b991962679244b679f36cace4",
+    "skill_md_hash": "d98b6b92587919e89b78849d4f37fb9774d04851589aac0274c8eb82e9cb1a48",
+    "version_metadata_sha256": "0f412fe2c269f49b4f4510ed15bcf4ce0198406bf1d34419cf86362240d64e39"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sharbelayy/skills/agent-audit",
+    "claim_id": "90f3d0aa0e9217d4bad6cc77f86ec4fba21e4df0d4771ee817ed35b943985865",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "agent-audit",
+        "url": "https://clawskills.sh/skills/sharbelayy-agent-audit"
+      },
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "agent-audit",
+        "url": "https://clawskills.sh/skills/sharbelayy-agent-audit"
+      }
+    ],
+    "owner_handle": "sharbelayy",
+    "owner_id": "s17ct5sbgey28qqebqd4pd1ejh8847g8",
+    "published_at": 1771411989194,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779921866579,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779921866579,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose of auditing OpenClaw agent costs matches reading local OpenClaw config and generating a report, but the current script only inspects config and emits general guidance rather than actually collecting cron/session history.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill clearly tells the user to run a bundled Python script and says it will not automatically change configuration; the optional report output is disclosed, though the 'read-only' wording should be understood as no config mutation, not no file writes at all.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No package installation, dependency installation, background setup, or network bootstrap is present in the artifacts; it is a small skill with markdown references and one Python script.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Local access to OpenClaw config files is proportionate to an agent cost audit, and the code shows no network requests, arbitrary command execution, credential harvesting, or broad filesystem indexing.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No persistence, privilege escalation, or automatic mutation is evidenced; the only write path is a user-supplied optional markdown report path, which could overwrite a file if the user chooses an unsafe destination.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The optional --output file write is real and disclosed, but it is user-directed report generation rather than hidden persistence or config mutation; this supports user guidance rather than a Review verdict.\n[SDI-1] unexpected: The scanner correctly identifies a capability mismatch: the documentation promises cron/session/model-usage auditing, while the script currently performs static config inspection and generic recommendations only.\n[SDI-4] unexpected: The placeholder cron/API language may cause users to overtrust the report, but it does not add execution, exfiltration, destructive behavior, or hidden authority.",
+          "guidance": "Before installing, treat this as a lightweight config report rather than a complete ROI audit. Review the generated report for sensitive agent names or model details before sharing it, and use --output only with a safe path you intend to create or overwrite.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This appears to be a local, mostly read-only OpenClaw cost-audit helper, but its documentation overstates how much usage history it actually analyzes.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779921829633,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 32,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: agent-audit\nVersion: 1.0.0\n\nThe OpenClaw Agent Audit skill is designed to analyze agent configurations and usage for cost optimization. It reads OpenClaw configuration files (e.g., `~/.openclaw/openclaw.json`) to identify models and agent setups, which is necessary for its stated purpose. The `scripts/audit.py` code does not perform any network requests, execute arbitrary system commands, or modify any files other than optionally writing a markdown report to a user-specified path. The `SKILL.md` instructions are clear, align with the script's functionality, and contain no evidence of prompt injection attempts to subvert the agent's behavior for malicious purposes. The skill explicitly states it is 'read-only' and the code confirms this, focusing solely on analysis and reporting without making changes or exfiltrating sensitive data.",
+          "checkedAt": 1779165121506,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "ae73ef41e670bf8a1607ae513305ebc125875337299a3b1b5f151f0f9a4ec6ef",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ae73ef41e670bf8a1607ae513305ebc125875337299a3b1b5f151f0f9a4ec6ef"
+    },
+    "slug": "agent-audit",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

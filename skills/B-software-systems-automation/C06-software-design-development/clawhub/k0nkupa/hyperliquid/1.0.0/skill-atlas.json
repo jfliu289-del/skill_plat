@@ -1,0 +1,158 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C01:token:sources",
+      "category:C02:token:language",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C06:token:implementation",
+      "category:C07:token:test",
+      "category:C12:token:market",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:software-development",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C02",
+      "C04",
+      "C07",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "research",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "827a245a3639fa075362500494499515d40e582b6b2f4e7acec682dc4fcbc339",
+    "content_hash": "045cdbf00348575490f598e3d96cd191d3e7a7b9d65c6268720e4fe02162d145",
+    "precanonical_content_hash": "550b7ea329a8bf08c079176308b0643190e75886fffc19c79b469153ba24b1a3",
+    "skill_md_hash": "d2086008a10c8e907b9f0c15111fa460f3f716d817de50116dfbaea284879be7",
+    "version_metadata_sha256": "517ca122f2b7568da4d5d02204769bd62078f3591de7d3ea7d8b24e85e9d2bc4"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/k0nkupa/skills/hyperliquid",
+    "claim_id": "05fe48d53a8c4d8064bdd490ba0894e88c21b3ae1f8629684d5d2ca1f4fbb521",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "hyperliquid",
+        "url": "https://clawskills.sh/skills/k0nkupa-hyperliquid"
+      },
+      {
+        "index_path": "categories/data-and-analytics.md",
+        "label": "hyperliquid",
+        "url": "https://clawskills.sh/skills/k0nkupa-hyperliquid"
+      }
+    ],
+    "owner_handle": "k0nkupa",
+    "owner_id": "s179yvzsphapq5ss49dv4zhfh584aptr",
+    "published_at": 1769399507857,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783649815494,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783649815494,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The top manifest emphasizes market data, while SKILL.md, README.md, and the implementation also include read-only account views for positions, balances, orders, and fills. That is broader than the one-line summary, but it is documented and the code does not trade, sign transactions, handle private keys, or mutate Hyperliquid accounts.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill supports explicit hl and /hl commands plus natural-language fallback. Account lookups require a supplied address, saved alias, or default account; alias changes can be invoked by documented commands or specific natural-language save phrasing, but there is no separate confirmation prompt.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains markdown and Node scripts only. I found no installer, package-install step, background worker, shell persistence, obfuscation, or child process execution.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to https://api.hyperliquid.xyz/info is expected for Hyperliquid market and account data. The API URL and timeout can be changed with environment variables, which is useful for configuration but means users should not set HYPERLIQUID_INFO_URL to an untrusted endpoint.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill writes saved account labels, wallet addresses, and an optional default account to ~/.clawdbot/hyperliquid/config.json or an override path. This persistence is disclosed and purpose-aligned, but users should treat the saved labels and addresses as local financial metadata.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] expected: The account-data and alias-management concerns are partially supported by the code, but the features are documented in SKILL.md and README.md and are limited to read-only Hyperliquid API calls plus local alias storage.\n[SDI-4] expected: The read-only label is imprecise because local alias config can be modified, but the artifacts disclose the config path and there is no external account mutation, trading, or credential use.\n[SDI-2] expected: Account inspection helpers expand beyond pure public market quotes, but they match the documented account-view feature and require an address, saved alias, or configured default.\n[SQP-1] expected: Natural-language triggers are expected for this chat assistant. The main caution is accidental invocation, especially after a default account is saved, not hidden behavior.\n[SQP-2] expected: Immediate alias add, remove, and default updates are real local state changes without confirmation, but they affect only the disclosed local config file and are not enough by themselves to move the skill to Review.\n[suspicious.env_credential_access] expected: The static finding is based on environment-variable access plus network fetch. The environment variable is an endpoint override, not a credential read, so this is configuration risk rather than evidence of secret access or exfiltration.",
+          "guidance": "Install this if you are comfortable using it to query wallet-linked Hyperliquid positions, balances, orders, and fills. Avoid saving aliases on shared or managed machines, review or delete ~/.clawdbot/hyperliquid/config.json if needed, and leave HYPERLIQUID_INFO_URL unset unless you intentionally trust the replacement API endpoint.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This Hyperliquid skill is a disclosed read-only data helper, with local alias storage that users should understand before using account features.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783649750972,
+          "issueCount": 13,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 71,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: hyperliquid\nVersion: 1.0.0\n\nThe OpenClaw skill bundle for Hyperliquid is benign. It is explicitly stated as 'read-only' and interacts solely with the public Hyperliquid Info API (`https://api.hyperliquid.xyz/info`). Local configuration, such as account aliases, is stored transparently in `~/.clawdbot/hyperliquid/config.json`. There is no evidence of data exfiltration, malicious execution, persistence, obfuscation, or prompt injection attempts against the agent beyond legitimate instructions for parsing user input and formatting responses, as seen in `SKILL.md` and `scripts/hyperliquid_chat.mjs`.",
+          "checkedAt": 1779159993305,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "f50b2f5b39277081140034e4a08eededb66c0837b315155b8ada5ad2e947610f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/f50b2f5b39277081140034e4a08eededb66c0837b315155b8ada5ad2e947610f"
+    },
+    "slug": "hyperliquid",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,151 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.69,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C05:phrase:image generation",
+      "category:C05:token:image",
+      "category:C05:token:video",
+      "category:C06:token:api",
+      "category:C07:token:quality",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "manage",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "3718e7858ee1058e09b5ef019bbf291c8c0cec78a53294fb8d7d2d05e71caf28",
+    "content_hash": "995e6f843da509af56bc6d1b680436b296a6372013e961227f75274a2221b327",
+    "precanonical_content_hash": "75063ddd3495892b1deb05b54b61b6520c1467a045cd09a79697bffe4cf26024",
+    "skill_md_hash": "881cc4c65fde6ef60610a0bb20dc1243e114014e1f64006f00adad309db49e10",
+    "version_metadata_sha256": "dc920ad8b2638d893139446e5b695ab436be8c470b5fe7baccb7a3d74f38a149"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/rhanbourinajd/skills/ai-video-gen",
+    "claim_id": "06ac1d74f53be47feb4eaf846a4e4b9565babc7ae54bf7461318f24e46b1605a",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "ai-video-gen",
+        "url": "https://clawskills.sh/skills/rhanbourinajd-ai-video-gen"
+      },
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "ai-video-gen",
+        "url": "https://clawskills.sh/skills/rhanbourinajd-ai-video-gen"
+      }
+    ],
+    "owner_handle": "rhanbourinajd",
+    "owner_id": "s175w8vf0j5qyfa24rgebz9vt188567v",
+    "published_at": 1769686950506,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783654307628,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783654307628,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the implementation: generate images/audio/video through OpenAI, Replicate, LumaAI, and FFmpeg, then save local media outputs. Some documented items such as Runway, ElevenLabs, multi_scene.py, edit_video.py, setup.bat, and .env.example are referenced but not present or not implemented, which is a documentation completeness issue rather than evidence of abuse.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Use is CLI-driven with user-provided prompts, narration text, input media, and output paths. The docs identify API keys, providers, and approximate costs, but they should more plainly say that prompts, text, images, and generated media may be sent to third-party services.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses ordinary Python requirements plus FFmpeg. Dependencies are lower-bound ranges rather than locked versions, so installs are not fully reproducible and should use current patched packages in an isolated environment.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Environment-variable API keys, outbound network calls, local file writes, and FFmpeg execution are proportionate for AI video generation. The code would benefit from URL allowlists, request timeouts, content-size limits, media validation, and safer FFmpeg concat handling.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden persistence, background worker, privilege escalation, self-modification, credential harvesting, or broad local indexing was found. Persistence is limited to user-created configuration, generated media outputs, and temporary files.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[TT3] expected: Downloading image URLs returned by image-generation providers is part of the advertised workflow; the lack of URL validation, timeout, and size limits is a hardening gap, not purpose-mismatched behavior.\n[TT2] expected: Downloading a generated video URL from LumaAI is expected for this skill; the implementation should still constrain redirects, hosts, content type, and response size.\n[LP3] expected: The effective needs for env access, network access, file writes, and FFmpeg are visible in the docs and code, though a dedicated permissions section would improve transparency.\n[SQP-2] expected: Sending prompts and voiceover text to AI providers is central to the skill, but the user-facing privacy and billing notice is less explicit than it should be.\n[OH1] expected: FFmpeg processing is expected for video assembly. The concat-file path handling with '-safe 0' and unescaped filenames is a real robustness issue, but it is not hidden or unrelated to the skill's purpose.\n[SC1] expected: The listed packages are normal for this workflow, but using only minimum versions weakens reproducibility and supply-chain hygiene.\n[SC4] unexpected: The exact vulnerable-version claims are not directly established by the artifact because requirements use lower bounds, not pinned versions; users should still install patched current versions and avoid constrained installs that select old releases.",
+          "guidance": "Install this in a virtual environment, keep provider API keys scoped and private, monitor paid API usage, and avoid sending confidential prompts, scripts, images, audio, or videos unless the providers' data policies are acceptable. Keep FFmpeg and Python dependencies updated, and be careful with unusual image filenames and output paths because FFmpeg is invoked locally and selected outputs may be overwritten.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward AI video-generation helper that uses expected cloud providers, local files, and FFmpeg, with some privacy and hardening caveats.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783654250545,
+          "issueCount": 16,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ai-video-gen\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle for AI video generation appears benign. All Python scripts utilize `subprocess.run` with a list of arguments for executing FFmpeg, which is a secure method that mitigates shell injection risks. API keys are loaded from environment variables, and network requests are directed to legitimate AI service providers (OpenAI, Replicate, LumaAI). File system operations are limited to creating output directories and saving generated media, aligning with the skill's stated purpose. No evidence of data exfiltration, persistence mechanisms, obfuscation, or prompt injection attempts in the markdown files was found. The use of `ffmpeg -safe 0` in `images_to_video.py` is noted, but its context within the script (programmatic construction of a file list with absolute paths) does not indicate malicious intent.",
+          "checkedAt": 1779160287560,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "fa81e5eac9b6de0f5e4f59ce78b9a5f8ca468a812bfad478c95e272962238909",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/fa81e5eac9b6de0f5e4f59ce78b9a5f8ca468a812bfad478c95e272962238909"
+    },
+    "slug": "ai-video-gen",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.7167,
+    "domains": [
+      "security"
+    ],
+    "needs_review": false,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C07:token:review",
+      "category:C09:phrase:security audit",
+      "category:C09:token:audit",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:review",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "review",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8a135247cf90bd0085ea382a0135210cfa04e81d13550614d3744076fc6b1a0f",
+    "content_hash": "4417a7f77a0b62a4390b21c9f30966c4415d345831ab369fc7c1b5a4351bacd3",
+    "precanonical_content_hash": "bd248d073dcf51f21d1783f6934722d9a4ac48024622d666385d6ce687b393e9",
+    "skill_md_hash": "41a19bb71737341b17942a6eeaecdaf4af039737f2cf8518e7cfc15a2d71f947",
+    "version_metadata_sha256": "47338fbcbf62474b24e39f28c6992f6d8afcc15d6332f40f509a0a0b546eb98c"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/laurentaia/skills/ai-shield-audit",
+    "claim_id": "9e0e81a32562ece62e36e84165ad7955b2554fe6ae240dfe062e6560d6418765",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "ai-shield-audit",
+        "url": "https://clawskills.sh/skills/laurentaia-ai-shield-audit"
+      }
+    ],
+    "owner_handle": "laurentaia",
+    "owner_id": "s17cb8m53w10b0jyrxeg3q62kn884enc",
+    "published_at": 1771884479257,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779953989344,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779953989344,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The advertised purpose is to audit OpenClaw configs for misconfiguration, permissions, and secret exposure, and the code implements those checks locally. Reading config files is sensitive but coherent with that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The workflow directs the agent to read ~/.openclaw/openclaw.json and run the audit CLI, which can expose secrets to the agent context. The scope is OpenClaw-focused, but it would benefit from a clearer privacy warning before reading or displaying live config content.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package has no dependencies, no postinstall hook, and no hidden installer behavior; it provides a Node.js CLI and a small shell wrapper.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The CLI can read a provided file, stdin, or a live OpenClaw config through a fixed openclaw config.get command with a local file fallback. This is proportionate for an audit tool, but users should treat the inspected config as secret-bearing.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background worker, privilege escalation, automatic mutation, deletion, or network submission path was found. Sanitization writes redacted output to stdout, and auto-fix entries are report suggestions only.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The live-config workflow may place secrets in the agent context, but accessing OpenClaw config data is central to the advertised audit function and is scoped to user-directed audit commands.\n[SQP-2] unexpected: The README mentions a premium remote audit via ACP without explaining data handling. The inspected artifacts do not implement a remote submission path, so this is a documentation caution rather than evidence of exfiltration.\n[suspicious.dangerous_exec] expected: The child_process use is a fixed local command, openclaw config.get, used only for live config retrieval; it is not constructed from user input.\n[VirusTotal/code_insight] expected: The telemetry concern about sensitive config access is supported, but that access is disclosed and purpose-aligned, and there is no artifact evidence of hidden transmission or destructive behavior.",
+          "guidance": "Install this only if you want a local audit of your OpenClaw configuration. Treat OpenClaw configs as sensitive because they may contain API keys, tokens, and remote access details; sanitize before sharing outputs or configs, and do not use any remote or premium audit flow unless its data handling is clearly explained.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a local OpenClaw configuration audit tool; it reads sensitive config data for an expected purpose and does not show artifact-backed exfiltration, persistence, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779953958090,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ai-shield-audit\nVersion: 1.0.0\n\nThe skill is designed to perform security audits of OpenClaw configurations, which inherently involves accessing sensitive data. The `SKILL.md` explicitly instructs the AI agent to `cat ~/.openclaw/openclaw.json`, and `bin/shield.js` uses `execSync('openclaw config.get')` to retrieve live configuration, both of which are high-privilege actions that handle potentially sensitive information (API keys, tokens, etc.). While the stated purpose is beneficial (auditing for secret leaks and vulnerabilities) and a `sanitize` function is provided, the direct instruction to access sensitive files and the use of `execSync` for configuration retrieval, without clear evidence of exfiltration, classify it as suspicious due to the inherent risks associated with such powerful capabilities.",
+          "checkedAt": 1779166600588,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "861495dc8878eb69b520feca3018e588ffbbbc37d2978af48f98537c024f7736",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/861495dc8878eb69b520feca3018e588ffbbbc37d2978af48f98537c024f7736"
+    },
+    "slug": "ai-shield-audit",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,119 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.0,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "fallback:C00"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "298c8aee744dec2842b4d357ad5776cfd594c40d1352d73180e306a36b5e65c6",
+    "content_hash": "0df35b6f6c3d560542e2ee12545639fdc2dca6a34c0a83a244e1cdb573996848",
+    "precanonical_content_hash": "c9bb9dd9b08c6e1bf618fb2cf49254dd4e52c96a302020ecc155595dc6aed1bc",
+    "skill_md_hash": "04e4d7d5e728b6a4863217a7ff8ba3e48828e1ea6d5e6dab1073b67598fff3f9",
+    "version_metadata_sha256": "76b5a8b46e37139e39ad8c29f764bb15a54f71c67b4d74fb191bd9f63fe48e36"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/waqas-orcalo/skills/identitygram-signin",
+    "claim_id": "d3a72313151f5cac9f782cc492e4c9a15ccf46e6e99a11ae0f4ca4b716682d80",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "identitygram-signin",
+        "url": "https://clawskills.sh/skills/waqas-orcalo-identitygram-signin"
+      }
+    ],
+    "owner_handle": "waqas-orcalo",
+    "owner_id": "s176ahnr118h98z4hfgr4dfgjh885sjw",
+    "published_at": 1770873825788,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971685978,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971685978,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe a narrow IdentityGram sign-in skill, and the YAML implements exactly that by POSTing email and password to the documented HTTPS endpoint and mapping the auth response.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The credential flow and returned token fields are disclosed, but the documentation does not give strong handling guidance for passwords, raw responses, access tokens, refresh tokens, logging, or retention.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains markdown documentation, metadata, and a declarative HTTP skill YAML; no install scripts, package installs, executable code, obfuscation, or automatic setup behavior were found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Sending credentials to IdentityGram is proportionate to a sign-in skill, but it is inherently sensitive and should only be used when the user intentionally wants this remote authentication call.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No local persistence, background workers, filesystem access, privilege escalation, credential store access, or hidden execution paths are evident in the artifact files.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The README disclosure that email and password are sent to the IdentityGram auth endpoint is sensitive but directly aligned with the stated sign-in purpose; the missing privacy and token-handling language is guidance-worthy, not enough by itself for Review.\n[SQP-2] expected: The SKILL.md documents returned raw authentication data and token fields. Exposing tokens increases leakage risk, but it is visible to the user and coherent for an authentication wrapper.\n[SQP-2] expected: The SKILL.yaml maps token, accessToken, refreshToken, user, and raw response fields from the remote sign-in response. This should be treated as sensitive output, but there is no artifact evidence of hidden exfiltration, persistence, or unrelated data use.",
+          "guidance": "Install only if you trust the publisher and the IdentityGram endpoint. Expect your email and password to be sent to IdentityGram over the network, and treat any returned access or refresh token like a password: do not expose it in chats, logs, screenshots, or unrelated tools.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This sign-in skill does what it says, but it handles your IdentityGram password and returns login tokens that must be protected.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971647833,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 30,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: identitygram-signin\nVersion: 0.0.2\n\nThe skill is designed to authenticate users with IdentityGram by sending `email` and `password` to a specific, hardcoded endpoint (`https://gateway-v2.identitygram.co.uk/auth/signin`) as defined in `SKILL.yaml`. All documentation (`SKILL.md`, `README.md`) consistently describes this purpose. There is no evidence of prompt injection against the agent, unauthorized data exfiltration, persistence mechanisms, obfuscation, or any other intentional malicious behavior. The handling of sensitive credentials is inherent to the skill's stated function and is performed transparently to the declared service.",
+          "checkedAt": 1779163386963,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "58010db8f8c9e34c43bc42aeb67a0c4732a5ea9d5601f1726a07fa25aa4b7c27",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/58010db8f8c9e34c43bc42aeb67a0c4732a5ea9d5601f1726a07fa25aa4b7c27"
+    },
+    "slug": "identitygram-signin",
+    "source_type": "clawhub",
+    "version": "0.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

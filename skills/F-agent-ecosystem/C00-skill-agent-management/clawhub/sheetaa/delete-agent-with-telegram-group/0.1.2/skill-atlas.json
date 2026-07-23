@@ -1,0 +1,131 @@
+{
+  "classification": {
+    "artifacts": [
+      "website"
+    ],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C19:token:browser",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C19"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "automate",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "29bcb6a51e4bdfb26e9eb39e250d64ac469eb8843c4e5665fc38fdfbfb90aae6",
+    "content_hash": "5018c46f9873a48f6d279acd244021def9853ac9ee6531e20206c3df150f9135",
+    "precanonical_content_hash": "598ea7ccff3f844aeeffcf9b0309aea450b7c31931eac947a6ae62164365b38b",
+    "skill_md_hash": "2d5796f208809ddbcfa68f3a008c755d71bdd9d142a9b7742c9eb0840089a58b",
+    "version_metadata_sha256": "8bbba8022bd12867e7aed290b89d3a4f7e0da3fcd3d4b0c38b621858f6274842"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sheetaa/skills/delete-agent-with-telegram-group",
+    "claim_id": "d5ed3b0f99343e8c9006f06d4e4a7d312b402b0f8f6e3438462818ea4a4fb45b",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "delete-agent-with-telegram-group",
+        "url": "https://clawskills.sh/skills/sheetaa-delete-agent-with-telegram-group"
+      }
+    ],
+    "owner_handle": "sheetaa",
+    "owner_id": "s179d3f8cdkn1z4zg517qr2vmn885hq0",
+    "published_at": 1771689482951,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779947063496,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779947063496,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The capability matches the stated purpose: delete an OpenClaw agent, related local configuration, optional workspace, Telegram routing config, and cron jobs. These are destructive actions, but they are the expected function of this skill.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill instructs agents to run a dry-run first, require explicit confirmation for local deletion, and require separate confirmation before browser/session-controlled Telegram group deletion. The script enforces dry-run or --yes for local changes, while Telegram deletion remains an external/manual workflow.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains a SKILL.md file and one Python cleanup script. I found no hidden installer, package download, background service, obfuscation, or automatic execution path.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script reads and mutates OpenClaw files under the user's home directory, deletes the selected agent directory, can remove matching cron job entries, and can optionally delete a workspace only when it is under the user's home and named claw-*. This access is powerful but proportionate to an agent-deletion tool.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill removes persistent files and cron entries rather than creating persistence. It may use an existing Telegram Web session only after a separately disclosed confirmation for irreversible group deletion.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SkillSpector-current] expected: The supplied current SkillSpector report found no issues; this is consistent with the inspected artifacts.\n[TP4] expected: Metadata included an earlier advisory concern about Telegram deletion safeguards. The artifacts do show high-impact deletion authority, but they distinguish local Telegram routing-config removal from actual Telegram group deletion and require separate confirmation for browser/session-controlled group deletion, so this supports user caution rather than a Review verdict.\n[staticScan] expected: Static scan reported no suspicious patterns, and artifact inspection found no unrelated network access, credential harvesting, hidden persistence, or obfuscated behavior.\n[VirusTotal] expected: VirusTotal telemetry was clean; this was treated as supporting telemetry only, not as the sole basis for the verdict.",
+          "guidance": "Install only if you want a tool that can permanently delete an OpenClaw agent and related artifacts. Before approving execution, review the dry-run output carefully, verify the agent ID, workspace path, Telegram group, and cron jobs, and keep the generated backup files for recovery. Use manual Telegram deletion if you do not want the agent controlling a logged-in Telegram Web session.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill performs destructive agent cleanup, but its behavior is disclosed, purpose-aligned, and guarded by dry-run, confirmation, backup, and path checks.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779947031408,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: delete-agent-with-telegram-group\nVersion: 0.1.2\n\nThe skill bundle is designed for the legitimate, albeit destructive, purpose of cleanly deleting an OpenClaw agent and its associated artifacts. The `scripts/delete_agent.py` script implements robust security guardrails, including strict input validation (`re.fullmatch` for agent ID), path traversal prevention (`validate_within` function ensuring operations are confined to expected directories and user home), and explicit confirmation (`--yes` flag) for destructive actions. The `SKILL.md` instructions emphasize multiple user confirmations for irreversible actions like Telegram group deletion, which, while powerful, is explicitly stated as part of the skill's purpose and not an attempt at unauthorized access or data exfiltration. No evidence of malicious intent, data exfiltration, persistence, or obfuscation was found.",
+          "checkedAt": 1779082742615,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "7f9ed1eb4ee1a18d6a5baaa2134c36cd570dbf2655831434ffa8eecbc17541c3",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/7f9ed1eb4ee1a18d6a5baaa2134c36cd570dbf2655831434ffa8eecbc17541c3"
+    },
+    "slug": "delete-agent-with-telegram-group",
+    "source_type": "clawhub",
+    "version": "0.1.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

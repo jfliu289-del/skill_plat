@@ -1,0 +1,136 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d9868966c52f9235e5356e729c0cf57c6cb2784081afc761f7790ffa0b10704a",
+    "content_hash": "3373f063e1a18b65126ac853f6e9a9aa95b1dd50581a9d47248088a8056ff072",
+    "precanonical_content_hash": "a9e1547772ea1e254154c3bf0a4f7c867539234895a4a9ef16f34c60d073319a",
+    "skill_md_hash": "5eac2941c4e91a83428c633ea106fb6d3d7f74f6c52477c543238f39b592508d",
+    "version_metadata_sha256": "2b111bb8fd49b3e0d8190a4a1296ebe9d35aa19793986feca8e1be7359d5aeda"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/teltel-call-center/skills/teltel-send-sms-text-message",
+    "claim_id": "4e8d2d621fb6af48c3dece756c9852dce92bc4779e2e2ef6a3fe264052f5bf2a",
+    "index_entries": [
+      {
+        "index_path": "categories/communication.md",
+        "label": "teltel-send-sms-text-message",
+        "url": "https://clawskills.sh/skills/teltel-call-center-teltel-send-sms-text-message"
+      }
+    ],
+    "owner_handle": "teltel-call-center",
+    "owner_id": "s17a9k22nkfgsk81hw6dfd6hw9885p1k",
+    "published_at": 1770492883306,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658991432,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658991432,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose, scripts, API endpoint, required recipient/message inputs, API key use, sender configuration, and single/bulk SMS payloads all align with a TelTel SMS integration.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "SMS delivery can cost money and contact real recipients, and bulk sending lacks explicit confirmation language in the documentation; however, the scripts are user-invoked, require recipient and message arguments, and include dry-run support.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains a markdown skill file and two Node scripts, with no unusual installer, package install hook, startup behavior, or mutation of other skills or agent settings.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Reading TELTEL_API_KEY, TELTEL_SMS_FROM, and optionally TELTEL_BASE_URL is proportionate for the purpose; message text, phone numbers, sender data, and optional callbacks are sent to the configured SMS API, which users should understand before use.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No evidence shows background workers, persistence, privilege escalation, credential harvesting, broad local file access, or destructive behavior.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The environment-variable and outbound-network behavior is expected for a third-party SMS API skill and is substantially disclosed through TELTEL_API_KEY, TELTEL_SMS_FROM, TELTEL_BASE_URL, and the TelTel API endpoint; missing richer permission declarations are a transparency improvement, not evidence of unsafe behavior.\n[SQP-1] expected: The real-world impact of SMS sending is valid user guidance, especially for bulk sends, but artifact behavior remains user-directed through explicit command arguments and dry-run support.\n[SQP-2] expected: Sending phone numbers, message content, sender identifiers, and optional callback URLs to TelTel is inherent to the stated SMS function and is visible in the documented API payloads, though a clearer privacy warning would improve disclosure.\n[VirusTotal] expected: The supplied telemetry reports no detections and describes the scripts as aligned with TelTel SMS sending; this supports but does not solely determine the benign verdict.",
+          "guidance": "Install only if you want the agent to send SMS through your TelTel account. Treat the TelTel API key as sensitive, use dry-run or explicit confirmation before bulk sends, and avoid sending secrets, regulated data, or sensitive personal information in SMS unless you are authorized to share it with TelTel and the recipients.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill appears to do what it says: send single or bulk SMS messages through TelTel, with no evidence of hidden persistence, unrelated data access, or deceptive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658943965,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 29,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: teltel-send-sms-text-message\nVersion: 1.0.1\n\nThe skill is designed to send SMS messages via the TelTel API, and all files align with this stated purpose. The Node.js scripts (`send_sms.js`, `send_sms_bulk.js`) correctly read API keys and sender information from environment variables (`TELTEL_API_KEY`, `TELTEL_SMS_FROM`) or command-line arguments, and make legitimate API calls to `https://api.teltel.io/v2`. There is no evidence of data exfiltration beyond what is necessary for the API interaction, no malicious execution patterns, no persistence mechanisms, and no prompt injection attempts in `SKILL.md` instructing the agent to perform unauthorized actions. The inclusion of a `--dry-run` option further indicates a focus on transparency and controlled execution.",
+          "checkedAt": 1779162096682,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "566b32d828b8b6231803463ae326e8782304442f50e71d3c8199e4d3d66444c4",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/566b32d828b8b6231803463ae326e8782304442f50e71d3c8199e4d3d66444c4"
+    },
+    "slug": "teltel-send-sms-text-message",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:browse",
+      "category:C01:token:search",
+      "category:C03:token:pdf",
+      "category:C06:token:api",
+      "category:C12:token:management",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C03",
+      "C06",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "discover"
+    ],
+    "tasks": [
+      "build",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1c2c84b148a73783611f31c8e7c58aff5ef012b26554594a1742f0ec68ea32e8",
+    "content_hash": "ecb52ef485f1b551421cbbe9b471827c7371f98f7a77b7e1a3db17a0d6fd54d6",
+    "precanonical_content_hash": "15fa23c027d51a62ef3a07abf7a9b3ab1c3abbc3f2147ecc16e958461d778ab9",
+    "skill_md_hash": "f652f7cd0b158005f34ab9bb033d2e6552a311bbd15412d90d8fc4c86bb6101a",
+    "version_metadata_sha256": "40fe55e11508f00af40f973729d2bff9ed67419e3a7f6f56280834157ceff03d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/killgfat/skills/pyzotero",
+    "claim_id": "173c23e818a2620513361b57389afc4bc7c536646d5d3d0cceb7d380f2507109",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "pyzotero",
+        "url": "https://clawskills.sh/skills/killgfat-pyzotero"
+      }
+    ],
+    "owner_handle": "killgfat",
+    "owner_id": "s17d0zyy31mmgnhxcs17jmbmk583na3e",
+    "published_at": 1772151019543,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779961523194,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779961523194,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe Zotero library search, browsing, item creation, and collection management using local Zotero or the official Zotero Web API.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill documents read and write actions, including bulk item add, collection rename, item collection changes, and collection deletion; deletion is user-invoked and prompts by default, with a documented bypass flag.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses standard pipx or pip installation of the pyzotero package. This is coherent for the purpose, though it delegates package trust to the Python package source.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Online mode reads ZOTERO_USER_ID and ZOTERO_API_KEY and uses them for Zotero access, which fits the skill purpose. Documentation does not consistently warn that the API key is sensitive or that online mode sends library queries and metadata to Zotero.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The code does not create background persistence, but documentation suggests storing API configuration in shell startup files and includes a recursive uninstall deletion command limited to the skill directory.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The API-key findings reflect real documentation weaknesses, but the artifact behavior is purpose-aligned: credentials are read from environment variables for Zotero access, with no evidence of unrelated logging or unauthorized endpoints.\n[SQP-2] expected: The shell-profile guidance can leave a long-lived key in plaintext, but it is user-directed setup guidance rather than hidden runtime persistence.\n[SQP-2] unexpected: Troubleshooting examples that echo configuration values, including an API key in some docs, are poor secret-handling guidance and users should avoid doing that in shared terminals or logs.\n[SQP-2] expected: The rm -rf command is an uninstall step targeting the skill directory only; it should be reviewed before use, but it is not automatic or purpose-mismatched.",
+          "guidance": "Install only if you are comfortable giving the tool access to your Zotero library. Prefer local mode when possible. For online mode, create a least-privilege Zotero API key, avoid storing it in shared dotfiles, do not echo it in terminals or logs, and review collection delete, rename, and bulk add commands before execution.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Zotero library management skill, but users should handle Zotero API keys carefully and review write or delete commands before running them.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779961465892,
+          "issueCount": 8,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 91,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: pyzotero\nVersion: 2.2.0\n\nThis skill provides Python scripts to manage Zotero libraries, supporting both local and online API modes. It handles Zotero API keys via environment variables, which is a standard practice for CLI tools. All network calls are directed to the official Zotero API (api.zotero.org) for legitimate library management operations, such as searching, listing, adding, and deleting items/collections, as seen in `scripts/zotero_tool.py`. There is no evidence of data exfiltration to unauthorized endpoints, malicious execution, persistence mechanisms, or prompt injection attempts in `SKILL.md` or other documentation files. The code and instructions are clearly aligned with the stated purpose of Zotero library management.",
+          "checkedAt": 1779162357195,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a7ec8a0afd3ea935c57a81e2f9623e993123922def11a0272c6e08e871461c30",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a7ec8a0afd3ea935c57a81e2f9623e993123922def11a0272c6e08e871461c30"
+    },
+    "slug": "pyzotero",
+    "source_type": "clawhub",
+    "version": "2.2.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,135 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.31,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C10:token:model",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "26bba4ee635565e6839d6792cda59d722fa097346c3026466c9f7a68a656a3fa",
+    "content_hash": "bbb377fae6806bfc5a0f1dc4dbdc10625b13b5f4411bf70d40e59240b58cfc0a",
+    "precanonical_content_hash": "10708beb86e5350744ca9a071d436c8e893a2946b28bb74c617ad6d9d5190e1f",
+    "skill_md_hash": "c6ee70ded537dd1563247a133dc605c7b6edada2a7d83a8eccec571d28298d75",
+    "version_metadata_sha256": "e133c919eabccf953d4b3b03cb30173c4dc4291ce3a2f5bb728d44019e827a12"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/hxy9243/skills/zettel-link",
+    "claim_id": "7c6525bde9d7dfbd26f0fed84f3ddee8ddc35b9bc5f113049f1da53822fddb8a",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "zettel-link",
+        "url": "https://clawskills.sh/skills/hxy9243-zettel-link"
+      }
+    ],
+    "owner_handle": "hxy9243",
+    "owner_id": "s174jr89gtts64q6r7vjgw2e2983fhme",
+    "published_at": 1772256775391,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779948603719,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779948603719,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts match the stated purpose: they read user-selected Markdown notes, create embeddings, run semantic search, and compute note-to-note similarity links.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The activation text is somewhat broad, but runtime commands require an explicit input directory and the skill says to prompt before creating embeddings when needed; no hidden automatic vault-wide execution was found.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The README install command points at a mutable GitHub branch path, which is less reproducible than a pinned release, but no install-time payload or hidden setup behavior appears in the artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Default configuration uses local Ollama. OpenAI and Gemini modes are user-configured and restricted to official endpoints, but those modes send note/query text to external APIs and should be treated as a privacy-sensitive choice.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill writes local config, embedding cache, search result, and link files under the skill or selected notes directory. It reads only named provider API keys from environment variables or a documented skill-root .env file.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: Confirmed: OpenAI/Gemini embedding modes can transmit cleaned note contents and search queries to third-party APIs. This is purpose-aligned, optional, and endpoint-restricted, but the privacy disclosure should be clearer.\n[SQP-1] expected: The trigger wording is broad, but the reviewed scripts still require explicit CLI inputs and do not show hidden background indexing or unrelated execution.\n[SQP-2] expected: The .env/API key documentation is for legitimate remote provider authentication; the code reads named keys from the environment or skill-root .env only, with no broad credential harvesting found.\n[staticScan] expected: Static scan reported no findings, consistent with artifact inspection.\n[VirusTotal] expected: VirusTotal telemetry was clean and aligned with the inspected code, but was not used as the sole basis for the verdict.",
+          "guidance": "Install only if you are comfortable indexing the selected notes folder. Use the default local Ollama provider for private vaults; if you switch to OpenAI or Gemini, assume note text and search queries are sent to that provider. Keep any .env file out of synced or committed note folders, and review or delete the .embeddings cache when you no longer want derived note data stored.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Zettel Link is a coherent note-search skill, but users should understand that remote embedding providers can receive note text and search queries if selected.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948565368,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 84,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: zettel-link\nVersion: 1.1.3\n\nThe OpenClaw skill 'zettel-link' is classified as benign. The Python scripts are designed for semantic search and linking of notes, using local or remote embedding providers. A critical security control is implemented in `scripts/embed.py` (and used by `scripts/search.py`): the `validate_url` function strictly enforces `ALLOWED_DOMAINS` for all API calls, preventing data exfiltration to arbitrary external endpoints. API keys are handled securely by reading from environment variables or a local `.env` file for legitimate API authentication, without any evidence of malicious intent or exfiltration. The `SKILL.md` and `README.md` files contain clear, functional instructions without any prompt injection attempts.",
+          "checkedAt": 1779166113434,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "11645e033fc8e6fc57a1877e9bdce91391bc554f3780694f0d1a2c25fe6e80a9",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/11645e033fc8e6fc57a1877e9bdce91391bc554f3780694f0d1a2c25fe6e80a9"
+    },
+    "slug": "zettel-link",
+    "source_type": "clawhub",
+    "version": "1.1.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.69,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C04:token:dashboard",
+      "category:C05:phrase:image generation",
+      "category:C05:token:image",
+      "category:C05:token:video",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "5e8b4489f538746ffb4ca8446d55561b164ed3c3daf179f58818932357edc06e",
+    "content_hash": "915bfc3d692d70325bf2b6e800b59f0a7a48352f11770c5c999966f1e90e0a99",
+    "precanonical_content_hash": "accae878eb1885251c2e4be19bb58b207be443ec883303d55b5a6d609ff1c04e",
+    "skill_md_hash": "113a79c5beae60d1aa2c891081101b5cfc8f21542078134545baeb6617fc3b5c",
+    "version_metadata_sha256": "ea09d81b18bc7588c1bb78c978345d33caf3499c4ee320abb51ad58d965656ee"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/iamzifei/skills/imaginepro-api",
+    "claim_id": "a1d5ecb176949aeb8595e647c9c40acbada1b7152d3ca3a638cef49e39e7817d",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "imaginepro-api",
+        "url": "https://clawskills.sh/skills/iamzifei-imaginepro-api"
+      }
+    ],
+    "owner_handle": "iamzifei",
+    "owner_id": "s17c1xt6bfwnnc6aqzcvj39xdx83nkt7",
+    "published_at": 1771752772446,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779949017007,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779949017007,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is image/video generation and post-processing through ImaginePro, and the Python helper implements only matching API operations such as imagine, wait, status, upscale, background removal, prompt enhancement, and model listing.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions encourage agent-run, credit-consuming API calls and polling, but they document the commands, model costs, required API key, and ImaginePro base URL. A clearer privacy warning would be useful but the external API use is not hidden.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no installer, package dependency fetch, or setup script. The bundle consists of documentation, an announcement markdown file, and a standard-library Python CLI requiring python3 and IMAGINEPRO_API_KEY.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Outbound HTTPS requests, bearer-token authentication, prompts, reference image URLs, frame URLs, and image URLs are proportionate to the API-wrapper purpose. Users should still treat submitted prompts and URLs as shared with a third-party service.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence mechanism, privilege escalation, shell execution, local file harvesting, credential-store access, obfuscation, destructive action, or background worker behavior was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The documentation shows prompts, image URLs, webhook examples, and bearer authentication being used with ImaginePro. The concern is a valid privacy-disclosure improvement, but the data flow is expected for an external image-generation API wrapper.\n[SQP-2] expected: The helper sends user-supplied prompts and media URLs only to the configured ImaginePro API base URL. Lack of an interactive consent prompt in this CLI is not a Review-level issue because the commands are user-directed and aligned with the skill purpose.",
+          "guidance": "Install this only if you intend to let an agent use your ImaginePro account and credits. Use a dedicated API key if possible, monitor credit usage, and avoid submitting confidential prompts, private/internal image URLs, personal data, or sensitive webhook endpoints unless you accept ImaginePro processing them.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward ImaginePro API wrapper that sends user-provided prompts and image URLs to ImaginePro for the advertised image/video generation features.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948991028,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: imaginepro-api\nVersion: 1.0.0\n\nThe skill bundle is benign. The `imaginepro_api.py` script uses only standard Python libraries (`urllib.request`, `json`, `os`, `sys`, `time`, `re`) to interact with the ImaginePro API. It correctly handles API key authentication via environment variables and makes network calls only to the specified `https://api.imaginepro.ai/api/v1` endpoint. There is no evidence of data exfiltration, unauthorized remote execution, persistence mechanisms, or obfuscation. The `SKILL.md` instructions are clear, directly related to the skill's purpose, and do not contain any prompt injection attempts to subvert the AI agent's behavior for malicious ends. The `webhookOverride` parameter is a standard API feature, not a malicious instruction from the skill itself.",
+          "checkedAt": 1779166165527,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "d31ad9c136707ae8b0665c03cc9cbaf011270570a779223b39d9b7dd5301be2b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d31ad9c136707ae8b0665c03cc9cbaf011270570a779223b39d9b7dd5301be2b"
+    },
+    "slug": "imaginepro-api",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

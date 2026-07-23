@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C02:token:write",
+      "category:C03:token:pdf",
+      "category:C05:token:design",
+      "category:C07:token:quality",
+      "category:C10:token:model",
+      "cross-tag:design",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C03",
+      "C05",
+      "C07",
+      "C10"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "design",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "35a6ee31e23712b04274e8ba32969e1b898f8f54010a0d5240d077a51cc25c63",
+    "content_hash": "7dee70bfbb1d4892c2b8e17b57d69e9f66b0fa06b71c601ce0eaaa82c21d2f95",
+    "precanonical_content_hash": "3fc6547426f453638070676dd7e542ac7c81b171a477f85967662d136fafe88f",
+    "skill_md_hash": "3ff00813ae96ba239663ac28aad424e3a2f04466cdf9e562d0de905ee68ab23f",
+    "version_metadata_sha256": "d8fd4720af77a3db40c4f85701567ff0d016462efe536f398964d79a3b1d446d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/trondw/skills/math-worksheets",
+    "claim_id": "be6843073c5d818002c03ab34cd34d28ea62f709e9b81d9ff119fc0117b7bf18",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "math-worksheets",
+        "url": "https://clawskills.sh/skills/trondw-math-worksheets"
+      }
+    ],
+    "owner_handle": "trondw",
+    "owner_id": "s175jxj1rjk3azjdda2kdgbaps884t6j",
+    "published_at": 1771915684382,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779950850632,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779950850632,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "Generating math worksheets, compiling PDFs, and verifying answers with SymPy are coherent with the stated purpose. Optional delivery through messaging, email, or printing expands the surface but still fits the worksheet workflow when user-directed.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The reported local model inspection and hosted ranking fetch are not central to worksheet generation and should be disclosed more clearly, but the supplied evidence does not show credential theft, exfiltration, or hidden control.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Use of Python, SymPy, Tectonic/LaTeX, package installation, and printer commands is proportionate for creating and printing PDFs. Tectonic package downloads create normal build-time network activity.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Photo-guided worksheet generation and outbound sharing can involve children's educational information, so users should minimize or redact personal data before use.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No evidence was supplied of persistence, privilege escalation, background workers, destructive actions, obfuscation, or secret collection beyond normal use of configured local tools or sharing channels.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: Network activity from TeX package retrieval is expected for PDF builds; the hosted model-ranking fetch is less core and should be disclosed, but it is not enough by itself to move the skill to Review.\n[TP4] unexpected: Local model configuration checks and external model rankings are ancillary to worksheet generation. This is a disclosure and scoping concern, but the evidence does not show sensitive data transmission or hidden misuse.\n[SDI-2] expected: Sending generated worksheets through Telegram, SMS/iMessage, email, or printing is purpose-aligned if explicitly requested by the user, but it can expose student-related content through external services.\n[SQP-2] expected: Using a homework photo as a guide is plausible for worksheet creation, but the skill should warn users to remove names, faces, school identifiers, and other personal details first.\n[SQP-2] expected: Generated PDFs and filenames may include student-related details when shared externally; this is a privacy guidance issue rather than evidence of malicious behavior.",
+          "guidance": "Install only if you want a skill that can create, compile, verify, and optionally distribute math worksheets. Keep use local unless you intentionally choose a sharing channel, redact student names or school details from photos and PDFs, and review any generated worksheet before sending or printing.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to be a worksheet generator with some privacy-sensitive optional sharing features, not malware or a deceptive package.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779950803472,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 84,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: math-worksheets\nVersion: 2.0.0\n\nThe skill appears benign. It generates math worksheets using LaTeX and verifies answers with SymPy. The `SKILL.md` instructions are clear and task-oriented, without any prompt injection attempts to manipulate the agent into unauthorized actions. Crucially, the `scripts/verify.py` script, which processes AI-generated content, uses `sympy.sympify` for safe mathematical expression parsing instead of `eval()` or `exec()`, explicitly addressing a potential RCE vulnerability from previous versions as noted in `README.md`. All shell commands executed (`brew`, `tectonic`, `python3`, `lpr`) are for legitimate skill functionality, and there are no network calls for executable content or signs of data exfiltration, persistence mechanisms, or obfuscation.",
+          "checkedAt": 1779166348001,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "35a6ee31e23712b04274e8ba32969e1b898f8f54010a0d5240d077a51cc25c63",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/35a6ee31e23712b04274e8ba32969e1b898f8f54010a0d5240d077a51cc25c63"
+    },
+    "slug": "math-worksheets",
+    "source_type": "clawhub",
+    "version": "2.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

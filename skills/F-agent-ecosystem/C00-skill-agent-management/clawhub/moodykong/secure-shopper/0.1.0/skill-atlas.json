@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "website"
+    ],
+    "audiences": [],
+    "confidence": 0.2643,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:plugin",
+      "category:C01:token:browse",
+      "category:C01:token:research",
+      "category:C09:token:secure",
+      "category:C17:token:notes",
+      "category:C19:token:browser",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C09",
+      "C17",
+      "C19"
+    ],
+    "stages": [
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "automate",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "57bc5c62cd384da67f494009989129bbbc78629203d4fbaae215be06b2341f01",
+    "content_hash": "bfd1f41fa6518d1a6729d535914d048962ea1ead476c45d7e60800786801322e",
+    "precanonical_content_hash": "6abf150e69874461bd63200ce1b0496d1a53e7e0fe61357329dee99e4e745003",
+    "skill_md_hash": "0e0d60d384c4a45f7d0ec0d620d71b452b152432ab45c9313d7b20a78251e022",
+    "version_metadata_sha256": "6999adf709db230f5da26ba900086c30a2c388e723ee0b9dcb8ac84ec54aa672"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/moodykong/skills/secure-shopper",
+    "claim_id": "98e5008148055dafdf2251db04c7b9673261475c9f6ab555cfcd87fc82be6339",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "secure-shopper",
+        "url": "https://clawskills.sh/skills/moodykong-secure-shopper"
+      }
+    ],
+    "owner_handle": "moodykong",
+    "owner_id": "s17bmvm4mtehh962q2etg1s8w1884r8m",
+    "published_at": 1771740205148,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779948614272,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779948614272,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "Shopping research, candidate selection, secure-autofill login, and optional checkout all fit the stated purpose; checkout can create real purchases, so the confirmation gates matter.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions require a shopping task, honor runtime overrides, use a disclosed browsing sub-agent, require accept/deny on candidates, and require explicit yes/no checkout confirmation before placing an order.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no hidden install-time execution; onboarding is an optional script that writes skill-local config, and the skill depends on a separate secure-autofill setup that should be reviewed separately.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Browser access, shopping-site visits, zip/address context, and secure-autofill use are proportionate to shopping and checkout; the hardcoded /home/miles workspace path is non-portable.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill writes shopping prompts, preferences, candidates, URLs, and statuses to local workspace artifacts and discloses that behavior; no background service, credential logging, exfiltration, or destructive action was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-2] unexpected: Verified: the status helper accepts an arbitrary --file path and rewrites matching JSON. This is an under-scoped local integrity weakness, but it is not automatic, hidden, or evidence of malicious behavior.\n[SQP-2] expected: Verified: task artifacts persist shopping prompts and candidate data. This is expected for the advertised asynchronous workflow and is disclosed in the skill text, though retention and privacy wording could be clearer.",
+          "guidance": "Install only if you trust the separate secure-autofill workflow. Avoid putting unnecessary sensitive details in shopping prompts, periodically delete old secure_shopping artifacts, and verify item, price, quantity, shipping address, delivery date, and payment method before confirming checkout.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill performs shopping research and optional checkout with clear user-confirmation gates, but users should treat its saved shopping artifacts as sensitive.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948555037,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: secure-shopper\nVersion: 0.1.0\n\nThe skill bundle is designed for asynchronous shopping and checkout, leveraging a 'secure-autofill' skill for sensitive operations. The `SKILL.md` provides clear instructions for the AI agent, including explicit guardrails such as 'Never paste secrets' and mandatory user confirmation for checkout, mitigating prompt injection risks. The JavaScript utilities (`onboard.mjs`, `task_io.mjs`) perform file I/O strictly within the skill's configuration directory and a designated workspace artifact directory (`/home/miles/.openclaw/workspace/artifacts/secure_shopping/`), using `path.join` to prevent path traversal. There is no evidence of intentional malicious behavior, data exfiltration, unauthorized execution, or persistence mechanisms.",
+          "checkedAt": 1779166126432,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "cb8b34eee601b0fdf80b3df592c2969c5a69b40c300a06cfea0649fa4642ff08",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/cb8b34eee601b0fdf80b3df592c2969c5a69b40c300a06cfea0649fa4642ff08"
+    },
+    "slug": "secure-shopper",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

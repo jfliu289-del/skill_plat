@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.1417,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C05:token:video",
+      "category:C07:token:review",
+      "category:C10:token:ai",
+      "category:C11:token:product",
+      "category:C12:token:management",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:review"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05",
+      "C07",
+      "C10",
+      "C11",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "design",
+      "manage",
+      "review"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "67e0c8903fdb2c66556b31e5b3f4a0ab7f6c655be0f51a1ef7b5f9b2c4c18297",
+    "content_hash": "5da2e9f6301538ec765ac18078b3ce1384693de5a083aac9f28022b28e8cfa65",
+    "precanonical_content_hash": "9de67798d1386338d3f7785e993de4bca3914201443827054f95e7a240957445",
+    "skill_md_hash": "d064745a019ceaac139dcc5337db0c60452e49792c98762391aae3c70bf8c404",
+    "version_metadata_sha256": "36a1b942f165dbf65cd0497c770793e60eedc9b0cccf08a22adbf52e6eee1e94"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/nevo-david/skills/agent-media",
+    "claim_id": "c8512d60670d8bae4f55b557c22555c61fad649bb3758bc1ab0ee9a96ffaae63",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "agent-media",
+        "url": "https://clawskills.sh/skills/nevo-david-agent-media"
+      }
+    ],
+    "owner_handle": "nevo-david",
+    "owner_id": "s17ees28yb2fktpcyfrfy9mx3n83ppvx",
+    "published_at": 1772615427223,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779922406384,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779922406384,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The documented capabilities fit the stated purpose of producing UGC and SaaS review videos with a hosted CLI, including actors, screenshots, face and voice assets, subtitles, and job management.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are mostly workflow and quality controls, but they do direct the agent to visit product URLs and use screenshot URLs or local files for B-roll without a separate confirmation step.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill is instruction-only, but it requires installing the external global npm package agent-media-cli and authenticating with agent-media login, so package provenance matters.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Remote URL fetching and local file upload are proportionate for cloud video generation and are disclosed for B-roll images, but users should treat screenshots, face photos, voice samples, and videos as data leaving the machine.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact shows normal CLI authentication and account use, with no bundled persistence, background worker, privilege escalation, or self-running behavior.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The product-site browsing concern is supported by the artifact, but it is tied to user-supplied SaaS review workflows and not evidence of hidden or unrelated network activity.\n[SQP-2] expected: The local-file upload concern is supported by the artifact and should be called out to users, but the behavior is disclosed and aligned with generating videos from user-selected media.\n[VirusTotal code_insight] expected: The telemetry flags browsing, uploads, and shell-command risk; the inspected artifact contains only CLI usage instructions, static scan is clean, and the risky capabilities are expected for the media-generation purpose.\n[static-scan] expected: Static scan reported no findings, and the artifact contains only SKILL.md with no executable scripts.",
+          "guidance": "Before installing, verify the npm package and GitHub project for agent-media-cli. Use only the account you intend to charge or associate with generated videos, and provide only product screenshots, local files, face photos, voice samples, URLs, and videos that you are comfortable uploading to the service.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent guide for using an AI video CLI, but users should be careful because provided media files and product URLs may be sent to external services.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779922365850,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 35,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: agent-media\nVersion: 1.0.1\n\nThe skill is classified as suspicious due to instructions that enable risky capabilities and potential vulnerabilities. Specifically, the `SKILL.md` instructs the AI agent to 'visit the site yourself and extract image URLs from the page' from arbitrary URLs, posing a potential Server-Side Request Forgery (SSRF) or web scraping risk. Additionally, several `agent-media` commands (e.g., `--broll-images`, `persona create`, `subtitle`) explicitly accept and 'auto-upload' arbitrary local file paths, creating a risk of local file exfiltration if an attacker can control the path. There's also a general risk of command injection given the construction of shell commands from user-provided text.",
+          "checkedAt": 1779165239844,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "77cac19cba4ef8155582539a42193794161cfa4d2483d397150f60700d270948",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/77cac19cba4ef8155582539a42193794161cfa4d2483d397150f60700d270948"
+    },
+    "slug": "agent-media",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "configuration"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.525,
+    "domains": [
+      "infrastructure",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C07:token:test",
+      "category:C08:token:ci",
+      "category:C08:token:deploy",
+      "category:C08:token:github",
+      "cross-tag:deployment",
+      "cross-tag:testing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C07"
+    ],
+    "stages": [
+      "deliver",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "deploy",
+      "operate",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "89f94f02cb624d19ad31d785a1a081fca403d1e2ff09d1f68282c13a2473c409",
+    "content_hash": "daf7fc8e54c7f29bc300a25bb61f160aaee570da4681f1a18de700cf83f9d860",
+    "precanonical_content_hash": "eaf8f797695e0e36606ee1744b2785833adb39e1596669b985ea2eb8dfef2bb1",
+    "skill_md_hash": "6edd9d7500af4b474e8d38019ef744a4a743eb0d3ab2108222525d459a8b9bad",
+    "version_metadata_sha256": "20dffafb4ce0edf54bbf35bf33c3f32c580989ad57a98c37c7326c2a686964a8"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/branexp/skills/gh-action-gen",
+    "claim_id": "85e64d1f56dd4b993e394f5c0ba0abc6aa0d303e079225d8b95da83dc7dde76b",
+    "index_entries": [
+      {
+        "index_path": "categories/git-and-github.md",
+        "label": "gh-action-gen",
+        "url": "https://clawskills.sh/skills/branexp-gh-action-gen"
+      }
+    ],
+    "owner_handle": "branexp",
+    "owner_id": "s17f35ypf03tpcqeq92yw31pzx885fkc",
+    "published_at": 1770916616701,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972493659,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972493659,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe and implement GitHub Actions workflow generation from a plain-English description using OpenAI, with no unrelated capabilities found.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The invocation language is broad for CI setup, so it should be used only when the user explicitly wants a GitHub Actions workflow created or edited.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "It is an npm/npx CLI with no root install scripts in package metadata; dependencies are standard for a Node CLI and OpenAI client.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The OPENAI_API_KEY requirement is documented and used for the OpenAI API call. The user's workflow description is sent to OpenAI, so sensitive CI/CD details should not be included.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistent effects are user-directed writes: --install writes .github/workflows/ai-generated.yml, and --output writes to a caller-specified path. No background persistence, privilege escalation, deletion, or automatic execution was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: Verified that raw workflow descriptions are sent to OpenAI. This is the core function of an AI workflow generator and the API-key requirement is disclosed, but users should avoid including secrets or proprietary deployment details.\n[VirusTotal code_insight] expected: Verified that the reported prompt-injection and file-write risks describe possible misuse of generated output, not hidden behavior. The tool writes only when the user passes --install or --output and does not execute the generated YAML locally.",
+          "guidance": "Install only if you are comfortable sending the workflow description to OpenAI. Do not paste tokens, credentials, private infrastructure details, or sensitive deployment logic into the prompt. Prefer printing the YAML or writing to a new file first, then review it like code before committing it because GitHub Actions can run with repository permissions and secrets.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward GitHub Actions workflow generator, but users should review generated workflow files and avoid putting secrets in prompts.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972456537,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: gh-action-gen\nVersion: 1.0.1\n\nThis skill is classified as suspicious due to two critical vulnerabilities: a prompt injection vulnerability against the underlying OpenAI model and an arbitrary file write capability. The `src/index.ts` file directly interpolates user input (`description`) into the prompt sent to OpenAI, allowing a malicious user to bypass system instructions and potentially generate non-YAML or malicious YAML content. Furthermore, the `src/cli.ts` file allows writing the AI-generated output to an arbitrary file path specified by the `--output` option. When combined, these vulnerabilities could lead to remote code execution if a malicious user crafts an input that tricks the AI into generating executable code, which is then written to a sensitive location.",
+          "checkedAt": 1779163448662,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "8912325c2c040fe9949ace52ea270ba97a46d26cdfee78d9c81911dd080eb5f7",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8912325c2c040fe9949ace52ea270ba97a46d26cdfee78d9c81911dd080eb5f7"
+    },
+    "slug": "gh-action-gen",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

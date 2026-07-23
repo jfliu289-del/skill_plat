@@ -1,0 +1,128 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.75,
+    "domains": [],
+    "needs_review": false,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:phrase:agent skill",
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C10:token:ai",
+      "category:C18:token:health",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "263a018e501d4b47b0336b1935cbf5bd17bea80ae13ce95ad1fcbcc2d7e4a95f",
+    "content_hash": "36829a1e37a723c3570f123f76381e36c59c2d3da9b311e9c024d40e9b3ff8f7",
+    "precanonical_content_hash": "9d45bb03b089dce686f51a7009e0e77377b1a66cb1648d90f8de42fdc69c561a",
+    "skill_md_hash": "e38970cebe41b72bbf5f275fc575f0d7905a0899640bac6d3fa15d5f8e27f706",
+    "version_metadata_sha256": "677e48666baa96b42146b8f79d88729628f54bdeb84a894de62c279fce88580b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tsu-j/skills/bort-agent",
+    "claim_id": "0516905779a52fdac18209e9d14568ef2ed08068729b6f651638bc088445e777",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "bort-agent",
+        "url": "https://clawskills.sh/skills/tsu-j-bort-agent"
+      }
+    ],
+    "owner_handle": "tsu-j",
+    "owner_id": "s173nmap0ey2644wd97dhdp7vx885gtg",
+    "published_at": 1770221443922,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783655334105,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783655334105,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts match the stated purpose: send a user-provided message to a BORT WebAPI endpoint, check runtime or agent status, and query public BNB Chain contract state.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill explicitly documents the shell scripts and arguments. Inputs are not strongly validated, but there is no evidence of hidden commands, filesystem scanning, credential access, destructive behavior, or automatic execution.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No installer, package download, post-install hook, or persistence setup is present; the artifact consists of documentation and small visible shell scripts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to BORT_RUNTIME_URL and BNB_RPC_URL is necessary for the skill, and the destination URLs are documented and configurable. Message content may leave the local machine if BORT_RUNTIME_URL points to a remote service.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill itself does not store data, create background workers, read secrets, or request elevated privileges. The external BORT runtime may queue or retain messages after they are sent.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Executable shell helpers are present and should be understood by users, but they are visible, documented, and directly tied to the advertised messaging, health, status, and public chain-query functions.\n[SQP-2] expected: The optional webhook signature appears in reference documentation for the external BORT WebAPI connector; this skill does not implement or call the webhook endpoint, so it is operator guidance rather than evidence of unsafe behavior by the skill.\n[VirusTotal code_insight] expected: Sending messages to a configurable BORT runtime is central to the skill and is disclosed. A maliciously configured endpoint could receive message content, but the artifact does not hide or force such an endpoint.",
+          "guidance": "Install only if you intend to interact with BORT agents. Before sending messages, verify BORT_RUNTIME_URL and BNB_RPC_URL, avoid sending secrets or sensitive personal information to untrusted runtimes, and treat agent responses as untrusted external content.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed helper for contacting BORT agent runtimes and reading public BNB Chain agent data, with the main risk being that messages go to whatever runtime URL the user configures.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783655277603,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 23,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: bort-agent\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to the `scripts/send-message.sh` script. This script sends user-provided message content to a configurable `BORT_RUNTIME_URL`. While the default URL is `http://localhost:3001`, the ability to set this environment variable to an arbitrary external endpoint means that user-provided messages, which could contain sensitive information, could be exfiltrated to an attacker-controlled server if the `BORT_RUNTIME_URL` is maliciously configured. This represents a risky capability without clear malicious intent from the skill itself, but it enables potential data exfiltration.",
+          "checkedAt": 1779161320654,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "b1f6e844c6e08806047969d45a465a7e8c104fa78ccc569f090a230f7332d23d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b1f6e844c6e08806047969d45a465a7e8c104fa78ccc569f090a230f7332d23d"
+    },
+    "slug": "bort-agent",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

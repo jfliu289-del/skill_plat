@@ -1,0 +1,157 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "document",
+      "report"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional"
+    ],
+    "confidence": 0.1321,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C02:token:write",
+      "category:C04:token:analyze",
+      "category:C05:token:video",
+      "category:C11:token:product",
+      "category:C12:token:strategy",
+      "category:C14:token:seo",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:design",
+      "cross-tag:planning",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C04",
+      "C05",
+      "C11",
+      "C12",
+      "C14"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "design",
+      "manage",
+      "plan",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "670f157728a205c621ccd8cd9df3b5409b3c1e82b77bab83a01c15f5a2bb7202",
+    "content_hash": "579312d360114de4926d7d01af68a0d0efb685a4fd7543d9de77685e5927bed9",
+    "precanonical_content_hash": "579f893c75ce4ff4d98fa0b275c9bc0b9c33f98f4c70d9addb762a821ec384b1",
+    "skill_md_hash": "0805b0af5a172fa69722fb875f0bab0ee9d712c0b6d0dc6ff45ac4a63c039871",
+    "version_metadata_sha256": "2b2a3146adb19fe410a0761d86647e3de73e95070d1f25545bcc867437513f42"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/markusmikely/skills/youtube-hook",
+    "claim_id": "71a1f21f954d9c8d75e9beca386491edbb701965df852f7074ec8ec4028b2b28",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "youtube-hook",
+        "url": "https://clawskills.sh/skills/markusmikely-youtube-hook"
+      }
+    ],
+    "owner_handle": "markusmikely",
+    "owner_id": "s174y1mbhkgn239gb20yfrh3t5884pdk",
+    "published_at": 1771767723905,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779949673975,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779949673975,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill instructions match the advertised purpose: generating YouTube titles, thumbnail briefs, scripts, chapters, descriptions, tags, upload strategy, and optional competitive/trend analysis.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are focused on content planning and do not ask the agent to post content, modify accounts, override user intent, execute hidden commands, or perform destructive actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The artifact contains markdown instructions and small helper scripts only; there is no installer, package-manager mutation, startup hook, background worker, or install-time execution.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The trend analyzer reads TAVILY_API_KEY and sends that key plus the supplied topic query to https://api.tavily.com/search. This is proportionate for Tavily-backed trend analysis and is disclosed in frontmatter, README, and the script manifest, but users should understand it is an external data flow.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The scripts declare and show no local file reads or writes, no credential-store access, no privilege escalation, no broad environment harvesting, and no persistence mechanism.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The skill lacks a separate formal permissions field, but the artifact does declare TAVILY_API_KEY in frontmatter and documents the Tavily helper; this is a transparency note rather than a material mismatch.\n[TP4] expected: Tavily use is not hidden: README lists optional Tavily trend integration, SKILL.md references trending topics and optional competitive analysis, and the script limits the network call to Tavily search.\n[VirusTotal code_insight] expected: User input is interpolated into generated text or a Tavily search query; there is no shell execution, unsafe command construction, backdoor, or unauthorized endpoint in the artifacts.",
+          "guidance": "Install if you are comfortable with the optional trend-analysis helper sending topic queries to Tavily using your Tavily API key. Avoid using confidential drafts, private launch plans, or sensitive personal topics with trend lookup unless you are comfortable sharing that query with Tavily.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent YouTube content-planning helper with a disclosed optional Tavily trend lookup, not evidence of hidden or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779949634149,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 45,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: youtube-hook\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to a lack of input sanitization in its Python scripts. Specifically, `scripts/trend_analyzer.py` uses unsanitized user input (`topic`) directly in a query to the external Tavily API (https://api.tavily.com/). This creates a prompt injection vulnerability against the third-party API, which could lead to API abuse or unintended search results. Similar input sanitization issues exist in `scripts/hook_generator.py` and `scripts/title_optimizer.py`, where unsanitized user input is used in string formatting, posing a risk if their output were subsequently executed in a shell context. There is no evidence of intentional malicious behavior such as data exfiltration to unauthorized endpoints, backdoor installation, or direct system compromise.",
+          "checkedAt": 1779166213573,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "73af38025cd9b417678bf3482e9a4362ccc6a890f5a5aad3b876f918f2992fe9",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/73af38025cd9b417678bf3482e9a4362ccc6a890f5a5aad3b876f918f2992fe9"
+    },
+    "slug": "youtube-hook",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

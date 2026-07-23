@@ -1,0 +1,136 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C04:token:dashboard",
+      "category:C06:token:api",
+      "category:C10:token:llm",
+      "category:C10:token:model",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C06"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "c3956b7ac09c27ab4ad9c52043e2570d3cca41177a910e22d7c5a2ff17325f50",
+    "content_hash": "f5d9a1e9a183b7f2a8ffef44d18bc9d624b60fad342fb83bdd5190372d2db723",
+    "precanonical_content_hash": "536096b4a2f5dd83bf4c18656d3e33381833d90c7e39f1bdc6970172bb191718",
+    "skill_md_hash": "0e3e03781e16c6ab9bb967b989f01b9e331cccc6f6728d4dd2702175fc0a3203",
+    "version_metadata_sha256": "c72c723e8073b30b1a40c2de3afc16540a586c378664baa64568b4f9adff629f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/joelnishanth/skills/local-first-llm",
+    "claim_id": "7e83666e1e3c3a0f41facc435ae0ac466fe3138eab7355d956970d8ab680f5e9",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "local-first-llm",
+        "url": "https://clawskills.sh/skills/joelnishanth-local-first-llm"
+      }
+    ],
+    "owner_handle": "joelnishanth",
+    "owner_id": "s175bmppg255yzbqa2vdce50sn881gab",
+    "published_at": 1771972009391,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779957101997,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779957101997,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, local provider checks, routing helper, savings tracking, and dashboard fit together; the main caveat is that any cloud fallback behavior should be obvious to users before sensitive prompts are routed.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The invocation language appears broad for deciding local-vs-cloud routing, but that is aligned with the skill's purpose and does not by itself show hidden interception or misuse.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The referenced Ollama Linux setup documentation includes a pipe-to-shell installer command; this is a supply-chain caution for users, but it is documentation rather than automatic execution by the skill.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The supplied telemetry says network activity is limited to localhost provider checks and data storage is scoped to a user-specific savings file, which is proportionate for the feature set.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No evidence was supplied of background persistence, privilege escalation, credential harvesting, destructive actions, or writes beyond the savings data file.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-1] expected: Broad local-vs-cloud routing triggers are expected for this type of utility; users should still understand when the skill may participate in prompt routing.\n[SQP-2] expected: The cloud fallback concern is relevant as a disclosure issue, but the supplied telemetry does not show external cloud API calls by the scripts themselves.\n[SQP-2] expected: A routing decision that selects cloud for unavailable or complex local handling is purpose-aligned, but should be surfaced clearly before sensitive content leaves the local environment.\n[SC2] expected: The Ollama install command is related to setting up a local provider, but users should prefer safer verified installation methods.\n[TM2] expected: The pipe-to-shell pattern is risky installation guidance, not evidence that the skill silently executes remote code.",
+          "guidance": "Before installing, confirm whether cloud fallback is enabled and use a local-only mode for sensitive prompts if available. Avoid blindly running the documented curl-to-shell installer; prefer package managers, signed releases, or reviewing and verifying the installer first.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This looks like a coherent local-first LLM routing utility, with some disclosure and installation cautions but no artifact-backed evidence of malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779957048227,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: local-first-llm\nVersion: 1.0.0\n\nThe skill bundle is designed to route LLM requests locally, track savings, and display a dashboard. All scripts (`check_local.py`, `dashboard.py`, `route_request.py`, `track_savings.py`) and documentation (`SKILL.md`, `references/*.md`) align with this stated purpose. Network calls are exclusively to `localhost` to check for local LLM providers. File system operations are limited to reading and writing a user-specific data file (`~/.openclaw/local-first-llm/savings.json`). Subprocess executions are confined to other Python scripts within the same skill bundle. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts against the agent. The code is clear, and its behavior is consistent with a benign utility.",
+          "checkedAt": 1779166906104,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "8c50e93490873cc8441cb3ffc5a718721e56d42128c67fbd2a91f45b5aa5a81d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8c50e93490873cc8441cb3ffc5a718721e56d42128c67fbd2a91f45b5aa5a81d"
+    },
+    "slug": "local-first-llm",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

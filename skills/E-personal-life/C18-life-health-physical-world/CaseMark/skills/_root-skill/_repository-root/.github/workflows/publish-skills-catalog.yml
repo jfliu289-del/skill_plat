@@ -1,0 +1,91 @@
+name: Publish Skills Catalog
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'skills/**'
+      - 'scripts/skills-catalog.js'
+      - '.github/workflows/publish-skills-catalog.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build shared skills catalog
+        run: node scripts/skills-catalog.js --out .artifacts/skills-catalog.json
+
+      - name: Workflow summary
+        if: always()
+        run: |
+          node <<'SCRIPT'
+          const fs = require('fs')
+          const catalog = JSON.parse(fs.readFileSync('.artifacts/skills-catalog.json', 'utf8'))
+          const lines = [
+            '## Shared Skills Catalog',
+            '',
+            `- Total skills: ${catalog.skillCount}`,
+            `- Generated from SHA: ${catalog.generatedFromSha || 'not provided'}`,
+            '- Counts by category:',
+          ]
+          for (const [category, count] of Object.entries(catalog.countsByCategory)) {
+            lines.push(`  - ${category}: ${count}`)
+          }
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `${lines.join('\n')}\n`)
+          SCRIPT
+
+      - name: Notify casemark-com-v3 to sync new skills
+        if: always()
+        env:
+          DISPATCH_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
+        run: |
+          if [ -z "$DISPATCH_TOKEN" ]; then
+            echo "::warning::DISPATCH_TOKEN not set — skipping cross-repo dispatch"
+            exit 0
+          fi
+          curl -s -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $DISPATCH_TOKEN" \
+            https://api.github.com/repos/CaseMark/casemark-com-v3/dispatches \
+            -d '{"event_type":"skills-updated","client_payload":{"source":"CaseMark/skills","sha":"'"$GITHUB_SHA"'"}}'
+          echo "Dispatched skills-updated to CaseMark/casemark-com-v3"
+
+      - name: Sync skills catalog to C3
+        if: always()
+        env:
+          C3_SKILLS_SYNC_URL: ${{ secrets.C3_SKILLS_SYNC_URL }}
+          C3_SKILLS_SYNC_SECRET: ${{ secrets.SKILLS_SYNC_SECRET }}
+          # Optional Vercel Protection Bypass for Automation token — needed
+          # when C3_SKILLS_SYNC_URL points at a preview/staging deployment
+          # that's behind Vercel SSO. Leave unset for production URLs.
+          C3_SKILLS_BYPASS_TOKEN: ${{ secrets.C3_SKILLS_BYPASS_TOKEN }}
+        run: |
+          if [ -z "$C3_SKILLS_SYNC_URL" ] || [ -z "$C3_SKILLS_SYNC_SECRET" ]; then
+            echo "::warning::C3_SKILLS_SYNC_URL or C3_SKILLS_SYNC_SECRET not set — skipping C3 mirror sync"
+            exit 0
+          fi
+          bypass_header=()
+          if [ -n "$C3_SKILLS_BYPASS_TOKEN" ]; then
+            bypass_header=(-H "x-vercel-protection-bypass: $C3_SKILLS_BYPASS_TOKEN")
+          fi
+          http_code=$(curl -s -o /tmp/c3-sync.txt -w '%{http_code}' \
+            -X POST \
+            "${bypass_header[@]}" \
+            -H "x-skills-sync-secret: $C3_SKILLS_SYNC_SECRET" \
+            -H "Content-Type: application/json" \
+            --data-binary @.artifacts/skills-catalog.json \
+            "$C3_SKILLS_SYNC_URL")
+          echo "C3 skills-sync responded $http_code: $(cat /tmp/c3-sync.txt)"
+          if [ "$http_code" != "200" ]; then
+            echo "::warning::C3 skills-sync returned non-200 ($http_code)"
+          fi

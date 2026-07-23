@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:data",
+      "cross-tag:data-analysis"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "validate"
+    ],
+    "tasks": [
+      "analyze"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "f1b4d15855c74f6e00e8a36e2ab10c9114764bf39d1846fd525e37548a328204",
+    "content_hash": "913ea0c56bac020055c0b30e3e4db2ac1bf869dde6ae20e64d1bb6df41d31346",
+    "precanonical_content_hash": "4ec98cd67889361d4daddca5eda56fa1cadc1f355f2dea394ff3b8e37decea02",
+    "skill_md_hash": "9ed88f35c543b442fdfe370db5a4df01e790fdbcd18221db8e21514eeea4adb9",
+    "version_metadata_sha256": "9438782f513c4781111d9fac5766f6392500c3ed3b7aef6b70406e68d40c092f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/evgyur/skills/fix-life-in-1-day",
+    "claim_id": "9903f911b2e797599d2499c11921477f45f39d4f20e239f0ba56becb490698d1",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "fix-life-in-1-day",
+        "url": "https://clawskills.sh/skills/evgyur-fix-life-in-1-day"
+      },
+      {
+        "index_path": "categories/personal-development.md",
+        "label": "fix-life-in-1-day",
+        "url": "https://clawskills.sh/skills/evgyur-fix-life-in-1-day"
+      }
+    ],
+    "owner_handle": "evgyur",
+    "owner_id": "s17bajx0073258tb2b45gkzsvx885e65",
+    "published_at": 1769427741168,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783650243412,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783650243412,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently implement the stated 10-session coaching flow with progress tracking, saved responses, insights, final export, and reminder data; no unrelated network, credential, or privilege behavior was found.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions stay within the self-improvement purpose, but they use forceful mental-health-adjacent framing and quasi-psychological assessment without clear non-therapy, opt-out, or crisis-safety language.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a normal ClawHub/manual skill install with bash scripts and jq; there are no install hooks, obfuscated payloads, package-manager actions, or automatic external setup steps.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime writes are scoped to the configured workspace under memory/life-architect; the reminder command writes a JSON reminder file and does not edit crontab or create background jobs.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill persistently stores user responses, insights, and an exported final document locally, which fits the multi-session purpose and is disclosed in SKILL.md, but it lacks a clear privacy/retention warning and reset confirmation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-2] expected: Reminder support is purpose-aligned for the one-day protocol; the artifact text says 'cron reminders,' but the handler only creates reminders-session10.json and performs no system scheduling.\n[SQP-2] expected: Sensitive local storage/export is real and purpose-aligned for journaling continuity, but users should be warned more clearly about where personal reflections are retained and how to delete them.\n[SQP-2] expected: The intense emotional prompts and developmental-stage exercises are part of the advertised coaching style, but the skill should add safety framing, non-diagnostic language, and stop/seek-support guidance.\n[SQP-3] expected: The Russian files are parallel localized sessions and the skill documents English default plus Russian selection, so the language findings do not indicate hidden or deceptive behavior.\n[SQP-2] expected: The reset command deletes only the skill's own saved state, notes, insights, final document, and reminder JSON; this is user-directed, though a confirmation step would reduce accidental loss.",
+          "guidance": "Install only if you are comfortable with a forceful self-reflection style and with personal journal-like answers being saved in your local workspace. Do not treat it as therapy or crisis support, and review or delete the saved files if you do not want those reflections retained.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a local self-help journaling skill with no evidence of exfiltration or system persistence, though its prompts and saved reflections are sensitive.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783650176071,
+          "issueCount": 17,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 55,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: fix-life-in-1-day\nVersion: 1.0.0\n\nThe OpenClaw skill 'fix-life-in-1-day' is benign. It uses standard bash scripting and `jq` for managing user session state, saving user responses to markdown files, and generating a final document within its designated `$WORKSPACE`. The `SKILL.md` and session markdown files define the AI's persona and interaction flow, but contain no instructions for malicious prompt injection, data exfiltration, or unauthorized system access. The `create_reminders` function in `scripts/handler.sh` generates a JSON file with reminder data for the agent to potentially act upon, rather than directly creating system-level cron jobs, which is a safe design pattern. All file operations are confined to the skill's workspace, and there are no external network calls or attempts at persistence or privilege escalation.",
+          "checkedAt": 1779160020942,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "efa3541aa1f7650fdc95b84c0c7e4a6ac14cf77f4a63c65cc713b0e616111759",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/efa3541aa1f7650fdc95b84c0c7e4a6ac14cf77f4a63c65cc713b0e616111759"
+    },
+    "slug": "fix-life-in-1-day",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

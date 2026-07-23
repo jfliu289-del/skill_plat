@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C06:token:frontend",
+      "category:C17:token:notes",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover"
+    ],
+    "tasks": [
+      "build",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "b2b28348b4fed131cff7c0859163a7551fa40141c54897477b3e1fd1900c6398",
+    "content_hash": "69c09eb73876e658d08552426d71291af12b83f4d44866c87979bf671091977b",
+    "precanonical_content_hash": "bf0c4746e51dec8aadbd52510d4811d227bb92231996c4bc8c3226b4260ce0d4",
+    "skill_md_hash": "d808f45b568c000e56381bf06256dba903bd4f3337d03d6961060990178821f0",
+    "version_metadata_sha256": "15808d65b8354bcec0bac51b79297f9d6d633fdfb05d25b87ed24c626e44c92e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/awlevin/skills/airbnb-search",
+    "claim_id": "e30e75a6deb59d33104bb044fb5af27007c70762a527fff230aef7381a320b6d",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "airbnb-search",
+        "url": "https://clawskills.sh/skills/awlevin-airbnb-search"
+      }
+    ],
+    "owner_handle": "awlevin",
+    "owner_id": "s1718qg1ad2pdk2ghq4eqvz44d885ayk",
+    "published_at": 1770929215535,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658766001,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658766001,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is searching Airbnb listings, and the code implements read-only requests to Airbnb's ExploreSearch endpoint, then parses prices, ratings, and listing links.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "SKILL.md, README.md, and AGENTS.md contain normal CLI, install, and development instructions with no prompt override, concealment, autonomous execution, or unsafe escalation behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation uses ordinary Python and skill tooling such as uvx, uv tool, pip, npx skills add, and clawhub install. The package metadata has version drift across metadata.json, SKILL.md, pyproject.toml, and __init__.py, but this appears to be packaging inconsistency rather than harmful behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Outbound access to Airbnb is necessary for the skill's purpose and is disclosed as use of Airbnb's public/internal frontend API. Users should understand that location, dates, price filters, bedroom filters, result limit, and currency are sent to Airbnb.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No artifact evidence shows background persistence, local indexing, browser profile access, credential or session use, account mutation, destructive actions, or privilege escalation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The skill performs outbound network access without a separate manifest-level permission declaration, but the observed endpoint is Airbnb and the network use is purpose-aligned and repeatedly described in the docs.\n[SQP-2] expected: User-entered destinations and travel filters are sent to Airbnb because live Airbnb search requires it; the privacy disclosure could be clearer, but no unrelated data or credentials are transmitted.\n[SC4] expected: The runtime dependency on requests is expected for this network CLI. The broad lower bound is a maintenance and supply-chain hygiene issue, not evidence of malicious behavior in the artifact.\n[SC4] expected: The pytest dependency is a development/test dependency and is expected for the included tests; it does not add runtime authority for normal skill use.\n[VirusTotal] expected: VirusTotal telemetry was clean and is consistent with the artifact review, but it was used only as supporting signal.",
+          "guidance": "Reasonable to install for read-only Airbnb searches. Use it only for travel searches you are comfortable sending to Airbnb, do not provide Airbnb login credentials or cookies, and prefer repeatable installs with current patched dependencies.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a narrow Airbnb search tool that sends user-directed travel search details to Airbnb and does not show hidden access, persistence, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658717159,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 62,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: airbnb-search\nVersion: 0.1.4\n\nThe OpenClaw skill 'airbnb-search' is benign. Its primary function is to search Airbnb listings using their public frontend API, which is clearly stated and implemented in `airbnb_search/search.py`. The code uses standard Python libraries (`requests`, `argparse`), handles input safely, and does not exhibit any signs of data exfiltration, unauthorized execution, persistence mechanisms, or prompt injection attempts in `SKILL.md` or `AGENTS.md`. The hardcoded API key is explicitly noted as a public key used by Airbnb's website, not a sensitive credential.",
+          "checkedAt": 1779161786858,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "3f1e6825420dc533877dd98bba1507bc828ccc8de43ed7d1f3f78b87c282d836",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/3f1e6825420dc533877dd98bba1507bc828ccc8de43ed7d1f3f78b87c282d836"
+    },
+    "slug": "airbnb-search",
+    "source_type": "clawhub",
+    "version": "0.1.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

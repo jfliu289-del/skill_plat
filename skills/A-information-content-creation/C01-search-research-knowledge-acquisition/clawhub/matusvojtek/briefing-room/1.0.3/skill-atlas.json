@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.65,
+    "domains": [
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:phrase:web search",
+      "category:C01:token:find",
+      "category:C01:token:search",
+      "category:C02:token:language",
+      "category:C03:token:document",
+      "category:C03:token:docx",
+      "category:C04:token:data",
+      "category:C05:token:audio",
+      "category:C06:token:code",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C03"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "0fe6c94eacfe1f5201d52af29418ed9cf6bc79f3703db21e07bc106f3efa6ac3",
+    "content_hash": "4e6660bdf5a974df430545b3739d6ecd7fe943adf11c4cc5cd59dc0a92c22575",
+    "precanonical_content_hash": "78a32722bdc72f7b8b79c9a6e8e1de753a668cd6f3a898f8411f2da912cb7bcf",
+    "skill_md_hash": "70b5c0de628daf200a512e1894214a139bb6926acb2eaeb19fea344b2f68a9fa",
+    "version_metadata_sha256": "731a83b450ca80fe71102a17b83d5259e7e49d4ac2d8ddfdee46afa9f6a143f6"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/matusvojtek/skills/briefing-room",
+    "claim_id": "59cb7bf9460cf8a528c7550c1631cfa42d84462b7ece6d3868b90d3530af03a2",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "briefing-room",
+        "url": "https://clawskills.sh/skills/matusvojtek-briefing-room"
+      }
+    ],
+    "owner_handle": "matusvojtek",
+    "owner_id": "s17234qeb8wtkx5ay0qvd7yy5x885s1j",
+    "published_at": 1770755697874,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779963677000,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779963677000,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The network lookups, web searches, local TTS, DOCX/audio generation, config file, and output folders directly support the stated daily briefing purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "It uses broad briefing-style trigger examples and immediately spawns a time-limited background sub-agent, so users should understand a briefing request can start network access and file generation without an extra confirmation step.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The manifest declares curl, while the documentation also relies on macOS tools, python3, web_search, and optional pandoc, ffmpeg, and MLX-Audio; this is under-declared in metadata but documented in the skill files.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "External calls to Open-Meteo, Coinbase, getdaytrends.com, Google Trends RSS, and web search are proportionate to weather, trends, market, and news gathering, with no credentials or private-session stores requested.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill stores configuration in ~/.briefing-room/config.json, writes generated briefings under ~/Documents/Briefing Room by default, uses /tmp drafts, opens the output folder, and includes an explicit cleanup helper for old output folders.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: File I/O, shell execution, and network access are expected for this skill; metadata could declare them more completely, but README.md and SKILL.md disclose the main paths, tools, and APIs.\n[TP4] expected: Config management, dependency checks, folder opening/listing, and retention cleanup are ancillary file-management features for a generated-briefing tool rather than evidence of hidden unrelated behavior.\n[SDI-1] expected: The helper commands list and manage generated briefings, and those commands are documented in SKILL.md rather than concealed.\n[SDI-2] expected: The cleanup command is destructive, but it is user-invoked, documented, and scoped to date-named folders under the configured briefing output directory; a confirmation or dry-run would improve safety.\n[SQP-1] expected: The trigger examples are broad, but they are briefing-oriented phrases; the main risk is accidental invocation, not purpose mismatch or malicious behavior.\n[SQP-2] expected: Persistent config/output files and external data lookups are disclosed in the artifacts, though a more prominent first-run privacy and storage notice would be clearer.\n[VirusTotal] expected: VirusTotal telemetry was clean and aligns with artifact evidence showing public APIs, local output files, and no obfuscation or credential theft.",
+          "guidance": "Install only if you are comfortable with a skill that runs web searches, sends your configured weather location and trend regions to public services, creates local config and briefing files, and may run a short background task. Review output.folder before using the clean helper, because it permanently removes old date-named briefing folders under that configured location.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Briefing Room appears to be a disclosed, purpose-aligned macOS news-briefing skill that writes local briefing files and contacts public data sources as expected.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779963637835,
+          "issueCount": 10,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: briefing-room\nVersion: 1.0.3\n\nThe skill bundle is designed to generate daily news briefings using local macOS tools and public APIs. It performs file I/O only within designated user directories (`~/Documents/Briefing Room`, `~/.briefing-room`, `/tmp`) and includes a critical path traversal validation in `scripts/config.py` to prevent writing to arbitrary locations, as noted in the `CHANGELOG.md`. Network calls are made to legitimate public services (Open-Meteo, Coinbase, getdaytrends.com, Google Trends RSS) for data gathering. The `SKILL.md` instructions guide the AI agent to compose a briefing without any directives for data exfiltration, unauthorized execution, or other malicious activities. There is no evidence of intentional harmful behavior or obfuscation.",
+          "checkedAt": 1779162613834,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "fe06729b076c5c30579fdf30e5d9be0e8390fa0421fd98214110d7903622d52d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/fe06729b076c5c30579fdf30e5d9be0e8390fa0421fd98214110d7903622d52d"
+    },
+    "slug": "briefing-room",
+    "source_type": "clawhub",
+    "version": "1.0.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

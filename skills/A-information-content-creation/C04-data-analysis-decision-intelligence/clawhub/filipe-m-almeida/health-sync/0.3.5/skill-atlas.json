@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.35,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:analyze",
+      "category:C04:token:data",
+      "category:C18:token:health",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C18"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d60f291a80361849cedaa3645f8c46e151aa1e65eaa9a9e42e6ee38e99c87acf",
+    "content_hash": "f58ced9d313a980446227795f2d9020781766e42623e8e6bf7d3032b348a1bb2",
+    "precanonical_content_hash": "c73bcca34ca52a9d4904f92db54848a66eb8bf6f9104b89df4fab52c59e74d14",
+    "skill_md_hash": "25094013561bca791c5fdc2bc59454a0fc15f0d40dd50887896057e8728c3560",
+    "version_metadata_sha256": "8c9ac17f420afd9652a35cf5a741c9456d11eda1e7e12570a1afa80000e831e7"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/filipe-m-almeida/skills/health-sync",
+    "claim_id": "b1ecba43ac8adfeca94f7d1d28ab97d52c8522bca8ac5ac952b2d2d174b5ec2b",
+    "index_entries": [
+      {
+        "index_path": "categories/health-and-fitness.md",
+        "label": "health-sync",
+        "url": "https://clawskills.sh/skills/filipe-m-almeida-health-sync"
+      }
+    ],
+    "owner_handle": "filipe-m-almeida",
+    "owner_id": "s174c48vp3w6rv2kcabdcng3ex83n0wn",
+    "published_at": 1771561726812,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779933116842,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779933116842,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to sync and analyze health data from Oura, Withings, Hevy, Strava, WHOOP, and Eight Sleep, and the required CLI, local SQLite database, config, and credential files fit that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill tells the agent to run a sync before analysis and query local health records, which is expected for fresh health insights; the broad trigger wording around sleep, recovery, training, activity, and health should be interpreted as user-directed personal health analysis, not generic health conversation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses a Node package/CLI via npm or npx, which is a normal mechanism for this workflow but means package code will run on the host; no opaque downloader, persistence hook, or unrelated install step was evident.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Local filesystem access, provider API sync, encrypted onboarding archives, decrypted credentials, and a SQLite cache are sensitive but proportionate to a cross-provider health-data sync tool and are disclosed in the artifact.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill stores decrypted provider credentials and health data locally under workspace/health-sync; this persistence is purpose-aligned but raises normal host-security and retention considerations.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad activation language is a real least-privilege note because the skill can sync/read sensitive health data, but the behavior is disclosed and coherent with personal health analysis, so it does not by itself require Review.\n[VirusTotal code_insight suspicious] expected: The VT concern centers on SQL generation and sensitive credentials; the artifacts disclose credential handling, prohibit raw secrets in chat, use an encrypted bootstrap flow, and query a local health database for the stated analysis purpose. No artifact-backed deception, exfiltration, or destructive behavior was found.",
+          "guidance": "Install only if you trust the health-sync npm package and are comfortable storing provider tokens and a local health database on the agent host. Keep workspace/health-sync/.health-sync.creds and health.sqlite protected, prefer the encrypted bootstrap flow, avoid pasting raw secrets in chat, and remove local credentials/data when no longer needed.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill handles sensitive health data and provider credentials, but the access is disclosed and matches its health-sync analysis purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779932976523,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: health-sync\nVersion: 0.3.5\n\nThe skill is classified as suspicious due to the inherent risks associated with an AI agent generating and executing SQL queries based on user input, and its handling of sensitive user credentials. While the `SKILL.md` and `references/setup.md` documents outline a secure remote bootstrap process for credentials (encrypted archives, no pasting secrets in chat) and explicitly warn about treating local files like `workspace/health-sync/.health-sync.creds` as sensitive, the agent's instruction to 'form SQL' for analysis presents a significant vulnerability surface for prompt injection or SQL injection. The skill itself does not contain malicious code or instructions for harmful actions, but the powerful capabilities and potential for misuse via agent vulnerabilities warrant a 'suspicious' classification.",
+          "checkedAt": 1779165367338,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "31b8ce240369dc30345c9988cdc303f90dfa47a18950f2cddfd94e6de20498d5",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/31b8ce240369dc30345c9988cdc303f90dfa47a18950f2cddfd94e6de20498d5"
+    },
+    "slug": "health-sync",
+    "source_type": "clawhub",
+    "version": "0.3.5"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

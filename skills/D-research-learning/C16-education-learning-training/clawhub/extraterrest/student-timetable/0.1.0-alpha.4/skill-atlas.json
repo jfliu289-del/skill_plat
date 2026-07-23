@@ -1,0 +1,129 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "educator",
+      "student"
+    ],
+    "confidence": 0.475,
+    "domains": [
+      "education"
+    ],
+    "needs_review": true,
+    "primary_category": "C16",
+    "reasons": [
+      "category:C16:token:student",
+      "cross-tag:education"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "learn"
+    ],
+    "tasks": [
+      "teach"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "67f5bea2fef57a352c49f222c3774e1d7ccb413fd8f341edcc410bb17d72e3db",
+    "content_hash": "20f67a8cd72957fe0cf96c0acf83b3494b375103e4c6566ccba2254b8e34f8f3",
+    "precanonical_content_hash": "7452a7d8437e222e5b90e1b3cdbda9484a84dfb471b65cfc268a068b3823e991",
+    "skill_md_hash": "e7370ad080cd3806696fd329183945699d3bd90b29191fd05a038e4be7a839ae",
+    "version_metadata_sha256": "d3994b80310a53b6d515e5f1145d68943d6d99659e33c89717993d0339bcb42a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/extraterrest/skills/student-timetable",
+    "claim_id": "c95fbd3dfd18894713b39d139ba8cf329fb222ba33dfa133a156a6eb801b5175",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "student-timetable",
+        "url": "https://clawskills.sh/skills/extraterrest-student-timetable"
+      }
+    ],
+    "owner_handle": "extraterrest",
+    "owner_id": "s17c17a2e992dacvjcg11mx3fh83t99j",
+    "published_at": 1771496784170,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972815602,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972815602,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The code coherently supports student/child timetable setup, querying, special events, migration, and a related academic calendar import; wake keywords are ancillary and should be documented more prominently, but they are stored in the skill registry and used for this timetable tool rather than broad system interception.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands are user-directed CLI/tool actions, and the init flow explicitly asks for optional wake keywords; top-level SKILL/README documentation does not fully surface wake, special-event upsert, or calendar import behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No package installer, dependency installation, shell execution, or background service is present; use relies on local Node.js commands, which are documented but not expressed as a formal install requirement.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "File operations are scoped to timetable data under schedules/profiles and backups, with one workspace-root environment variable used for location; calendar import can send school/city/country terms to web search/fetch and filters fetches to official-looking sources.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persistently stores student or child profile metadata, schedules, special events, migration backups, and optional wake keywords, but does not request credentials, elevated privileges, or long-running/background persistence.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Environment use is limited to OPENCLAW_WORKSPACE path resolution, and network use is tied to academic calendar import; permission disclosure could be clearer but the capability is purpose-related.\n[TP4] expected: Migration, event editing, and calendar import are related to timetable management; the reviewed code did not support the stronger claim of cross-skill/message interception.\n[SDI-1] expected: The wake commands add/list optional timetable wake keywords in the skill's local registry; this is ancillary and under-documented, but user-directed.\n[SDI-2] expected: Wake keyword modification is persistent, but it writes only to schedules/profiles/registry.json and is not automatic or privileged in the reviewed artifacts.\n[SQP-2] expected: School, city, and country are used to search for official academic calendars; this is proportionate to import functionality but should be treated as a privacy disclosure point.\n[VirusTotal-code_insight] expected: The network concern is limited to the calendar import module, with official-source filtering and fetch size limits; no malware detections or artifact-backed malicious behavior were present.",
+          "guidance": "Install only if you are comfortable storing student or child timetable details locally under schedules/profiles. Use the academic calendar import only when it is acceptable to share school and location terms with a search/fetch provider, and review any wake keywords because they persist in the registry for future timetable routing.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a local student timetable skill with persistent schedule storage and an optional web calendar lookup, but the reviewed artifacts do not show hidden credential access, exfiltration, destructive behavior, or unsafe persistence.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972731843,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 78,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: student-timetable\nVersion: 0.1.0-alpha.4\n\nThe skill is classified as suspicious due to its use of network capabilities (`web_search`, `web_fetch`) in `academic_calendar_import.js`. While these functions are plausibly needed for the stated purpose of importing academic calendars and include some safeguards (e.g., `isOfficialSource` URL filtering, `maxChars` limit on fetch), network access inherently carries risks such as potential SSRF or data exfiltration if the safeguards were to be bypassed or if the skill's intent were to change. There is no clear evidence of intentional malicious behavior like credential theft, unauthorized command execution, or persistence mechanisms. All file system operations are confined to the skill's designated data directories (`schedules/profiles/`, `schedules/backups/`).",
+          "checkedAt": 1779164859806,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "f9f9f77af1bc257c5c00b979749358fa380c45341f8ab3ebf770750179d84082",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/f9f9f77af1bc257c5c00b979749358fa380c45341f8ab3ebf770750179d84082"
+    },
+    "slug": "student-timetable",
+    "source_type": "clawhub",
+    "version": "0.1.0-alpha.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

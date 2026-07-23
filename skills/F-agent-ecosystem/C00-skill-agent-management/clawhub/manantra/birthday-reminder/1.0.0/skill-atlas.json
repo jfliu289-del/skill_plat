@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.175,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C02:token:language",
+      "category:C04:token:data",
+      "category:C18:token:home",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C04",
+      "C18"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "17319a24cdc632e880e08758bd1d8bcac2f0a3103c01d63645925df22b808a3c",
+    "content_hash": "601ada26b9955a7ce116643940243d618ddd66b2becd4616526adb3d2d4ecc30",
+    "precanonical_content_hash": "644c2081cdcbf5e65678d4242579ce4363d2426c79503e7a4f7639ae7fd00b63",
+    "skill_md_hash": "a1b58c58bccd81dc726b5a053c2904fd22a93be0333f821f7ec1f10c43ca7646",
+    "version_metadata_sha256": "49363978a766b35a7082e320dde810c92df8de5f5c2ee6dbb0e27a8d1b98f859"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/manantra/skills/birthday-reminder",
+    "claim_id": "75b48c2a7b802c5f8b25eeb5325c8b5120d7d6a9e0db875a31196aad10ca624a",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "birthday-reminder",
+        "url": "https://clawskills.sh/skills/manantra-birthday-reminder"
+      },
+      {
+        "index_path": "categories/clawdbot-tools.md",
+        "label": "birthday-reminder",
+        "url": "https://clawskills.sh/skills/manantra-birthday-reminder"
+      }
+    ],
+    "owner_handle": "manantra",
+    "owner_id": "s178f10m3mt0hsrbw7vx2dj2z1884tzv",
+    "published_at": 1769898549506,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783654175035,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783654175035,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The birthday-management purpose matches the scripts for adding, listing, removing, and checking reminders, but the documentation says birthdays.md while the scripts use birthdays.json.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The activation wording is broad for birthday-related conversation, but the described actions stay within birthday storage and lookup rather than unrelated agent behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No installer, package download, remote code fetch, dependency installation, or crontab modification is present in the artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Local storage of names, birthdays, and optional birth years is proportionate to the skill, but it is personal data and should be clearly disclosed.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The scripts create and update a local JSON file under /home/clawd/clawd/data and include cron-compatible reminder logic, but they do not install persistence, request elevated privileges, access credentials, or use the network.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: File read/write access is expected for a skill that remembers birthdays locally; the missing explicit permission declaration is a packaging and disclosure issue, not evidence of unsafe behavior by itself.\n[SDI-1] unexpected: The md-versus-json storage mismatch is real and should be fixed because users may inspect or manage the wrong file, but both paths are local birthday data stores and do not show hidden exfiltration or broader access.\n[SQP-1] expected: Broad birthday-related activation is consistent with a natural-language birthday skill, though writes should still be tied to clear add or update intent.\n[SQP-2] expected: Persistent storage of birthday data is central to the skill, but users should be told before first use that the actual saved file is /home/clawd/clawd/data/birthdays.json.\n[VirusTotal] expected: VirusTotal telemetry reported no detections and aligns with the artifact review, but it was treated only as supporting signal.",
+          "guidance": "Before installing, understand that names and birthdays will be stored locally and remain until removed. Treat /home/clawd/clawd/data/birthdays.json as the actual storage file despite the documentation mentioning birthdays.md, and only store birthday data you are comfortable keeping on this machine.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This appears to be a local birthday reminder that stores names and dates on disk, with a documentation mismatch but no hidden network, credential, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783654147814,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 47,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: birthday-reminder\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle 'birthday-reminder' is benign. Its purpose is to manage birthdays, storing data in a dedicated JSON file (`/home/clawd/clawd/data/birthdays.json`) within the agent's data directory. The `SKILL.md` provides clear, functional instructions to the AI agent without any prompt injection attempts to subvert its behavior. The Python scripts (`scripts/birthday.py` and `scripts/reminder.py`) perform only local file I/O on this specific data file and date calculations, with no evidence of data exfiltration, malicious execution, persistence mechanisms, or access to sensitive system resources.",
+          "checkedAt": 1779160553170,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "7a05ba402686891951c30a6b8a7278ed5af2c27674255596a2a873b0b08e2164",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/7a05ba402686891951c30a6b8a7278ed5af2c27674255596a2a873b0b08e2164"
+    },
+    "slug": "birthday-reminder",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

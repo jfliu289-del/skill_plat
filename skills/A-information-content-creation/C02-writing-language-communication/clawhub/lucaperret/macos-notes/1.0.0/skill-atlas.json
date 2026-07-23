@@ -1,0 +1,135 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [],
+    "confidence": 0.35,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C02:token:language",
+      "category:C02:token:write",
+      "category:C17:token:notes",
+      "cross-tag:search",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover"
+    ],
+    "tasks": [
+      "research",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "b16569e20482f1a1d96cfdd028c4c126e20b3acce41bcee6eca676c93c3fbdff",
+    "content_hash": "0c11c5d68b26461150794445d829a1a0446a582263befad358aa640f3a714229",
+    "precanonical_content_hash": "fe465a2c4271a395e01d925a035e36c884c114add0fd826a9f3d70a59aa460a8",
+    "skill_md_hash": "d32c3ea40d33b2849ac742510e9d402771edff8eddd1b0a39dded5b5cb3d8c30",
+    "version_metadata_sha256": "eb3cdf5ec0c037573bef01aa77c31ef295815561e873b494449426dd4ed81c0c"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/lucaperret/skills/macos-notes",
+    "claim_id": "4c94dec0857a71663f851ed75b13f7e3e0a19c2b350c21e8618463d815286011",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "macos-notes",
+        "url": "https://clawskills.sh/skills/lucaperret-macos-notes"
+      }
+    ],
+    "owner_handle": "lucaperret",
+    "owner_id": "s170p3gn5cv7fnt54xggm88a4s83f8ny",
+    "published_at": 1771364150829,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972883003,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972883003,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The capability matches the stated purpose: it can create, list, search, and read unprotected Apple Notes through Notes.app AppleScript. This is sensitive personal-data access, but it is direct and purpose-aligned.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The trigger language is broad but remains scoped to Apple Notes-related requests. The instructions encourage listing folders first and specifying account and folder, though defaults may otherwise act on the default Notes account/folder.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains only SKILL.md and a local shell helper. It declares macOS, osascript, and python3 requirements and does not install packages or fetch remote code.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Using osascript and opening Notes.app is proportionate for a macOS Notes integration. There is no evidence of network exfiltration, credential harvesting, destructive file operations, or unrelated system access.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The script writes an append-only local log at logs/notes.log with timestamps, commands, targets, note titles, and search queries. This is disclosed and local, but note titles and queries can still reveal sensitive topics.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] expected: Confirmed: the script logs note activity metadata locally. This is a real privacy consideration, but it is disclosed, limited to metadata rather than note bodies, and not paired with exfiltration or hidden behavior.\n[SQP-1] expected: The trigger text covers common Apple Notes requests, including read and search. It is broad but still tied to the advertised Notes functionality rather than unrelated activation.\n[SQP-2] expected: Confirmed: SKILL.md discloses action logging but does not provide retention controls or an explicit privacy warning. This warrants user guidance, not a Review verdict by itself.\n[SSD-3] expected: Confirmed: the local log creates retained metadata about note activity. The risk is proportional and disclosed, with no artifact evidence of remote sharing or hidden persistence beyond the log file.",
+          "guidance": "Install only if you are comfortable letting the agent access Apple Notes on your Mac when you ask it to. Avoid asking it to read or search notes containing secrets, specify the account and folder when location matters, and periodically review or delete logs/notes.log if note titles or search terms are sensitive.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it advertises: it lets an agent manage Apple Notes on macOS, with a disclosed local activity log that users should be aware of.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972849277,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: macos-notes\nVersion: 1.0.0\n\nThe OpenClaw AgentSkill 'macos-notes' is benign. It provides legitimate functionality for managing macOS Notes via AppleScript and demonstrates strong security practices. The `SKILL.md` explicitly instructs the agent to pass JSON via stdin (avoiding process list leakage) and notes that all fields are validated and actions logged. The `scripts/notes.sh` script implements these best practices, featuring robust input validation (type, length, range checks) in Python, HTML escaping for note titles, and safe argument passing to `osascript` to prevent shell injection. All operations are logged to `logs/notes.log`, and password-protected notes are explicitly skipped, respecting user privacy. There is no evidence of malicious intent, data exfiltration, or significant vulnerabilities.",
+          "checkedAt": 1779164938969,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "fbbeaa7bbfea20eb3a3ea52e1174d4abf19dae849d58eb9aeb71c4ba54873cef",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/fbbeaa7bbfea20eb3a3ea52e1174d4abf19dae849d58eb9aeb71c4ba54873cef"
+    },
+    "slug": "macos-notes",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

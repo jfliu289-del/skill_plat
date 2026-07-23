@@ -1,0 +1,136 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "03392bb2277a7812939e4c569686432e17398a46ca357c3ac6aea435797bd8f3",
+    "content_hash": "f8a478022867880e29975f17753cd8013e464d6b7a1e57cacbe918e82b21df92",
+    "skill_md_hash": "4a4419d51692a0b472b7168a89abcccdc663b8e725453e759fb68b143bc73bb9",
+    "version_metadata_sha256": "bc677754e01cfd7dd4e9c6a9ad53974a7748a7c8485bf228ba4a8adc0c3fff14"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/autogame-17/skills/feishu-common",
+    "claim_id": "0901e0d949a76b1bccf59a66fc84c7361a3a3f7ff72bd849cf2359b7935d7edd",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "feishu-common",
+        "url": "https://clawskills.sh/skills/autogame-17-feishu-common"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "autogame-17",
+    "owner_id": "s174qjf2384d46r16zkn04qam183hbm3",
+    "published_at": 1771169173214,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974646936,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974646936,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is shared Feishu authentication and API support, and the code implements token acquisition, caching, retry handling, and an authenticated request wrapper consistent with that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The README discloses tenant token acquisition, caching, and authenticated requests, but it does not spell out the exact shared ../../.env credential path or ../../memory/feishu_token.json cache path.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains ordinary npm metadata and lockfile dependencies, with no install-time scripts, bootstrap commands, obfuscation, or automatic execution beyond being imported by dependent skills.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Using FEISHU_APP_ID and FEISHU_APP_SECRET is proportionate for a Feishu auth helper; dependent skills should only pass intended Feishu API URLs to the generic authenticated fetch wrapper.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists a plaintext tenant access token in a shared parent memory path. That is purpose-aligned token caching, but it relies on the host environment to keep that directory private and controlled.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-2] expected: The shared ../../.env credential access is real, but the code uses the Feishu app ID and secret for the advertised Feishu authentication function; no unrelated secret use was found.\n[SDI-2] expected: The generic authenticated fetch wrapper can send the bearer token to caller-supplied URLs, but it is disclosed as an API helper for dependent Feishu skills; this is a misuse risk rather than artifact-backed exfiltration.\n[SQP-2] expected: Sending app_id and app_secret to the official Feishu token endpoint over HTTPS is expected for this integration, though clearer manifest-level disclosure would improve user understanding.",
+          "guidance": "Install this only for Feishu-related skills you trust. Keep the shared .env file and memory directory private, treat the cached tenant token as sensitive, and avoid using dependent skills that pass non-Feishu URLs into the authenticated request helper.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent Feishu API helper that uses expected Feishu credentials and token caching, with no evidence of hidden exfiltration or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974616885,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: feishu-common\nVersion: 1.0.1\n\nThe skill bundle provides a Feishu authentication and API helper. It reads Feishu application credentials (APP_ID, APP_SECRET) from a `.env` file located two directories up (`../../.env`) and caches the tenant access token in `../../memory/feishu_token.json`. All network requests are directed to the legitimate Feishu API (`https://open.feishu.cn`). The file system and network operations are directly aligned with the stated purpose of acquiring and caching authentication tokens and making authenticated API calls. There is no evidence of data exfiltration to unauthorized endpoints, malicious execution, persistence mechanisms, obfuscation, or prompt injection attempts in SKILL.md. The use of parent directories for configuration and caching is a design choice for shared resources, not an indication of malicious intent within the skill itself, although it relies on a properly configured and sandboxed execution environment.",
+          "checkedAt": 1775879774043,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "03392bb2277a7812939e4c569686432e17398a46ca357c3ac6aea435797bd8f3",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/03392bb2277a7812939e4c569686432e17398a46ca357c3ac6aea435797bd8f3"
+    },
+    "slug": "feishu-common",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

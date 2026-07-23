@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.8361,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C06:token:coding",
+      "category:C09:phrase:security audit",
+      "category:C09:token:audit",
+      "category:C09:token:secure",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "2e619c55ef07ca51dde78f61c26a423dd7682ac39a4d07e21e61c0b4ef846557",
+    "content_hash": "068ce988b3cc55f9414fab69ce73cee206f6b9784ddea7ec04c80d28b38d811c",
+    "precanonical_content_hash": "6ef40a678653843aa4b5e2980036a5825ab95fdba72fddbda1edee522bdde416",
+    "skill_md_hash": "9c0e15ce287e94a7553f41253cec1781e185c1840e3de5ef19364fe7a7a3ef13",
+    "version_metadata_sha256": "bab8792c253572a48becbf01cc62f1776a6f36b5707dde40713111baf51a7a7b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/nextfrontierbuilds/skills/moltbot-security",
+    "claim_id": "b57462075df0f76956dd1299825d51defe6d9a6cffd20fa2ded17c68bf6c6b0e",
+    "index_entries": [
+      {
+        "index_path": "categories/moltbook.md",
+        "label": "moltbot-security",
+        "url": "https://clawskills.sh/skills/nextfrontierbuilds-moltbot-security"
+      }
+    ],
+    "owner_handle": "nextfrontierbuilds",
+    "owner_id": "s173crrwz6a8ksnw7w0q36yky18408nb",
+    "published_at": 1770799033611,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783649132764,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783649132764,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The README, SKILL.md, and package metadata consistently describe Moltbot/OpenClaw gateway hardening: loopback binding, authentication, permissions, Node updates, Tailscale, firewall rules, and SSH settings.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill includes user-run commands that can change system configuration, permissions, firewall behavior, SSH settings, and installed packages. These actions are sensitive but directly aligned with the stated hardening purpose and are not hidden.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains documentation and package metadata only, with no executable helper code or install scripts in package.json.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Administrator-level and network-configuration commands are proportionate for a security-hardening guide, but they should be applied only on systems the user intends to modify.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Recommended changes can persist, including shell environment variables, gateway configuration, firewall rules, Tailscale setup, file permissions, and SSH daemon configuration. These are disclosed and purpose-aligned.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The README's quick audit command includes a mutating --fix option. That is a real usability risk, but it is an explicit hardening command rather than hidden behavior, and the main SKILL.md also shows a read-only audit command before auto-fix.\n[VirusTotal/code_insight] expected: The NodeSource curl-to-sudo-bash command and Tailscale curl installer are supply-chain risks if run blindly, but they are openly presented as optional install/update steps for known tools and are not automatically executed by the skill.",
+          "guidance": "Install is reasonable if you want a Moltbot/OpenClaw security checklist. Before running commands, prefer read-only audits first, inspect any remote installer scripts, make backups, and confirm you have recovery or console access before changing firewall or SSH settings on a remote machine.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a documentation-only security hardening checklist whose powerful commands are visible and relevant, but users should review them before running them.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783649106557,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 9,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: moltbot-security\nVersion: 1.0.3\n\nThe skill's stated purpose is security hardening, which is benign. However, the `SKILL.md` file instructs the AI agent to execute several powerful system commands, including `curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -`. While intended for a legitimate Node.js update from a known source, this pattern of piping a remote script to `bash` with root privileges represents a significant supply chain risk and a potential Remote Code Execution (RCE) vulnerability if the remote source were compromised. This falls under 'risky capabilities without clear malicious intent' as per the classification guidelines, making the skill suspicious.",
+          "checkedAt": 1779160230897,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "6a74cb35943699db824deb89d24382b940c58b4fda2e1f11a202b17c98ddfa4f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6a74cb35943699db824deb89d24382b940c58b4fda2e1f11a202b17c98ddfa4f"
+    },
+    "slug": "moltbot-security",
+    "source_type": "clawhub",
+    "version": "1.0.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

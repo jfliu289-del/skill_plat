@@ -1,0 +1,148 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C00:token:skill",
+      "category:C05:token:image",
+      "category:C06:token:api",
+      "category:C07:token:quality",
+      "category:C10:token:ai",
+      "category:C10:token:model",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05",
+      "C06",
+      "C07",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d0b85cfa8120790620a75dc215e7cdc4f96873874ce60cb96a5b649b0b555c84",
+    "content_hash": "cadfac4ff3ab2cec9e4ee48f277ee5d76b5f0f4769c2b75bfb7613e06b65c8db",
+    "precanonical_content_hash": "9be81b78d5573d4a78782df156a6ab8bebf3df3fcf89072e8dce2eab84e64ee5",
+    "skill_md_hash": "cf60937a58c87405154dd22e0ed52c447c8a4be8480118bd7d1054541e5602c1",
+    "version_metadata_sha256": "b7dcaacdad673bd6ad7ef9982a9db02fa0181232f1af461deb7c6717f0765662"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/1999azzar/skills/stability-ai",
+    "claim_id": "d8313962f6043ea467e50b2d50adbcbacd966f677ffda8533cb4396f29520652",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "stability-ai",
+        "url": "https://clawskills.sh/skills/1999azzar-stability-ai"
+      }
+    ],
+    "owner_handle": "1999azzar",
+    "owner_id": "s17bnq7bcwrm6mwmx7ryseen81885fxg",
+    "published_at": 1770938969266,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972996040,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972996040,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently implement prompt-based image generation through Stability AI, saving generated images and JSON metadata locally.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The activation phrases are broad, but they match ordinary image-generation requests and do not show hidden prompt override or unrelated agent-control behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The requirements are ordinary for this purpose, but requests, python-dotenv, and pillow are unpinned, so installs are not reproducible and should be reviewed in managed environments.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Using STABILITY_API_KEY and sending prompts to a network API is proportionate for Stability AI generation; the optional API_HOST setting should only be used with a trusted HTTPS endpoint because it receives the bearer token and prompts.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill writes image files and prompt metadata and auto-deletes older images in the selected output directory; this is disclosed, scoped by the output path, and does not include background persistence or privilege escalation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[TT3] expected: The API URL can be built from API_HOST and receives the bearer token, but custom endpoint use is disclosed and purpose-related; this is a configuration risk rather than evidence of hidden exfiltration.\n[LP3] expected: Environment access, local writes, and network access are all necessary for this skill's stated function, though clearer permissions documentation would improve transparency.\n[SQP-1] expected: Broad image-generation triggers could cause unintended API use or cost, but they are aligned with the stated image-generation purpose.\n[SQP-2] expected: Local metadata storage and retention cleanup are present in the code and documented in the skill, though users should avoid sensitive prompts and avoid using an output folder with unrelated images.\n[SC1] expected: The unpinned dependencies are a supply-chain hygiene issue, not artifact-backed malicious behavior.\n[SC4] expected: The artifact does not pin known-vulnerable versions; the practical issue is dependency drift, which supports caution but not a Review verdict by itself.",
+          "guidance": "Install only if you are comfortable sending prompts to Stability AI and storing prompt metadata locally. Keep API_HOST unset or pointed only at a trusted official-compatible HTTPS endpoint, use a reviewed or pinned Python environment, and keep important images outside the auto-cleanup output directory.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent Stability AI image-generation skill with expected API-key, network, and local file behavior, but users should understand prompt privacy, API_HOST, dependency, and auto-cleanup risks.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972968117,
+          "issueCount": 11,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: stability-ai\nVersion: 1.0.0\n\nThe skill bundle is designed to generate images via the Stability AI API. The `SKILL.md` provides clear, benign instructions and usage examples. The `scripts/core/generate.py` script uses standard libraries (`requests`, `python-dotenv`, `pillow`) to interact with the Stability AI API, save generated images and metadata to a specified output directory (defaulting to `./assets/generated`), and perform cleanup of old files. There is no evidence of intentional malicious behavior such as data exfiltration, unauthorized remote execution, persistence mechanisms, or prompt injection attempts against the AI agent. While the script has file system write/delete capabilities, these are directly aligned with its stated purpose, and arguments are parsed safely via `argparse`, preventing direct shell injection.",
+          "checkedAt": 1779163598315,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "1b7eb183c7c11e4bdcdb3134cb9a25c3e0e01fda654c0a2fe11bfa9c24017ac1",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1b7eb183c7c11e4bdcdb3134cb9a25c3e0e01fda654c0a2fe11bfa9c24017ac1"
+    },
+    "slug": "stability-ai",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

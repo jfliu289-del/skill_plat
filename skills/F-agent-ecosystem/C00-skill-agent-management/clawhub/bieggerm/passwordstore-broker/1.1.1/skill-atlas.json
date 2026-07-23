@@ -1,0 +1,124 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "5284f261e825c9395eae1e2bb95459f4bf2e9755efc1b3f4cc6757cf9bd570ac",
+    "content_hash": "83681f7ec05d1c1f42a6c4533b6f576415d752cacb66bd11a78d7ced6de640bb",
+    "precanonical_content_hash": "71c3f4516e1cfb263b1dafa93d8850648297116b7a358f919ef66eccd11c2881",
+    "skill_md_hash": "80bf641ea8159086898b2590cf768491a3351d995ea9264b2924207b851c67a8",
+    "version_metadata_sha256": "8d20f112e68a6e3ea376c5fd1fae16103ff9fe2b0c7567d795be4cfc312f8c9e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/bieggerm/skills/passwordstore-broker",
+    "claim_id": "30075a1ebf9717863e55e23ba33b84ce24b97f90836a8f52069e6d388c2dce3a",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "passwordstore-broker",
+        "url": "https://clawskills.sh/skills/bieggerm-passwordstore-broker"
+      }
+    ],
+    "owner_handle": "bieggerm",
+    "owner_id": "s17dcvjs6qhar98e0yew8ycgwn885m8m",
+    "published_at": 1771453850206,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779922455712,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779922455712,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to collect secrets through one-time HTTPS forms, store them in pass, and inject them into commands; the bundled scripts implement that workflow without unrelated endpoints, hidden downloads, or unrelated credential access.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The runtime instructions are scoped to local or private-LAN intake, pass-backed storage, and command execution with selected secrets; LAN mode and secret-bearing commands are high-sensitivity flows but are user-directed and documented.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no automatic installer or remote code download in the artifact. Setup documentation asks the user to install standard local dependencies such as pass, gpg, openssl, python3, and qrencode.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Local HTTPS binding is the default, LAN mode is optional and private-network gated with TOTP, and the required tools match the password-store purpose. Users should still only use LAN mode on trusted networks.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists pass entries and a TOTP enrollment secret under ~/.passwordstore-broker with restrictive permissions. This persistence is disclosed and purpose-aligned, but the TOTP seed and otpauth output should be treated as sensitive.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[AST4] expected: The subprocess call stores a submitted secret through the bundled vault script. The downstream vault.sh validates secret names with a conservative allowlist, rejects traversal and leading dashes, and uses -- with pass, so the scanner's injection concern is materially mitigated.\n[LP3] expected: Shell execution, home-directory storage, pass usage, and local/LAN HTTPS serving are disclosed in SKILL.md, metadata, and SETUP.md. The skill does not request unrelated authority, though explicit permission metadata would improve clarity.\n[TP4] expected: The persistent TOTP seed, setup timestamp, QR output, and manual enrollment URL are documented as part of LAN-mode authentication. This is not hidden persistence, but users must protect and rotate the seed manually if compromised.\n[SDI-1] expected: The otpauth URL contains the enrollment secret and is emitted for initial authenticator setup. That is expected for enrollment and documented, but it should not be logged, retransmitted, or exposed after setup.\n[SQP-2] expected: The self-signed HTTPS intake page is coherent with the one-time local/LAN form design. The artifact lacks strong user-facing certificate/fingerprint warnings, which is a hardening gap rather than evidence of malicious behavior.\n[SQP-2] expected: Passing a retrieved secret through an environment variable is explicitly the skill's command-injection mechanism. This is a known exposure tradeoff, so only trusted commands should be run with injected secrets.",
+          "guidance": "Install only if you are comfortable using pass/gpg as your local password store and letting the skill run a temporary HTTPS intake server. Prefer localhost mode; use LAN mode only on trusted private networks, protect ~/.passwordstore-broker/totp.secret and the QR/otpauth enrollment output, and run only trusted commands with injected secret environment variables.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill handles secrets through a local password-store workflow, and its sensitive capabilities are disclosed and purpose-aligned, with precautions needed for LAN mode and environment-based secret use.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779922379154,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 97,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: passwordstore-broker\nVersion: 1.1.1\n\nThe skill bundle is designed for secure secret handling, acting as a broker between an AI agent and a `pass` password store. All scripts (`run_with_secret.sh`, `vault.sh`, `get_password_from_user.py`, `setup_totp_enrollment.py`) demonstrate strong security practices, including robust input sanitization, safe subprocess execution (e.g., passing secrets via stdin, using `--` for `pass` commands, `exec env` for environment injection), and strict network access controls (e.g., `get_password_from_user.py` explicitly checks for private IPs and restricts access to local or private networks). The `SKILL.md` and `references/SETUP.md` documentation includes explicit guardrails for the AI agent, instructing it never to leak secrets or expose sensitive information. There is no evidence of intentional malicious behavior, data exfiltration, or unauthorized actions; instead, the code actively implements measures to prevent such risks.",
+          "checkedAt": 1779165238041,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "5284f261e825c9395eae1e2bb95459f4bf2e9755efc1b3f4cc6757cf9bd570ac",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/5284f261e825c9395eae1e2bb95459f4bf2e9755efc1b3f4cc6757cf9bd570ac"
+    },
+    "slug": "passwordstore-broker",
+    "source_type": "clawhub",
+    "version": "1.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

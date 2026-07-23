@@ -1,0 +1,127 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:find",
+      "cross-tag:agent-management",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4e554971a309f6bbb91ffcf12bd008ff4bae8ef79f60f96d3b9087862a309d29",
+    "content_hash": "bbf7ce1b4e0f2726807c0f989c8c24953e7eaf05f03ed3be5278a6667e7b5210",
+    "precanonical_content_hash": "16efeab96a59ce0d02483016a8a8df1d51c058c8a689bf4949f29b05795d0f45",
+    "skill_md_hash": "d45ebf20355d24592b6819036a6279a7c5bca197b299b9aa573dfe14752ee4ce",
+    "version_metadata_sha256": "3f0d905d2833269e7b67d3c7a5616fdd0fe1969aba45c1acd55c428cad2d5a10"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/james-southendsolutions/skills/camino-safety-checker",
+    "claim_id": "26caa569639f23eabd4c6a69e3c33216c81278a36fc8cbda1a59b6a3bca26a0f",
+    "index_entries": [
+      {
+        "index_path": "categories/transportation.md",
+        "label": "camino-safety-checker",
+        "url": "https://clawskills.sh/skills/james-southendsolutions-camino-safety-checker"
+      }
+    ],
+    "owner_handle": "james-southendsolutions",
+    "owner_id": "s17dekpybzcxf10vsx8arm960n86hhnf",
+    "published_at": 1778699275050,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972246508,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972246508,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The capability matches the stated late-night safety purpose: it validates a location and radius, then queries Camino for safety-related nearby places. The sensitive part is expected but real: precise coordinates are sent to Camino.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are ordinary setup and usage examples. I found no prompt override, hidden role instruction, automatic execution, or unrelated agent-control behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The documentation includes both a broad companion-suite install and a specific skill install. The broad install could add more than this reviewed skill, but it is user-directed and not automatic.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill requires curl, jq, and CAMINO_API_KEY, all of which are coherent for a Camino API integration. The API key is used only as an X-API-Key header to api.getcamino.ai in the reviewed script.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The setup suggests storing the API key in Claude Code settings, which is persistent credential configuration, but the skill itself does not create background workers, modify files, escalate privileges, or install persistence.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Downgraded: the artifact frontmatter and setup disclose curl, jq, and CAMINO_API_KEY, and the script is a small bounded wrapper around those tools.\n[SQP-2] expected: Accepted as privacy guidance, not a Review verdict: precise location is sensitive, but sending location to Camino is the core disclosed function of this remote API skill.\n[E1] expected: Downgraded: the external POST to https://api.getcamino.ai/context is documented in the skill usage and limited to location, radius, fixed safety context, and the Camino API key.",
+          "guidance": "Install only if you are comfortable sending the locations you check, plus your Camino API key for authentication, to Camino's API. Prefer the specific skill install command rather than installing the whole Camino suite unless you want the other skills too, and avoid querying highly sensitive exact locations if that privacy tradeoff is not acceptable.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Camino API wrapper that sends user-provided coordinates to Camino for nearby safety resources, with no hidden persistence, destructive behavior, or unrelated data access found.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972203866,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: camino-safety-checker\nVersion: 2.0.1\n\nThe skill is a legitimate tool for querying the Camino AI API for safety-related location data. The shell script `scripts/safety-checker.sh` safely handles JSON input using `jq` to prevent shell injection and communicates only with the documented endpoint (api.getcamino.ai). No evidence of data exfiltration, malicious persistence, or prompt injection was found.",
+          "checkedAt": 1779164737940,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "5e9478a20e6bd7792c91befca8a06d2cd9c0b8b218d419ec58ba2842d30333c7",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/5e9478a20e6bd7792c91befca8a06d2cd9c0b8b218d419ec58ba2842d30333c7"
+    },
+    "slug": "camino-safety-checker",
+    "source_type": "clawhub",
+    "version": "2.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

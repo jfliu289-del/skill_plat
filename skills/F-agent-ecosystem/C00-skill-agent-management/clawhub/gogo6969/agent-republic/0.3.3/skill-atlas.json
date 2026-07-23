@@ -1,0 +1,151 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C03:token:office",
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "category:C12:token:management",
+      "category:C18:token:health",
+      "cross-tag:agent-management",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C03",
+      "C06",
+      "C09",
+      "C12",
+      "C18"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "6d3d9dc0de2db4f3f8475aa85a394ee39d47d0a4404fd78c6ed93015de9dd3cc",
+    "content_hash": "553e05257de0c51fac6d2af4132c09f40c8603fccdc0d690c941452a76c181bd",
+    "precanonical_content_hash": "5a81281b928eb09c31a7409d6212915b9f6fb723886ba7dcf153a05ee6aedd99",
+    "skill_md_hash": "50d19379a418d49a92b5d5bf00381446f1a92cfd82896d54b5284bb35bbd959d",
+    "version_metadata_sha256": "4f485463f788a63f35d0d91e4b224473593c2f5df4dda3d33f5a8c88ee8e81b7"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/gogo6969/skills/agent-republic",
+    "claim_id": "49fcdcebe66da36218bf9239917853df6ddf18399cfc87ee6a8a0edec1651cb3",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "agent-republic",
+        "url": "https://clawskills.sh/skills/gogo6969-agent-republic"
+      }
+    ],
+    "owner_handle": "gogo6969",
+    "owner_id": "s17c6x273aeq4p6mgqegpf04js885zh9",
+    "published_at": 1770760605957,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779962566186,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779962566186,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifacts: registration, status checks, elections, voting, forum posting, bot management, and onboarding health through Agent Republic API endpoints.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "State-changing commands such as vote, run, forum-post, and bot-verify are documented and user-invoked, but the helper has no dry-run or confirmation prompt.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden installer or setup behavior is present. The documentation inconsistently references both ./agent_republic.sh and ./scripts/agent_republic.sh, which is a usability issue rather than a security concern.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Use of bash, curl, python3, HTTPS calls to agentrepublic.net, and a local credentials file is proportionate to the API-helper purpose and disclosed in the skill text.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill relies on a long-term API key stored in ~/.config/agentrepublic/credentials.json and recommends chmod 600; this is disclosed and purpose-aligned, but sensitive.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The local long-term API key is real sensitive material. The artifact discloses the credentials file and recommends restrictive permissions, but users would benefit from stronger warnings about not sharing, logging, or committing it.\n[SQP-2] expected: Public verification via X/Twitter, GitHub Gist, or Moltbook is part of the ownership-proof workflow, but the skill should more clearly warn that it can publicly link the user’s social account to the agent identity.\n[VirusTotal/code_insight] unexpected: The reported JSON and URL argument-handling weaknesses are plausible implementation bugs, but they do not show deception, exfiltration, unauthorized execution, hidden persistence, or purpose-incompatible behavior.",
+          "guidance": "Install only if you trust Agent Republic and are comfortable with this helper using an API key to take account actions. Keep the credentials file private, avoid committing or sharing it, and treat vote, run, forum-post, and bot-verify as real actions that may affect public or account-visible state.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Agent Republic API helper, but users should protect its long-lived API key and understand that verification and posting actions may be public.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779962520296,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: agent-republic\nVersion: 0.3.3\n\nThe `agent_republic.sh` script contains several shell injection vulnerabilities. User-provided arguments for `name` and `description` in `cmd_register`, and `statement` in `cmd_run`, are directly interpolated into JSON payloads, risking JSON injection. Additionally, the `bot_id` argument in `cmd_bot_status` and `cmd_bot_verify` is directly inserted into the URL path, which could lead to URL manipulation or path traversal. While these are significant vulnerabilities, there is no evidence of intentional malicious behavior like data exfiltration, persistence, or unauthorized remote execution.",
+          "checkedAt": 1779162459466,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "1ddec4e86528712225d7a68c61cf3539a3daf5bb52e1032ad6943e468c33fa3b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1ddec4e86528712225d7a68c61cf3539a3daf5bb52e1032ad6943e468c33fa3b"
+    },
+    "slug": "agent-republic",
+    "source_type": "clawhub",
+    "version": "0.3.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

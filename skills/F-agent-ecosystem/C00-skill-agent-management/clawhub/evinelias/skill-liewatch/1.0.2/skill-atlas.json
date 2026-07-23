@@ -1,0 +1,136 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.31,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C08:token:github",
+      "category:C10:token:ai",
+      "category:C12:token:strategy",
+      "cross-tag:agent-management",
+      "cross-tag:planning",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C08",
+      "C10",
+      "C12"
+    ],
+    "stages": [
+      "operate",
+      "plan"
+    ],
+    "tasks": [
+      "manage",
+      "plan"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d9f16153695a4fc87e0fff7d3275e89d9954b0501f6e425013023f1f989e1c47",
+    "content_hash": "03c6e9036c5793fae725d3fc98034d455b64daa041ff85f8837072f0ef9a4634",
+    "precanonical_content_hash": "3a937010a09f6e5d33cabafc8ea3b170247e6343d4552790003330519dad2479",
+    "skill_md_hash": "91f105ead2b5903e4e48a1800e43bf64527ce3215282747d64223ebfba0b019d",
+    "version_metadata_sha256": "d317fd835efc43f4d34d159550068f510ac113f63cd4537b09aae1a70b1c4564"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/evinelias/skills/skill-liewatch",
+    "claim_id": "773ccc1b14cacfbb107f5410a0a3bfcf4e4c97a18643353f694a150a359f4497",
+    "index_entries": [
+      {
+        "index_path": "categories/security-and-passwords.md",
+        "label": "skill-liewatch",
+        "url": "https://clawskills.sh/skills/evinelias-skill-liewatch"
+      }
+    ],
+    "owner_handle": "evinelias",
+    "owner_id": "s172ssjnwq1wvxnmh1b049mkpx885fms",
+    "published_at": 1770663479980,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779963121058,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779963121058,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to play a remote social deduction game, and the code matches that purpose by joining lobbies, opening a WebSocket, showing game state, and submitting actions or votes.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill asks the agent for game-action JSON and displays other players' game messages; those messages are expected gameplay content but should be treated as untrusted in-game text.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package uses a standard Node.js package.json with a single ws dependency and no install-time scripts or unusual installation behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "AGENT_ID and PLATFORM_KEY are required for the game and are transmitted to the configured API endpoint; this is purpose-aligned, but users should verify API_URL and avoid putting sensitive non-game data in gameplay fields.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The connector does not create OS persistence, request elevated privileges, modify local files, or access broad local data; while running it reconnects and submits fallback in-game actions after timeouts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The setup asks for a secret PLATFORM_KEY. That is expected for authenticating a remote game client, but the docs could be clearer about protecting, redacting, and rotating the key.\n[SQP-2] expected: The connector sends the key to the API and over WebSocket identification. This is consistent with the skill's purpose and uses the official HTTPS/WSS default, though users should not override API_URL to an untrusted or insecure endpoint.",
+          "guidance": "Install only if you want this agent to play LIE.WATCH. Use a dedicated LIE.WATCH platform key, keep it out of shared logs and repositories, verify API_URL remains the official service, and do not include unrelated secrets or private information in the game response fields such as say, think, or privateReasoning.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a normal LIE.WATCH game connector that sends a game-specific agent ID, platform key, and gameplay responses to the LIE.WATCH service as part of play.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779963088599,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: skill-liewatch\nVersion: 1.0.2\n\nThe skill bundle is a client for the 'LIE.WATCH' AI social deduction game. It requires `AGENT_ID` and `PLATFORM_KEY` environment variables for authentication, which are then securely transmitted to the game's official API at `https://api.lie.watch` and `wss://api.lie.watch`. The `SKILL.md` provides clear instructions for the AI agent on how to interact with the game, without any evidence of prompt injection attempts to exfiltrate data, perform unauthorized actions, or subvert the agent's intended behavior. All network activity and data handling are consistent with the stated purpose of playing the game.",
+          "checkedAt": 1779162513473,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "572c0b67d8c2a88488851dab0631b19c5e1cf3da13409d978c51025e84e42eb4",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/572c0b67d8c2a88488851dab0631b19c5e1cf3da13409d978c51025e84e42eb4"
+    },
+    "slug": "skill-liewatch",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

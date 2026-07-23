@@ -1,0 +1,154 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "website"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.375,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C07",
+    "reasons": [
+      "category:C01:token:find",
+      "category:C01:token:research",
+      "category:C06:token:coding",
+      "category:C06:token:implementation",
+      "category:C07:token:quality",
+      "category:C07:token:test",
+      "category:C07:token:testing",
+      "category:C19:token:browser",
+      "cross-tag:browser-automation",
+      "cross-tag:planning",
+      "cross-tag:search",
+      "cross-tag:software-development",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C06",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "build",
+      "plan",
+      "research",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1c6b946c05c527a2f916f1079e81bf7f4667afe89b909e0174de3d85c7a2cc39",
+    "content_hash": "60fbe7ed1661405cd7afda2b40b1a3fed879079a8e8f29e7790364b8cd57957d",
+    "precanonical_content_hash": "612690972740e6274e4ccad3c33d82e40f3510edffecf8d14fedc61f81cf4bc5",
+    "skill_md_hash": "ea8c4762903a7f9d5f72c19342b9b0634262ccc60892d5ec4d777c7d19dafb09",
+    "version_metadata_sha256": "895aa6207f2ffe96449b2172f8e0c2dcb823cbe706a7539043a722395a0c2f77"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/fortunto2/skills/solo-build",
+    "claim_id": "bbe2939928ca166c658b99af6002038bd2f9a48747d0b246aee364a2ce42235d",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "solo-build",
+        "url": "https://clawskills.sh/skills/fortunto2-solo-build"
+      }
+    ],
+    "owner_handle": "fortunto2",
+    "owner_id": "s17ccp4nxta4tm3ahx4kexjbq5885bd3",
+    "published_at": 1771711547889,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779936005872,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779936005872,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill is explicitly for executing implementation plans with TDD, verification, progress updates, and git commits; repository mutation and command execution are expected for that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are mostly scoped to docs/plan, docs/workflow, per-task source files, test/lint/build commands, and user-selected tracks; it also follows project Makefile and workflow commands, so project files must be trusted.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains only SKILL.md and no bundled executable code or install script, but it may run local hook setup commands such as pnpm prepare, npm run prepare, uv run pre-commit install, or lefthook install.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Broad tools such as Bash, Write, Edit, Read, Grep, and MCP search are proportionate for a build agent, with no artifact-backed credential requests or external exfiltration behavior found.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to local repository changes, plan/progress edits, and git commits; the skill discourages destructive reset behavior and documents git revert paths.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The natural-language triggers are broad, but they invoke a clearly described build workflow that requires plan files and asks the user when multiple tracks or recovery choices exist; this is guidance-worthy, not enough for Review by itself.\n[VirusTotal code_insight] expected: The VT concern is based on powerful tools and local project command execution. The artifact discloses those capabilities and uses them for ordinary build, test, hook, and commit workflows, with no malicious artifact behavior identified.\n[staticScan] expected: Static scan reported no findings, and the artifact set contains only the markdown skill instructions.",
+          "guidance": "Install only in repositories where you trust the plan files, Makefile/package scripts, workflow docs, and git hooks. Expect it to run commands, edit files, install/verify hooks, and create commits; review diffs and command output before relying on the result.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed build-automation skill that can edit code, run project commands, and commit changes, but those powers match its stated purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779935970289,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: solo-build\nVersion: 2.2.1\n\nThe skill is classified as suspicious due to its extensive use of powerful tools like `Bash`, `Write`, `Edit`, and `web_search` as defined in `SKILL.md`. While the instructions consistently guide the agent towards legitimate software development, testing, and verification tasks (e.g., running linters, compilers, test suites, git commands, installing dev tools), the inherent capability to execute arbitrary shell commands and modify files presents a significant attack surface. A compromised agent or malicious project configuration (e.g., in `Makefile`, `docs/workflow.md`, or `stack.yaml`) could exploit these capabilities for unauthorized actions, even though the skill's own instructions do not demonstrate malicious intent.",
+          "checkedAt": 1779165555676,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "7b7d437f6a0d904764c64198cf4181f81f334c1758c3c7c58e0fb1c505b1f07b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/7b7d437f6a0d904764c64198cf4181f81f334c1758c3c7c58e0fb1c505b1f07b"
+    },
+    "slug": "solo-build",
+    "source_type": "clawhub",
+    "version": "2.2.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

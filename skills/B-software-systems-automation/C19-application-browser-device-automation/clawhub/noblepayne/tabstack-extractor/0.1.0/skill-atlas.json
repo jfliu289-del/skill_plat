@@ -1,0 +1,167 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report",
+      "website"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "educator",
+      "student"
+    ],
+    "confidence": 0.5833,
+    "domains": [
+      "education",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C19",
+    "reasons": [
+      "category:C01:phrase:web search",
+      "category:C01:token:search",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C07:token:test",
+      "category:C08:token:github",
+      "category:C11:token:product",
+      "category:C16:token:learning",
+      "category:C16:token:teaching",
+      "category:C19:phrase:browser automation",
+      "category:C19:token:automation",
+      "category:C19:token:browser",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:data-analysis",
+      "cross-tag:education",
+      "cross-tag:search",
+      "cross-tag:software-development",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C16"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "learn",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "automate",
+      "build",
+      "manage",
+      "research",
+      "teach",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "02de1dd7b41e32fd43c0a547267cfd64e4e9fa4c9e99e523fd35844798a661ac",
+    "content_hash": "513b98688f8b334a4c289d25ad1228e6fb6af85b4f0e9d86e436865421fd2f2b",
+    "precanonical_content_hash": "2ce0cc416737d67c4b1656941955c2dd714a12ca4a8fd066ddb5643e8b5b1bfe",
+    "skill_md_hash": "b0ac26a0d839493ba086011114d4799fc2bcb133b4b83ad79d6fba4396ccea82",
+    "version_metadata_sha256": "159087e6cbe66893ec78d17de66c4d178f2b875d3a94abcebb2e42aaaced7b91"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/noblepayne/skills/tabstack-extractor",
+    "claim_id": "0b25f8ba6606a32c496735f46c2a5f47bdb8d7c1cc2c841f130d33b473c5ab3a",
+    "index_entries": [
+      {
+        "index_path": "categories/data-and-analytics.md",
+        "label": "tabstack-extractor",
+        "url": "https://clawskills.sh/skills/noblepayne-tabstack-extractor"
+      }
+    ],
+    "owner_handle": "noblepayne",
+    "owner_id": "s17b1r8pdrbb55jx4268swjj8x884yrv",
+    "published_at": 1769834343429,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783653116192,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783653116192,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, scripts, and examples center on sending user-selected URLs and schemas to Tabstack for markdown or JSON extraction. The API reference mentions broader Tabstack endpoints such as automation and research, but the included executable wrappers only implement extraction and connection tests; the missing referenced Babashka script is a quality/coherence issue rather than evidence of hidden behavior.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The trigger examples are broad web-scraping and page-extraction requests, which fits the skill purpose but could cause users to route ordinary page content through a third-party API unless they understand that Tabstack is doing the processing.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The Babashka install section includes a visible, optional curl-to-bash command from GitHub without pinning or integrity checks; this is a real supply-chain caution, but it is not automatic and alternatives via Nix and Homebrew are listed.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Use of TABSTACK_API_KEY, outbound HTTPS requests to api.tabstack.ai, and reading local schema files are proportionate for this integration. The documentation should more plainly warn against submitting internal URLs, secret-bearing query strings, or regulated content.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background worker, privilege escalation, broad local indexing, or destructive local persistence was found. The only persistence described is an optional Tabstack API key config file under ~/.config/tabstack.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Shell commands, environment variables, local schema reads, and network calls are visible in the docs and are normal for a CLI/API extraction helper; the absence of formal permission declarations is a documentation gap, not evidence of hidden authority.\n[SDI-1] unexpected: The reference file lists broader Tabstack capabilities than this skill implements. That creates scope ambiguity, but the runnable scripts reviewed only call extraction endpoints.\n[SQP-1] expected: Broad scraping and extraction triggers match the stated use case, though users should confirm intent before sending non-public URLs or content to Tabstack.\n[SQP-2] expected: External processing of URLs, schemas, and fetched page content is inherent to the Tabstack API workflow and is partly disclosed by the skill description, but the privacy warning should be more explicit.\n[E1] expected: The outbound POST requests to Tabstack carry user-provided URLs and schemas as part of the advertised extraction function; this is a trust boundary to manage, not exfiltration evidence by itself.\n[VT-code-insight] expected: The curl-to-bash installer concern is valid supply-chain guidance, but it is visible, optional, and not enough to move an otherwise coherent skill into Review.",
+          "guidance": "Use this skill only for public or approved web pages. Prefer Homebrew, Nix, or an inspected pinned Babashka release instead of piping a remote install script into bash, keep the Tabstack API key secure, and avoid submitting private intranet URLs, URLs containing secrets, or regulated data unless Tabstack processing is approved.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a purpose-aligned Tabstack web extraction helper, with privacy and install-safety cautions but no evidence of hidden, destructive, or deceptive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783653073962,
+          "issueCount": 11,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 71,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: tabstack-extractor\nVersion: 0.1.0\n\nThe skill's core functionality for web scraping via the Tabstack API appears benign, utilizing `api.tabstack.ai` as intended. However, the `SKILL.md` file contains a highly risky installation instruction for Babashka (`curl -s https://raw.githubusercontent.com/babashka/babashka/master/install | bash`). This method of executing remote scripts directly without integrity checks introduces a significant supply chain risk, as it could lead to arbitrary code execution if the remote script is compromised, making the skill suspicious.",
+          "checkedAt": 1779160366088,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "ecc89c9f2e83c0bd89e4694f38a57680c9b46d31c0e556428334779d9d441edd",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ecc89c9f2e83c0bd89e4694f38a57680c9b46d31c0e556428334779d9d441edd"
+    },
+    "slug": "tabstack-extractor",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

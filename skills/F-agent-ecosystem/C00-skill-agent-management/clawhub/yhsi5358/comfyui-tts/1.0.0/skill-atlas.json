@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C05:token:audio",
+      "category:C06:token:api",
+      "category:C10:token:model",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05",
+      "C06",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "37792530513d8c5ced3110638e2590a3b8a62de3134b73226956f354955d44dc",
+    "content_hash": "193a82fc3870a32ee8af27d3b0947cb39f5f64708836a604a8b0094ff942a307",
+    "precanonical_content_hash": "09028be865a71f6a1580cc6c0ad0f6a31c059a28eafb1ab53ac5c8269e8729af",
+    "skill_md_hash": "40f166ee4e529ecac74a299cdf755752e6bf711c2d3c0d1dbd1669de1a0510fb",
+    "version_metadata_sha256": "23b563fef60e4fd42118176b7c02f1a3438b20b9fad44cbb2e8684f2d122ef51"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/yhsi5358/skills/comfyui-tts",
+    "claim_id": "d0bb8324b767c49e0ef3b088136a44fb9e87cf51a3261f81f5384b2e4c69d7de",
+    "index_entries": [
+      {
+        "index_path": "categories/git-and-github.md",
+        "label": "comfyui-tts",
+        "url": "https://clawskills.sh/skills/yhsi5358-comfyui-tts"
+      }
+    ],
+    "owner_handle": "yhsi5358",
+    "owner_id": "s1708eqygrrj8v9bfk0jt8ps0x8840xd",
+    "published_at": 1771022102903,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974346859,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974346859,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose and implementation align: it builds a ComfyUI Qwen-TTS workflow, submits it to the configured ComfyUI HTTP endpoint, polls for completion, and retrieves generated audio.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The main text is JSON-escaped, but some option values are inserted into the workflow JSON without validation; unusual values could alter or break the submitted ComfyUI workflow.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No package installer, background service, privilege request, or hidden setup is present; the metadata only declares curl and jq as required binaries.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to the configured ComfyUI host is expected for TTS generation, but users should understand that text and prompt settings are sent to that server.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Generated audio is saved by ComfyUI and may also be downloaded to a user-provided output path; this is disclosed and purpose-aligned, though users should choose paths carefully.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The data-flow concern is mostly purpose-aligned: the skill describes using ComfyUI API endpoints and documents output files, though it would benefit from a clearer privacy warning for remote or shared ComfyUI hosts.\n[VirusTotal code_insight] unexpected: The reported unvalidated JSON option interpolation is supported by the script and should be fixed, but it does not show intent to exfiltrate data, install persistence, or perform unrelated actions. The output path behavior is a documented user-directed save feature.\n[staticScan clean] expected: The clean static scan is consistent with the reviewed artifacts: no obfuscation, credential harvesting, destructive commands, or hidden install behavior were found.",
+          "guidance": "Install only if you trust the ComfyUI server you configure. Avoid sending sensitive text to remote or shared ComfyUI hosts, keep character/style/model values within normal documented choices, and use output paths that will not overwrite important files.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward ComfyUI text-to-speech wrapper, with input-validation weaknesses but no evidence of hidden, destructive, or deceptive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974285173,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: comfyui-tts\nVersion: 1.0.0\n\nThe `scripts/tts.sh` file contains significant vulnerabilities. Several parameters (e.g., `--character`, `--style`, `--model`) are directly interpolated into the JSON workflow sent to the ComfyUI API without proper sanitization, leading to a JSON injection vulnerability. An attacker controlling these inputs could inject arbitrary JSON into the ComfyUI prompt. Additionally, the `--output` argument is used directly for file download and directory creation, posing a path traversal vulnerability that could allow writing files to arbitrary locations on the agent's filesystem. While these are critical flaws, there is no clear evidence of intentional malicious behavior (e.g., data exfiltration, backdoor installation) within the provided code, classifying it as suspicious due to the exploitable vulnerabilities.",
+          "checkedAt": 1779163861406,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "6d2af5135225d992e07308ad53b55e03af82d0826ac686e38dd6cdaa14b58357",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6d2af5135225d992e07308ad53b55e03af82d0826ac686e38dd6cdaa14b58357"
+    },
+    "slug": "comfyui-tts",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

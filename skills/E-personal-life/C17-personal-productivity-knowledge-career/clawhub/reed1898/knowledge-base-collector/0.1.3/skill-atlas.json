@@ -1,0 +1,131 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.465,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C17",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C10:token:llm",
+      "category:C17:token:knowledge",
+      "category:C17:token:notes",
+      "category:C17:token:personal",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C10"
+    ],
+    "stages": [
+      "discover"
+    ],
+    "tasks": [
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "fe585c00a6ca90b7fe1d0098b77415cc6e9b18828bedb23185f5f8980bce448c",
+    "content_hash": "88eb52bc549225d3f1cf15f2d0931f98895b4bbf8b8811f5af4587ae3072ec29",
+    "precanonical_content_hash": "bbf996aeb52c190ba30738d6b9c3bf36b0b9847d8d17b950ca58398d1a12fb69",
+    "skill_md_hash": "ebeaf151bc4d204b4cd2fe6eeb80910ac0fbdcf2d5312fa7f7e16b158941e0fc",
+    "version_metadata_sha256": "7ab0b75e43985aacfd7b94b87e0e188fc7f051402dc6bfe57229374c16bc47e8"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/reed1898/skills/knowledge-base-collector",
+    "claim_id": "a63f3b289f7aec07373d95b329d21b2a1ec85a9e5ccade5ca277ba86a7b97614",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "knowledge-base-collector",
+        "url": "https://clawskills.sh/skills/reed1898-knowledge-base-collector"
+      }
+    ],
+    "owner_handle": "reed1898",
+    "owner_id": "s17053w3a6c09bkqzkan106kp1843wcx",
+    "published_at": 1770966976041,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779973243635,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779973243635,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts match the stated collector purpose: ingest URLs and images, infer tags, write content.md/meta.json/index.jsonl, search the KB, list blocked WeChat items, and prepare digest candidates. URL ingestion uses r.jina.ai, which is disclosed in SKILL.md and implemented in ingest_url.py.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Invocation is tied to explicit user intents such as saving, ingesting, archiving, tagging, storing screenshots, or searching saved knowledge. The optional macOS nodes.run WeChat fallback is powerful, but it is described as a scoped manual fallback for blocked WeChat fetches rather than an automatic execution path.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No install hooks, package-manager execution, background startup, or self-modifying behavior were found; the bundle contains markdown instructions and Python helper scripts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to r.jina.ai, reading user-specified images/OCR text, and writing under KB_ROOT are proportionate for a knowledge-base collector, but users should treat private URLs, tokenized links, screenshots, and OCR text as sensitive before ingesting.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill intentionally persists copied images, extracted text, notes, tags, metadata, and an index under /home/ubuntu/.openclaw/kb by default. No credential harvesting, privilege escalation, destructive file operations, or unbounded background persistence was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill does not declare a formal permission manifest, but the artifact text plainly discloses local KB writes, user-selected file reads for images/OCR text, and network URL extraction. This is a transparency note rather than hidden behavior.\n[TP4] expected: The cited behaviors are either disclosed or aspirational: r.jina.ai use is documented and implemented, Telegram is described as search-flow support over the local index, and the macOS node path is a documented fallback rather than an automatic hidden implementation.\n[SQP-2] expected: Forwarding user-supplied URLs to r.jina.ai is privacy-relevant and should be considered before use, but it is consistent with the stated URL ingestion purpose and disclosed in the skill instructions.\n[VirusTotal-code_insight] unexpected: The shell-injection concern is not supported by the inspected scripts: they parse arguments with argparse and do not call subprocess, os.system, eval, or exec. The nodes.run mention remains a powerful manual fallback that users should confirm before using.",
+          "guidance": "Install only if you are comfortable creating a persistent local KB and sending saved URLs through r.jina.ai for extraction. Redact tokens, verification codes, private links, screenshots, and OCR text before ingesting them, and confirm the exact target device and command before using any connected-macOS-node WeChat fallback.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill saves user-chosen URLs, screenshots, notes, and search metadata into a local knowledge base, with a disclosed but privacy-relevant dependency on r.jina.ai for URL extraction.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779973205783,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 58,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: knowledge-base-collector\nVersion: 0.1.3\n\nThe skill bundle is classified as suspicious due to potential shell injection vulnerabilities and the use of powerful execution capabilities. The `SKILL.md` instructs the AI agent to execute `python3` scripts with user-provided arguments (URL, tags, notes, image paths). If the agent fails to properly sanitize or escape these arguments before constructing the shell command, it could lead to remote code execution (RCE). Additionally, the `SKILL.md` mentions using `nodes.run` to execute commands on connected macOS nodes, which is a powerful capability that could be abused for unauthorized remote execution if the agent is prompted to run arbitrary commands. While the scripts themselves appear to perform their stated function, the method of execution described in `SKILL.md` introduces significant risks.",
+          "checkedAt": 1779163678265,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "1767c501074387027af02d41d3d4756837bbd7d8258dbdd30e503e39fc6d96b1",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1767c501074387027af02d41d3d4756837bbd7d8258dbdd30e503e39fc6d96b1"
+    },
+    "slug": "knowledge-base-collector",
+    "source_type": "clawhub",
+    "version": "0.1.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

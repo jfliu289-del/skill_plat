@@ -1,0 +1,162 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "website"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2227,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C06:token:code",
+      "category:C08:token:cd",
+      "category:C09:token:privacy",
+      "category:C09:token:security",
+      "category:C13:token:business",
+      "category:C17:token:notes",
+      "category:C18:token:home",
+      "category:C19:token:automation",
+      "category:C19:token:device",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C08",
+      "C09",
+      "C13",
+      "C17",
+      "C18",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "build",
+      "manage",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "3810ddcf7b4ebf1bf555f3484144cacee92d0d592abdf538047013ef16351b27",
+    "content_hash": "5cee4653bae9c77e22424f3285bebfadb39a8cb645cdde5b2a4a496cea0c5dd1",
+    "skill_md_hash": "e17409ff6557d4e44d3667fced807cfa1737c4fe83006f201139d6f3a7c16e31",
+    "version_metadata_sha256": "d2b1b81739a0dbb3279cb08aab971c4fb9e91d0f18199bbcff8a9dff453ef37d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tradmangh/skills/m365-calendar",
+    "claim_id": "ea9c6757377b33cbda38110522b54bfbcf15d0b50e120dbf153618fc55300e6c",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "m365-calendar",
+        "url": "https://clawskills.sh/skills/tradmangh-m365-calendar"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "tradmangh",
+    "owner_id": "s17aaegq3rafytyraeyc72bkjx83twpg",
+    "published_at": 1771421485467,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779921903716,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779921903716,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts authenticate with Microsoft via MSAL device-code flow and use Microsoft Graph to list, search, inspect, and move calendar events, which matches the documented calendar automation purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are focused on bundled scripts and user-supplied profiles, client IDs, event IDs, and times; the raw-token import utility reads an explicitly provided file path, which is a sensitive fallback but is disclosed and not used to send unrelated files elsewhere.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package has a single appropriate npm dependency, @azure/msal-node, and no package lifecycle scripts or hidden install-time behavior were found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Delegated Calendars.Read and Calendars.ReadWrite permissions, attendee output, and event mutation are sensitive but proportionate to a calendar-management skill and are user-directed through explicit commands.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill stores profile configuration and token cache files under ~/.openclaw/secrets/m365-calendar as documented; the code does not set restrictive file modes, so local token protection depends on the user's system permissions.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code_insight] expected: The flagged file read occurs in an explicit raw OAuth token import utility using a user-provided --file argument; artifact review found no automatic file harvesting or exfiltration path, so this does not justify a Review verdict by itself.\n[SQP-2] expected: Local profile and token-cache persistence is real and sensitive, but it is repeatedly disclosed in SKILL.md and references/config.md and is coherent with OAuth calendar access; lack of explicit chmod handling remains user guidance rather than a material mismatch.\n[SQP-2] expected: Printing attendee names, email addresses, and response status is sensitive, but the skill specifically advertises checking attendee responses and the output stays local/stdout; users should still avoid running it where transcripts or logs are broadly shared.",
+          "guidance": "Install only if you are comfortable granting Microsoft Graph calendar read/write access and storing Microsoft auth material locally. Protect ~/.openclaw/secrets/m365-calendar, avoid --offline unless you want longer-lived refresh capability, use trusted token files with import-raw-token.mjs, and be aware that event and attendee details may appear in terminal or agent logs.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill matches its stated Microsoft 365 calendar purpose and discloses its local token storage, with no evidence of hidden exfiltration or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779921853550,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: m365-calendar\nVersion: 0.1.9\n\nThe skill bundle is classified as suspicious due to a potential Local File Inclusion (LFI) vulnerability in `scripts/import-raw-token.mjs`. This script directly reads the content of a file specified by the `--file` argument (`fs.readFileSync(file, 'utf8')`) without path sanitization. While this script is a utility and not part of the primary operational workflow described in `SKILL.md` for the AI agent, the vulnerability exists within the bundle and could be exploited if an attacker could prompt the agent to use this script with an arbitrary file path. All other scripts and the `SKILL.md` appear to align with the stated purpose of M365 calendar automation, using standard authentication practices and appropriate permissions.",
+          "checkedAt": 1779165156106,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "3810ddcf7b4ebf1bf555f3484144cacee92d0d592abdf538047013ef16351b27",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/3810ddcf7b4ebf1bf555f3484144cacee92d0d592abdf538047013ef16351b27"
+    },
+    "slug": "m365-calendar",
+    "source_type": "clawhub",
+    "version": "0.1.9"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

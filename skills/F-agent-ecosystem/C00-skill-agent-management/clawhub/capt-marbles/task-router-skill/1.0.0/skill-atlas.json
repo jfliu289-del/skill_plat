@@ -1,0 +1,147 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.8667,
+    "domains": [
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:phrase:agent management",
+      "category:C00:phrase:multi agent",
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:research",
+      "category:C06:token:api",
+      "category:C07:token:review",
+      "category:C12:token:management",
+      "category:C18:token:health",
+      "cross-tag:agent-management",
+      "cross-tag:planning",
+      "cross-tag:review",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "plan",
+      "review"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "ffc5a07455284751312c2dbea2bdc2f8f815b60a540a439f544ec43f3d418338",
+    "content_hash": "d65ec7c3e8ebfe84a3c6db27f7b559baed75986a1cfcf38cf181f25190fa09f3",
+    "skill_md_hash": "b708fa3635c442c00841b3f74f1377c56e9818c1e1024e7c4910b8880ffb0f01",
+    "version_metadata_sha256": "922cdbf0af259c5ae367a27d7e908682a845280fca32f0f994cba3454a34ac26"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/capt-marbles/skills/task-router-skill",
+    "claim_id": "d3e49a0f4980cb74ffa90c2584876543da548ca91f9b2e733f90af263601e076",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "task-router-skill",
+        "url": "https://clawskills.sh/skills/capt-marbles-task-router-skill"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "capt-marbles",
+    "owner_id": "s17df5gcc5vdxfpm151a90vxyd8852kb",
+    "published_at": 1771277303860,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971744170,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971744170,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The described capabilities match the stated purpose: queueing tasks, routing them to registered agents, tracking status, retrying failures, and managing dead letters.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Automatic heartbeat routing, retries, reassignment, cancellation, and notifications are disclosed and purpose-aligned, but they can affect queued work without a separate user command each time.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains only SKILL.md and no executable implementation or install spec, while the documentation assumes a task CLI and TypeScript SDK; users should confirm what provides those before use.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill stores task payloads, results, errors, agent registry data, and logs under ~/.openclaw/task-router/, which is proportionate for a local task queue but may retain sensitive workflow data.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence and background heartbeat behavior are clearly part of the design; the artifact does not request credentials, privileged OS access, obfuscated commands, or unrelated data access.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The troubleshooting section includes broad cleanup commands for cancelling pending tasks and clearing dead letters. This is operationally risky and should be used carefully, but it is disclosed maintenance behavior for a task queue rather than evidence of hidden or malicious behavior.\n[VirusTotal code_insight] expected: The reported concerns around sessions_send notifications, task result paths, and exports map to documented task-router behavior. The artifact does not include executable code showing arbitrary file access, exfiltration, or deceptive behavior; path and prompt-safety concerns are best treated as user caution for the underlying implementation.",
+          "guidance": "Before installing, verify which task CLI and SDK implementation this skill expects. Register only trusted agents, avoid putting secrets in task payloads or result files, review heartbeat automation before enabling it, and preview/export important queue or dead-letter state before running bulk cleanup commands.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent task-routing guide, but users should be careful because it stores task state locally and can route work automatically between agents.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971709209,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: task-router-skill\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to several potential vulnerabilities, primarily related to prompt injection vectors and broad file system access, rather than clear malicious intent. The `HEARTBEAT.md` script uses `sessions_send` to notify other agents about task completion, including user-controlled `task.title` and `task.result` (a file path). This creates a potential prompt injection vector if a malicious actor crafts these inputs. Additionally, CLI commands like `task export` allow writing task data to arbitrary user-specified file paths, and `task result` allows viewing arbitrary result files, which could be abused for unauthorized file access or writes if input paths are not properly sanitized. While these capabilities are plausible for a task router, the lack of explicit input sanitization for user-controlled strings and paths presents significant security risks.",
+          "checkedAt": 1779164668848,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "c30b884dc7ae1b318955569f9c333f800c39130da4cc75fec9f2b36e5c205bd5",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/c30b884dc7ae1b318955569f9c333f800c39130da4cc75fec9f2b36e5c205bd5"
+    },
+    "slug": "task-router-skill",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

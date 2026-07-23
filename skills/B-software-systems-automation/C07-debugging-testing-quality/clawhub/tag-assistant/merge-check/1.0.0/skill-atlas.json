@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report",
+      "website"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.7167,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C07",
+    "reasons": [
+      "category:C04:token:analyze",
+      "category:C07:phrase:pull request",
+      "category:C07:token:quality",
+      "category:C07:token:review",
+      "category:C08:token:github",
+      "category:C09:token:compliance",
+      "cross-tag:browser-automation",
+      "cross-tag:code-review",
+      "cross-tag:data-analysis",
+      "cross-tag:review",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "automate",
+      "review",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "348eb8bbc96aa4483fee99c211cfa9d73436c1521133148e8fa7059494f11a9b",
+    "content_hash": "89df0d0a73db04a88678dbb8a03c3398223e4fafb0f53a67805eff57e9c87cf5",
+    "precanonical_content_hash": "c0b4a9e9cb4309c1a716e5ed9681945a1a2d9baf1ba026082dc8e0fc681260d0",
+    "skill_md_hash": "a94dc74a8bff83f31222020110df2f6a0f5d4f3a97e7664e7dd63735910eb764",
+    "version_metadata_sha256": "27bfdf09c53de22594db321cab91d2bc66c7b944036dc87d47430c005749a2a3"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tag-assistant/skills/merge-check",
+    "claim_id": "ae7d875fb6c7d954002ea67d45327c574632b62f04a7f73468b33f2aeaf95f9f",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "merge-check",
+        "url": "https://clawskills.sh/skills/tag-assistant-merge-check"
+      }
+    ],
+    "owner_handle": "tag-assistant",
+    "owner_id": "s17bnqhgmzxahjkwfj9rs88zgd8847d4",
+    "published_at": 1771341193017,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972742732,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972742732,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to predict PR mergeability, and the artifacts gather PR metadata, files, checks, reviews, comments, commits, repository metadata, CODEOWNERS presence, and contributor history needed for that analysis.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The workflow is scoped to a user-specified GitHub PR, but it intentionally brings PR bodies and comments into the agent context, so that text should be treated as untrusted evidence rather than instructions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no unusual installer; the skill includes a shell script that the user runs manually. The script depends on local gh and jq tooling, with jq less clearly surfaced in the user-facing instructions.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "GitHub API access through the user's configured gh authentication is proportionate for PR analysis, including private repository data the account can already read.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts show no background worker, persistence, credential storage, destructive command, or GitHub write/mutation API call.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight suspicious] expected: The concern is based on extensive gh api reads using local GitHub authentication; artifact review shows these calls are read-only and aligned with the PR analysis purpose, so this is guidance-level rather than Review-worthy.\n[SkillSpector clean] expected: SkillSpector reported no issues, which is consistent with the artifact review.\n[staticScan clean] expected: Static scan reported no suspicious patterns, and manual review found no hidden install behavior, exfiltration, persistence, or mutation path.",
+          "guidance": "Install only if you are comfortable letting the skill query GitHub through your local gh login and include PR discussion, review text, and private repository metadata in the analysis. Use a GitHub account or token with the least access needed for the repositories you review.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a read-only GitHub pull request analysis helper, with expected use of the GitHub CLI and no evidence of hidden, destructive, or persistent behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972697244,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: merge-check\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to its reliance on executing a shell script (`scripts/merge-check.sh`) that performs extensive network calls to the GitHub API using the `gh` CLI. While the script's purpose is aligned with gathering data for PR analysis and shows no explicit malicious intent (e.g., data exfiltration, persistence, or arbitrary code execution), the use of `gh api` implies interaction with an external service and relies on the `gh` CLI's authentication token, which may possess broad permissions. This represents a powerful capability and potential attack surface if the underlying token is over-privileged or the script were to be modified, aligning with the 'risky capabilities without clear malicious intent' threshold.",
+          "checkedAt": 1779164852894,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "01167830ca47fa84bc87958f7ec51ab9a5525ebf7edbf9dce9d52731f1a72a97",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/01167830ca47fa84bc87958f7ec51ab9a5525ebf7edbf9dce9d52731f1a72a97"
+    },
+    "slug": "merge-check",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

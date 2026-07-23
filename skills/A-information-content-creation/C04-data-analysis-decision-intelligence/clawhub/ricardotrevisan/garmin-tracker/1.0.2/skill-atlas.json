@@ -1,0 +1,150 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report",
+      "website"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:data",
+      "category:C10:token:training",
+      "category:C16:token:training",
+      "category:C19:token:browser",
+      "cross-tag:browser-automation",
+      "cross-tag:data-analysis",
+      "cross-tag:planning",
+      "cross-tag:testing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C10",
+      "C16",
+      "C19"
+    ],
+    "stages": [
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "automate",
+      "plan",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "0541f3de88ff70e64f0c7bebeaf9e8355cf775606bc446c988573d296826d859",
+    "content_hash": "414547e95b89053f3e08d6d3f729f7849416817bfbd6b9d8853bf13ce4b60d1a",
+    "precanonical_content_hash": "f71ded2e7702f999e2c74ed4fe6674b89e484bf72ae0dfe9914833cd3834b938",
+    "skill_md_hash": "ea3214d3a95da688c838a34ca190112844f61264e6580500200b9e27d9be2f59",
+    "version_metadata_sha256": "bf75e9697c7d6f364cf855d7240eacbf2567b35e95eadcff12bc81cbca1bdfb0"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/ricardotrevisan/skills/garmin-tracker",
+    "claim_id": "0434d6ef77f52e42d4b24ebdcf0001dfb0f32d4ccc97cc6ed36bd298200d5e4c",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "garmin-tracker",
+        "url": "https://clawskills.sh/skills/ricardotrevisan-garmin-tracker"
+      }
+    ],
+    "owner_handle": "ricardotrevisan",
+    "owner_id": "s1717z141tzzw1ssvjmgqmxhm5885pxe",
+    "published_at": 1771276613468,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971748800,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971748800,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill purpose, scripts, and documented workflow coherently rebuild and validate a local garmin_tracking.json file from Garmin training-plan data, with explicit limits against deep telemetry scraping.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Browser-session reuse and optional Garmin credential login are disclosed and tied to the sync purpose; the credential CLI fallback is risky but not hidden or unrelated.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill may ask users to install playwright-core with npm if missing; this is proportionate for browser automation but is unpinned.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Using Playwright/CDP and a logged-in Garmin browser session is proportionate for Garmin web sync, but it can expose account fitness data to the local automation context.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The scripts write only the requested tracking JSON file and optionally a user-specified debug dump; no background persistence, credential storage, deletion, or unrelated exfiltration was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The file read/write behavior is central to maintaining garmin_tracking.json and is clearly described in SKILL.md, though explicit permission metadata would improve reviewability.\n[SDI-2] expected: The script does accept Garmin email and password as CLI flags for a last-resort login path. This is a real handling risk, but it is disclosed, limited to Garmin login, and no artifact evidence shows credential storage or exfiltration.\n[SQP-2] expected: SKILL.md documents credentials mode as a fallback and includes rules not to store or echo credentials; users should still prefer browser login because prompt/CLI secrets may appear in logs or process listings.\n[SQP-2] expected: The automated form-fill login matches the stated Garmin sync purpose. The script help identifies credential mode, but stronger runtime warnings would be useful.\n[VirusTotal code_insight] expected: VirusTotal flagged the same credential-argument concern and reported no unauthorized exfiltration, persistence, or other malicious behavior; artifact review supports downgrading this to user guidance rather than Review.",
+          "guidance": "Install only if you are comfortable letting the skill use a Garmin logged-in browser session and update garmin_tracking.json. Prefer manual browser login over passing a Garmin password on the command line, avoid debug dumps unless needed, and pin playwright-core in managed environments if supply-chain repeatability matters.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This Garmin skill is purpose-aligned and disclosed, but users should avoid the password-based fallback unless they trust the environment.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971711516,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: garmin-tracker\nVersion: 1.0.2\n\nThe skill is classified as suspicious due to its direct handling of user credentials via command-line arguments in `scripts/sync_training_plan.mjs`, as demonstrated in `SKILL.md`. While `SKILL.md` provides explicit instructions to the AI agent to handle credentials securely (e.g., not storing, logging, or echoing them), the capability to accept sensitive data directly as arguments for browser automation presents a significant risk for misuse through prompt injection against the agent, even without clear malicious intent within the skill's code itself. No evidence of data exfiltration to unauthorized endpoints, persistence, or other malicious activities was found.",
+          "checkedAt": 1779164663362,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "84cbbf6ecb024b086985cdcc79b3852438e04b86366718d1d9af3f2caa94c41d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/84cbbf6ecb024b086985cdcc79b3852438e04b86366718d1d9af3f2caa94c41d"
+    },
+    "slug": "garmin-tracker",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

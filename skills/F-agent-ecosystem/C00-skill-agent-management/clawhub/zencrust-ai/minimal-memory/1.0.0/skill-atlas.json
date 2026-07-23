@@ -1,0 +1,150 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [],
+    "confidence": 0.125,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C01:token:search",
+      "category:C02:token:writing",
+      "category:C07:token:review",
+      "category:C10:token:ai",
+      "category:C12:token:management",
+      "category:C13:token:operations",
+      "category:C17:token:knowledge",
+      "cross-tag:agent-management",
+      "cross-tag:review",
+      "cross-tag:search",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C02",
+      "C07",
+      "C10",
+      "C12",
+      "C13",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "research",
+      "review",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "1b39aee0347f7287087bebe03706c5aae5fe58e1b6885cb83fccde33a46a3e4b",
+    "content_hash": "5d32df9a099b3911c6a623af3fddccd227bae8553bb3f014cdfe2cc425562fc0",
+    "skill_md_hash": "6cbf2e0a56b6b30221b1d883a5b8073ebc1bfb76fe8ae052ab20a3a2902b44f0",
+    "version_metadata_sha256": "999681c005eeee5b44844c2d954a2591a6bb64bf80833a004aecf367b5a9ce19"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/zencrust-ai/skills/minimal-memory",
+    "claim_id": "9274272b84b5f75a59da14e7a8fb8d13396998c537f31858764a17ce23ba2110",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "minimal-memory",
+        "url": "https://clawskills.sh/skills/zencrust-ai-minimal-memory"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "zencrust-ai",
+    "owner_id": "s1729k4ygyjjg9wbma63d6dy9s8851fq",
+    "published_at": 1771168626453,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968346897,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968346897,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The capabilities match the stated purpose: GOOD/BAD/NEUTRAL memory tagging, local daily memory logs, search, cleanup guidance, and archival of old local memory files.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The activation wording is somewhat broad around memory discussions and 'remember this', but the instructions remain focused on memory-file operations and do not ask the agent to take unrelated actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No install script, dependency installation, remote download, or privilege escalation is present; the package consists of markdown instructions and local shell helper scripts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The scripts operate on local OpenClaw workspace memory paths and optional user-provided MEMORY_DIR/WORKSPACE overrides, which is proportionate for a memory-management skill.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill intentionally persists local memory files across sessions, but this is central to the purpose and there are no cron jobs, startup hooks, background workers, credentials, or elevated privileges.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The trigger language is broad, so users should be deliberate about when memory is stored, but this does not show hidden or purpose-mismatched behavior.\n[RA2] expected: The cited daily-memory and add-entry behavior is expected local state persistence for a memory skill, not unauthorized session control or background persistence.\n[VirusTotal code_insight] unexpected: The claimed QUERY shell injection is not supported by the artifact because search.sh passes the query to grep in quotes; the unquoted file-list expansion is a shell robustness issue but not evidence of arbitrary command execution or malicious intent.",
+          "guidance": "Install only if you want the agent to keep local memory notes in the OpenClaw workspace. Avoid storing secrets or sensitive personal data, periodically review MEMORY.md and daily logs, and be aware that broad 'remember this' prompts may cause information to be retained for future use.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed local memory organizer; it creates, searches, and archives workspace memory files without evidence of hidden access, networking, credential use, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968306771,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: minimal-memory\nVersion: 1.0.0\n\nThe skill bundle is classified as suspicious due to a critical shell injection vulnerability in `scripts/search.sh`. The user-provided `QUERY` argument is passed unquoted to the `grep` command, allowing for arbitrary command execution on the system where the agent is running. While the overall purpose of the skill (memory management) appears benign, this vulnerability allows an attacker to exploit the agent's execution environment.",
+          "checkedAt": 1779164278051,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "5e0ed091926c2b8c4d9925dfd43faeff0c0916cd11bb655d9b87c7d3ceddb394",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/5e0ed091926c2b8c4d9925dfd43faeff0c0916cd11bb655d9b87c7d3ceddb394"
+    },
+    "slug": "minimal-memory",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

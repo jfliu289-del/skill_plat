@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C07:token:testing",
+      "category:C09:token:audit",
+      "category:C10:token:model",
+      "category:C12:token:decision",
+      "cross-tag:agent-management",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C07",
+      "C09",
+      "C10",
+      "C12"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8de61cefa93d0798dd57468e13d00a73865bc47acb079537c23455ce6a463067",
+    "content_hash": "61c073a33502a85f8d4661977f8bf7a63098f1d709dcd74bd80ba55cb3e8c953",
+    "precanonical_content_hash": "d61d37610f84bfe26a4d29bc8d41baf90a35230af497c3d46b342de40c142bd3",
+    "skill_md_hash": "74bc9b463bc63c78f81cc13f87b01af3793358cd9576192575c5f7752a1a268c",
+    "version_metadata_sha256": "29c79a7f09828f4aa457e95e17a8cc698b49fae4b032a0c9f44bc60e2c92bf87"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/joetomasone/skills/policy-engine",
+    "claim_id": "57788b1b1056818b10d8a0174520fa9bbedda62a8925be491c36cafe54dff02a",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "policy-engine",
+        "url": "https://clawskills.sh/skills/joetomasone-policy-engine"
+      }
+    ],
+    "owner_handle": "joetomasone",
+    "owner_id": "s179qpkrzje1rzyw0rc7xz7hfx885v31",
+    "published_at": 1771359874309,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972948182,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972948182,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The code and documentation align around tool governance: before-tool-call enforcement, deny patterns, path allowlists, allowlists, dry-run behavior, escalation tracking, and audit logging.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill explicitly documents essential/T0 tool bypasses, fail-open behavior, and an environment-variable break-glass bypass; these weaken enforcement but are disclosed as availability and recovery choices.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is conventional for an OpenClaw plugin, with no postinstall script found, but registry/version metadata and README package versions differ and the README points to a GitHub clone workflow that users should verify.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "It requests no credentials and performs no network or file exfiltration, but OPENCLAW_POLICY_BYPASS=1 is a sensitive environment switch that disables all policy checks when set.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The plugin registers high-impact enforcement hooks and keeps per-session state in memory with a one-hour TTL; it does not create background persistence or store data on disk.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] expected: The essential/T0 bypass and escalation behavior are real, but they are plainly documented as anti-deadlock design choices rather than hidden behavior.\n[SDI-2] expected: Model/profile routing is disclosed in the configuration; the implementation only prepends routing context and does not itself contact providers or switch sessions through an undisclosed channel.\n[SDI-4] expected: The fail-open paths and break-glass bypass are present and security-relevant, but they are documented and logged, so they are operational risks rather than evidence of malicious intent.\n[TM1] expected: The dangerous command strings appear in tests that verify disabled/bypass behavior; they are not automatically executed by the skill.",
+          "guidance": "Install only if you want this plugin to sit in the tool-execution path. Treat OPENCLAW_POLICY_BYPASS and gateway/config access as administrator-only controls, test policies in dry-run before enforcing, and verify the GitHub source before using the README clone/npm workflow.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed policy-control plugin with important operational bypasses, but I found no hidden exfiltration, destructive behavior, or deceptive behavior in the artifacts.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972880773,
+          "issueCount": 10,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: policy-engine\nVersion: 1.1.0\n\nThe OpenClaw Policy Engine plugin is designed to enhance security by providing deterministic governance over tool execution. It implements robust features like tool allowlists, deny patterns (e.g., blocking `rm -rf`, `curl|bash`), and path allowlists with canonicalization to prevent path traversal. The documentation explicitly addresses prompt injection as a threat the plugin mitigates and details anti-deadlock measures. While it includes a 'fail-open' policy on internal errors and an `OPENCLAW_POLICY_BYPASS` environment variable for emergency overrides, these are transparently documented design choices for availability and control, not indicators of malicious intent. No evidence of data exfiltration, unauthorized remote control, persistence, or obfuscation was found. The markdown files provide legitimate instructions for configuring a security plugin and do not contain prompt injection attacks against the agent.",
+          "checkedAt": 1779164924420,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "8de61cefa93d0798dd57468e13d00a73865bc47acb079537c23455ce6a463067",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8de61cefa93d0798dd57468e13d00a73865bc47acb079537c23455ce6a463067"
+    },
+    "slug": "policy-engine",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

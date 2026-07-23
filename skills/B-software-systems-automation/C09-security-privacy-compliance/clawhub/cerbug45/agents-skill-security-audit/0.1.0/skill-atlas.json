@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.6682,
+    "domains": [
+      "security"
+    ],
+    "needs_review": false,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C00:phrase:agent skill",
+      "category:C00:token:skill",
+      "category:C09:phrase:security audit",
+      "category:C09:token:audit",
+      "category:C09:token:security",
+      "cross-tag:agent-management",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "857ceb01110172bb27b6c014c6947091cc57aa0c5cd1f8e5303717d07fe329df",
+    "content_hash": "e7a03d6b96992338be74e33e5b66f156c350f5d3847f1d1fa8cccf23b319ca6b",
+    "precanonical_content_hash": "8b13f6f875c6e31cfe282b36ceb1721fdd029dff0efe182f4d75bbc3cb61e433",
+    "skill_md_hash": "6edca4e4c897b2af337a2cfbfdd65c6dd411264be9822f8f2f3ae77ae437b7dd",
+    "version_metadata_sha256": "c0a059568a2b5d96adbbd29e533fc22530da0e27e083cf57703905353f682b26"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/cerbug45/skills/agents-skill-security-audit",
+    "claim_id": "74450c4cbde3c08c776557e38fb0eab7f8d049363433502b1fc93a7b4fe22c97",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "agents-skill-security-audit",
+        "url": "https://clawskills.sh/skills/cerbug45-agents-skill-security-audit"
+      },
+      {
+        "index_path": "categories/cli-utilities.md",
+        "label": "agents-skill-security-audit",
+        "url": "https://clawskills.sh/skills/cerbug45-agents-skill-security-audit"
+      }
+    ],
+    "owner_handle": "cerbug45",
+    "owner_id": "s170r0ajc2x7b9pyqmvrajgtxx85hz4r",
+    "published_at": 1771354153079,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972880671,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972880671,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifacts: SKILL.md and README describe auditing skill instructions, and audit.py performs regex checks for exfiltration, sensitive-file, and shell-command patterns.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Usage is explicitly user-directed via `python audit.py path/to/skill.md`; there is no automatic execution, hidden role instruction, mutation workflow, or broad authority request.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill only declares a python3 requirement and has no dependency download or postinstall behavior. The package is not a trusted OpenClaw publisher package, and the artifact version metadata is inconsistent, but this is a provenance/packaging note rather than unsafe behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The script reads only the file path supplied by the user and writes findings to stdout, but matching line snippets may include sensitive text if the scanned file itself contains secrets.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background workers, credential stores, privileged paths, network calls, command execution, or file modification are evidenced in the artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SkillSpector clean] expected: SkillSpector reported no issues; artifact review also found no hidden or purpose-mismatched behavior.\n[VirusTotal clean] expected: VirusTotal telemetry is clean and aligns with the inspected code, which only performs local file reading and regex matching.\n[Static scan clean] expected: Static scan reported no findings; manual inspection found the risky terms are detection patterns used by the audit tool, not actions performed by it.\n[Report snippet sensitivity] expected: Printing snippets of matched lines is expected for an audit report, but users should review reports before sharing them if scanned files may contain real secrets.",
+          "guidance": "Reasonable to install for local, lightweight skill-audit checks. Run it only on files you choose, and review or redact generated reports before sharing because findings can include snippets from the scanned file.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a small local scanner that reads a user-chosen file and prints heuristic security findings without network, persistence, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972835781,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: agents-skill-security-audit\nVersion: 0.1.0\n\nThis skill bundle is designed to audit other OpenClaw skill bundles for supply-chain risks. The `audit.py` script scans input files for patterns indicative of data exfiltration (e.g., `http://`, `webhook`, `ngrok`), sensitive file access (e.g., `.env`, `.ssh`, `credentials`), and dangerous shell commands (e.g., `curl | bash`, `sudo`, `rm -rf`). The script itself only reads files and performs regex matching; it does not execute any external commands, make network calls, or modify files. The `SKILL.md` and `README.md` files provide clear, benign instructions for using the auditing tool. There is no evidence of malicious intent, prompt injection, or high-risk behaviors within this skill bundle itself.",
+          "checkedAt": 1779164908514,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "bffca3bb4279db6dbec4118efbbf9a82956de2aa503b02ddff3174455599db15",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/bffca3bb4279db6dbec4118efbbf9a82956de2aa503b02ddff3174455599db15"
+    },
+    "slug": "agents-skill-security-audit",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

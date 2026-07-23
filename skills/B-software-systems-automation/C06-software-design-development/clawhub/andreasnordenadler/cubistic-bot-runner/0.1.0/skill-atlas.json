@@ -1,0 +1,133 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C17:token:notes",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "c035493c4255ae974fecb580af3471ed7ca329fb882cc561e789f8a413f34cb9",
+    "content_hash": "4fffc914d99183c3aab707322f3ffb441095f7571060fb5f95df2127131ae2c9",
+    "precanonical_content_hash": "a1cc51d6673e4d38eb207e5428b39cf4253bc7fb3fab0ae247b2643da4b96bf9",
+    "skill_md_hash": "644f9337540b45b3f3c090e2e742cac1d1066242f4405d5dacdd02c34222d74b",
+    "version_metadata_sha256": "bbdf1abb9e335901cc3d871adeceb4429184ffecc0fde9e0da2df8466f2defb4"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/andreasnordenadler/skills/cubistic-bot-runner",
+    "claim_id": "73128830c298a3e0936404b86e51fa3995b3d0439d429efb86a1b167610cb1a4",
+    "index_entries": [
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "cubistic-bot-runner",
+        "url": "https://clawskills.sh/skills/andreasnordenadler-cubistic-bot-runner"
+      }
+    ],
+    "owner_handle": "andreasnordenadler",
+    "owner_id": "s17bpsrtv4yajx4w1j08wrkvn98854x9",
+    "published_at": 1771871812373,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779953363204,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779953363204,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to run a polite Cubistic painter bot, and the scripts match that purpose by checking pixels, solving proof-of-work, and posting bounded paint actions.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The loop can repeatedly perform public paint actions, but this behavior is disclosed, user-invoked, limited by MAX_ATTEMPTS and MAX_SUCCESSES, and uses backoff.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains only SKILL.md and two readable Node.js scripts; no installer, package install, obfuscation, or automatic execution was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "BACKEND_URL and API_KEY are required and purpose-aligned for the API integration, but run-loop logs the full API_KEY locally at startup.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background service, filesystem mutation, privilege escalation, or local credential-store access was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] unexpected: Verified: scripts/run-loop.mjs logs API_KEY in plaintext as the bot field. This is a real local log-exposure issue, but it is not hidden exfiltration and does not outweigh the otherwise coherent, bounded behavior.\n[suspicious.env_credential_access] expected: Verified: both scripts read API_KEY and send it as X-Api-Key to the configured BACKEND_URL, which is disclosed in SKILL.md and necessary for the Cubistic API workflow.",
+          "guidance": "Install only if you intend to run a bot that can publicly paint pixels on the configured Cubistic backend. Verify BACKEND_URL, use a limited bot key, keep loop limits small, and redact terminal or CI logs from run-loop before sharing them.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward Cubistic painting bot runner, but users should avoid sharing its loop logs because they can include the bot API key.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779953324581,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: cubistic-bot-runner\nVersion: 0.1.0\n\nThe skill bundle is benign. It provides Node.js scripts to run a 'polite' bot that interacts with a Cubistic HTTP API, performing Proof-of-Work and painting pixels. The `SKILL.md` documentation clearly outlines the bot's purpose, required environment variables (`BACKEND_URL`, `API_KEY`), and execution commands, without any prompt injection attempts. The `scripts/run-loop.mjs` and `scripts/run-once.mjs` files implement the described functionality, reading `API_KEY` from `process.env` and sending it as an `X-Api-Key` header to the configured `BACKEND_URL`. There is no evidence of data exfiltration beyond the intended API key usage, malicious execution, persistence mechanisms, or obfuscation. The code explicitly checks for 'Void' pixels before painting, aligning with its 'polite' description.",
+          "checkedAt": 1779166557808,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "0d6cf8c3f04dfee9351c5eb4b9907ec99932463c4913c370e588a97ee457a57c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0d6cf8c3f04dfee9351c5eb4b9907ec99932463c4913c370e588a97ee457a57c"
+    },
+    "slug": "cubistic-bot-runner",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

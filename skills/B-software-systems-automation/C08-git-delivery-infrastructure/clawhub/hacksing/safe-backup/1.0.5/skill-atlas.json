@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.375,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C01:token:find",
+      "category:C02:token:edit",
+      "category:C08:token:git",
+      "category:C08:token:github",
+      "category:C08:token:repository",
+      "category:C09:token:security",
+      "category:C17:token:notes",
+      "category:C18:token:home",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C02",
+      "C09",
+      "C17",
+      "C18"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "research",
+      "secure",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "5545c2b008b0379739be698f0ab638605152a935a57664fcf3f28ebb8c10a028",
+    "content_hash": "e64f9f37ef12607ad7f3c65068840eeb68ed2011b5eee8c6825701401724872f",
+    "precanonical_content_hash": "9a44c0ed9830bb02d902a4dbf2a136d499bc01852f115dfe16cce96bd69b3339",
+    "skill_md_hash": "7d448fce22ea0f73c7b104f1851b1641dab657b35eaeb1095fe7a482d06e3b61",
+    "version_metadata_sha256": "c6f3e0b71b3955b823f8e98dfe73dcf4c2a248496bcc1716ac4ee9c648d437ac"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/hacksing/skills/safe-backup",
+    "claim_id": "3e4ef282aba2328b15d87f4c221b587e2196ae7c61efdf61f2a3c0301a1bf358",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "safe-backup",
+        "url": "https://clawskills.sh/skills/hacksing-safe-backup"
+      }
+    ],
+    "owner_handle": "hacksing",
+    "owner_id": "s176ztvkqj8425kmfx7pqg716s83h4n5",
+    "published_at": 1772082320004,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779949696016,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779949696016,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is backing up OpenClaw state and workspace data, and the script implements local rsync copying plus tar packaging with explicit exclusions for credentials, tokens, sessions, logs, keys, and caches.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The trigger wording includes broad phrases like backup, export, or save state, and the documentation includes optional GitHub and remote rsync storage examples; these are disclosed but should be invoked only for explicit backup/offsite-backup requests.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains a markdown skill file and one local shell script; there is no hidden installer, package download, dependency bootstrap, or automatic remote setup.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Reading and archiving OpenClaw state and workspace directories is proportionate for a backup tool, but those directories can contain private user content even after credential-oriented exclusions.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The script creates a persistent local tar.gz backup in the temp directory and removes only its staging directory; it does not install persistence, run in the background, escalate privileges, or automatically transmit data.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-2] expected: Remote storage guidance is expected for backup/disaster-recovery documentation and is presented as manual, disclosed post-backup handling rather than automated exfiltration. The remote rsync example is less carefully scoped than the main backup script, so users should review exclusions before using it.\n[SQP-1] unexpected: The broad trigger wording is a real usability caution for a backup skill because it could activate on imprecise requests, but the artifacts do not show hidden execution or automatic upload behavior.",
+          "guidance": "Install only if you want OpenClaw state/workspace backups. Before running it, confirm the source directories, review the generated archive contents, delete unencrypted local copies when done, and do not follow the GitHub or remote rsync examples unless the destination is private and you have verified that secrets and private workspace files are excluded or encrypted.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed local backup utility, but users should treat its archives and optional remote-storage examples as potentially sensitive.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779949645741,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: safe-backup\nVersion: 1.0.5\n\nThe 'safe-backup' skill is designed to securely back up OpenClaw state and workspace directories. Both the `SKILL.md` documentation and the `scripts/backup.sh` script explicitly define and implement extensive exclusion patterns for sensitive files such as API keys, credentials, environment variables, and SSH keys. The `backup.sh` script performs only local file system operations (copying with `rsync`, archiving with `tar`, and cleaning up temporary files) and does not initiate any network connections or data exfiltration. While `SKILL.md` suggests optional manual steps for storing backups to remote locations (e.g., private GitHub repositories or remote rsync servers), these are presented as post-backup user actions with security best practices (encryption, private repos) and are not part of the automated script's execution. There is no evidence of malicious intent, obfuscation, or prompt injection designed to compromise the agent or exfiltrate data.",
+          "checkedAt": 1779166247301,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "277bf0be05c365225e3919ee1874b490ed59b2cbe7deeef8bb48e2946ec72a4d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/277bf0be05c365225e3919ee1874b490ed59b2cbe7deeef8bb48e2946ec72a4d"
+    },
+    "slug": "safe-backup",
+    "source_type": "clawhub",
+    "version": "1.0.5"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

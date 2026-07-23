@@ -1,0 +1,148 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "creative",
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:video",
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C17:token:notes",
+      "cross-tag:design",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C09",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "41e6105b614a372047a0120da5fad2718afc8ee9a68fd01b7cb773aeb75adbe4",
+    "content_hash": "5a2509446b66dfa77004e924b347de0050632ff1dacd494f706ee2179d6f652c",
+    "precanonical_content_hash": "4678696463575b9c23377047581d936f083b68a745ccc7cc1eb51866eece0ac2",
+    "skill_md_hash": "959368e9c2f9b9687ae488f53aa38fe77699cbca959ea4b0a3dda806785582dd",
+    "version_metadata_sha256": "558734c68e09f588e8e141cf6748b6e27e3cf34f729d020f390425b439bd226b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/kmasterrr/skills/video-captions-reelwords",
+    "claim_id": "fd655a4ca207acc2d1576a68ceeadca59f09cfcccf3b666f84038b027c1e82e6",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "video-captions-reelwords",
+        "url": "https://clawskills.sh/skills/kmasterrr-video-captions-reelwords"
+      }
+    ],
+    "owner_handle": "kmasterrr",
+    "owner_id": "s179z4shz0qzgyfp7xhxazry9h84bz5m",
+    "published_at": 1771747155223,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779949003302,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779949003302,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, documentation, and helper script all align around creating ReelWords caption jobs, polling status, and downloading rendered videos.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Instructions are user-directed setup and API usage examples; I found no hidden prompt manipulation, unrelated commands, autonomous background behavior, or deceptive control flow.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no installer or automatic package execution; the helper script is a local Python script that depends on requests and is run intentionally by the user or agent.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Use of REELWORDS_API_KEY and outbound HTTPS requests to api.reelwords.ai are disclosed and proportionate to a third-party captioning API workflow.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill suggests storing the API key in OpenClaw configuration and can write a downloaded video to a user-specified output path, but shows no persistence mechanism, privilege escalation, broad local access, or destructive behavior.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill metadata and docs disclose the required API key and ReelWords API usage; lack of a stronger structured permission model is a hardening note rather than evidence of hidden or mismatched behavior.\n[SQP-2] expected: The skill could be clearer about ReelWords privacy and retention implications, but sending video URLs and job metadata to the ReelWords service is the plainly stated purpose.\n[E1] expected: External transmission of the API key, video URL, and caption preferences to api.reelwords.ai is expected for creating caption jobs and is shown in both the docs and script.\n[E1] expected: Following a ReelWords download endpoint redirect or using result.downloadUrl is documented behavior for retrieving rendered output; users should still treat signed URLs as sensitive.",
+          "guidance": "Install only if you trust ReelWords with the videos or video URLs you submit. Keep REELWORDS_API_KEY private, avoid command-line secrets when possible, review API usage or credits, and choose output paths carefully because the helper writes the downloaded video to the path you provide.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it sends a video URL to ReelWords for captioning and can download the rendered result.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779948969438,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 91,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: video-captions-reelwords\nVersion: 1.0.0\n\nThe skill bundle is benign, designed to interact with the ReelWords Caption API as described. The `SKILL.md` provides clear, helpful instructions, including security advice for handling API keys, and contains no prompt injection attempts. The `scripts/reelwords_caption_job.py` script correctly implements the stated functionality, securely retrieves the API key from environment variables or arguments, and directs all network traffic to `https://api.reelwords.ai`. There is no evidence of data exfiltration, unauthorized command execution, persistence mechanisms, or obfuscation. File writing for downloaded videos is to a user-specified path, which is expected behavior.",
+          "checkedAt": 1779166144442,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "373429aeaa78d4f4df56f0df0e234480da94308fae76f621fd12b96b01b6241f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/373429aeaa78d4f4df56f0df0e234480da94308fae76f621fd12b96b01b6241f"
+    },
+    "slug": "video-captions-reelwords",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

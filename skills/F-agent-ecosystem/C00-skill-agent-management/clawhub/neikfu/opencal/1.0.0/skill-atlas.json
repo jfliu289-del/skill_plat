@@ -1,0 +1,132 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.31,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C10:token:ai",
+      "category:C17:token:notes",
+      "category:C18:token:food",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10",
+      "C17",
+      "C18"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "05776d9dd59f17989f8b07037d1a70cacd78d9e7ea7b0142f1f67fa52c6acb0d",
+    "content_hash": "4e55e75327fff4e3f153e42dfd2f4022a86a1e52fd633cee15fc26f55b94a7b0",
+    "precanonical_content_hash": "285956b6f7cbf394ddc5269d96f8caf027f772b90ed1ec8354c3a9e41d5a5deb",
+    "skill_md_hash": "6dde1560429a978fd7dc4704b7de671c9a9235b703ab42492a7e828c87298c49",
+    "version_metadata_sha256": "cb19145d8ac7f176293823aacc2f79503ba79b6cde9d01c497a4d85d7d336207"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/neikfu/skills/opencal",
+    "claim_id": "2889f5fdbdf55428a1b83942d97ec6a695dd35743bb0206485103d687f5d4c0b",
+    "index_entries": [
+      {
+        "index_path": "categories/health-and-fitness.md",
+        "label": "opencal",
+        "url": "https://clawskills.sh/skills/neikfu-opencal"
+      }
+    ],
+    "owner_handle": "neikfu",
+    "owner_id": "s17cvexkwce3gt29eaaz5nph0s885cd2",
+    "published_at": 1771493292292,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779933362644,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779933362644,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The API calls to search foods, log meals, read daily progress, update goals, and delete entries match the stated nutrition-tracking purpose, but they can expose and modify personal nutrition data.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The activation wording is broad and the examples support hands-free logging, so users should be explicit when they only want nutrition information rather than an account change.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains only SKILL.md, no executable installer or bundled runtime code, and discloses required tools and OPENCAL_API_KEY.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Using curl, jq, an OpenCal bearer token, and the OpenCal API is proportionate for this skill; the OPENCAL_BASE_URL override should only be set to a trusted endpoint.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Meal logs, deletions, and goal updates persist in the user's OpenCal account, but that persistence is central to the advertised function and is disclosed in the instructions.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad food-related trigger is real, but the artifact also distinguishes logging from nutrition lookup and does not show hidden automatic execution; this is a user-control caution rather than a Review-level mismatch.\n[E1] expected: The POST to /food/log sends meal data to OpenCal as expected for a meal logger; the privacy impact is disclosed by the skill's purpose and API-key setup.\n[E1] expected: The PUT to /goals changes calorie and macro goals, which is state-changing but directly matches the advertised goal-management function.\n[VirusTotal code_insight] expected: The shell-command and endpoint-override concerns are plausible hardening notes, but engine detections were otherwise clean and the artifact does not show injection, obfuscation, or redirection to an unrelated service.\n[Static scan] expected: The static scan reported no findings, consistent with the artifact being a single instruction file with disclosed API usage.",
+          "guidance": "Install only if you are comfortable giving your agent an OpenCal API key. The agent can read meal history, add or delete food entries, and change calorie or macro goals; keep the key private, do not set OPENCAL_BASE_URL unless you trust the endpoint, and review logged changes for accuracy.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a documentation-only OpenCal integration that clearly uses an API key to read and update meal logs and goals, with privacy and account-change cautions but no hidden or unrelated behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779933332509,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 30,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: opencal\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to its reliance on direct shell command execution (`curl`, `jq`) for API interactions, which presents a significant vulnerability to shell injection if the AI agent does not rigorously sanitize user input before constructing these commands. Additionally, the `OPENCAL_BASE_URL` override in SKILL.md allows for potential redirection of API calls to arbitrary endpoints if an attacker can control this environment variable via prompt injection. While these capabilities are plausibly needed for the skill's stated purpose, they introduce high-risk attack vectors without clear malicious intent within the skill's instructions themselves.",
+          "checkedAt": 1779165403866,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "a899d849ea93fb00ee0da3ec59b5f5fc7f4d05baf5a09c82dec2a78e7a467cde",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a899d849ea93fb00ee0da3ec59b5f5fc7f4d05baf5a09c82dec2a78e7a467cde"
+    },
+    "slug": "opencal",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,148 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "configuration"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "infrastructure",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C11:token:team",
+      "category:C13:token:operations",
+      "category:C17:token:schedule",
+      "cross-tag:agent-management",
+      "cross-tag:deployment",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C11",
+      "C13",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "deploy",
+      "manage",
+      "operate"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e42d80f847d7b0119ac85f3068bd0425785b657a641d5aa88945794e3e83deb8",
+    "content_hash": "c6594b8d000b2edc4d9861125bab76fe7c1c8c26a260f5a76ae7a3f2aa4ad82e",
+    "precanonical_content_hash": "d8788831902ecb9110cf456f34e0f720cccbb47e18cace10ed2b41477bbd9f80",
+    "skill_md_hash": "ef51621d7acb16b2c21230c932074cb353b4cfba3cd833ab154f6ec0be9fc569",
+    "version_metadata_sha256": "e2f87eae6fbf274e5d6e5bc457f9e9641b80d82c95ffa72f555319a4dd2ed83c"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/peerrich/skills/calcom",
+    "claim_id": "6fd3b15335e5acb65104128e858c9530e4ccf48d780de08649433cd563c2d4c4",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "calcom",
+        "url": "https://clawskills.sh/skills/peerrich-calcom"
+      }
+    ],
+    "owner_handle": "peerrich",
+    "owner_id": "s174zvptx0f8t143ehsw3ygwsx8859ht",
+    "published_at": 1771433773494,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779922430622,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779922430622,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill clearly describes using Cal.com API v2 to manage bookings, event types, schedules, calendars, availability, and webhooks; those capabilities can affect live scheduling data and attendee information, but they match the stated purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are straightforward API reference examples with no hidden commands or prompt-injection behavior, though they do not consistently require explicit user confirmation before create, cancel, reschedule, delete, or webhook actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains Markdown documentation and reference files only; no executable installer, script, package hook, or background runtime behavior was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use requires Cal.com API credentials and can expose booking, attendee, calendar, and busy-time metadata; this is expected for the integration and should be handled with least-privilege keys and minimal disclosure.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Webhook and calendar configuration can persist in the Cal.com account and webhooks can send future booking events to configured URLs; this is disclosed and purpose-aligned, but should be user-approved and limited to trusted endpoints.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[suspicious.exposed_secret_literal] expected: The flagged Bearer values appear to be placeholder API documentation examples, not evidence of a real leaked secret or executable credential use.\n[SQP-2] expected: The documented booking cancellation, rescheduling, schedule, and webhook operations are account-mutating, but they are central to the Cal.com scheduling purpose and are not hidden or automatic.\n[SQP-2] expected: The ICS feed URL endpoint is part of calendar integration documentation; users should only provide trusted calendar feed URLs, but the skill itself does not perform hidden fetching.\n[SQP-2] expected: Webhook subscriber URLs can receive attendee and booking data, which the webhook examples make visible; use should be limited to user-approved HTTPS endpoints.\n[SQP-2] expected: Busy-time endpoints return calendar metadata such as titles, times, and sources; that data is sensitive but expected for availability and calendar-management workflows.\n[SQP-2] unexpected: The webhook best-practice line recommending payload logging is broader than necessary because payloads include personal and meeting data; this warrants caution and redaction guidance, but it does not show malicious or hidden behavior.",
+          "guidance": "Install/use this skill only if you are comfortable giving an agent Cal.com API access. Require confirmation before creating, cancelling, rescheduling, deleting, or changing webhooks; use least-privilege credentials; avoid logging full webhook payloads; and only send webhooks or calendar feeds to trusted HTTPS endpoints.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a documentation-only Cal.com API skill whose sensitive actions are real but aligned with its scheduling-management purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779922387392,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 50,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: calcom\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle for Cal.com API v2 is classified as benign. The `SKILL.md` and all `references/*.md` files provide standard, comprehensive documentation for interacting with a legitimate scheduling API (Cal.com). There is no evidence of prompt injection attempts against the AI agent, no instructions for data exfiltration, malicious execution, persistence, or unauthorized actions. The documentation even includes security best practices for API key handling and webhook verification, indicating a responsible approach. While the API allows creating webhooks to arbitrary URLs, this is a standard API capability and the skill bundle does not instruct the agent to use it maliciously; a malicious user would need to explicitly prompt the agent to do so.",
+          "checkedAt": 1779165238484,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "e7fef5eb4df89fd6cdc07d74b1bfdeab3dd00e8db38847942030b163d10d3d9a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e7fef5eb4df89fd6cdc07d74b1bfdeab3dd00e8db38847942030b163d10d3d9a"
+    },
+    "slug": "calcom",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

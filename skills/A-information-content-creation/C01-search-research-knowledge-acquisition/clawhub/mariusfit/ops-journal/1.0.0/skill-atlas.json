@@ -1,0 +1,159 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "configuration",
+      "data",
+      "report",
+      "website"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "infrastructure",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C04:token:statistics",
+      "category:C06:token:api",
+      "category:C08:token:deploy",
+      "category:C12:token:management",
+      "cross-tag:browser-automation",
+      "cross-tag:data-analysis",
+      "cross-tag:deployment",
+      "cross-tag:search",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C08",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "automate",
+      "build",
+      "deploy",
+      "operate",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "6df98a8a509d4bdb18a95ac8f9e2a172c0de2c6844da4c6a0a86732d1a03335a",
+    "content_hash": "9d35e27d9a55ea81dfe8cf9f79d996f568c10033a7a8c16b8cdf0c2be7d3da32",
+    "skill_md_hash": "ab49c964fa75327739e6b1817d50dccda3eb5c42a9c097642b20e77a0c9a5fb7",
+    "version_metadata_sha256": "cce3bae9ac5ca2d23f567a6a2cca605632751c9500116c2e7d31fff317434a53"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/mariusfit/skills/ops-journal",
+    "claim_id": "b113f32ec1853b48aa1e7bc2b6094b9264b83c80999289fd07782863a7430107",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "ops-journal",
+        "url": "https://clawskills.sh/skills/mariusfit-ops-journal"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "mariusfit",
+    "owner_id": "s17en27tt4m76ranka73sgtdfd884sb7",
+    "published_at": 1771953349881,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779957040919,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779957040919,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill describes logging deployments, incidents, changes, decisions, search, summaries, timelines, and exports; the bundled Python script implements those local journal functions without unrelated capabilities.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are explicit user-run CLI commands, with optional cron or hook examples; there is no hidden auto-start, background worker, network call, or prompt-injection behavior in the artifacts.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The package contains a markdown skill file and a Python standard-library script with no dependency installer, shell bootstrap, or install-time mutation logic.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The default local storage under ~/.openclaw/workspace/ops-journal is proportionate for an ops journal, but entries can contain sensitive operational, security, and incident details.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is disclosed and local via SQLite plus incident markdown files; export and timeline commands can write to a user-supplied output path, which is expected for exports but could overwrite a chosen writable file if misused.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The concern is valid as user guidance because operational logs may hold sensitive details, but the local storage path and journal purpose are disclosed and aligned.\n[VirusTotal code_insight] expected: The reported arbitrary output path is an explicit --output feature for export and timeline generation, controlled by the caller; it is not hidden or purpose-mismatched, though users should choose paths carefully.\n[staticScan] expected: Static scan reported clean, and artifact review found no network transfer, credential/session access, subprocess execution, unrelated deletion, or privilege escalation behavior.",
+          "guidance": "Install only if you want a persistent local operations journal. Do not log passwords, tokens, private keys, or regulated data; protect the journal directory and review exported files before sharing. Use --output paths carefully because exports can overwrite the file path you provide.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a local operations journal whose persistent files and export writes match its stated purpose, with normal caution needed for sensitive incident data.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779957004995,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 6,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ops-journal\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to a potential arbitrary file write vulnerability in the `scripts/journal.py` file. The `cmd_export` function allows writing journal entries to an arbitrary file path specified by the `--output` argument (`with open(args.output, 'w') as f:`). While this functionality is plausible for an export feature, it presents a significant vulnerability if a malicious actor or a compromised agent could control the `args.output` path, potentially leading to overwriting critical system files or user configuration files. There is no evidence of intentional malicious behavior such as data exfiltration, backdoors, or prompt injection in `SKILL.md`.",
+          "checkedAt": 1779166831944,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "d9919c289d438c60efdc962688f4fd4bef4bf5faf5d669cd90ec2327472b67d0",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d9919c289d438c60efdc962688f4fd4bef4bf5faf5d669cd90ec2327472b67d0"
+    },
+    "slug": "ops-journal",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

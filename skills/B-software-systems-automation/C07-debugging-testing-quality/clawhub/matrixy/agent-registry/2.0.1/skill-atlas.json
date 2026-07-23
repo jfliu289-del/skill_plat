@@ -1,0 +1,167 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.5568,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C07",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C06:token:code",
+      "category:C07:phrase:code review",
+      "category:C07:token:review",
+      "category:C09:token:security",
+      "category:C11:token:project",
+      "cross-tag:agent-management",
+      "cross-tag:code-review",
+      "cross-tag:data-analysis",
+      "cross-tag:review",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C01",
+      "C06",
+      "C09",
+      "C11"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "research",
+      "review",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "9bd3718ca9a6c1fa172f575e578984d46d50aa896721e368cf5e424e688dde75",
+    "content_hash": "df35cbee7d8a4776cde69ac912c3d91bd34c586319085677e48f2ce498546729",
+    "precanonical_content_hash": "f6d33e4117094b9ab834a8dccb611078398d8e81ce179d038a86316ac001d78f",
+    "skill_md_hash": "54dcea9b30ad2d53ebc0b2c7061f374cfc9c9e93cb1445bd1852d34a2414be58",
+    "version_metadata_sha256": "0fffbc98e85615a53db9c2e0d988a4c999156e28c670064bcf3dbdb8e5483534"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/matrixy/skills/agent-registry",
+    "claim_id": "e08721d65bfc8e41c4c3289dbabdbc4e339395e323594f65fb1a90163e4edaa0",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "agent-registry",
+        "url": "https://clawskills.sh/skills/matrixy-agent-registry"
+      },
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "agent-registry",
+        "url": "https://clawskills.sh/skills/matrixy-agent-registry"
+      }
+    ],
+    "owner_handle": "matrixy",
+    "owner_id": "s17e24j3hd5g35an84aqwke9px88507e",
+    "published_at": 1771193694808,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783651161880,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783651161880,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently implement lazy loading for Claude agents by scanning local agent markdown files, building a metadata registry, searching it, and loading selected agents on demand.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "SKILL.md uses forceful MANDATORY/MUST language and broad activation guidance, but the instructions remain focused on agent discovery and registry-based loading rather than unrelated assistant control.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "install.sh copies the skill into a user or project Claude skills directory, creates expected subdirectories, and installs optional UI dependencies only when --install-deps is supplied.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The hook processes every submitted prompt locally against registry metadata, and CLI telemetry can make network requests only after AGENT_REGISTRY_TELEMETRY is explicitly enabled.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The UserPromptSubmit hook persists as part of the skill and runs on each prompt; file migration copies by default, while destructive movement of source agent files requires the explicit --move option.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The command hook, local filesystem access, and environment-variable checks are visible in artifacts and coherent with a Bun-based agent registry, though users should understand the hook authority before installing.\n[TP4] expected: Installation, migration, automatic hook behavior, optional --move, and telemetry are described across SKILL.md, README.md, and CLAUDE.md, so the broader behavior is not hidden relative to the stated registry purpose.\n[SDI-2] expected: External telemetry exists, but it is disabled by default, requires explicit AGENT_REGISTRY_TELEMETRY opt-in, and bundled call sites send aggregate fields rather than prompts, search queries, agent names, or file paths.\n[SDI-1] expected: Telemetry is not in the skill frontmatter, but it is disclosed in README/CLAUDE.md and gated by opt-in environment variables, so this is a privacy consideration rather than evidence of covert data transfer.\n[SQP-2] expected: The --move mode can relocate/delete source agent files, but it is labeled destructive in CLI help and docs and is not the default migration behavior.\n[VirusTotal:code_insight] expected: The telemetry and strong skill-use wording are real, but artifact review shows opt-in telemetry, local-only prompt search, and no hidden destructive or exfiltrating behavior.\n[suspicious.dangerous_exec] expected: The flagged child_process usage appears in tests that spawn CLI scripts, not in the runtime skill hook or user-facing command flow.\n[suspicious.env_credential_access] expected: Environment access is used for telemetry opt-in/opt-out and CI detection variables, not credential or session harvesting.",
+          "guidance": "Install this only if you want a persistent hook that locally checks every prompt against your agent registry and may add matching-agent suggestions to context. Leave AGENT_REGISTRY_TELEMETRY unset, or set DO_NOT_TRACK/AGENT_REGISTRY_NO_TELEMETRY, if you do not want usage telemetry sent. Use the default copy migration first; only run --move if you intentionally want source agent files relocated.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed local agent registry with an automatic local prompt-search hook and opt-in telemetry, with no artifact-backed evidence of hidden exfiltration or destructive default behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783651111889,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 78,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: agent-registry\nVersion: 2.0.1\n\nThe skill is classified as suspicious primarily due to the presence of an anonymous telemetry feature (`lib/telemetry.js`) that sends usage data to an external endpoint (`https://t.insightx.pro`). While this feature is opt-in, well-documented, and designed to be privacy-preserving by not collecting sensitive information, any data exfiltration to an external server, even for benign purposes, introduces a level of risk. Additionally, `SKILL.md` contains strong instructions to the AI agent (e.g., 'Claude MUST use this skill'), which, while intended for efficiency, represents a form of prompt injection. However, the code demonstrates active security hardening, including robust path traversal prevention in `lib/registry.js` for agent file loading, which is a positive indicator against malicious intent.",
+          "checkedAt": 1779159827987,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "84f0102b13b1d21bffc9ac4307ab0715b607e6a79ff073f2ee03149d5d7be2f9",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/84f0102b13b1d21bffc9ac4307ab0715b607e6a79ff073f2ee03149d5d7be2f9"
+    },
+    "slug": "agent-registry",
+    "source_type": "clawhub",
+    "version": "2.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

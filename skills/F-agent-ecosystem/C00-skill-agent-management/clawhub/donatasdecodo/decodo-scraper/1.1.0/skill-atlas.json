@@ -1,0 +1,132 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C11:token:product",
+      "cross-tag:agent-management",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C11"
+    ],
+    "stages": [
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "04a6c8417b848ef20d1bef9ed4b9b98ec124dba0c6b68711be641c418a140cbb",
+    "content_hash": "45876e87181494e3f4c4e276692b4080ee11df9112636e135f8d22e60ef21021",
+    "precanonical_content_hash": "65c3a61e8e8ddea0d0b575fc00b7585caa1c2083cf4ca5252df48e89bc6177cf",
+    "skill_md_hash": "23ff1c36cac472ed4372eb7b80cf80753f0e0c730b0b31c6f20861715535aa20",
+    "version_metadata_sha256": "6635c48af412edcb947b596480b21a92d8c8931505a03851fe743b80d30c9a42"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/donatasdecodo/skills/decodo-scraper",
+    "claim_id": "c671b2f95c50ed346069eff14a1598da52880ba74f5cdd5fd835837f87ff3dfd",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "decodo-scraper",
+        "url": "https://clawskills.sh/skills/donatasdecodo-decodo-scraper"
+      }
+    ],
+    "owner_handle": "donatasdecodo",
+    "owner_id": "s17addratm1abkq51qst2v11zn885ac8",
+    "published_at": 1771534138338,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779973769802,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779973769802,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is web search and scraping through Decodo, and the script implements only those targets: Google search, universal URL scraping, Amazon, YouTube subtitles, and Reddit retrieval.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions are user-directed command examples and do not ask the agent to override user intent, run automatically, hide actions, or change local or remote accounts beyond requested scraping API calls.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation uses a small requirements file with requests and python-dotenv specified as lower-bound ranges rather than pinned versions, which is a reproducibility and supply-chain hygiene concern but not evidence of malicious behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill requires DECODO_AUTH_TOKEN and sends the token plus user-provided queries or URLs to Decodo; this is proportionate for a Decodo scraping integration, but users should understand the third-party data flow.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The code reads an environment variable or repo .env file, posts to a fixed Decodo API endpoint, and prints results; no background worker, credential logging, local indexing, file mutation, privilege escalation, or persistence mechanism was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: Environment-token use and outbound network access are inherent to this Decodo API wrapper and are partly disclosed in the SKILL.md frontmatter and setup docs; a more explicit permissions declaration would improve transparency but does not show hidden behavior.\n[SQP-2] expected: Submitting URLs, queries, Reddit links, Amazon searches, and YouTube IDs to Decodo is expected for the advertised scraping service and the Decodo API is named prominently; the skill should still warn users not to submit secrets, internal URLs, or sensitive research terms.\n[SC1] unexpected: The unpinned requests and python-dotenv requirements are ordinary dependency-management risk, not purpose-mismatched or deceptive behavior.\n[SC4] unexpected: The requests advisory signal comes from the broad allowed version range; the artifact uses requests for a single HTTPS POST to Decodo and contains no evidence of exploiting vulnerable behavior.",
+          "guidance": "Install this only if you intend to use Decodo as a third-party scraping provider. Treat submitted URLs, search terms, video IDs, and retrieved content as visible to Decodo, keep DECODO_AUTH_TOKEN out of shared logs and repositories, avoid credential-bearing or private/internal URLs, and pin dependencies or use a lockfile in production.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it sends chosen searches and URLs to Decodo's scraping API, with dependency hygiene issues but no hidden or destructive behavior found.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779973742796,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 71,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: decodo-scraper\nVersion: 1.1.0\n\nThe OpenClaw skill is designed for web scraping via the Decodo API. The `SKILL.md` and `README.md` provide clear, non-malicious instructions for the AI agent and user, with no evidence of prompt injection attempts to subvert agent behavior. The `tools/scrape.py` script uses `argparse` for secure command-line argument parsing and the `requests` library for API communication to `https://scraper-api.decodo.com`. It correctly handles the `DECODO_AUTH_TOKEN` environment variable for authentication. There is no evidence of data exfiltration beyond the stated purpose, persistence mechanisms, obfuscation, or suspicious dependencies in `requirements.txt`. The code's functionality is directly aligned with its described purpose.",
+          "checkedAt": 1779163788964,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "e2ee6243ad9bc5cd041a085d9688fe5d65c26022b6e60333c5aff0bd392de2f8",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e2ee6243ad9bc5cd041a085d9688fe5d65c26022b6e60333c5aff0bd392de2f8"
+    },
+    "slug": "decodo-scraper",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,147 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C02:token:language",
+      "category:C02:token:translate",
+      "category:C09:token:secure",
+      "category:C09:token:security",
+      "category:C10:token:llm",
+      "cross-tag:agent-management",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C09",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "2a473d7d0e4e45052ae6bd5a2dd6e3ed497287ccd965825e9a8c6f9e081d574d",
+    "content_hash": "4d6f40d463bdc8c27cfab0dacaa5dab553a17311fb4ca16506920c2eb0365cb5",
+    "precanonical_content_hash": "050026a64a2f0fa49e4cad1713212e0ea109b3c3a3b876fd1c249c1ba4a93d31",
+    "skill_md_hash": "3d8223a399085ca82805bb150f671c642e7d1f2f35bd08ed298807dad1558520",
+    "version_metadata_sha256": "470ab54cf78e2c7851cbafb9c6df43f21dc7dae5b4ef5575d4083959169401ad"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/thetail001/skills/subtitle-translate-skill",
+    "claim_id": "b8408e9819db35b95f5261f307afbad3a82dd658441a0e3fb607d10c25678002",
+    "index_entries": [
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "subtitle-translate-skill",
+        "url": "https://clawskills.sh/skills/thetail001-subtitle-translate-skill"
+      }
+    ],
+    "owner_handle": "thetail001",
+    "owner_id": "s176jayfpajfrsbbbj0dte2gmd882m6r",
+    "published_at": 1772017285802,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779958904651,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779958904651,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts and documentation align with the stated purpose: read an SRT file, send subtitle text to an OpenAI-compatible API for translation, and write a translated SRT output.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The workflow is user-directed and scoped to translation, validation, and model listing; subtitle text is sent to the model endpoint, which is expected for the purpose and disclosed.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden installer, background worker, package install step, privilege escalation, or automatic execution behavior is present in the artifacts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access, proxy honoring, and API-key use are proportionate for an API-backed translator and are called out in the security notes, but users must trust the endpoint and network path.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The only persistence described is user-created output files and an optional plaintext config-file example; the docs mark plaintext API-key storage as less secure, though the scripts themselves appear to require command-line credentials rather than implementing the documented env/config paths.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: File read/write, environment/proxy use, and network access are expected for this skill; lack of explicit permission metadata is a governance limitation rather than evidence of hidden behavior.\n[SQP-2] expected: Subtitle upload to the configured API is core functionality and is disclosed in the security section; the lack of a runtime confirmation is a usability/privacy caution, not a purpose mismatch.\n[E1] expected: External transmission of subtitle content and credentials is expected for an OpenAI-compatible translation tool, and the documentation warns users not to use sensitive content unless they control or trust the API.\n[RA2] expected: The home-directory config file is optional and documented as less secure; it is not an automatic persistence mechanism or background session behavior.\n[VirusTotal code_insight] expected: The proxy interception risk is real but disclosed, and VirusTotal reported no engine detections; this telemetry does not outweigh the coherent artifact behavior.",
+          "guidance": "Install only if you are comfortable sending subtitle text to the configured API provider. Use trusted HTTPS endpoints and trusted network/proxy settings, avoid command-line or plaintext-file API keys on shared systems, and do not process confidential subtitles unless you control or trust the API service.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill translates user-selected subtitle files through a user-provided LLM API, with the main privacy and credential risks disclosed in its documentation.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779958866998,
+          "issueCount": 9,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: subtitle-translate-skill\nVersion: 0.1.1\n\nThe skill is classified as suspicious primarily due to the `scripts/list_models.py` and `scripts/translate_srt.py` scripts honoring `http_proxy` and `https_proxy` environment variables. While this is a common feature, it introduces a vulnerability where API keys and subtitle content could be intercepted if the agent's environment is configured with an untrusted proxy. However, the `SKILL.md` documentation explicitly warns users about this risk, stating: 'If your environment uses untrusted proxies, API keys could be captured.' This transparency, combined with the absence of other malicious indicators like unauthorized data exfiltration, persistence mechanisms, or prompt injection attempts against the agent, prevents a 'malicious' classification. The core functionality aligns with the stated purpose of subtitle translation.",
+          "checkedAt": 1779167070970,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "8e7267c07b68cc46193e2d32ba5778849fb5340fdf6986dca32a3ee309ea476e",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8e7267c07b68cc46193e2d32ba5778849fb5340fdf6986dca32a3ee309ea476e"
+    },
+    "slug": "subtitle-translate-skill",
+    "source_type": "clawhub",
+    "version": "0.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

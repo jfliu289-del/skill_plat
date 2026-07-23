@@ -1,0 +1,155 @@
+{
+  "classification": {
+    "artifacts": [
+      "configuration",
+      "document"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.3964,
+    "domains": [
+      "infrastructure",
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C02:token:edit",
+      "category:C08:token:git",
+      "category:C08:token:github",
+      "category:C08:token:repository",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:deployment",
+      "cross-tag:security",
+      "cross-tag:writing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00",
+      "C02",
+      "C09",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "deploy",
+      "manage",
+      "operate",
+      "secure",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8389b83b4de719a0f1aa2c2b131c6cbdab5d7e1cfbc6dad756a9e74a0c154d1d",
+    "content_hash": "88842e3f5d33e205993e2593965848b5d19943a2d544d7656afb46bcfeb35524",
+    "precanonical_content_hash": "ecebfc0c4e4345a82fff064b5021954c85cb00d1c667796361bb0dcccd01d4a9",
+    "skill_md_hash": "a78d8d957894442711e65e1649f5d80bb1aa0922b5e2ee702f038cdca65a209f",
+    "version_metadata_sha256": "0559c906a7425b032990af4cfcb7c4742ae10782844d90df9e47bdb47c4f3b28"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/gopinathnelluri/skills/spirit",
+    "claim_id": "3a0131c1bea537e85e2afeaf7fd7ad546bdaf8b0bdfa28bfea82667773120ff1",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "spirit",
+        "url": "https://clawskills.sh/skills/gopinathnelluri-spirit"
+      }
+    ],
+    "owner_handle": "gopinathnelluri",
+    "owner_id": "s17e2pd417wjxxv906ppshdyfx884wna",
+    "published_at": 1771571711046,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779920551235,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779920551235,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The purpose is coherent and disclosed: preserving agent identity, memory, user preferences, and project files through Git sync. Those files are sensitive, but the behavior matches the stated purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill lists default synced paths and points users to `.spirit-tracked` for scoping. Scheduled sync instructions are optional, but the cron guide could be clearer that recurring sync sends updated private state off-host.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Install metadata uses a Homebrew tap, while restore instructions also show a user-directed curl-to-bash installer. This is not hidden, but users should verify the external SPIRIT CLI source before running it.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Use of Git, SSH keys, GitHub CLI, or Git credential helpers is expected for private repository sync. The skill warns against token-in-URL remotes and recommends private repositories.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Cron, OpenClaw cron, and SPIRIT auto-backup are documented opt-in mechanisms for background syncing. They are purpose-aligned but can continue syncing without per-run review once enabled.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The SKILL.md scheduled-sync concern is valid as user guidance: recurring sync can upload sensitive state. It is disclosed, optional, and aligned with the backup purpose, so it does not by itself justify a Review verdict.\n[SQP-2] expected: The cron setup guide does describe unattended recurring backups. The risk is real if `.spirit-tracked` or the remote is misconfigured, but the artifacts do not show hidden exfiltration or automatic enablement.\n[SQP-2] expected: The auto-backup daemon is presented as an explicit command with status and disable commands. It warrants caution, not a malicious or suspicious classification on its own.\n[VirusTotal] expected: VirusTotal flagged the combination of sensitive Git sync, cron persistence, and curl-to-bash restore install. Static artifact review found these behaviors disclosed and purpose-aligned; VirusTotal is telemetry only.\n[staticScan] expected: The static scan reported no suspicious patterns, and the shell script only checks for SPIRIT initialization, runs `spirit sync`, and rotates a local log.",
+          "guidance": "Install only if you intentionally want agent identity, memory, and project files backed up to Git. Use a dedicated private repository, inspect and narrow `.spirit-tracked`, avoid secrets in synced files, verify the external SPIRIT installer or Homebrew tap, and enable cron or auto-backup only if you want continuous background syncing.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "SPIRIT is a clearly disclosed backup/sync skill for agent state, but users should treat it as sensitive because it can repeatedly upload memory and project files to a private Git repository.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779920497323,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: spirit\nVersion: 1.1.0\n\nThe OpenClaw AgentSkills bundle 'spirit' is designed to preserve AI agent identity and memory by syncing sensitive files (e.g., IDENTITY.md, memory/*.md) from the OpenClaw workspace to a user-configured private Git repository. This involves high-privilege operations including extensive file system access, network communication for Git operations, and persistence via cron jobs (SKILL.md, scripts/spirit-sync-cron.sh, references/cron-setup.md). While the stated purpose is legitimate backup, these capabilities inherently carry significant risk. Furthermore, the installation instructions for the 'spirit' CLI tool itself include a `curl -fsSL ... | bash` command (SKILL.md), which is a critical supply chain vulnerability and potential RCE risk, even if the skill bundle's immediate intent appears to be benign and includes security warnings.",
+          "checkedAt": 1779165033067,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "daa4fd683f9992f45c1d4165458f2ea380d397d8bfea5eee291131550de84d3f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/daa4fd683f9992f45c1d4165458f2ea380d397d8bfea5eee291131550de84d3f"
+    },
+    "slug": "spirit",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

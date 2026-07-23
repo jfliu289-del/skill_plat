@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [
+      "website"
+    ],
+    "audiences": [],
+    "confidence": 0.175,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C02:token:language",
+      "category:C07:token:review",
+      "category:C17:token:knowledge",
+      "cross-tag:browser-automation",
+      "cross-tag:review",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C07",
+      "C17"
+    ],
+    "stages": [
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "research",
+      "review"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "3b4743df0b565b87a124de0c79983e65cc89b956ccc56da4462ae2587a446685",
+    "content_hash": "af5e2f4a9b60330dd9093ccccef6783bb8a600e3dc7adfb349863fb38ad4b7e3",
+    "precanonical_content_hash": "79f43ac6c19279e23ba753eceb82c9e2070b7b8f7656969d002ca12eb13b752e",
+    "skill_md_hash": "54835484c7e999af6d47a93fc95aa78165ff224718c6f0ff5205cf530b1884a9",
+    "version_metadata_sha256": "3a6407c40d241b06a2d9e1efb51fda5a873b931858c2ae8b692f9a8663af1f07"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jakes420/skills/link-brain",
+    "claim_id": "40682c0ad13d410d164b341aea6bd9e1dd1753ad0b1ed97e02bed53a4be02a77",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "link-brain",
+        "url": "https://clawskills.sh/skills/jakes420-link-brain"
+      }
+    ],
+    "owner_handle": "jakes420",
+    "owner_id": "s17622cyf5h0hmzmmamrqjwnc5884cf1",
+    "published_at": 1771185824768,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974357848,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974357848,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe saving, importing, searching, reviewing, and visualizing links; reading browser bookmark stores and exported platform files is purpose-aligned for a link manager.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The documentation discloses quickstart auto-import, browser scans, local storage, optional auto-save fetching, and generated HTML/browser opening, though a clearer privacy/permissions section would help users understand the sensitivity of bookmark imports.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains a skill document, one Python script, references, tests, and fixtures; no hidden installer, dependency bootstrap, background worker, or automatic execution path was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use of filesystem access, SQLite storage, browser bookmark reads, generated local HTML, and user-selected LINK_BRAIN_DIR is proportionate, while auto-save can fetch arbitrary user-provided URLs and should be treated as a network-capable feature.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistent data is stored under ~/.link-brain or a user-selected directory, with command-driven deletion and sync behavior; no privilege escalation or stealth persistence was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[TT3] expected: The auto-save network fetch is disclosed and tied to summarizing a user-supplied URL. Lack of host/scheme/private-address restrictions is a hardening issue, especially in automated environments, but the artifact does not show hidden exfiltration or unrelated outbound traffic.\n[LP3] expected: Filesystem access, browser bookmark reads, local HTML generation, environment-variable configuration, and optional network fetching are described across the skill documentation and are coherent with a local link manager.\n[TP4] expected: The broader features identified by the scanner, including imports, GUI output, sync, and reading statistics, are documented as commands and remain within the stated link knowledge-base purpose.\n[SDI-4] expected: Feedback creates a local log and prints a GitHub issue URL containing the user's message and basic system info; it does not automatically submit the issue or open a remote page, but this behavior could be documented more prominently.\n[SQP-2] expected: Quickstart does import all detected Chrome, Safari, and Firefox bookmarks when invoked, and the documentation says so plainly. Because bookmarks can be private, users should prefer setup or individual scan commands if they want more control.",
+          "guidance": "Install only if you want a local database of your saved links and are comfortable with the quickstart command reading browser bookmarks. Use setup or individual scan commands instead of quickstart if you want to review sources first, and use auto-save only for URLs you are comfortable having the tool fetch from your machine.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Link Brain is a local bookmark and link knowledge-base tool whose browser import, local database, HTML output, and optional URL fetching match its stated purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974316058,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: link-brain\nVersion: 4.3.0\n\nThe OpenClaw AgentSkills skill bundle 'link-brain' is classified as benign. The code (scripts/brain.py) and documentation (SKILL.md) align with the stated purpose of a local knowledge base for links. Key claims of local-only operation, no telemetry, and a single network call (via urllib for auto-summarization) are verified. Input sanitization (e.g., HTML escaping for GUI output, URL quoting for feedback links) is present. While the skill reads browser bookmark files and user-provided export files, this is its core stated functionality, and it does not attempt to access or exfiltrate unrelated sensitive data. The `LINK_BRAIN_DIR` environment variable allows users to specify a custom data directory, which is a user-controlled capability and not indicative of malicious intent by the skill itself.",
+          "checkedAt": 1779163881656,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "060eca174b472007d47fb34abe7aacfd3da96fc769ae7bfd55e2c9621bab5067",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/060eca174b472007d47fb34abe7aacfd3da96fc769ae7bfd55e2c9621bab5067"
+    },
+    "slug": "link-brain",
+    "source_type": "clawhub",
+    "version": "4.3.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

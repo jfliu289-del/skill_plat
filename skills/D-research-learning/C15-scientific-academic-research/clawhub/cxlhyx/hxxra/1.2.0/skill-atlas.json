@@ -1,0 +1,163 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "paper",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "researcher"
+    ],
+    "confidence": 0.4333,
+    "domains": [
+      "science",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C15",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:research",
+      "category:C01:token:search",
+      "category:C03:token:pdf",
+      "category:C04:token:analyze",
+      "category:C06:token:api",
+      "category:C10:token:llm",
+      "category:C15:phrase:research paper",
+      "category:C17:token:notes",
+      "cross-tag:academic-research",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00",
+      "C01",
+      "C03",
+      "C04",
+      "C06",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "02c68e717fdfeb848cc5c4f76c6972a9eded41615032afe28d22f26329aa4a26",
+    "content_hash": "517f4026d3fe4d6fb844b9d061539cc685ba57d6cd4f6d38ed71d826e9ccf711",
+    "skill_md_hash": "92481287f220cc2f3b4e09b2f5304cf0c38a7bc52aa9b57f752a61f7c741e732",
+    "version_metadata_sha256": "18b43161c4d3fdb11aebfca4c0593230483b97b2938930aac4b5962d5b3d5630"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/cxlhyx/skills/hxxra",
+    "claim_id": "af7a0fdec14e28002db9350ebf41ac3033b73bb42cc6f28e65d5b00736d4e650",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "hxxra",
+        "url": "https://clawskills.sh/skills/cxlhyx-hxxra"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "cxlhyx",
+    "owner_id": "s1737edg3fvd6hwyzxndcqw8z184jcpz",
+    "published_at": 1773247974186,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779962570957,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779962570957,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose is to search, download, analyze, report on, and save academic papers, and the Python script implements those same command-driven workflows.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Commands are explicit JSON inputs over stdin/stdout. The analyze workflow is documented as LLM-based, though the documentation could more plainly state that extracted PDF text is sent to the configured LLM provider.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No unusual installer, background hook, or hidden setup behavior was found; dependencies are ordinary Python packages for scholarly search, PDF extraction, and LLM access.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network calls to arXiv, Google Scholar tooling, configured OpenAI-compatible endpoints, arbitrary paper PDF URLs, and Zotero are proportionate to the stated research workflow, but they involve third-party services and user API keys.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill writes search results, PDFs, analysis JSON, and Markdown reports locally, and can create Zotero collections/items when save is invoked. These side effects are generally disclosed and purpose-aligned, with no background persistence found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] expected: The Zotero save workflow creates collections and uploads paper metadata, but this matches the advertised save-to-Zotero feature and requires the user to invoke the save command with configured credentials.\n[SDI-2] expected: The skill reads configured OpenAI-compatible and Zotero credentials only for the LLM analysis and Zotero save workflows; this is sensitive but purpose-aligned and not hidden.\n[SQP-2] expected: The disclosure concern is valid as guidance: SKILL.md says analysis uses an LLM and save uses Zotero, but it should be clearer that PDF text and metadata may leave the local machine during analysis and save.\n[SSD-1] expected: PDF text is placed into the LLM prompt for summarization, which can affect output quality if a paper contains adversarial text, but there is no evidence that the skill grants the PDF autonomous tool authority or performs hidden actions from model output.",
+          "guidance": "Install only if you are comfortable using external academic, LLM, and Zotero services. Do not run analyze on confidential, unpublished, licensed, or personal PDFs unless the configured LLM provider and retention policy are acceptable. Use a dedicated workspace and avoid storing real API keys in shared config files.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent research-paper assistant, but it uses external LLM and Zotero services when the user invokes those features.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779962526391,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 84,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: hxxra\nVersion: 1.2.0\n\nThe hxxra skill is a legitimate research assistant tool designed to search, download, and analyze academic papers from arXiv and Google Scholar, with integration for OpenAI and Zotero. The Python script (scripts/hxxra.py) implements clear command-driven logic for PDF processing and metadata management, using standard libraries like urllib and scholarly. While it handles sensitive API keys for Zotero and OpenAI, there is no evidence of data exfiltration, malicious execution, or prompt injection; all network and file operations are strictly aligned with the stated research workflow.",
+          "checkedAt": 1779162453217,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "ac0d9c57677fda5a9d622479e6beaf0f9ef639f3328bc47eacd9428efbc872b2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ac0d9c57677fda5a9d622479e6beaf0f9ef639f3328bc47eacd9428efbc872b2"
+    },
+    "slug": "hxxra",
+    "source_type": "clawhub",
+    "version": "1.2.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

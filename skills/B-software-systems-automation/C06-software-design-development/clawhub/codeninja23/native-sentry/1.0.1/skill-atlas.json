@@ -1,0 +1,135 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C17:token:notes",
+      "category:C18:token:health",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17",
+      "C18"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "67d5204f234a6bb78faef5673cd8b21aeaaecc4cf7a2b7af44f08a782c6cf9f7",
+    "content_hash": "aab9afef805e2a3dfc4355d7b1f882561889a2f1c2f19e8dd6009db159ca7492",
+    "precanonical_content_hash": "8f3f943d0c04b66b3c6159c1082bebfa2aefdfe8910ba431d400c051d72f0477",
+    "skill_md_hash": "0576452fbf697a307cedab8d2b40dbabb10e5349353489a643825284ebe0fedc",
+    "version_metadata_sha256": "726a29199b411addac6cda118d414d01f0b30747bbe47e063151908c071eb2ef"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/codeninja23/skills/native-sentry",
+    "claim_id": "388808e4fab3a2040934dcbeb9edc302ebd705aa0df9034309b3c2a76018868f",
+    "index_entries": [
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "native-sentry",
+        "url": "https://clawskills.sh/skills/codeninja23-native-sentry"
+      }
+    ],
+    "owner_handle": "codeninja23",
+    "owner_id": "s173w4sv23s5bb8w4kjv1t143n842den",
+    "published_at": 1771927232270,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779956066356,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779956066356,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifacts: the skill reads Sentry issues, events, and error details through REST API endpoints. Sentry telemetry can be sensitive, but the behavior is purpose-aligned and disclosed.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are scoped to Python helper commands for read-only workflows. Optional flags for stack traces and unredacted output are documented with warnings, so they are privacy-sensitive but not hidden.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No dependency installer or package chain is present; the helper uses Python standard-library modules only.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Requiring SENTRY_AUTH_TOKEN is proportionate for a Sentry integration, and the skill asks for read-only scopes. Users should keep the token least-privilege and only use trusted SENTRY_BASE_URL values.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts show no file writes, background workers, persistence, credential storage, mutation endpoints, or destructive actions. The token is read from the environment and used only as an Authorization header.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal-code_insight] unexpected: The shell-injection concern is not supported by the helper implementation: it uses argparse, URL parameter encoding, and does not invoke a shell. The Markdown examples still require normal safe argument quoting by the agent or user.\n[SkillSpector] expected: The supplied current report is clean. A privacy concern visible in metadata about --no-redact is a valid caution, but the option is disclosed, redaction is enabled by default, and the behavior fits debugging use.\n[staticScan] expected: Static scan reported no findings, which is consistent with the inspected files.",
+          "guidance": "Install only if you want an agent to read Sentry diagnostics. Use a dedicated read-only Sentry token, keep redaction enabled by default, avoid --no-redact in shared or logged sessions, and request stack traces only when needed in a trusted environment.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed read-only Sentry helper; it can expose production error data, but that access is expected and documented.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779956019560,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: native-sentry\nVersion: 1.0.1\n\nThe skill bundle is classified as suspicious due to a potential shell injection vulnerability. While the `sentry_api.py` script itself employs good security practices like PII redaction, `argparse`, and `urlencode` to prevent injection within its own logic, the `SKILL.md` defines commands that take arguments (e.g., `ISSUE_ID`, `EVENT_ID`, `--query`) which, if directly interpolated from unsanitized user input by the OpenClaw agent into the bash command string, could lead to arbitrary shell command execution. This represents a significant vulnerability in the agent's interaction model with the skill, rather than intentional malice within the skill's code itself.",
+          "checkedAt": 1779166729756,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "787a8c26e5ed5cb7fae162a0b4cd7189f75436309c09d6a09a8308897ad2b64b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/787a8c26e5ed5cb7fae162a0b4cd7189f75436309c09d6a09a8308897ad2b64b"
+    },
+    "slug": "native-sentry",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

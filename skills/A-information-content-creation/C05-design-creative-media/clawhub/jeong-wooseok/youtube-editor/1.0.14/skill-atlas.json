@@ -1,0 +1,167 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "document",
+      "report",
+      "website"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.5568,
+    "domains": [
+      "creative",
+      "security",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C04:token:analyze",
+      "category:C05:phrase:video editing",
+      "category:C05:token:video",
+      "category:C06:token:api",
+      "category:C07:token:quality",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C19:token:automate",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:data-analysis",
+      "cross-tag:design",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C07",
+      "C09",
+      "C10",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "automate",
+      "build",
+      "design",
+      "manage",
+      "secure",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "834f1766cca4253aa1d8b10b1b3591fc43a6cb00579031f33969570a68151e88",
+    "content_hash": "a3425dad6adf2956d1f7879c8a7a5b7b3b7668bcf2fa6deff058b6a2f83540fa",
+    "skill_md_hash": "f5b60fac8780b2ea2c9283f6d0669b44d2059b78b5da1d880ec011a1041bd5f4",
+    "version_metadata_sha256": "a83f276c6efd01fe5b2fcf9d5fe12dcdc6f3ca0d483d08bc86ec47fb2cae1182"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jeong-wooseok/skills/youtube-editor",
+    "claim_id": "f8d02221576d38851e992131f4430946637ec7960f161fab7904b136c4dc1990",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "youtube-editor",
+        "url": "https://clawskills.sh/skills/jeong-wooseok-youtube-editor"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "jeong-wooseok",
+    "owner_id": "s179vpxa7n813rmc0z08qnz9an884z9n",
+    "published_at": 1770815342011,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658338514,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658338514,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The advertised workflow matches the code: it downloads or reads a user-supplied video, extracts audio with ffmpeg, sends audio/transcript content to OpenAI for transcription and metadata, optionally calls a thumbnail image helper, and writes local output files.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Execution is user-invoked through a CLI script. The transcript is placed directly into an LLM prompt, which can affect generated metadata or thumbnail prompts, but the output is used as content rather than as shell commands.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The script declares uv-managed Python dependencies and depends on ffmpeg. Optional thumbnail generation runs a fixed-path nano-banana-pro script if installed, so users should treat that helper as a separate trusted dependency.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "OPENAI_API_KEY and optional NANO_BANANA_KEY are disclosed and aligned with transcription, analysis, and image generation. The optional key is passed to the helper command, so use it only with a trusted helper installation.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill creates timestamped local output folders and files. I found no background persistence, privilege escalation, account mutation, broad indexing, self-modification, or hidden network behavior beyond the disclosed APIs and YouTube download.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[AST4] expected: The subprocess use is real and executes a separate nano-banana-pro script from fixed local paths, but this cross-skill image-generation integration is disclosed, optional, timeout-limited, and aligned with the thumbnail feature. It is a dependency trust issue, not evidence of malicious behavior in this skill.\n[SSD-1] expected: The transcript is untrusted content inside an LLM prompt, which can degrade or manipulate generated metadata and image prompts. The impact is bounded to generated content, and the artifact does not use transcript text as executable code.\n[VirusTotal:code_insight] unexpected: The reported unescaped avatar path in local thumbnail HTML is artifact-backed as a hardening issue. Because the path is user-supplied/local and rendered for thumbnail capture rather than used for hidden persistence, credential theft, or account actions, it does not justify a Review verdict by itself.",
+          "guidance": "Install only if you are comfortable sending video audio and transcript-derived text to OpenAI and running local media/browser tooling. Review nano-banana-pro separately before using AI thumbnail generation, use limited or revocable API keys, and avoid untrusted avatar file paths until the local HTML escaping issue is fixed.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed video-editing automation tool with normal local-processing and API-use risks, but no artifact-backed evidence of hidden, destructive, or deceptive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658307830,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 21,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: youtube-editor\nVersion: 1.0.14\n\nThe skill is classified as suspicious due to a local HTML injection (XSS) vulnerability in `scripts/process_video.py`. The `avatar_path` argument, which can be user-controlled, is directly embedded into an `<img>` tag's `src` attribute within an HTML template without proper HTML escaping. This could allow a malicious user to inject arbitrary JavaScript into the locally rendered HTML, which is then processed by Playwright. While the skill demonstrates good security practices like YouTube URL validation and safe subprocess execution for other features, this specific input sanitization oversight presents a vulnerability.",
+          "checkedAt": 1779162167029,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "b075be551b16d59951c0821f7a86748035b968bcba55b086e9243a41845c75f2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b075be551b16d59951c0821f7a86748035b968bcba55b086e9243a41845c75f2"
+    },
+    "slug": "youtube-editor",
+    "source_type": "clawhub",
+    "version": "1.0.14"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

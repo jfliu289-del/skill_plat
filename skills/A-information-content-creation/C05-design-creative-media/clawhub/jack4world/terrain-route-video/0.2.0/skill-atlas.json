@@ -1,0 +1,129 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.55,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": false,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:animation",
+      "category:C05:token:video",
+      "cross-tag:design"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "f9b9c41ca150f0532c864b4092b8042485d895cb5f9b991d99eacc771207d832",
+    "content_hash": "c81d23634051f63163712fefe849d5c9b48be5c8f260d29c075aec05aa35043d",
+    "precanonical_content_hash": "c9c4e52cf6b0179dff9546761db468d9872f98b7ffafea298f9c198739caf923",
+    "skill_md_hash": "bf8cbc405a3b22f404f4ea536e31bf1553bb496f49ce67616d4f6fcd916c29f3",
+    "version_metadata_sha256": "18b3bd291bf2b9ddd4a545e2af95e48327712200d4aa32aec82848e38f1d7fca"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jack4world/skills/terrain-route-video",
+    "claim_id": "1b73b7e1f8f1aa9cdd673b0224ef91a4bf90c1c0ee9f54c19b83fc120e464b69",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "terrain-route-video",
+        "url": "https://clawskills.sh/skills/jack4world-terrain-route-video"
+      }
+    ],
+    "owner_handle": "jack4world",
+    "owner_id": "s17dbynx3685n8nahtb3yet8ks8586em",
+    "published_at": 1771770856692,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779947321567,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779947321567,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose is to generate terrain-style MP4 route videos, and the script behavior matches that: it reads user-supplied stops or GPX/KML tracks, fetches route/tile data, renders frames, and encodes an MP4.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are user-directed and focused on video generation; I found no hidden role changes, unrelated automation, deception, credential handling, or prompt-injection behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The runbook asks users to create a Python virtual environment and install common PyPI packages, but dependencies are unpinned and the metadata does not separately declare permissions.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The script reads user-selected route/font files, writes an output MP4 plus local frames and tile cache folders, invokes FFmpeg, and contacts OSRM/OpenTopoMap; these capabilities are proportionate and mostly disclosed, though route coordinates are shared with third-party services in online mode.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No elevated privileges, credential stores, startup persistence, background workers, or long-lived agents are requested; persistence is limited to disclosed local output, frame, and tile-cache files.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The file, network, and FFmpeg capabilities are real, but they are directly needed for the route-video workflow and are described in the skill text; the missing explicit permission declaration is a transparency note rather than a Review-level concern.\n[VirusTotal:code_insight] expected: The --font path is used by Matplotlib for text rendering. I found no artifact evidence that arbitrary file contents are displayed, transmitted, or otherwise exfiltrated, so this does not support a suspicious verdict.\n[staticScan] expected: Static scan reported no suspicious patterns, which is consistent with the inspected artifacts.",
+          "guidance": "Run it in a fresh working folder and virtual environment. Avoid sensitive home/work routes unless you are comfortable sending coordinates and map tile areas to public OSRM/OpenTopoMap services, and choose output paths carefully because the FFmpeg command overwrites the target MP4.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed route-video generator that uses local rendering files, public map/routing services, and FFmpeg in ways that match its stated purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779947298736,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: terrain-route-video\nVersion: 0.2.0\n\nThe skill is classified as suspicious due to a potential arbitrary file read vulnerability. The `scripts/terrain_route_video.py` script accepts a `--font` argument, which defaults to a system path (`/System/Library/Fonts/Hiragino Sans GB.ttc`). If an OpenClaw agent allows user-controlled input for this argument without proper sanitization, an attacker could specify an arbitrary file path (e.g., `/etc/passwd` or `~/.ssh/id_rsa`) to attempt to read its contents via `matplotlib.font_manager.FontProperties(fname=...)`. While there is no evidence of intentional malicious behavior like data exfiltration or backdoors, this vulnerability could lead to information disclosure.",
+          "checkedAt": 1779165975343,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "83b76f9a3341b81cfb63682b99ed5d798d68e19d98f65c00bd27dd9c2bb89198",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/83b76f9a3341b81cfb63682b99ed5d798d68e19d98f65c00bd27dd9c2bb89198"
+    },
+    "slug": "terrain-route-video",
+    "source_type": "clawhub",
+    "version": "0.2.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,130 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:plugin",
+      "category:C01:token:search",
+      "cross-tag:agent-management",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01"
+    ],
+    "stages": [
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "9a724681457a4c9f48f52bca6c25ee41f15eba9190f14a80cdcb3cf8097775c3",
+    "content_hash": "c52f0ecb814c4d2dffb5b901da18f13fcd6184143c531936a1bd09a481ae2126",
+    "precanonical_content_hash": "28b400d7c6f4eee7721d5470c68a7cd9f6c040ea0332673bed54620cc1c8a6e3",
+    "skill_md_hash": "2d57e887072187448598993a84b350099d3ca70e549322737a30f39896775010",
+    "version_metadata_sha256": "f17cc46bdb2d5e3edb5eb2c5479fe9185347240d2d93f623ec4876981b91dbb1"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/ksemaj/skills/lily-memory-5-0-0",
+    "claim_id": "960c8b74d37c08e700eaed2a42f867c396dd6493996fc6043a70c48ed0579d23",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "lily-memory-5-0-0",
+        "url": "https://clawskills.sh/skills/ksemaj-lily-memory-5-0-0"
+      }
+    ],
+    "owner_handle": "ksemaj",
+    "owner_id": "s1749xq1yk329yf01xdptw18gh885b89",
+    "published_at": 1771318154488,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972324768,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972324768,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The plugin's SQLite memory storage, keyword/vector search, auto-capture, auto-recall, entity management, consolidation, and stuck-detection all align with a persistent memory plugin for OpenClaw agents.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Auto-capture and auto-recall are disclosed in the README, SKILL.md, and manifest, and can be configured off, but they are enabled by default and the privacy warning could be more explicit.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a normal OpenClaw extension install with no npm dependencies or install-time scripts; required node and sqlite3 binaries are disclosed.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The default data path is local SQLite under ~/.openclaw, and Ollama defaults to localhost; a user-configured remote Ollama URL would send memory/query text to that endpoint.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The plugin intentionally persists extracted facts and topic history across sessions and injects relevant memories into future turns; no privilege escalation, credential harvesting, or hidden persistence was found, but built-in deletion/redaction controls are limited.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: SQLite CLI use and Ollama HTTP calls are documented and purpose-aligned for local memory and embeddings; this is a transparency note rather than evidence of hidden behavior.\n[SQP-2] expected: Persistent capture, recall injection, and embedding generation are core features and are disclosed, but users should treat them as sensitive because conversation-derived facts may be stored and later reintroduced.\n[SSD-3] expected: Cross-session retention and resurfacing are intentional memory functionality; scope is limited by regex extraction, entity validation, TTLs, and configuration toggles, so this does not indicate malicious behavior.",
+          "guidance": "Install only if you want the agent to remember facts across sessions. Review the database path, consider disabling autoCapture, autoRecall, or vectorSearch for sensitive work, and keep ollamaUrl on a trusted local endpoint unless you are comfortable sending memory/query text to that service.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent persistent-memory plugin whose storage, recall, and local embedding behavior match its stated purpose, though users should understand the privacy implications before enabling it.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972275736,
+          "issueCount": 18,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: lily-memory-5-0-0\nVersion: 1.0.0\n\nThe OpenClaw Lily Memory plugin is classified as benign. The code demonstrates strong security awareness, particularly in its handling of shell and SQL injection risks. The `lib/sqlite.js` module uses `execSync` to interact with the `sqlite3` CLI, which is a common pattern but inherently risky. However, the `escapeSqlValue` function and the shell escaping logic within `sqliteQuery` and `sqliteExec` appear robust, and the `CHANGELOG.md` explicitly highlights 'SQL sanitization' as a key security improvement. Furthermore, the `test/docker-smoke.mjs` and `test/smoke.mjs` files include explicit SQL injection safety tests, confirming developer intent to prevent such vulnerabilities. Prompt injection against the AI agent is present in `lib/recall.js` and `lib/stuck-detection.js`, but it is used for beneficial purposes like injecting memory context and self-correction nudges, not for malicious subversion or data exfiltration. No evidence of credential theft, unauthorized network activity (Ollama is local-only), persistence mechanisms beyond its stated memory function, or obfuscation was found.",
+          "checkedAt": 1779164776315,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "9a724681457a4c9f48f52bca6c25ee41f15eba9190f14a80cdcb3cf8097775c3",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/9a724681457a4c9f48f52bca6c25ee41f15eba9190f14a80cdcb3cf8097775c3"
+    },
+    "slug": "lily-memory-5-0-0",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

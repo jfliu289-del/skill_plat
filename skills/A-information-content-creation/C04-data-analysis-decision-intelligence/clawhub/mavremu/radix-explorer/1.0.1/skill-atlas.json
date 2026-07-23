@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.2833,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C01:token:sources",
+      "category:C04:token:data",
+      "category:C04:token:statistics",
+      "category:C06:token:developer",
+      "category:C12:token:market",
+      "category:C17:token:personal",
+      "cross-tag:data-analysis",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C06",
+      "C12",
+      "C17"
+    ],
+    "stages": [
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a3a1302abb81d49f8f112261f69623a34ae836d93a030cdd071dc07ff257d2c0",
+    "content_hash": "23a422129af5ea9a4ef70998e6bde1202075a85dc0b86316ac54bd305b7f63eb",
+    "precanonical_content_hash": "eeb47d6a7e59eaf9726409889ff9b35d46f430c766967a29017900276f2cae42",
+    "skill_md_hash": "12a46062f8736efebaf4966ee3b7582bdca3062b6c17341a58884f123e66c41d",
+    "version_metadata_sha256": "2079797c2822aeb5e40ae4d663e6e8498367547c558fd349bba44b2a04285fe2"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/mavremu/skills/radix-explorer",
+    "claim_id": "52dd68fde5be9b80fb5f1009125ac9e4fe9444ada93820d1459ddfce2dce6dc8",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "radix-explorer",
+        "url": "https://clawskills.sh/skills/mavremu-radix-explorer"
+      }
+    ],
+    "owner_handle": "mavremu",
+    "owner_id": "s171fn79cqzfvj0dz9gfq43cxx884ce6",
+    "published_at": 1770302658609,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783656440176,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783656440176,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, setup, tool list, and examples all center on querying Radix wallet, token, validator, market, ecosystem, and DeFi data; no signing, trading, account mutation, private-key handling, or destructive action is requested.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are limited to installing/using mcporter, registering the named Emily MCP endpoint, and calling documented query tools. The artifact contains no prompt override, hidden behavior, credential-harvesting instruction, or unrelated local file access.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill declares installation of the npm package mcporter and configures https://www.ineedemily.com/api/mcp/mcp. This is disclosed and aligned with the MCP-based query workflow, but users must trust both the npm CLI and the hosted service.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill does not request local files, browser profiles, API keys, seed phrases, or broad environment access. User-provided wallet addresses, token addresses, RNS domains, and market queries are sent to external blockchain and market data services, which is expected for the advertised functionality but has privacy implications.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The mcporter server registration persists locally so the integration can be reused. That persistence is disclosed and scoped to the named endpoint; there is no evidence of background workers, privilege escalation, or unbounded indexing.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The privacy concern is artifact-supported: wallet, transaction, and LP-position tools require user-supplied addresses and the skill uses a hosted MCP service plus listed data providers. This is expected for the skill's purpose and is not evidence of malicious behavior, but users should understand the lookup metadata exposure.\n[VirusTotal telemetry] expected: VirusTotal reported clean telemetry and described the npm install plus remote MCP endpoint as aligned with read-only Radix blockchain queries.\n[static_scan] expected: Static scan metadata reports no findings, and the reviewed bundle contains only SKILL.md with documented setup commands and query examples.",
+          "guidance": "Install only if you are comfortable adding the mcporter npm CLI and sending Radix wallet addresses, token addresses, .xrd domains, and related lookup queries to the Emily remote MCP service and its data providers. Avoid querying wallets or portfolios you consider sensitive unless that external-service exposure is acceptable.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a read-only Radix blockchain lookup skill that uses a disclosed npm CLI and remote data endpoint, with the main caveat that wallet lookup inputs are sent to external services.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783656422123,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 9,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: \nDeveloper: \nVersion: \nDescription: OpenClaw Agent Skill\n\nThe skill bundle is designed to query Radix DLT blockchain data using the `mcporter` CLI tool. It instructs the agent to install `mcporter` via npm and then configure it to interact with an external API endpoint at `https://www.ineedemily.com/api/mcp/mcp`. All listed tools in SKILL.md are read-only queries for public blockchain, market, or ecosystem data. There is no evidence of intentional harmful behavior such as data exfiltration, malicious execution, persistence, or prompt injection attempts to subvert the agent's security or purpose. The network access and package installation are aligned with the skill's stated functionality.",
+          "checkedAt": 1779161560399,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "137d5a62e07bbe90f65331f83cd4dbd590da7419f26df6080eddaf211740b03a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/137d5a62e07bbe90f65331f83cd4dbd590da7419f26df6080eddaf211740b03a"
+    },
+    "slug": "radix-explorer",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

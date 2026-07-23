@@ -1,0 +1,152 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.5972,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:phrase:image generation",
+      "category:C05:token:image",
+      "category:C06:token:api",
+      "category:C07:token:quality",
+      "category:C10:token:ai",
+      "category:C17:token:notes",
+      "cross-tag:design",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C07",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "c54a569cb6392c3ea878b3051116eaba949aeed2793cb6d8ed19682a04c2aa96",
+    "content_hash": "6f03051c165486d23696b47c39adf15ccff2cc87acc0e6990e4dae80e68fd06e",
+    "precanonical_content_hash": "f602fcf667b514925c49142999726916993566c7267f00b6d424fa66d6a7e9a0",
+    "skill_md_hash": "c1ef89926bd56c83197843d22b63be59efa58b3ceb919dcaec079e5956966a46",
+    "version_metadata_sha256": "4408dfd041e0f13254a7c3cd8d538cf1803546133af459147646233d709e40aa"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/pharmacist9527/skills/best-image",
+    "claim_id": "a0af3053f9cb04ca2ad706fc835f53f2414b41b05314520c7dc0cec6e74efbc8",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "best-image",
+        "url": "https://clawskills.sh/skills/pharmacist9527-best-image"
+      },
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "best-image",
+        "url": "https://clawskills.sh/skills/pharmacist9527-best-image"
+      }
+    ],
+    "owner_handle": "pharmacist9527",
+    "owner_id": "s17bef4n5esrpxsrx6mpa2f0r1884a6p",
+    "published_at": 1771633786198,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943599872,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943599872,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill, Python script, and fallback examples consistently implement EvoLink image generation/editing; I found no unrelated endpoints, hidden data collection, destructive workflow, or deceptive purpose mismatch.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill tells the agent to generate immediately for trigger phrases, which is purpose-aligned but can spend paid API credits; users should understand this before enabling it.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no package installation, startup hook, background worker, or persistence mechanism; the primary implementation is a local Python script with documented PowerShell and curl fallbacks.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Prompts, optional image URLs, and the EvoLink API key are sent to api.evolink.ai, which is necessary for the advertised API-based image generation but carries normal privacy and credential-handling considerations.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Generated images are written to local files, and the optional output filename can target arbitrary user-chosen paths; this is expected for saving images but should be used carefully to avoid overwriting important files.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The external transmission concern is valid as privacy guidance, but the artifacts repeatedly describe EvoLink/API-key based image generation, so sending prompt data and image URLs to EvoLink is coherent with the purpose rather than hidden exfiltration.\n[VirusTotal code_insight] expected: The reported output-path overwrite risk and curl JSON construction weakness are real robustness concerns for manual/fallback use, but they require user- or agent-supplied parameters and do not show deception, persistence, or purpose-mismatched behavior.\n[staticScan] expected: The static scan was clean, and local artifact review found no malicious install behavior, privilege escalation, or unrelated local data access.",
+          "guidance": "Install only if you are comfortable sending prompts, image URLs, and your EvoLink API key to EvoLink and potentially spending API credits. Prefer the Python script over the curl fallback, keep the key in the EVOLINK_API_KEY environment variable, avoid sensitive prompts or private image URLs, and do not set output paths to important existing files.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it advertises: it uses a user-provided EvoLink API key to generate or edit images and save the result locally.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943574048,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: best-image\nVersion: 1.0.0\n\nThe skill's core functionality for image generation via the EvoLink API is benign. However, it contains significant vulnerabilities. All three implementations (Python in `scripts/generate.py`, Bash in `references/curl_heredoc.md`, and PowerShell in `references/powershell.md`) are susceptible to path traversal via the user-controlled output filename parameter (`--out`, `<OUTPUT_FILE>`, `$Out`). This could allow a malicious prompt to write files to arbitrary locations on the filesystem. Additionally, the Bash script (`references/curl_heredoc.md`) is vulnerable to JSON injection, as it directly embeds user-provided strings into the JSON payload without proper escaping, potentially allowing manipulation of the API request.",
+          "checkedAt": 1779165808587,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "419a1c9ae4e973ffb0a4d13da76bd20ee1fd96b6a1d8597cfa8761b351773309",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/419a1c9ae4e973ffb0a4d13da76bd20ee1fd96b6a1d8597cfa8761b351773309"
+    },
+    "slug": "best-image",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

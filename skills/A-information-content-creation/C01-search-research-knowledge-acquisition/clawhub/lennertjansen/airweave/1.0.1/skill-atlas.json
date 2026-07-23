@@ -1,0 +1,150 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.2833,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:find",
+      "category:C01:token:search",
+      "category:C03:token:document",
+      "category:C04:token:data",
+      "category:C08:token:github",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C03",
+      "C04",
+      "C08",
+      "C10"
+    ],
+    "stages": [
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "2273765ea8cd435873bf0d4aaf17d957f3ac42a0417de27d4d1702ba3260e7c4",
+    "content_hash": "6f941be641a80e467d45f8c8c5d50c53bf5b8178838d861f8a749045c9dabd01",
+    "precanonical_content_hash": "9b84b5b86cbda2d8978632b342aab972775985f555205c25295ee25cb8adf7a6",
+    "skill_md_hash": "e253d815d779c19e0a4b6a2f87ad505e96ae35df27204955c2dcda324bb9e67f",
+    "version_metadata_sha256": "445f7f1cff7f356e8f6679a43e5e688a015534bb3d9f5d32fe57d11a3013e5ce"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/lennertjansen/skills/airweave",
+    "claim_id": "81f64f745d2f4ae73265ed7c77e957b8e0753058581689f4712d9df5fff03e2b",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "airweave",
+        "url": "https://clawskills.sh/skills/lennertjansen-airweave"
+      },
+      {
+        "index_path": "categories/productivity-and-tasks.md",
+        "label": "airweave",
+        "url": "https://clawskills.sh/skills/lennertjansen-airweave"
+      }
+    ],
+    "owner_handle": "lennertjansen",
+    "owner_id": "s1775rvj4ep0br56sg5abh7fed885agt",
+    "published_at": 1770083639373,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783656049426,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783656049426,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill's purpose is clearly to search Airweave collections containing connected-app data, including workplace systems such as Slack, GitHub, Notion, Jira, Salesforce, SharePoint, and Stripe; that can expose sensitive business data, but it is disclosed and purpose-aligned.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are limited to when and how to run the provided search script, formulate queries, handle no results, and present sources; they do not instruct unrelated access, mutation, exfiltration, or prompt override behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The package is small and reviewable, with markdown references and one Python script; there is no installer, dependency bootstrap, background setup, or auto-execution mechanism.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Requiring AIRWEAVE_API_KEY and AIRWEAVE_COLLECTION_ID is proportionate for this connector and is declared in metadata. The optional AIRWEAVE_BASE_URL can redirect the request and API key to another endpoint, so users should only set it to a trusted Airweave-compatible service.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No local persistence, privilege escalation, file mutation, deletion, background worker, or account-changing behavior appears in the artifacts; the script makes a read-oriented POST search request and prints returned results.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The network call and environment-variable use are expected for an API-backed retrieval skill, and the required API key and collection ID are declared in the skill metadata. The lack of a separate formal network-permission declaration is a governance/documentation note, not evidence of hidden behavior.\n[SQP-2] expected: The concern about sensitive connected-app data is valid user guidance, but the description openly frames the skill as searching user workspace and company data across connected applications. This is broad access, yet it is coherent with the stated purpose and controlled by the configured Airweave collection and API key.",
+          "guidance": "Install this only if you want an agent to search the configured Airweave collection. Use a least-privilege API key and a collection limited to data the agent is allowed to see, avoid setting AIRWEAVE_BASE_URL unless you trust the endpoint, and treat retrieved workplace content carefully according to your organization's privacy and data-handling rules.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward Airweave search connector that uses a configured API key and collection to retrieve workspace context, with no evidence of hidden, destructive, or persistent behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783656025991,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 24,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: airweave\nVersion: 1.0.1\n\nThe skill is designed to interact with the Airweave API for context retrieval. The `SKILL.md` provides clear instructions for the AI agent to use the `scripts/search.py` script, which makes a POST request to `https://api.airweave.ai` (or a configurable URL) using `AIRWEAVE_API_KEY` and `AIRWEAVE_COLLECTION_ID` from environment variables. All network activity and data handling are strictly aligned with the stated purpose of querying the Airweave service, with no evidence of data exfiltration to unauthorized endpoints, malicious execution, persistence mechanisms, or prompt injection attempts to subvert the agent's behavior beyond its intended function.",
+          "checkedAt": 1779161001783,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "5875250cc247dbb4a2d1bcdfa40e2a959ace9e8a617c7466a252dc1581dbaa0e",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/5875250cc247dbb4a2d1bcdfa40e2a959ace9e8a617c7466a252dc1581dbaa0e"
+    },
+    "slug": "airweave",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

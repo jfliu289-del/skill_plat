@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C01:token:find",
+      "category:C01:token:search",
+      "category:C10:token:ai",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e358e079ba57d821e5aeae9d69e54a95485055798e4837f30acc76a593d00b04",
+    "content_hash": "dd7dd11e41889a17afd4f96dd0c7dc0b1783c9a14b8119bbced164da66ccf019",
+    "precanonical_content_hash": "ca6207f50b3506a0c8de96c731595212a8e392b15d2708e6754283686dbd082c",
+    "skill_md_hash": "8a7b0cae87fbefbc227407a805b10f48ffac39dbc29fb1c1a4ee1fc7988c9568",
+    "version_metadata_sha256": "25d525acfa6fe14d77b6e090107c090cfbde766d4dbc45e2f934da92d6d52fa8"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/5kbpers/skills/sg-property-scraper",
+    "claim_id": "09d20643c9385d45ba96ec489b4e003020f8f45b3b2164395c894742721b4093",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "sg-property-scraper",
+        "url": "https://clawskills.sh/skills/5kbpers-sg-property-scraper"
+      }
+    ],
+    "owner_handle": "5kbpers",
+    "owner_id": "s1791y7st1e2m8b2q7zk9qxzj9884qqp",
+    "published_at": 1771407501304,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779920633049,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779920633049,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe scraping Singapore property listings and returning JSON/text results, with optional commute-time enrichment for a user-supplied destination.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Execution is user-directed through CLI or JSON/config input. The --raw-param and --no-validate options are broad escape hatches, but they are documented and limited to constructing PropertyGuru query URLs.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no automatic installer or hook. Setup asks users to install unpinned Python packages with pip, which is common but should be done in a virtual environment.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to PropertyGuru and optional Google Routes API use fit the stated purpose. Commute mode sends listing addresses and the user destination to Google and may consume a billable API key.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The code shows no background persistence, privileged actions, credential harvesting, account mutation, or local writes. It reads an optional JSON config file selected by the user.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The Google Routes API call does transmit property origins and the destination when commute calculation is enabled, but this is documented in the README/SKILL usage and only occurs with --commute-to plus GOOGLE_MAPS_API_KEY.\n[VirusTotal code_insight] expected: The --config file read is a normal user-selected JSON config input; the code parses JSON and does not print file contents on parse failure. The --raw-param option is a documented advanced URL-query option against a fixed PropertyGuru base URL.\n[staticScan] expected: The static scan reported no suspicious findings, which matches the artifact review.",
+          "guidance": "Install dependencies in a virtual environment, use a restricted Google Maps API key with quotas if enabling commute calculations, and avoid using sensitive home or workplace addresses unless you are comfortable sending them to Google for routing.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill is a disclosed Singapore property-listing scraper with optional Google commute calculations, and the flagged behaviors are purpose-aligned rather than hidden or deceptive.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779920585860,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: sg-property-scraper\nVersion: 1.0.1\n\nThe `scripts/scrape.py` file contains a local file inclusion (LFI) vulnerability. The `--config` command-line argument allows specifying an arbitrary file path, which the script then attempts to open and parse as JSON. This could be exploited via prompt injection against the AI agent to read sensitive local files (e.g., `/etc/passwd`, `~/.ssh/id_rsa`), even if the JSON parsing fails, as the file read itself is an information disclosure risk. Additionally, the `--raw-param` argument allows adding arbitrary URL query parameters, which could be used to target the scraped website with injection attacks.",
+          "checkedAt": 1779165090968,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "1335939826e9a14592c0a625bef33c3e2f639fe8c08a0584ec1fb4efdf1d78e9",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1335939826e9a14592c0a625bef33c3e2f639fe8c08a0584ec1fb4efdf1d78e9"
+    },
+    "slug": "sg-property-scraper",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

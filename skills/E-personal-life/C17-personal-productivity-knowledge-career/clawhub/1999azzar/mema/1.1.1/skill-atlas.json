@@ -1,0 +1,137 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C17",
+    "reasons": [
+      "category:C03:token:document",
+      "category:C09:token:security",
+      "category:C17:token:knowledge",
+      "category:C17:token:personal",
+      "cross-tag:search",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C03",
+      "C09"
+    ],
+    "stages": [
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e1672fdea9f05426026b26c45571ffa13ac6b308198fd4a7a745bf48164c871a",
+    "content_hash": "d5084d9a69413ff5b200a22f47b104f91cb3cc83f36d0029c05001755c6fd93c",
+    "precanonical_content_hash": "55606f02e45d9c7b22696d851a68c38c8a05e01e77845355f41f15496f3e9e6e",
+    "skill_md_hash": "ccb9aaa16d8e40b9d63d1850bc307486aca5d9c9a219c705b2ad75ecbadaaa1a",
+    "version_metadata_sha256": "c830d47a46829d81c3404b112d753a75e7a8a178dae39b51003008e7d34dc781"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/1999azzar/skills/mema",
+    "claim_id": "2cda0d68fb0f5d6517355375a27a12327f34e8291d7ad94e35d7c82aec0a8a28",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "mema",
+        "url": "https://clawskills.sh/skills/1999azzar-mema"
+      }
+    ],
+    "owner_handle": "1999azzar",
+    "owner_id": "s17bnq7bcwrm6mwmx7ryseen81885fxg",
+    "published_at": 1771266880950,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779973017537,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779973017537,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "Redis-backed session memory and local SQLite path metadata fit the stated memory-system purpose; I found no artifact-backed evidence of unrelated exfiltration, credential theft, destructive file actions, or hidden behavior.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The reported `mental clear` behavior is broad within the skill's own Redis key prefix and lacks a confirmation step, so accidental use could remove the skill's saved context, but it is still a user-directed memory reset rather than unrelated destructive behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The dependency declaration `redis>=5.0.0` is flexible rather than pinned, which reduces reproducibility and may allow older affected client versions depending on resolver state, but this is a supply-chain hygiene issue rather than evidence of malicious behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Connecting to a Redis host from environment variables is proportionate for this skill, and the supplied context says the skill warns users about Redis host trustworthiness; users should avoid untrusted or exposed Redis instances.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists memory-related state and file path references, which is expected for a memory system, but sensitive project paths or private documents should only be indexed deliberately.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The bulk clear operation is expected for a memory tool but should be treated carefully because it removes all skill-prefixed Redis memory without an additional confirmation step.\n[SC1] unexpected: The unpinned Redis dependency is not required for the purpose and is a reproducibility/supply-chain concern, but it does not by itself show unsafe runtime behavior.\n[SC4] unexpected: The allowed Redis dependency range may include vulnerable versions; this is relevant because Redis is central to the skill, but it is remediable dependency hygiene rather than evidence of malicious intent.\n[VirusTotal code_insight] expected: The Redis connectivity and local path storage flagged by telemetry are coherent with a memory system and were not supported by detector hits; the risk is mainly configuration and user scoping.",
+          "guidance": "Install only if you want an agent memory layer and can point it at a Redis instance you control or trust. Do not ask it to index sensitive paths unless you intend those references to become part of memory, and treat `mental clear` as a full reset of the skill's Redis-backed state.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a memory-management skill with expected Redis and local metadata storage behavior, but users should configure it carefully because it can erase its own stored memory and may reference sensitive paths.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972968832,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: mema\nVersion: 1.1.1\n\nThe skill is classified as suspicious due to its network connectivity to a Redis instance configured via environment variables and its ability to store arbitrary file paths in a local SQLite database. While these capabilities are aligned with the stated purpose of a 'memory system,' they present a risk if the Redis instance is misconfigured or insecure, or if an agent is instructed to index sensitive paths. The `SKILL.md` provides a warning about Redis host trustworthiness, but the underlying capability for potential misuse by a compromised agent remains.",
+          "checkedAt": 1779163610242,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "22674efa9191db78b95eb352ea07fad7083e56f931ede074c6fe780be342566e",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/22674efa9191db78b95eb352ea07fad7083e56f931ede074c6fe780be342566e"
+    },
+    "slug": "mema",
+    "source_type": "clawhub",
+    "version": "1.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

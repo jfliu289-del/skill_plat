@@ -1,0 +1,124 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "04ef6ffe7a3c1f1135fdc68d0e4cac2e35a6a7da4e0d76cfcff2772faba2ec67",
+    "content_hash": "06f4e866fc233990096d0749d1196748f32bbf69af3dbba8b1c6b77ea13b7597",
+    "precanonical_content_hash": "b3e6ec99e78ef22748346adb7d8ecadf268da2a393c75ef4ccf4de80af7a4a5f",
+    "skill_md_hash": "51ee7f776022f91fcafecb932414bfdb0e55adc25b6749c71de894964e0294f7",
+    "version_metadata_sha256": "5d2ed23e89e08163b34f21a84d4c3428a00fee2e20f050f7c4a1842448cc2a2b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/takedwind/skills/webhook-robot",
+    "claim_id": "f544c9f1f86dd7978fce54e78d455c54c2c98ae03d3038f56af64e8ec8dcc9ab",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "webhook-robot",
+        "url": "https://clawskills.sh/skills/takedwind-webhook-robot"
+      }
+    ],
+    "owner_handle": "takedwind",
+    "owner_id": "s17bgv03ka8xtccxk3ya24m8e98849h4",
+    "published_at": 1770924444033,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972819081,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972819081,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts send user-provided messages to named webhook services, which matches the stated purpose and README examples.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use is explicit through command-line arguments for destination, content, tokens, and chat or group IDs; some scripts accept full URLs, so destination safety depends on user input.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No install hooks, package dependencies, setup scripts, or automatic execution paths were found; the package contains documentation and standalone Python scripts requiring python3.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access and webhook credentials are proportionate for a notification skill, but the documentation does not prominently warn that content and identifiers are sent to external services.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background workers, local indexing, credential storage, privilege escalation, destructive file operations, or broad filesystem access were found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The missing privacy and credential-handling warnings are real documentation gaps, but sending user-supplied content and webhook credentials is inherent to this skill's disclosed function.\n[E1] expected: Outbound transmission to services such as Bark is an expected notification path, not evidence of hidden exfiltration in these artifacts.\n[VirusTotal code_insight] expected: The GoCqHttp script accepts a user-provided base URL, including localhost-style endpoints, which can be misused if an agent accepts untrusted URLs, but the behavior is disclosed and purpose-aligned.\n[staticScan] expected: Static scan reported no suspicious patterns, consistent with the artifact review showing simple webhook POST scripts.",
+          "guidance": "Install only if you want the agent to send messages through webhook services you control. Verify destination URLs, chat IDs, group IDs, and message content before sending; avoid putting secrets or sensitive documents in messages; avoid exposing tokens in shared logs or shell history; rotate any webhook key or bot token that may have been exposed.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward webhook sender, but users should handle message contents and bot credentials carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972779165,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: webhook-robot\nVersion: 1.1.0\n\nThe skill bundle is designed to send messages to various webhook-based services. While the core functionality is benign, the `scripts/send_gocqhttp.py` script allows specifying an arbitrary URL (`--url`) for the GoCqHttp API. This capability, while necessary for its stated purpose, introduces a potential Server-Side Request Forgery (SSRF) vulnerability if the agent's input is not adequately sanitized, allowing an attacker to direct the agent to make requests to internal network resources or other arbitrary external hosts. This is a risky capability without clear malicious intent within the script itself, thus classifying it as suspicious rather than malicious.",
+          "checkedAt": 1779163532225,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "b911d0a729fb9f9b13b1f45975091681f33fc946ff0d131a222d57dffdf789dd",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b911d0a729fb9f9b13b1f45975091681f33fc946ff0d131a222d57dffdf789dd"
+    },
+    "slug": "webhook-robot",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

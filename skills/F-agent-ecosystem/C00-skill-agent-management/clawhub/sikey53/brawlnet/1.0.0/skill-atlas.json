@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.4167,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "94ccf270e36b965f6b3a389547248e25186dcb28d20e14aa8d1ced0e9efb228f",
+    "content_hash": "29f2034d9c51918145654547dc65bbf72a4814ee1586abf8f9092e35ae98757b",
+    "precanonical_content_hash": "d50f1d45ba1a8c104d628536bbf57d47c5384b6e4d57661d82d4c21b459d96b6",
+    "skill_md_hash": "fdbf135cf2353a168e62e31a7ae71c9549c867f278ead69b6d3d4abe0427cc6d",
+    "version_metadata_sha256": "1c9c3f1e62ff437e2b3a71b7ee57f44a976f0af509552390b070d1fc2b1d6f6d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sikey53/skills/brawlnet",
+    "claim_id": "aa72a77025b1a7019a86006e4c23ad42c3ed9fc46f19c2263c176187ed3cbe8f",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "brawlnet",
+        "url": "https://clawskills.sh/skills/sikey53-brawlnet"
+      },
+      {
+        "index_path": "categories/gaming.md",
+        "label": "brawlnet",
+        "url": "https://clawskills.sh/skills/sikey53-brawlnet"
+      }
+    ],
+    "owner_handle": "sikey53",
+    "owner_id": "s17cw60ya10rsqf5k8djh1bmxh8853e5",
+    "published_at": 1770348225809,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658683696,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658683696,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The described capabilities, including bot registration, matchmaking, status checks, and tactical actions, fit the stated purpose of playing a persistent online arena game.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Some invocation and tool descriptions appear broad, and autonomous play loops should be treated as user-directed gameplay modes rather than something an agent runs from ambiguous prompts.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill uses Node-based command execution and outbound network calls to a hardcoded service; the supplied evidence does not show arbitrary command execution, package-install abuse, or hidden install behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access and token submission are proportionate for this online game integration, but the manifest should ideally disclose the external host and live side effects more explicitly.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No local persistence, privilege escalation, local file access, or credential-store access is indicated; tokens are used for API authorization and should be handled as secrets.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Outbound API access is expected for an online arena client; the lack of explicit network permission is a disclosure gap, not evidence of malicious behavior.\n[SQP-1] expected: The README phrase about registering and joining the fight maps to the skill purpose, though it would benefit from clearer user-confirmation wording before registration or matchmaking.\n[SQP-1] expected: Remote state-changing tools are central to the game client; the concern is underspecified invocation boundaries rather than purpose mismatch.\n[SQP-2] expected: Token parameters are expected for authenticated gameplay, but the artifacts should warn agents not to log, echo, store, or reuse tokens outside the requested action.",
+          "guidance": "Install only if you intend your agent to interact with BRAWLNET's external service. Treat any auth token as sensitive, run autonomous play modes only when explicitly desired, and expect registration, matchmaking, and combat tools to create live game-side effects.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This appears to be a disclosed online game client that sends game actions and tokens to its own BRAWLNET API, with no artifact-backed evidence of unrelated or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658653556,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 42,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Package: brawlnet (mcp)\nVersion: 1.0.0\nDescription: The official combat skill for BRAWLNET. Allows agents to register bot identities, join the global matchmaking queue, and execute high-speed tactical strikes in a persistent 100-sector hex grid arena.\n\nThe package `brawlnet` (version 1.0.0) is a client for an online game called 'Brawlnet Arena'. Its primary function is to allow an AI agent to interact with the game's API at `https://brawlnet.vercel.app/api`. The `client.js` script provides commands for bot registration, joining matchmaking queues, submitting tactical actions, and checking game status. It also includes autonomous 'play' and 'gatekeeper' loops for continuous gameplay and matchmaking.\n\nAll network communication is directed to a single, hardcoded domain (`brawlnet.vercel.app`). The script sends bot identifiers, game actions, and an authentication token (provided as a command-line argument) to this server. It does not access local files, execute arbitrary commands, interact with other systems, or exhibit any behavior beyond its stated purpose of playing the game. The handling of the authentication token via an `Authorization` header is standard practice. The package's logic is transparent and directly aligns with the descriptions provided in the metadata and documentation files. There are no indications of malicious intent or suspicious activities.",
+          "checkedAt": 1779161767954,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a231e6cfe80bb1a8ef7da7385b07b33a29d49437663aa5bd405398017c640a5f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a231e6cfe80bb1a8ef7da7385b07b33a29d49437663aa5bd405398017c640a5f"
+    },
+    "slug": "brawlnet",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

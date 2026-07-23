@@ -1,0 +1,129 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C10:token:model",
+      "category:C12:token:decision",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10",
+      "C12"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "f3f22d8aeadaf79996d6bb1dee53be54622726ccbf94e3da2ae792455f4bf3f8",
+    "content_hash": "485507759226adb86a16e5b95f318b718c11c9f6b5f9795428ff6bb96843727e",
+    "precanonical_content_hash": "a1eeea1ae547138b2d85fbf2a9babbf788a286e0405801d90b230fc2bc5fe51b",
+    "skill_md_hash": "39353c990e75c44a6f2bf7240697fa69347a2f262c323b3c3e4334a7b5136fe8",
+    "version_metadata_sha256": "28deab1250af42e552dc434d0cb897622536b56f9bd3c5e9359baf2b51d62bc8"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/vatsashah45/skills/valiron-trust-layer",
+    "claim_id": "e41425c8dd5a95ac75b2cc5184e02656e20c8b87edab5fce1206ea7ec22b334a",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "valiron-trust-layer",
+        "url": "https://clawskills.sh/skills/vatsashah45-valiron-trust-layer"
+      }
+    ],
+    "owner_handle": "vatsashah45",
+    "owner_id": "s17897mxjjyq7nqcady75rh49583gwx4",
+    "published_at": 1772034420725,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779957659771,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779957659771,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to intercept outgoing machine-to-machine payments and authorize them using Valiron trust decisions; the documented workflow, SDK calls, policy checks, spend controls, and fail-closed behavior fit that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Instructions are scoped to extracting counterparty identity, checking trust, applying deterministic policy, enforcing spend limits, and logging outcomes; they do not ask for unrelated secrets, broad local scans, prompt overrides, or hidden actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "No suspicious install mechanism is evident; dependencies such as @valiron/sdk and payment rail packages are disclosed as normal runtime prerequisites, and no arbitrary remote installer or obfuscated execution path is described.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill operates in a payment path and may influence whether payments proceed, but that authority is expected for a payment interceptor and is bounded by policy JSON, spend controls, and fallback guidance.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No artifact evidence indicates persistent background agents, privilege escalation, modification of other skills, or system-wide control; credential use is limited to the disclosed VALIRON_API_KEY and optional Valiron configuration.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SkillSpector clean result] expected: SkillSpector reported no issues; this is consistent with the artifact-backed review, but it was not used as the sole basis for the verdict.\n[VirusTotal clean telemetry] expected: VirusTotal reported no detections and its summary aligns with the reviewed payment-interceptor purpose, including fail-closed handling and local policy validation.",
+          "guidance": "Before installing, review the @valiron/sdk package provenance, keep VALIRON_API_KEY in a secrets manager, test the decision policy and spend limits with representative payment routes, and use fail-closed defaults for production or high-value payment flows.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent payment trust-gate integration with disclosed Valiron SDK usage and no evidence of hidden persistence, unrelated data access, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779957596811,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: valiron-trust-layer\nVersion: 1.0.2\n\nThe skill bundle is designed to intercept and authorize payments using a trust SDK. The `SKILL.md` provides clear instructions without any prompt injection attempts. The core logic in `assets/payment-interceptor.ts` uses the `@valiron/sdk` for external trust lookups, which is its stated purpose, and implements a secure 'fail-closed' default on errors. The `scripts/validate-payment-policy.mjs` script safely reads and validates local JSON policy files, incorporating robust path traversal prevention, NUL byte checks, and file size limits, demonstrating a strong focus on security. All documentation files (`references/*.md`) consistently promote security best practices. There is no evidence of data exfiltration, malicious execution, persistence, or obfuscation.",
+          "checkedAt": 1779166935660,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "d8ebbdf0d43a55e7e717d22e8bb315b6d841af0323bf730729611ecc1ddb6f8b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d8ebbdf0d43a55e7e717d22e8bb315b6d841af0323bf730729611ecc1ddb6f8b"
+    },
+    "slug": "valiron-trust-layer",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,166 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.325,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C01:token:find",
+      "category:C01:token:lookup",
+      "category:C02:token:language",
+      "category:C04:token:analytics",
+      "category:C04:token:analyze",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C12:token:market",
+      "category:C13:token:finance",
+      "category:C18:token:health",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C02",
+      "C06",
+      "C09",
+      "C10",
+      "C12",
+      "C13",
+      "C18"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "069a11b7117555dc2378fac37a6eb46fd35a1d4b43dc87e000181109cc896307",
+    "content_hash": "c9fdd94f8cd8c6dc1d381981b2069c0d28494d31a7a7f3181da60b8c724594bf",
+    "precanonical_content_hash": "ff9cb9865fa9c3fefabd25e10ab7a470a0f908222b135cff940f2324f986c525",
+    "skill_md_hash": "5bbdf5ad679f5aa7362800acbb513b25a274180944196689e86ee78744851508",
+    "version_metadata_sha256": "cd183646e0d1f26bb31f489403b7c74841ef82053364583bf9231fe58d8b9d53"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/nextfrontierbuilds/skills/strykr-prism",
+    "claim_id": "3ca07164e8a884e6891311a3847fcfb2ca036123f24f35d44ce65b6aa71da91d",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "strykr-prism",
+        "url": "https://clawskills.sh/skills/nextfrontierbuilds-strykr-prism"
+      }
+    ],
+    "owner_handle": "nextfrontierbuilds",
+    "owner_id": "s173crrwz6a8ksnw7w0q36yky18408nb",
+    "published_at": 1770220762033,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783650948141,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783650948141,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe asset resolution, price lookup, token security analysis, wallet/on-chain queries, and market data; those capabilities fit the stated finance API purpose, but submitted symbols, wallet addresses, contract addresses, and natural-language finance queries go to an external PRISM service.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are lookup-oriented and do not request trading, account mutation, destructive actions, hidden execution, or autonomous work. Some triggers such as \"check {token}\", \"scan {address}\", and \"what's trending\" are broad enough to cause accidental invocation outside explicit finance context.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains only the manifest, SKILL.md, and a small shell helper using curl and jq against PRISM_URL, with no installer, dependency bootstrap, curl-to-shell pattern, or hidden download. Version metadata differs across files, but this does not create a security concern by itself.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "A PRISM_API_KEY and PRISM_URL are declared configuration values, which is proportionate for a financial data API. The inspected script does not read local files or credential stores, though the configured endpoint receives user-provided lookup data.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, privilege escalation, background workers, scheduled jobs, local indexing, credential-store access, or destructive behavior appears in the inspected artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: Wallet and contract-address lookups are part of the advertised on-chain analysis feature. The scanner's privacy concern is valid as user guidance because the documentation does not clearly warn that these identifiers are sent to a third-party API, but this is not hidden or purpose-mismatched behavior.\n[SQP-1] expected: Price and market-data triggers match the skill's finance purpose, but broad phrases can cause unintended external lookups if the host agent invokes skills loosely.\n[SQP-1] unexpected: The trigger \"check {token}\" is too generic and can overlap with ordinary non-finance requests; this supports a caution note, not a Review verdict, because the resulting behavior is still read-only and within the documented API domain.\n[SQP-1] unexpected: The trigger \"scan {address}\" is ambiguous across wallet, postal, email, and IP addresses; users should ensure only intended blockchain identifiers are submitted to PRISM.",
+          "guidance": "Install this only if you trust the Strykr PRISM API provider with the market symbols, wallet addresses, contract addresses, and finance questions you submit. Use a dedicated PRISM API key, avoid querying wallets you do not want associated with your usage, and prefer explicit finance wording so broad triggers do not send unrelated text to the external service.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a read-only finance data skill that calls a disclosed PRISM API endpoint, with privacy cautions around external wallet/address lookups and broad activation phrases.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783650911679,
+          "issueCount": 4,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 17,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: strykr-prism\nVersion: 1.1.2\n\nThe skill bundle is benign. All files consistently define and interact with a financial data API hosted at `https://strykr-prism.up.railway.app`. The `SKILL.md` provides clear instructions for an AI agent to use this API, and the `scripts/prism.sh` helper script exclusively uses `curl` to query this specific endpoint. There is no evidence of data exfiltration, malicious execution (e.g., `curl|bash`), persistence mechanisms, or prompt injection attempts against the agent. The skill properly requests an API key via environment variable (`PRISM_API_KEY`) as a configuration item, which is a standard and secure practice.",
+          "checkedAt": 1779160179748,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "2e90e4ef9e0a17b999deb002ef8df15163878496bfae2af26364e04e1f36dea6",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/2e90e4ef9e0a17b999deb002ef8df15163878496bfae2af26364e04e1f36dea6"
+    },
+    "slug": "strykr-prism",
+    "source_type": "clawhub",
+    "version": "1.1.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

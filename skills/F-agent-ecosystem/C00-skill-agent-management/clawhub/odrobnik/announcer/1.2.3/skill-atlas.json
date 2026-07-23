@@ -1,0 +1,124 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.0,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "fallback:C00"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "85f16c883b22c6c09fbc6d97cb62b352ec340e7be641c549955ceea20614f63c",
+    "content_hash": "2e842f01bfdc72cbb5ad089dcbcb1b623841ef7f6e270d09ed476c5ca948df05",
+    "precanonical_content_hash": "528da785cff0a146ff5460c9a4a3e3548a54282b0c6a629f6e1a5fc832d950c4",
+    "skill_md_hash": "6942f51da95e3991773ea9679555091415b054283c662108e34b6194dca6a635",
+    "version_metadata_sha256": "30c89b797771a97f655a2ff333f6ac70f56f54b9d85faee59c65e41688b9dff1"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/odrobnik/skills/announcer",
+    "claim_id": "22f6d75b1dc9b91d2200b3076b374a59279176cd586c6d299ee4fa2c523c7492",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "announcer",
+        "url": "https://clawskills.sh/skills/odrobnik-announcer"
+      },
+      {
+        "index_path": "categories/speech-and-transcription.md",
+        "label": "announcer",
+        "url": "https://clawskills.sh/skills/odrobnik-announcer"
+      }
+    ],
+    "owner_handle": "odrobnik",
+    "owner_id": "s175mv7e1vzhser8sz79yq23fd83h54z",
+    "published_at": 1772570451505,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783656130039,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783656130039,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose is house-wide announcements via Airfoil and ElevenLabs, and the script’s behavior matches that: it generates speech, converts audio with ffmpeg, controls Airfoil speakers, plays audio, and can list speakers.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts contain setup and usage instructions only; I found no prompt-injection language, hidden role changes, deceptive claims, or output-format manipulation aimed at the agent.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no automatic installer or persistence setup. Required components are disclosed in the docs and metadata: macOS, Airfoil, python3, ffmpeg, an ElevenLabs API key, and a sibling ElevenLabs skill.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Local subprocesses, AppleScript control of Airfoil, speaker names, temporary audio files, and use of ElevenLabs are proportionate to the stated announcement feature, but announcement text should be treated as potentially sent to a third-party TTS service.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "I found no background worker, startup persistence, self-modification, destructive file operations, credential storage, or unrelated privilege use. The script reads user config and uses temporary audio files.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The skill invokes local scripts/tools and needs an API key, but SKILL.md and SETUP.md disclose python3, ffmpeg, Airfoil, ELEVENLABS_API_KEY, and the ElevenLabs skill; this is purpose-aligned rather than hidden.\n[SQP-2] expected: ElevenLabs use is central to the skill and is repeatedly disclosed, though the docs could be clearer that announcement text is processed by a cloud TTS provider.\n[OH1] unexpected: The speaker-name parsing and unescaped terminal output are a real hardening gap for unusual local device names, but the behavior is local, user-invoked, and not evidence of exfiltration, deception, persistence, or malicious intent.",
+          "guidance": "Install only if you are comfortable letting the skill control Airfoil speakers on your Mac and send announcement text for ElevenLabs TTS generation. Avoid announcing secrets or highly sensitive personal information, and review the configured speaker list and exclusions before use.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it generates text-to-speech announcements and plays them through configured AirPlay speakers, with ordinary privacy cautions for cloud TTS.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783656097337,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 50,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: announcer\nVersion: 1.2.3\n\nThe skill bundle is benign. The `scripts/announce.py` script demonstrates good security practices by explicitly sanitizing user-provided speaker names before embedding them into AppleScript commands, preventing AppleScript injection. All `subprocess.run` calls use argument lists rather than shell strings, and inputs to commands like `ffmpeg` and `afplay` are either static asset paths or securely generated temporary file paths. There is no evidence of data exfiltration, persistence mechanisms, or prompt injection attempts in `SKILL.md` or `SETUP.md`. The skill's functionality aligns with its stated purpose of playing TTS announcements via AirPlay.",
+          "checkedAt": 1779161153316,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "8f5af164cb15b290489a55d41406505dcf21189b5f50897e989f0e7040d4afa4",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8f5af164cb15b290489a55d41406505dcf21189b5f50897e989f0e7040d4afa4"
+    },
+    "slug": "announcer",
+    "source_type": "clawhub",
+    "version": "1.2.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

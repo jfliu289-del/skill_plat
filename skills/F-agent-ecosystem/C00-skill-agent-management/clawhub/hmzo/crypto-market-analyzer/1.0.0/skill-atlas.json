@@ -1,0 +1,146 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C12:token:market",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e168a2e7ae96e2515356aad3de03e277b3083be45b9861caa9ce573257b62ca9",
+    "content_hash": "e1a6fb68a0193fe163f566480a5515b8192bdea77f1e072c95c39b7e015e7553",
+    "precanonical_content_hash": "f329714cff5519380132d931a76c56643c8b29321be03ecbd6e7c673845b8f85",
+    "skill_md_hash": "eed9b91c06a85b2965b576cb802d51079705aa360651518f5066f5a4bf58c9c6",
+    "version_metadata_sha256": "4ac8a5090c6b19e15fd6444ad03c3ee4f1b33f0e2737bba8bfaf5f8affe05123"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/hmzo/skills/crypto-market-analyzer",
+    "claim_id": "6e3fd3a5ff20b336c8a4579b5259ce773f14d55b106fe935bfd26fa0a801cf0c",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "crypto-market-analyzer",
+        "url": "https://clawskills.sh/skills/hmzo-crypto-market-analyzer"
+      }
+    ],
+    "owner_handle": "hmzo",
+    "owner_id": "s1745asvqxqdwdyz2zvndjbhbh884av3",
+    "published_at": 1770804426699,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779970235988,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779970235988,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifacts: SKILL.md describes BTC/ETH market analysis, and the Python script only fetches Binance kline data, computes indicators, and prints JSON output.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Manual execution is clear, and the daily cron workflow is disclosed as something the user would configure; the messaging destination for scheduled reports is not implemented in the artifact and should remain user-controlled.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no installer, package hook, automatic cron creation, or startup modification; the skill contains SKILL.md and one script.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Outbound network access is proportionate to the purpose and limited in code to the Binance public API endpoint with no authentication, local file reading, credential storage, or account mutation.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "Daily automated execution is described, which is persistent if the user opts in, but the artifact does not create persistence on its own and requires no elevated privileges.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The network capability is real, but it is disclosed in SKILL.md and the inspected code calls only the public Binance klines endpoint without credentials; this is a transparency note rather than a Review-level concern.\n[RA2] expected: The cron language describes optional scheduled daily reports and does not install or enable a cron job automatically, so the persistence is purpose-aligned when explicitly configured by the user.",
+          "guidance": "Install only if you want a tool that contacts Binance for public market data. Enable the optional daily schedule only deliberately, keep any messaging destination under your control, and treat the output as market analysis rather than financial advice.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill fetches public Binance crypto price data and generates local BTC/ETH analysis, with optional disclosed scheduling but no hidden credential use or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779970191348,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: crypto-market-analyzer\nVersion: 1.0.0\n\nThe OpenClaw skill 'crypto-market-analyzer' is benign. The `SKILL.md` clearly defines the skill's purpose to fetch and analyze public cryptocurrency data from the Binance API. The `scripts/fetch_crypto_data.py` script exclusively uses the `requests` library to interact with the public `https://api.binance.com/api/v3/klines` endpoint, which requires no authentication. The script performs local data processing and prints the results to standard output. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, obfuscation, or prompt injection attempts against the agent. All actions are aligned with the stated purpose.",
+          "checkedAt": 1779163150548,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "c4681fb167f4d275fdddb88b2533c2bb1a8753f9a3be3f06b4a1da7ab300e36c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/c4681fb167f4d275fdddb88b2533c2bb1a8753f9a3be3f06b4a1da7ab300e36c"
+    },
+    "slug": "crypto-market-analyzer",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,122 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C02:token:language",
+      "category:C19:token:device"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C19"
+    ],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "c6c41ed4ce643187300767562bf382c68a60877b9617c38f02170a2bf572402f",
+    "content_hash": "7657650ac01a189b15ce333ee1437f0f1da7d3457f4c1cc3798fd99fe75b7795",
+    "precanonical_content_hash": "2b4f43089c6d8d6bd9f71ec16c695b9e0b99095e2b84ee3aa63957c5c238870e",
+    "skill_md_hash": "6d3e18531bf5a4f2d9b5668d5670485e646afac43e3bf6f51409b7d72b78a135",
+    "version_metadata_sha256": "cf379be7299f3aef4b927ed9d12b0e3f3e1785fa4f6e13345c73701ed425fc77"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/stillstellung/skills/lifx",
+    "claim_id": "4a82b32551bf34e0a90e88d4041be47d28d87e6f30847065e6f7d526aa807c68",
+    "index_entries": [
+      {
+        "index_path": "categories/productivity-and-tasks.md",
+        "label": "lifx",
+        "url": "https://clawskills.sh/skills/stillstellung-lifx"
+      }
+    ],
+    "owner_handle": "stillstellung",
+    "owner_id": "s173rs6pvxd7q9bggdw22gaf2n885t6c",
+    "published_at": 1771709255553,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779969044055,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779969044055,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts do what the skill advertises: discover LIFX lights, toggle lights or groups, set colors and brightness, activate scenes, and check scene status through the LIFX API.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands are user-directed and documented, including broad selectors such as rooms and all lights; generated device and scene names become agent context, so instruction-like names could influence later behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Setup is manual and disclosed, but the artifact references SKILL.md.template and .gitignore entries that are not included in the packaged files, so setup may fail or not provide the promised local exclusions.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network calls are limited to the expected LIFX API, and the LIFX token requirement is proportionate to controlling LIFX lights.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "setup.sh stores the LIFX token in .lifx-token with chmod 600, and runtime scripts fall back to that file; setup also rewrites SKILL.md with device, room, and scene metadata.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Environment-secret use, shell execution, and network calls are expected for this integration, and SKILL.md declares LIFX_TOKEN, though user-facing disclosure could be clearer about shell and network authority.\n[SDI-2] expected: The .lifx-token fallback is real and documented indirectly by setup and the README file list; it is a local credential convenience rather than hidden exfiltration.\n[SQP-2] expected: Token storage on disk is verified in setup.sh and protected with chmod 600, but users should treat the skill directory as sensitive and revoke the token if exposed.\n[SQP-2] expected: The setup process does embed LIFX-provided room, light, and scene names into SKILL.md; this is purpose-aligned personalization, with privacy and prompt-context caveats.\n[VirusTotal code_insight] unexpected: The reported shell-injection claim is not supported by the artifact because the JSON body is passed as a quoted curl argument without eval; the unsanitized generated SKILL.md context concern is supported but does not show malicious intent.",
+          "guidance": "Install only if you are comfortable letting the agent control your LIFX lights. Keep .lifx-token and the generated SKILL.md private, avoid instruction-like light or scene names, and verify the package includes the missing SKILL.md.template before relying on setup.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent LIFX smart-light control skill, but it stores a local LIFX token and personalized home-light context that users should protect.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968955413,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 71,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: lifx\nVersion: 1.0.1\n\nThe skill is classified as suspicious due to two critical vulnerabilities. Firstly, `lifx-api.sh`'s `state` command passes a user-controlled JSON body directly to `curl -d \"$body\"`, making it vulnerable to shell injection if the `$body` contains malicious shell metacharacters. Secondly, `setup.sh` embeds unsanitized data (light, group, scene names) fetched from the LIFX API directly into the generated `SKILL.md`. If a malicious actor could control these names, they could inject arbitrary markdown or commands into `SKILL.md`, leading to prompt injection against the OpenClaw agent. These vulnerabilities could lead to remote code execution or agent compromise, but there is no clear evidence of intentional malicious behavior by the skill author.",
+          "checkedAt": 1779164437610,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "f5d32ed3d645bf7052b9dadfc01fc3f58e09470356383c04ee38018a73d48f62",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/f5d32ed3d645bf7052b9dadfc01fc3f58e09470356383c04ee38018a73d48f62"
+    },
+    "slug": "lifx",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

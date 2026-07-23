@@ -1,0 +1,146 @@
+{
+  "classification": {
+    "artifacts": [
+      "configuration"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.6607,
+    "domains": [
+      "creative",
+      "infrastructure"
+    ],
+    "needs_review": false,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C05:phrase:image generation",
+      "category:C05:token:image",
+      "category:C08:token:deployment",
+      "cross-tag:agent-management",
+      "cross-tag:deployment",
+      "cross-tag:design",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00",
+      "C08"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate"
+    ],
+    "tasks": [
+      "deploy",
+      "design",
+      "manage",
+      "operate"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "0edbb9a0acccdeb7bd3393e80c3c721b64cd515076033cf06b9f3e7fe2ff8a8a",
+    "content_hash": "079cff6575c4b18d74b9864a72a5f1b501176b904beb06fc27e3c37ca9427bda",
+    "precanonical_content_hash": "964a59957f04a62070e36a1e5b423b87c21a76bafda600f3da5a2437e586adac",
+    "skill_md_hash": "b3afd14695e85ab5aca3e1779338344cb5b62e576eadaba552abaaf155ad7b5d",
+    "version_metadata_sha256": "9ab28935abe326442e79cfd0292211defae1ce0722e9f5d14987dacde28412d5"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jacqueskang/skills/ms-foundry-image-gen",
+    "claim_id": "822d07f2318424ad8665b7592fa30e4e3615d0fba3521bc331003e241d837c64",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "ms-foundry-image-gen",
+        "url": "https://clawskills.sh/skills/jacqueskang-ms-foundry-image-gen"
+      }
+    ],
+    "owner_handle": "jacqueskang",
+    "owner_id": "s174zp0t7hhmnkdgzmnns3pp418855sf",
+    "published_at": 1771850273738,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779949681787,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779949681787,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifact: it builds a prompt payload, sends it to a configured Azure Foundry image-generation deployment with curl, and decodes the returned image.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The example uses quoted variables and jq --arg for prompt JSON construction. FOUNDRY_DEPLOYMENT and FOUNDRY_API_VERSION are not separately validated, but the artifact does not use eval or unquoted shell execution, so the claimed shell command injection path is not supported.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No installer, executable package, download step, or background setup is included; the artifact is a single SKILL.md with disclosed dependencies on curl, jq, and base64.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The required FOUNDRY_API_KEY, FOUNDRY_ENDPOINT, and FOUNDRY_DEPLOYMENT variables are proportionate to calling the user's Azure Foundry deployment, though the API key can consume Azure quota and should be scoped.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, privilege escalation, broad local indexing, profile/session access, or long-running worker behavior is shown. The example writes only temporary output files under /tmp.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight] expected: Directly constructing a request URL from configured Foundry environment variables is expected for this skill. The telemetry's shell-injection concern is downgraded because the URL is assigned and passed to curl with quoted expansions and no eval-style reprocessing.\n[SkillSpector] expected: SkillSpector reported no issues, which is consistent with the instruction-only artifact and disclosed Azure API use.\n[staticScan] expected: Static scan reported clean with no findings, and artifact review found no hidden code, install hooks, persistence, or unrelated data handling.",
+          "guidance": "Install only if you intend your agent to send prompts to Azure Foundry. Use a trusted HTTPS Azure endpoint, keep the API key scoped and private, and monitor usage or costs from generated image requests.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a simple Azure Foundry image-generation helper that uses a user-provided endpoint and API key, with no hidden installer, persistence, or unrelated data access found.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779949646808,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ms-foundry-image-gen\nVersion: 1.0.6\n\nThe skill is designed for Azure Foundry image generation and includes positive security measures like endpoint validation and safe prompt handling using `jq --arg`. However, it directly interpolates the `$FOUNDRY_DEPLOYMENT` and `$FOUNDRY_API_VERSION` environment variables into the `curl` URL in `SKILL.md` without explicit validation or escaping. This creates a potential shell injection vulnerability if an attacker can control these environment variables, which could lead to arbitrary command execution on the agent. While the skill explicitly states an intent to prevent injection risks, this oversight constitutes a significant vulnerability, classifying it as suspicious rather than benign.",
+          "checkedAt": 1779166258528,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "b5d7d1db69936b550a11f6d800bc337d7d1d87f2cada18e3121f2e69b9f1b84b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b5d7d1db69936b550a11f6d800bc337d7d1d87f2cada18e3121f2e69b9f1b84b"
+    },
+    "slug": "ms-foundry-image-gen",
+    "source_type": "clawhub",
+    "version": "1.0.6"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

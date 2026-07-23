@@ -1,0 +1,132 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C11:token:product",
+      "cross-tag:agent-management",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C11"
+    ],
+    "stages": [
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "cf9560c4c09e8f83ebd24a36f7fa757de0880d60ffb30b22f82c5e99e849c7e3",
+    "content_hash": "f735833288581f873caf1dc522796843e87e656cad36c37f1ee2c20db538c792",
+    "precanonical_content_hash": "cd0c84a51054c88e5010acd6d476a2839d2cd2ac7b95c53495ac0c14bb98da6c",
+    "skill_md_hash": "23ff1c36cac472ed4372eb7b80cf80753f0e0c730b0b31c6f20861715535aa20",
+    "version_metadata_sha256": "251ef4d95495067d6192af8b34d38be6251719c16590640ce8bc22482d765255"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/donatasdecodo/skills/decodo-scraper-skill",
+    "claim_id": "c4c1704921a0a517f9516415082d1845efa5c497f0dfcbd250d2f971e87502d4",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "decodo-scraper-skill",
+        "url": "https://clawskills.sh/skills/donatasdecodo-decodo-scraper-skill"
+      }
+    ],
+    "owner_handle": "donatasdecodo",
+    "owner_id": "s17addratm1abkq51qst2v11zn885ac8",
+    "published_at": 1771513553387,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779933658901,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779933658901,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe Google search, webpage, Amazon, YouTube subtitle, and Reddit scraping through Decodo, and the Python tool implements only those targets.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions are normal usage examples for a CLI script and do not contain prompt overrides, hidden role changes, automatic execution, or destructive workflows.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation uses a small requirements.txt with lower-bound dependencies rather than pinned versions, which is a reproducibility and supply-chain hygiene issue but not evidence of malicious behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill requires DECODO_AUTH_TOKEN and sends queries or URLs to Decodo's hosted scraping API; this is disclosed and necessary for the stated purpose, but users should treat submitted targets as shared with a third party.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background process, persistence mechanism, privileged system changes, local indexing, or broad filesystem access is present; the script reads only the Decodo token from environment or .env.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: Forwarding user-provided queries and URLs to Decodo is the central function of the skill and is disclosed as Decodo API use; a clearer privacy warning would improve user understanding but this does not make the skill suspicious.\n[SC1] expected: The Python dependencies are ordinary for this tool, but the lower-bound version specs mean installs are not fully reproducible; this is a caution rather than a purpose mismatch.\n[SC4] expected: Use of requests for HTTPS API calls is expected; the broad version range can allow vulnerable releases in some environments, so users should pin patched versions for production, but artifact behavior remains coherent and non-deceptive.",
+          "guidance": "Install only if you are comfortable sharing submitted URLs, search terms, video IDs, and returned scraping requests with Decodo. Use a dedicated Decodo token, keep it out of shared repos, avoid sensitive internal URLs or regulated data, and pin dependencies in controlled or production environments.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward Decodo web-scraping skill that sends user-chosen searches or URLs to Decodo using a Decodo API token, with no hidden persistence or destructive behavior found.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779933627746,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 71,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: decodo-scraper-skill\nVersion: 1.1.0\n\nThe OpenClaw skill 'decodo-scraper' is designed to interact with the Decodo Web Scraping API. It uses a `DECODO_AUTH_TOKEN` to authenticate with `scraper-api.decodo.com` and sends user-provided queries/URLs to this service. The `SKILL.md` file provides clear instructions without any prompt injection attempts. The `tools/scrape.py` script uses `argparse` for input and constructs JSON payloads for `requests.post`, preventing shell injection. There is no evidence of unauthorized data exfiltration, malicious execution, persistence mechanisms, or obfuscation. The behavior is fully aligned with its stated purpose.",
+          "checkedAt": 1779165465121,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "2f92e0e8269f2e61cf2653a69a146b5f093f75f2ae8921ac2b97dfe401ae4807",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/2f92e0e8269f2e61cf2653a69a146b5f093f75f2ae8921ac2b97dfe401ae4807"
+    },
+    "slug": "decodo-scraper-skill",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

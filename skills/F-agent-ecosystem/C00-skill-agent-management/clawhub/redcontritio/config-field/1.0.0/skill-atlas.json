@@ -1,0 +1,135 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [],
+    "confidence": 0.35,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C02:token:writing",
+      "category:C12:token:management",
+      "cross-tag:agent-management",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "6adfaa815d3da0a1a46e6216d34489369adb2559c0338677dcce9663b752e4e7",
+    "content_hash": "6b690bd5669319545d7d5b0bee1d0a2295ebe8874a0e938c565827ee265c2df2",
+    "precanonical_content_hash": "195114e39f70f87bb10acdff6294f08597a86ccf587367f3a980ddce26ff8e53",
+    "skill_md_hash": "093270901304f065c61bcd8ee6a47246a4a014d33ace698a51586c518567ae91",
+    "version_metadata_sha256": "c26c536e4e1c26c2ad2bc52c132095c9ad3c478c703ba2da72f100f2ca484ac3"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/redcontritio/skills/config-field",
+    "claim_id": "c959f30debe64082c74b2d24cdb162440795952f0f01e77aeefb49aba8eb7085",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "config-field",
+        "url": "https://clawskills.sh/skills/redcontritio-config-field"
+      }
+    ],
+    "owner_handle": "redcontritio",
+    "owner_id": "s17dsph4aqaw5ys7vfh5wtsnys8850dn",
+    "published_at": 1771939763625,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779956578937,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779956578937,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is validating OpenClaw configuration fields, and the scripts load a bundled or cached schema, validate field paths, inspect a user-supplied config file, and report field validity without printing config values.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The README says the skill automatically triggers when working with OpenClaw configurations, but the artifacts show normal user-invoked Python utilities rather than hidden automatic execution. The wording should be clearer.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The README includes placeholder GitHub install URLs using YOUR_USERNAME, so users should prefer the ClawHub registry or another verified source rather than relying on those examples.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading openclaw.json is proportionate for validation, even though such files may contain token fields. The inspected code reports field names and schema information, not secret values, and does not perform network transmission.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The sync code creates a cache under ~/.config/openclaw/skills/config-field and runs a fixed openclaw --version command. This is disclosed and purpose-aligned, with no background persistence, privilege escalation, broad indexing, deletion, or remote command execution found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill uses local file reads, cache writes, and a fixed subprocess version check. Those capabilities are expected for a schema validator, though explicit permission documentation would improve reviewability.\n[TP4] expected: The documented schema sync, documentation generation, and cache behavior are related to validation. The code does not implement the claimed GitHub download; it copies the bundled schema into the local cache.\n[SQP-1] expected: The automatic-trigger wording is imprecise, but there is no artifact-backed evidence of hidden or broad auto-execution beyond the skill being available for config-related work.",
+          "guidance": "Install from a verified ClawHub source, not the README's placeholder GitHub URL. Use it only on OpenClaw config files you intend to validate, and be aware it may create or update a local schema cache and run openclaw --version.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This appears to be a local OpenClaw config validator; its file reads, cache writes, and version check fit that purpose, with no evidence of hidden data sharing or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779956538704,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 58,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: config-field\nVersion: 1.0.0\n\nThe OpenClaw Config Field Validator skill is designed to validate OpenClaw configuration fields against a Zod schema. The Python scripts primarily handle local file operations for schema caching (`~/.config/openclaw/skills/config-field/`), parsing JSON configuration files, and executing `openclaw --version` via `subprocess.run` to determine the local OpenClaw version. While `SKILL.md` mentions downloading schemas from GitHub, the `sync_schema.py` implementation currently only copies a built-in `schema.json` file, which is a safer behavior than implied. There is no evidence of data exfiltration, unauthorized remote command execution from untrusted input, persistence mechanisms, or prompt injection attempts against the agent to perform malicious actions. All operations are aligned with the stated purpose of configuration validation.",
+          "checkedAt": 1779166774121,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "0af57765345fa8f35cc4564a7e76d5631f706455df50f3116585bddb4be01e41",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0af57765345fa8f35cc4564a7e76d5631f706455df50f3116585bddb4be01e41"
+    },
+    "slug": "config-field",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

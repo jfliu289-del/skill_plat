@@ -1,0 +1,119 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.0,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "fallback:C00"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "db20f3256cd9454b7707c07e616a78f943abbd41c8eed755c036377b2e5f160f",
+    "content_hash": "d63e2a84f242b5c887c703a02d5496049267e71f3e1f1b8e00bbb85832ed1369",
+    "precanonical_content_hash": "decb9e2d79c4349662d63d98aef22bde15c1ff0d856b2099a66fa9e4fc38e132",
+    "skill_md_hash": "c2b2433397d1b5cd2d775e28820965c3fddeaa01085ae8cc42434630150017f5",
+    "version_metadata_sha256": "ecb4216c70b3675dd96c3ef77a4742848eea3dde885401fc0a98396c301b9a88"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/wlinds/skills/soundcloud-watcher",
+    "claim_id": "6213be50b9f74d4061b7c7227c5a6dda342babc7e914c35dbf7e869b76393ef4",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "soundcloud-watcher",
+        "url": "https://clawskills.sh/skills/wlinds-soundcloud-watcher"
+      }
+    ],
+    "owner_handle": "wlinds",
+    "owner_id": "s176wv5bwq6fvnx5ecb64b2pcx83w9ym",
+    "published_at": 1774897513800,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971168307,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971168307,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The code and documentation align around monitoring SoundCloud followers, likes, and tracked artist releases. SoundCloud credentials, API calls, and local tracking state are expected for that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands are scoped to setup, status, manual checks, artist tracking, and an optional user-created cron job. The README includes a troubleshooting command that prints the full secrets file, which is risky documentation but not hidden runtime behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The OpenClaw plugin manifest and package metadata are straightforward. Package install scripts only print setup instructions, and no runtime child-process execution was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Filesystem access is limited to SoundCloud credentials, tracking data, and backoff state under ~/.openclaw, and network calls target SoundCloud API and OAuth endpoints. Two backoff files are not listed in the manifest, but they are low-impact local state.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists a SoundCloud access token and monitoring state locally, and recurring checks occur only if the user adds the documented cron job.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Runtime network and local-file use are expected for a SoundCloud watcher and are substantially disclosed through the manifest and README; no plugin shell/process execution was found.\n[TP4] expected: Account monitoring, follower and like tracking, artist releases, OAuth use, data files, and optional cron are described in the artifacts. Token persistence is only implicit, but it fits the OAuth integration.\n[SQP-2] unexpected: The README's `cat ~/.openclaw/secrets/soundcloud.env` troubleshooting step could expose the client secret if pasted into chat or logs. This is a documentation safety issue, not automatic credential disclosure.\n[SQP-2] expected: Storing SoundCloud credentials in a local env file is expected for this integration, but the setup docs should give stronger guidance on file permissions, redaction, and rotation.\n[suspicious.destructive_delete_command] expected: The `rm -rf` command appears only in uninstall instructions and is scoped to this plugin's extension directory; it is not executed automatically.\n[suspicious.exposed_secret_literal] expected: The flagged `clientSecret` line forwards a value read from the user's secrets file; no hardcoded secret literal was found.",
+          "guidance": "Install only if you are comfortable giving the plugin SoundCloud API credentials and letting it store local monitoring state. Keep `~/.openclaw/secrets/soundcloud.env` private, do not paste its contents into chat or logs, restrict file permissions where possible, and add the cron job only if you want recurring background checks.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent SoundCloud monitoring skill, but users should protect its local secrets file and avoid printing it into chat or logs.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971115610,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 71,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: soundcloud-watcher\nVersion: 2.4.0\n\nThe SoundCloud Watcher plugin is a legitimate tool for monitoring account activity and artist releases. It follows standard OpenClaw patterns for credential management (using ~/.openclaw/secrets/soundcloud.env) and state persistence. The code in soundcloud_watcher.ts demonstrates high security awareness by implementing explicit sanitization of API-retrieved metadata (usernames, track titles) to prevent prompt injection against the agent. Network activity is strictly limited to official SoundCloud API endpoints (api.soundcloud.com and secure.soundcloud.com).",
+          "checkedAt": 1779164536222,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "697e7983bb484eca630c5be51e4b44ea39abe0ecd19d56c5186baa1ebf0d1b3b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/697e7983bb484eca630c5be51e4b44ea39abe0ecd19d56c5186baa1ebf0d1b3b"
+    },
+    "slug": "soundcloud-watcher",
+    "source_type": "clawhub",
+    "version": "2.4.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

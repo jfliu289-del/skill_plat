@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C07:token:test",
+      "category:C10:token:ai",
+      "category:C10:token:model",
+      "category:C17:token:notes",
+      "category:C17:token:schedule",
+      "cross-tag:search",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C07",
+      "C17"
+    ],
+    "stages": [
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "research",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "691a8dea58ab3dac9c20f1a89129510c1303f323d0619a62178bb1f6d4c0d71e",
+    "content_hash": "9c8848f222d1029116e3e76c292b6931324959496cdce53ca00240c21996a39d",
+    "precanonical_content_hash": "e7cd2b8fc7e39a482eee72fbb04a29969e828365f8e6d7d4d3e810bfdc661e57",
+    "skill_md_hash": "6fdbac775d32bc591670e7ba89b17e5c1da3657284cbbddd96053611710fac53",
+    "version_metadata_sha256": "e20b5d0d52a3dce619102faf7092040c3ffd51680276b94f740ad6235bdd665b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/am-will/skills/morning-email-rollup",
+    "claim_id": "5b5ab8eea45d51a9706b02ec4af63bec7d529e811b56fdd9b26c95813ca08ac0",
+    "index_entries": [
+      {
+        "index_path": "categories/calendar-and-scheduling.md",
+        "label": "morning-email-rollup",
+        "url": "https://clawskills.sh/skills/am-will-morning-email-rollup"
+      }
+    ],
+    "owner_handle": "am-will",
+    "owner_id": "s17fkr20stq3221ggbapf4qgv988405y",
+    "published_at": 1768589827150,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783649934788,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783649934788,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The Gmail, Calendar, Gemini summarization, and rollup output behavior all match the stated morning email rollup purpose, though the workflow processes sensitive account content.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The documented flow is bounded to important or starred Gmail threads, recent calendar events, and a configurable email limit; Gemini use is disclosed, but users should understand email body content is included in prompts.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains a visible SKILL.md and rollup.sh, declares required binaries, and does not include a hidden installer, package download, or obfuscated setup path.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use of authenticated gog and gemini CLIs is proportionate for Gmail/Calendar rollups with AI summaries, but it relies on existing Google and Gemini trust boundaries and may produce output through the configured Clawdbot/Telegram channel.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Daily execution is documented as a user-created cron job, and the script writes a local run-status log under $HOME/clawd without storing email bodies; no unauthorized persistence or privilege escalation is evident.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The artifact does send cleaned email body text to Gemini, but SKILL.md explicitly describes extracting email bodies, sending them to gemini, and passing the body as prompt content, so this is disclosed and purpose-aligned rather than hidden behavior.\n[SSD-3] expected: The script includes up to 5000 characters of cleaned email body content in the Gemini prompt; this is sensitive and worth user attention, but it is the advertised AI summarization mechanism and not evidence of unrelated exfiltration or deception.\n[staticScan] expected: Static scan reported no findings, and artifact review found no destructive commands, credential theft, obfuscation, or unrelated network behavior.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with the artifact review, used only as supporting signal.",
+          "guidance": "Install only if you are comfortable with important/starred Gmail message bodies and calendar event titles being processed by this workflow, including Gemini summarization and delivery through the configured messaging channel. Review the Gmail query, MAX_EMAILS value, Google account, and cron schedule before enabling daily automation.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says, but it handles private Gmail and Calendar data and sends email bodies to Gemini for summaries.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783649884767,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 31,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: morning-email-rollup\nVersion: 2.1.0\n\nThe skill bundle is designed to provide a daily rollup of important emails and calendar events using Google's `gog` CLI and AI summaries via the `gemini` CLI. All operations, including accessing Gmail/Calendar, generating summaries, and logging to `$HOME/clawd/morning-email-rollup-log.md`, are directly aligned with its stated purpose. The `SKILL.md` provides clear, benign instructions for setup and customization, including how to set up a user-initiated cron job for daily execution. There is no evidence of data exfiltration, malicious execution, unauthorized persistence, or prompt injection against the OpenClaw agent.",
+          "checkedAt": 1779159758161,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "cf625c4e64e2993a547158205a2b1e23c9ed60ee519b922abc77dbd2806d7514",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/cf625c4e64e2993a547158205a2b1e23c9ed60ee519b922abc77dbd2806d7514"
+    },
+    "slug": "morning-email-rollup",
+    "source_type": "clawhub",
+    "version": "2.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

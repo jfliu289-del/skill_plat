@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:prompt",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C12:token:management",
+      "category:C13:token:operations",
+      "cross-tag:agent-management",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09",
+      "C10",
+      "C12",
+      "C13"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "89e10b4130f6bcb8f4eacd281adfcd143037a419c816e603f76b9c7f0201aaa6",
+    "content_hash": "dd4b771b147340835f2c339f2f6a8f78a23a5977138d7061848a14c9823cbe64",
+    "precanonical_content_hash": "07d1f533cebfeba6c9f87abee4b649d85c9596f586833661a547f4b2cc193a86",
+    "skill_md_hash": "356e1bd8460d6e9a81223ac94863c135477d92fed8269a0955513dac5d727760",
+    "version_metadata_sha256": "dd811b44c6db486f72349bb56b4df434735ee882501caabab36da7b6ec020df0"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tedim52/skills/privy",
+    "claim_id": "23885510eec5e26989b94b21ffd581146ef8538d51507262c390fe3b30dd2822",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "privy",
+        "url": "https://clawskills.sh/skills/tedim52-privy"
+      }
+    ],
+    "owner_handle": "tedim52",
+    "owner_id": "s17bd4qngfss0sq42435sv7krd8852kt",
+    "published_at": 1770236833117,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783655414352,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783655414352,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill is explicitly for creating Privy server wallets, managing policies, and executing on-chain transactions, so its ability to move real crypto funds is high impact but purpose-aligned and disclosed.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The trigger description is broad for crypto wallet and autonomous transaction requests, but the runtime instructions require Privy credentials, direct user intent, transaction validation, policies, rate limits, and confirmation for policy deletion.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact is markdown-only and includes clone/install guidance plus examples for storing PRIVY_APP_SECRET in environment or local OpenClaw config; users should treat that config as sensitive.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Privy API credentials, network calls to Privy endpoints, and wallet RPC examples are proportionate to the stated wallet-management purpose; no hidden unrelated access or exfiltration behavior was found.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill recommends persistent local audit logs containing transaction metadata and uses credentials that can control wallets, but this is disclosed and tied to auditability and wallet operation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[suspicious.prompt_injection_instructions] expected: The flagged prompt-injection phrases appear as defensive examples telling the agent to stop, not as instructions to override safeguards.\n[SQP-2] expected: The README emphasizes autonomous wallet uses, but SKILL.md and references/security.md prominently warn that the skill controls real funds, mistakes are irreversible, and policies plus validation are mandatory.\n[SQP-2] expected: The credential-handling concerns are relevant user guidance, but the artifacts identify PRIVY_APP_SECRET as a private backend secret and prohibit exposing, sharing, or logging credential values.\n[SQP-1] expected: The skill can trigger on agent-wallet and autonomous transaction requests; that is broad but aligned with its purpose and constrained by Privy-specific setup and transaction safety checks.\n[SQP-2] expected: Transaction and signing examples are inherently risky, but they are central to the skill and are paired elsewhere with validation checklists, policy requirements, prompt-injection defenses, and forbidden actions.",
+          "guidance": "Use this only with a dedicated Privy app and limited funds. Keep PRIVY_APP_SECRET out of source control and chats, prefer environment variables or a secrets manager, start on testnets or low-value wallets, configure strict spending limits and allowlists, and require human review for any value-bearing transaction or signature.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a high-risk but coherent Privy wallet skill that discloses its fund-moving capabilities and includes substantial safety controls.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783655378620,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 23,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: privy\nVersion: 1.0.1\n\nThis skill is designed for high-risk operations involving real cryptocurrency funds, but it includes extensive and explicit security instructions for the AI agent to prevent misuse and prompt injection. Key indicators include mandatory policies with spending limits, detailed pre-transaction validation checklists, explicit instructions to protect API credentials (PRIVY_APP_SECRET), a comprehensive list of forbidden actions, and strong defenses against prompt injection patterns, all detailed across SKILL.md, references/security.md, and references/policies.md. The skill's intent is clearly to provide a secure framework for agentic wallets, not to exploit or exfiltrate data.",
+          "checkedAt": 1779161219376,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "796d4484755a788db724122fde1decf9783489538bf63ef56040aba1c7aa7010",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/796d4484755a788db724122fde1decf9783489538bf63ef56040aba1c7aa7010"
+    },
+    "slug": "privy",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

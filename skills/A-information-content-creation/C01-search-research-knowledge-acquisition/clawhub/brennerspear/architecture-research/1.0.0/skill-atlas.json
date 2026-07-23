@@ -1,0 +1,154 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.3964,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:find",
+      "category:C01:token:research",
+      "category:C01:token:sources",
+      "category:C04:token:data",
+      "category:C05:token:design",
+      "category:C06:token:code",
+      "category:C17:token:notes",
+      "cross-tag:data-analysis",
+      "cross-tag:design",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C05",
+      "C06",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "design",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "dfab3c2c20a263f166cc14cf2274cad6e918ca3a38a041338cb2e5504ce717e9",
+    "content_hash": "694d3411c99093bdc4f94d8ddcaef2e2c69b0ee4b369af64beb472bd06c9ba2a",
+    "precanonical_content_hash": "a637102682d0b78bbb67e807237e66e90b5267a0e85688071a799c148a96a911",
+    "skill_md_hash": "9ff6ffc3fab167ac770143f49f8fefe5b0d67827e454ef0c8e0c4c6c9cd4db50",
+    "version_metadata_sha256": "6c63616f43ae39bf3c5d43019fd4538bd2554066dc05181a249ee144d7cbf48b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/brennerspear/skills/architecture-research",
+    "claim_id": "f576dcfce3c3fd6e28521efa5bd92f745fa37001a9d97248d9f8f9ca104a8729",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "architecture-research",
+        "url": "https://clawskills.sh/skills/brennerspear-architecture-research"
+      }
+    ],
+    "owner_handle": "brennerspear",
+    "owner_id": "s17ebpr0c7y6bpmzatrjw5rdt583fggy",
+    "published_at": 1771978300406,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779957630107,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779957630107,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifact instructions: inspect repositories or systems, research external context, explain architecture, and produce ELK diagrams and a markdown report.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "It asks the agent to clone or browse source code, perform web research, and cite sources; this is expected for architecture analysis but should be used deliberately on private or sensitive codebases.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill is instruction-only but depends on a separate diagrams skill and documents running a Node renderer from that dependency; the dependency and render script should be reviewed separately before use.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "It does not request credentials, browser profiles, local auth stores, or privileged environment access; source reading and web research are proportionate to the task.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "It creates a research folder containing markdown, ELK JSON, and SVG outputs, but does not request background persistence, elevated privileges, agent setting changes, or destructive file operations.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight] expected: The telemetry concern centers on the documented Node command for rendering diagrams. That command is disclosed, purpose-aligned, and tied to a named dependency, with no artifact evidence of exfiltration, persistence, or deception.\n[SkillSpector] expected: The current SkillSpector report found no issues, and artifact review supports that the file writes and repository access are expected deliverables for architecture research.",
+          "guidance": "Install this if you want an agent to inspect repositories and produce architecture documentation. Use caution with private code, choose a dedicated output directory, and review the separate diagrams skill before allowing the SVG rendering command.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent architecture-research helper that reads code, gathers context, and writes diagram/report files without hidden, destructive, or credential-seeking behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779957589288,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: architecture-research\nVersion: 1.0.0\n\nThe skill is designed to research codebases and generate diagrams, which requires extensive file system access (cloning repos, writing output) and network access (web searches). The primary reason for 'suspicious' classification is the explicit instruction in `SKILL.md` for the AI agent to execute shell commands using `node <diagrams-skill-dir>/scripts/render-elk.mjs`. While these commands are for a stated, seemingly benign purpose (rendering diagrams via a dependency skill), direct shell execution capabilities introduce a significant attack surface for potential Remote Code Execution (RCE) if the `render-elk.mjs` script or its inputs (ELK JSON generated by the agent) were exploitable, or if the `<diagrams-skill-dir>` path could be manipulated. There is no evidence of intentional malicious behavior like data exfiltration or persistence within this skill's instructions, but the direct shell command execution capability elevates it beyond benign.",
+          "checkedAt": 1779166927488,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "dfab3c2c20a263f166cc14cf2274cad6e918ca3a38a041338cb2e5504ce717e9",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/dfab3c2c20a263f166cc14cf2274cad6e918ca3a38a041338cb2e5504ce717e9"
+    },
+    "slug": "architecture-research",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

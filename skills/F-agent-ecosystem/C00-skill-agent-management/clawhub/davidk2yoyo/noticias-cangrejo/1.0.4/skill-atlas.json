@@ -1,0 +1,119 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.0,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "fallback:C00"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "29a919af975680e0653027b5419ec529fde6187efbd02492a09f0a5408cd5b03",
+    "content_hash": "7e24c71397a205e7d35877e992da55062b6abffb5af174c4073d2168f3634380",
+    "precanonical_content_hash": "cd77838ae83c681559043f7aeeb641a3f613bb7cf74c2fbe81bc950da7b1f1a1",
+    "skill_md_hash": "372d3e840acca4c12e166806ad3b6024ce908a29aa27776acdacdc3da1eb42c6",
+    "version_metadata_sha256": "179a895b2d3193400c3e85862f7b19d17e143030fd0c987efdf6c3d63ff93219"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/davidk2yoyo/skills/noticias-cangrejo",
+    "claim_id": "9e42cf59e9d18f53700b3a21488486bbe4daad6271415bac01e5edf2736a9546",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "noticias-cangrejo",
+        "url": "https://clawskills.sh/skills/davidk2yoyo-noticias-cangrejo"
+      }
+    ],
+    "owner_handle": "davidk2yoyo",
+    "owner_id": "s17ca7wy10n5kcfrpxc33a4fhn846rsc",
+    "published_at": 1771121962677,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967442541,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967442541,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The README, SKILL.md, _meta.json run command, and Python code all align around querying GNews for a user-provided topic and rendering article links in Markdown.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime behavior is scoped to a single topic, bounded article counts, one GNews endpoint, and Markdown output; no unrelated commands, hidden prompts, credential harvesting, or broad local reads were found.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no install script and requirements.txt declares no external dependencies. _meta.json lists version 1.0.1 while registry metadata says 1.0.4, which is a provenance/versioning inconsistency but not suspicious behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill requires GNEWS_API_KEY and outbound access to gnews.io, which is proportionate for a news-fetching skill and disclosed, though users should understand their topic and API key are sent to GNews.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The optional --output flag writes the generated digest to a caller-selected path and can overwrite that path. This is documented and user-directed, not hidden persistence.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill does use an environment API key, network access, and optional file writing. Artifact review found those behaviors are aligned with the stated GNews digest purpose and substantially disclosed, though metadata could be more explicit about network and file-write permissions.\n[SQP-2] expected: Sending the user topic to GNews and optionally saving output are expected for this skill. The docs disclose both behaviors, but could better warn users not to submit sensitive topics and to choose output paths carefully.\n[VirusTotal code_insight] expected: The reported arbitrary-path write comes from the documented --output option. It is a real overwrite footgun if misused, but artifact evidence does not show deception, automatic execution, or malicious file targeting.",
+          "guidance": "Before installing, be comfortable sharing searched topics with GNews and using your GNews API key for requests. Use --output only with an intended file path, preferably a new file in the working directory, because it overwrites existing files.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it claims: it fetches GNews results for a user topic and formats a Markdown news digest, with only ordinary API-key and optional file-save risks.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967407991,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 19,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: noticias-cangrejo\nVersion: 1.0.4\n\nThe skill's core functionality is benign, fetching and summarizing news. However, the `scripts/fetch_news.py` script is vulnerable to path traversal via the `--output` argument. It allows writing the news summary to an arbitrary file path without sanitization, which could enable an attacker to overwrite or create files in sensitive locations if they can control the input to this argument. This is a significant vulnerability, but there is no evidence of intentional malicious behavior within the script itself.",
+          "checkedAt": 1779164111663,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "6a743873278b3a1ec3e2794e355974d34aabf4227990290987b588bca31d853d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6a743873278b3a1ec3e2794e355974d34aabf4227990290987b588bca31d853d"
+    },
+    "slug": "noticias-cangrejo",
+    "source_type": "clawhub",
+    "version": "1.0.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

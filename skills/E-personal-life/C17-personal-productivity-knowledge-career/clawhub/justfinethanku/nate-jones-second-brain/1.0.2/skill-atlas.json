@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.3964,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C17",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C10:token:llm",
+      "category:C17:token:knowledge",
+      "category:C17:token:notes",
+      "category:C17:token:personal",
+      "cross-tag:search",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C09",
+      "C10"
+    ],
+    "stages": [
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "9fa586762e20eb89770c4b2500b18af61c35bb600586ee748dc9f3e8024d580f",
+    "content_hash": "62e34775e197c56afd9781b80658af714e454f54c0a8a322b6b0581253be9d3c",
+    "precanonical_content_hash": "f758ddc606d63cacfdd50ab9510d2e5ad7c50bb4a9b43bb33bd1797025789112",
+    "skill_md_hash": "d4ca6f168faaefd055278c110f6581ef4db5fc571cf15d7dad9defb464c002c7",
+    "version_metadata_sha256": "d81b3254067d2dc21bf08956ea5f558fe938e7a97ea878fc42375a3da974c6e9"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/justfinethanku/skills/nate-jones-second-brain",
+    "claim_id": "eb9f1b24b0f62b3c6f3d1377164454bc97bad7952676516fcb86e91de7270d7d",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "nate-jones-second-brain",
+        "url": "https://clawskills.sh/skills/justfinethanku-nate-jones-second-brain"
+      }
+    ],
+    "owner_handle": "justfinethanku",
+    "owner_id": "s178jdc704kxn9e9sy7vdt7e01862sqk",
+    "published_at": 1771300087198,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972250209,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972250209,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The Supabase database, pgvector embeddings, OpenRouter classification, routing, and semantic retrieval all directly match the stated second-brain purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill instructs the agent to insert, update, route, and occasionally delete/recreate knowledge records, but these mutations are documented as part of capture, correction, and retrieval workflows.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no installer, bundled executable, hidden setup script, or automatic persistence mechanism; setup is documented through user-run Supabase SQL and API examples.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The required OpenRouter and Supabase credentials are expected for the integration, but the Supabase service-role key is high privilege and must be kept to a dedicated project or trusted server-side agent context.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill intentionally creates persistent memory containing thoughts, people, projects, ideas, tasks, embeddings, and metadata; this is central to the product but increases privacy and retention risk.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The scanner concerns about personal-data storage and privacy are supported in the sense that the skill stores broad personal notes and metadata, but the main skill and setup docs explicitly disclose persistent Supabase storage, OpenRouter processing, service-role access, and key-handling precautions.\n[E1] expected: The OpenRouter transmissions and Supabase service-role API examples are real, but they are not hidden or unrelated; they are the documented embedding, classification, retrieval, and database-access path for this single-user knowledge system.\n[VirusTotal code_insight] expected: VirusTotal's concern about service-role access and OpenRouter processing matches the artifacts, but it also notes transparent disclosure and no evidence of malicious exfiltration or deception; static scan had no findings.",
+          "guidance": "Install only for a dedicated personal Supabase project, not a database with unrelated app data. Protect and rotate the Supabase service-role key and OpenRouter key, avoid capturing secrets or highly sensitive third-party communications, and review OpenRouter/model-provider data policies because captured text and search queries are sent out for AI processing.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it builds a personal knowledge database, but users must be comfortable storing private notes in Supabase and sending captured text to OpenRouter.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972215089,
+          "issueCount": 19,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: nate-jones-second-brain\nVersion: 1.0.2\n\nThe skill is classified as suspicious due to its reliance on the `SUPABASE_SERVICE_ROLE_KEY`, which grants full, unrestricted access to the user's entire Supabase database, bypassing Row Level Security. While the documentation (SKILL.md, references/setup.md, references/schema.md) transparently explains this design choice for a 'single-user personal knowledge base' where the agent is a 'trusted server-side component', and configures RLS to *only* allow this role, it represents a significant privilege escalation. A compromise of the agent or the environment variables would lead to complete data exposure or manipulation. Additionally, all captured user thoughts are sent to OpenRouter for processing, which is a privacy consideration, though also transparently documented. There is no evidence of intentional malicious behavior, unauthorized data exfiltration to unknown endpoints, or prompt injection designed to subvert the agent for harmful purposes.",
+          "checkedAt": 1779164729387,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "782e19e9e9d41f162483a9fce3fad552822b0b60905f6a078f95805ef081feb6",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/782e19e9e9d41f162483a9fce3fad552822b0b60905f6a078f95805ef081feb6"
+    },
+    "slug": "nate-jones-second-brain",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

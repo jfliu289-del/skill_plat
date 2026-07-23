@@ -1,0 +1,147 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "configuration"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "infrastructure",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:backend",
+      "category:C07:token:testing",
+      "category:C10:token:model",
+      "cross-tag:agent-management",
+      "cross-tag:deployment",
+      "cross-tag:testing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C06",
+      "C07",
+      "C10"
+    ],
+    "stages": [
+      "deliver",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "deploy",
+      "manage",
+      "operate",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "10b47b4931dc08208207aee60899c6d6f07626dc05cc805626d21cb4cdb1e79c",
+    "content_hash": "360c99e57e198bffa3750b165f07d43c68540bafbef8639f75e7a80b19c52aac",
+    "precanonical_content_hash": "dbafd2eb5cb48742c8019f7475c7722117712e3ad5ef9baa0e5c6439c6735b27",
+    "skill_md_hash": "5ac9be2f7510b35a8424f0df1687e41fa6244e58f886ffed6be0ff35ea7cb177",
+    "version_metadata_sha256": "735718b8e7a31d55783f334bc1504bae10b2db4d81a71a58d7ea093cf9039e8f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/rbcp18/skills/teller-borrow-agents",
+    "claim_id": "7758b81fd6dce0e4ca5eda897ac30d49e997826e23cd17cecd59d1bc8b411ede",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "teller-borrow-agents",
+        "url": "https://clawskills.sh/skills/rbcp18-teller-borrow-agents"
+      }
+    ],
+    "owner_handle": "rbcp18",
+    "owner_id": "s1775hmf98n5vvy4sz06dv5v45885w76",
+    "published_at": 1771209134399,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779969012715,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779969012715,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently implement the stated purpose: a Node MCP server exposing Teller opportunity, borrow pool, loan-term, wallet-loan, borrow-transaction, and repay-transaction tools. The transaction-builder capability is financially sensitive but disclosed and does not itself sign or submit transactions.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Tool inputs are schema-validated and scoped to Teller API workflows. The skill returns raw structured API payloads for downstream automation, which is expected for MCP use but requires user control before any wallet signing step.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is manual via npm install/build/start in the bundled Node project. A package-lock is included, and no package lifecycle scripts or hidden install actions were found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Outbound HTTPS requests to the Teller API and optional TELLER_API_BASE_URL/TELLER_API_TIMEOUT_MS environment variables are disclosed and proportionate to the integration. No wallet keys, API keys, cookies, or local credential stores are requested or read.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background service installation, privilege escalation, arbitrary command execution, file mutation, signing, or transaction submission behavior was found. Registration with mcporter/OpenClaw is user-directed configuration.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The network access and specific environment variables are expected for a Teller API MCP server and are documented in the artifacts; the lack of a separate permission declaration is a transparency note, not evidence of hidden behavior.\n[SQP-2] expected: Wallet-linked loan lookups and ready-to-submit transaction payload generation are central to the stated purpose and disclosed. The concern is real user risk if another tool signs outputs without review, but this skill does not sign or submit transactions itself.\n[static:suspicious.env_credential_access] expected: The flagged environment access is limited to TELLER_API_BASE_URL and TELLER_API_TIMEOUT_MS configuration, not credentials or secrets.\n[VirusTotal:code_insight] expected: VirusTotal reported the package clean, consistent with the artifact review; this was supporting telemetry, not the sole basis for the verdict.",
+          "guidance": "Install only if you want an agent-accessible Teller finance MCP server. Treat generated borrow and repay transactions as proposals: verify wallet, chain, pool, token addresses, amounts, approvals, loan terms, and API endpoint before signing in any wallet.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed Teller MCP integration that fetches financial data and builds unsigned blockchain transaction payloads, so users should review outputs carefully before signing anything.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968964218,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: teller-borrow-agents\nVersion: 0.2.3\n\nThe OpenClaw AgentSkills skill bundle for 'teller-borrow-agents' is designed to expose Teller financial APIs via the Model Context Protocol. The code (scripts/tellermcp-server/src/client.ts, scripts/tellermcp-server/src/index.ts) makes legitimate outbound HTTPS requests to `https://delta-neutral-api.teller.org` to fetch financial data and build transaction payloads. Input validation is robustly implemented using `zod` with regex for addresses, mitigating common injection risks. The skill does not attempt to exfiltrate sensitive data, establish persistence, or execute arbitrary commands beyond its stated purpose. The `TELLER_API_BASE_URL` environment variable allows overriding the API endpoint, which is a standard configuration practice and not indicative of malicious intent within the skill itself.",
+          "checkedAt": 1779164438201,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "56f268eddd62ec0014d67600ecf3feac670cf3c4549fa88051f86eb40ed1825b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/56f268eddd62ec0014d67600ecf3feac670cf3c4549fa88051f86eb40ed1825b"
+    },
+    "slug": "teller-borrow-agents",
+    "source_type": "clawhub",
+    "version": "0.2.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

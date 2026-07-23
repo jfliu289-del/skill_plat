@@ -1,0 +1,152 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:sources",
+      "category:C05:token:design",
+      "category:C06:token:implementation",
+      "category:C10:token:model",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:search",
+      "cross-tag:software-development",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C05",
+      "C06",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "manage",
+      "research",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "56f794ab04a45f70d6a761b6588d28658cb9d2372c098df7ff67443d3ae2ec49",
+    "content_hash": "e2f1138cfbbb1b2f95150414875575675946bb3b0e4d2504b94bfa2841aece85",
+    "precanonical_content_hash": "ec274575d9f81baea5582866e30c47fa11c8c1ffab9af8425c866790cd8c07b7",
+    "skill_md_hash": "c618c5fb3ba254a4d3ad4e49391792968a2ef14382d64195c9e50c23e116ff99",
+    "version_metadata_sha256": "0a0d882cf6ddeee5ec234ba47c2de8a44b7d5aff5289ddf183a821a7e6e14e0a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/foscomputerservices/skills/fosmvvm-fluent-datamodel-generator",
+    "claim_id": "eecb620829f9b2353464fc4d59d2e6c3cc2955246525178207ac1ca64b8ea32c",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "fosmvvm-fluent-datamodel-generator",
+        "url": "https://clawskills.sh/skills/foscomputerservices-fosmvvm-fluent-datamodel-generator"
+      }
+    ],
+    "owner_handle": "foscomputerservices",
+    "owner_id": "s176qttct9c3m85rbwsfpq4e15884ham",
+    "published_at": 1771098271697,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967407429,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967407429,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to generate FOSMVVM Fluent DataModels, migrations, seed files, tests, and migration registration; the artifacts match that purpose and do not include unrelated capabilities.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill includes a clear Fluent-only scope guard and tells the agent to stop and ask when the project does not use Fluent or the persistence layer is unclear.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The package contains only markdown instruction/reference files and no executable scripts, install hooks, required credentials, or hidden runtime components.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Reading project files such as Package.swift, existing models, migrations, tests, and database.swift is proportionate for a code-generation skill, but it can lead to source-code changes across server and test targets.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Generated migrations and seed registrations can affect database schema when later run by the user; revert templates delete tables and raw SQL examples can add PostgreSQL-specific columns or indexes.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[virustotal_code_insight] expected: The raw SQL and migration concerns are real database-risk primitives, but they are explicitly documented as optional PostgreSQL migration patterns, not hidden execution or exfiltration behavior.\n[skillspector_clean] expected: SkillSpector reported no issues, which is consistent with the artifacts being instruction-only and purpose-aligned.\n[metadata_llm_migration_notes] expected: Prior metadata notes about source and migration changes are expected for this skill; they support user review guidance rather than a Review or malicious verdict.",
+          "guidance": "Use this skill for Fluent/Vapor projects only. Review generated migrations, raw SQL, seed data, foreign keys, cascade deletes, and revert behavior before committing or running them, especially against shared, staging, or production databases.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This instruction-only skill coherently generates Swift Fluent model and migration code, with database-impacting templates that users should review before applying.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967379342,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: fosmvvm-fluent-datamodel-generator\nVersion: 2.0.6\n\nThe skill is designed for generating Fluent DataModels and instructs the AI agent to analyze project files (e.g., `Package.swift`, existing models, migrations) to understand the codebase, which is expected for its function. However, both `SKILL.md` and `reference.md` explicitly document and provide templates for executing raw SQL queries using `SQLKit` within database migrations. While the examples use `SQLQueryString` with `unsafeRaw` for identifiers, indicating an awareness of SQL injection risks for *fixed* identifiers, the overall capability to generate and execute arbitrary SQL is a high-risk primitive. If the AI agent were to construct these raw SQL queries based on unsanitized user input, it could lead to severe SQL injection vulnerabilities or unauthorized database modifications, classifying this as a significant risky capability.",
+          "checkedAt": 1779164082974,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "f54feb97606f666cf8fcd0654364c1c06f88ba2b6927c6ce29a023684df5adba",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/f54feb97606f666cf8fcd0654364c1c06f88ba2b6927c6ce29a023684df5adba"
+    },
+    "slug": "fosmvvm-fluent-datamodel-generator",
+    "source_type": "clawhub",
+    "version": "2.0.6"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

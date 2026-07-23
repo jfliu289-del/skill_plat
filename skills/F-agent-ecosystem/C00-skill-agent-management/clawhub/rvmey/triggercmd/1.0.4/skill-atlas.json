@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C07:token:testing",
+      "category:C09:token:security",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C07",
+      "C09",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "secure",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a6aa3248644e3dabb6d4ceb2831b3dc247c1a6e04d3c4c5ed9e82f5f74d42835",
+    "content_hash": "b5b000b536e8db07b07cbc6cac2b5fa3e5556f775eafe08be1e6e67c39f3cc05",
+    "precanonical_content_hash": "bae91128e72f9c0b062a14054febaec0972178502a2d38e40a9304a02a56a4ed",
+    "skill_md_hash": "b05aa0d718f3355d6ae9e8f38d4eda8b06f3dcb99ddbbbe68a0962be909f30c4",
+    "version_metadata_sha256": "0c9f5c592603be640854996f20e1519a42fb400590dc88443578374c239407b5"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/rvmey/skills/triggercmd",
+    "claim_id": "42c6f5659267d42254142b55052a456846e15b91db7952acc308086269a4e241",
+    "index_entries": [
+      {
+        "index_path": "categories/health-and-fitness.md",
+        "label": "triggercmd",
+        "url": "https://clawskills.sh/skills/rvmey-triggercmd"
+      }
+    ],
+    "owner_handle": "rvmey",
+    "owner_id": "s17cttppeqqhwggy7vvxqe8jhs884g4d",
+    "published_at": 1771383732864,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971129091,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971129091,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is remote TRIGGERcmd control, and the artifact only documents listing commands and triggering configured commands through the TRIGGERcmd REST API. That capability can affect real computers, but it is purpose-aligned and disclosed.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are scoped to TRIGGERcmd API calls, include safer JSON payload construction with jq, and tell the agent to confirm side-effecting commands unless the user explicitly asked for them.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The package contains only SKILL.md with no executable scripts, install hooks, bundled binaries, or hidden setup behavior. It requires ordinary local tools curl and jq.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The TRIGGERCMD_TOKEN credential is necessary for this integration and is clearly declared. The skill warns not to print or expose the token.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The optional fallback token file at ~/.TRIGGERcmdData/token.tkn persists a sensitive credential, but the behavior is disclosed and includes chmod 600 guidance. No background worker or privilege escalation is present.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SkillSpector] expected: SkillSpector reported no issues; local artifact review found no hidden or unrelated behavior.\n[staticScan] expected: Static scan was clean, and the artifact contains only markdown instructions with no executable files.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with the artifact review, but it was not used as the sole basis for the verdict.\n[remote_triggering_capability] expected: The skill can trigger configured commands on registered computers, which is high-impact but central to the stated TRIGGERcmd purpose and accompanied by user-confirmation guidance.\n[credential_use] expected: The skill uses an API token from an environment variable or optional local token file; this is expected for the service and is clearly documented.",
+          "guidance": "Install this only if you are comfortable letting the agent trigger TRIGGERcmd actions on your registered computers. Prefer a temporary environment variable for the token, keep any token file owner-only, review available commands first, and require confirmation before anything that changes files, services, devices, or system state.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it lets an agent list and trigger TRIGGERcmd commands on computers tied to your token, which is powerful but clearly disclosed.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971100294,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: triggercmd\nVersion: 1.0.4\n\nThe skill is designed to control TRIGGERcmd computers remotely, a powerful but legitimate function. It demonstrates strong security awareness by explicitly warning against token exposure, instructing the agent to confirm commands with side effects, and using `jq -n --arg` to prevent JSON injection in `SKILL.md`. There is no evidence of unauthorized data exfiltration, arbitrary local command execution, persistence mechanisms, or malicious prompt injection attempts against the agent.",
+          "checkedAt": 1779164586085,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "7d29f9b9ab87403d9a27079d45362f7fa13ff2ffa0908ddfcfb1d8af9a62dbce",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/7d29f9b9ab87403d9a27079d45362f7fa13ff2ffa0908ddfcfb1d8af9a62dbce"
+    },
+    "slug": "triggercmd",
+    "source_type": "clawhub",
+    "version": "1.0.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

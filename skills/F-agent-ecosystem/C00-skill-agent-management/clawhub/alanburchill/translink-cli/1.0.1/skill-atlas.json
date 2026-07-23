@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.31,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:plugin",
+      "category:C00:token:skill",
+      "category:C04:token:data",
+      "category:C07:token:review",
+      "category:C17:token:schedule",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:review"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C07",
+      "C17"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "review"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "3316e42a7b2566ab90569d44d9de37469b2de5c9056fa3f0b574190c2098ef7c",
+    "content_hash": "9b5fe220f79b2f4cd9ca1a3c7251beb5f9e9e46042c1a316bdf8b683910bd03f",
+    "precanonical_content_hash": "3fe38f1e3360aa8bdb85bf74b1e7f426c03206e78857176f0fb301e2a7ef5c63",
+    "skill_md_hash": "d25f2e81a1689a423d2f333eab3931cc1269230036cf66165ad718b67d0f0459",
+    "version_metadata_sha256": "b68a83121c525f3968c67f3fb3cbe7f8bf94eaf9fd7f509053258c4496306a11"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/alanburchill/skills/translink-cli",
+    "claim_id": "075a38cefcb31fa84814c0d675e7bb7932ea85979f6522fa73fd12dddd3d9ff0",
+    "index_entries": [
+      {
+        "index_path": "categories/transportation.md",
+        "label": "translink-cli",
+        "url": "https://clawskills.sh/skills/alanburchill-translink-cli"
+      }
+    ],
+    "owner_handle": "alanburchill",
+    "owner_id": "s17amhqnhxy9fr4w7vv0r7d8k98852hx",
+    "published_at": 1771813879590,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779950836462,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779950836462,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe querying Translink SEQ GTFS schedule and realtime data through translink_* commands, with references limited to routes, stops, trips, alerts, schema, and joins.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill authorizes local shell or slash-command use and cache refreshes, which fits its purpose; command parameters should still be passed safely as arguments rather than interpolated into shell strings.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains markdown documentation only and no installer, but it depends on separately installed CLI scripts and references a GitHub URL with a likely 'traslink' spelling mismatch, so provenance should be verified before installation.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Local command execution and a transit-data cache under ~/.openclaw/cache/translink/ are proportionate for schedule and realtime transit lookup; no credentials, private files, or unrelated data access are requested.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The runtime section discloses a 24-hour cache and a daily refresh cron example, but the skill artifacts do not create persistence, install services, or request elevated privileges themselves.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal-code_insight] expected: The external CLI dependency and flexible query parameters are expected for a CLI-wrapper skill. The repository spelling mismatch is a real installation caution, but the artifact instructs the agent to ask the user to install prerequisites and does not auto-download or execute unknown code.\n[SkillSpector] expected: The supplied SkillSpector report found no issues. Older metadata references locale-field documentation concerns, but those fields describe GTFS feed metadata rather than instructions to force the user's language or locale.",
+          "guidance": "Before installing, confirm the exact source of the Translink CLI scripts and make sure the translink_* commands in PATH are trusted. Expect the skill to run those local commands and maintain a local transit cache; only enable scheduled refresh behavior if you want it.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed Translink transit-data helper that relies on local CLI commands, with dependency-verification cautions but no evidence of hidden or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779950802634,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: translink-cli\nVersion: 1.0.1\n\nThe skill bundle is designed to interact with a local CLI tool (`translink_*` commands). It is classified as suspicious due to two main reasons: 1) The `SKILL.md` references a GitHub repository URL (`https://github.com/alanburchill/traslink-cli-scripts`) with a typo (`traslink` instead of `translink`), which represents a typosquatting supply chain risk. While the agent is instructed to 'stop and ask the user to install it first', this is still a significant vulnerability if the user or agent misinterprets the instruction. 2) The skill describes CLI commands with numerous parameters (e.g., `--where field=value`, `--contains field=text`) in `references/commands.md` and `SKILL.md`. If the AI agent constructs these commands by directly interpolating user input without proper sanitization, it could lead to shell injection vulnerabilities, allowing arbitrary command execution on the host system. These are vulnerabilities rather than explicit malicious intent within the skill bundle itself.",
+          "checkedAt": 1779166372150,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "3244399f9cecdb62ca47f234ceeac954901747d51de78253d9cd899c046061cd",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/3244399f9cecdb62ca47f234ceeac954901747d51de78253d9cd899c046061cd"
+    },
+    "slug": "translink-cli",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

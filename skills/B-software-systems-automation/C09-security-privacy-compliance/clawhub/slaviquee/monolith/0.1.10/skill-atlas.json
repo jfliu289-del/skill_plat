@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C09:token:secure",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C10:token:model",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "6a0ce4f647c022909783a95ac93eba7ffe96c00080bcf8b602f5c6f24edaabf2",
+    "content_hash": "96020b1291a62428befd44d2afe149a921443fae2d67bd529496649995e59b25",
+    "precanonical_content_hash": "af2fd273f15b9a2e5025d64c62d8ef9485d463fb3030a3c4dd396dcc59ec68dc",
+    "skill_md_hash": "59ce5883c499e3250658b1f25d6f0ebb6a3a5a14ae0d84dba7aec6c88d43483e",
+    "version_metadata_sha256": "16e7f5e440e89686851731c8f72265f31dbd9cc79e5a90acc2e412576bbcc4df"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/slaviquee/skills/monolith",
+    "claim_id": "14563cd431759303299637449990381020bcb8eccce48f67f03ed93c894fcdad",
+    "index_entries": [
+      {
+        "index_path": "categories/apple-apps-and-services.md",
+        "label": "monolith",
+        "url": "https://clawskills.sh/skills/slaviquee-monolith"
+      }
+    ],
+    "owner_handle": "slaviquee",
+    "owner_id": "s175qbbppv9bsg2tre6pyrm4ch885k9e",
+    "published_at": 1772011871965,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779933414802,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779933414802,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The skill is explicitly a crypto wallet for AI agents and its send, swap, setup, policy, allowlist, status, balance, and audit commands match that stated purpose; value transfer is high impact but not hidden.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The documentation clearly says in-policy transfers and swaps can run on autopilot, while out-of-policy transactions, unknown calldata, token approvals, policy updates, and allowlist changes are routed through daemon-enforced approval flows.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation requires separate macOS daemon and companion downloads, including an admin/root daemon package, and this is disclosed in the metadata and setup instructions; the skill code itself does not auto-install or auto-start them.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Use of a local Unix socket, public Ethereum/Base RPC endpoints, ENS lookup, and Uniswap quote API is proportionate for a wallet skill that builds and submits transaction intents.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "Persistent/high-privilege behavior appears delegated to the separately installed local daemon; the skill only checks files, prints manual launch commands, and calls daemon endpoints, with no artifact evidence of secret extraction, hidden persistence, or destructive local file actions.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The autopilot concern is real financial risk, but the artifact explicitly documents automatic execution within spending limits and allowlists, making it disclosed and purpose-aligned rather than hidden behavior.\n[SQP-2] expected: The daemon client exposes signing, panic, policy, allowlist, setup, and deploy endpoints, but this is the declared local daemon integration model; the artifacts state privileged enforcement and approvals are handled by the daemon.\n[SQP-2] expected: The wallet deployment helper can trigger an on-chain setup action when the setup script is invoked with the deploy action, but it is not run automatically during status checks and fits the wallet setup workflow.",
+          "guidance": "Install only if you understand that an AI agent may move crypto assets automatically within the policy you configure. Use conservative caps and allowlists, verify the downloaded macOS daemon/companion source, keep the audit log enabled, and avoid funding the wallet with more value than you are comfortable exposing to automated policy-based actions.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed crypto-wallet skill that can move funds within configured policy limits, so users should treat it carefully but the artifacts are coherent with that purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779933364169,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: monolith\nVersion: 0.1.10\n\nThe skill implements a robust security model where the 'untrusted' skill only builds transaction intents, and a separate, trusted, local macOS daemon enforces policy and handles signing with human approval (Touch ID). The code in `lib/intent-builder.js` and `scripts/*.js` adheres to this by communicating with the daemon via a Unix socket (`lib/daemon-client.js`) and making read-only network calls to legitimate public RPCs and the Uniswap API. Crucially, `lib/runtime-bootstrap.js` explicitly avoids automatic execution of system commands for installation or persistence, instead providing manual instructions. There is no evidence of data exfiltration, unauthorized execution, persistence mechanisms, or prompt injection attempts against the agent.",
+          "checkedAt": 1779165437378,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "67336041eeca27bb2da757e1980bd3f6cba0f529ce785aaabf53bf2127e22c00",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/67336041eeca27bb2da757e1980bd3f6cba0f529ce785aaabf53bf2127e22c00"
+    },
+    "slug": "monolith",
+    "source_type": "clawhub",
+    "version": "0.1.10"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

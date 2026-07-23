@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.75,
+    "domains": [
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:phrase:web search",
+      "category:C01:token:research",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C13:token:operations",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create",
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "bbe1656eafc6232c825ffa270a1142012a9b7b281fb86884b19868c0e4fdbd13",
+    "content_hash": "a7bbcf08d9fe7b4f175499192478f58987e8bf96cd788e229025e363d21ac907",
+    "precanonical_content_hash": "525677da4eb697ef690a97d055287a000d0fd347260b88f71621703522db7ada",
+    "skill_md_hash": "1819dbe0a7b57aa7e5b1b27188b01562cf2f59d806cfd6fd43a43223b04cfd17",
+    "version_metadata_sha256": "84b9d0093aad5619f918a69bc588ce548088aee65bec89aae13c4d7c8e339025"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/smile-xuc/skills/haibo-jina-reader",
+    "claim_id": "27e41eaf46d75f9bcc2c7b712a41cbe045bf9d7f3ded28462ae0dfafdf298d88",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "haibo-jina-reader",
+        "url": "https://clawskills.sh/skills/smile-xuc-haibo-jina-reader"
+      }
+    ],
+    "owner_handle": "smile-xuc",
+    "owner_id": "s175fqvaq1g8g5aany22ra7wj988572k",
+    "published_at": 1770748110858,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967849814,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967849814,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The described behavior of fetching readable web content through Jina Reader fits the skill name and purpose; network access and script execution are expected for that function.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The supplied scanner context indicates the documentation may not clearly warn that URLs are relayed to a third-party Jina service, which is important for sensitive or internal URLs.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No evidence was provided of deceptive install steps, hidden package installation, persistence setup, or startup hooks.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "External fetches and optional local file output are proportionate to a reader/export tool, but they require user judgment because URLs may contain secrets and output paths may affect local files.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No artifact-backed evidence shows credential harvesting, privilege escalation, background execution, or persistent modification of the environment.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: Network access, shell/script use, and optional file output are coherent for this type of utility, though clearer permission and privacy disclosure would improve user consent.\n[SQP-2] expected: Sending target URLs to r.jina.ai is expected for a Jina Reader integration, but users should avoid internal links, tokens in query strings, pre-signed URLs, and confidential documents.\n[VirusTotal code_insight] unexpected: The telemetry reports possible shell-injection and path-traversal vulnerabilities, but no artifact text was available in the workspace to independently validate those claims; this is treated as cautionary signal rather than proof of malicious intent.",
+          "guidance": "Install only if you are comfortable sending requested URLs to Jina's external reader service. Do not use it on private, authenticated, internal, token-bearing, or pre-signed URLs, and be deliberate with any output-file option so it does not overwrite important local files.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This appears to be a purpose-aligned Jina Reader helper, but users should treat submitted URLs and optional output paths carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967817173,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: haibo-jina-reader\nVersion: 1.0.0\n\nThe skill bundle is classified as suspicious due to two significant vulnerabilities. The `scripts/jina-reader.sh` script is vulnerable to shell injection, as the user-provided URL is directly embedded into the `JINA_API` string without proper sanitization before being passed to `curl`, potentially allowing arbitrary command execution. Additionally, the `scripts/jina-reader.py` script has a path traversal vulnerability in its file output functionality (`-o` argument), allowing an attacker to write extracted content to arbitrary file paths on the system by using `../` sequences in the output filename. While these are severe flaws, there is no clear evidence of intentional malicious behavior (e.g., data exfiltration, backdoor installation) by the skill's author, classifying them as vulnerabilities rather than direct malice.",
+          "checkedAt": 1779162929305,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "56dd5be1ffc4f6d86b58d3bfa7a5d4407fadd57d0e010eb7324f4455bae5f689",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/56dd5be1ffc4f6d86b58d3bfa7a5d4407fadd57d0e010eb7324f4455bae5f689"
+    },
+    "slug": "haibo-jina-reader",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,154 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "website"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C06:token:api",
+      "category:C08:token:git",
+      "category:C08:token:github",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C18:token:health",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00",
+      "C06",
+      "C09",
+      "C10",
+      "C18"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "build",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "105e1b7bd0d8716ac63cb40abd4ba2d46f84bed91282213a5372bfe24cb85e3e",
+    "content_hash": "e8c6531f9526ac394050948a37a99d930fd5d2a4732ec1b1916be02e8afd265b",
+    "precanonical_content_hash": "b6036a319e0fdc291883d73eed5700cc0beaa5a43df0f9c9b05edf2397c809c8",
+    "skill_md_hash": "ed6b5c615219197703444d828cf51d606b0d408ec8c6bd49dec2b43b6e7fc5ed",
+    "version_metadata_sha256": "2f763e96003e27c3b68cc78204487ba09ff8a3188228eaaf5c1bc628316abd2c"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/compass-soul/skills/agent-safety",
+    "claim_id": "6e37fa1ee300f711a86bbd7d0097663c28039ca3590101bf1c6efcd98d550015",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "agent-safety",
+        "url": "https://clawskills.sh/skills/compass-soul-agent-safety"
+      }
+    ],
+    "owner_handle": "compass-soul",
+    "owner_id": "s171apx7326hy8m6m3sc2qdwv9885ced",
+    "published_at": 1771200025580,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968987028,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968987028,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The SKILL.md and README describe pre-publish scanning, Git pre-commit enforcement, and periodic health checks, and the scripts implement those functions without credential theft, exfiltration, destructive actions, or hidden unrelated capabilities.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill encourages broad use on every repo and before any external publish action, but those instructions are visible and aligned with its stated guardrail purpose.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Normal use requires running shell scripts, and install-hook.sh writes a .git/hooks/pre-commit hook in the chosen repository. This is disclosed, though it can replace an existing hook without an explicit backup step.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The scanner reads files under the user-supplied target path, and the health check reads local OpenClaw workspace size/count information plus local system status. The npm and macOS update checks add limited outbound/update-query behavior that is related to health checking but should be clearer to users.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The persistent behavior is limited to a repository-local pre-commit hook that can block commits and can be bypassed with --no-verify or removed; no elevated privileges or credential/session stores are requested.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Shell execution is central to this skill's documented scanners and hook installer. The lack of a formal permissions declaration is a transparency limitation, not evidence of hidden behavior in the artifacts.\n[TP4] expected: The health-check capability is not hidden: SKILL.md and README explicitly mention disk, workspace, software version/update, firewall, and SIP checks. This broadens the skill beyond commit scanning, but it is disclosed as part of the package.\n[SDI-1] expected: The AI model and OpenClaw version checks are part of the documented health-check workflow. The npm lookup is a limited update query, not shown collecting or transmitting local secrets.\n[SDI-1] expected: The OS update, firewall, and SIP checks match the documented system health/security checks. They print local status, so users should avoid sharing logs blindly, but the artifact does not show exfiltration.\n[SDI-2] expected: The npm registry lookup is real outbound network activity and would be better made explicit or optional, but it is limited to checking the latest OpenClaw version and does not by itself support a Review or malicious verdict.\n[SQP-2] unexpected: The artifacts do not clearly warn that health-check.sh may contact npm or Apple's update service. This is an under-disclosure issue suitable for user guidance, not a basis for escalation on its own.",
+          "guidance": "Install this only if you want local shell-based scanning and a repository pre-commit hook that can block commits. Run scans only on files or repos you intend to publish, check whether an existing pre-commit hook would be overwritten, and treat health-check output as local security/workspace information that should not be shared casually.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed local safety-scanning skill with a Git hook and health-check script; it has workflow and privacy considerations but no artifact-backed malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968948552,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 91,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: agent-safety\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle is designed for agent safety, providing tools to scan for secrets, PII, and malicious patterns before publishing or committing. The `SKILL.md` and `README.md` clearly state this defensive purpose, and do not contain any prompt injection attempts with malicious intent. The `health-check.sh` script performs legitimate system monitoring, including checking for software updates via external network calls (npm, softwareupdate), without exfiltrating sensitive data. The `install-hook.sh` script installs a git pre-commit hook that uses `pre-publish-scan.sh` to analyze staged content for security issues. The `pre-publish-scan.sh` script is a defensive tool that actively detects and blocks patterns indicative of data exfiltration (e.g., `webhook.site`, `ngrok.io`), reverse shells (`/dev/tcp/`), bulk environment variable harvesting, and sensitive file access (`/etc/passwd`, `~/.ssh`), rather than performing these actions itself. All observed behaviors align with the stated purpose of enhancing security and preventing accidental data leaks.",
+          "checkedAt": 1779164408883,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "4999d4d2644385a25b6f070f3b3f5ddf3756da944e83db7bad0c9c51509e1832",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4999d4d2644385a25b6f070f3b3f5ddf3756da944e83db7bad0c9c51509e1832"
+    },
+    "slug": "agent-safety",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

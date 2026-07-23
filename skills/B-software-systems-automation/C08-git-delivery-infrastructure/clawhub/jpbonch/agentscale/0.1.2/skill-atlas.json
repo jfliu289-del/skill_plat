@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "configuration"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "infrastructure",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C08:token:deploy",
+      "category:C11:token:project",
+      "cross-tag:deployment",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C11"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "deploy",
+      "operate"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "249662da55935472dad0caa97629652ab68702fbdf866a4741e3bf713ccba847",
+    "content_hash": "2ddec834f70d8d0a864f645577c5b7d1a1050fadda73ab3a9b7a5bfe30379588",
+    "precanonical_content_hash": "1ca009e0856097f9ba65f5a051dada16ef1bc8628522d0851eee152af6526d96",
+    "skill_md_hash": "f67703f63fffd3a8182be706ae3788d63cce853722a08e225aa220ae48483706",
+    "version_metadata_sha256": "6fe8c7a38d37e056f31f3b32e373fe6faaf5392617383ae600363cad68062936"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jpbonch/skills/agentscale",
+    "claim_id": "cb6e7c0a55fffc38454508ac2e5ac53ad659b2735284a28ba4ecd765e6fb9165",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "agentscale",
+        "url": "https://clawskills.sh/skills/jpbonch-agentscale"
+      }
+    ],
+    "owner_handle": "jpbonch",
+    "owner_id": "s1715fxz9nqg82afb1gqz9j2pn884sak",
+    "published_at": 1771391774018,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779920549402,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779920549402,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The commands match the stated hosting purpose: register for an API key, package and deploy the current directory, list services, and show account status.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill documents that deploy packages the current directory and warns that AGENTSCALE_API_URL redirects API calls, but users should still treat deploy as an external code upload.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The documented workflow uses npx and the local tar tool; there are no postinstall hooks or hidden install-time execution in the package metadata reviewed.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access, tar packaging, and an API endpoint override are proportionate for a deployment CLI; the override is sensitive because it can redirect API-key-bearing requests.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists only an AgentScale API key in ~/.agentscale/config.json with restrictive file permissions and does not install background workers or request elevated privileges.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Network and environment-variable use are expected for this deployment tool and are described in SKILL.md, though the frontmatter only declares tar.\n[TP4] expected: Registration, saved API keys, service listing, account status, and optional credits are hosting lifecycle functions and are disclosed rather than hidden.\n[SQP-2] expected: Uploading the current project is central to deployment and is stated in the docs; users still need to verify the directory contents before running deploy.\n[E1] expected: Sending the API key and project archive to the AgentScale API is expected; the documented AGENTSCALE_API_URL override is the main sensitive configuration risk.\n[VirusTotal code_insight] expected: The telemetry concern about AGENTSCALE_API_URL is valid as a caution, but the behavior is explicitly documented and not evidence of hidden exfiltration by itself.",
+          "guidance": "Install only if you trust AgentScale and the npm package source. Run deploy from the intended project directory, review files for secrets first, keep AGENTSCALE_API_URL unset unless you deliberately trust the alternate endpoint, and require explicit approval before using any payment or credits command.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent deployment tool, but using it will upload your project and use a locally stored API key.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779920491235,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 71,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: agentscale\nVersion: 0.1.2\n\nThe skill is classified as suspicious due to a critical vulnerability related to the `AGENTSCALE_API_URL` environment variable. As documented in `SKILL.md` and implemented in `src/config.ts`, this variable allows overriding the default API endpoint. All API calls, including those transmitting the user's `x-api-key` and the project tarball (from `src/commands/deploy.ts`), would be redirected to this arbitrary, user-defined URL. While the `SKILL.md` includes a warning about this, it presents a significant risk for API key and data exfiltration if an attacker can manipulate this environment variable, even though the code itself does not exhibit direct malicious intent.",
+          "checkedAt": 1779165028289,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "24f72e823d55cc6f9588567bd2d9b1170bd5e6e299e1e22badda6142dda5716d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/24f72e823d55cc6f9588567bd2d9b1170bd5e6e299e1e22badda6142dda5716d"
+    },
+    "slug": "agentscale",
+    "source_type": "clawhub",
+    "version": "0.1.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

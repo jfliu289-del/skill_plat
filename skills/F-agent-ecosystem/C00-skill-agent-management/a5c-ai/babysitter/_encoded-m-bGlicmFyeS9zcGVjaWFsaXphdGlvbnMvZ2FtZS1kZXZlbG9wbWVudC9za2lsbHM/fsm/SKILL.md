@@ -1,0 +1,21 @@
+---
+name: fsm
+description: Finite State Machine skill for hierarchical FSM and state transitions.
+allowed-tools: Read, Grep, Write, Bash, Edit, Glob, WebFetch
+graph:
+  domains: [domain:gaming]
+  specializations: [specialization:game-development]
+  skillAreas: [skill-area:game-ai-pathfinding, skill-area:gameplay-programming]
+  roles: [role:game-developer]
+---
+
+# FSM Skill
+
+Finite State Machine design for game AI.
+
+## Capabilities
+
+- State machine design
+- Hierarchical FSM
+- State transitions
+- Event handling

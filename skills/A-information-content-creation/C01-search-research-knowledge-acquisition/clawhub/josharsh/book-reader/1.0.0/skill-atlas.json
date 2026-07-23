@@ -1,0 +1,154 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.3583,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:find",
+      "category:C01:token:search",
+      "category:C01:token:sources",
+      "category:C03:token:pdf",
+      "category:C09:token:privacy",
+      "category:C10:token:ai",
+      "category:C11:token:project",
+      "category:C16:token:learning",
+      "category:C17:token:knowledge",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C03",
+      "C09",
+      "C10",
+      "C11",
+      "C16",
+      "C17"
+    ],
+    "stages": [
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "6695ba0fd25fff890085752be8677532021c82ab33f25c6d8223c34cd7f483e6",
+    "content_hash": "93dd07ad2752ec0e085204259c0199a76706eaad073f0465890229d05365ab98",
+    "skill_md_hash": "984bb9b36e34cd7e9ff3e81757e42ed9bb59707eb26b34753e4951d41f0e5747",
+    "version_metadata_sha256": "762fa977c56ab15ca6da1f024c8c50df0df821654e780607ccd76fe794637658"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/josharsh/skills/book-reader",
+    "claim_id": "a8d842b95112a48ffc54c3a3a03de96249e74d3a254245f746524c5b3651311e",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "book-reader",
+        "url": "https://clawskills.sh/skills/josharsh-book-reader"
+      },
+      {
+        "index_path": "categories/pdf-and-documents.md",
+        "label": "book-reader",
+        "url": "https://clawskills.sh/skills/josharsh-book-reader"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "josharsh",
+    "owner_id": "s17dte68yes1a0xgwnr1px0e5h884m16",
+    "published_at": 1771072135173,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779966785764,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779966785764,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe reading, downloading, converting, and tracking progress for EPUB, PDF, and text books; the shell script implements those same capabilities without unrelated credential access, exfiltration, destructive actions, or hidden execution.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script accepts caller-provided book sources and output paths, including direct URLs and explicit destination files; that fits a downloader but requires the agent/user to avoid sensitive system paths and untrusted URLs.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation guidance asks the user to install common tools such as pandoc, poppler-utils, and Python packages; there is no automatic installer or bundled package execution beyond the provided shell script.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to Gutendex/Project Gutenberg and local reads of user-specified book files are proportionate to the purpose, and the Anna's Archive references are disclosed as legally sensitive rather than hidden.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill creates a books directory and persists reading progress under the OpenClaw workspace; it does not install background services, request credentials, escalate privileges, or establish persistence outside normal saved state.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code_insight: caller-controlled download output path] expected: Confirmed: download_book writes to an optional caller-supplied path. This is a real capability but is disclosed and purpose-aligned for saving downloaded books, so it is guidance-level rather than a Review verdict by itself.\n[VirusTotal code_insight: Anna's Archive legal/ethical risk] expected: Confirmed: the docs mention Anna's Archive and warn about jurisdiction and copyright. The script itself only automates Gutendex/Project Gutenberg and direct URL downloads, so this is a source-selection caution rather than malicious behavior.\n[SkillSpector clean] expected: SkillSpector reported no issues; independent artifact review did not find hidden behavior or purpose-mismatched authority.\n[Static scan clean] expected: The platform static scan reported no suspicious patterns, consistent with the inspected files.",
+          "guidance": "Install only if you are comfortable with a skill that can download files, read local book files you point it at, and save reading progress. Keep downloads inside the OpenClaw workspace or another non-sensitive books folder, review any direct URL before using it, and check copyright/local-law issues for non-public-domain sources.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed book downloader and reader with normal local file and progress-tracking behavior, though users should choose download paths and sources carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779966739849,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: book-reader\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to the `download_book` function in `book-reader.sh` allowing the agent to specify an arbitrary output file path for downloaded content. While the script itself does not exhibit malicious intent, this capability, if exploited via prompt injection against the AI agent, could lead to arbitrary file writes to sensitive locations (e.g., `/etc/cron.d/`, `~/.ssh/authorized_keys`), potentially enabling persistence, privilege escalation, or remote code execution. The `SKILL.md` and `README.md` also mention Anna's Archive, a 'shadow library' with legal gray areas, which, while not a code vulnerability, introduces an ethical/legal risk for the agent's operation.",
+          "checkedAt": 1779163973662,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "33c97a0e8b2b0bce8f4d7b48233af94acdd71512555f586813a73e62f23632cd",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/33c97a0e8b2b0bce8f4d7b48233af94acdd71512555f586813a73e62f23632cd"
+    },
+    "slug": "book-reader",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

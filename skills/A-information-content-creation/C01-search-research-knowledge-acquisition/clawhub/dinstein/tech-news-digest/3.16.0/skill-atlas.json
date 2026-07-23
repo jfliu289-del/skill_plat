@@ -1,0 +1,166 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.57,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C01:phrase:web search",
+      "category:C01:token:search",
+      "category:C01:token:sources",
+      "category:C03:token:pdf",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C07:token:debug",
+      "category:C07:token:quality",
+      "category:C07:token:test",
+      "category:C08:token:github",
+      "category:C09:token:security",
+      "category:C10:token:model",
+      "category:C12:token:management",
+      "category:C13:token:operations",
+      "category:C17:token:notes",
+      "category:C18:token:health",
+      "cross-tag:data-analysis",
+      "cross-tag:debugging",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "cross-tag:testing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C07"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "debug",
+      "research",
+      "secure",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "041fd92437e859b6875ed9e4f5dbcec4af25e80aec225202fbdc008f049690c3",
+    "content_hash": "5799f6bd7422df9d4f2dbcca00c8fed2336c78f7c9565aea1d361adf229ef3a9",
+    "precanonical_content_hash": "0c76b268ad22f95d09293c54a517dbb5e730aaffd2e5c12e0d9b87f9fc734f7d",
+    "skill_md_hash": "08006997c6f2a805fc7a9cc4da3caf471a2ac8016e86e5ddbcd0542ec1076a56",
+    "version_metadata_sha256": "90da0a83cdb70422fb26e0f46712fb1b544d4ca5caf43158bf43f485fec23533"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/dinstein/skills/tech-news-digest",
+    "claim_id": "c5edbdc4a7007b0878cb64cba14c6bd002c46cfe855d97a01f4c543578ddd886",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "tech-news-digest",
+        "url": "https://clawskills.sh/skills/dinstein-tech-news-digest"
+      }
+    ],
+    "owner_handle": "dinstein",
+    "owner_id": "s17b4tqstw4mskfqf2pwt634b183jtng",
+    "published_at": 1774512912548,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968237681,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968237681,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The network fetching, scoring, archiving, PDF/email generation, and Discord/email delivery all fit the stated news-digest purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are mostly scoped by explicit placeholders, but delivery and 90-day archive cleanup are automatic once configured and should be reviewed before scheduling.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts do not install packages automatically; they declare Python as required and list optional tools/dependencies for enhanced output and delivery.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use of API keys, GitHub App key files, and optional local gh CLI credentials is purpose-aligned for rate limits and integrations, but it is higher authority than a purely public fetcher.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to workspace archives and temporary/cache files, with scheduled delivery initiated by the user or platform; no hidden background worker or privilege escalation was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Broad network/file/env/tool access is consistent with a multi-source digest workflow and is partly declared in metadata, though a clearer permissions summary would help users.\n[SDI-4] expected: Reading GH_APP_KEY_FILE is documented as part of optional GitHub App auth, but the blanket statement that no files outside the workspace are accessed is inaccurate.\n[SDI-4] expected: Fetching article URLs during enrichment is expected for full-text enrichment, but the network notes understate this arbitrary article-domain egress.\n[SDI-2] expected: GitHub App token generation and gh CLI fallback are documented and used for GitHub API rate limits; they are not used for unrelated mutation or exfiltration.\n[SQP-2] expected: Conversational installation, configuration, scheduling, and delivery are central to the advertised workflow, but users should confirm destinations and cadence.\n[SQP-2] expected: Discord and Telegram delivery examples match the product purpose; the privacy implications of posting digest content to third-party services should be clearer.\n[SQP-2] expected: The Chinese README describes credentials and delivery without much privacy context, but the behavior remains consistent with the integration purpose.\n[SQP-2] expected: Deleting archive files older than 90 days is limited to the configured tech-news-digest archive path, so it is scoped but should be understood before use.\n[SQP-2] expected: Email delivery sends the generated digest and optional PDF to configured recipients; this is expected but should only be used with approved content and recipients.\n[SQP-2] expected: Discord template delivery to a channel or DM is purpose-aligned, but users should verify the target identifier.\n[SQP-2] expected: The Gmail/email template is an external delivery path for generated digest content; no evidence shows credential theft or unrelated data transfer.",
+          "guidance": "Before installing, review any configured sources, tokens, GitHub App key path, delivery recipients, and schedule. Use least-privilege API credentials, avoid enabling gh CLI fallback if you do not want the skill to use your local GitHub session, and confirm that archived digest cleanup and external delivery match your expectations.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent tech-news digest tool, but users should understand that it fetches many external sources, can use configured credentials, archives reports, and can deliver digests to third-party channels.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968183318,
+          "issueCount": 11,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: tech-news-digest\nVersion: 3.16.0\n\nThe tech-news-digest skill bundle is a well-structured and documented news aggregation system. It uses a series of Python scripts to fetch, merge, and score data from RSS feeds, Twitter/X, GitHub, Reddit, and web search APIs. While the scripts utilize high-risk capabilities such as shell execution (via subprocess for orchestration and email delivery) and extensive network access, these actions are strictly aligned with the stated purpose. The code demonstrates security awareness by including input sanitization (e.g., URL scheme validation in fetch-rss.py), explicit instructions to the agent to avoid shell interpolation of untrusted content (in digest-prompt.md), and the use of temporary files for sensitive operations like PDF generation and email construction.",
+          "checkedAt": 1779164247450,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "f8919b7f8d881f33c67be8a2b702e0b9330da3a895bdda9831e940f8f9ce57d3",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/f8919b7f8d881f33c67be8a2b702e0b9330da3a895bdda9831e940f8f9ce57d3"
+    },
+    "slug": "tech-news-digest",
+    "source_type": "clawhub",
+    "version": "3.16.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

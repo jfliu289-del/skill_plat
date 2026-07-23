@@ -1,0 +1,153 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "business",
+      "developer",
+      "marketer",
+      "security-professional"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "business",
+      "marketing",
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C02:token:communication",
+      "category:C06:token:api",
+      "category:C09:token:privacy",
+      "category:C09:token:security",
+      "category:C12:token:decision",
+      "category:C12:token:management",
+      "category:C14:token:sales",
+      "cross-tag:marketing-sales",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C06",
+      "C12",
+      "C14"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "market",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a1cbf2c9a5a0d9d83b38d025027fb8e9428a49356201e2bcd5dc444c662fd5a2",
+    "content_hash": "e23998397f5566198f12adc07f9a2918ce6c79bd2008e91b4c4a85d8d08a96df",
+    "precanonical_content_hash": "ab6ad7a25cc2a34f785c8300bf7d94e894817d2cbb0008c6bf1f6759684271d3",
+    "skill_md_hash": "ada0ba95e3f9d09f391334164bf88b3ec00b43b5bf66b39b669a6a07d4225336",
+    "version_metadata_sha256": "9533efc90954fbcffc23ccef8a8148acddbab23537ba41b3ffb3cf610012c032"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tomc98/skills/sophiie",
+    "claim_id": "d8ffdcf1fe6887d8a2965b3920347fe1ac0783a6eb3ad2831063eab6a1fce03e",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "sophiie",
+        "url": "https://clawskills.sh/skills/tomc98-sophiie"
+      }
+    ],
+    "owner_handle": "tomc98",
+    "owner_id": "s17c28f90r8santtaanwt43zps8847x7",
+    "published_at": 1771395667351,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779920600238,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779920600238,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifacts: managing Sophiie leads, inquiries, appointments, FAQs, policies, members, SMS, and calls through the Sophiie REST API. Those capabilities include real business-data mutations and outbound communications, but they are disclosed and purpose-aligned.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands are scoped to Sophiie resources and the documentation requires confirmation before deletes and outbound calls. SMS and create/update operations would benefit from similarly explicit confirmation guidance, but the actions are not hidden or unrelated.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains Markdown instructions and a single shell script requiring curl, jq, and SOPHIIE_API_KEY. No installer hooks, package downloads, or hidden setup actions are present.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use of SOPHIIE_API_KEY is proportionate for a Sophiie integration, and requests go to https://api.sophiie.ai. The key may grant access to customer and business data, so users should prefer scoped or test credentials when available.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts show no local caching, background workers, persistence, privilege escalation, credential-store access, or protected-path writes. The script reads the API key from the environment and sends direct HTTPS API requests.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The README does advertise SMS, calls, and record create/update/delete operations. These are high-impact live actions, but they are consistent with a sales-pipeline management skill and are visible in the docs.\n[SQP-1] expected: The invocation examples are broad business commands such as showing leads, calling, and texting. That can increase accidental-use risk, but the scope remains Sophiie pipeline management rather than an unrelated capability.\n[SQP-2] expected: SMS sending is documented as a supported command. The documentation should ideally require confirmation of recipient and message content, but the capability is disclosed and not deceptive.",
+          "guidance": "Install only if you intend your agent to manage a live Sophiie account. Use a test or least-privileged API key where possible, and require explicit confirmation before sending SMS or calls, deleting records, or changing customer-facing FAQs and policies.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a clear Sophiie API wrapper that can manage CRM data and send calls or SMS, so it is powerful but not deceptive.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779920555050,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: sophiie\nVersion: 0.0.3\n\nThe skill bundle is benign. The `scripts/sophiie.sh` script correctly sanitizes all user-provided input for JSON payloads using `jq -n --arg`, preventing JSON injection vulnerabilities. All network requests are directed to the legitimate `https://api.sophiie.ai` endpoint, and the `SOPHIIE_API_KEY` is handled appropriately for authentication without being logged or exfiltrated. The `SKILL.md` instructions for the AI agent are clear, promote user confirmation for destructive actions, and do not contain any prompt injection attempts to manipulate the agent into malicious behavior.",
+          "checkedAt": 1779165045843,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "718a4e439af241b1a91d01d681c3e2a28e18850ac00ebcf7754a83dd0bab5086",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/718a4e439af241b1a91d01d681c3e2a28e18850ac00ebcf7754a83dd0bab5086"
+    },
+    "slug": "sophiie",
+    "source_type": "clawhub",
+    "version": "0.0.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

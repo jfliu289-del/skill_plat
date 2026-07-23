@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.625,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C02:token:edit",
+      "category:C05:phrase:image generation",
+      "category:C05:token:image",
+      "category:C06:token:api",
+      "cross-tag:design",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C02",
+      "C06"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "08d7093526d814be1e630c07f6f0ee575a40c3b487c625ad6727790e0197ca59",
+    "content_hash": "5dd02badff36d5fd0df7e3fd994761a62553b188ff827a041f0589db32818a1c",
+    "precanonical_content_hash": "10d4a5a826418046f7f21b5e698db4bc0422999f567648f1e76c95e064d83158",
+    "skill_md_hash": "4ea88f4b0e9577e22fb68111fb2efcacb3f5c034dee3f8f6f8aeabaa96a7988b",
+    "version_metadata_sha256": "9463a720e9e70a89f6d2ebae8a9ff0383177df384113d971e8085fc37b570d89"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/namebekc/skills/my-nano-image",
+    "claim_id": "4d6d14869f4293238d860654dc2a16f54a32c5cb20e6987e9f5af01383558bca",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "my-nano-image",
+        "url": "https://clawskills.sh/skills/namebekc-my-nano-image"
+      }
+    ],
+    "owner_handle": "namebekc",
+    "owner_id": "s175tvv3e6wbrafpxy24zpgygx884q09",
+    "published_at": 1771092936654,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967073228,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967073228,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe generating or editing images with Google's Gemini/Nano Banana Pro image API, and the script implements that purpose without unrelated behavior.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill runs a local Python script, reads an optional user-selected input image, sends the prompt and image to Google's API, and writes a PNG to the requested path; this is purpose-aligned but users should choose paths carefully.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The script uses uv inline Python dependencies for google-genai and Pillow. This is disclosed in the script, but runtime dependency resolution is less reproducible than pinned installs.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "A Gemini API key is required and may be supplied by command-line argument or GEMINI_API_KEY. This is expected for the integration, but command-line keys can be exposed in shell history or process listings.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background worker, credential storage, privilege escalation, hidden network endpoint, destructive behavior, or self-modification was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The skill documents use of GEMINI_API_KEY in SKILL.md and the script only reads that specific environment variable; metadata under-declaration is a transparency note, not a material policy concern.\n[SQP-2] expected: The command-line API key option is a real handling weakness, but it is not hidden and is directly tied to the Gemini API integration; users should prefer GEMINI_API_KEY.\n[SQP-2] expected: Prompts and optional input images are sent to Google's Gemini API, which is the core function of the skill and is described as using Google's API, though a clearer privacy warning would improve disclosure.\n[SQP-2] expected: The point-of-transmission code sends only the prompt and optional input image to the configured Google GenAI client for image generation/editing; no unrelated exfiltration path was identified.",
+          "guidance": "Install only if you are comfortable sending prompts and selected input images to Google's Gemini API. Use GEMINI_API_KEY instead of pasting an API key into chat or command arguments, and avoid using confidential images or output filenames that could overwrite important files.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward Gemini image generation/editing helper, but users should avoid sensitive images and prefer environment variables for API keys.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967048988,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: my-nano-image\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to potential vulnerabilities related to file system access. The `generate_image.py` script processes user-controlled paths for both input (`--input-image`) and output (`--filename`). This introduces a risk of path traversal, allowing an attacker (or a prompt-injected agent) to read or write files outside the intended directory. Additionally, the script sends user-provided image data to Google's GenAI API, which, while intended functionality, could lead to unintended exposure of sensitive images if a user is tricked into providing them. There is no evidence of intentional malicious behavior like exfiltration to unauthorized endpoints or backdoor installation.",
+          "checkedAt": 1779164066211,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "08d7093526d814be1e630c07f6f0ee575a40c3b487c625ad6727790e0197ca59",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/08d7093526d814be1e630c07f6f0ee575a40c3b487c625ad6727790e0197ca59"
+    },
+    "slug": "my-nano-image",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

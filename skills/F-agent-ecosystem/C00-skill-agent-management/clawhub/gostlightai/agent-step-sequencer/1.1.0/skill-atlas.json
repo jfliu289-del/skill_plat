@@ -1,0 +1,132 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "cross-tag:agent-management",
+      "cross-tag:planning"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate",
+      "plan"
+    ],
+    "tasks": [
+      "manage",
+      "plan"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "90911e3d8a13923d3c2b5fbdbfe2806a413bf0788c474f1c00a0b3491731df80",
+    "content_hash": "2d833c7e3d8899f3a0eb2cf4af6a53b51841e0ad14f32ec74dfec2925e1fcec1",
+    "precanonical_content_hash": "658152a5f442379790d208c85f77390fa7ab3cfbee8c22f9be6783975da19c47",
+    "skill_md_hash": "3a1754e6175a5245a8111f437ba68dd761e0236388079d4a48b28543d33d3cd8",
+    "version_metadata_sha256": "917502bf3adf65355f89ed11aa0e2d8dead4e3d27d51fc22ae436802c5853223"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/gostlightai/skills/agent-step-sequencer",
+    "claim_id": "6249f26e0231c4180cb845b35cbfba7311327f5ea54b6873c690b51573733635",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "agent-step-sequencer",
+        "url": "https://clawskills.sh/skills/gostlightai-agent-step-sequencer"
+      },
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "agent-step-sequencer",
+        "url": "https://clawskills.sh/skills/gostlightai-agent-step-sequencer"
+      }
+    ],
+    "owner_handle": "gostlightai",
+    "owner_id": "s172g9xhvf9935ycqf0gaeh7gs83sav2",
+    "published_at": 1770759073965,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783656999390,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783656999390,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill can launch a configured agent command and continue approved steps autonomously, but that capability is central to the stated scheduler purpose and is documented throughout the artifacts.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill requires the agent to propose a plan and wait for confirmation before multi-step execution; after approval it may auto-advance and retry, so users should review sensitive plans carefully.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a normal ClawHub install or manual copy with Python declared; heartbeat wiring is documented as a manual integration and there is no hidden post-install execution.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use of Python, local state files, environment variables, and subprocess execution is proportionate for this scheduler; STEP_AGENT_CMD and optional STEP_RUNNER must be trusted local configuration.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists state.json and can resume from heartbeat, storing step status plus short stdout/error snippets; this is disclosed and bounded by the plan, retry limit, and DONE status.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[AST4] expected: The runner uses subprocess to invoke STEP_AGENT_CMD with shell=False; this is the core execution mechanism and is disclosed, with shell interpreters and common shell flags blocked.\n[LP3] expected: The artifacts disclose Python, STEP_AGENT_CMD, state writes, runner behavior, and heartbeat integration; the metadata also declares the required binary and environment variable.\n[TP4] expected: Autonomous execution, retries, output validation, heartbeat continuation, and state persistence are not hidden; they are the skill's documented purpose after user plan confirmation.\n[SDI-2] expected: STEP_RUNNER can override the runner path, which is a real local configuration trust risk, but it is documented as optional and requires control of the runtime environment.\n[SQP-1] expected: The activation rules are broad, but the skill instructs the agent to suggest the plan and wait for confirmation before entering the persisted workflow.\n[OH1] expected: Forwarding step instructions and retry errors to the configured agent is expected for a step scheduler; users should protect state.json from untrusted edits.",
+          "guidance": "Install this only if you want approved multi-step tasks to continue through heartbeat automation. Set STEP_AGENT_CMD and STEP_RUNNER only to trusted local commands or paths, review the generated plan before sensitive work, avoid placing secrets in step instructions, and disable the heartbeat or mark state DONE when automation should stop.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed local step scheduler that runs user-approved multi-step work through a configured agent and heartbeat.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783656958878,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: agent-step-sequencer\nVersion: 1.1.0\n\nThe OpenClaw AgentSkills skill bundle 'agent-step-sequencer' is classified as benign. The code and documentation demonstrate a strong focus on security, explicitly implementing and testing robust controls against command injection (e.g., blocking shell interpreters and flags in `STEP_AGENT_CMD`, using `shell=False` in `subprocess.run`) and path traversal (validating `requiredOutputs` against the workspace root). The `SKILL.md` instructions guide the AI agent on multi-step task orchestration and transparent error handling, without any malicious prompt injection attempts. The `CHANGELOG.md` further confirms that OpenClaw security scan findings were addressed, reinforcing the skill's secure design.",
+          "checkedAt": 1779162154549,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "ef551ca9b74abc6a12001dcf1fffc5988cc7622fb5a3fe331313abc28f463669",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ef551ca9b74abc6a12001dcf1fffc5988cc7622fb5a3fe331313abc28f463669"
+    },
+    "slug": "agent-step-sequencer",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,122 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:audio",
+      "category:C12:token:management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C12"
+    ],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "b9125bfd5c5aa90e088d1b127f0dd39c20a1f7f5c333d902f2bafac365c2af0a",
+    "content_hash": "d97b3f88a65e3671d71588b464bfa858ec61438c06b41c650b4e35bab2ceaeb7",
+    "precanonical_content_hash": "20232e2e2ec0e5c582ff192d89e29f848d833ada4c4bf4babfa088d5f9acc4d5",
+    "skill_md_hash": "a0850303bf48d9ab2c7016192e33c3b8f213f6c794d43d37183d5602d3234343",
+    "version_metadata_sha256": "00c0068445aebfa3814576e94ca7c8d82fc878407f7105f74d9923c4b2e29e8c"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/fourthdensity/skills/sam-tts",
+    "claim_id": "25ae5cd6efbd313764b5f8c829c2fd278508a9202ae279a5fb8e0ce943dd7f5c",
+    "index_entries": [
+      {
+        "index_path": "categories/productivity-and-tasks.md",
+        "label": "sam-tts",
+        "url": "https://clawskills.sh/skills/fourthdensity-sam-tts"
+      }
+    ],
+    "owner_handle": "fourthdensity",
+    "owner_id": "s174axsy12wyy9a9fpjb56kaps8853e5",
+    "published_at": 1770884385028,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971681966,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971681966,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is SAM-style text-to-speech, and the included Node scripts implement that by passing text into the sam-js library and writing WAV audio output.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The /sam on mode changes future responses into audio until /sam off is used, but that behavior is clearly documented and controlled by explicit chat commands.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses npm to fetch the purpose-aligned sam-js dependency pinned in package-lock; optional ffmpeg conversion is documented as requiring user confirmation.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime behavior is limited to local Node execution, generated audio files, and the declared state file; no credential access, network API calls, shell execution, or unrelated local data access was found.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill persists only memory/sam-mode.json for enabled state and voice parameters, which is disclosed and proportionate, though it can affect later responses until disabled.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[skillspector:no-issues] expected: SkillSpector reported no issues, and artifact review found the behavior coherent with the TTS purpose.\n[staticScan:clean] expected: Static scan context reported no suspicious patterns; reviewed file writes and npm dependency use are expected for generating audio.\n[virustotal:clean] expected: VirusTotal telemetry was clean, and its observation that text is processed as data by sam-js rather than executed as shell input matches the script implementation.",
+          "guidance": "Install this if you are comfortable adding the sam-js npm dependency and creating local audio files. Keep output paths to temporary or intended folders, and use /sam off or reset memory/sam-mode.json when you no longer want responses spoken as audio.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent offline text-to-speech skill that generates local WAV audio and stores a small user-controlled mode setting.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971650718,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: sam-tts\nVersion: 1.0.0\n\nThe skill provides text-to-speech functionality using the `sam-js` Node.js library. While the `SKILL.md` instructs the agent to pass user-provided text to a Node.js script (`scripts/sam-tts-wrapper.js`), the script itself processes this input as data via a JavaScript function call (`sam.buf8()`), not as a shell command. This design prevents shell injection vulnerabilities. The skill's file system access is limited to temporary WAV files in `/tmp` and its own state file (`memory/sam-mode.json`). The `SKILL.md` also explicitly instructs the agent to seek user consent before installing optional dependencies like `ffmpeg`, demonstrating good security practice. No evidence of data exfiltration, persistence, or other malicious intent was found.",
+          "checkedAt": 1779163418593,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "0f14503fc4d377d623f5028998c08e813407694a665fc7262e5c3a723c9b7a92",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0f14503fc4d377d623f5028998c08e813407694a665fc7262e5c3a723c9b7a92"
+    },
+    "slug": "sam-tts",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

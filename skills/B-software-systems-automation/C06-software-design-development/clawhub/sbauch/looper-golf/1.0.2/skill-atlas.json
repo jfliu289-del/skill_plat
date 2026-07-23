@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:code",
+      "category:C12:token:strategy",
+      "category:C17:token:resume",
+      "cross-tag:planning",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C12",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "plan"
+    ],
+    "tasks": [
+      "build",
+      "plan"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d989aec5a81b56ae014714910627e747417784a24bd61cdf47e67e7cafe1a82d",
+    "content_hash": "e2bd8dd182e7986c148f8339bf392316d8b0fdf0136bfe29616ca53417d5d45d",
+    "precanonical_content_hash": "fae124ec62106886da50df1b94c8c5020d2dc4789ff27c23b04ae681beae59c6",
+    "skill_md_hash": "11e34fb75e4aaccfc1818ba33a290361166c6704d4efb0906c91b5eaae757112",
+    "version_metadata_sha256": "54196f860c3888f924a107f19e7344092b2c61eafbd15c5cf00b8226ac777a96"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sbauch/skills/looper-golf",
+    "claim_id": "7dc1fa9ed50890d153382735097ccc69e5d03243cfadb7829ec528fc25cd6999",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "looper-golf",
+        "url": "https://clawskills.sh/skills/sbauch-looper-golf"
+      },
+      {
+        "index_path": "categories/self-hosted-and-automation.md",
+        "label": "looper-golf",
+        "url": "https://clawskills.sh/skills/sbauch-looper-golf"
+      }
+    ],
+    "owner_handle": "sbauch",
+    "owner_id": "s179q58vdpa3x525ma30kwfac9885e8g",
+    "published_at": 1771944011995,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968583848,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968583848,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The CLI capabilities match the stated purpose: registering a Looper agent, listing courses, resuming rounds, viewing holes, calculating bearings, submitting shots, viewing scorecards, and preparing round-start transaction data.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill includes autonomous play and per-hole subagent guidance, but it defaults to caddy mode, scopes subagents to one hole at a time, forbids parallel play, and keeps actions limited to game play.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no install script or package installation behavior; metadata only requires the node binary and the skill runs the bundled cli.js directly.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The CLI contacts https://api.playlooper.xyz and uses OPENCLAW_GOLF_BASE_DIR or the current directory to read and write its own agent.json file, which is proportionate for a remote game integration.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Registration persists agentId and apiKey in agent.json without explicit restrictive file permissions; prepare-round prints raw EVM calldata but does not submit transactions or access wallet credentials.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The network/API use and wallet-assisted transaction preparation are disclosed in the skill instructions and fit the remote golf-game purpose; the metadata could be more explicit, but this does not show hidden or unrelated authority.\n[SQP-2] expected: The skill states that registration saves credentials to agent.json, and the code writes the Looper agent ID/API key there; the missing stronger warning and file-permission hardening are user guidance issues rather than evidence of malicious behavior.\n[suspicious.env_credential_access] expected: The environment access is limited to choosing the agent.json base directory and optionally reading an invite code; no unrelated environment secrets or credential stores are read.",
+          "guidance": "Install only if you trust the Looper service. Keep agent.json private and out of shared folders or source control because it contains the game agent API key. If using prepare-round with a wallet skill, verify the to address, chainId 84532, and value 0 before submitting the transaction.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed golf-game CLI that contacts the Looper API, stores a game credential locally, and can prepare but not submit blockchain transaction data.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968556641,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: looper-golf\nVersion: 1.0.2\n\nThe skill bundle is designed for playing a golf game via CLI commands and interacting with a remote API. The `SKILL.md` provides clear instructions to the AI agent, including 'CRITICAL RULES' that explicitly forbid direct HTTP requests or `curl` calls, mitigating prompt injection risks for network exfiltration. The `cli.js` code handles arguments safely, without direct shell execution of user input, and includes robust path traversal protection for its state file. While the `cmdPrepareRound` command generates on-chain transaction data based on server-provided configuration (introducing a trust dependency on the game server), the `SKILL.md` explicitly warns the user to verify the transaction details before submission, indicating an awareness of this risk rather than malicious intent by the skill itself. No evidence of intentional data exfiltration, backdoors, or other malicious activities was found.",
+          "checkedAt": 1779163005385,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "79747a4cde60cd182b025530d4b30a79b27ae6becc2510fe806802c0b57b3f6e",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/79747a4cde60cd182b025530d4b30a79b27ae6becc2510fe806802c0b57b3f6e"
+    },
+    "slug": "looper-golf",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

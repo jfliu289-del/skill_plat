@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C05:token:image",
+      "category:C06:token:api",
+      "category:C06:token:developer",
+      "category:C19:token:device",
+      "cross-tag:design",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C05",
+      "C19"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d741cee7d00edc37b92a93291998f7c06a77fb08d4dc12b805eaf9d56472f5ef",
+    "content_hash": "fadb067e7bf9fd363230049c5dec7e80453d0132fa8154b66886042395a21aa8",
+    "precanonical_content_hash": "80cd8ed8df4a896ff14b5d01bd304879d1aa6a6bb2b2ea00ad478ae79180cbef",
+    "skill_md_hash": "de8913f2b35c59abe2cabcbaae7595dd014aa3464d78480cd798e105cd489593",
+    "version_metadata_sha256": "b1cbef4370c672c3d251dc7cc77eddafeee389acbb34be51d2afa36d3e5cc56b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/yangguangzhou/skills/quote0",
+    "claim_id": "d514ffb762e027f3a45031028a58dc1923baebded49fb2278b6a531eed078afd",
+    "index_entries": [
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "quote0",
+        "url": "https://clawskills.sh/skills/yangguangzhou-quote0"
+      }
+    ],
+    "owner_handle": "yangguangzhou",
+    "owner_id": "s17fxh9wsbfa5mkmchr2b69wmd85vgxt",
+    "published_at": 1771956482459,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779956580599,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779956580599,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill can list devices, check status, advance content, and push text or PNG images to a Quote/0 device; these are real device-changing actions, but they directly match the stated purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "SKILL.md documents required DOT_API_KEY and DOT_DEVICE_ID, command behavior, API endpoints, and explicitly warns not to pass sensitive files to --imageFile.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "No install scripts, dependencies, package hooks, or automatic execution paths are present; package metadata marks it as instruction-only and execution is via the included Node script.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script reads environment credentials and can upload a user-specified PNG to a fixed Dot API host; this is sensitive but proportionate to controlling the device and bounded by extension, regular-file, magic-byte, and 5MB checks.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background service, privilege escalation, file writes, or unbounded persistence are shown; persistent shell profile configuration is documented as requiring explicit user consent.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-1] expected: The activation language covers Quote/0 configuration, content pushing, status, next content, task listing, and Dot API troubleshooting. It is somewhat broad, but still tied to this specific device/API integration and does not show hidden or unrelated authority.\n[VirusTotal code_insight suspicious] expected: The concern is the --imageFile path reading and upload. Artifact review confirms this is disclosed, user-directed, limited to PNG files under 5MB, and central to the image-push feature, so VirusTotal alone does not justify Review.\n[static scan clean] expected: Static scan reported no suspicious patterns, and manual inspection found only https, fs, and path usage needed for documented API calls and PNG file handling.",
+          "guidance": "Install this only if you want an agent to control your MindReset Dot Quote/0 device. Treat DOT_API_KEY like a password, verify the DOT_DEVICE_ID before state-changing commands, and only use --imageFile with PNGs you are comfortable uploading to the Dot service.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed Quote/0 device-control helper that uses expected API credentials and user-selected content uploads.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779956551992,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: quote0\nVersion: 1.0.4\n\nThe skill is designed to interact with a specific API, and the `quote0.js` script primarily performs its stated function. However, the `image` command in `quote0.js` allows reading any local file specified by `--imageFile` and uploading its base64 content to the remote API. While the script includes strict validation to ensure the file is a PNG (checking both extension and magic bytes), this still represents a risky capability. An AI agent could potentially be prompted to upload a sensitive PNG file (e.g., a screenshot containing confidential information) from an arbitrary location on the filesystem. The `SKILL.md` file explicitly warns against passing sensitive file paths to `--imageFile`, acknowledging this potential risk, which contributes to the 'suspicious' classification rather than 'benign' due to the inherent data leakage risk if misused.",
+          "checkedAt": 1779166826648,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "3deccfaaee7e1c6bc1be0782efc77faf0525d9d1cc2d7709d5cc4f85c6001ed3",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/3deccfaaee7e1c6bc1be0782efc77faf0525d9d1cc2d7709d5cc4f85c6001ed3"
+    },
+    "slug": "quote0",
+    "source_type": "clawhub",
+    "version": "1.0.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

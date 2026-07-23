@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "website"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C07:token:test",
+      "category:C09:token:security",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:security",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C07",
+      "C09"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "manage",
+      "secure",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "b555c45d2dc7c7f6ce5b12c2c4b06eb03776d0be633f1ba63617b208432c15b8",
+    "content_hash": "1cc4ad23c848ba0262f2be455580828dd37725807a7a8de46903b27438229498",
+    "precanonical_content_hash": "b91c80e0fcf94e802cea58057139b48f830b0ec90a3228d9c42d93f8452e8576",
+    "skill_md_hash": "768911d2901b9ff72dd9376a1f6d98b0aa8a45f359beab85aa116491c029eb45",
+    "version_metadata_sha256": "36aa2ca9fea113e105b1cf45e84ecba14fc0f0b7b410207558f4fbcc788e9eaf"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/kuns9/skills/trading-upbit-skill",
+    "claim_id": "8d215b14111561eaf10842985ec1dd678d9aa53cfb305ed9a0d2c3525c512d6f",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "trading-upbit-skill",
+        "url": "https://clawskills.sh/skills/kuns9-trading-upbit-skill"
+      }
+    ],
+    "owner_handle": "kuns9",
+    "owner_id": "s17f6wa351hcng3hyeqmtnhs2988594q",
+    "published_at": 1771164867961,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779966818813,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779966818813,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill's stated purpose is automated Upbit trading, and the code implements market monitoring, event generation, risk checks, and order placement against Upbit. This is high-impact financial behavior, but it is plainly disclosed.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime commands are explicit: monitor_once, worker_once, loop variants, smoke_test, and security_check. Documentation recommends dry-run first and cron-based user scheduling; there is no evidence of hidden agent instruction override or prompt-injection behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation is a normal Node package flow with npm dependencies. No install scripts, postinstall hooks, or automatic persistence were found in package.json.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Required Node and Upbit API credentials are proportionate to an Upbit trading bot. External network use is limited in the artifacts to Upbit API endpoints, and credentials are loaded from environment variables or local config.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill writes local state under its resources directory and supports cron/loop execution. This persistence is disclosed and aligned with monitoring positions and preventing overlapping runs.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[suspicious.dangerous_exec] expected: The child_process use is confined to a test helper that runs node skill.js worker_once from the project root; it does not construct arbitrary shell commands from remote input.\n[suspicious.exposed_secret_literal] expected: The cited code uses config/env-derived Upbit keys and generates Authorization headers for Upbit API requests; no hardcoded real secret was found in the artifacts reviewed.\n[SkillSpector] expected: SkillSpector reported no issues, which is consistent with the artifact review.\n[VirusTotal] expected: VirusTotal telemetry was clean and matched the observed allowlisted Upbit API behavior, but it was treated only as supporting signal.",
+          "guidance": "Install only if you intend to run an automated trading bot. Start with execution.dryRun=true, use minimal-permission Upbit API keys from the OpenClaw secret store, avoid storing keys in config.json, review the budget and maxPositions settings, and monitor account activity closely before enabling real trading.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Upbit trading automation skill that can place real orders, but its code and documentation are coherent with that purpose and do not show hidden exfiltration or unrelated behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779966773904,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: trading-upbit-skill\nVersion: 1.0.14\n\nThe OpenClaw skill bundle is classified as benign. The code and documentation consistently demonstrate a strong focus on security, explicitly stating that it does not include telemetry or upload data, a claim verified by the `UpbitClient.js` which strictly allowlists `api.upbit.com` as the only external host and disables redirects. API keys are prioritized from environment variables, preventing hardcoding. A `securityCheck.js` script is provided for users to self-audit for unexpected external URLs. All file system operations are confined to the skill's local `resources/` directory for state management, and there is no evidence of malicious execution, persistence mechanisms, or prompt injection attempts against the AI agent.",
+          "checkedAt": 1779163991067,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "476c3a3fc8bc214e1adefa719d3b79dc43a70aa38c2bbedb5984ced09b90ff35",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/476c3a3fc8bc214e1adefa719d3b79dc43a70aa38c2bbedb5984ced09b90ff35"
+    },
+    "slug": "trading-upbit-skill",
+    "source_type": "clawhub",
+    "version": "1.0.14"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

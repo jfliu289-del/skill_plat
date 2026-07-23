@@ -1,0 +1,129 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:audio",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "5d512cbca7171aeb5e4045958f27e4c55e862acd089ddf401d03c281c9148b91",
+    "content_hash": "0cfff1b674d0dd479d5b85a1794a3d60e354d90268015c4a58edbd80ae447af3",
+    "precanonical_content_hash": "45e8fd60f48e95e4292df62c3d3ab34119d378cea95ba609ef704cbde0186455",
+    "skill_md_hash": "c1ecb6d4b2c6c8de1b3dc3b40c24a46759adfe27a04fb386c95a14326bbd73f3",
+    "version_metadata_sha256": "2e6b73b5c5d333f4562311411c3d110d6af125654ab9290f35b8658f6d4b3d04"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/paulasjes/skills/elevenlabs-transcribe",
+    "claim_id": "a1f6685dddb7518abe216a99a28d0569270395c2eaeb6c0eb0c0e6bdfa74cfcc",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "elevenlabs-transcribe",
+        "url": "https://clawskills.sh/skills/paulasjes-elevenlabs-transcribe"
+      },
+      {
+        "index_path": "categories/speech-and-transcription.md",
+        "label": "elevenlabs-transcribe",
+        "url": "https://clawskills.sh/skills/paulasjes-elevenlabs-transcribe"
+      }
+    ],
+    "owner_handle": "paulasjes",
+    "owner_id": "s17cngejwkdkahn7052ckyg1as885187",
+    "published_at": 1770128590511,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783656500365,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783656500365,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is ElevenLabs speech-to-text transcription, and the code implements local-file, URL-stream, realtime-file, and microphone transcription through the ElevenLabs SDK. Audio transmission to ElevenLabs is inherent to that purpose, though the docs could state the privacy impact more plainly.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Sensitive actions are user-directed through explicit file, --url, --realtime, or --mic arguments. The skill does not automatically record, scan broad local files, or invoke unrelated actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The wrapper creates a local scripts/.venv, upgrades pip, installs requirements.txt, and writes a .installed marker. This is disclosed in help text and scoped to the skill directory, but dependency reproducibility is not perfect because numpy is version-ranged.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Requiring python3, ffmpeg, ELEVENLABS_API_KEY, network access to ElevenLabs, and microphone access for --mic is proportionate to transcription. Users should treat audio content, stream URLs, and the API key as sensitive.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to the local virtual environment and install marker. I found no background service, privilege escalation, credential harvesting, destructive file operations, or unrelated persistence mechanism.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The privacy concern is valid guidance: files, microphone audio, and URL stream content are sent to ElevenLabs. This is expected for an ElevenLabs transcription skill and is user-selected, but disclosure should be clearer at runtime and in docs.\n[SC1] expected: Installing Python dependencies is expected for this wrapper, but numpy>=1.24.0 is not fully pinned, so future installs may be less reproducible.\n[SC4] expected: python-dotenv is used only to load environment variables; the scanned code does not call the vulnerable set_key-style write path. Upgrading remains advisable, but this does not indicate malicious behavior in this skill.",
+          "guidance": "Install only if you are comfortable sending the audio or stream URLs you choose to transcribe to ElevenLabs under your API key. Use microphone mode intentionally, avoid confidential or non-consented recordings, protect ELEVENLABS_API_KEY, and verify the publisher if the 'Official ElevenLabs skill' claim matters to your trust decision.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: transcribes user-selected audio through ElevenLabs, with expected privacy and dependency caveats but no hidden or destructive behavior found.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783656476230,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 30,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: elevenlabs-transcribe\nVersion: 1.0.1\n\nThe skill bundle is benign. It provides audio transcription functionality using the ElevenLabs API, supporting local files, URLs, and microphone input. The `SKILL.md` contains no prompt injection attempts. The `transcribe.sh` script securely sets up a Python virtual environment and installs dependencies from `requirements.txt` with SHA256 hashes for supply chain security. The `transcribe.py` script uses `os.getenv` for the API key and `sounddevice` for microphone access, both of which are directly aligned with the skill's stated purpose and do not show any evidence of data exfiltration to unauthorized endpoints, malicious execution, or persistence mechanisms.",
+          "checkedAt": 1779161096220,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a649b17a670419c5bf02cbf1730645200f0ea508fd06bccd38574741476d63c2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a649b17a670419c5bf02cbf1730645200f0ea508fd06bccd38574741476d63c2"
+    },
+    "slug": "elevenlabs-transcribe",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

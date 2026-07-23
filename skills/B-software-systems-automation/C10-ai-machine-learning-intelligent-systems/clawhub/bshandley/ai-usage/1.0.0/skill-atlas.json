@@ -1,0 +1,119 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C10:token:ai"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "339524109c6cc94d2445045adfdfd246f57d5b9630368bcb625d31baa44da891",
+    "content_hash": "0771b4931dd5a4befb510249d8dd5b307720ea91ac0b18005bbff10ae95c5c89",
+    "precanonical_content_hash": "abecdeb225c682495889a958c184c4c635b37f0a2f33a161051cb8e013b8f7d0",
+    "skill_md_hash": "74aaa93c7c9c84e9eadde5ae23f5d112941250c5bd363186911fdc3b1eb58567",
+    "version_metadata_sha256": "d082b2d1f65486401140132cd8cf1bc1e1d5c18420bd77f6692d3948fa956d9d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/bshandley/skills/ai-usage",
+    "claim_id": "05000455d9739a31e02ff0edecd136775e14d06f6e90db7f9e7a4130cc84b271",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "ai-usage",
+        "url": "https://clawskills.sh/skills/bshandley-ai-usage"
+      }
+    ],
+    "owner_handle": "bshandley",
+    "owner_id": "s179hzpajxrd197x098jx8y221885dnr",
+    "published_at": 1771116616427,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967462529,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967462529,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The credential read, Anthropic usage API call, Claude CLI refresh, and session-log parsing all directly support the stated AI usage and quota reporting purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill is user-invoked and documents optional heartbeat or cron use; scheduled execution should remain explicitly user-controlled because it repeatedly reads local credentials and logs.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains a markdown skill file and a Python stdlib script, with no package installer, dependency install, or hidden setup behavior found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Reading ~/.claude/.credentials.json and ~/.openclaw/agents/main/sessions is sensitive, but it is disclosed, narrowly tied to usage reporting, and the token is only used for the fixed Anthropic usage endpoint in the inspected script.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, privilege escalation, destructive action, credential logging, or broad exfiltration path was found; the only command execution is the disclosed claude --print -p ok token refresh attempt.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The skill does use file reads, a local CLI command, and a network request, but these are documented and match the usage-reporting function; the main residual issue is user awareness of the sensitive files involved.\n[PE3] expected: The Claude credentials file access is real and sensitive, but artifact evidence shows it is used to extract an OAuth access token for Anthropic's usage API and is not printed, stored, or sent to unrelated destinations.\n[PE3] expected: The credentials-path environment override expands what the user can point the script at, but the code still expects the Claude credentials structure and sends only the extracted bearer token to the fixed Anthropic usage URL.",
+          "guidance": "Install only if you are comfortable letting this skill read your local Claude Code credentials and OpenClaw session logs. Review the script before scheduling it, keep any cron or dashboard use under your control, and avoid sharing reports if provider, model, token, request, quota, or cost data is private.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it claims, but it needs access to local Claude credentials and OpenClaw session logs to report usage.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967411036,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 78,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ai-usage\nVersion: 1.0.0\n\nThe skill is designed to check AI usage across Anthropic and other providers. It legitimately accesses `~/.claude/.credentials.json` to retrieve OAuth tokens for Anthropic API calls and executes the `claude` CLI tool to refresh these tokens. It also parses local OpenClaw session logs for usage statistics. All file access, external command execution, and network requests are directly aligned with its stated purpose and target official endpoints or local files. There is no evidence of data exfiltration, arbitrary command injection, persistence mechanisms, or prompt injection attempts against the agent.",
+          "checkedAt": 1779164122983,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "4f6bbb11c6479e014b804b632fcd2c6ec91f0c8051cdf21265625615b12a8421",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4f6bbb11c6479e014b804b632fcd2c6ec91f0c8051cdf21265625615b12a8421"
+    },
+    "slug": "ai-usage",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

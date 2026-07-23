@@ -1,0 +1,148 @@
+{
+  "classification": {
+    "artifacts": [
+      "document",
+      "website"
+    ],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C17:token:notes",
+      "category:C19:token:browser",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:security",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09",
+      "C10",
+      "C17",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "manage",
+      "secure",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "98cbe733988af97f6ce1650c14e286341d3b5bd1a5f4f56ea7e9a1ab3fca8f85",
+    "content_hash": "738c97f56f35da8e0a8492302066643ba2c20349fe9d42fcafae4c9e788bc7a5",
+    "precanonical_content_hash": "fde552c5f502beff8685b292769ac11edf9f513441ff9ed9044cb2af614982ce",
+    "skill_md_hash": "dd190ec43736b17f508d6438322667c39cac595c048fb8fb1836731cb9e2825b",
+    "version_metadata_sha256": "79e1997d4f1c1d1734d173c3e9588355c60d948d98f59116aea1fd7a4f1667e5"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/parkertoddbrooks/skills/markdown-viewer",
+    "claim_id": "8c1b75db9d0a22727bd47631c17da899e50a81d0d53884b9a4da602012453d4b",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "markdown-viewer",
+        "url": "https://clawskills.sh/skills/parkertoddbrooks-markdown-viewer"
+      }
+    ],
+    "owner_handle": "parkertoddbrooks",
+    "owner_id": "s17620xzyc7kfan8m36at57m6n83h8he",
+    "published_at": 1771622710223,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968972303,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968972303,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill's file-reading behavior is coherent with its purpose of rendering local Markdown files; the broad `/view?path=` access is disclosed and has a documented `--root` mitigation.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are user-directed and focused on installing, starting, and opening the local viewer, though the quick start starts a background server without `--root` by default.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill installs a global third-party npm package that provides `mdview`; this is expected for a CLI viewer, but the package source is not included in the skill artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The server is documented as binding to 127.0.0.1 and making no external requests, which limits exposure; unrestricted local file viewing remains a use caution.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No elevated privileges, credential access, reboot persistence, destructive actions, or external exfiltration behavior are present in the provided artifact; the server is a non-persistent background process.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight suspicious] expected: The LFI concern is based on disclosed local file viewing through `/view?path=`. This is purpose-aligned for a Markdown viewer, localhost-only per the artifact, and mitigated by `--root`, so it warrants guidance rather than Review.\n[SkillSpector clean] expected: SkillSpector reported no issues and the artifact contains only `SKILL.md` with no bundled executable scripts.\n[staticScan clean] expected: Metadata static scan reported no suspicious patterns, consistent with the single documented skill file and disclosed npm install flow.",
+          "guidance": "Install only if you trust the `@wipcomputer/markdown-viewer` npm package. Prefer starting it as `mdview --root <your-project>` and only open files you intend to preview, especially on shared machines or when sensitive files exist nearby. Stop the background server when finished.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed localhost Markdown preview tool, but users should run it with a project root limit to avoid accidentally viewing sensitive local files.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968938783,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: markdown-viewer\nVersion: 1.2.0\n\nThe skill bundle is classified as suspicious due to a Local File Inclusion (LFI) vulnerability in the `mdview` tool, explicitly acknowledged in the `SKILL.md` file. The `/view?path=` parameter allows reading arbitrary files from the local filesystem, which could be exploited by an AI agent or user to disclose sensitive data. While the skill author transparently discloses this vulnerability and suggests a mitigation (`--root`), the presence of such a high-risk capability without clear instructions to prevent its misuse by the agent makes it suspicious. There is no evidence of intentional malicious behavior like data exfiltration or persistence.",
+          "checkedAt": 1779164414373,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "8ca59d050942910fceaae14241371f36d290646936b1d66b1d01d2826160d2a4",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8ca59d050942910fceaae14241371f36d290646936b1d66b1d01d2826160d2a4"
+    },
+    "slug": "markdown-viewer",
+    "source_type": "clawhub",
+    "version": "1.2.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

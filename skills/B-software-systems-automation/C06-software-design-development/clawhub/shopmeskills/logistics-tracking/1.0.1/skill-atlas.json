@@ -1,0 +1,146 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "configuration",
+      "website"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "infrastructure",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C08:token:deploy",
+      "category:C19:token:browser",
+      "cross-tag:browser-automation",
+      "cross-tag:deployment",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C08",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate"
+    ],
+    "tasks": [
+      "automate",
+      "build",
+      "deploy",
+      "operate"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "b390f1d9a84b6576c750926966d6317300df19ae243c875ef869da9cf1cdfdf1",
+    "content_hash": "698754fa158ed621e04c5b415b22bbed9720d75d805596a9bdc33d3501cba428",
+    "precanonical_content_hash": "0173c6f066aab3523c276c1f33e9fcbb8d278f08335810f3a3912f45bd08d838",
+    "skill_md_hash": "1b6e7eeed9ea6eee4ea2ce4814ddc5776b150265a258c5a5a9eb1cb9bdaa8479",
+    "version_metadata_sha256": "589a6c8f176bf466a837ee70a40ce387af2f53b63d5332f3a217891d38e9d5e4"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/shopmeskills/skills/logistics-tracking",
+    "claim_id": "70c0e3f08a6df3f8b219148ea5b6237d3359ad66942607bedf28acc86e32a150",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "logistics-tracking",
+        "url": "https://clawskills.sh/skills/shopmeskills-logistics-tracking"
+      }
+    ],
+    "owner_handle": "shopmeskills",
+    "owner_id": "s176c083xv32w68z1py0bq22vh884d7m",
+    "published_at": 1771573027730,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779940237765,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779940237765,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is package tracking, and the disclosed tools and data flow to 17track directly fit that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Instructions are limited to user-requested tracking, carrier detection, batch tracking, and status explanation, with no unrelated control or hidden tasking.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Setup relies on running an unpinned external npm package with npx and optionally installing Playwright; this is disclosed and purpose-aligned but should be verified before use.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The optional TRACK17_API_KEY and transmission of tracking numbers to 17track are proportionate to shipment tracking, though users should understand the privacy implications.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden persistence is shown; the optional HTTP deployment is a long-running MCP service and should not be exposed publicly without access controls.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The concern about sending tracking numbers to 17track is partly mitigated by the artifact's repeated disclosure that it uses api.17track.net or t.17track.net; this remains a privacy consideration rather than evidence of hidden behavior.\n[VirusTotal code_insight] expected: The external npx MCP package and Playwright fallback are real supply-chain and local-execution considerations, but they are disclosed, coherent with the tracking purpose, and not supported by malware detections or static findings.",
+          "guidance": "Before installing, verify the @shopmeagent/logistics-tracking-mcp package source and consider pinning a version. Use the official 17track API-key mode when possible, protect TRACK17_API_KEY, and secure any hosted MCP endpoint with HTTPS, authentication, and rate limits.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a clearly described package-tracking integration, but users should treat the external npm MCP server, 17track data sharing, and optional API key carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779940183752,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: logistics-tracking\nVersion: 1.0.1\n\nThe skill is suspicious due to its reliance on `npx -y @shopmeagent/logistics-tracking-mcp` for execution, which introduces a supply chain risk by downloading and running code from an external registry without explicit user confirmation. The trustworthiness of the `@shopmeagent` scope is unknown. Additionally, the skill's fallback mechanism utilizes Playwright (a headless browser) for web scraping, a powerful capability that, while intended for `t.17track.net`, significantly increases the attack surface and could be misused if the underlying package is compromised or contains vulnerabilities. These risky capabilities are present in `SKILL.md`.",
+          "checkedAt": 1779165625839,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "9df66726ef0749a14397a0754c469bc0201259d7213d6a82fa3078a1a08e16a5",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/9df66726ef0749a14397a0754c469bc0201259d7213d6a82fa3078a1a08e16a5"
+    },
+    "slug": "logistics-tracking",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

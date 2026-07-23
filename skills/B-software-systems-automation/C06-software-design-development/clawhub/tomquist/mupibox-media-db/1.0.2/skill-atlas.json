@@ -1,0 +1,152 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "document",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C02:token:edit",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C06:token:backend",
+      "category:C07:token:quality",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C02",
+      "C04",
+      "C07"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "345eaec62b8dc471487687ec0ab17e48f7321c5a3bba60a5582f248435278bc6",
+    "content_hash": "97df868cb430ec023a06444e2782af884974d7c91efd4abb07b6db162779dbde",
+    "precanonical_content_hash": "b62d646acc45b2fcb93dacb2968c65576a662dbc7b915cb2177e1e14ff8b8bc0",
+    "skill_md_hash": "b510f81a8fd877c690d02aaf9d79336c5f1a9d75dcb4a2b7e0611b5b7418442b",
+    "version_metadata_sha256": "735c51f52e941e353a5ca4350e3d7e29acf34209656b2beb63c044f7e9a3bad9"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tomquist/skills/mupibox-media-db",
+    "claim_id": "994b20acd8fd9c65cb207dd250479097a705ebaff30bb116867fcd36c0030eb9",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "mupibox-media-db",
+        "url": "https://clawskills.sh/skills/tomquist-mupibox-media-db"
+      }
+    ],
+    "owner_handle": "tomquist",
+    "owner_id": "s17b39xakdryp3n3dqfs1vjt79885w5d",
+    "published_at": 1771069353444,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779966762516,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779966762516,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is managing MuPiBox data.json, and the bundled script implements listing, adding, deleting, moving, editing, backing up, and restoring entries through documented MuPiBox API endpoints.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are user-directed and include guardrails to list before removal, confirm move targets, verify changes, and restore only from trusted backup files.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The artifact contains only SKILL.md and one bundled Python script, with no remote installer, package installation, startup hook, or obfuscated setup behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to a configurable MuPiBox base URL and local JSON backup reads/writes are proportionate to the database-management purpose, though users should verify the base URL and restore file.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The script requests no credentials or elevated privileges, but it persistently stores timestamped backup copies under ~/.mupibox-db-backups by default.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The concern about network and file capabilities is supported, but those capabilities are clearly described in SKILL.md and directly match the MuPiBox API and backup/restore workflow; this is a user-awareness note rather than a Review-level concern.\n[VirusTotal code_insight suspicious] expected: The SSRF and untrusted-restore observations are plausible misuse risks of the configurable --base-url and --file options, but the artifact does not instruct hidden exfiltration or automatic use, and the script limits API paths to MuPiBox-style endpoints.",
+          "guidance": "Install only if you intend to let an agent manage your MuPiBox media database. Check that --base-url points to your MuPiBox backend, review add/delete/move/restore operations before running them, keep backup files private, and restore only from backup JSON files you trust.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed MuPiBox database manager that can change media entries and create local backups, but the reviewed artifacts do not show hidden or deceptive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779966725474,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: mupibox-media-db\nVersion: 1.0.2\n\nThe skill bundle is classified as suspicious due to its capabilities for network requests to a user-controlled base URL and file system operations (reading arbitrary JSON files for restore). While these features are necessary for the skill's stated purpose of managing a MuPiBox media database, they introduce potential vulnerabilities such as Server-Side Request Forgery (SSRF) if the `--base-url` argument is not properly sanitized, or data injection/integrity issues if the `--file` argument for restore points to an untrusted or malicious JSON file. The `SKILL.md` documentation attempts to mitigate this by instructing the agent to 'Restore only from trusted backup files', but the underlying code in `scripts/mupibox_media_manager.py` provides the capability for these actions without inherent input validation beyond basic type checks.",
+          "checkedAt": 1779163946618,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "c83fde4cd55e5d05c03ff8a91e5993466cbe450049f9cfcd0097b1b3c415773b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/c83fde4cd55e5d05c03ff8a91e5993466cbe450049f9cfcd0097b1b3c415773b"
+    },
+    "slug": "mupibox-media-db",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

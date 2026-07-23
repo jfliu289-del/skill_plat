@@ -1,0 +1,136 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C09:token:security",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09",
+      "C17"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "48a476557317b9c9ec703a1883f574aac2242ae93aa18ada14b3b14605476894",
+    "content_hash": "c1dd3cbe0ebe3a5faeec89b8cf6912a097dad7be8dae7627bdeb4889a9945b2a",
+    "precanonical_content_hash": "0ed4f15d5b988ee75e88d5b8abfe8334d7d3d5557d9fcb8f249d087ab28b2eba",
+    "skill_md_hash": "01e1d011febaaf50421c3a08e0ba5e844867ed37e9cc06f716994c703ae5adc5",
+    "version_metadata_sha256": "fa73e987234267ca60c9f424668d16da8a61d0cb08c04be5ba34bc57d41c8bd9"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/ziwenwang28/skills/feishu-file-sender",
+    "claim_id": "e5266c8e7ccc367f43aaeaccfcd6c44c3ecbeb66b8e1104b68fcc99951400ed3",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "feishu-file-sender",
+        "url": "https://clawskills.sh/skills/ziwenwang28-feishu-file-sender"
+      }
+    ],
+    "owner_handle": "ziwenwang28",
+    "owner_id": "s171mctt5y0wfc7zvv2fezmb8d83gm7k",
+    "published_at": 1772047314694,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779953369127,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779953369127,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documentation, manifest, and Python script align around one purpose: upload a caller-specified local file to Feishu and send it as a file message.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script requires a file path and resolves the recipient from an argument or documented environment variables, but it does not add an interactive confirmation or dry-run before sending.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No install-time execution, postinstall hook, remote installer, or obfuscated setup was found; the only documented install step is installing the requests Python dependency.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Reading ~/.openclaw/openclaw.json for Feishu appId/appSecret and contacting open.feishu.cn are sensitive but disclosed and proportionate to Feishu file delivery.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background worker, persistence mechanism, privilege escalation, self-modification, destructive behavior, or local file writes were found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: Downgraded in context: local config, credential, and network use are disclosed in SKILL.md, README.md, and clawdis.yaml; the manifest could be more granular about arbitrary file reads, but the behavior matches the stated file-sending purpose.\n[SQP-2] expected: Confirmed as a safety consideration: the script can send any caller-provided local file without an extra confirmation step, but this is the core disclosed function and requires invocation with a file path and recipient context.\n[staticScan] expected: Static scan was clean, consistent with artifact review showing only straightforward Feishu API calls and local config/file reads.\n[VirusTotal] expected: VirusTotal telemetry was clean and aligned with the artifact review; it was used only as supporting signal.",
+          "guidance": "Install this only if you want agents on this machine to send local files to Feishu. Keep ~/.openclaw/openclaw.json protected, limit the Feishu app permissions where possible, and verify the file path and chat or user ID before sending sensitive files.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it sends a selected local file to Feishu using the configured OpenClaw Feishu account, with no hidden persistence or extra destinations found.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779953334901,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: feishu-file-sender\nVersion: 1.0.9\n\nThe skill 'feishu-file-sender' is designed to upload local files to Feishu via its OpenAPI and send them as messages. The Python script (`scripts/feishu_file_sender.py`) correctly implements this functionality by reading Feishu credentials (appId, appSecret) from `~/.openclaw/openclaw.json`, obtaining an access token from `open.feishu.cn`, and then using legitimate Feishu API endpoints for file upload and message sending. All documentation (`SKILL.md`, `README.md`, `clawdis.yaml`) is transparent about its network access and credential usage, explicitly stating that credentials are not stored or transmitted elsewhere. There is no evidence of data exfiltration to unauthorized endpoints, malicious execution, persistence mechanisms, obfuscation, or prompt injection attempts against the agent.",
+          "checkedAt": 1779166543569,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "241581e3b2eae5a17da3062abe3023423a7b5deac9c7451b1be459dfa2fc641c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/241581e3b2eae5a17da3062abe3023423a7b5deac9c7451b1be459dfa2fc641c"
+    },
+    "slug": "feishu-file-sender",
+    "source_type": "clawhub",
+    "version": "1.0.9"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

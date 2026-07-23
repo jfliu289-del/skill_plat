@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:data",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C04",
+      "C17"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "0bf5f46800b61e2bd915d467a539866139cb78b88d588572caf2d92f40626e34",
+    "content_hash": "8e88f02376021ce8e16f9237577ffef4745c4b7c601d156aef967c99eb49ff9d",
+    "precanonical_content_hash": "e84619760f20afdf72fdf5a43f0e6c2ab3cc64eea45a81b0caaa074dc4197aee",
+    "skill_md_hash": "e769143887210372aec6cbd71f96bc29db2a67fc691c89921161311e8ad70e24",
+    "version_metadata_sha256": "518561add126e765e53d35588358477ccf4fe51817cd27c68d740d108f4075dc"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/lpigeon/skills/ros-skill",
+    "claim_id": "c93ad19956f59bf062e506e01757ad3b42f5edaee0ce01f1b12ead5e193ce083",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "ros-skill",
+        "url": "https://clawskills.sh/skills/lpigeon-ros-skill"
+      }
+    ],
+    "owner_handle": "lpigeon",
+    "owner_id": "s178nfnj5zpvm9styz19faqaz5845dh0",
+    "published_at": 1772020369006,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779958463622,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779958463622,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, runtime commands, dependency on python3/websocket-client, and rosbridge WebSocket architecture all align with controlling and monitoring ROS/ROS2 robots.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions are ROS-scoped and include read and write/control operations; movement, service calls, parameter writes, and actions are disclosed, but the broad capability means agents should use it only for explicit robot-interaction requests.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden installer, persistence hook, credential request, or unrelated download behavior is evident from the supplied artifacts and public package context; the only declared runtime dependency is the WebSocket client package.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to a rosbridge endpoint and arbitrary ROS topics/services/parameters is proportionate for this skill, but it can affect real hardware and should be limited to trusted robots, simulators, or controlled lab networks.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No forced global inclusion, background worker, privilege escalation, modification of other skills, credential/session use, or persistent agent behavior is evident.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The shell-invoked CLI and robot-control authority are expected for the skill's purpose; lack of a formal permission declaration is a packaging/control-plane weakness rather than evidence of malicious behavior.\n[SQP-1] expected: The invocation scope is broad for ROS questions, but the artifact does not instruct automatic actuation on informational requests; this is best handled with user guidance and explicit operator confirmation.\n[SQP-2] expected: Movement examples, service calls, parameter writes, and action goals are high-impact but disclosed and central to ROS robot control; the absence of a built-in confirmation gate is a safety limitation, not a purpose mismatch.\n[VirusTotal:code_insight] expected: VirusTotal telemetry reports no malicious or suspicious engine detections and describes the WebSocket and subprocess behavior as aligned with the stated robot-control purpose.",
+          "guidance": "Install only if you intend to let an agent inspect or control a ROS/ROS2 system. Use a simulator first, verify the target IP/port before issuing commands, keep robots in a clear area with an emergency stop available, and require explicit human approval before movement, service calls, parameter changes, or action goals on real hardware.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This ROS skill is purpose-built for robot control and discloses that it can move or change robot state, but users should treat it as a real-world control surface.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779958387029,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 78,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ros-skill\nVersion: 1.0.1\n\nThe skill is designed to control ROS/ROS2 robots via rosbridge WebSocket, a clearly stated and legitimate purpose. The `SKILL.md` transparently outlines the commands, including 'destructive commands' that can move or change robot state, and advises caution. The `ros_cli.py` script uses `subprocess.run` for `ping` in a safe manner (list of arguments, not `shell=True`), preventing shell injection. All other interactions are via WebSocket with JSON payloads, which is the intended mechanism for robot control. There is no evidence of data exfiltration, persistence mechanisms, obfuscation, or prompt injection attempts against the agent. The ability to connect to arbitrary IPs/ports is a necessary and transparent feature for a robot control skill, not a vulnerability or malicious intent.",
+          "checkedAt": 1779167015047,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a83defd9ebb7173d6929f0c5f1f7aa2902e44cd1dab8f5fb3fe721660b0c7e0e",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a83defd9ebb7173d6929f0c5f1f7aa2902e44cd1dab8f5fb3fe721660b0c7e0e"
+    },
+    "slug": "ros-skill",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

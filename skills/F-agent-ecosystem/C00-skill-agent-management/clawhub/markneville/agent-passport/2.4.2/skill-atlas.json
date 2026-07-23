@@ -1,0 +1,156 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "security-professional"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C04:token:data",
+      "category:C08:token:git",
+      "category:C09:token:audit",
+      "category:C09:token:threat",
+      "category:C11:token:roadmap",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:planning",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C08",
+      "C09",
+      "C11"
+    ],
+    "stages": [
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "plan",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "524d82aefea411b9a2866df8e2eb0a3f3291ffc3c0f16d08318f219bded1550e",
+    "content_hash": "c803fe67dff7f71bb90c4d6afee18e4df57db671edcf43f16fcc82187dc6d55d",
+    "precanonical_content_hash": "4f83da5c8f9558a0232a3d786e40162b49005c783649b4c869852daeb8c49153",
+    "skill_md_hash": "f976d530281ef158f3c44c744e382798f824ae4540385ffaa1502e6f3718c744",
+    "version_metadata_sha256": "53c3adc65ec5e9c473ce6b6f512620db0127dedcffa6ba24087b12de6603c664"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/markneville/skills/agent-passport",
+    "claim_id": "a5d947400c08fdbff83b8fb56116d680170af80ef981cff83ad3d0a3964ef8e3",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "agent-passport",
+        "url": "https://clawskills.sh/skills/markneville-agent-passport"
+      },
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "agent-passport",
+        "url": "https://clawskills.sh/skills/markneville-agent-passport"
+      }
+    ],
+    "owner_handle": "markneville",
+    "owner_id": "s17c2c6n780m8086w7vcgempyh83gkce",
+    "published_at": 1772141918683,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779962603048,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779962603048,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe a consent-gating ledger, audit trail, skill scanner, injection checks, SSRF checks, path checks, and optional threat-definition updates; the script implements those capabilities without evidence of unrelated exfiltration or destructive behavior.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill deliberately tells agents to check mandates before sensitive side-effect actions and to stop on denial; this changes agent behavior but is central to the stated purpose and disclosed.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The metadata declares local ledger configuration and required binaries, while documentation separately discloses Pro calls to api.agentpassportai.com; the manifest is less explicit than ideal about curl/network and the Pro license-key environment variable.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Free/local operation is documented as offline. Pro mode uses AGENT_PASSPORT_LICENSE_KEY as a bearer token for license validation and threat-definition retrieval, which is purpose-aligned but expands the trust boundary.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill stores mandate, KYA, audit, license-cache, and threat-definition files under the local ledger directory and may start short-lived background update checks in Pro mode; no cron, daemon install, privilege escalation, or hidden persistence was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-4] unexpected: The rate-limit implementation treats values such as 20/day or 100/hour as cumulative lifetime counts rather than true time windows. That is a product correctness and expectation issue, but it is partly documented in the reference file and does not show hidden or malicious behavior.\n[SDI-4] unexpected: The read-only template is confusing because it uses the broad data action type while allowlisting only read/list/cat/ls strings. The ledger does not itself perform file operations or grant unrestricted writes, but users should not treat this as a robust operation-level read-only sandbox.\n[SQP-2] expected: Pro background threat-definition updates are disclosed in README and SKILL.md, run only when a Pro license key is configured, and fetch definitions from the vendor API; the silent recurring network behavior should be considered before use in offline-sensitive environments.\n[SQP-2] expected: License validation sends the configured license key as an Authorization bearer token to api.agentpassportai.com and caches the result; this matches Pro licensing behavior and is documented, though not surfaced in the install metadata.\n[SQP-2] expected: Live threat-pattern and definition fetches also use the configured license key and fall back to bundled definitions when unavailable; this is aligned with the advertised security-update feature.",
+          "guidance": "Install this if you want agents to use a local mandate and audit workflow before sensitive actions. Keep it in free/offline mode if you do not want vendor network calls. Only set AGENT_PASSPORT_LICENSE_KEY if you accept periodic HTTPS requests to api.agentpassportai.com for license checks and threat-definition updates, and use narrow templates instead of broad options like full-auto.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed local consent and audit tool with optional Pro network updates, but users should understand its broad templates and recurring license-key checks before enabling them.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779962560717,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: agent-passport\nVersion: 2.4.2\n\nThis skill bundle, 'Agent Passport', is designed to enhance agent security by providing consent-gating, audit trails, and various security shields (SSRF, Path Traversal, Skill Scanner, Injection Shield). The `SKILL.md` explicitly instructs the AI agent on security protocols and anti-prompt injection rules, and the `mandate-ledger.sh` script implements robust checks and scanning capabilities. While the script makes external `curl` calls to `api.agentpassportai.com` for license validation and threat definition updates (Pro tier), the code and documentation explicitly state that no usage data or scan results are transmitted, and the calls are limited to fetching definitions or validating licenses. There is no evidence of intentional harmful behavior, data exfiltration, persistence, or unauthorized remote control. The script uses `set -euo pipefail` and `jq` for JSON parsing, which are good practices for shell script security, and the included test script confirms the developers' intent to prevent common malicious patterns.",
+          "checkedAt": 1779162470878,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "7c51fc879ef81d0cff6ea2c39871e886481ad7d9e721adb8a3736c0cdf0b5e0a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/7c51fc879ef81d0cff6ea2c39871e886481ad7d9e721adb8a3736c0cdf0b5e0a"
+    },
+    "slug": "agent-passport",
+    "source_type": "clawhub",
+    "version": "2.4.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

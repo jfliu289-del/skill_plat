@@ -1,0 +1,136 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C09:token:security",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09",
+      "C17"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "7788a0eba55cd6fd1d956c4cc2648a8e1e16d44579d26b80ab9f2a9ccd4ab449",
+    "content_hash": "9920877e55eff6bb8d010481da4389e318ca566bacb7d0c6bd8774a436f591a1",
+    "precanonical_content_hash": "9d39be6e70cd08669d94537081795a7f895cd312516914a1084bc8488b7ba50a",
+    "skill_md_hash": "02931ca231d33972b997f05a649940bdfb8ddd75995279026e97a24c8c8f5e5d",
+    "version_metadata_sha256": "d120728a2afa69c2735530d7da8fe1808171b08f5cd88417dbb0edccda7fa1d1"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sakullla/skills/quotly-style-sticker",
+    "claim_id": "647a039ac9b2647c1d742b0b7f3eb1b5b5fab91ef8b2af8bd737d0e30c5573ff",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "quotly-style-sticker",
+        "url": "https://clawskills.sh/skills/sakullla-quotly-style-sticker"
+      }
+    ],
+    "owner_handle": "sakullla",
+    "owner_id": "s1776e8tz49js8h2rq86fawakh884xyv",
+    "published_at": 1772084031467,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779959416795,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779959416795,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The script builds quote-sticker payloads from selected message text, sender names, formatting entities, and optional avatar URLs, then posts them to a configured QuotLy API and writes a local WebP media file; this matches the stated sticker-generation purpose and is disclosed.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill instructs the agent to run one bundled script and return only the emitted MEDIA path. The agent metadata enables implicit invocation, so administrators should ensure it is only triggered by clear sticker-generation intent.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No installer, package mutation, background setup, or credential bootstrap is present; the artifact contains SKILL.md, agent metadata, a sample input file, and one Python script.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Environment variables configure the API URL, optional host allowlist, audit logging, and dedupe window. External transmission is proportionate for remote sticker rendering, and the script includes host/IP checks and payload/response size limits.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to temporary WebP output and a time-bounded dedupe cache under a temp/OpenClaw directory. No credential access, privilege escalation, broad local indexing, or long-running worker behavior was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-1] expected: The concern about implicit invocation is partially valid as user-control guidance: the metadata enables implicit invocation for forwarded or quoted message sticker creation. The artifacts still scope the behavior to selected messages and disclosed sticker generation, so this does not by itself warrant a Review verdict.\n[staticScan] expected: The supplied static scan was clean, and local artifact review did not find hidden install steps, destructive commands, credential harvesting, or unrelated file access.\n[VirusTotal] expected: VirusTotal telemetry was clean and aligned with artifact review, but it was treated only as supporting telemetry rather than the basis for the verdict.",
+          "guidance": "Install this only where users understand that selected message content, sender display information, formatting entities, and optional avatar URLs may be sent to the configured QuotLy rendering API. For private groups or regulated environments, restrict QUOTLY_API_ALLOW_HOSTS and require a clear user request before auto-sending generated media.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed quote-sticker generator that uses selected messages with an external rendering API, with the main risk being accidental use in chats if implicit invocation is left broad.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779959321945,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: quotly-style-sticker\nVersion: 1.4.3\n\nThis skill is designed to generate stickers by sending user-provided message content to an external API. The `scripts/openclaw_quote_autoreply.py` script implements robust SSRF protection for the main API endpoint via `_sanitize_api_url`, including hostname validation, DNS rebinding checks, and path traversal prevention. User-provided `avatar_url` and `status_url` are also sanitized by `_sanitize_avatar_for_renderer` to only allow `https` or `data:image/` schemes without credentials, mitigating direct SSRF risks from these inputs. The `SKILL.md` explicitly documents the external API interaction and warns about user-provided URLs, demonstrating transparency. There is no evidence of malicious intent, data exfiltration, persistence mechanisms, or harmful prompt injection attempts against the agent.",
+          "checkedAt": 1779167133595,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "d5452a3f7f9cc4b402c06fa3112b8698f50d916926948e56e1de70addd9848a3",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d5452a3f7f9cc4b402c06fa3112b8698f50d916926948e56e1de70addd9848a3"
+    },
+    "slug": "quotly-style-sticker",
+    "source_type": "clawhub",
+    "version": "1.4.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

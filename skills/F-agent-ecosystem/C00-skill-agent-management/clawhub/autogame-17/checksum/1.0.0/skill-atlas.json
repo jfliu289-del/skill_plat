@@ -1,0 +1,119 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.0,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "fallback:C00"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ba3cf596b1bcd607e39a5ee393844b253cd21ef6b6387e615fd6d74b55568388",
+    "content_hash": "f686f955636dcf397870538a21553f59e2390bf7afe8683cd43bd4be78004563",
+    "precanonical_content_hash": "ddb39d713650964c8a4641e877b6c8bb1dc3db86ec9896041244032de5691279",
+    "skill_md_hash": "58ca4fda066289e61425d4b78cf6a6b33b15b1d2ecb592069c27a6e49fa020a1",
+    "version_metadata_sha256": "16a757f056e8c93a0863e2a774c38a4ccd3136edb5b02d5d19946b7e865ada3f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/autogame-17/skills/checksum",
+    "claim_id": "fdfbfc9aaca3ba20693d6ad823aa87d2929146787e8b296a7bf0713ad09d9efb",
+    "index_entries": [
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "checksum",
+        "url": "https://clawskills.sh/skills/autogame-17-checksum"
+      }
+    ],
+    "owner_handle": "autogame-17",
+    "owner_id": "s174qjf2384d46r16zkn04qam183hbm3",
+    "published_at": 1771333526850,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972578919,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972578919,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The SKILL.md, package metadata, and index.js consistently describe and implement local file and directory checksum generation using Node.js crypto and filesystem APIs. No unrelated capabilities, credential access, network calls, or data exfiltration behavior were found.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions are scoped to user-provided --file or --dir paths and checksum output. There is a minor path mismatch: SKILL.md examples use node skills/checksum/index.js while the artifact stores index.js at the package root. Verification is documented as planned and is not implemented.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains only SKILL.md, index.js, and package.json. There are no install hooks, dependency downloads, postinstall scripts, or auto-executed setup steps; the npm test script hashes package.json only when explicitly run.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Local filesystem read access is proportionate for a checksum utility. The code skips .git and node_modules during directory traversal, requests no environment variables, and performs no writes or network activity.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No persistence, background worker, privilege escalation, credential/session use, system modification, or mutation of other skills is present.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal telemetry: arbitrary file hashing] expected: The code can hash any file or directory path supplied on the command line, which is inherent to the checksum purpose. The telemetry did not identify exfiltration, persistence, obfuscation, or destructive behavior, so this is guidance rather than a Review-level concern.\n[SkillSpector result] expected: SkillSpector reported no issues and low risk; this aligns with the artifact review but was not used as the sole basis for the verdict.\n[Local static review: filesystem APIs] expected: Static inspection found fs.createReadStream, fs.readdirSync, and fs.statSync for hashing user-supplied paths, plus crypto hashing. No child_process, network, process.env, file write/delete APIs, or persistence mechanisms were found.",
+          "guidance": "Install if you want a local checksum helper and understand that it can read files or directories you explicitly ask it to hash. Avoid directing it at sensitive files unless you intend to reveal their hashes, prefer SHA-256 or SHA-512 over MD5/SHA1, and use the package-root command path if the documented skills/checksum/index.js path does not exist.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward local checksum tool; it can read files you point it at, but that behavior is disclosed and matches its purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972529372,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: checksum\nVersion: 1.0.0\n\nThe `index.js` script directly processes file and directory paths provided via command-line arguments (`--file`, `--dir`) using `fs.createReadStream` and `fs.readdirSync`. While this is the intended functionality of a checksum utility, it creates a vulnerability where a compromised OpenClaw agent could be prompted via prompt injection (e.g., in `SKILL.md` or user input) to hash sensitive files (e.g., configuration files, private keys, credential files) and output their hashes to `stdout`. There is no evidence of malicious intent within the code itself (e.g., exfiltration, persistence, obfuscation for evasion), but the capability to access arbitrary files makes it suspicious due to potential misuse.",
+          "checkedAt": 1775880478800,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "ba3cf596b1bcd607e39a5ee393844b253cd21ef6b6387e615fd6d74b55568388",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ba3cf596b1bcd607e39a5ee393844b253cd21ef6b6387e615fd6d74b55568388"
+    },
+    "slug": "checksum",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

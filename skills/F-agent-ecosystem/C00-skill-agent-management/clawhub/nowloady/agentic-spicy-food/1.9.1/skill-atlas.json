@@ -1,0 +1,150 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.1417,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:browse",
+      "category:C06:token:api",
+      "category:C11:token:product",
+      "category:C12:token:strategy",
+      "category:C18:token:food",
+      "cross-tag:agent-management",
+      "cross-tag:planning",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C06",
+      "C11",
+      "C12",
+      "C18"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "plan"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "plan",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d156f33984fc88b0d7f142242f021ffbf413e674398765cd8192c496c02ba270",
+    "content_hash": "3361fb7597c78255aecae311bbcb02ef94b3303708d46ede24f2533ef5937449",
+    "precanonical_content_hash": "ca320859c71de271a2f769b543782926767368ea4bd90b7ce3ba9e3522c77666",
+    "skill_md_hash": "78621eee18423894a91c317dd781fcbd749a16d67f3061fe73f04913e0f8a230",
+    "version_metadata_sha256": "fb2bc4792db1dddafc88ded2366aeb3e000b3221a715b5b741278ce6f899e352"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/nowloady/skills/agentic-spicy-food",
+    "claim_id": "c95365bb98d413d87ae7c4a2ce5ce035032d57110ae079e75232ad3d41708003",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "agentic-spicy-food",
+        "url": "https://clawskills.sh/skills/nowloady-agentic-spicy-food"
+      }
+    ],
+    "owner_handle": "nowloady",
+    "owner_id": "s170qrwxgcfkzaeyqee42jsysx83q132",
+    "published_at": 1773442903633,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783650200649,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783650200649,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill's commerce capabilities, including product browsing, cart changes, login/registration, profile updates, order history, and order creation, fit its stated Lafeitu food-ordering purpose, but they are account-bound and state-changing.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions direct agents to use the Lafeitu CLI/API, confirm shipping details before order creation, show cart summaries for purchase decisions, and leave final payment to the user; no hidden or unrelated actions were found.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation requires python3 and the requests package, both disclosed in metadata and documentation; the package is not version-pinned, but this is ordinary dependency hygiene rather than suspicious behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The CLI entry point hardcodes https://lafeitu.cn/api/v1, and static review found no eval, shell execution, obfuscation, destructive local behavior, or unrelated network endpoints in normal skill use.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The client stores a visitor ID and account API token under ~/.openclaw/credentials/agent-commerce-engine/lafeitu.cn/, applies 0600 permissions to the credential file, and provides logout; persisted token access remains sensitive on shared machines.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill needs Python execution, network access, and a local credential path to provide the disclosed commerce workflow; the official API endpoint and local path are documented, so this is a disclosure and least-privilege note rather than a material mismatch.\n[SDI-1] expected: The shared client is generic and accepts a base URL internally, but the user-facing Lafeitu CLI hardcodes the official Lafeitu API and does not expose a base-url option; no artifact evidence shows normal use redirecting credentials to arbitrary hosts.\n[SQP-2] expected: Login, registration, profile, cart, and order commands necessarily transmit account and shipping data to the vendor API; the actions and destination are disclosed, though users should receive explicit confirmation before mutating account, cart, profile, or order state.\n[RA2] expected: Session persistence is expected for account and cart continuity in this commerce skill, and the artifacts disclose local credential storage plus a logout command; users should still treat the saved token as sensitive.",
+          "guidance": "Install only if you want an agent to interact with your Lafeitu account and shopping cart. Confirm product choices, quantities, profile changes, recipient phone number, and shipping address before running mutating commands, and use logout or delete the credential file when you no longer want the saved token retained.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Lafeitu shopping skill that can manage account, cart, profile, and unpaid order actions through the official API when directed by the user.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783650148296,
+          "issueCount": 8,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 75,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: agentic-spicy-food\nVersion: 1.9.1\n\nThe skill is a legitimate commerce integration for the Lafeitu (辣匪兔) brand, providing a CLI tool to interact with their official API (lafeitu.cn). It follows security best practices by enforcing HTTPS for API calls, using token-based authentication instead of persisting passwords, and restricting local credential file permissions to 0600. The code logic in scripts/lafeitu_client.py and scripts/lib/commerce_client.py is well-structured, lacks dangerous execution sinks (like eval or os.system), and aligns perfectly with the stated purpose of food ordering and account management.",
+          "checkedAt": 1779160020505,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "3ede0b9ed155c1cff37a5821850641b22f4b3ca1f52f18639bfe9db33c1d7d4d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/3ede0b9ed155c1cff37a5821850641b22f4b3ca1f52f18639bfe9db33c1d7d4d"
+    },
+    "slug": "agentic-spicy-food",
+    "source_type": "clawhub",
+    "version": "1.9.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

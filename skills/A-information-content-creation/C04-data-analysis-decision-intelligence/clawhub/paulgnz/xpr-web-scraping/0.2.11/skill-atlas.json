@@ -1,0 +1,129 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:data",
+      "cross-tag:data-analysis"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "validate"
+    ],
+    "tasks": [
+      "analyze"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "04f4c347b8d69d9837be8639188168aaabe02caab7d0ed76d93e1777e9fc32cc",
+    "content_hash": "a17bb58d5e4a6e2622e736f05f742d3a35f36a7678143d031c04cc99616b8712",
+    "precanonical_content_hash": "a220c228eeb689eff9da9307647bb9ea0a56b8e3efc047cf84b5d23da24b335b",
+    "skill_md_hash": "62351342ef2a96ca749da0d425810291d9e22dbaee26f9626f505ee57badb835",
+    "version_metadata_sha256": "90a3ed987ace83a4c27c2f177f94cff461ac77d7b88e3958e3e94fe96840fb93"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/paulgnz/skills/xpr-web-scraping",
+    "claim_id": "0dff4d9af2fc502b92ade24d02dc4472391a8c2a247e8c395fe8a70afe936ed0",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "xpr-web-scraping",
+        "url": "https://clawskills.sh/skills/paulgnz-xpr-web-scraping"
+      }
+    ],
+    "owner_handle": "paulgnz",
+    "owner_id": "s176veh2p67seej3jqh4f86bd986kzxg",
+    "published_at": 1771018022738,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974328583,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974328583,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is fetching pages, extracting text, metadata, and links, and the code implements only those web-scraping functions.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The tool schema discloses optional custom HTTP headers, but the user-facing SKILL.md does not explicitly warn that provided headers are transmitted to the target site or that scraped HTML/text is untrusted.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Artifacts show a small TypeScript skill, SKILL.md, and skill.json, with no install scripts, package installs, external dependencies, or required environment variables.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Outbound HTTP(S) requests to user-supplied URLs are necessary for scraping and are bounded by http/https validation, a 5 MB response cap, a 30 second default timeout, and a 10 URL multi-scrape limit; there is no private-network blocking.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, local file access, credential-store access, background worker, or privilege escalation is present; however, caller-supplied headers could include credentials if the user or agent provides them.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The arbitrary custom-header concern is real user guidance, but artifact evidence shows headers are only caller-supplied for an expected scraping request; the skill does not harvest credentials or hide the destination.\n[VirusTotal code_insight] expected: VirusTotal flagged the same custom-header capability as risky, while engine detections were otherwise absent and the artifacts show no exfiltration, persistence, or deceptive behavior.\n[staticScan] expected: The static scan reported no suspicious patterns, consistent with the inspected artifacts.",
+          "guidance": "Install this only if you want your agent to fetch web pages. Use trusted URLs, avoid internal or local network targets unless intentional, treat returned HTML and text as untrusted content, and do not provide Cookie, Authorization, API key, or similar headers except for sites you trust and intend to authenticate to.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward web-scraping skill; the main caution is not to send sensitive custom headers to untrusted URLs.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974274951,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: xpr-web-scraping\nVersion: 0.2.11\n\nThe skill provides web scraping functionality using Node.js built-in fetch. While the code is generally well-behaved and lacks direct evidence of malicious intent (e.g., no data exfiltration, persistence, or malicious execution), the `scrape_url` tool in `src/index.ts` allows arbitrary HTTP headers to be passed via the `headers` parameter. This capability, though plausibly needed for advanced scraping, presents a risky vector for misuse by a malicious prompt. An attacker could instruct the agent to send crafted headers for various attack scenarios against the target web server (e.g., authentication bypass, HTTP header injection, or to trigger specific server-side behaviors), making it a 'risky capability without clear malicious intent'.",
+          "checkedAt": 1778558430609,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "5526f1b5de4c67edc6ebefe6562cc1d55cb9bd3973dcba15f059726da60b25ec",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/5526f1b5de4c67edc6ebefe6562cc1d55cb9bd3973dcba15f059726da60b25ec"
+    },
+    "slug": "xpr-web-scraping",
+    "source_type": "clawhub",
+    "version": "0.2.11"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

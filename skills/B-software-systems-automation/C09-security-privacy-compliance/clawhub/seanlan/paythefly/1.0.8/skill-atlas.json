@@ -1,0 +1,131 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C09:token:security",
+      "category:C17:token:notes",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [
+      "validate"
+    ],
+    "tasks": [
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "f8fc05d4af052996e1661cb74c6a30ebd52c369096c2b1167ab0386aef0f5651",
+    "content_hash": "ee192526c8f9077da435ea73d786aecb2c9cbee28790862cae0316b4eaaba39d",
+    "precanonical_content_hash": "011efc81297940a5b4aff0b00d325c91c8f0c30bc7ecb9bbe3511afb23346172",
+    "skill_md_hash": "a5493620471183983c4ca9b82ba4ebdbaf5e537d6859b88d509d68a6e410f175",
+    "version_metadata_sha256": "43080df955ba2632656191a03eaa380cd9be5b7372896b0cab01e47a90a3c406"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/seanlan/skills/paythefly",
+    "claim_id": "3f222adce1d5f8c902bee9284c016fe218344a73fe6b39ba5f2cbb9737c5e147",
+    "index_entries": [
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "paythefly",
+        "url": "https://clawskills.sh/skills/seanlan-paythefly"
+      }
+    ],
+    "owner_handle": "seanlan",
+    "owner_id": "s17br3kx2y4jw61mz72pmq67w9884xjj",
+    "published_at": 1772119001816,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779922425011,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779922425011,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The payment, withdrawal, and query scripts align with the documented purpose of generating PayTheFlyPro links and checking order status. Withdrawal-link generation is financially sensitive, but it is the advertised core function.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands require explicit amount, serial number, recipient, chain, and signer environment variables. The artifacts do not show hidden automatic execution, but they also do not strongly warn that signed withdrawal URLs are bearer-style sensitive links.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a user-directed npm install of ethers and tronweb without pinned versions. This is normal for a small Node helper but carries ordinary dependency supply-chain risk.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The required PTF_SIGNER_KEY is proportionate to signing EIP-712/TIP-712 authorization messages, and the documentation tells users to use a dedicated unfunded signer wallet.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The scripts read environment variables at runtime, generate output, and query blockchain RPCs; no background persistence, credential storage, self-starting behavior, destructive local actions, or unrelated privilege use was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The finding is valid that withdrawal.mjs prints the full signed withdrawal URL, including the signature. That output is expected for a link-generator skill, so it does not by itself indicate malicious or deceptive behavior, but users should treat generated withdrawal links as sensitive until they expire or are used.",
+          "guidance": "Install only if you use PayTheFlyPro and understand its signer model. Use a dedicated unfunded signer key, keep PTF_SIGNER_KEY out of shared logs and CI output, verify every withdrawal recipient, amount, serial number, and deadline before generating a link, and avoid sharing signed withdrawal URLs except with the intended recipient.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it creates signed PayTheFlyPro payment and withdrawal links, but the signer key and generated withdrawal URLs must be handled as sensitive financial authorization material.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779922364687,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: paythefly\nVersion: 1.0.8\n\nThe skill is designed to generate signed crypto payment and withdrawal links, a function that inherently requires handling a private key (`PTF_SIGNER_KEY`). The `SKILL.md` documentation explicitly addresses this high-risk operation with a 'Security Notice,' advising users to use a dedicated, unfunded wallet for signing, which demonstrates an awareness of security and a lack of malicious intent. The code in `scripts/payment.mjs`, `scripts/withdrawal.mjs`, and `scripts/query.mjs` uses standard crypto libraries (`ethers`, `tronweb`) to interact with legitimate blockchain RPCs and the `pro.paythefly.com` service, without any evidence of data exfiltration, unauthorized execution, persistence mechanisms, obfuscation, or prompt injection attempts against the AI agent. All operations are aligned with the stated purpose.",
+          "checkedAt": 1779165223105,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "e30a9f8e1ee0ccacf5ef58b64da0e06d9b5b34bf877e5526cf5511a33893b1a4",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e30a9f8e1ee0ccacf5ef58b64da0e06d9b5b34bf877e5526cf5511a33893b1a4"
+    },
+    "slug": "paythefly",
+    "source_type": "clawhub",
+    "version": "1.0.8"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

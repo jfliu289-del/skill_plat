@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.625,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C02:token:edit",
+      "category:C05:phrase:image generation",
+      "category:C05:token:image",
+      "category:C06:token:api",
+      "category:C17:token:notes",
+      "cross-tag:design",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C06",
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a0dc28b788854babe423d11951f3a31f031c8a62feeeb65f6bb8f82f97166cbf",
+    "content_hash": "52ce8e7e7a027eda128059198ca954376d8f4b128067bba12a3b55b65ce759e1",
+    "precanonical_content_hash": "d387438135dbdf4c3881e976374b6f3a5da21acf92dcff14b645888c63a4bfd7",
+    "skill_md_hash": "bcab856367c8710b2271b1c2381246a4eb424cf9eda267d6be73bbb35cbfac0f",
+    "version_metadata_sha256": "f51e286b33600cb9b7df9268e51dc6c6f48c8c2071fe76d5617f7a7b92ffe20b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/nixeifoit/skills/grok-imagine-image-pro",
+    "claim_id": "ffd9eae0451b8a9e9703ec799d4825751c9acf5ab464a011ba3462a1bb33adb0",
+    "index_entries": [
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "grok-imagine-image-pro",
+        "url": "https://clawskills.sh/skills/nixeifoit-grok-imagine-image-pro"
+      }
+    ],
+    "owner_handle": "nixeifoit",
+    "owner_id": "s17dda3zbeyc0hm756fmp49pgx884tps",
+    "published_at": 1771052282011,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974682720,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974682720,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill’s capabilities are image generation, style transfer/reimagination, saving PNG outputs, and optional Telegram sending; these match the stated Grok/xAI image workflow.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The local edit flow reads a user-supplied source path and uploads it as image data to xAI. That is purpose-aligned but users should only provide image files they intend to share externally.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains only SKILL.md, with no executable install script or hidden payload. It declares curl, python3, and XAI_API_KEY as requirements.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to api.x.ai and use of an xAI API key are proportionate for image generation. URL-based editing can disclose supplied image URLs to xAI.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill writes generated images under ~/.openclaw/media and temporarily writes an edit payload to /tmp; no background persistence, privilege escalation, or long-running worker is shown.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The trigger examples are ordinary image-generation and image-editing requests. They are somewhat broad, but the skill is clearly scoped to image work and does not show automatic unrelated invocation.\n[SQP-2] expected: The artifact repeatedly shows the xAI API endpoint, XAI_API_KEY requirement, and local/URL image edit flows. A plainer privacy warning would help, but the external service use is not hidden.\n[E1] expected: Uploading a selected local image or image URL to xAI is central to the edit/style-transfer function. The risk is contextual privacy exposure if a user or agent supplies a sensitive non-image file or private URL, not artifact-backed malicious behavior.\n[VirusTotal code_insight] expected: The LFI/exfiltration concern is based on the local source-path upload flow. Direct artifact review supports treating this as disclosed, user-directed image processing rather than suspicious or malicious behavior.",
+          "guidance": "Install only if you are comfortable giving the skill access to your xAI API key and sending prompts, selected local images, or supplied image URLs to xAI. Do not use confidential files, private URLs, or non-image files as edit sources.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill sends prompts and chosen images to xAI to generate or reimagine images, which matches its stated purpose and is disclosed in the artifact.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974643611,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 60,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: grok-imagine-image-pro\nVersion: 1.0.2\n\nThe skill is classified as suspicious due to the potential for Local File Inclusion (LFI) and subsequent data exfiltration. The 'Edit from local file' command in SKILL.md allows reading an arbitrary local file (via `<SOURCE_PATH>`), base64 encoding its content, and sending it to the external xAI API endpoint (`https://api.x.ai/v1/images/generations`). While the skill's stated purpose is to process image files, this mechanism could be abused by a malicious user or a prompt-injected agent to exfiltrate sensitive non-image files from the local system to an external service. Additionally, the direct insertion of user prompts into JSON payloads for the `curl` commands presents a prompt injection vulnerability against the xAI API if the agent does not properly sanitize user input.",
+          "checkedAt": 1779163920383,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "76c3285bee1785a5a02a11ededaaa686b3e8ebd20df19a017da363ca8ce4dec4",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/76c3285bee1785a5a02a11ededaaa686b3e8ebd20df19a017da363ca8ce4dec4"
+    },
+    "slug": "grok-imagine-image-pro",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

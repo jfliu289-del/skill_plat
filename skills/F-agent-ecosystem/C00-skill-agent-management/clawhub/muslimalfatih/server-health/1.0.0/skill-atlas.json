@@ -1,0 +1,127 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C18:token:health",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C18"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "59ac6500cc06365f22700e921ac8338ede9bb9fec5ee72eaeeac5249a5cac28b",
+    "content_hash": "75736c89329c1cf11679a4b93ca636736bc7b0771c82bbd37f4a54e32efebdf2",
+    "precanonical_content_hash": "5aaae49854a75a410ddcdc86caaa2f55d6a61a16dc6077a89767088518ba1059",
+    "skill_md_hash": "040700a95cb71e3ae36acc7f66bc5fe57df41a16ed596e82bf530b953efd6efe",
+    "version_metadata_sha256": "7146e22368fe500df47fe5014771e0dfcc419f9c7014b5823b7520569c6aa463"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/muslimalfatih/skills/server-health",
+    "claim_id": "11c2289c55dda40d2c2bc1a17b15d022389286d15a7f68efe80a3f831e4302f4",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "server-health",
+        "url": "https://clawskills.sh/skills/muslimalfatih-server-health"
+      }
+    ],
+    "owner_handle": "muslimalfatih",
+    "owner_id": "s177zq3e7x7bc7qw9mp8kd42r18841mb",
+    "published_at": 1770598080054,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779961486729,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779961486729,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The script reports CPU, RAM, disk, process list, Docker/PostgreSQL status, OpenClaw gateway status, model configuration, version, port, and session count; this is coherent with server health monitoring but operationally sensitive.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Usage is user-invoked through documented CLI modes, but the README suggests broad invocation for system health/resource/OpenClaw status without clear admin-only or redaction guidance.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains plain README/SKILL documentation and a shell script with simple ClawHub/manual install instructions; no install hook, remote installer, obfuscation, or package manager side effect is evident.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Local host introspection and selected OpenClaw config/session reporting are proportionate for diagnostics, but should be restricted to trusted operators because output may disclose ports, versions, model names, process names, and service inventory.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, background worker, privilege escalation, mutation, deletion, credential transmission, or network exfiltration is present; the script reads local state when run with sufficient permissions.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SDI-2] expected: Confirmed reads of /root/.openclaw/openclaw.json for port/model/fallbacks and counting session files; this is read-only OpenClaw health/config reporting, so it is an operational-exposure note rather than a Review-level concern.\n[SQP-1] expected: Confirmed broad invocation guidance. The lack of authorization wording is a documentation weakness for shared or remote chat use, but it does not show hidden or purpose-mismatched behavior.\n[SQP-2] expected: Confirmed README/SKILL advertise process, service, gateway, model, and session details without a sensitivity warning; the data is expected for server health monitoring but should be treated as admin-only output.\n[SQP-2] expected: The script’s root-owned config access is not separately disclosed in the script, but the documentation does disclose OpenClaw gateway/model configuration reporting and the implementation remains read-only.\n[staticScan] expected: Static scan metadata reports no findings, consistent with artifact review.\n[VirusTotal] expected: VirusTotal telemetry is clean and aligns with the artifact evidence; it was not used as the sole basis for the verdict.",
+          "guidance": "Install only where users who can trigger it are trusted to see server diagnostics. Avoid posting its output to public or shared chat channels, because it may reveal process names, service status, OpenClaw port/version/model configuration, and session counts.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a read-only server health tool whose diagnostics can reveal operational details, but the behavior matches its stated monitoring purpose and shows no exfiltration, persistence, or destructive actions.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779961433555,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 65,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: server-health\nVersion: 1.0.0\n\nThe skill bundle provides a server health monitoring script. While the script accesses sensitive paths like `/root/.openclaw/openclaw.json` and `/root/.openclaw/agents/main/sessions/*.json`, this access is directly aligned with its stated purpose of monitoring the OpenClaw gateway's status, configuration, and sessions. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts in the `SKILL.md` or `README.md` files. All commands used are standard system utilities for gathering health metrics, and the script only reads OpenClaw-specific files relevant to its monitoring function.",
+          "checkedAt": 1779162323903,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a3de575031b865be62b7e17fffdeae9b985a32b510e0f447671aafee9eaf2934",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a3de575031b865be62b7e17fffdeae9b985a32b510e0f447671aafee9eaf2934"
+    },
+    "slug": "server-health",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

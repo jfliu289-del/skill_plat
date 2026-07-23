@@ -1,0 +1,130 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.35,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C03",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C03:token:document",
+      "category:C03:token:pdf",
+      "category:C08:token:cd",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C08"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "68e114fe94ec316ddf3095b3138caaf849b4ed90caa7d8fb6dd6eb352903be78",
+    "content_hash": "ed923eda76b45784c67382fe949e19c60147eaaf65e88a5584779d289d047af6",
+    "skill_md_hash": "6ce5073bd1b02fcb77cb9e1faeb785093d7f914a68f94ae1677d3a91d172857f",
+    "version_metadata_sha256": "fe497a9d29474302ac6c7043308a4b71afbbfdda35dfa142a5b9cd91dda26808"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/shingwha/skills/tsend",
+    "claim_id": "c77ed8d3fde337cf540dd4bac6830ad946f84a107c7f005d1767abd7c5842d40",
+    "index_entries": [
+      {
+        "index_path": "categories/communication.md",
+        "label": "tsend",
+        "url": "https://clawskills.sh/skills/shingwha-tsend"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "shingwha",
+    "owner_id": "s170e9fqjv07tv6a3akze6g8rh885cq5",
+    "published_at": 1771564888341,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779933394411,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779933394411,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The ability to send selected files, photos, and text to Telegram is coherent with the stated purpose and implemented through Telegram Bot API calls only.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Usage is user-directed, with explicit file paths or globs and a dry-run option in the CLI, though the documentation could more clearly warn users about broad patterns and sensitive files.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses documented editable Python package commands via uv or pip and creates a global tsend command; no hidden install hook or automatic execution was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to api.telegram.org and local reads of user-selected files are proportionate for a Telegram sender; no unrelated hosts or broad filesystem indexing were found.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The tool discloses that it stores configuration at ~/.tsend/config.json and can also use environment variables, but it does not harden file permissions or prominently label the bot token as a secret.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The concern about uploading files and captions to Telegram is real user guidance, but the behavior is inherent in a tool described as sending files via Telegram and requires user-selected inputs.\n[SQP-2] expected: The concern about storing Telegram token and chat ID locally is valid cautionary guidance; the storage path is disclosed and supports the tool's normal configuration workflow.\n[SQP-2] expected: The config save method does persist the configuration dictionary in plaintext; this is not hidden or purpose-mismatched, but users should protect that file or use environment variables.\n[staticScan] expected: Static scan reported no findings, and artifact inspection found no destructive commands, background persistence, obfuscation, or unrelated data collection.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with the artifact review, but it was treated only as supporting signal.",
+          "guidance": "Install only if you are comfortable with a global CLI that uploads files you name to a configured Telegram chat. Treat the bot token as a secret, restrict access to ~/.tsend/config.json, prefer environment variables if you do not want a saved token, and use --dry-run before sending broad globs or files from sensitive folders.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill behaves like a Telegram file-sending CLI, but users should understand that selected files leave the device and bot credentials may be saved locally.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779933348202,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: tsend\nVersion: 2.1.0\n\nThe OpenClaw skill 'tsend' is a legitimate tool designed to send files and messages via Telegram. The code exclusively interacts with the official Telegram Bot API (api.telegram.org) and stores configuration (bot token, chat ID) locally in `~/.tsend/config.json` or reads from environment variables. There is no evidence of intentional malicious behavior such as unauthorized data exfiltration, credential theft, persistence mechanisms, or attempts to compromise the system. The `SKILL.md` instructions are clear, transparent, and do not contain any prompt injection attempts or hidden commands designed to mislead the AI agent or user into performing harmful actions. The ability to send arbitrary files is inherent to a file-sending tool and requires explicit user instruction or agent action.",
+          "checkedAt": 1779165439007,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "d53078dcd703daec9c163359c86e15243e177473d98d30670475ef6560eaddb2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d53078dcd703daec9c163359c86e15243e177473d98d30670475ef6560eaddb2"
+    },
+    "slug": "tsend",
+    "source_type": "clawhub",
+    "version": "2.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

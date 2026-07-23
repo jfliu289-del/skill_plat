@@ -1,0 +1,132 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.7929,
+    "domains": [],
+    "needs_review": false,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:phrase:multi agent",
+      "category:C00:token:agent",
+      "category:C00:token:orchestration",
+      "category:C12:token:management",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ed44310bf621d368bbe3f821b9a1b7cad7c7d5d53ba674670c835922d4c352e2",
+    "content_hash": "594bed59f2c3d916914b212525a4ccdef5874645b539bf686b56ed97e87d64a9",
+    "precanonical_content_hash": "56b2455cf423ceff17f52647f72a738de1c2725b404581793b9d192f0ab9264b",
+    "skill_md_hash": "21f6a86078f97ab51aeb665bdf8e465833077256d66f612534e2ab73fb8bb41c",
+    "version_metadata_sha256": "61a9f69eeb6b607e5b9cf13921e021e766680aaa22ef5cddff9665887ba073b8"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/dobbybud/skills/agent-task-manager",
+    "claim_id": "d3833bcd175a973aa7fe086f3feb668d0dc3c263a2927c52b2ba921062f1922d",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "agent-task-manager",
+        "url": "https://clawskills.sh/skills/dobbybud-agent-task-manager"
+      },
+      {
+        "index_path": "categories/productivity-and-tasks.md",
+        "label": "agent-task-manager",
+        "url": "https://clawskills.sh/skills/dobbybud-agent-task-manager"
+      }
+    ],
+    "owner_handle": "dobbybud",
+    "owner_id": "s1796cjcae8vjcz78y6kd8sqy188517b",
+    "published_at": 1769967101965,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783652459294,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783652459294,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts fit the stated purpose of stateful multi-step agent workflow management, including a narrow example financial-alert workflow that is disclosed in the documentation and implemented mostly as simulation.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill description is broad and the cooldown helper can execute arbitrary wrapped commands; this is visible and purpose-aligned for rate limiting, but users should avoid feeding it untrusted or dynamically assembled command text.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden installer, package installation, startup registration, background service, or obfuscated setup behavior was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The code writes local state and timestamp files in the working directory and does not implement credential access, hidden network endpoints, or real external API calls.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "Persistence is limited to task_state.json and agent_task_manager_data timestamp files, which matches the task-resume and cooldown purpose but can retain workflow details locally.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The local state files and advertised external-action patterns are consistent with a workflow orchestration skill; this is a documentation and scoping caution rather than evidence of hidden privilege use.\n[SDI-1] expected: The hard-coded SHIPYARD financial alert is domain-specific, but the SKILL.md also describes financial analyst and MoltFinance-style example workflows, and the implementation only simulates notification behavior.\n[SQP-1] expected: The invocation guidance is broad, but the artifacts are readable, coherent with reusable orchestration, and do not force automatic execution or background activity.\n[SQP-2] expected: The eval-based cooldown wrapper is a real command-execution risk if misused, but it is visible, manual, and aligned with the declared purpose of wrapping rate-limited commands.\n[VirusTotal code_insight] expected: The telemetry correctly highlights eval and possible prompt-injection concerns, but direct artifact review found no automatic untrusted-input execution path, exfiltration, destructive logic, or hidden network behavior.",
+          "guidance": "Install this only if you want a local task-orchestration template. Review commands before passing them to cooldown.sh, do not pass user-supplied text into that wrapper as a command, and avoid storing sensitive task data because workflow state remains on disk.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a transparent local workflow template, but its command wrapper should only be used with trusted commands.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783652436901,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 45,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: agent-task-manager\nVersion: 1.0.0\n\nThe `scripts/cooldown.sh` file uses `eval \"$COMMAND\"`, which allows for arbitrary command execution. While intended for a benign purpose (rate-limiting a wrapped command), this is a high-risk primitive that could be exploited if the `$COMMAND` argument is supplied by untrusted input, potentially leading to unauthorized code execution by the OpenClaw agent. Additionally, the `orchestrator.py` and `task_parser.py` define and process task structures with `role`, `action`, and `message` fields, which, if not properly sanitized or if the underlying tools are vulnerable, could be used for prompt injection or command execution, although the current implementation only simulates these actions.",
+          "checkedAt": 1779160718128,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "f231bb812b7b8f46b00451d633cf6b9a7b51f540553bcf8ce1cebdeab62ac1fa",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/f231bb812b7b8f46b00451d633cf6b9a7b51f540553bcf8ce1cebdeab62ac1fa"
+    },
+    "slug": "agent-task-manager",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

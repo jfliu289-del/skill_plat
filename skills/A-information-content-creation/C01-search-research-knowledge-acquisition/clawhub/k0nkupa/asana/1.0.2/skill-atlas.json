@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "discover"
+    ],
+    "tasks": [
+      "build",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "0d2ebe1611de7164d5b2e8ceb37ee7c984e7a885a8f09e5454665bfe43aa5a63",
+    "content_hash": "3945dff83caf3de1497636fd772660350af85492a5ccae57f53d7ba4766f6208",
+    "precanonical_content_hash": "a64b1850b48bba57f937a940872080689bf205ee02359f868c66188f38dcff06",
+    "skill_md_hash": "4f978967100cd374573af99ff03e2c4d568afb53a61153564ed4671c34468a46",
+    "version_metadata_sha256": "77533d2d5a721007e1a2d218228de0e6316b93cabaf07a0ce7e400cfe56a3d40"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/k0nkupa/skills/asana",
+    "claim_id": "af213e4d9f1ca0fcf0c7d817f5ba4574074bb31ee1e92427a6d7e6b91c4cd007",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "asana",
+        "url": "https://clawskills.sh/skills/k0nkupa-asana"
+      },
+      {
+        "index_path": "categories/productivity-and-tasks.md",
+        "label": "asana",
+        "url": "https://clawskills.sh/skills/k0nkupa-asana"
+      }
+    ],
+    "owner_handle": "k0nkupa",
+    "owner_id": "s179yvzsphapq5ss49dv4zhfh584aptr",
+    "published_at": 1775511056158,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783649769148,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783649769148,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose is managing Asana workspaces, projects, tasks, comments, and completion state, and the scripts implement those Asana API operations against official app.asana.com endpoints.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill exposes live write commands for creating, updating, commenting on, and completing tasks; these are clearly listed and purpose-aligned, but users should treat agent-invoked writes as real Asana changes.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Setup requires Node and either a Personal Access Token or OAuth credentials. The local storage paths are disclosed, though the README and SKILL.md differ slightly on credentials.json handling.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access is limited to Asana OAuth and REST API endpoints, and local file access is limited to the user's ~/.openclaw/asana configuration and token files.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists reusable Asana credentials locally in JSON files without visible permission hardening; this is expected for the integration but should be protected as sensitive account access.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The asana_api.mjs finding about writing config.json/token.json reflects a real local-secret handling risk, but credential persistence is disclosed and aligned with the Asana API integration.\n[SQP-2] expected: The configure.mjs finding is supported by the artifact because PATs and OAuth client secrets can be saved under ~/.openclaw/asana; this warrants user caution but is not hidden or unrelated behavior.\n[SQP-2] expected: The oauth_oob.mjs finding is supported because OAuth token responses are saved locally; this is part of the documented OAuth flow and no non-Asana destination or exfiltration path was found.",
+          "guidance": "Install only if you are comfortable giving this skill reusable access to your Asana account. Prefer an Asana token or OAuth app with the minimum permissions you need, keep ~/.openclaw/asana out of sync folders and repositories, and review any create, update, comment, or complete-task request before allowing it to run.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward Asana integration that uses local credentials to read and change Asana tasks, with no evidence of hidden exfiltration or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783649739413,
+          "issueCount": 3,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 15,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: asana\nVersion: 1.0.2\n\nThe Asana skill bundle is a standard API integration for managing workspaces, projects, and tasks. It implements a clear authentication flow using either Personal Access Tokens (PAT) or OAuth, storing credentials locally in the user's home directory (~/.openclaw/asana/). The code (asana_api.mjs, oauth_oob.mjs) interacts exclusively with official Asana endpoints (app.asana.com) and lacks any indicators of data exfiltration, malicious execution, or prompt injection.",
+          "checkedAt": 1779159989569,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "dc6bbc93db90b6769e58e2bae37967bfbbff7ecc7b7ffabb3619c819da0a90fa",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/dc6bbc93db90b6769e58e2bae37967bfbbff7ecc7b7ffabb3619c819da0a90fa"
+    },
+    "slug": "asana",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

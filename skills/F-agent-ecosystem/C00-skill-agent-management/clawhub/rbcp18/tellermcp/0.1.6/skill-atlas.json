@@ -1,0 +1,147 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "configuration"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "infrastructure",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:backend",
+      "category:C07:token:testing",
+      "category:C10:token:model",
+      "cross-tag:agent-management",
+      "cross-tag:deployment",
+      "cross-tag:testing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C06",
+      "C07",
+      "C10"
+    ],
+    "stages": [
+      "deliver",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "deploy",
+      "manage",
+      "operate",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "0a9be7e5f0b5fe740ed22234b3a4530a5bd8c2c44d501daaa038cb7b4142b15f",
+    "content_hash": "32dd41bcf4a8856afbe4984522f8d25080018536f3d24ace47608e6da7425f4e",
+    "precanonical_content_hash": "c1a0cdf5049f48ba0268192d0d94a8d1d9bec4bda7f502f4d1b4826516349d98",
+    "skill_md_hash": "5ac9be2f7510b35a8424f0df1687e41fa6244e58f886ffed6be0ff35ea7cb177",
+    "version_metadata_sha256": "e8eb98ae7301569e18958e2aee957b47b5f4e6a90511eeeac07762282ca16b20"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/rbcp18/skills/tellermcp",
+    "claim_id": "26702bedb418608206f9d1c369cab321609a39637abfb2597f49b99935b5f7b9",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "tellermcp",
+        "url": "https://clawskills.sh/skills/rbcp18-tellermcp"
+      }
+    ],
+    "owner_handle": "rbcp18",
+    "owner_id": "s1775hmf98n5vvy4sz06dv5v45885w76",
+    "published_at": 1771206650185,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779969003197,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779969003197,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill’s stated purpose matches the artifacts: it exposes Teller lending, loan, and delta-neutral API tools, including unsigned borrow and repay transaction builders.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are direct setup and MCP registration guidance; I found no prompt overrides, hidden role changes, obfuscation, or unrelated automation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation is user-directed with npm install/npm start and a package lock; this is normal for a bundled Node MCP server, though it carries ordinary npm supply-chain risk.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to the Teller API and optional TELLER_API_BASE_URL/TELLER_API_TIMEOUT_MS environment configuration are disclosed and coherent with the purpose.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The server runs over stdio when started or registered by the user; there is no evidence of self-starting persistence, credential theft, privilege escalation, signing, or transaction broadcast.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: Downgraded to guidance: the skill clearly documents the Teller API endpoint and environment variables, and the env vars are configuration rather than credentials.\n[SQP-2] expected: Partially accepted as a user-safety note: wallet-specific queries and unsigned transaction builders are expected for this DeFi tool, but users should treat wallet addresses as sensitive financial metadata and review payloads before signing.\n[suspicious.env_credential_access] expected: The static finding points to TELLER_API_BASE_URL and TELLER_API_TIMEOUT_MS; these are disclosed configuration values, not secret access, and the network calls are the advertised Teller client behavior.",
+          "guidance": "Install only if you intend to use Teller lending tools through an MCP server. Use the default Teller endpoint or another endpoint you trust, avoid sharing wallet addresses unnecessarily, and independently verify destination, chain, amounts, approvals, and calldata before signing any generated borrow or repayment transaction.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This appears to be a legitimate Teller MCP server, but users should review any generated borrow or repay transaction before signing it.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968957483,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: tellermcp\nVersion: 0.1.6\n\nThe OpenClaw skill 'tellermcp' is benign. It functions as a Model Context Protocol server exposing legitimate Teller financial APIs. All network requests are directed to `https://delta-neutral-api.teller.org` (or a configurable environment variable), and inputs are rigorously validated using `zod` schemas, preventing injection vulnerabilities. The `SKILL.md` and `README.md` files contain standard instructions for deployment and usage, with no evidence of prompt injection attempts or malicious commands. Dependencies are standard for a Node.js project and do not indicate any supply chain risks.",
+          "checkedAt": 1779164420597,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "28542cc723fec1dfff6a5ff0508e2f0c316cad1500d65a49f5a7d0b27bcde922",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/28542cc723fec1dfff6a5ff0508e2f0c316cad1500d65a49f5a7d0b27bcde922"
+    },
+    "slug": "tellermcp",
+    "source_type": "clawhub",
+    "version": "0.1.6"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,131 @@
+{
+  "classification": {
+    "artifacts": [
+      "website"
+    ],
+    "audiences": [],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:dashboard",
+      "category:C17:token:notes",
+      "category:C19:token:automation",
+      "cross-tag:browser-automation"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17",
+      "C19"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "automate"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "505b905c3d4244afe38dd90199a1e1fef0fc583025fe743f4173d3ea3e3ab040",
+    "content_hash": "b17bf0393e715dccbb431b2c3c4eaa2fc60eba6a7f12cb2bc183988be7902209",
+    "precanonical_content_hash": "06bd47a1b8a4b9b7af23ba0203a08df2248fb0c7e44f38f9a56d4b6743523759",
+    "skill_md_hash": "8f9cc9d4739ee946bff81c92fa3c1fd4cc8c1508e3b4c981a37b2cf7c255685c",
+    "version_metadata_sha256": "99e2948738427c94831086f5ecb81ed3666ad727c038b6b508d74ae0a411262f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jakes420/skills/web-monitor-pro",
+    "claim_id": "cd1a784bd09cbd547803b43d719f91cfcf9877d04a64e37ee67c93113796ec22",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "web-monitor-pro",
+        "url": "https://clawskills.sh/skills/jakes420-web-monitor-pro"
+      }
+    ],
+    "owner_handle": "jakes420",
+    "owner_id": "s17622cyf5h0hmzmmamrqjwnc5884cf1",
+    "published_at": 1771185838866,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974357300,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974357300,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose is monitoring web pages for changes, prices, stock status, diffs, and alerts, and the Python script implements those capabilities directly.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill can fetch arbitrary user-provided URLs, persist snapshots, open local HTML in a browser, and optionally POST alert data to webhooks; these are documented and user-directed, but users should avoid monitoring sensitive authenticated pages.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden installer or automatic dependency download is present. Required binaries are declared as python3 and curl, with optional user-installed Playwright or cloudscraper support.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Local storage under ~/.web-monitor and optional WEB_MONITOR_DIR override are proportionate for a monitoring CLI, though the override means the user environment controls where files are written.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Monitor state, snapshots, feedback logs, diffs, and GUI files persist locally, and examples show optional recurring checks, but the skill does not install its own background job or escalate privileges.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[TT2] expected: The environment-controlled WEB_MONITOR_DIR affects the local storage path. That is consistent with a configurable CLI data directory, and there is no evidence of hidden writes outside the selected directory.\n[LP3] expected: Network access, local file writes, and curl execution are expected for web monitoring and are described in the artifacts, though the manifest itself is minimal.\n[TP4] expected: Feedback, debug, import/export, and GUI commands are visible in the skill documentation and align with support and management features rather than hidden behavior.\n[SDI-2] expected: The debug command can print OS details, data directory information, monitor counts, and recent feedback log lines. It is user-invoked and not automatically transmitted, but users should treat it as potentially sensitive.\n[SQP-1] expected: The activation text is broad, but it is centered on explicit watch, track, monitor, check, list, remove, and report requests for web monitors; persistent monitoring is disclosed.\n[SQP-2] expected: The documentation states that webhook payloads include monitor ID, label, URL, event details, price, and timestamp. The implementation sends those fields only to user-configured webhook URLs during checks when a condition or change triggers.\n[SQP-2] expected: The webhook implementation matches the documented alert feature and does not use hardcoded external endpoints; the privacy impact depends on the endpoint and monitored URLs the user chooses.",
+          "guidance": "Install only if you are comfortable with a local tool storing monitored URLs and page snapshots under ~/.web-monitor. Be careful with webhook destinations because monitored URLs and change details leave your machine, and review debug or feedback output before sharing it because it can include local system details or prior feedback text.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent web page monitoring skill that stores monitor data locally and only sends webhook or diagnostic data when the user configures or invokes those features.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974303486,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: web-monitor-pro\nVersion: 3.5.0\n\nThe OpenClaw AgentSkills skill bundle 'web-monitor-pro' is classified as benign. The Python script `scripts/monitor.py` implements web page monitoring functionalities as described in `SKILL.md`, including fetching URLs, tracking changes, and sending user-configured webhooks. Critical review of `subprocess.run` for `curl` shows arguments are passed as a list, mitigating shell injection risks. Data storage is local to the user's home directory, and webhook payloads contain only operational monitoring data. There is no evidence of intentional harmful behavior such as credential theft, unauthorized data exfiltration to hardcoded external endpoints, persistence mechanisms, or malicious prompt injection attempts in `SKILL.md`.",
+          "checkedAt": 1779163881287,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a2db0273a0036e90b783c6c7f20148dca602a104c981b18308df59b7d8ae2ea0",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a2db0273a0036e90b783c6c7f20148dca602a104c981b18308df59b7d8ae2ea0"
+    },
+    "slug": "web-monitor-pro",
+    "source_type": "clawhub",
+    "version": "3.5.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

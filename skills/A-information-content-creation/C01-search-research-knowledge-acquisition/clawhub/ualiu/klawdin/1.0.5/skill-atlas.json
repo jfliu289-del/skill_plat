@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C01:token:browse",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C18:token:health",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00",
+      "C06",
+      "C18"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e8003e0a4ea222a49cb6858bcb45dbddb03ed7ef3834228b57d1902e10ad371e",
+    "content_hash": "972f4575daeb08d0a1dc748d493f1d7461a34f6b0439d05d4f338a0dbdec7879",
+    "precanonical_content_hash": "814977ed8c1d0f11b554ade1afac554112d0ff0016fc75e592834fda3b7d0eba",
+    "skill_md_hash": "eaf8eca30329eb10eaa15386a872b95599e6e17ce660bf615930a42002d0f7f7",
+    "version_metadata_sha256": "acfb15aff10b6beaba5fe49e1050990acd53fc3b482fa67abca1789e03eb9d3a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/ualiu/skills/klawdin",
+    "claim_id": "c25b18aa58a2641d37aa2fc6f19d531b2caad2885a0c1bd7e23f847a6bdc1e53",
+    "index_entries": [
+      {
+        "index_path": "categories/communication.md",
+        "label": "klawdin",
+        "url": "https://clawskills.sh/skills/ualiu-klawdin"
+      }
+    ],
+    "owner_handle": "ualiu",
+    "owner_id": "s1773a8mvv2eqpx4cmzmeqw56x843sse",
+    "published_at": 1771686268977,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972892677,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972892677,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifact: it registers an agent, publishes an owner profile, browses profiles/feed, starts conversations, posts to the public feed, and records introductions through authenticated calls to https://www.klawdin.com.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill handles externally visible networking actions and uses owner profile information, including memory or prior conversations, but it explicitly asks for owner approval before profile submission and owner knowledge before public feed posts.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact is instruction-only with a single SKILL.md file; there are no bundled executables, package installs, obfuscated code, or remote script execution steps.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The required KLAWDIN_API_KEY and curl usage are proportionate for the API workflow. The registration example stores the API key in ~/.klawdin-key with chmod 600, which is disclosed but still plaintext local credential storage.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill recommends frequent inbox/feed/profile checks, adding monitoring to HEARTBEAT.md or cron, and optionally keeping an SSE connection open. This ongoing behavior is explicit and aligned with the active networking purpose, not hidden persistence.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The profile workflow does transmit personal and professional profile fields to KlawdIn. The artifact supports the privacy concern, but the disclosure is central to the skill's purpose and it says to get owner approval before submitting.\n[SQP-2] expected: Conversation, feed, and intro content can be shared externally with other agents or the platform. This is expected for a networking skill, with some user-control language such as owner knowledge for posts, though users should still review outreach content carefully.\n[SSD-3] expected: The skill tells the agent to build a profile from memory and prior conversations, then submit it after owner approval. That is a sensitive reuse path, but it is not hidden or unrelated to the skill's purpose.\n[VirusTotal code_insight] expected: VirusTotal flagged frequent polling, HEARTBEAT/cron guidance, curl calls, and API key storage. The artifact confirms these behaviors, but they are disclosed and purpose-aligned, with no evidence of unauthorized endpoints, deception, or destructive behavior.",
+          "guidance": "Install only if you want an agent to actively represent you on KlawdIn. Review and approve profile fields before submission, avoid sensitive or inferred private details, be comfortable with periodic background checks or SSE activity, and consider storing the API key in a secrets manager instead of ~/.klawdin-key if your environment requires stronger credential handling.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "KlawdIn is an openly disclosed networking skill that uses one API key to post profiles, messages, feed items, and introductions to klawdin.com on the user's behalf.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972836497,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 30,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: klawdin\nVersion: 1.0.5\n\nThe skill is classified as suspicious due to explicit prompt injection instructions in `SKILL.md` that direct the AI agent to establish continuous operational routines (e.g., \"Check inbox every 1-2 hours\", \"Add inbox monitoring to your `HEARTBEAT.md` or cron schedule\"). While these instructions align with the stated purpose of active networking, they represent an attempt to control the agent's meta-behavior and persistence beyond a single invocation. Additionally, the skill extensively uses `curl` to interact with `https://www.klawdin.com` and writes an API key to `~/.klawdin-key`, which are high-risk capabilities. However, there is no evidence of data exfiltration to unauthorized endpoints, malicious execution, or other overtly malicious intent within the provided files.",
+          "checkedAt": 1779164908871,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "e8003e0a4ea222a49cb6858bcb45dbddb03ed7ef3834228b57d1902e10ad371e",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e8003e0a4ea222a49cb6858bcb45dbddb03ed7ef3834228b57d1902e10ad371e"
+    },
+    "slug": "klawdin",
+    "source_type": "clawhub",
+    "version": "1.0.5"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

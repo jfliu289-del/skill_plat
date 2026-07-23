@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator",
+      "security-professional"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "creative",
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C00:token:skill",
+      "category:C05:token:design",
+      "category:C09:token:privacy",
+      "category:C09:token:security",
+      "category:C10:token:model",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05",
+      "C09",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "design",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "2e823d822ad23a9f09162ca62e1a3e9f472a0a5934fd700e366272f8a8373aa2",
+    "content_hash": "d876f7c0581a7f7df1918d50cbc56cfdb6dab300184f8ffd0d295a1f4576f526",
+    "precanonical_content_hash": "a3d2386856f80f8a2a9590368b08530d601d65fbea6d56c7dfca6aee46229769",
+    "skill_md_hash": "124ef1d0123263d90cab409024993df0250ead1c9e1d03652c2fa89690024c63",
+    "version_metadata_sha256": "13172ac24aac42c8dcc83781ef14e8990d3015eca6360ee1775dc2ce2c84c1a3"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/qsmtco/skills/tokenqrusher",
+    "claim_id": "0933528cfb3e0cbf4e8bfd328abb0cfa57e6fff3a5d8757dc889fd6c14e499c1",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "tokenqrusher",
+        "url": "https://clawskills.sh/skills/qsmtco-tokenqrusher"
+      }
+    ],
+    "owner_handle": "qsmtco",
+    "owner_id": "s17c6trzbwfqeabfg04zjp98cs884arg",
+    "published_at": 1771390744956,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1780085599038,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968722786,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The implemented hooks match the stated purpose: they filter bootstrap context and reduce heartbeat work. Some bundled advisory assets still discuss model routing, provider fallback, and API-key placeholders that are not part of the core installed behavior.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are mostly scoped to token savings, heartbeat checks, and hook management. The heartbeat templates include strong model-selection instructions, which are purpose-aligned but should be treated as configurable recommendations rather than policy overrides.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No remote downloader or opaque installer was found. The CLI uses fixed OpenClaw subprocess commands to list or enable the two active hooks, and this hook-enablement behavior is documented.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The core code does not call external endpoints or require secrets. Optional config examples reference alternate LLM providers and API-key placeholders, which could expand data sharing if a user manually applies them.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists by enabling normal OpenClaw hooks and may write heartbeat state through the helper script under the OpenClaw workspace memory directory. Migration docs also show scoped rm -rf cleanup commands for old hook directories, which are user-directed but should be handled carefully.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Hook enablement, local config reads, and OpenClaw CLI status/install commands are consistent with a hook-based optimizer, though the metadata could disclose these capabilities more explicitly.\n[TP4] expected: Heartbeat scheduling and hook state management are part of the documented cost-reduction design, not a hidden separate capability.\n[SDI-1] unexpected: The provider-fallback examples in assets/config-patches.json are not automatically applied by the skill, but they are broader than the core local-hook behavior and should be opt-in if used.\n[SDI-2] unexpected: Automatic fallback to alternate providers would materially change outbound data flow if a user manually applied that patch; artifact evidence did not show the installed code applying it silently.\n[SDI-4] expected: The CLI security comment understates subprocess use, but the actual subprocess calls are fixed OpenClaw commands and the README/SKILL.md disclose status and install operations.\n[SQP-2] expected: The migration deletion commands are scoped to obsolete OpenClaw hook directories, not broad home-directory deletion, but they lack safer backup or confirmation guidance.\n[SQP-3] expected: The heartbeat templates recommend a low-cost model for routine heartbeat work, which aligns with the cost-saving purpose; users should ensure this matches their provider, privacy, and quality policies.\n[SQP-1] expected: The simple keyword routing examples are advisory configuration material, not active code in the current hooks; they could reduce answer quality if manually adopted without review.\n[TM1] expected: The rm -rf snippets are specific migration cleanup commands for old hook folders. They are not evidence of malicious deletion, but they are risky operator guidance and should be replaced or used with verification.",
+          "guidance": "Install only if you want OpenClaw hooks that automatically reduce loaded context and heartbeat work. Review the hook configs after installation, avoid applying provider-fallback or model-routing patches unless you explicitly want those data flows, and back up or manually verify any old hook directories before running the migration deletion commands.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill’s core behavior is a disclosed local cost-optimization hook system, but users should review optional model/provider configuration examples and migration cleanup commands before using them.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968671608,
+          "issueCount": 23,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": null,
+          "checkedAt": 1780085599038,
+          "normalizedStatus": "clean",
+          "source": "engines",
+          "status": "clean",
+          "verdict": null
+        }
+      },
+      "sha256hash": "2e823d822ad23a9f09162ca62e1a3e9f472a0a5934fd700e366272f8a8373aa2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/2e823d822ad23a9f09162ca62e1a3e9f472a0a5934fd700e366272f8a8373aa2"
+    },
+    "slug": "tokenqrusher",
+    "source_type": "clawhub",
+    "version": "2.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

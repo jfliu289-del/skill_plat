@@ -1,0 +1,131 @@
+{
+  "classification": {
+    "artifacts": [
+      "website"
+    ],
+    "audiences": [],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C10:token:ai",
+      "category:C12:token:management",
+      "category:C19:token:automation",
+      "cross-tag:browser-automation"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C12",
+      "C19"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "automate"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "9d9fe94fecfdbb479ce0e2f25e95348b1d5dac64a98b2dee2696d3890ba3d0d7",
+    "content_hash": "7d1fbcc617293efe47f5500b8bc1bc72a1b0c7fdb8b3a9961aa07b884bed36f6",
+    "precanonical_content_hash": "ca61de3cf16e9dc0cab2cce347a9eaf586c059f99992870ae9bc11723cbe8490",
+    "skill_md_hash": "df425be0787b9d543b15807425916ca9ec84fa1ce1b4a610756a3345f36551d7",
+    "version_metadata_sha256": "addeb6b57235ec4bbcd56140967bee8034df632d73599af0e8f38c414f06dcb3"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/abhibavishi/skills/verk",
+    "claim_id": "fe5319b125b72a31444558f7f9eda9a0818142eae113a69f810229c15a02b543",
+    "index_entries": [
+      {
+        "index_path": "categories/productivity-and-tasks.md",
+        "label": "verk",
+        "url": "https://clawskills.sh/skills/abhibavishi-verk"
+      }
+    ],
+    "owner_handle": "abhibavishi",
+    "owner_id": "s17cthr513m32pdbakkn7nmdtx86sp1k",
+    "published_at": 1771157773114,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974665787,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974665787,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The code matches the stated Verk task-management purpose: it lists, creates, updates, comments on, and deletes tasks, and lists projects and flows. The README mentions flow triggering and task comment listing, but those commands are not implemented in the CLI, so this is a documentation mismatch rather than hidden runtime behavior.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions disclose the mutating task operations, including deletion. The delete command has no built-in confirmation prompt, so agents and users should verify the exact task ID before invoking it.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a normal skill copy or ClawHub install. The package has no install scripts, no dependencies, and no background startup behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Requiring VERK_API_KEY and VERK_ORG_ID is proportionate for a Verk API client. The optional VERK_API_URL override can redirect requests and the API key, so users should only set it to a trusted endpoint.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No local persistence, broad file indexing, credential-store access, shell spawning, or background worker behavior was found. Privilege is limited to the configured Verk API key and organization.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The README advertises task deletion, which is purpose-aligned for a task manager, but it does not warn that deletion may be irreversible. It also mentions flow triggering, but the CLI does not implement that command.\n[SQP-2] expected: The SKILL.md instructs the agent to use task deletion when asked to delete or remove a task. This is disclosed and user-directed, but lacks explicit confirmation guidance.\n[SQP-2] expected: The CLI sends DELETE for tasks delete immediately after receiving a task ID. That is the intended API behavior, not deceptive or automatic, but users should treat it as a destructive command.",
+          "guidance": "Install this only if you trust Verk and can provide a scoped, revocable API key. Confirm exact task IDs before update or delete operations, and avoid setting VERK_API_URL unless you intentionally trust that alternate API server.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward Verk task-management client, with the main caveat that deleting tasks is immediate and should be used carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974634628,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 30,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: verk\nVersion: 1.1.0\n\nThe OpenClaw Verk skill is a straightforward client for the Verk API. It securely handles `VERK_API_KEY` and `VERK_ORG_ID` environment variables for authentication with the legitimate Verk API endpoint (`https://c0x9lrm7ih.execute-api.us-east-1.amazonaws.com/v1`). The `verk-cli.mjs` script uses Node.js `fetch` for network requests and `JSON.stringify` for request bodies, mitigating common injection risks. The `SKILL.md` and `README.md` provide clear, non-malicious instructions for the AI agent and user, without any evidence of prompt injection attempts to subvert the agent, data exfiltration, or other harmful behaviors.",
+          "checkedAt": 1779163927328,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "d16f235008485bd4d8d591f6cac43a5462c8c2d0b2bb00a83b44a5b16c11f01a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d16f235008485bd4d8d591f6cac43a5462c8c2d0b2bb00a83b44a5b16c11f01a"
+    },
+    "slug": "verk",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

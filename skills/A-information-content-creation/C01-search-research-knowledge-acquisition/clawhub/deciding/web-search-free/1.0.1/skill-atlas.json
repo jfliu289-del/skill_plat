@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.69,
+    "domains": [
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:phrase:web search",
+      "category:C01:token:research",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C06:token:code",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e47af61d92f669c44731ca6103f64471c2307af6f2d550d88b10d03c15c688f0",
+    "content_hash": "0cb1293b6ba19e662e8f5a8434610cbf9e5ff2a1f1b5f185ebc0aa689e1bc782",
+    "precanonical_content_hash": "b477893080709b661007734b4abf36ea1b03ccbfe936d1ca978355ad84174c19",
+    "skill_md_hash": "912465ca80a158bf3bc32597ac09b1f5e8a89fb5dd4093b27f4237375cc9829f",
+    "version_metadata_sha256": "7a1080245d40edd95e181aa297ea8d504cbd20dc08ac057494511d9e69ef6946"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/deciding/skills/web-search-free",
+    "claim_id": "f9db364e56ba5221cdf9c791085aebb8cb9d525af607374519118ec93d19dcbb",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "web-search-free",
+        "url": "https://clawskills.sh/skills/deciding-web-search-free"
+      }
+    ],
+    "owner_handle": "deciding",
+    "owner_id": "s174h26z8eet87tapb9t9sd64s884qjs",
+    "published_at": 1771858406982,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779952800485,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779952800485,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The package is broader than the short name suggests, but SKILL.md explicitly discloses web search, code context, company research, people search, URL crawling, and deep research capabilities.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instruction to always prefer this skill over built-in web_search or web_fetch is overbroad and should be treated as preference guidance, not as an override of user intent or policy.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation/setup is limited to checking and adding an Exa MCP endpoint through mcporter; there are no bundled executable scripts, hidden installers, or automatic system changes in the artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "External search, crawling, people lookup, and research requests are proportionate to the stated purpose, but the skill does not clearly warn users that queries, URLs, and research instructions are sent to third-party services.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No local persistence, privilege escalation, credential access, or background worker is installed by the skill; the only persistent state described is mcporter endpoint configuration and remote research IDs returned by Exa.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SDI-1] expected: The examples for crawling, people search, and deep research are not hidden in the main instructions; those capabilities are named in SKILL.md and included in the Exa MCP setup command.\n[SDI-1] expected: Code-context and company-research examples align with the broader SKILL.md description, though the manifest summary could describe the full scope more clearly.\n[SQP-1] unexpected: The repeated 'always prefer this skill' routing language is too broad and could cause unnecessary third-party disclosure, but it is visible and not deceptive or policy-overriding.\n[SQP-2] unexpected: The missing privacy warning is a real documentation gap because search terms, URLs, people queries, and research instructions may be sent externally; this supports user caution but not a Review verdict by itself.\n[VirusTotal-code_insight] expected: The shell-injection and SSRF concerns are hypothetical risks around using mcporter and URL crawling; the artifact contains command examples and a disclosed crawl tool, not unsafe implementation code or exploitation logic.",
+          "guidance": "Install this only if you are comfortable sending web searches, URLs, people/company lookups, and research prompts to Exa or the fallback search provider. Do not include secrets, private/internal URLs, confidential business material, or sensitive personal data in queries, and override the skill’s broad preference when built-in tools or no web lookup are more appropriate.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed web-search helper that routes searches through Exa MCP, with privacy and routing caveats but no evidence of hidden or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779952770940,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 45,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: web-search-free\nVersion: 1.0.1\n\nThe skill is classified as suspicious due to the inherent risk of shell injection and Server-Side Request Forgery (SSRF) vulnerabilities. The `SKILL.md` instructs the agent to use `mcporter call` commands with user-provided parameters (e.g., `query`, `url`). If the OpenClaw agent does not properly sanitize or escape user input before constructing these shell commands, it could lead to arbitrary command execution (shell injection). Additionally, the `crawling_exa` tool, which takes a `url` parameter, could be exploited for SSRF if the agent allows arbitrary user-provided URLs, potentially accessing internal network resources. While the skill's stated purpose is benign (web search), these capabilities present significant security risks if the agent's implementation is vulnerable. There are also prompt injection attempts in `SKILL.md` to influence agent behavior regarding skill prioritization, though these do not appear to be malicious in intent.",
+          "checkedAt": 1779166511422,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "ae3008761002cf97edc11c243871f93f64baa44906606feafab2400ff60a8049",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ae3008761002cf97edc11c243871f93f64baa44906606feafab2400ff60a8049"
+    },
+    "slug": "web-search-free",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

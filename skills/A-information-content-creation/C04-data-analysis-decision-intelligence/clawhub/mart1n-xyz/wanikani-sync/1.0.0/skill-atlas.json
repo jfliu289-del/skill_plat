@@ -1,0 +1,151 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.375,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:analyze",
+      "category:C04:token:data",
+      "category:C04:token:statistics",
+      "category:C06:token:api",
+      "category:C07:token:review",
+      "category:C09:token:secure",
+      "category:C16:token:learning",
+      "category:C17:token:notes",
+      "cross-tag:data-analysis",
+      "cross-tag:review",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C07",
+      "C09",
+      "C16",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "review"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a60eae2e8b5d1f9d3f6ddb3acbfaafa3193359a1fd46484a74873061b42ebe2f",
+    "content_hash": "1c4875c699d64f313adea5bc14ae2fe9cf90739d450b95b7c1974fa8684bf36f",
+    "precanonical_content_hash": "f8369263f237c12747a1efa0a4ec3c049df2f56ffaf342b52d2cae54b0452c0d",
+    "skill_md_hash": "8491dd6e7f498d60c606cb8712e67c1b8d9484965e839622aff7f4b6e2dd6cda",
+    "version_metadata_sha256": "745233145688bdb1838e66a423375b45c50e97ec93fe5c14797c60e9c318720b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/mart1n-xyz/skills/wanikani-sync",
+    "claim_id": "6604d202e5e401077a665feba9e303c5e17aa2c0ff97b990c5350a008b703c4e",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "wanikani-sync",
+        "url": "https://clawskills.sh/skills/mart1n-xyz-wanikani-sync"
+      }
+    ],
+    "owner_handle": "mart1n-xyz",
+    "owner_id": "s173v1m6sq7skzy2eq4pb7ehks885nma",
+    "published_at": 1771252646900,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971130510,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971130510,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The API calls, SQLite storage, and query helpers are aligned with syncing and analyzing WaniKani progress; the data can include profile, subscription, assignment, review, reset, and subject information.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are user-directed CLI examples with no hidden prompt overrides, automatic execution, unrelated commands, or attempts to bypass user control.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The metadata declares python3 and WANIKANI_API_TOKEN, but the script imports the non-stdlib requests package without a pinned dependency file; this is a transparency issue, not suspicious behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Use of the WaniKani API token and network access to api.wanikani.com are proportionate to the stated sync purpose, and no unrelated domains or credential uses were found.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill creates a persistent local wanikani.db and sync metadata for incremental sync, which is expected for offline analysis; no background service, privilege escalation, destructive behavior, or exfiltration path was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[ASI03] expected: Delegated WaniKani API-token use is necessary for account-data syncing and is disclosed in the skill documentation.\n[ASI06] expected: Persistent local storage is the core feature; users should treat the SQLite database as private learning/account data.\n[ASI04] expected: The undeclared requests dependency may affect setup provenance, but it does not create a purpose mismatch or hidden behavior in the artifact.",
+          "guidance": "Install this if you are comfortable giving a local script your WaniKani API token and keeping a local copy of your WaniKani progress data. Prefer the environment variable method over passing the token on the command line, store the database in a private directory, avoid committing the token or wanikani.db to source control, and install Python dependencies from a trusted environment.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it syncs WaniKani learning data to a local SQLite database for offline analysis.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971104257,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: wanikani-sync\nVersion: 1.0.0\n\nThe OpenClaw skill 'wanikani-sync' is benign. All files, including `SKILL.md`, `scripts/sync.py`, and `scripts/queries.py`, align with the stated purpose of syncing WaniKani progress data to a local SQLite database and querying it. The `SKILL.md` contains no prompt injection attempts. The Python scripts use the `WANIKANI_API_TOKEN` solely for legitimate API calls to `api.wanikani.com/v2` and store data locally in a user-specified or current directory. SQL queries are properly parameterized, preventing injection vulnerabilities. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or obfuscation.",
+          "checkedAt": 1779164565699,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "983b067038d174a53f3e5366840a395d7c1f3ec43f7fdb7ce6337cdf2e97f057",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/983b067038d174a53f3e5366840a395d7c1f3ec43f7fdb7ce6337cdf2e97f057"
+    },
+    "slug": "wanikani-sync",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

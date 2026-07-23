@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:prompt",
+      "category:C04:token:data",
+      "category:C10:token:ai",
+      "category:C10:token:model",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:design"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "design",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8f8ccd73cd136194f29e77b895ed9d9f16eab4ec4ac5da0ee63f0ab9eab7fdd5",
+    "content_hash": "5fca50c8b4ebd9075373a55b3bca922685d6083261e1c2555812c4a96b924162",
+    "precanonical_content_hash": "0303f28bad65d91e9c18137730878869295cebd8629f8e433ca6e2685b326560",
+    "skill_md_hash": "15257502fc9c0161d686dd7fa33c98dd52e1ca869ca88aa27e9b8e46f1ca33da",
+    "version_metadata_sha256": "31880d29700fa637b572250b9402e3d1c778a5195934bfc8978be7b1ed10136f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/zeglin/skills/aieos",
+    "claim_id": "c8d0ea29861de8716c768743a803a67c4349df746bcc5430f74980a0cdb2586a",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "aieos",
+        "url": "https://clawskills.sh/skills/zeglin-aieos"
+      }
+    ],
+    "owner_handle": "zeglin",
+    "owner_id": "s17d8tj6z3q9nxzpcqskts9n058842az",
+    "published_at": 1769986654680,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783653693436,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783653693436,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifacts: loading, validating, applying, exporting, and rendering AIEOS persona data. These capabilities can affect future agent behavior, but that is central to the skill.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands are user-directed, apply is dry-run by default, and committing changes requires --apply. The skill accepts arbitrary user-provided local paths or URLs, so schema sources should be trusted and reviewed.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No package install hooks, hidden setup steps, dependencies, obfuscation, subprocess execution, or startup mechanisms were found. The package contains SKILL.md, a JSON schema, and one standard-library Python CLI script.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network use is limited to fetching a user-specified schema URL, and file access is limited to user-specified files plus the OpenClaw workspace identity files. No credentials, tokens, browser profiles, or broad local indexing were found.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "With --apply, the tool writes the full persona to $OPENCLAW_WORKSPACE/aieos/entity.json and overwrites existing IDENTITY.md and SOUL.md. It does not create background workers, escalate privileges, or self-persist beyond those persona files.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The file, network, and workspace-write capabilities are real, but they are documented in SKILL.md and align with persona import and application. The lack of a separate permission manifest is a documentation gap, not evidence of hidden behavior.\n[TP4] expected: The claimed mismatch is not supported by the artifacts: remote loading, local persona persistence, export, and HTML generation are all explicitly described as skill features.\n[SDI-1] expected: The HTML bio page feature is disclosed as world-facing and writes only to a user-provided output path. Users should still treat generated pages as publishable personal/persona data and review them before sharing.\n[SDI-2] expected: Fetching arbitrary URLs is user-directed and purpose-aligned, but untrusted schemas can poison persona files or appear in generated HTML, so trusted sources matter.\n[SQP-2] expected: The --apply persistence behavior is disclosed and dry-run is the default. The warning could be clearer that files may be overwritten, and dry-run still creates the aieos directory before printing proposed changes.\n[staticScan] expected: The static scan reported no findings, which is consistent with local review: no eval, subprocess, credential access, deletion routines, or background persistence were found.\n[VirusTotal] expected: VirusTotal telemetry was clean and aligns with the artifact review, but it was treated only as supporting telemetry.",
+          "guidance": "Install only if you want a skill that can manage persistent agent persona files. Use dry-run first, inspect imported JSON carefully, avoid schemas from unknown URLs, back up IDENTITY.md, SOUL.md, and aieos/entity.json before using --apply, and review generated HTML before publishing it.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed persona-management skill that can persistently change an agent’s identity files when the user explicitly runs its commands.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783653649847,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 70,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: aieos\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills bundle for AIEOS is classified as benign. The `SKILL.md` provides clear, non-malicious instructions for managing AI persona data. The core script, `scripts/aieos_tool.py`, performs file operations (reading/writing to `OPENCLAW_WORKSPACE/aieos/entity.json`, `IDENTITY.md`, `SOUL.md`) and network operations (`urllib.request.urlopen`) solely for loading schemas from specified URLs or local files. There is no evidence of data exfiltration, malicious execution (e.g., `eval`, `subprocess`), persistence mechanisms, prompt injection attempts against the agent, or obfuscation. All actions are directly aligned with the stated purpose of standardizing and managing AI identity.",
+          "checkedAt": 1779160772939,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "4303dbe2f08f09b396909ea624b830e4e7f71563f7a02211fadeb27da6eb7e55",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4303dbe2f08f09b396909ea624b830e4e7f71563f7a02211fadeb27da6eb7e55"
+    },
+    "slug": "aieos",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

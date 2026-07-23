@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "category:C12:token:strategy",
+      "cross-tag:agent-management",
+      "cross-tag:planning",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C10",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "plan"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "plan"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1667a3d76356545196d05a2a8874c10db82104ba87cd6e0efca0c3c9ea1456e1",
+    "content_hash": "25ad5be67cab2722c849b0754360c371e2880ecce82395c91e4f18142d649ee3",
+    "precanonical_content_hash": "47b807786190d2edc50eb66476d37c9bf8f17836e9d0a924f043cea8bdcc72d7",
+    "skill_md_hash": "220c3665a9c62bf4fb97753b445ad45f4313572a8478be520f2695e700b8f410",
+    "version_metadata_sha256": "a613a1ab6d265356409b7b74ff46ecc77d89839048198ca17707fc935decdeee"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sergiorico1/skills/thrd-skill",
+    "claim_id": "fb02b2176c7223d0fd66698e4f4c8b8a5e6fcacf539142725a704e1769811272",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "thrd-skill",
+        "url": "https://clawskills.sh/skills/sergiorico1-thrd-skill"
+      }
+    ],
+    "owner_handle": "sergiorico1",
+    "owner_id": "s178verkv16na4xy0aqyk7j4fh83gf3n",
+    "published_at": 1771256350897,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971169497,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971169497,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts match the stated purpose of provisioning and operating a dedicated thrd.email inbox, including send/reply, delivery tracking, billing checkout creation, and trust/verification workflows. These are higher-impact capabilities but are disclosed and tied to the email service purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Workflows are explicit and mostly user-directed, with safety notes for dedicated inbox use, API key handling, idempotency, prompt-shield acknowledgements, quotas, and human payment/claiming steps.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation is limited to a documented pip install of requirements.txt, which contains only requests>=2.31.0. I found no hidden installer, obfuscated setup, or remote shell bootstrap.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "THRD_API_KEY is expected for this service and the skill warns not to persist it to disk. The polling script supports a base URL override, so users should avoid pointing it at untrusted hosts because the bearer token is sent there.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The poll daemon is a long-running user-started process that stores a cursor file and can run an optional user-supplied callback when events arrive. This is disclosed and uses shell=False, but the callback should be treated as local command execution under the user's control.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[AST4] expected: Verified in scripts/poll_daemon.py: --on-events runs a parsed argv command with subprocess.run(..., shell=False) after events are received. This is a real local execution capability, but it is optional, documented, user-supplied, and aligned with the fallback wake-up workflow rather than hidden behavior.\n[SDI-2] expected: The trust-boundary expansion is valid as guidance: inbound events can trigger whatever callback the operator configured. Artifact evidence does not show automatic unsafe execution, shell injection, persistence beyond the running daemon, or deceptive framing, so this does not justify Review by itself.\n[staticScan] expected: Static scan reported no suspicious patterns, and local inspection found only the documented scripts and thrd.email API interactions.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with artifact inspection, but it was used only as supporting signal.",
+          "guidance": "Install this only if you want an agent to operate a dedicated thrd.email inbox. Keep THRD_API_KEY in a secret manager, define clear approval rules for outbound email and billing upgrades, use the default Thrd API endpoint unless you trust the alternative, and only configure --on-events with harmless commands you would run yourself.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill is a coherent email-inbox integration with disclosed credentials, polling, and optional callback behavior; its main risks are ordinary operational controls, not hidden malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971132400,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: thrd-skill\nVersion: 1.2.7\n\nThe skill bundle is designed for managing email via thrd.email and exhibits no malicious intent. It correctly handles API keys by reading them from environment variables and explicitly warns against writing them to disk (`scripts/onboard.py`, `SKILL.md`). The most potentially risky component, `scripts/poll_daemon.py`, which allows executing a command via `--on-events`, uses `shlex.split` and `subprocess.run(..., shell=False)` to safely execute commands without shell injection, a fact explicitly documented in `SKILL.md` and `references/api.md`. All network requests are directed to the legitimate `api.thrd.email` domain, and there is no evidence of data exfiltration, persistence mechanisms, or prompt injection attempts against the AI agent.",
+          "checkedAt": 1779164585682,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "807c0e596e19ab57ecf3f574df0b41539db2ed24ff87a4b718142383c7b4eb00",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/807c0e596e19ab57ecf3f574df0b41539db2ed24ff87a4b718142383c7b4eb00"
+    },
+    "slug": "thrd-skill",
+    "source_type": "clawhub",
+    "version": "1.2.7"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

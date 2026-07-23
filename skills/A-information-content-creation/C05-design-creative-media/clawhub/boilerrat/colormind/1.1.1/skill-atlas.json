@@ -1,0 +1,137 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:image",
+      "category:C06:token:api",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "25d5913458d25c4475f238f8a86b38ad878aaddd9abe46444e1f0a0975cce956",
+    "content_hash": "86f605f6e71229b41692fcd1714d91e514d312ae71ad9202486d0229b9baea69",
+    "precanonical_content_hash": "c4240c6107ed746e6e71b110639b53c6776accfe5c125a3ceb42c9ccd22f8836",
+    "skill_md_hash": "6d5fa1fc7c2b28ba2c208a7b350c394771f874a99ad69b97cf2ee81ce0ffb3d7",
+    "version_metadata_sha256": "ebbc4a3cca2323217a7e6e309f7263278ec7a3e29ddc20e4d5ae286922ca87ea"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/boilerrat/skills/colormind",
+    "claim_id": "a74b242b93e4045f92a801adf8833409ce1523da6ca18c8e0d88a790f353010e",
+    "index_entries": [
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "colormind",
+        "url": "https://clawskills.sh/skills/boilerrat-colormind"
+      }
+    ],
+    "owner_handle": "boilerrat",
+    "owner_id": "s170t4v5bamwcpbskv6pc48j25847kge",
+    "published_at": 1771473533195,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972262301,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972262301,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts match the stated palette-generation purpose: list models, generate palettes, and optionally sample a user-chosen image for color values. The notable risks are disclosed external HTTP requests and ImageMagick image parsing.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The documented actions are user-run commands with no hidden automation, credential access, broad filesystem indexing, destructive behavior, or unrelated agent instructions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no installer or package-install script. Required binaries are declared as node, python3, and convert, matching the visible implementation.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to colormind.io, temporary local JSON files, Python helpers, and ImageMagick are proportionate to the feature set, but users should avoid sensitive palettes, private images, and untrusted image files.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts show no persistence, background workers, elevated privileges, environment-secret use, or credential/session access; temporary files are created in a temp directory and removed on exit.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SDI-1] expected: Downgraded in context: image sampling and helper scripts are documented in SKILL.md and SECURITY.md, and the required convert/python3 binaries are declared, so this is not hidden behavior despite the short manifest summary being narrower than the full documentation.\n[SQP-2] expected: Outbound Colormind requests are real and there is no per-run consent prompt, but the skill prominently discloses that palette inputs and image-derived color data are sent externally over HTTP.\n[E1] expected: The plain-HTTP fetch is confirmed and should be treated as a privacy/integrity limitation, but it is limited to the palette API workflow and is not evidence of deceptive exfiltration.\n[VirusTotal code_insight] expected: The telemetry concern matches the same disclosed HTTP and ImageMagick risks; with no engine detections and coherent artifacts, it is not enough to move the skill into Review.\n[staticScan] expected: The static scan reported clean findings, which is consistent with the straightforward scripts and lack of obfuscation, persistence, credential access, or destructive commands.",
+          "guidance": "Install only if you are comfortable sending palette colors and image-derived RGB values to colormind.io over unencrypted HTTP. Do not use it with private photos, confidential design work, proprietary brand colors, or untrusted images unless you add sandboxing and keep ImageMagick patched.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This palette skill is transparent about sending color data to Colormind over plain HTTP and using ImageMagick for optional image sampling, so it is acceptable for non-sensitive use.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972216142,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 58,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: colormind\nVersion: 1.1.1\n\nThis skill is classified as suspicious due to two primary reasons: 1) The `image_to_palette.sh` script uses ImageMagick's `convert` command on user-provided image paths, which, as acknowledged in `SKILL.md` and `SECURITY.md`, presents a potential Remote Code Execution (RCE) vulnerability if processing untrusted or malicious images. While the script attempts to quote the image path, ImageMagick itself has a history of vulnerabilities, and the risk is inherent to its use. 2) All network communication to `colormind.io` (for listing models and generating palettes) occurs over unencrypted HTTP, as explicitly stated in `SKILL.md`, `SECURITY.md`, and confirmed by `scripts/generate_palette.mjs` and `scripts/list_models.mjs`. This exposes transmitted color data to potential eavesdropping. Despite extensive and transparent documentation of these risks, they represent significant security vulnerabilities and risky capabilities, preventing a 'benign' classification, but lacking clear evidence of intentional malicious behavior to warrant a 'malicious' classification.",
+          "checkedAt": 1779164725882,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "fda64dd08c3fcf83c7a48bca14c11b510deb49ba4bf039a166976dff74ea491c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/fda64dd08c3fcf83c7a48bca14c11b510deb49ba4bf039a166976dff74ea491c"
+    },
+    "slug": "colormind",
+    "source_type": "clawhub",
+    "version": "1.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C06",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1f76d7589987e0607fa279344e2729d845d5323bfb091f6bf88bcdb2ee2dcbbc",
+    "content_hash": "f21b47ed442e2b43f707669d354697c2120e95a43024c2d54517526e5339f60f",
+    "precanonical_content_hash": "a4be97284d4c0d930abf1f3b44aec403522e1a6684f1f6b1e00448a8289b6841",
+    "skill_md_hash": "5a975c3d3e9dc07e381238bdb1eaa9b22aa731724f6c6f245073f183a82cd71a",
+    "version_metadata_sha256": "02fb974334ac9fd4acf167a9edf93bd0ea6bc2719c20e9848f7a45136e4cfeff"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/codevena/skills/agorahub",
+    "claim_id": "9c3e19bfec53c7f3d27267c3efa79b37e9a269ab675cece6c4bec5691d51f69d",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "agorahub",
+        "url": "https://clawskills.sh/skills/codevena-agorahub"
+      }
+    ],
+    "owner_handle": "codevena",
+    "owner_id": "s173jcsbaxq2e2zy2kw0q6kem9884d9d",
+    "published_at": 1770903983635,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972516964,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972516964,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented behavior matches the stated purpose: discover and call AgoraHub-hosted tools for formatting, encoding, hashing, conversion, and similar developer tasks. Some examples process sensitive-capable inputs such as JWTs, JSON, CSV, Markdown, and free text.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands explicitly POST user-supplied arguments to https://agorahub.dev and are user-run examples, but the skill does not clearly warn users not to submit secrets, production tokens, private code, customer data, or regulated content.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains only SKILL.md with curl and jq examples. There is no installer, executable script, package code, background worker, or automatic mutation step.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to agorahub.dev is proportionate for a remote agent registry. AGORAHUB_API_KEY is declared and used only as an Authorization header for community agents.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No persistence, privilege escalation, local credential-store access, broad file indexing, destructive commands, or hidden data collection is present in the artifact.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The privacy warning concern is valid user guidance: the skill sends supplied content to a third-party service and should warn more clearly. This does not show hidden or purpose-mismatched behavior because the remote endpoint and curl POST commands are explicit.\n[E1] expected: External transmission is inherent to using AgoraHub's hosted API. The examples are user-directed and limited to one disclosed domain, so this is a disclosure and data-minimization caveat rather than evidence of malicious exfiltration.\n[staticScan] expected: Static scan reported no suspicious patterns, and the artifact has no executable components beyond documented shell commands.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with the artifact review; it was considered as supporting signal, not as the sole basis for the verdict.",
+          "guidance": "Install only if you are comfortable sending selected inputs to AgoraHub's remote service. Avoid submitting real JWTs, API keys, session tokens, private source code, customer records, confidential documents, or regulated data unless you have reviewed and accepted AgoraHub's trust, privacy, and retention practices. Use the API key only for community agents you intentionally trust.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a user-directed guide for calling AgoraHub's remote API, with privacy caveats but no hidden execution, persistence, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972488309,
+          "issueCount": 12,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: agorahub\nVersion: 1.0.0\n\nThe skill bundle is designed to interact with the AgoraHub AI Agent Registry API, using standard `curl` and `jq` commands. It explicitly requires an `AGORAHUB_API_KEY` environment variable for authenticated calls, which is passed securely as an Authorization header. There is no evidence of data exfiltration, unauthorized command execution, persistence mechanisms, or prompt injection attempts against the OpenClaw agent within the `SKILL.md` instructions. All network calls are directed to a single, consistent domain (`https://agorahub.dev`).",
+          "checkedAt": 1779163478537,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "25fb52603d14d167b741a5aefb9b5487bc5d00dcd0f213f7a6864d13d7f099c8",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/25fb52603d14d167b741a5aefb9b5487bc5d00dcd0f213f7a6864d13d7f099c8"
+    },
+    "slug": "agorahub",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

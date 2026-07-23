@@ -1,0 +1,133 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C13:token:operations",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C13"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "46e740b20bafe44ebaaf2646af06c79b317ebdc718af23240b827323465475d8",
+    "content_hash": "bfa56c90a3a576bbdceb818e8cc58a1310ba1ea4d6b2c3a09bb8aaf168bb8df5",
+    "precanonical_content_hash": "f6d13f6c757c74be8e3adce6b5d10c24a13bb5a2a34436efcb3a2865995b1cc0",
+    "skill_md_hash": "63600be6a688811e56461b11df9a32a8e5a6cd2be44deb8804915289d80f9541",
+    "version_metadata_sha256": "0de07afb134bc64adde4bb1c76fed62364d49af0b8c8223efd48133da68b2729"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/ferminrp/skills/dub-links-api",
+    "claim_id": "61145e5bcab4c53d72322d33240b022b213918d4724e481466d28bb38451635f",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "dub-links-api",
+        "url": "https://clawskills.sh/skills/ferminrp-dub-links-api"
+      }
+    ],
+    "owner_handle": "ferminrp",
+    "owner_id": "s1783khztmx4kqz8vvn0bd61dd884gnv",
+    "published_at": 1771447527940,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779932825563,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779932825563,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is Dub /links API management, and SKILL.md documents create, update, list, count, delete, and bulk link operations. Those capabilities are coherent with the skill name, but they can modify or delete live workspace links.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "SKILL.md repeatedly says scope is limited to /links* and explicitly marks analytics, events, conversions, partners, customers, commissions, payouts, domains, folders, tags, and tokens endpoints as out of scope. The bundled OpenAPI snapshot includes those non-link endpoints, so agents should follow the narrower SKILL.md runtime scope.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No installer, executable package, background worker, or local code was found; the bundle contains SKILL.md and a local OpenAPI JSON reference.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill requires a Dub bearer token via DUB_API_KEY, which is proportionate for an authenticated API integration, but the onboarding text does not include strong secret-handling guidance.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, privilege escalation, local indexing, or hidden credential storage is shown. While active, the configured Dub API key grants whatever link-management authority that token has.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] unexpected: Verified that the OpenAPI reference contains many non-link endpoints. This is overbroad as a reference file for a links-only skill, but SKILL.md explicitly restricts operational use to /links* and forbids the cited non-link areas, so this is guidance-level rather than a verdict driver.\n[SDI-2] unexpected: Partner, commission, payout, ban, deactivate, and bounty workflows are present in the reference snapshot, but they are not instructed for use and are expressly out of scope in SKILL.md.\n[SDI-2] unexpected: Customer and tracking endpoints are present in the reference snapshot, but the runtime instructions limit use to link endpoints and list customers, analytics, events, and conversions as out of scope.\n[SQP-2] expected: Delete and bulk-delete link operations are disclosed and purpose-aligned, including bulk deletion of up to 100 links. The artifact does not require an explicit confirmation step, so users should confirm targets before allowing these actions.\n[SQP-2] expected: API key setup is expected for Dub API access, but the skill should be used with normal secret hygiene: avoid pasting keys into chat, avoid echoing tokens, and prefer a least-privilege token if available.\n[SQP-2] unexpected: Domain deletion is present in the OpenAPI snapshot, including cascading link deletion, but SKILL.md specifically excludes domains endpoints from operational scope.\n[SQP-2] unexpected: Lead and sale tracking endpoints that may transmit customer or commercial data are present in the reference snapshot, but they are outside the declared /links* scope and are not part of the skill workflow.\n[SQP-2] unexpected: Customer listing can expose personal and commercial data in the reference API, but SKILL.md excludes customer endpoints and does not direct the agent to retrieve them.\n[SQP-2] unexpected: Events telemetry is present in the reference snapshot, but analytics and events endpoints are explicitly out of scope for the skill.\n[VirusTotal/code_insight] expected: The curl examples are expected for an instruction-only API skill. The reported shell-injection risk is an implementation hygiene concern for agents constructing shell commands, not artifact-backed malicious behavior.",
+          "guidance": "Install this only if you want an agent to manage Dub short links in the authenticated workspace. Use a least-privilege Dub API key if possible, keep the key out of chat and logs, and require the agent to show the exact link IDs, domains, and payload before update, delete, or bulk operations.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This instruction-only skill is scoped to Dub short-link management, but users should be careful with API keys and delete or bulk operations.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779932763750,
+          "issueCount": 10,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: dub-links-api\nVersion: 1.0.1\n\nThe skill bundle is designed to interact with the Dub Links API using `curl` commands, as demonstrated in `SKILL.md`. While the examples themselves are benign and the skill explicitly defines 'Out of Scope' actions, the instruction for the AI agent to construct and execute `curl` commands based on user input introduces a shell injection vulnerability. If the agent fails to properly sanitize user-provided data before interpolating it into the `curl` command's URL, headers, or body, it could lead to arbitrary command execution. This is a vulnerability (RCE risk) rather than intentional malice, classifying it as suspicious.",
+          "checkedAt": 1779165287927,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "cda39afab4dac47e2393a8e28ea2f1a04e50d075c1530e55e96c3ace5b337149",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/cda39afab4dac47e2393a8e28ea2f1a04e50d075c1530e55e96c3ace5b337149"
+    },
+    "slug": "dub-links-api",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

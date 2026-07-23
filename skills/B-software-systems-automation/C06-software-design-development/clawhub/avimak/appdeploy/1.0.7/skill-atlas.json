@@ -1,0 +1,150 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "configuration"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "infrastructure",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C06:token:backend",
+      "category:C08:token:deploy",
+      "category:C10:token:ai",
+      "category:C13:token:operations",
+      "cross-tag:agent-management",
+      "cross-tag:deployment",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00",
+      "C08",
+      "C10",
+      "C13"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "deploy",
+      "manage",
+      "operate"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "dc9fb7bce94997277eb796850c1209abca39d535924d24f3c42533e25658f5bb",
+    "content_hash": "4b4c375acc8bcdc1944c611806a0fc20dc536d0c9fe7c782abe75d9e9b17ef6c",
+    "precanonical_content_hash": "829227c98b4ddce3938d2c999999c069002f2720d86369018fbe17c6351fb9ff",
+    "skill_md_hash": "06df996f893acbfedac43832e812c1513b63d8a4ddc2bcd15e52ab7965c0c449",
+    "version_metadata_sha256": "9f58666120d7580220ccba0579259541aadd75675de5f785d702fe3d4a9a6098"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/avimak/skills/appdeploy",
+    "claim_id": "bf6ff656011658a01c95f86d263a7172f594da03de31346accc4ff114c25b8c6",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "appdeploy",
+        "url": "https://clawskills.sh/skills/avimak-appdeploy"
+      }
+    ],
+    "owner_handle": "avimak",
+    "owner_id": "s17bakqg5zmqgj3985jhvysex5885w9d",
+    "published_at": 1772612471888,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783654117111,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783654117111,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "Creating, updating, inspecting, versioning, and deleting hosted apps fits the stated purpose of deploying web apps to a public URL; these are high-impact actions but not purpose-mismatched.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The activation language covers user requests to deploy or publish a web app with a public URL. It would benefit from an explicit confirmation step before upload, but the artifact does not show hidden or unrelated execution.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no executable installer beyond the markdown skill. Setup uses Bash/curl to register with AppDeploy's HTTPS API and instructs storing the returned credential in a local .appdeploy file.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network calls, app file upload, source snapshot search/read, and status/log retrieval are proportionate for a deployment integration, but they cross a sensitive boundary because private code or secrets could be sent if included in the deployment files.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists an AppDeploy API key in the project root and advises gitignoring it. The delete operation is irreversible, but the artifact limits it to explicit user request.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad deploy/publish trigger is relevant to the skill's purpose. It raises consent and accidental-publication considerations, but artifact text ties use to a user asking for a public URL.\n[SQP-1] expected: The deploy_app guidance can publish files externally and lacks a hard confirmation requirement. That is a user-control improvement, not evidence of hidden or malicious behavior.\n[VirusTotal code_insight] expected: The cited risk comes from disclosed capabilities: Bash/curl, a locally stored API key, and remote source read/search. These increase prompt-injection impact, but the artifact contains no exfiltration instruction or deceptive behavior.",
+          "guidance": "Install this only if you intend to use AppDeploy for public deployments. Before deploying, review which files will be sent, keep secrets out of source snapshots, keep .appdeploy private and gitignored, and require explicit confirmation before overwriting or deleting an existing app.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "AppDeploy is a disclosed deployment helper that sends app files to an external hosting service, with sensitive but purpose-aligned capabilities.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783654088675,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 8,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: appdeploy\nVersion: 1.0.7\n\nThe skill is classified as suspicious due to the combination of powerful capabilities that, while necessary for its stated purpose, present a significant prompt injection risk. Specifically, the `src_read` and `src_grep` tools allow the agent to read and search arbitrary files within deployed application source code on the remote platform. Coupled with the `Bash` tool allowance and the agent's handling of a powerful API key stored locally, a malicious prompt could instruct the agent to read sensitive configuration files (e.g., API keys, credentials) from a deployed application and then exfiltrate that data using `curl` or other shell commands. While the skill itself does not contain malicious instructions, its capabilities create a high-risk attack surface for data exfiltration via prompt injection.",
+          "checkedAt": 1779160534686,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "3a8eb2a6fe766be95253b8824bdb3b3c46aacb37a379b54e55960196fe1067c8",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/3a8eb2a6fe766be95253b8824bdb3b3c46aacb37a379b54e55960196fe1067c8"
+    },
+    "slug": "appdeploy",
+    "source_type": "clawhub",
+    "version": "1.0.7"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

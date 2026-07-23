@@ -1,0 +1,133 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:audio",
+      "category:C06:token:api",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1b52e6ef0f12d9c215b5f3e3819d2195cce0417c60b350732afcb2c491e68e04",
+    "content_hash": "d99fc35b9cc0aab964d05cbc07dde130868b12ebc5c2f540d8d951d3cdc3e759",
+    "precanonical_content_hash": "e95d5629fca7be2b4788fcb6922bd928117cd54cc2d1988f1386030b380d67b2",
+    "skill_md_hash": "f45c705d624d04e826e0c9a84de52fe16ee2b7c61736356aafa1f96e3df6aba1",
+    "version_metadata_sha256": "95b7deae02578adb8f3f89dc65dff3158e34aaec20bbec2fa1f5fbb2246bb122"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/easwee/skills/voice-log",
+    "claim_id": "193fbf7c64181dcf237037a7320cb69b790bb480fdfbde581f3b73dba2b93999",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "voice-log",
+        "url": "https://clawskills.sh/skills/easwee-voice-log"
+      }
+    ],
+    "owner_handle": "easwee",
+    "owner_id": "s178f3x9hgftrw1tgjqg79e5e5885eb8",
+    "published_at": 1771781752645,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779949693491,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779949693491,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "Continuous microphone capture, third-party STT, and transcript logging are sensitive, but they directly match the stated voice-journaling purpose and are disclosed in SKILL.md.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are scoped to start, stop, status, and recent transcript retrieval; implicit invocation is disabled and raw transcript output is limited unless requested.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation uses npm and the @soniox/node dependency with a caret version range, which is common but less reproducible than a pinned dependency or lockfile.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill requires SONIOX_API_KEY and microphone/audio binaries for its core function; code narrows environment forwarding and deletes the API key from the daemon environment after reading it.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "It runs a detached background daemon until stopped and writes state, logs, PID, and transcript files under a local .data directory with best-effort restrictive permissions.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The privacy risk is real, but microphone capture, Soniox transcription, local rolling retention, and start/end controls are disclosed and purpose-aligned rather than hidden or deceptive.\n[SC1] expected: The unpinned Soniox SDK range is a supply-chain hardening issue, not evidence of malicious or unrelated behavior.",
+          "guidance": "Install only if you intentionally want background voice journaling. Use a revocable Soniox API key, start recording deliberately, stop it when finished, check status if unsure, and avoid recording sensitive or non-consenting conversations.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed voice-journaling tool that records only after a start command, sends audio to Soniox for transcription, and stores a rolling local transcript.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779949654818,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 71,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: voice-log\nVersion: 0.1.5\n\nThe OpenClaw voice-log skill is designed for background voice journaling using Soniox STT. It demonstrates strong security practices, including explicitly limiting environment variables passed to child processes, deleting the `SONIOX_API_KEY` from the daemon's environment after use, and using `spawn` with hardcoded commands/arguments for audio capture to prevent shell injection. All data is confined to a local, hardened `.data` directory. The `SKILL.md` instructions for the AI agent are benign, focusing on controlling output and accurate reporting, with no evidence of prompt injection attempts to subvert the agent's behavior or exfiltrate data. No malicious intent or high-risk vulnerabilities were identified.",
+          "checkedAt": 1779166262591,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "96738dcf4762c264225c5c43e214a538c6db9743399f43f25899fd20d2920d61",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/96738dcf4762c264225c5c43e214a538c6db9743399f43f25899fd20d2920d61"
+    },
+    "slug": "voice-log",
+    "source_type": "clawhub",
+    "version": "0.1.5"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

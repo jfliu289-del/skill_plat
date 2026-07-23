@@ -1,0 +1,155 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.25,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C02:token:write",
+      "category:C06:token:code",
+      "category:C07:token:test",
+      "category:C08:token:git",
+      "category:C08:token:repository",
+      "category:C12:token:decision",
+      "category:C12:token:management",
+      "cross-tag:agent-management",
+      "cross-tag:planning",
+      "cross-tag:software-development",
+      "cross-tag:testing",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C02",
+      "C06",
+      "C07",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "plan",
+      "test",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "6ee3b3d53fbc1ad7a4e0bffdc9db881c7a7982458e91618504687816a717014f",
+    "content_hash": "d13c0318ef31d7e96730366fb350d91712508ea363cd84a92f26e556e0b670ab",
+    "precanonical_content_hash": "90631510cab85a865ed530b37da3a935fb9f24dc781c2750b040ed32c6c7cf02",
+    "skill_md_hash": "0a77f7dd61bde10e7316d622a40fdb4b6258059142bedb2c466fcf710fc870fc",
+    "version_metadata_sha256": "18528193bf5e1cf3269dd4c0e5b2583683d37451b09d76b61a5eba8fe20e546f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/cadot-eu/skills/script-creator",
+    "claim_id": "7ff63721c4e37f4e44a46e9f7fe0997351ed7bb8d842ca6d013edc7bbf73acbe",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "script-creator",
+        "url": "https://clawskills.sh/skills/cadot-eu-script-creator"
+      }
+    ],
+    "owner_handle": "cadot-eu",
+    "owner_id": "s17aj4ny2h7ad1kw8fm3hgm8hs8859gw",
+    "published_at": 1771427736986,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779922378217,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779922378217,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill’s purpose is to create or modify scripts under ~/.nanobot/workspace/test using one Git repository per script; local file, Git, and optional pip activity are expected for that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions repeatedly require explicit user intent, a plan confirmation before execution, progress reporting, and stopping on ambiguity.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no separate installer or bundled executable; runtime instructions may run pip installs in ~/.nanobot/workspace/venv, so package names should be reviewed before approval.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The file scope is bounded to a specific workspace, but the shared virtual environment can affect other scripts that use the same venv.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to user-approved local directories and Git commits; artifacts show no credential use, elevated privilege, background process, remote publishing, or external data transfer.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight suspicious] expected: The artifact does show placeholder shell commands and optional pip installs, but they are disclosed, confirmation-gated, and central to script creation; no hidden, destructive, automatic, or exfiltrating behavior is present.\n[SkillSpector clean] expected: SkillSpector reported no issues, which is consistent with the artifact-backed review.\n[staticScan clean] expected: The static scan found no suspicious patterns; the only artifact file is SKILL.md.",
+          "guidance": "Install only if you want an agent to create and modify scripts in ~/.nanobot/workspace/test. Before confirming a plan, check the directory name, file name, requested edits, commit message, and any Python packages to be installed; prefer trusted and pinned packages when possible.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed, user-confirmed script-management workflow that can change local files and install Python packages, but the behavior fits its stated purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779922338695,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: script-creator\nVersion: 1.0.0\n\nThe skill's stated purpose of managing scripts with Git is benign, and its instructions to the AI agent include strong security constraints. However, the `SKILL.md` instructions implicitly create a critical shell injection vulnerability. The agent is instructed to directly substitute user-provided inputs (e.g., `<script_name>`, `<extension>`, `<package_name>`) into shell commands like `mkdir`, `touch`, `cd`, `pip install`, and `git commit` without any explicit guidance for sanitization. This allows a malicious user to inject arbitrary commands (e.g., `my_script; rm -rf /`) which the agent would then execute, leading to potential remote code execution. Additionally, the instruction to `pip install` user-specified packages introduces a supply chain risk, as malicious packages can execute arbitrary code during installation.",
+          "checkedAt": 1779165211747,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "e803c095adb843678baad955fdf3d3fe29bed7eb3051fda02c150416f3fb3915",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e803c095adb843678baad955fdf3d3fe29bed7eb3051fda02c150416f3fb3915"
+    },
+    "slug": "script-creator",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

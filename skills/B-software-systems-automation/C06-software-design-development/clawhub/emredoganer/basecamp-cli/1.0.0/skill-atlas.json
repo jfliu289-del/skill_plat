@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "website"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C17:token:notes",
+      "category:C19:token:automation",
+      "cross-tag:browser-automation",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "automate",
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ce68fc86942f2ba9423ab11afd28425b1644b9212f904b15f31416d54a01484e",
+    "content_hash": "d99099c05a712f9630f7b477a00a0e52790bf4b66e37f385e1cae8aabec2bd75",
+    "precanonical_content_hash": "d0e0149a465c547c59b5d7b9b1dce9313ad3147ad253b877d38e3339498e14e4",
+    "skill_md_hash": "ae0ffab38354440db5ec03591d27ba0eac79f388309bf7ffee2ad065258d07c4",
+    "version_metadata_sha256": "c54c76f756552dadc61966252b1b6b6a84b1561a2fe5d9c878b154b34dd1522e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/emredoganer/skills/basecamp-cli",
+    "claim_id": "d2c6b17632a5ab0c68849c59edb5063b5d159ade6479fd75a7a27d149ab54d56",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "basecamp-cli",
+        "url": "https://clawskills.sh/skills/emredoganer-basecamp-cli"
+      },
+      {
+        "index_path": "categories/marketing-and-sales.md",
+        "label": "basecamp-cli",
+        "url": "https://clawskills.sh/skills/emredoganer-basecamp-cli"
+      }
+    ],
+    "owner_handle": "emredoganer",
+    "owner_id": "s173cc0c6ja26tfpfbavkfj6m1884m5m",
+    "published_at": 1769288855864,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783651641474,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783651641474,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill can read and mutate Basecamp resources, including projects, to-dos, messages, campfire chats, and people data; those capabilities match the stated Basecamp CLI purpose and are exposed as direct commands.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are ordinary CLI usage and OAuth setup steps. I found no prompt-injection text, role-changing instructions, hidden automation, unrelated local scanning, or unexpected execution paths.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation is a global npm CLI package with normal build scripts and common dependencies. The package itself has no install-time hooks; package-lock install-script entries are for common dev or optional dependencies such as esbuild and fsevents.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access is limited in source to 37signals Launchpad OAuth endpoints and the Basecamp API, plus a localhost OAuth callback server during login, which is proportionate for this integration.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The CLI persists OAuth access and refresh tokens in its local Conf store with machine-derived encryption and reads BASECAMP_CLIENT_SECRET from the environment. This is expected for a CLI but users should treat the machine account as trusted.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SkillSpector: no issues] expected: SkillSpector reported zero issues; source inspection was consistent with that clean result.\n[VirusTotal Code Insight: benign] expected: VirusTotal telemetry reported no malicious or suspicious engine detections and described behavior consistent with the inspected artifacts.\n[Static artifact review: Basecamp write operations] expected: Create, update, archive, complete, uncomplete, and send-message operations are real account mutations, but they are explicit CLI commands and match the skill description.\n[Static artifact review: local token persistence] expected: Token persistence is present and purpose-aligned for OAuth sessions; the client secret is not stored by the CLI, though the README has minor outdated examples mentioning unsupported client-secret configuration and BASECAMP_ACCESS_TOKEN.",
+          "guidance": "Install only if you intend to let this CLI, and any agent using it, access and modify your Basecamp account. Review the OAuth app permissions, keep BASECAMP_CLIENT_SECRET in your environment rather than config files, and use logout or revoke the Basecamp integration if you no longer need access.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent Basecamp command-line skill that uses expected OAuth and Basecamp API access, with no evidence of hidden or unrelated behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783651582955,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: basecamp-cli\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle for the Basecamp CLI is benign. It provides a command-line interface to manage Basecamp resources, using standard and secure practices for OAuth 2.0 authentication, including PKCE and a local redirect server. Sensitive tokens are encrypted on disk using a machine-specific key, and the `BASECAMP_CLIENT_SECRET` is explicitly required to be set as an environment variable, never stored in configuration files. The `SKILL.md` and `README.md` contain clear, functional instructions without any evidence of prompt injection attempts or hidden directives. All network communication is directed to legitimate Basecamp API endpoints (`launchpad.37signals.com`, `3.basecampapi.com`).",
+          "checkedAt": 1779159894768,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "87da096e51a13bb6071b5ea5919d31cef6c40f77b2befbae07d0274fac69735d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/87da096e51a13bb6071b5ea5919d31cef6c40f77b2befbae07d0274fac69735d"
+    },
+    "slug": "basecamp-cli",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

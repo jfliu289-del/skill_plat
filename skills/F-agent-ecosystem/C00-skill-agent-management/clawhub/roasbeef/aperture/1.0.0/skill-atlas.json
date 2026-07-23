@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C06:token:backend",
+      "category:C07:token:test",
+      "category:C07:token:testing",
+      "cross-tag:agent-management",
+      "cross-tag:software-development",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C07"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "6247e4836b143dca98f070d92dbaae370c8fd7d288c40545a3a1b9aee67990ca",
+    "content_hash": "753818b611cde76609353f0720e98842c0ff448d757db62de04c2d1211d4cda6",
+    "precanonical_content_hash": "60986a4784d20823ea37df3fad2bde96e5745165ac8a2b460dfcd57419d12825",
+    "skill_md_hash": "7e847fd1765b823c59de2f6604249dde340d91680351cda9a686f89f3fdcb0d5",
+    "version_metadata_sha256": "f35af421457bc2486a2ed6690f5ca2e2bc735b4b9ce10e296056464c5de89667"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/roasbeef/skills/aperture",
+    "claim_id": "30792976fb02fa57c546e850eb6fab32fc4f7fee462f20ad27fe5170beeefb14",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "aperture",
+        "url": "https://clawskills.sh/skills/roasbeef-aperture"
+      },
+      {
+        "index_path": "categories/health-and-fitness.md",
+        "label": "aperture",
+        "url": "https://clawskills.sh/skills/roasbeef-aperture"
+      }
+    ],
+    "owner_handle": "roasbeef",
+    "owner_id": "s17ct3pzdm5xvjjh7x3qs5z3kn884ax4",
+    "published_at": 1770777071122,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968948128,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968948128,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill's scripts and documentation align with installing, configuring, starting, and stopping an L402 reverse proxy; use of LND invoice credentials and paid endpoint routing is sensitive but expected for this purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are mostly user-directed and scoped to setup and operation. Insecure TLS-disabled, no-auth, and wildcard host examples are disclosed but need careful handling outside local testing.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The installer checks for Go and runs go install for github.com/lightninglabs/aperture/cmd/aperture, defaulting to @latest; this is purpose-aligned, though users needing reproducibility should pin a version.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Generated files stay under ~/.aperture and default to localhost, while referencing ~/.lnd TLS and macaroon paths needed for invoice creation. This access is proportionate but payment-related.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "start.sh launches a background Aperture process and the Docker template uses restart behavior, both expected for a proxy service. stop.sh targets processes named aperture, so multiple local instances need care.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The insecure and no-auth options are real risks if used on exposed services, but they are visible, purpose-related development/testing controls rather than hidden behavior.\n[SQP-2] expected: The minimal configuration's wildcard host matching is broad and should be narrowed for production, but it appears in a localhost-oriented proxy example and is not evidence of deception or exfiltration.\n[SQP-1] expected: The template also uses wildcard host matching; this is a configuration safety issue for multi-host deployments, not malicious behavior.",
+          "guidance": "Install this only if you intend to run an Aperture/L402 Lightning payment proxy. Review ~/.aperture/aperture.yaml before starting it, use an invoice-only macaroon rather than admin credentials, avoid --insecure and --no-auth on public or shared networks, replace hostregexp \".*\" with explicit hostnames for production, and stop the background service when finished.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent helper for installing and running the Aperture Lightning payment proxy, with configuration risks users should handle carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968901718,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: aperture\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle for 'aperture' is benign. The skill's purpose is to install and manage Aperture, an L402 Lightning reverse proxy. All scripts (`install.sh`, `setup.sh`, `start.sh`, `stop.sh`) and configuration templates are aligned with this stated goal. The `SKILL.md` provides clear, non-malicious instructions for the agent, without any evidence of prompt injection attempts to mislead or exploit. The `install.sh` script uses `go install` to fetch and compile the `aperture` binary from a legitimate GitHub repository (`github.com/lightninglabs/aperture`), which is a standard method for Go application deployment. File system and network interactions are confined to the application's operational requirements (e.g., `~/.aperture` for config/db/logs, `~/.lnd` for LND credentials).",
+          "checkedAt": 1779163069062,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "39a955d632df702de89c012a342d52130251fa4bc406a44dd5fcf224c3272b9b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/39a955d632df702de89c012a342d52130251fa4bc406a44dd5fcf224c3272b9b"
+    },
+    "slug": "aperture",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,159 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.25,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:find",
+      "category:C01:token:search",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C09:token:privacy",
+      "category:C13:token:operations",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C04",
+      "C06",
+      "C09",
+      "C13"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ba41c51772f7a3c442d7c662e2afc98948fe6d01ca9381f9653d15f8e50ff366",
+    "content_hash": "88cf1a4f32ba9d1a411c6a284e202f96f9cd2f4b0c99df3453397b2f57ae6c57",
+    "precanonical_content_hash": "5c149b93735f4ccef056fc364c4a1613b043a795044dd0f5ec63c5502b2b029e",
+    "skill_md_hash": "22b2474fe388dc3ab2207ff1c59787e28c52f7a28f3354a182e232e6099138bd",
+    "version_metadata_sha256": "b366c5796e00168b6821916fbe67a1bcbdd866782e78bb8abbd3832cd533f4dd"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/apresmoi/skills/meetup-planner",
+    "claim_id": "05058ca2ce9f7adaf401485c927c69551cf77f09ffe7239f7b16a7eaee55a0f3",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "meetup-planner",
+        "url": "https://clawskills.sh/skills/apresmoi-meetup-planner"
+      }
+    ],
+    "owner_handle": "apresmoi",
+    "owner_id": "s170pq8xjvs453wfk65qd3wy0x8848sk",
+    "published_at": 1770933613364,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972823541,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972823541,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The declared purpose is to discover, track, and remind users about events; web search/scraping, local event files, preference storage, reminders, and optional daily scheduling all directly support that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill uses broad conversational commands such as \"search now\" and checks installed skills for search/scraping capability, but these behaviors are documented and tied to setup or user-directed event search workflows.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package declares filesystem, network, and cron permissions, includes a pre-install confirmation, and contains only markdown instructions and package metadata with no executable scripts or hidden payloads.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Filesystem use is scoped to ~/.openclaw/workspace/meetup-planner/, while external requests send preference-derived search queries and event URLs through the user's configured search/scraping tools.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill can persist preferences, events, reminders, and an optional cron-style daily search task; this is disclosed and opt-in, but users should review how to pause or remove scheduled jobs.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-2] expected: Cron-based daily search is real persistence, but the artifacts disclose cron permission, describe daily automation as optional, ask the user before enabling it, and tie it to the event-discovery purpose.\n[SDI-2] expected: Inspecting ~/.openclaw/skills/ is broader than ideal, but it is used for capability detection of required search/scraping tools and there is no evidence of exfiltration or unrelated use.\n[SDI-4] expected: Scraping event-page URLs is expected for event discovery; the skill discloses external search/scraping and does not instruct use of personalized or authenticated event pages, though users should prefer public URLs.\n[SQP-2] expected: Persisting location, interests, schedule, and event preferences is central to personalized matching and is disclosed as local storage in the README, SKILL instructions, and setup flow.\n[SQP-2] expected: Recurring outbound searches are disclosed in multiple artifacts, including package install messaging and SKILL privacy details; the warning could be more explicit about removing cron jobs, but the behavior is not hidden.\n[VirusTotal] expected: VirusTotal telemetry was clean and supports the absence of malicious indicators, but it was not used as the sole basis for the verdict.\n[staticScan] expected: The static scan reported no suspicious patterns, consistent with the artifact review showing no executable payloads, destructive commands, obfuscation, or data exfiltration instructions.",
+          "guidance": "Install only if you are comfortable storing event interests, location, schedule preferences, tracked events, and reminders locally, and with preference-derived searches being sent to third-party event/search services through your configured tools. Enable daily automation only if you want a recurring scheduled task, and review your crontab or scheduler settings if you later pause or uninstall the skill.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Meetup Planner is a coherent event-finding skill whose web searches, local storage, and optional scheduled reminders match its stated purpose, though users should understand the persistent cron automation before enabling it.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972790305,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 60,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: meetup-planner\nVersion: 0.1.5\n\nThe OpenClaw skill 'meetup-planner' is classified as benign. All requested permissions (network access to event sites, filesystem access to its dedicated workspace, and cron job setup) are explicitly declared and align with the skill's stated purpose of finding, tracking, and reminding about events. The `BOOTSTRAP.md` file contains shell commands for benign setup tasks like creating directories, setting permissions, and initializing data files within its workspace. While a cron job is set up for daily searches, this is transparently declared, user-controlled, and essential for the skill's core functionality. There is no evidence of data exfiltration, malicious execution, unauthorized persistence, or prompt injection attempts designed to harm the user or the agent.",
+          "checkedAt": 1779163537398,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "956b784efde7ba9181f731bb7054299834d323762745c89cd7a5d8b49c2529a0",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/956b784efde7ba9181f731bb7054299834d323762745c89cd7a5d8b49c2529a0"
+    },
+    "slug": "meetup-planner",
+    "source_type": "clawhub",
+    "version": "0.1.5"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

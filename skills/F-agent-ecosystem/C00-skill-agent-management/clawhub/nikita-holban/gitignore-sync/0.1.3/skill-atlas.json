@@ -1,0 +1,146 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C00:token:skill",
+      "category:C02:token:rewrite",
+      "category:C06:token:api",
+      "category:C08:token:repository",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C06",
+      "C08",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "eb763d2bcb52c3106bb67a94f418cbcada3ba5f6cc64f85c4db43371dce9efc9",
+    "content_hash": "481e75afaad6fade612e419ada25c6460232d7d7fe122baa95c67c404474eefc",
+    "skill_md_hash": "5a8050000b2694b14b7ed966798e284462aa8cadabcbc9506e0f832da0a90a92",
+    "version_metadata_sha256": "2fde7a6265cf3799d74a3b10b0f7dc4ee61fd435ff3e4a2622f177644a050c7f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/nikita-holban/skills/gitignore-sync",
+    "claim_id": "5745bea1945c0d23dcc1d91daf0a581414cf450526ab52208a51056fbad7a1c5",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "gitignore-sync",
+        "url": "https://clawskills.sh/skills/nikita-holban-gitignore-sync"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "nikita-holban",
+    "owner_id": "s170k08x3j9erqx7eypzvwh7s5884ch4",
+    "published_at": 1771191092775,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968661011,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968661011,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is .gitignore generation/update, and the script directly implements that by detecting common project files, selecting templates, fetching ignore rules, and writing a managed .gitignore block.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions clearly disclose that the skill mutates .gitignore and preserves non-managed sections; users should still review the diff because ignore rules can affect what gets committed.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No package installation, dependency installation, shell bootstrap, or privilege escalation is present; the executable component is a Python standard-library script.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script reads limited repository marker files, optionally reads an explicitly provided local rules file, contacts the disclosed Toptal/gitignore.io endpoint by default, and writes .gitignore, which is proportionate to its purpose.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background process, persistence mechanism, credential access, broad indexing, hidden memory use, or elevated privilege request is evidenced.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal:code_insight] expected: The flagged --repo, --api-base, and --rules-file arguments are real, but they are command-line controls for choosing the target repository, overriding the template service, or using local offline rules. The artifact does not automatically use attacker-controlled values, execute fetched code, or write outside the selected directory except to its .gitignore file.\n[SkillSpector] expected: SkillSpector reported no issues; this matches the artifact review, with the main residual risks being ordinary .gitignore mutation and reliance on a disclosed remote template source.\n[staticScan] expected: Static scan was clean, and manual review found no obfuscated code, credential handling, destructive file operations, persistence, or unrelated network behavior.",
+          "guidance": "Install/use this only in the repository you intend to update, prefer the default gitignore.io endpoint unless you deliberately trust another source, and review the generated .gitignore diff before committing because ignore rules can accidentally hide important files from version control.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it advertises: it updates a repository’s .gitignore using detected project context and gitignore.io templates.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968636988,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: gitignore-sync\nVersion: 0.1.3\n\nThe skill bundle is designed to generate or update `.gitignore` files, which is a benign purpose. However, the `scripts/update_gitignore.py` script includes arguments like `--api-base` and `--rules-file` that introduce vulnerabilities. If an attacker can control these arguments (e.g., via prompt injection against the agent or direct command line manipulation), they could direct the script to fetch ignore rules from an arbitrary malicious URL or inject content from an arbitrary local file into the `.gitignore`. The `--repo` argument also allows writing the `.gitignore` file to an arbitrary directory. While these are not indicative of intentional malice, they represent significant risks due to potential for arbitrary content injection or file manipulation if the agent's input is not sufficiently sanitized.",
+          "checkedAt": 1779164381133,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "827344da00e37c8a0aa1821c51a10d94a21c360cff7818b09b2db5944567a506",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/827344da00e37c8a0aa1821c51a10d94a21c360cff7818b09b2db5944567a506"
+    },
+    "slug": "gitignore-sync",
+    "source_type": "clawhub",
+    "version": "0.1.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

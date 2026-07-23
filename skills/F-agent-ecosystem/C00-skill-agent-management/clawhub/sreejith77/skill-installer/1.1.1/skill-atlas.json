@@ -1,0 +1,132 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C17"
+    ],
+    "stages": [
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a9f75f7e7d72dd1a99e22bd5a3118e6d482f57cdb8f111967a56a7c438a9d7e3",
+    "content_hash": "17828af8b7cc896ee1b303edfaf7d6a7fa4f151700766f87051a9c836803ed7b",
+    "precanonical_content_hash": "cee82cfa4ebfe286b4c34cf007ae3cf9be89324314db9909e48dc1b7e13fd56c",
+    "skill_md_hash": "3d4d2386e71faa8c696ef9350b80054d29db5c0129de37097126ab91079d7aab",
+    "version_metadata_sha256": "3da3dbd823159ff679acc05782cb64821449fd2f76a2442b3001347da44b1f90"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sreejith77/skills/skill-installer",
+    "claim_id": "80ff06c4a6345392a40ca1d743803effc4a3e5b5d11b16eb7f37322de3f155f4",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "skill-installer",
+        "url": "https://clawskills.sh/skills/sreejith77-skill-installer"
+      }
+    ],
+    "owner_handle": "sreejith77",
+    "owner_id": "s174k6emc2g5y9s2pgzd84jkrd884d75",
+    "published_at": 1771325065404,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972552145,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972552145,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to search, install, update, and manage ClawHub skills, and the documented commands match that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill includes broad actions such as installing a skill and updating all installed skills, but they are presented as user-directed commands rather than hidden automation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "It depends on the external global `clawhub` npm CLI and shows `npm i -g clawhub`; the artifact also says to ask the user to install it manually and not auto-install without confirmation.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Managing files under `~/.openclaw/workspace/skills` is proportionate to a skill manager, but it can change future agent behavior.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Installed workspace skills persist across sessions and take precedence over other skills; this persistence is disclosed in the artifact.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The WhatsApp install flow is purpose-aligned for a skill manager. The wording that the agent will handle CLI installation is somewhat loose, but the prerequisites explicitly require user confirmation before installing the CLI.\n[VirusTotal code_insight] expected: The flagged shell commands, global CLI dependency, and skill install/update authority are expected for this skill's purpose. The ambiguity around 'install if missing' is mitigated by the explicit no-auto-install instruction and does not by itself justify Review.\n[staticScan] expected: Static scan reported no suspicious patterns, consistent with the artifact containing only documented instructions and no bundled executable code.",
+          "guidance": "Install only if you trust ClawHub and the npm `clawhub` CLI. Confirm any global CLI installation yourself, review third-party skills before enabling them, and be careful with `update --all` because installed skills persist and can affect future OpenClaw sessions.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed ClawHub skill manager that can install or update persistent skills, with normal supply-chain risk but no evidence of hidden or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972519937,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: skill-installer\nVersion: 1.1.1\n\nThe skill is designed to manage other OpenClaw skills using an external `clawhub` CLI tool. It instructs the agent to execute shell commands like `cd`, `which`, `npm i -g clawhub`, and various `clawhub` subcommands. While the `SKILL.md` explicitly states 'Do not auto-install without user confirmation' for `npm i -g clawhub`, the 'Workflow' section later instructs the agent to 'install if missing' without reiterating the need for user confirmation. This ambiguity presents a prompt-injection vulnerability, as a less robust agent might auto-install a global package without user consent. The reliance on an external CLI and the execution of powerful commands like `npm i -g` with user-provided input (e.g., `<slug>`) also introduce potential shell injection risks if the `clawhub` CLI itself is vulnerable or if the agent mishandles input, classifying it as suspicious rather than benign due to these risky capabilities and instruction ambiguities.",
+          "checkedAt": 1779164792496,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "830b7ec7813765bef05f08706e68bdebd822cf113f792569560f375b753e4fb0",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/830b7ec7813765bef05f08706e68bdebd822cf113f792569560f375b753e4fb0"
+    },
+    "slug": "skill-installer",
+    "source_type": "clawhub",
+    "version": "1.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

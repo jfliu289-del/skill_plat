@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "paper"
+    ],
+    "audiences": [
+      "researcher"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "science"
+    ],
+    "needs_review": true,
+    "primary_category": "C07",
+    "reasons": [
+      "category:C07:token:review",
+      "category:C10:token:ai",
+      "category:C17:token:personal",
+      "cross-tag:academic-research",
+      "cross-tag:review"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "research",
+      "review"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "981cafb0fa1e5e986ed5b6368080ed847e232dc242710819022d8d13dfd5306d",
+    "content_hash": "115f412127a84b72e8a4592315dfe99ae06ad4793040b62bcac80e8a124eedde",
+    "precanonical_content_hash": "3be7440ee8e781a6d46fbac27f784253986a7aa005ef64e3281e18f1b0740b32",
+    "skill_md_hash": "600e5fc2968169115afd3eabd2a56dfec4b73171d471f8657758b0e04d5158a0",
+    "version_metadata_sha256": "a6fb941a042ca389fa256045c6fd4feef9738d88df80037356c4d54575a1bcfc"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/blackshady1130-jpg/skills/ai-review",
+    "claim_id": "838e72dab59a53dcb0c8dd89b8a64254a9737b6a2c9f6c2d3b050b7fe9caa76d",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "ai-review",
+        "url": "https://clawskills.sh/skills/blackshady1130-jpg-ai-review"
+      },
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "ai-review",
+        "url": "https://clawskills.sh/skills/blackshady1130-jpg-ai-review"
+      }
+    ],
+    "owner_handle": "blackshady1130-jpg",
+    "owner_id": "s17beaf3yw673tdawemqp6w22d884t8c",
+    "published_at": 1771932087974,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779956119555,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779956119555,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, SKILL.md workflow, and three style guides coherently support reviewing articles, papers, news, URLs, and files.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill discloses browser, local file, speech-to-text, and shell-based PDF reading paths; these fit the review purpose, but PDF handling should be limited to trusted or carefully quoted inputs.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains only SKILL.md and markdown reference files, with no executable scripts, install commands, dependencies, or credential setup.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Reading user-supplied URLs and local files is proportionate for content review, but the `curl` plus `pdftotext` example uses shell on user-provided PDF inputs without an explicit safety gate.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts do not request persistence, background workers, privilege escalation, credential stores, broad indexing, account sessions, or data upload beyond fetching user-provided content.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal-code_insight] expected: Telemetry flags shell PDF extraction and local file reading; the artifact backs those behaviors, but they are disclosed content-ingestion paths rather than hidden or malicious actions.\n[SDI-2] expected: The shell PDF workflow is purpose-aligned but should be treated as a safety caution because the example does not show quoting or sanitization.\n[SQP-2] expected: The skill accepts user-provided URLs and local files; it does not show automatic broad filesystem access, but users should avoid sensitive paths and untrusted PDF URLs.\n[SQP-3] expected: The Chinese analytical style guides are part of the advertised output style; they may reduce usability if the user expects another language, but they do not add sensitive authority.",
+          "guidance": "Install only if you want an agent to fetch or read content you provide and generate Chinese-leaning analytical reviews. Prefer safer PDF/file-reading tools when available, and avoid untrusted PDF URLs or sensitive local file paths unless the agent will quote and constrain shell arguments.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a markdown-only review helper that reads user-provided content and produces styled commentary, with a real safety caution around its shell-based PDF extraction example.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779956036266,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 40,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ai-review\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to critical vulnerabilities in its content reading mechanisms defined in `SKILL.md`. Specifically, the skill instructs the agent to use the `shell` tool to process PDF URLs via `curl` and `pdftotext`, creating a severe shell injection vulnerability that could lead to Remote Code Execution (RCE) if the user-provided URL is not sanitized. Additionally, it uses the `file` tool to read local `.md` or `.txt` files, which is vulnerable to Local File Inclusion (LFI) if user-provided file paths are not sanitized. While these capabilities are highly risky, there is no explicit evidence of intentional malicious behavior within the skill bundle itself, classifying it as a vulnerable utility rather than malware.",
+          "checkedAt": 1779166748529,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "51ac1342719c1baa22e304e5e33d0ccb54a8caeb5073e94237b820e2695c08ad",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/51ac1342719c1baa22e304e5e33d0ccb54a8caeb5073e94237b820e2695c08ad"
+    },
+    "slug": "ai-review",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

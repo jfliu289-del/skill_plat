@@ -1,0 +1,119 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:audio"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1c7ce2ade7fdc4b490e93456461cdda6373aaaa810fb54c0bd178d6833beaede",
+    "content_hash": "9c8e96745256a02749bf23c609e3fcd74b7195562ebd6848f20706c4527716cd",
+    "precanonical_content_hash": "1c7916c6aeb8780d9d683af3029fd860f2da16e6f11735012d0464b90fc7eb24",
+    "skill_md_hash": "79fac3c48e8008b9ab69338da7d3827931ef1a5cd32d31e8cf0940988fb9a711",
+    "version_metadata_sha256": "5e93e1298c7d486e7376704c9ec3d3e24d863424bc281ee3a5f7213e846bfebd"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/edkief/skills/kokoro-tts",
+    "claim_id": "4a6bb1c3f6179563035168628064a2023b285a4ffc0c151683487f22e18170c6",
+    "index_entries": [
+      {
+        "index_path": "categories/speech-and-transcription.md",
+        "label": "kokoro-tts",
+        "url": "https://clawskills.sh/skills/edkief-kokoro-tts"
+      }
+    ],
+    "owner_handle": "edkief",
+    "owner_id": "s178bftbwy1x73a1va9pdtj9ax885qxa",
+    "published_at": 1769905003380,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783651919311,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783651919311,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, documentation, and script behavior are coherent: text, voice, and speed are posted to a Kokoro speech API and the returned audio is written as an MP3.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The trigger phrase asking to \"say\" something is broad and could be invoked ambiguously, but the documented action remains limited to user-requested speech generation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no installer or dependency mutation behavior; the skill relies on Node.js and documents the optional KOKORO_API_URL environment configuration.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network transfer of the input text is proportionate for API-backed TTS and defaults to localhost, but configuring a remote endpoint means the spoken text is sent to that server.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The script only creates a local media directory and timestamped MP3 output files; it does not read credentials, install persistence, spawn background workers, or perform destructive actions.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The lack of an explicit permissions declaration is a disclosure polish issue, but the files clearly document environment configuration and API use for the TTS workflow.\n[SDI-1] expected: The manifest emphasizes a local engine while the body also permits remote endpoints; this should be clearer, but remote API-backed TTS is disclosed and purpose-aligned.\n[SQP-1] expected: The broad \"say\" trigger could be narrowed, but it does not grant unrelated authority or hide behavior beyond generating speech.\n[suspicious.env_credential_access] expected: The environment variable is an API URL, not a credential, and the network POST is the expected TTS request.",
+          "guidance": "Install this if you trust the Kokoro endpoint you will use. Prefer the localhost default, avoid sending secrets or sensitive private text to an untrusted remote server, and expect generated audio files to accumulate in the local media directory.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward text-to-speech skill that sends requested text to a configured Kokoro endpoint and saves the returned MP3 locally.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783651884070,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 33,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: kokoro-tts\nVersion: 0.1.0\n\nThe skill is designed to generate speech using a configurable Kokoro TTS API. It makes a network POST request to the API_URL (defaulting to localhost) with user-provided text, voice, and speed, then saves the resulting audio to a local 'media' directory. There is no evidence of prompt injection in SKILL.md, malicious execution (user input is JSON-encoded, not executed), data exfiltration beyond sending the requested text to the configured TTS endpoint, or persistence mechanisms. All file and network operations are directly aligned with the stated purpose of a text-to-speech skill.",
+          "checkedAt": 1779160574480,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "d8a2c52f41261db40bf0d0883854a9cb6a6852b590a383d3ad4fb045fe7374c4",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d8a2c52f41261db40bf0d0883854a9cb6a6852b590a383d3ad4fb045fe7374c4"
+    },
+    "slug": "kokoro-tts",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

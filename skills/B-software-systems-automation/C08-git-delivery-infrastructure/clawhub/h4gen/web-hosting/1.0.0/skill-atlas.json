@@ -1,0 +1,150 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "configuration"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.5286,
+    "domains": [
+      "infrastructure",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C07:token:quality",
+      "category:C08:token:cd",
+      "category:C08:token:ci",
+      "category:C08:token:deployment",
+      "category:C08:token:github",
+      "cross-tag:agent-management",
+      "cross-tag:deployment",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00",
+      "C06",
+      "C07"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "deploy",
+      "manage",
+      "operate"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ba5d2893f1de91a68513d29bc7e7d6eaabc9e2b4c7793763372c66e1f313a0f4",
+    "content_hash": "862d4741d71d1f7fd05a7ad387af94b9b81e6d7f0ecdc3b2837b27e511300e2b",
+    "precanonical_content_hash": "c982b9b78bd8794704bc114475eb30abf86a5def7c1e7cccc939443383ac7e44",
+    "skill_md_hash": "c3c26c1a49a8937fe7b3d5dab9d965af9c634c24974bf505cf1586e5640cdc63",
+    "version_metadata_sha256": "74ff2579a11dd086e709d7243c28f393e95c91898e1cd1f4358d4e9044a21677"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/h4gen/skills/web-hosting",
+    "claim_id": "7dc913e097a344f28913136ad78f28f5ffb3fce0a57d6656d7c90a3870e9a152",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "web-hosting",
+        "url": "https://clawskills.sh/skills/h4gen-web-hosting"
+      }
+    ],
+    "owner_handle": "h4gen",
+    "owner_id": "s1789vg92zcrdcbajdp87fjxsh8487xv",
+    "published_at": 1771087398794,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967072261,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967072261,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill’s purpose is to deploy local web projects by creating/syncing a GitHub repository, deploying to Vercel or Netlify, and optionally wiring domains; those capabilities are high-impact but coherent with the stated hosting purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions require collecting project path, repository name, visibility, deployment target, and infrastructure mode before deployment, and explicitly prohibit deploying before target and visibility are clear.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The artifact contains only markdown, but its setup instructions install dependent skills with latest-version commands and include an `update --all` command; this is disclosed and user-run, but broader than the minimum needed for one deployment path.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill requires `MATON_API_KEY` and Vercel or Netlify authentication, which are sensitive credentials but expected for GitHub and hosting automation; missing auth must be disclosed rather than silently bypassed.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The workflow can create persistent external state such as repositories, production deployments, CI/CD links, and domain attachments; this is central to the purpose and guarded by status checks and output requirements.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[skillspector.clean] expected: SkillSpector reported no issues and found only non-executable markdown components.\n[staticScan.clean] expected: The static scan reported no findings or suspicious patterns.\n[virustotal.clean] expected: VirusTotal telemetry was clean; this supports but does not determine the benign verdict.\n[artifact.deployment_authority] expected: The artifact directs repo creation, code push, production deployment, and domain checks, which are expected for a web-hosting orchestration skill and are disclosed with required user inputs and verification gates.",
+          "guidance": "Before using it, review the dependent skills, install only the deploy path you need, avoid `update --all` unless intended, use least-privilege tokens, verify the logged-in GitHub/Vercel/Netlify accounts, check the project for secrets before pushing, and confirm repository visibility and production/domain changes before proceeding.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed deployment helper that can publish code and configure hosting accounts, but its high-impact actions fit its stated purpose and include clear gating and verification requirements.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967014703,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: web-hosting\nVersion: 1.0.0\n\nThe skill is benign. It provides detailed instructions for an AI agent to orchestrate web project deployments using standard tools and services (GitHub, Vercel, Netlify). While it requires access to sensitive API keys (`MATON_API_KEY`, `VERCEL_TOKEN`, `NETLIFY_AUTH_TOKEN`), this is necessary for its stated purpose. Crucially, the `SKILL.md` includes robust guardrails, explicitly instructing the agent to never fail silently, always disclose missing credentials, and verify outcomes (e.g., reachable URLs, DNS propagation) before claiming success, which actively mitigates prompt injection risks and prevents malicious or unauthorized actions.",
+          "checkedAt": 1779164043621,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "65cd98e036d462ce5b43757ad1114c5fd5f369b61f4a8cd07f6c5efe2f56407c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/65cd98e036d462ce5b43757ad1114c5fd5f369b61f4a8cd07f6c5efe2f56407c"
+    },
+    "slug": "web-hosting",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

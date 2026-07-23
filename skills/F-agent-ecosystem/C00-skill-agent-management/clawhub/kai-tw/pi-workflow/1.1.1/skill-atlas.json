@@ -1,0 +1,156 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "developer",
+      "educator",
+      "student"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "education",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:orchestration",
+      "category:C00:token:skill",
+      "category:C02:token:writing",
+      "category:C06:token:code",
+      "category:C07:token:quality",
+      "category:C12:token:management",
+      "category:C12:token:strategy",
+      "cross-tag:agent-management",
+      "cross-tag:education",
+      "cross-tag:planning",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C06",
+      "C07",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "learn",
+      "operate",
+      "plan"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "plan",
+      "teach",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "fce53c30fd91f4f26977fb81cc7aa3ca3a8db9471718468ac41bccab66bd7871",
+    "content_hash": "c6c1df802bb4e0337125af56711f44520fd25cdab0e467029471e0ca4eb33705",
+    "precanonical_content_hash": "efc8d8dd0c843b443c849d101a6c34cd9742805efe21a22014898fc9125ff032",
+    "skill_md_hash": "4f4e12aee7d9b1afa1773f91585467ed343ea28c285f7b8e1592a5ed7ad50aeb",
+    "version_metadata_sha256": "4e83b45ea062174610bdfafbf26fda9873092709812cf816d6e4170a4d86a5ca"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/kai-tw/skills/pi-workflow",
+    "claim_id": "32b6ef9e7e21df821323c42ffa96b47c75a2e7f9474674a1ec58f8d1c1e4733a",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "pi-workflow",
+        "url": "https://clawskills.sh/skills/kai-tw-pi-workflow"
+      }
+    ],
+    "owner_handle": "kai-tw",
+    "owner_id": "s1722289wse2hf4xk8z9n59rp184h4y5",
+    "published_at": 1772123479724,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779952796151,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779952796151,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The task files, lesson logs, lesson-sync script, and startup reminder all fit the stated workflow and self-improvement purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The activation language is broad and may cause the agent to apply planning and logging behavior to many non-trivial tasks, so users should expect workflow files to be touched.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The described hook injects a local virtual reminder at session start; it is visible integration behavior rather than hidden execution or network activity.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The observed behavior is local file read/write within task, lesson, and reference files, with no credential use, broad local indexing, or external transmission indicated.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill creates durable workspace notes and can sync lessons into its reference material, which is purpose-aligned but may persist project details if the user allows sensitive content into those files.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The cited file access supports the workflow’s local task and lesson tracking; it is a disclosure and scoping consideration, not evidence of malicious behavior.\n[TP4] expected: The hook reminder and lesson syncing are consistent with a workflow-orchestration skill, though users should understand they change local guidance and notes over time.\n[SQP-1] expected: Broad activation is expected for an orchestration workflow, but it increases the chance of unwanted planning/logging unless the user keeps activation intentional.\n[SQP-2] expected: Persistent task, error, lesson, and feature-request files are central to the stated purpose; avoid storing secrets or private project details there.\n[VirusTotal:clean] expected: VirusTotal reported no malicious or suspicious engine detections, which is consistent with the local-only artifact behavior described.",
+          "guidance": "Reasonable to install if you want persistent local workflow notes. Before using it, know that it may create or update task, lesson, error, and feature-request files and may inject a session reminder; review those files periodically and do not let secrets, credentials, or sensitive project details be written into them.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to be a local workflow helper that keeps task and lesson notes, with no evidence of exfiltration or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779952751328,
+          "issueCount": 8,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: pi-workflow\nVersion: 1.1.1\n\nThe skill bundle provides a structured workflow for an AI agent's self-improvement and task management. It instructs the agent to write to specific markdown files within its workspace (`tasks/lessons.md`, `tasks/errors.md`, `tasks/feature_requests.md`). A Python script (`scripts/sync_lessons.py`) handles syncing these workspace lessons to the skill's `references/lessons.md` file, performing only local file read/write operations within the expected scope. An OpenClaw hook (`hooks/openclaw/handler.js`/`.ts`) injects a virtual markdown reminder (`PI_WORKFLOW_REMINDER.md`) into the agent's context at session start, which is a benign form of self-guidance. All instructions and code are aligned with the stated purpose and show no evidence of malicious intent, data exfiltration, unauthorized execution, or persistence mechanisms.",
+          "checkedAt": 1779166476937,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "52374c1b6f4bcac16a8906d3724210d1a4fae35f90081c52d20182d629e475c5",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/52374c1b6f4bcac16a8906d3724210d1a4fae35f90081c52d20182d629e475c5"
+    },
+    "slug": "pi-workflow",
+    "source_type": "clawhub",
+    "version": "1.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

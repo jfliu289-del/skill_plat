@@ -1,0 +1,153 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.25,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C02:token:rewrite",
+      "category:C06:token:code",
+      "category:C07:token:review",
+      "category:C09:token:security",
+      "category:C09:token:threat",
+      "category:C10:token:ai",
+      "category:C10:token:model",
+      "category:C17:token:notes",
+      "cross-tag:review",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C06",
+      "C07",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "review",
+      "secure",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4444e5aa8a09a7f23c643f4a81477d272007c5a1adfbc5e69215a373e16da6f1",
+    "content_hash": "f9c1ab0a97ef07902d697c2c5c8b26874fa6648aacc3dc0b93d83b3eb51cd75e",
+    "precanonical_content_hash": "eaf46dbb8627724be9eaf6e560dcd6f2ca2afc0f359a85c193e60df0e6a3d9a0",
+    "skill_md_hash": "56c3b8ed176e36bc88c759abdd33024be2f05134c82a0ddf680e3e332efa501e",
+    "version_metadata_sha256": "e257b48a93eb828e67121736bc4606a2614f74ec8d51817f05b07ac341adf39d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/anshumanbh/skills/securevibes-scanner",
+    "claim_id": "d05a3cab6be935b9c53fbe18a87ea56c2a47dc817f45c0248e84c69dc4c76d16",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "securevibes-scanner",
+        "url": "https://clawskills.sh/skills/anshumanbh-securevibes-scanner"
+      }
+    ],
+    "owner_handle": "anshumanbh",
+    "owner_id": "s17c2ph0s994k0k4yv3ne2bsn5885bc2",
+    "published_at": 1771986187419,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779969241774,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779969241774,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The skill consistently describes AI-assisted code security scanning, threat modeling, incremental PR review, report generation, and optional DAST; these capabilities fit the stated purpose but can involve sensitive source code and authorized network testing.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions map common security-review requests to shell-based scanner commands and include git, artifact cleanup, and cron workflows. The actions are disclosed and target a user-provided repository, but the wording is broad enough that users should confirm whether they want an external CLI scan versus passive review.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill depends on installing the external securevibes CLI via pipx or uv and checks for a minimum CLI version in the scan wrapper. The package itself is outside the submitted artifact, so users must trust that external dependency.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Use of local repository access, .securevibes output files, Anthropic OAuth or API-key authentication, git fetch, and optional DAST traffic is proportionate to the scanning purpose and is described in the artifacts.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Recurring monitoring is implemented through an explicitly user-created OpenClaw cron job and local state, logs, lock files, and run records under .securevibes. This is disclosed persistence, not hidden background behavior.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad skill description does cover command execution, cron monitoring, and optional DAST, but those capabilities are central to the stated scanner workflow and are disclosed rather than hidden; this is downgraded to user guidance rather than a Review verdict.\n[SQP-1] expected: The request-to-action table uses ordinary phrases like quick security check, but the mapped actions remain security-scan actions against a provided path, with DAST and continuous monitoring requiring more explicit user intent. No artifact-backed evidence showed deceptive or unrelated automatic execution.",
+          "guidance": "Before installing, verify that you trust the securevibes CLI package and understand which Anthropic account or API key it will use. Only scan repositories and web targets you are authorized to test, and create the cron job only when you intentionally want ongoing background monitoring that writes .securevibes state and reports.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed security-scanning skill whose powerful behaviors are mostly expected for its purpose, but users should enable external scans and cron monitoring deliberately.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779969195611,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: securevibes-scanner\nVersion: 0.5.3\n\nThe OpenClaw skill 'securevibes-scanner' is benign. The `SKILL.md` explicitly addresses prompt injection risks, advising against unsanitized user input and stating that the `scripts/scan.sh` wrapper validates paths. The `scripts/scan.sh` file implements robust input validation using a regex to reject shell metacharacters from the `PROJECT_PATH` argument, effectively preventing shell injection. The `ops/incremental_scan.py` script uses `subprocess.run` with argument lists, which is the secure method for executing external commands in Python. There is no evidence of data exfiltration, unauthorized persistence, or other malicious intent; all actions align with its stated purpose as an AI-powered security scanner.",
+          "checkedAt": 1779164493427,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "7fc15fafd2688e2aee122eaa580cbfbf692656f4bafb79a59aea111682f89ba1",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/7fc15fafd2688e2aee122eaa580cbfbf692656f4bafb79a59aea111682f89ba1"
+    },
+    "slug": "securevibes-scanner",
+    "source_type": "clawhub",
+    "version": "0.5.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

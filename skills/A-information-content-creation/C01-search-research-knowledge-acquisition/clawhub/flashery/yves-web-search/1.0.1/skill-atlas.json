@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.69,
+    "domains": [
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:phrase:web search",
+      "category:C01:token:find",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C08:token:github",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create",
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "456a688f98fe55d43891e2713a15bb9d6cec9e10d28e2f95b4ba803f4aae814c",
+    "content_hash": "1bad015bcc8f7fed0d715f499d1a23a055ea94ea9ff94d4c90aed8c8e6258583",
+    "skill_md_hash": "2c7ccd800624a6b4a8cb0f996b00e8fc91c8e41ed16a103ae77474893542620b",
+    "version_metadata_sha256": "7a4cf0733b68b2a38e0ae04796bbfcb9b63f34a37b0c1a322556ae3ac437b36f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/flashery/skills/yves-web-search",
+    "claim_id": "f35474fa41b56a0c2d55e3bc923baeecb0c1120c0ff669e4aa5aa73559247b99",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "yves-web-search",
+        "url": "https://clawskills.sh/skills/flashery-yves-web-search"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "flashery",
+    "owner_id": "s17efa68t9jyrf94b1pb7atvvx8847re",
+    "published_at": 1771607794652,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943142282,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943142282,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is web search and page fetching, and the artifacts implement that through Jina Reader, DuckDuckGo Lite, and an optional ddgs Python fallback without unrelated capabilities.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The invocation description is broad and the instructions do not include a strong privacy warning, but the examples and commands clearly involve external web services and are aligned with the skill purpose.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no automatic installer or persistence hook. The only package-install guidance is a user-run pip install for the ddgs fallback, which is expected but carries normal package supply-chain risk.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The optional JINA_API_KEY is purpose-aligned for advanced Jina features, but credential-handling guidance is minimal and the metadata does not declare it as a required or optional environment variable.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill has no background worker, install hook, privilege escalation, local indexing, or agent configuration mutation; scripts run only when invoked.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad web-search description could cause overuse, but broad search/fetch capability is the core purpose and there is no hidden or unrelated authority.\n[SQP-2] expected: Queries and URLs are sent to Jina, DuckDuckGo, or ddgs-backed services; that external data flow is inherent to web search and is visible in the documented commands, though stronger privacy warnings would be useful.\n[SQP-2] expected: The optional Jina API key is documented and sent only when the user sets JINA_API_KEY, but the skill should give clearer advice not to expose keys in shared shells, logs, or screenshots.\n[SQP-2] expected: The reader script sends user-supplied URLs or search text to r.jina.ai and may include the bearer key; this is purpose-aligned, not hidden exfiltration, but users should not submit secrets, private URLs, or authenticated links.\n[VirusTotal code_insight] unexpected: The reported URL-parameter injection risk in reader.sh is a real input-validation weakness that could alter Jina request parameters, but it does not show intentional deception, destructive behavior, or data exfiltration beyond the requested third-party fetch.",
+          "guidance": "Install only if you are comfortable with searches and fetched URLs being sent to third-party web services. Do not use it for secrets, private intranet URLs, authenticated links, personal data, or confidential prompts. If you use JINA_API_KEY, keep it in a protected environment and avoid exposing it in shared terminals or logs.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent web-search helper that makes expected outbound requests, though users should avoid sending sensitive queries or URLs through it.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943115089,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 45,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: yves-web-search\nVersion: 1.0.1\n\nThe `scripts/reader.sh` file contains a URL parameter injection vulnerability. Arguments such as `--proxy`, `--selector`, and `--remove` are not sufficiently sanitized for URL control characters (e.g., '&', '=') before being appended to the `BASE_URL` for the `curl` command. This flaw could allow an attacker to inject arbitrary parameters into the Jina AI API request, potentially altering its intended behavior. There is no evidence of intentional malicious behavior like data exfiltration or backdoors.",
+          "checkedAt": 1779165718979,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "456a688f98fe55d43891e2713a15bb9d6cec9e10d28e2f95b4ba803f4aae814c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/456a688f98fe55d43891e2713a15bb9d6cec9e10d28e2f95b4ba803f4aae814c"
+    },
+    "slug": "yves-web-search",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

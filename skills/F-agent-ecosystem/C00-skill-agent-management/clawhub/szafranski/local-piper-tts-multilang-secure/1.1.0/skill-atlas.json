@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C02:token:language",
+      "category:C09:token:secure",
+      "cross-tag:agent-management",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C09"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "45351b4e0d34dabd02c05a9871bd191ca6544d731e5acc72cda582f35f37eb30",
+    "content_hash": "b9ae30a0f5bf983a28c061b7aed3bc4cbec97a1d469ac4742339d8969f62b2b7",
+    "precanonical_content_hash": "696cdc2940fa234f5e9963e35ca9cd18cc2fc278ba47851e6377aa99247db553",
+    "skill_md_hash": "4bac14345578663e36f3f4d293b508cdc532ce47356c977dcf4d7249930a2b04",
+    "version_metadata_sha256": "34075497528f0f7242777ca7b5e065beeb0e395716489abefab39330eedcc39e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/szafranski/skills/local-piper-tts-multilang-secure",
+    "claim_id": "ba2b7f22b262e1ee88f8f1877a73e46f97a7ac1d527cd77ea867de46a8cfcf94",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "local-piper-tts-multilang-secure",
+        "url": "https://clawskills.sh/skills/szafranski-local-piper-tts-multilang-secure"
+      }
+    ],
+    "owner_handle": "szafranski",
+    "owner_id": "s17ct1vxayfmf00ngmyaaks3k183gcaq",
+    "published_at": 1771882319782,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779953994379,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779953994379,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently implement Piper-based text-to-speech: setup, voice download/list/remove, synthesis, OGG conversion, and output to the OpenClaw workspace all match the stated TTS purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions require user confirmation before setup, voice downloads, voice removal, and saving speed preferences; the 'fully offline' wording is imprecise because setup and model downloads use the network, but those steps are documented.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Setup creates a skill-local Python venv and installs unpinned piper-tts/pathvalidate from PyPI; voice models are downloaded over HTTPS from HuggingFace-style Piper voice URLs without checksum verification. This is supply-chain exposure but disclosed and purpose-aligned.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Use of python3, ffmpeg, a bundled shell wrapper, HTTPS model downloads, and workspace audio output is proportionate for local TTS. The code uses execFile argument arrays rather than shell command strings for Node-launched processes.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill persists a local venv, downloaded voice models, generated audio files, and optional config.json speed preferences. It does not show background workers, credential/session access, broad local indexing, privilege escalation, or autonomous external sending.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] expected: Network use during first setup and voice acquisition is expected for a local TTS skill that does not bundle Piper or models. The offline claim should be read as offline runtime after setup, and the artifacts repeatedly disclose PyPI installation and voice downloads.\n[SC1] expected: Declaring an OpenClaw peer dependency is expected for an OpenClaw skill. The wildcard range is broad and worth tightening, but it does not create hidden behavior or show malicious capability in this artifact.\n[SC4] unexpected: This finding is about possible vulnerable host OpenClaw versions rather than a bundled dependency or concrete behavior in the skill. It is useful compatibility guidance but not enough to move an otherwise coherent skill into Review.",
+          "guidance": "Install only if you are comfortable with a one-time PyPI setup, HuggingFace voice model downloads, and local storage of generated audio under the OpenClaw workspace. Keep OpenClaw current, and avoid synthesizing sensitive text unless you are comfortable with the resulting audio file remaining on disk.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent local text-to-speech skill with disclosed setup downloads and local file storage, and I found no evidence of hidden data access, exfiltration, persistence, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779953957556,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: local-piper-tts-multilang-secure\nVersion: 1.1.0\n\nThis skill is classified as benign. The code and documentation demonstrate strong security practices, including the use of `child_process.execFile` with argument arrays to prevent shell injection, rigorous input sanitization (`path.basename()`) and path validation (`startsWith(PIPER_DIR)`) to prevent path traversal, and explicit HTTPS-only downloads with URL component validation for voice models from a legitimate source (HuggingFace). User confirmation is required for setup and voice downloads, and all operations are confined to the skill's isolated virtual environment and the OpenClaw workspace. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection against the agent. The skill's behavior is fully aligned with its stated purpose of providing local, offline text-to-speech.",
+          "checkedAt": 1779166593047,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "4e6acd25dd492b11c188420515f2d056f263c625b7de984070ec263ef0754439",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4e6acd25dd492b11c188420515f2d056f263c625b7de984070ec263ef0754439"
+    },
+    "slug": "local-piper-tts-multilang-secure",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

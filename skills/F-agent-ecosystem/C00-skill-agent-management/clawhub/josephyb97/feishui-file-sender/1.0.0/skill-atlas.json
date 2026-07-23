@@ -1,0 +1,124 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "544c17521758123705980c126044eddebd7ed1f0aaa299f663ac0d2670145ba1",
+    "content_hash": "b29dc80c4199e75caf11620346d9a20f2cb28b689aca31823e653585d218b58f",
+    "precanonical_content_hash": "bf4fcf70c24c122a889581edc6b4d0d29cf4a4170feebd9f5ee288237f78746c",
+    "skill_md_hash": "f11dbcf7acacdd2efa0849474e3ca5b18781d702384738a0f94c163119071160",
+    "version_metadata_sha256": "b95f6045841bb3fd152efe820ee1dd7455727d32524de32e352fa6efae28ddff"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/josephyb97/skills/feishui-file-sender",
+    "claim_id": "2d15d5fa5ccc80a27bb81a84402da3f4d8f5a34314b897ed2d399b07308a5969",
+    "index_entries": [
+      {
+        "index_path": "categories/communication.md",
+        "label": "feishui-file-sender",
+        "url": "https://clawskills.sh/skills/josephyb97-feishui-file-sender"
+      }
+    ],
+    "owner_handle": "josephyb97",
+    "owner_id": "s17dkjgw9j4nq05b4885rtz99583nsbr",
+    "published_at": 1772007244785,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779958405503,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779958405503,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The capability to package files and send them through Feishu is clearly disclosed and matches the stated utility purpose, but it is inherently sensitive because local files leave the environment.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are user-directed and examples focus on zipping skill folders into /tmp before sending, but they do not explicitly tell users to inspect archive contents or verify the recipient before transmission.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains only SKILL.md and package.json, with no executable scripts, dependencies, install hooks, or hidden runtime components.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Using zip and an absolute filePath is proportionate for a file-sending helper, but the workflow could send unintended local data if the user selects the wrong directory, archive, or chat target.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts show no persistence, background worker, credential storage, privilege escalation, or automatic execution; Feishu access depends on the user's existing configured channel.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The scanner concern about possible accidental disclosure is valid guidance, but the artifact-backed behavior is the disclosed file-sending purpose rather than hidden or unrelated exfiltration.\n[VirusTotal code_insight] expected: The zip plus absolute filePath pattern matches the documented workflow; VirusTotal notes abuse potential but also does not identify explicit malicious intent, and the files show no deception or automatic data theft.\n[staticScan.clean] expected: The clean static scan is consistent with the small instruction-only package and absence of executable code.",
+          "guidance": "Install this only if you want the agent to send selected files through your configured Feishu account. Before using it, verify the exact file or archive contents, confirm the Feishu chat or user ID, and avoid sending secrets, credentials, broad workspace folders, or proprietary/private data unless that disclosure is intended.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This instruction-only skill does what it says: it helps send a chosen local file or zip archive to Feishu, with the main risk being accidental disclosure if used carelessly.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779958375774,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: feishui-file-sender\nVersion: 1.0.0\n\nThe `SKILL.md` file instructs the AI agent to `cd` into `/root/.openclaw/workspace/skills` and use the `zip` command to package directories. The skill then uses the `message` tool with a `filePath` parameter that accepts absolute paths. This combination, while intended for sending other skills, creates a significant prompt injection vulnerability. An attacker could potentially instruct the agent to zip and exfiltrate arbitrary sensitive files or directories (e.g., `/etc`, `~/.ssh`, or other skill data) by manipulating the `zip` command's target or the `filePath` parameter. This grants a high-risk capability that could be abused, but the provided files do not show explicit malicious intent to self-exploit or exfiltrate unrelated data.",
+          "checkedAt": 1779167027997,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "ddba66fbeefae5bc1d8aca3caf3a11b02282c611c2bbe1836a9f877cf39b58ad",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ddba66fbeefae5bc1d8aca3caf3a11b02282c611c2bbe1836a9f877cf39b58ad"
+    },
+    "slug": "feishui-file-sender",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

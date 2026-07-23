@@ -1,0 +1,129 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C14",
+    "reasons": [
+      "category:C14:token:lead",
+      "cross-tag:data-analysis"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "validate"
+    ],
+    "tasks": [
+      "analyze"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "2a17469d6c65c5c38714d691c841a0d196d9e62f417ea3e05d3f8444f6444709",
+    "content_hash": "59b5d472a0ec55edfe0ec6894f90a4bb22d4ad9333bec794b3e15747098b7dfc",
+    "precanonical_content_hash": "f327245c50dff1e8e50b24014171e36d318a198cdbca5401660f82c4331961f5",
+    "skill_md_hash": "e7745c8d4c32649fda583bdd4ed762e0d2d46bea5d1408dff39e39f767e94701",
+    "version_metadata_sha256": "49abaadf4829b719bdbebff0929f4aa29226cc1a2a5023d5d8e380367dfb9826"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/psyduckler/skills/lead-scorer-free",
+    "claim_id": "173da1862be548025228c65a6581159d85f97e7a4cd5ba545d9c249c04a72eb8",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "lead-scorer-free",
+        "url": "https://clawskills.sh/skills/psyduckler-lead-scorer-free"
+      }
+    ],
+    "owner_handle": "psyduckler",
+    "owner_id": "s17918h35fap1pyt0j2wfakqzd885fpq",
+    "published_at": 1771171323880,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968363890,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968363890,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently implement lead scoring by analyzing user-supplied domains, DNS records, sitemaps, web pages, social links, and public contact information, matching the stated purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network activity is disclosed through the description, usage, and rate-limiting section, though sitemap URLs from robots.txt can extend requests beyond the originally entered host and there is no private/internal target guardrail.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no automatic installer or privileged setup, but the documented dependency install uses an unpinned pip package, which is less reproducible than a pinned requirements file.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Outbound DNS and HTTP/HTTPS requests are proportionate for lead scoring and rate-limited, but the fetch helper disables TLS certificate and hostname verification, weakening result integrity.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No credentials, background services, startup hooks, persistent agent state, or privilege escalation are present; local profile/CSV reads and output writes are user-directed CLI options.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The network requests and optional output file are consistent with the documented scoring workflow; the absence of explicit permission metadata is a transparency note rather than evidence of hidden behavior.\n[SQP-2] expected: Website scraping, DNS lookups, sitemap fetching, and contact extraction are core advertised functions, but users should be made more clearly aware that running the skill contacts external domains.\n[SQP-2] expected: The script performs the expected outbound checks against supplied domains; lack of allowlisting or private-address blocking is a hardening gap for automated or multi-tenant environments, not evidence of malicious intent.\n[VirusTotal code_insight] expected: The reported arbitrary profile/CSV reads and output writes are user-selected file paths, and disabled TLS verification is a vulnerability, but the artifacts do not show unauthorized exfiltration, persistence, or destructive actions.",
+          "guidance": "Install only if you are comfortable with a local script making DNS and web requests to lead domains and writing results to a path you choose. Avoid running it on untrusted or internal targets without adding private-address blocking, and consider restoring normal TLS certificate verification before relying on scores at scale.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill performs the advertised lead-scoring web and DNS checks, with security hardening cautions but no evidence of hidden data theft, persistence, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968327739,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 32,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: lead-scorer-free\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to significant security vulnerabilities in `scripts/score_lead.py`. It disables SSL/TLS certificate verification (`ssl.CERT_NONE`, `check_hostname = False`) when fetching URLs, making it vulnerable to Man-in-the-Middle attacks. Furthermore, the script allows reading arbitrary local files via the `--profile` and `--csv` arguments, and writing to arbitrary local files via the `--output` argument. While there is no evidence of intentional malicious behavior like data exfiltration to unauthorized endpoints or persistence mechanisms, these vulnerabilities could be exploited by a malicious actor providing input to the skill or by an inadequately sandboxed OpenClaw agent.",
+          "checkedAt": 1779164297222,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "b7ba25c41d11f02500eecee3882ce66df7ad22505e304a391d8b0bcf0bb3fd66",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b7ba25c41d11f02500eecee3882ce66df7ad22505e304a391d8b0bcf0bb3fd66"
+    },
+    "slug": "lead-scorer-free",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

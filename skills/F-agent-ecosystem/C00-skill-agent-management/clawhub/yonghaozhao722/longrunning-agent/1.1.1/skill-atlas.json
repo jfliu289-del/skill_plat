@@ -1,0 +1,128 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.75,
+    "domains": [],
+    "needs_review": false,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:phrase:agent skill",
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C10:token:ai",
+      "category:C11:token:project",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "51de584774881f907a03862122fa407c905fde6ee74fd7ff656dfa320bdbfe99",
+    "content_hash": "4ddc3bf30b501c13669f07dd4c53b147d5394b6876b4b00c67d573342ad4c7ac",
+    "precanonical_content_hash": "b6401a837fad7dbc0a14eb9e4b26c86b92afc4160976826f807667a241d11df8",
+    "skill_md_hash": "7348f9d8e4e01690ff43c666266f4d0ccb3a7a5f7b180c4c17df8c83bee9cf61",
+    "version_metadata_sha256": "fed6c9b433f7dbb5a80308e3cd888c9abf8e1c387b20ef4b9405f8babe7fc915"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/yonghaozhao722/skills/longrunning-agent",
+    "claim_id": "9b0785719b1008ffa346ce4c8dbf029df327df9c842303716226f9a0d8fd24f4",
+    "index_entries": [
+      {
+        "index_path": "categories/productivity-and-tasks.md",
+        "label": "longrunning-agent",
+        "url": "https://clawskills.sh/skills/yonghaozhao722-longrunning-agent"
+      }
+    ],
+    "owner_handle": "yonghaozhao722",
+    "owner_id": "s17f5k7je06wzdd9rt2r4ebjw988572e",
+    "published_at": 1771495522869,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779966784269,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779966784269,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is long-running project continuity, and the capabilities described fit that purpose: task files, progress logs, testing, and atomic commits. It also mentions web UI syncing/logging, which is purpose-related but privacy-relevant.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are scoped to a project directory and workflow files, but they include running an optional project-local init.sh and making git commits, so users should approve those actions in untrusted repositories.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The install path is a normal skills directory destination and no install-time script is present. The manifest lists gh and the documentation references Claude Code CLI, which are external tools users should configure knowingly.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading and writing CLAUDE.md, task.json, and progress.txt is proportionate for the workflow. The web UI section says tasks, progress, session output, and commits may be logged or synced, but does not describe destination, retention, or opt-in controls.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to project workflow files and git commits, which is central to the skill. No background worker, privilege escalation, credential harvesting, or hidden persistence is shown.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The web sync/logging concern is supported by the artifact text and is a real privacy note, but the behavior is disclosed at a high level and no executable code or endpoint is present in the package.\n[code_insight] expected: The init.sh and gh concerns are valid cautions for a development workflow, but they are disclosed, purpose-aligned, and not evidence of malicious or hidden behavior.\n[staticScan] expected: Static scan reported no suspicious patterns, consistent with the package containing only SKILL.md and manifest.json.",
+          "guidance": "Install only if you are comfortable with an agent maintaining project task files and making commits. Review any init.sh before it runs, inspect changes before accepting commits, avoid putting secrets in progress or task logs, and confirm how the referenced web UI stores or syncs session output before using it on private work.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a mostly transparent project-tracking workflow skill, with expected cautions around local setup scripts, commits, and possible web logging.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779966744455,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: longrunning-agent\nVersion: 1.1.1\n\nThe skill instructs the AI agent to execute an optional `init.sh` script found in the project directory as part of its workflow (SKILL.md). This presents a significant Remote Code Execution (RCE) vulnerability, as the agent would execute arbitrary code from an untrusted or compromised project's `init.sh` without explicit sanitization or warning. Additionally, the `manifest.json` lists `gh` (GitHub CLI) as a required tool, granting the agent broad capabilities for interacting with GitHub repositories, which could be misused if the agent is later prompted maliciously. While these capabilities are risky, there is no direct evidence of intentional malicious behavior or self-exploitation within the provided skill files.",
+          "checkedAt": 1779163977657,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "154e1ddf0c2912e4e44d904aab612c2516a2bf37548b831d7162f6cdb08791d0",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/154e1ddf0c2912e4e44d904aab612c2516a2bf37548b831d7162f6cdb08791d0"
+    },
+    "slug": "longrunning-agent",
+    "source_type": "clawhub",
+    "version": "1.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

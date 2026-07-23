@@ -1,0 +1,157 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.5833,
+    "domains": [
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:phrase:agent skill",
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "category:C11:token:collaboration",
+      "category:C11:token:team",
+      "category:C12:token:management",
+      "category:C12:token:strategy",
+      "category:C13:token:operations",
+      "category:C14:token:crm",
+      "category:C17:token:notes",
+      "category:C17:token:personal",
+      "category:C19:token:crm",
+      "cross-tag:agent-management",
+      "cross-tag:planning",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C11",
+      "C12",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "plan"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "plan",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "23ccf7febfcc40e6fa88cc032cd984527a75c066b666f156ffd501123822b89e",
+    "content_hash": "63f54a6fa4e581918aee7526e42f88f97b5293d54ed002c0f952974ded1a930e",
+    "skill_md_hash": "3202a3993ff42e59e440f087c1b2ebdde60976cad78fbe6fddb63f724edad8b4",
+    "version_metadata_sha256": "d225827e609dbd949032da628c617541b47c7b06c7078bcff60a612e47e07b60"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/makkzone/skills/people-strategy",
+    "claim_id": "d9158041e2394f1f03804be81753a50dd5c8e4c67c46950608b8d350fdd1ab73",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "people-strategy",
+        "url": "https://clawskills.sh/skills/makkzone-people-strategy"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "makkzone",
+    "owner_id": "s17929tv5gkjxsem66rjb5mp6x848r8d",
+    "published_at": 1771040812647,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974659507,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974659507,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill’s stated purpose matches its capabilities: it stores people, roles, organizations, relationship edges, character descriptions, and notes in a SQLite-backed relationship graph. That can be sensitive personal data, but it is central to the advertised personal CRM, org chart, mentorship, and collaboration use cases.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands for adding, updating, searching, deleting, viewing networks, and exporting the full graph are explicit and user-invoked. The documentation does not add privacy warnings or confirmation guidance for full export and destructive delete operations, so users need to apply their own controls.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is transparent: the bundle contains markdown, two Python files, and a requirements file stating no external dependencies. There is no install-time script, package download, or hidden setup behavior in the artifacts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The code uses Python standard library SQLite and JSON functionality only. I found no network calls, credential access, environment-variable harvesting, subprocess execution, broad filesystem scanning, or unrelated local data access.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill intentionally creates and mutates a local people.db database, can print/export the full graph as JSON, and can permanently delete people or relationships. This persistence and mutation authority is proportionate to the purpose, but the database and exports need user-side protection and backups.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The privacy concern is real user guidance because the skill stores interpersonal and professional notes, including character descriptions, but the storage is disclosed and purpose-aligned rather than hidden or unrelated.\n[SQP-2] expected: Full graph export can expose the complete relationship dataset if shared, but it is an explicit command and I found no automatic upload or exfiltration path.\n[SQP-2] expected: Delete-person and delete-relationship are destructive and lack confirmation prompts, but they are documented, local, user-directed database operations.\n[staticScan] expected: Static scan reported no findings, and artifact review found parameterized SQLite queries with no suspicious command execution or network behavior.\n[VirusTotal] expected: VirusTotal telemetry was clean; this supports but does not determine the benign verdict.",
+          "guidance": "Install only if you are comfortable maintaining a local database of people, relationships, and notes. Avoid storing unnecessary sensitive details, protect people.db and exported JSON files, review any export before sharing it, and make backups before using delete commands because deletions are not guarded by confirmation or recovery features.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a local people-relationship database tool with clear CRM-style storage, search, delete, and export features, but its data should be treated as private.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974606392,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: people-strategy\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle for 'people-strategy' is classified as benign. The Python code (`database.py`, `people_skill.py`) correctly uses parameterized queries for all SQLite operations, effectively preventing SQL injection vulnerabilities. There are no indications of malicious activities such as data exfiltration, unauthorized network communication, arbitrary code execution, persistence mechanisms, or attempts at prompt injection within the `SKILL.md` or `README.md` files. The `requirements.txt` explicitly states no external dependencies, further reducing supply chain risk.",
+          "checkedAt": 1779163894632,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "317a3b8771b0246351b20dd4685e7c15bbaea5e1de9c6ec44a53fe128250f80c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/317a3b8771b0246351b20dd4685e7c15bbaea5e1de9c6ec44a53fe128250f80c"
+    },
+    "slug": "people-strategy",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

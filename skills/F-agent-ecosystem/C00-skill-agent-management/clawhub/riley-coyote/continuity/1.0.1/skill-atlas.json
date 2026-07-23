@@ -1,0 +1,132 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C10:token:ai",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "5d5bfbcc522464c1ed440155244c1ab2fcf0d0b54ff6180684bc2e1966877d8d",
+    "content_hash": "69e8aa38d7b77613575f405da72822ecc31324030b32542d8158c9c516fd1678",
+    "precanonical_content_hash": "d19eea05fe4756460adedd982d188e5dfab7db1424828be0b2509e18b94764c2",
+    "skill_md_hash": "6701a2e4513c4f1a956f10833e34118e10fe2a01e53ed376339acdaa45b9631a",
+    "version_metadata_sha256": "d660881ad9d304c97030e47630689aba624ecc81cb8b1fe84b96a3f8463898c4"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/riley-coyote/skills/continuity",
+    "claim_id": "6e8daf0832a5539b1bc81c5521d8cbe8ac865073f76690f902a76ab2f5819879",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "continuity",
+        "url": "https://clawskills.sh/skills/riley-coyote-continuity"
+      },
+      {
+        "index_path": "categories/notes-and-pkm.md",
+        "label": "continuity",
+        "url": "https://clawskills.sh/skills/riley-coyote-continuity"
+      }
+    ],
+    "owner_handle": "riley-coyote",
+    "owner_id": "s17b8098tr27wmcxhq3mde6jjd885ggw",
+    "published_at": 1770271746741,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783654536732,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783654536732,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill's memory, reflection, question surfacing, and identity/self-model features are sensitive but match its stated continuity purpose and are described in the skill documentation.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Heartbeat-based post-session reflection is documented as an integration the user adds, and command behavior is visible; the artifacts could be clearer about privacy consent and retention controls.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No privileged installer, dependency installation, package scripts, network setup, or credential collection is present.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script reads a session transcript only when explicitly passed with --session and otherwise uses local files under a configurable memory directory.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill deliberately persists questions, identity notes, and reflection logs locally, but does not request elevated privileges, external accounts, credentials, or network access.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[TT2] expected: The environment-configurable memory directory controls where local memory files are written. This is a real local file-safety consideration, but it is disclosed configurability and writes fixed memory filenames rather than showing hidden or unrelated file mutation.\n[LP3] expected: Persistent file writes and environment variables are part of the documented local memory design. A clearer permission summary would help users, but the behavior is not hidden or purpose-mismatched.\n[TP4] expected: Identity notes, status output, question management, and reflection logs are all within the described continuity/memory scope, so the scanner's scope-mismatch concern is downgraded.\n[SQP-2] expected: The skill does retain conversation-derived questions and reflection output locally. That is privacy-sensitive, but the core description and file layout make persistent memory and resurfacing explicit.\n[SSD-3] expected: Cross-session retention and later display of stored questions are the central function of this skill; users should manage the memory directory carefully, but this is not evidence of malicious behavior.",
+          "guidance": "Install only if you want local cross-session memory. Review the configured CONTINUITY_MEMORY_DIR, avoid using it for sensitive conversations you do not want retained, and enable heartbeat reflection only when background post-session processing is acceptable.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a local memory helper that intentionally stores reflection questions and identity notes on disk, with no evidence of hidden network access, credential theft, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783654511156,
+          "issueCount": 9,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 90,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: continuity\nVersion: 1.0.1\n\nThe OpenClaw AgentSkills skill bundle 'continuity' is designed for asynchronous reflection and memory integration. The Python script (`scripts/continuity.py`) manages local markdown files for questions and identity within a dedicated memory directory (`~/.clawd/memory` by default). Crucially, the `analyze_session` function, which would typically involve LLM calls for analysis, is currently a placeholder that returns empty data, meaning the skill does not perform complex AI analysis or external LLM interactions as implemented. There is no evidence of data exfiltration, malicious execution, network activity, or prompt injection attempts in `SKILL.md` that would subvert the agent's core directives. All file operations are confined to the skill's designated memory storage, aligning with its stated purpose.",
+          "checkedAt": 1779161450625,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "30535138d6e5c1b22fb1287116a39a134022ecbf16f8e04c3a0602e287d8af0f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/30535138d6e5c1b22fb1287116a39a134022ecbf16f8e04c3a0602e287d8af0f"
+    },
+    "slug": "continuity",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

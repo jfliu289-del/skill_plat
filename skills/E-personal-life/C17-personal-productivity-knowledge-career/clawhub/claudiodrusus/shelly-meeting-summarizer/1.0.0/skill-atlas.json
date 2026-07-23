@@ -1,0 +1,119 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C17",
+    "reasons": [
+      "category:C17:token:notes"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "6e0a0b6f478d521e934e185007483409c3fcbfff029d1706aea8d6c6d8af35c8",
+    "content_hash": "bb157745bf3fd7c394aa88b94cf3173035d80863c4746f90cdd7c936e539328f",
+    "skill_md_hash": "9c472474eea76fc38d69d25bdd5804e1b0835e7a4be093067af1220bcba519ce",
+    "version_metadata_sha256": "f2ffbeca3b49fccd708a5709cdafb85f072bff91dac6e08006cb40e67042a1cf"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/claudiodrusus/skills/shelly-meeting-summarizer",
+    "claim_id": "1b6d3303fe46f0b7b0a1a9119852a1bb8f305156a062928e7530169b40359504",
+    "index_entries": [
+      {
+        "index_path": "categories/cli-utilities.md",
+        "label": "shelly-meeting-summarizer",
+        "url": "https://clawskills.sh/skills/claudiodrusus-shelly-meeting-summarizer"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "claudiodrusus",
+    "owner_id": "s172xccbt04xdg9tshkc5tw64x88526n",
+    "published_at": 1771792511873,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779950256727,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779950256727,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The shell script reads a user-supplied meeting transcript from stdin and sends it to Anthropic's messages API to generate the advertised markdown summary, which is coherent with the skill purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Usage is explicit and user-directed through shell commands; there are no instructions for automatic execution, background agents, destructive actions, or unrelated agent behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill lists bash, curl, and ANTHROPIC_API_KEY as requirements; the script also depends on python3 for JSON handling, which is not listed in SKILL.md.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network transmission and an Anthropic API key are proportionate for an LLM summarizer, but meeting transcripts can contain confidential or regulated information and the user-facing documentation should disclose the data flow more plainly.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts show no file writes, persistence, privilege escalation, local credential-store access, background service, or account mutation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The concern about limited privacy disclosure is valid as user guidance, but the external API use is aligned with an Anthropic-backed meeting summarizer and is suggested by the required API key.\n[E1] expected: The curl call to api.anthropic.com sends the provided transcript for summarization; no unrelated destination, credential theft, persistence, or hidden exfiltration behavior was found.\n[SDI-2] expected: The script transmits stdin transcript content to Anthropic, but that is the core mechanism of the skill rather than a purpose-mismatched data flow; clearer documentation would reduce user surprise.",
+          "guidance": "Install only if you are comfortable sending the meeting transcript to Anthropic using your API key. Avoid using it for confidential, regulated, legal, HR, customer, or personal data unless your organization permits that provider and data flow; also ensure bash, curl, python3, and ANTHROPIC_API_KEY are available.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it advertises, but users should know meeting transcripts are sent to Anthropic for summarization.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779950217420,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: shelly-meeting-summarizer\nVersion: 1.0.0\n\nThe skill bundle is benign. The `summarize.sh` script securely handles user input by using `python3 -c 'import sys,json; print(json.dumps(sys.stdin.read()))'` to properly JSON-escape the transcript before sending it to the Anthropic API. This prevents shell and JSON injection vulnerabilities. The script's purpose is clearly defined as summarizing meeting transcripts using an LLM, and it makes a legitimate API call to `api.anthropic.com` using an environment variable for the API key. There is no evidence of data exfiltration, unauthorized execution, persistence mechanisms, or prompt injection attempts against the OpenClaw agent in `SKILL.md`.",
+          "checkedAt": 1779166309762,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "11586b8120b1fb0acf4fd8d55c4529c9e8e432877e9fc410558c025d7ed83001",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/11586b8120b1fb0acf4fd8d55c4529c9e8e432877e9fc410558c025d7ed83001"
+    },
+    "slug": "shelly-meeting-summarizer",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

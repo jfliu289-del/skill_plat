@@ -1,0 +1,119 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.0,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "fallback:C00"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "82fc7a1844c9bd63a86a2a1b5ef7b64cdd3299febce9ba63dadc67b90b0ea954",
+    "content_hash": "bc6f984e7552dceb483dabfc487853bfead1f22b2e2e0b47cd63f0ac40cfcc8a",
+    "precanonical_content_hash": "6230055f52a441b99637df9838dc326b9c2d4540777509291ed6ea97ec7d58b8",
+    "skill_md_hash": "8111b2cfdf4204f0aefb898a9ddde3c83ba5ed0d4a6d8007030fa93f1d08c615",
+    "version_metadata_sha256": "e432fa08e100833adcb0cf40736eb35038cd90aa8009be58d8ef33e360bc3bc7"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/derick001/skills/multi-chat-context-manager",
+    "claim_id": "19225123a92b446f29e8268466dcc435a7d79115c5656835821ca1abac59a035",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "multi-chat-context-manager",
+        "url": "https://clawskills.sh/skills/derick001-multi-chat-context-manager"
+      }
+    ],
+    "owner_handle": "derick001",
+    "owner_id": "s17cgtq72c704n9jrtdh3v2eq983fhgb",
+    "published_at": 1772028252325,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779956605205,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779956605205,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to store, retrieve, list, and clear conversation contexts, and the Python CLI implements exactly those operations against a bundled JSON store.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions present manual CLI usage and explicitly say this is not an auto-integration plugin or automatic message interceptor.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The artifact requires python3 only and shows no package installation, remote download, background service, or install-time execution.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Conversation messages and responses are stored locally in plaintext JSON, which is proportionate for a simple context manager and disclosed, but users should treat the stored file as sensitive.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists local conversation history and the clear command can delete all contexts if run without a channel; this is confined to the skill's own data file but lacks a confirmation safeguard.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Shell invocation and local JSON read/write are expected for this CLI utility; metadata declares python3, and artifact review found no hidden privilege use or network behavior.\n[SQP-2] expected: Persisting message/response pairs is the core function of a context manager, and SKILL.md discloses plaintext JSON storage, though it could better document the exact file path and retention implications.\n[SQP-2] expected: The all-context deletion behavior is a real usability risk, but it is scoped to the skill's own local context file and does not show destructive behavior beyond the advertised context-management function.",
+          "guidance": "Install only if you are comfortable with manually supplied conversation history being saved in plaintext under the skill's data directory. Avoid storing secrets or sensitive personal data, and use the clear command carefully because running it without a channel can erase all contexts stored by this skill.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a local command-line context store; it saves chat history in plaintext and can erase its own stored contexts, but I found no hidden network access, credential use, or unrelated behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779956541241,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: multi-chat-context-manager\nVersion: 1.0.0\n\nThe skill bundle implements a multi-chat context manager that stores conversation history in a local JSON file. The `SKILL.md` provides clear instructions without any prompt injection attempts. The `scripts/context-manager.sh` wrapper uses proper quoting when invoking the Python script, and `scripts/context_manager.py` uses `argparse` for safe command-line argument parsing. Data is stored locally in `data/contexts.json` and is not exfiltrated or used in any executable context. There is no evidence of malicious intent, unauthorized access, or risky operations.",
+          "checkedAt": 1779166783927,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "0626cba566d381e2d7551ec389a2025603c7c79749b6087cd28cee3b99b84432",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0626cba566d381e2d7551ec389a2025603c7c79749b6087cd28cee3b99b84432"
+    },
+    "slug": "multi-chat-context-manager",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

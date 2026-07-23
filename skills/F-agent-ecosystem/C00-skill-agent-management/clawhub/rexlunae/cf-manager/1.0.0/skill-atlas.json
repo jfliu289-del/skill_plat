@@ -1,0 +1,156 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "configuration",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "infrastructure",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:analytics",
+      "category:C06:token:api",
+      "category:C08:token:deploy",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:deployment",
+      "cross-tag:planning",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C08"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "deploy",
+      "manage",
+      "operate",
+      "plan"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d869ee164c529c365f09c36ffb0cc378078bb353d69fbf033a1a7d724ffbb838",
+    "content_hash": "fd5a751ab27fd09979b9acdb47936da2e45e04fad1350574188bceb728d3bae9",
+    "precanonical_content_hash": "1c62402e6ac2f117f3d33c14542550e498de8e97f8bb220872d67bf64da16190",
+    "skill_md_hash": "212359e931a3167ea504ca50329594984b96692e3d07d92a161f344978c708a7",
+    "version_metadata_sha256": "3b1172bb11ddac460aa1c4e53e188f027fae7c356921d507b1ae4d7a80c3de62"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/rexlunae/skills/cf-manager",
+    "claim_id": "879ab7bf33ee94d3aeec0e31d474507bfae86c1811e892b3fd851bebfa3d5cdb",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "cf-manager",
+        "url": "https://clawskills.sh/skills/rexlunae-cf-manager"
+      }
+    ],
+    "owner_handle": "rexlunae",
+    "owner_id": "s17f16r7drqg1mnp1s8trs7v1h8845fe",
+    "published_at": 1770688970874,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779964140031,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779964140031,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is Cloudflare administration, and the script’s implemented API calls for zones, DNS, SSL, firewall rules, and analytics fit that purpose; the docs overstate support for page rules and Workers because those commands are documented but not implemented.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Read, write, and delete commands are shown plainly, including zone deletion, DNS deletion, cache purge, SSL changes, and firewall changes, but the skill lacks warnings, confirmations, or dry-run safeguards for high-impact production operations.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no package installer or dependency setup; the included Python script uses standard libraries and runs only when invoked.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Using a Cloudflare API token and calling the official Cloudflare API endpoint is proportionate to the management purpose, but the recommended token permissions allow meaningful infrastructure changes.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background persistence, privilege escalation, self-start behavior, or covert session reuse is present; the only persistent credential is the disclosed token file at ~/.config/cloudflare/token.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The high-impact zone, DNS, SSL, firewall, cache, and deployment-style examples are real operational risks, but they are plainly documented as Cloudflare administration commands and are not hidden or purpose-mismatched.\n[SQP-2] expected: The script immediately performs zone and DNS record deletion when those explicit delete commands are invoked. This is under-guarded for production use, but it remains user-directed CLI behavior aligned with the skill’s purpose.\n[RA2] expected: The local token file creates credential exposure risk if the user account or backups are compromised, but the storage path is disclosed and there is no evidence of covert persistence or exfiltration.",
+          "guidance": "Install only if you want an agent or CLI helper to manage Cloudflare resources. Use a least-privilege token scoped to the required zones, keep the token out of logs and synced folders, and require human review before delete, DNS, SSL, firewall, cache purge, or other production-impacting changes.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Cloudflare management skill with powerful infrastructure-changing commands, but the artifacts do not show hidden, deceptive, or unrelated behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779964109284,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 78,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: cf-manager\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle for Cloudflare management is classified as benign. The `SKILL.md` provides clear, non-malicious instructions for authenticating with a Cloudflare API token stored locally at `~/.config/cloudflare/token` and examples for using the provided Python script. The `scripts/cloudflare.py` script exclusively interacts with the official Cloudflare API (`https://api.cloudflare.com/client/v4`) using standard Python libraries, without any evidence of data exfiltration to unauthorized endpoints, malicious command execution, persistence mechanisms, or prompt injection attempts against the agent. All functionalities align with the stated purpose of managing Cloudflare resources.",
+          "checkedAt": 1779162637546,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "0209c4d1a7be67ace6ab3211a1b6885ab51c806483915c8a60f1b88943ca61e5",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0209c4d1a7be67ace6ab3211a1b6885ab51c806483915c8a60f1b88943ca61e5"
+    },
+    "slug": "cf-manager",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

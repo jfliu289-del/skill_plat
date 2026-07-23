@@ -1,0 +1,156 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "document",
+      "report",
+      "website"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.6346,
+    "domains": [
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C02:token:edit",
+      "category:C04:token:data",
+      "category:C07:token:test",
+      "category:C08:phrase:version control",
+      "category:C08:token:git",
+      "category:C08:token:github",
+      "category:C17:token:personal",
+      "category:C19:token:automate",
+      "category:C19:token:device",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:data-analysis",
+      "cross-tag:testing",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "automate",
+      "manage",
+      "test",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e248c697bb4652e233a197eb8f26f4f61b65fa02ee48f282cf4c5ebaf8db5239",
+    "content_hash": "8a2289caf24d24b603c4a5a22c4db894f1f84e450a7a5d410a55e0667c5c854d",
+    "precanonical_content_hash": "5aee9eca988ba87575da519d7d9cd3ec6d1983b02142af382261a68c32ced8a8",
+    "skill_md_hash": "388b273270acfa30d711e30310e8bf1e763f9f7b69f22fcfc18efb14e6f55b7a",
+    "version_metadata_sha256": "f5a7b59c3440ab2c83c74fcc180de7669670331c3d703fa1d1f9afb565ec1287"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sebastian-buitrag0/skills/clawdbot-backup",
+    "claim_id": "a8398969260fa66ea29b9f19cfd46bb4fbd6fdb4b8102cc3a2ede5184b7c19ad",
+    "index_entries": [
+      {
+        "index_path": "categories/git-and-github.md",
+        "label": "clawdbot-backup",
+        "url": "https://clawskills.sh/skills/sebastian-buitrag0-clawdbot-backup"
+      }
+    ],
+    "owner_handle": "sebastian-buitrag0",
+    "owner_id": "s17aaae0z5v057jvmwbdm16e9d88552m",
+    "published_at": 1769718150106,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783654449587,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783654449587,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented commands match the stated purpose of backing up, restoring, syncing, versioning, and migrating ClawdBot data under ~/.claude and user-chosen backup or remote locations.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The examples are user-directed and mostly scoped to ~/.claude, but git add ., git push, restore extraction, and rsync --delete can expose or overwrite private configuration if copied without review.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact is instruction-only Markdown with no packaged executable installer or hidden setup script; it declares ordinary backup tools: git, tar, and rsync.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Access to ~/.claude, backup archives, cloud folders, and user-configured remotes is proportionate for the backup purpose, though those locations may contain private contexts, MCP configuration, settings, or credentials.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Cron, systemd, and launchd examples create disclosed scheduled backups or git commits only if the user installs them; there is no stealth persistence or privilege escalation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-4] expected: Supported as an operational safety issue: settings.local.json is labeled machine-specific but included in full/settings backups and restored by tar extraction. This is under-documented, not hidden or purpose-mismatched.\n[SQP-2] expected: Supported as a privacy risk: the Git workflow pushes ~/.claude contents to a user-configured remote without a strong warning. The behavior is still aligned with version-control backup and has no hardcoded exfiltration endpoint.\n[SQP-2] expected: Supported as a data-loss/disclosure risk: rsync and cloud sync examples copy configuration externally and use --delete in places. This is expected sync behavior but should be handled with dry runs and private destinations.\n[TM2] expected: The ls | tail | xargs rm cleanup pipeline is brittle, but it operates in the backup directory on *.tar.gz files for retention cleanup and does not indicate malicious deletion behavior.",
+          "guidance": "Install only if you want to back up or sync ClawdBot state. Keep archives and git/cloud remotes private, review staged files before git add/git push, run rsync with --dry-run before using --delete, and be aware that restores may overwrite local machine-specific settings.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed backup-and-sync guide for ClawdBot configuration, but users should treat the copied data as sensitive and use the destructive sync examples carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783654395135,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 37,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: clawdbot-backup\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle 'clawdbot-backup' is classified as benign. The skill's purpose is to backup, restore, sync, and version control ClawdBot configurations. All provided scripts and instructions (using `tar`, `git`, `rsync`, `cron`, `systemd`, `launchd`) operate strictly within the `~/.claude/` directory and user-defined backup locations. There is no evidence of data exfiltration to unauthorized external endpoints, malicious execution of remote payloads, obfuscation, or prompt injection attempts to subvert the agent's intended purpose. Persistence mechanisms (cron, systemd, launchd) are explicitly for automating the stated backup and sync functions, not for stealthy unauthorized access. Network operations (git, rsync) rely on user-configured remotes, not hardcoded malicious ones.",
+          "checkedAt": 1779160329519,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "b694743bb471cc672f95ff22067a1d995d44aba34112398a229b25741aaf09c9",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b694743bb471cc672f95ff22067a1d995d44aba34112398a229b25741aaf09c9"
+    },
+    "slug": "clawdbot-backup",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

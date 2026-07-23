@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "website"
+    ],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.69,
+    "domains": [
+      "security"
+    ],
+    "needs_review": false,
+    "primary_category": "C19",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C09:token:security",
+      "category:C12:token:decision",
+      "category:C18:token:food",
+      "category:C19:phrase:browser automation",
+      "category:C19:token:automation",
+      "category:C19:token:browser",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:search",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "manage",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "adb706fcb2936a2bec3eb81abd76b4533fac0ca788bcba2ba9bd4f3878de8223",
+    "content_hash": "d02fbf8fe2253654f73507a0f524ae7fbb015e009519aed3f44b584cf7d23101",
+    "precanonical_content_hash": "c0bfea34e75377c25fc058b40ee5e6bd10a23e57228ae04ff9af140eaf73d72a",
+    "skill_md_hash": "e09dddb335ca59de54d2cff6869ac6a427a4baa4f0c303a5c8d75911c0f347a5",
+    "version_metadata_sha256": "6ef11afc3eea78ddc7df85f39c3251a3add3bf5daa20a7b8ca5ddc9bdbb2a323"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/thisisjeron/skills/food-cal-order",
+    "claim_id": "ce39d518709346e4af695177fdc64348757dcc050b894f50a5893ec64bf870dd",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "food-cal-order",
+        "url": "https://clawskills.sh/skills/thisisjeron-food-cal-order"
+      }
+    ],
+    "owner_handle": "thisisjeron",
+    "owner_id": "s179wt0ybszf58pbgyqpv2qenn86fx3c",
+    "published_at": 1772007303809,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783659011467,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783659011467,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The skill's browser automation, delivery-site access, calendar parsing, and sub-agent use all fit the stated purpose of ordering food from DoorDash, Uber Eats, and Grubhub, but the capability is financially impactful because it can submit live orders.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The main SKILL.md prominently warns about Chrome profile access, saved payments, real charges, calendar-event trust, and requires an explicit \"yes\" after an order summary before clicking the final order button. The service reference files list straight-through provider flows and should repeat the confirmation gate, but they appear secondary to the inlined runtime prompt rather than hidden automatic-purchase instructions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains markdown instruction files only; no executable installer, scripts, obfuscated payloads, or hidden helper code were found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Using the local Chrome profile exposes saved logins, payment methods, delivery addresses, and possibly delivery notes, which is broad but disclosed and directly tied to the live-ordering purpose.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The only persistence described is a memory/food-order-state.json record of recent orders with pruning after 24 hours; no privilege escalation, background worker persistence, unrelated credential handling, or exfiltration behavior is evident.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: SkillSpector's concern about final purchase clicks is valid risk context because the provider reference files omit their own final confirmation step, but the primary SKILL.md adds a mandatory pause, order summary, and explicit \"yes\" requirement before the final purchase action.\n[VirusTotal/code_insight] expected: VirusTotal flagged the Chrome profile and saved-payment access as suspicious capability, but reported no engine detections and no evidence of obfuscation, exfiltration, or unauthorized remote control; that access is disclosed and necessary for the stated browser-based ordering workflow.\n[staticScan] expected: Static scan was clean, consistent with the inspected artifact set being markdown-only instructions and service notes.",
+          "guidance": "Install only if you are comfortable letting an agent operate logged-in food delivery sites through your Chrome profile. Use it with calendar events you created yourself, review the restaurant, items, address, fees, tip, total, ETA, and payment method carefully, and only answer \"yes\" when you intend to place that exact live order.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill can place real food-delivery orders using saved browser accounts, but its primary instructions disclose that and require explicit confirmation before purchase.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658965752,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 43,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: food-cal-order\nVersion: 1.1.0\n\nThe skill is classified as suspicious due to its inherent high-risk capabilities, specifically the explicit instruction to access the user's local Chrome profile, which contains sensitive data like saved logins, payment methods, and delivery addresses. While this access is necessary for the stated purpose of browser-automated food ordering and the skill includes critical safeguards like mandatory user confirmation before placing an order and strict allergy/dietary constraint enforcement, the potential for misuse or compromise of such a powerful capability warrants a 'suspicious' classification. There is no evidence of intentional malicious behavior such as data exfiltration to external endpoints, unauthorized remote control, or obfuscation within the provided files; in fact, the prompt injection instructions in SKILL.md are largely defensive, guiding the agent to prioritize user safety and explicit confirmation.",
+          "checkedAt": 1779162108447,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "a0d196c886e358f90d0a639dc759da2f86717a1f015cad3e3bd06414179c63e8",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a0d196c886e358f90d0a639dc759da2f86717a1f015cad3e3bd06414179c63e8"
+    },
+    "slug": "food-cal-order",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

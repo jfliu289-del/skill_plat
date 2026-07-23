@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C09:token:privacy",
+      "category:C09:token:security",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C01",
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "86a77a3c7192dcac1a0fa35a7ffc01fe45e0a9bd03f496ab9497152e03eff786",
+    "content_hash": "10d0b75d3be66a7fc81623e3f4cb4a801b5bbc0ba79ab85065e175c469173617",
+    "precanonical_content_hash": "5242ea6b7eb05f2aad48cadee49906ba9b9c64d9765815796efa396b78d9dbe6",
+    "skill_md_hash": "724d289ddacbebc25cc9ab6b7d99e9f016d05cc1a0ad0eb47febe8a5cedf3567",
+    "version_metadata_sha256": "6f6ad1bd023bfc928688e561f57dc7d77d4abb778934b786946fcc0db3c4231d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/naeemmaliki036/skills/vanar-neutron-memory",
+    "claim_id": "692a9e56f73d102b03ca188f3442903fc5514ed688beafdb2e801411992b2a47",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "vanar-neutron-memory",
+        "url": "https://clawskills.sh/skills/naeemmaliki036-vanar-neutron-memory"
+      }
+    ],
+    "owner_handle": "naeemmaliki036",
+    "owner_id": "s174knx86bdgph4vast35xxcbn8858xx",
+    "published_at": 1772243534662,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783657877195,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783657877195,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts implement the stated memory save/search purpose using HTTPS calls to api-neutron.vanarchain.com; I found no unrelated file collection, system profiling, destructive behavior, or hidden payloads.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Manual commands are user-directed, and auto-recall/auto-capture are disabled unless VANAR_AUTO_RECALL or VANAR_AUTO_CAPTURE is set to true; once enabled, the hooks transmit the latest prompt or full turn without per-turn confirmation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains markdown plus small readable bash scripts only, with no compiled binary, package installer, or automatic persistence setup.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "curl, jq, an API key, and outbound HTTPS are proportionate for a hosted memory service; the optional credentials file stores the API key in plaintext and should be protected by the user.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Remote persistence is the core advertised feature and is clearly disclosed, but users should treat saved memories and auto-captured turns as durable off-device data.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Executable shell scripts and network access are visible in the artifact and match the documented CLI and hook design, though a richer structured permission declaration would improve platform transparency.\n[SDI-2] expected: Auto-capture sends user and assistant turn text to the memory API only when the documented opt-in environment variable is enabled; this is privacy-sensitive but purpose-aligned and disclosed.\n[SQP-2] expected: The pre-tool and post-tool hooks perform quiet HTTPS requests after opt-in, matching the advertised auto-recall and auto-capture behavior; users should understand there is no per-turn notice or redaction.\n[E1] expected: External transmission through curl is the mechanism for hosted semantic memory search and storage, not an unrelated or hidden data path.\n[PE3] expected: The optional plaintext credentials file is a real operational caution, but it is scoped to this service's API key and the setup guide recommends an environment variable first.",
+          "guidance": "Install only if you want a hosted memory service. Keep auto-capture and auto-recall off unless you are comfortable sending prompts, responses, and saved notes to Vanar Neutron over HTTPS, and avoid storing secrets, regulated data, or confidential business material unless that remote retention is acceptable. Prefer an environment variable or a tightly permissioned credentials file for the API key.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed hosted memory integration that sends saved text, search queries, and optionally conversation turns to Vanar Neutron when the user enables those features.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783657851026,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 82,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: vanar-neutron-memory\nVersion: 1.3.2\n\nThe OpenClaw AgentSkills skill bundle is classified as benign. All scripts (`hooks/*.sh`, `scripts/neutron-memory.sh`) consistently use `jq` to safely construct JSON payloads from user and agent inputs, effectively preventing shell injection vulnerabilities. The skill's functionality is clearly defined as saving and searching agent memory via a specific external API (`api-neutron.vanarchain.com`), and it explicitly states what data is sent and what is not. Auto-capture and auto-recall features are opt-in, and there is no evidence of unauthorized data exfiltration, persistence mechanisms, or other malicious behaviors.",
+          "checkedAt": 1779161911211,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "e4cd122bd932bebcb8a58c38acbb2acf7f3f4b04cb5bef455d8b1e381f79b13f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e4cd122bd932bebcb8a58c38acbb2acf7f3f4b04cb5bef455d8b1e381f79b13f"
+    },
+    "slug": "vanar-neutron-memory",
+    "source_type": "clawhub",
+    "version": "1.3.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,157 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional",
+      "educator",
+      "student"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "creative",
+      "education"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C03:token:pdf",
+      "category:C04:token:data",
+      "category:C05:token:image",
+      "category:C13:token:finance",
+      "category:C17:token:personal",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:design",
+      "cross-tag:education",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C03",
+      "C04",
+      "C05",
+      "C13",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "learn",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "design",
+      "manage",
+      "teach"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "f081925a7fc82fb7fb0b368eae88cd42aaacf85c4ecd008c5a976a5e3b91030a",
+    "content_hash": "4236e2eb1f0133fb4c477122e80ed56f6bb6788a5d00f18a135ed09b587ecdda",
+    "skill_md_hash": "6db259458eaf5a383716e2f71b4c28b57b68fbd77cb81a2633ab47ccba5dc7b7",
+    "version_metadata_sha256": "e114a425bf104c3e39f45301cfba05676a467bd536a512dc5dca3d3d1cbd6812"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/safaiyeh/skills/finance-skill",
+    "claim_id": "de14ea2d14bf6b95da4a0d8a8d6cc7da6064c90bd77a5297c9029f58f96a6633",
+    "index_entries": [
+      {
+        "index_path": "categories/notes-and-pkm.md",
+        "label": "finance-skill",
+        "url": "https://clawskills.sh/skills/safaiyeh-finance-skill"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "safaiyeh",
+    "owner_id": "s1713jkjen79myb3yz8zsfymd5884bmb",
+    "published_at": 1770816253795,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779963640564,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779963640564,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to parse statements, store transactions, and answer spending questions; the files and scripts match that purpose, but the data involved is sensitive financial information.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The runtime instructions are scoped to user-provided statements and transaction queries, with a normal workflow that appends parsed or manual transactions to the local store; stronger import confirmation would be useful but the write behavior is disclosed.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a normal skill clone/install flow, and dependencies are disclosed as jq and pypdf; there is no automatic package installation or hidden setup behavior in the artifacts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The scripts operate under ~/.openclaw/workspace/finance and read the transaction store for queries; I found no artifact evidence of network access, credential use, unrelated file access, exfiltration, or obfuscation.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill persistently stores transactions and creates a statements directory, which is expected for a finance memory layer; it does not request elevated privileges, background execution, or system-level persistence.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The README documents local retention of transactions and original statements; this is sensitive and should be highlighted to users, but it is central to the skill's stated purpose and not hidden.\n[SQP-2] expected: SKILL.md gives predictable local storage paths for transactions and statements; the lack of detailed privacy guidance is a documentation gap rather than evidence of malicious behavior.\n[SQP-2] expected: Appending parsed transactions to transactions.json is the core workflow. A preview, deduplication, and explicit confirmation would reduce risk of bad imports, but the durable write is purpose-aligned and disclosed.",
+          "guidance": "Install only if you are comfortable keeping bank statements and transaction history under ~/.openclaw/workspace/finance. Review parsed transactions before relying on summaries, periodically delete records or raw statements you no longer need, and protect the machine with normal local safeguards such as private accounts, trusted dependencies, backups you understand, and disk encryption where appropriate.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent local finance skill that stores sensitive bank and transaction data on disk, so users should protect and review that data.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779963609864,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: finance-skill\nVersion: 0.1.2\n\nThe OpenClaw Finance Skill is classified as benign. All operations are confined to the `~/.openclaw/workspace/finance/` directory, aligning with its stated purpose of local financial data management. The `scripts/add-transactions.sh` and `scripts/query.sh` scripts correctly utilize `jq`'s `--arg` and `--argjson` parameters, effectively preventing shell injection and `jq` code injection from user-provided or agent-generated input. The `SKILL.md` instructions for the AI agent, including the `python3 -c \"import pypdf...\"` command and the execution of `scripts/add-transactions.sh`, are directly related to the skill's functionality and do not contain any prompt injection attempts to manipulate the agent into malicious actions or data exfiltration. No evidence of unauthorized file access, network communication, persistence mechanisms, or obfuscation was found.",
+          "checkedAt": 1779162624639,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "b03528bc171576134a6575ce00ad6d2d99ff6c6b4b075768a7aea4c64fdd2f55",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b03528bc171576134a6575ce00ad6d2d99ff6c6b4b075768a7aea4c64fdd2f55"
+    },
+    "slug": "finance-skill",
+    "source_type": "clawhub",
+    "version": "0.1.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

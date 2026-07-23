@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C05:token:audio",
+      "category:C05:token:video",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "design",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "5c18739f00143a77091d1a203aac26f05b900a834160635e30660b7faf7865b5",
+    "content_hash": "dc966731c1f28729dd211c93ab147569352dbe126b0885ca9fec318ca8377890",
+    "precanonical_content_hash": "921c01fff012d1e140180546459c36f205f45d169c2ffdf02865178d61a8e591",
+    "skill_md_hash": "cf921cef6e3e4f8415fc77a0ff670733d3de093667f87b57b29d144eae630dcc",
+    "version_metadata_sha256": "b1cc16e476138df56c0cf0b5048698b4c9fe8907fac6ec593b15e007eb68ba81"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/gizmogremlin/skills/dub-youtube-with-voiceai",
+    "claim_id": "55bf3aca9eff4a993b4e82c15fc180420e3cae8e253e01e2e898e17716d97f98",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "dub-youtube-with-voiceai",
+        "url": "https://clawskills.sh/skills/gizmogremlin-dub-youtube-with-voiceai"
+      }
+    ],
+    "owner_handle": "gizmogremlin",
+    "owner_id": "s178490vvb7nmykckbyc8sh0sx884gc1",
+    "published_at": 1770772190925,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968658307,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968658307,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose matches the implementation: read a user-selected script, generate Voice.ai TTS audio, create captions/chapters/review files, and optionally mux audio into a user-selected video.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Commands are user-invoked and scoped to explicit input, output, voice, and video paths; generated local outputs can include the source script text in manifest/review/caption files.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No install script or package execution was found; it is a bundled Node.js CLI. Version labels differ across registry metadata, docs, and CLI text, but this does not change runtime behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "VOICE_AI_API_KEY, network requests to the configured Voice.ai API base, and ffmpeg/ffprobe execution are proportionate to TTS and media dubbing. VOICEAI_API_BASE is a documented override and should only be set deliberately.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background persistence, privilege escalation, broad local indexing, or credential-store access was found. The skill writes output folders, a segment cache, and optional ffmpeg helper scripts; helper scripts should be reviewed before manual execution, especially with unusual file paths.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The skill does send script text, voice identifiers, and synthesis parameters to Voice.ai, but this is central to the stated TTS purpose and is disclosed in the docs, including a privacy note that only script text is sent while video processing stays local.\n[VirusTotal code_insight] expected: The API base override can redirect requests if the user or environment sets VOICEAI_API_BASE, but it is documented configuration behavior rather than hidden exfiltration. Users should not allow untrusted instructions to alter this environment variable.\n[suspicious.env_credential_access] expected: Reading VOICE_AI_API_KEY and sending it as a Bearer token is required for the disclosed Voice.ai API integration.\n[suspicious.dangerous_exec] expected: The relevant external execution is ffmpeg/ffprobe via execFile argument arrays for probing, stitching, encoding, and muxing media, matching the documented workflow.",
+          "guidance": "Install only if you are comfortable sending your selected script text to Voice.ai or to an endpoint you explicitly configure with VOICEAI_API_BASE. Use a dedicated, revocable API key, avoid sensitive or regulated scripts unless approved, keep VOICEAI_API_BASE unset unless you intentionally need it, and review generated ffmpeg helper scripts before running them manually.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent YouTube voiceover skill that sends chosen script text to Voice.ai and uses local ffmpeg tooling as expected for its purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968611498,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: dub-youtube-with-voiceai\nVersion: 0.1.6\n\nThe skill is classified as suspicious due to the presence of the `VOICEAI_API_BASE` environment variable override in `voiceai-vo.cjs` (src/api.ts) and documented in `references/VOICEAI_API.md`. While a legitimate configuration option, this allows an external actor (e.g., via prompt injection against an AI agent) to redirect API calls for text-to-speech generation to an arbitrary, potentially malicious, endpoint. This creates a clear data exfiltration vector for the user's script content, which is sent to the TTS API. Additionally, the skill executes external binaries like `ffmpeg` via `child_process.execFile`, which, while generally safer than `exec`, still represents a risky capability if not handled with extreme care or if the external binaries themselves have vulnerabilities.",
+          "checkedAt": 1779163051834,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "8851dcd0069472d69e53b6b53383562e4e4cd148993cf616655132aeadcab9f7",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8851dcd0069472d69e53b6b53383562e4e4cd148993cf616655132aeadcab9f7"
+    },
+    "slug": "dub-youtube-with-voiceai",
+    "source_type": "clawhub",
+    "version": "0.1.6"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

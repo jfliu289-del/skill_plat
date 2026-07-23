@@ -1,0 +1,163 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.5833,
+    "domains": [
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:find",
+      "category:C01:token:search",
+      "category:C04:token:data",
+      "category:C04:token:statistics",
+      "category:C07:token:quality",
+      "category:C07:token:test",
+      "category:C08:token:repository",
+      "category:C10:phrase:machine learning",
+      "category:C10:token:ai",
+      "category:C10:token:ml",
+      "category:C11:token:project",
+      "category:C12:token:management",
+      "category:C12:token:strategy",
+      "category:C16:token:learning",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:planning",
+      "cross-tag:search",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C04",
+      "C07",
+      "C12"
+    ],
+    "stages": [
+      "discover",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "plan",
+      "research",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "904d829044df1ce065ce9abb0d78492822abffff2debdad4e640034bdd58fee3",
+    "content_hash": "3dd5635fc1b13af4624bb86f1751748101781e111b6cc67402b27a07511f1ab1",
+    "precanonical_content_hash": "907558c6da3150fbe89eb9d0d9062f79b927020eef4473a446c319a47138b55e",
+    "skill_md_hash": "511e624f4562d03b83250f4a40aaac313379eb32f0578b2d88d968f90ea721e6",
+    "version_metadata_sha256": "6a309137b74e626b29e76045428b6ff53d3aebe6a12767b69d0466e536aae7b8"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/anisafifi/skills/dataset-finder",
+    "claim_id": "86651465e0a0fb114e4d98bd1695eb7ad0f363e74ab4c1cc2ea6a39edd6d97a8",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "dataset-finder",
+        "url": "https://clawskills.sh/skills/anisafifi-dataset-finder"
+      }
+    ],
+    "owner_handle": "anisafifi",
+    "owner_id": "s17bsyazygqm0558snzx9msnnx885wpa",
+    "published_at": 1770540591991,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658408924,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658408924,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifacts: it searches Kaggle, Hugging Face, UCI, and documented Data.gov sources, downloads datasets, previews files, and generates data cards. Some documented commands are broader than the implemented script, which is a reliability and expectation issue rather than evidence of hidden behavior.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are dataset-focused and user-invoked, but the trigger language is broad and the preview/data-card workflows can expose sample rows from local datasets if users run them on sensitive files.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses ordinary Python packages for dataset access and parsing. The requirements use broad lower bounds rather than a lockfile, so dependency hygiene should be improved, especially for network and file-parsing libraries.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to external dataset services, use of Kaggle/Hugging Face credentials through standard tooling, and local dataset/report writes are proportionate to the skill's purpose and are not hidden.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill creates persistent local dataset directories and generated documentation as expected; no background persistence, privilege escalation, credential theft, destructive behavior, or unrelated data access was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Network operations and file writes are inherent to a dataset downloader and are described in the skill text, though explicit metadata permissions would improve user visibility.\n[SQP-1] expected: The activation language is broad for dataset-related discussions, but the artifacts do not instruct automatic downloads or writes without a user command.\n[SQP-2] expected: The skill could warn more clearly that downloads, previews, and data cards may involve untrusted remote data, local writes, stored credentials, and sample-row disclosure, but these are aligned with the stated function.\n[SC4] expected: The requests finding is a supply-chain maintenance risk for a network-facing tool; the artifact uses a lower-bound requirement rather than a vendored or hidden vulnerable binary.\n[SC4] expected: The lxml finding is relevant to scraping/parsing external content, but its presence is purpose-aligned and not evidence of malicious behavior.\n[SC4] expected: The pyarrow finding matters because parquet handling of downloaded datasets can be risky; the dependency should be kept patched, but the artifact does not show unsafe hidden execution.",
+          "guidance": "Install in a virtual environment, keep Kaggle and Hugging Face tokens out of source control and logs, download into a dedicated project directory, keep dependencies updated or locked to patched versions, and review preview/data-card outputs before sharing because they may include raw sample rows.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Dataset Finder behaves like a normal dataset search, download, preview, and documentation tool, with expected network, credential, and local-file risks.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658353588,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: dataset-finder\nVersion: 0.1.0\n\nThe OpenClaw AgentSkills skill bundle 'dataset-finder' is classified as benign. Its core functionality involves searching, downloading, and managing datasets from various online repositories (Kaggle, Hugging Face, UCI ML, Data.gov) and generating local documentation. While this involves network requests and local file system writes, these are explicitly stated and necessary for its purpose. The `SKILL.md` instructions guide the agent on how to use the skill's features, including shell commands for batch processing, but do not contain any prompt injection attempts to subvert the agent's behavior, hide actions, or access unrelated sensitive data. The `scripts/dataset.py` code uses standard libraries for API interactions and data processing, without evidence of credential theft, data exfiltration, persistence mechanisms, or malicious execution beyond its stated scope. API credentials (Kaggle, Hugging Face) are handled through their respective libraries as expected for authentication.",
+          "checkedAt": 1779162180426,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a078409d17cad4264650d2d90963de17292b11c7cdda469fe10e2ea9ef8e0d55",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a078409d17cad4264650d2d90963de17292b11c7cdda469fe10e2ea9ef8e0d55"
+    },
+    "slug": "dataset-finder",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

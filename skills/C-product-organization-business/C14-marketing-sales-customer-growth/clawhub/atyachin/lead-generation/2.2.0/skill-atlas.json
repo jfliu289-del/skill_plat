@@ -1,0 +1,132 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.5972,
+    "domains": [],
+    "needs_review": false,
+    "primary_category": "C14",
+    "reasons": [
+      "category:C01:token:find",
+      "category:C01:token:research",
+      "category:C01:token:search",
+      "category:C11:token:product",
+      "category:C14:phrase:lead generation",
+      "category:C14:token:lead",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C11"
+    ],
+    "stages": [
+      "discover"
+    ],
+    "tasks": [
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "04261e61add2337bffcf6bb15d73a68e90e95b8b0ba9dfe17accbd3f172b5c30",
+    "content_hash": "a142d7b9adf6b986a4673760d07a7a2bb697e16d7963e4e6fd9661a30fee91a2",
+    "precanonical_content_hash": "0fe33c12f19d6af03f9e740116062660126c32585dfac47e749c3179cff709fb",
+    "skill_md_hash": "d0412ee9320e6ba1e5ddd52d6315dda670808505e7daadd0abe5b47b44322804",
+    "version_metadata_sha256": "820b31c8a8e3b44fc697390bb6c883552e75bf2ac1daa4626e862177c015a50d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/atyachin/skills/lead-generation",
+    "claim_id": "c2b17a80411b6ae3ac6ad8148d86572da913df5defc9c7138ef562675a722111",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "lead-generation",
+        "url": "https://clawskills.sh/skills/atyachin-lead-generation"
+      }
+    ],
+    "owner_handle": "atyachin",
+    "owner_id": "s17ds4vnj4xesk3c3hvqm5wr5x85pztp",
+    "published_at": 1770892639010,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971353816,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971353816,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill's capabilities match its stated purpose: research a product, generate social search queries, retrieve social posts/users through Xpoz, score leads, and draft outreach for user review.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Instructions are scoped to prospecting and scoring; the artifact says outreach is draft-only and does not instruct automatic posting, account changes, destructive actions, or unrelated data access.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "It installs and uses the external npm CLI package mcporter and depends on the xpoz-setup skill; this is disclosed and purpose-aligned but requires trusting that package and setup path.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to mcp.xpoz.ai and Xpoz OAuth credentials are proportionate for an Xpoz-powered social search skill, but generated queries may reveal product strategy or targeting details to Xpoz.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill saves product profiles, queries, and lead deduplication data under data/lead-generation; this is bounded and disclosed, though it may contain usernames, post IDs, quotes, and outreach context.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The local storage concern is supported by the artifact, but saving profiles, queries, and sent-lead records directly supports reuse and deduplication in a lead-generation workflow; this warrants user guidance rather than Review escalation.\n[SQP-2] expected: The third-party data-flow concern is supported by the artifact, but Xpoz, mcp.xpoz.ai, OAuth setup, and mcporter calls are disclosed and central to the advertised function.\n[VirusTotal code_insight] expected: The external npm package and mcporter command examples are real, but they are declared in install metadata and used for the stated MCP workflow; VirusTotal reported no engine detections, so this telemetry does not justify escalation by itself.\n[staticScan] expected: Static scan reported no findings, and the artifact contains only SKILL.md with documented command examples rather than executable scripts.",
+          "guidance": "Install only if you trust Xpoz, the xpoz-setup OAuth flow, and the mcporter npm package. Avoid using confidential product plans or sensitive customer data in generated queries, periodically review or delete data/lead-generation files, and manually review all outreach drafts before sending.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed lead-generation workflow that uses Xpoz and local lead files as expected, with privacy and dependency risks users should understand.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971318973,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: lead-generation\nVersion: 2.2.0\n\nThe skill is classified as suspicious due to its reliance on an external npm package (`mcporter`) specified in `SKILL.md`'s install instructions, which introduces a supply chain risk. Furthermore, the skill instructs the agent to execute shell commands (`mcporter call ...`) with agent-generated content (`GENERATED_QUERY`). This pattern, while part of the skill's stated purpose, creates a potential shell injection vulnerability if the agent's execution environment does not properly sanitize the generated query before execution. There is no evidence of intentional malice, but these capabilities present significant security risks.",
+          "checkedAt": 1779163326458,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "c4c6f615633acea3630b08446b7ca81de4550c01bdc3d3b156297615c8b62b00",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/c4c6f615633acea3630b08446b7ca81de4550c01bdc3d3b156297615c8b62b00"
+    },
+    "slug": "lead-generation",
+    "source_type": "clawhub",
+    "version": "2.2.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

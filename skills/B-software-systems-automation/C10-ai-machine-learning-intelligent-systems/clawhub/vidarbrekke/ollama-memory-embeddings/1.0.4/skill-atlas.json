@@ -1,0 +1,130 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.35,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C10:token:embedding",
+      "category:C10:token:model",
+      "category:C17:token:notes",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C17"
+    ],
+    "stages": [
+      "discover"
+    ],
+    "tasks": [
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4c152233d0db73cedbaec661448c32c4a5df98ff2a3c09cd3a97c1230e59a151",
+    "content_hash": "9aa6341d1d40f0ba8bc8ad8798f62d3fbdae3e338d035f31830d78ba48dbee01",
+    "precanonical_content_hash": "9c570eb2d31abcc286122d773492bc1905b2048eb45fd5cce22998afcaa44972",
+    "skill_md_hash": "a479819942faf4fcc04966b2cc8b2520b1fa18b5c2fe0b4165f260e03ecc7edf",
+    "version_metadata_sha256": "c3c52076d9e8e06c1a6a4c32e668b16afc75a0704a189864dc1ac3f1f5b0b9a7"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/vidarbrekke/skills/ollama-memory-embeddings",
+    "claim_id": "cd08f4ea243f59d70da8a2813b8aff397c27fb527bb8c0179a17a14d76a6303d",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "ollama-memory-embeddings",
+        "url": "https://clawskills.sh/skills/vidarbrekke-ollama-memory-embeddings"
+      }
+    ],
+    "owner_handle": "vidarbrekke",
+    "owner_id": "s1793g8bdwekzfkd99qjjbjbyd8852c8",
+    "published_at": 1770948602442,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779966097567,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779966097567,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifacts: scripts configure OpenClaw memorySearch for a local Ollama embeddings endpoint, verify the endpoint, optionally import or pull embedding models, optionally reindex memory, and provide audit/enforce/uninstall helpers.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The README and SKILL.md disclose config changes, reindexing, gateway restart options, local GGUF import, and optional watchdog use. One caveat is that install.sh performs Ollama availability checks and may pull/import a model before reaching the --dry-run block, so dry-run should not be treated as strictly non-mutating in all cases.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is shell-script based, writes under ~/.openclaw/skills/ollama-memory-embeddings, updates ~/.openclaw/openclaw.json with backups, and uses local helper scripts rather than hidden installers or obfuscated payloads.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Local file access, local config writes, Ollama CLI calls, localhost HTTP checks, and optional OpenClaw CLI actions are proportionate to configuring a local embeddings provider. No artifact evidence shows remote exfiltration, credential theft, destructive behavior, or prompt-injection instructions.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "watchdog.sh can install a user-level macOS LaunchAgent that repeatedly heals config drift, but this is explicit via --install-launchd or --install-watchdog, scoped to the user account, documented, and removable via uninstall commands.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The README includes state-changing install, enforce, watchdog, and uninstall commands. This is expected for a local configuration skill, and the artifacts disclose safer defaults, optional watchdog installation, and removal paths; users should still read command flags before running them.\n[SQP-2] unexpected: The claimed raw API key logging is not supported by the reviewed code: enforce.sh logs the value returned by lib/config.js, and that helper emits only '(set)' or '(missing)' rather than the actual apiKey. Supplying a real secret via command-line arguments would still be operationally unwise, but the artifact does not print it directly.\n[VirusTotal] expected: Clean VirusTotal telemetry aligns with the artifact review, but it was used only as supporting signal.\n[staticScan] expected: Static scan reported no findings, consistent with manual review finding no hidden exfiltration, obfuscation, or destructive actions.",
+          "guidance": "Install this only if you want OpenClaw memory search to use Ollama embeddings. Review the target config path and model choice, enable the watchdog only if you want ongoing background drift-healing, and avoid passing real secrets as --api-key-value. Treat --dry-run cautiously because the installer may still interact with Ollama before printing the plan.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill transparently configures local OpenClaw memory embeddings to use Ollama, with optional watchdog persistence that is documented and user-controlled.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779966054386,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 19,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ollama-memory-embeddings\nVersion: 1.0.4\n\nThe skill bundle is benign. It transparently configures OpenClaw to use Ollama for memory embeddings, as described in SKILL.md and README.md. The scripts (install.sh, enforce.sh, watchdog.sh, verify.sh, audit.sh) use robust methods for configuration management (e.g., node for JSON parsing, file locking, backups) and input sanitization (e.g., xml_escape for launchd plist). Network activity is confined to the local loopback address (127.0.0.1:11434) for Ollama, and persistence via watchdog.sh is optional and explicitly documented. There is no evidence of data exfiltration, unauthorized remote control, obfuscation, or malicious prompt injection attempts against the AI agent.",
+          "checkedAt": 1779162879030,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "c62d1cd15c2cb130758be2582ecd1eab66f4aa4e7a46099f95836521abd96b90",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/c62d1cd15c2cb130758be2582ecd1eab66f4aa4e7a46099f95836521abd96b90"
+    },
+    "slug": "ollama-memory-embeddings",
+    "source_type": "clawhub",
+    "version": "1.0.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.175,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:find",
+      "category:C04:token:metrics",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C04",
+      "C17"
+    ],
+    "stages": [
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "f18f8cc9b77ca3844c266305174bc53ed127a22eaf25b5b3d947cb4817cb13f5",
+    "content_hash": "3079764872b47832f86e8032cacb155e31dda2501df789791881e62b92fc6807",
+    "precanonical_content_hash": "daf377c15eb99dac276b3686066d4e5299988f81408d0ec4f711bf24df4d6a79",
+    "skill_md_hash": "6526ef2fd310b50b9e2ad7419bfca3ab3b749725701a6993a923f7a83d69085e",
+    "version_metadata_sha256": "05b38f52f3e2e561092c34da6ccd0d65ebe566fda108d6e647fd313406de32ef"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/freemountaindeer/skills/zillow-airbnb-matcher",
+    "claim_id": "578e01950a33719803fe0caefc7e8480e53996723ada508b55666ef3cde415fa",
+    "index_entries": [
+      {
+        "index_path": "categories/media-and-streaming.md",
+        "label": "zillow-airbnb-matcher",
+        "url": "https://clawskills.sh/skills/freemountaindeer-zillow-airbnb-matcher"
+      }
+    ],
+    "owner_handle": "freemountaindeer",
+    "owner_id": "s170f5434x6rwf4r03tbgfgcwd885d8j",
+    "published_at": 1771508002463,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779933413508,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779933413508,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently implement a Zillow/Airbnb property-matching and investment-reporting helper using location searches, geo-matching, and demo data; I found no unrelated local data collection, account mutation, destructive behavior, or hidden destinations.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Commands are user-directed search/demo actions, though the trigger \"check properties\" is broad enough that an accidental invocation could consume API quota if live credentials are configured.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is disclosed as a shell setup step that runs npm install, writes optional RapidAPI configuration, and runs a demo; this is proportionate for a Node-based skill but still executes local code and installs third-party packages.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The RAPIDAPI_KEY requirement and RapidAPI endpoints are disclosed in the skill metadata, guide, and source code, and the network use is limited to the advertised Airbnb/Zillow data lookups.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The installer persists the RapidAPI key in a local .env file and installs node_modules, with no evidence of background workers, privilege escalation, broad indexing, or persistence beyond normal configuration.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Network access and an API key are necessary for the advertised live listing lookup, and the current artifacts do declare RAPIDAPI_KEY plus the shell installer; a more explicit network permission declaration would improve transparency but does not show hidden behavior.\n[SQP-2] expected: The guide and installer support writing the RapidAPI key to .env and passing it as a CLI argument. That is functional setup behavior, but users should avoid exposing the key through shell history, logs, or loose file permissions.\n[SQP-1] expected: The broad trigger maps to the advertised property-search command, but it could cause unintended quota use if matched accidentally.\n[SQP-2] unexpected: The demo file includes exact-looking addresses, coordinates, and listing URLs; this is not necessary for a demo and should ideally be synthetic or clearly licensed, but it is bundled as local sample data rather than evidence of exfiltration.",
+          "guidance": "Install only if you are comfortable running a Node/npm-based setup script and sending search locations plus your RapidAPI key to the listed RapidAPI services. Prefer setting the key in a protected .env file rather than passing it on the command line, keep that file out of version control, monitor RapidAPI usage, and independently verify any investment or regulatory conclusions before acting on the reports.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it advertises, but users should handle the RapidAPI key carefully and understand that live searches contact third-party listing APIs.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779933353296,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 65,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: zillow-airbnb-matcher\nVersion: 3.1.0\n\nThe skill bundle appears benign. It is designed to cross-reference Zillow and Airbnb listings using RapidAPI, requiring a user-provided API key stored in a local `.env` file. All network calls are directed to legitimate RapidAPI endpoints as described in the documentation. There is no evidence of data exfiltration to unauthorized destinations, malicious execution, persistence mechanisms, obfuscation, or prompt injection attempts against the OpenClaw agent. A minor shell injection vulnerability exists in `scripts/install.sh` due to unsanitized use of `RAPIDAPI_KEY` in `sed` and `echo` commands, but this is a flaw in input handling rather than an indicator of intentional malice, especially given the expected alphanumeric nature of an API key.",
+          "checkedAt": 1779165422752,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "825ba05bd9abc052472c37b6209ab575da71293ffdea42d239225c435d3585b7",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/825ba05bd9abc052472c37b6209ab575da71293ffdea42d239225c435d3585b7"
+    },
+    "slug": "zillow-airbnb-matcher",
+    "source_type": "clawhub",
+    "version": "3.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

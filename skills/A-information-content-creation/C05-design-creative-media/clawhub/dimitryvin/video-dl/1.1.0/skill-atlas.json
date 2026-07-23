@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:audio",
+      "category:C05:token:video",
+      "category:C07:token:quality",
+      "category:C17:token:notes",
+      "cross-tag:design"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C07",
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "44344a6917423172c4e3ce40efde56bf714d595039da2198a516e49599000601",
+    "content_hash": "b716988952fa73a32f425620a06b1c9ff38c007369ae9f309e3c8d16551e0cc4",
+    "precanonical_content_hash": "396ab6ba47a027972d42d6967c6e52ef64b4cc960e1b30f173d236135198d7f0",
+    "skill_md_hash": "26c3972e11dc195f103b6bef65d64da1e489246bb2d322d46e0dc81ede68482d",
+    "version_metadata_sha256": "64eb10fd1b50bb88e0333ab0500646701a72653ff2a5d5bc548d4984f2518713"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/dimitryvin/skills/video-dl",
+    "claim_id": "d5f4f9c91b3f59f42bc3d288bf59a88a0241e6713d9784368c2c871625b81ca8",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "video-dl",
+        "url": "https://clawskills.sh/skills/dimitryvin-video-dl"
+      }
+    ],
+    "owner_handle": "dimitryvin",
+    "owner_id": "s172m5ydq0qmmcqb1wk0faqmex8855dk",
+    "published_at": 1770780273766,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968956159,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968956159,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The yt-dlp download script and ffmpeg compression script fit the stated video-download purpose; the Telegram workflow is adjacent media preparation, but the script only creates a local compressed file and does not contact Telegram.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill documents shell-script use, custom output directories, custom filenames, background compression, and direct yt-dlp access; these broaden user-directed capability but are disclosed.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No installer, package mutation, or automatic setup is present; the scripts rely on existing local yt-dlp, ffmpeg, and ffprobe tools.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network downloads and writes to ~/Downloads/videos or a user-selected folder are proportionate for a downloader, but users should avoid sensitive output paths and expect disk, CPU, and bandwidth use.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The nohup compression example can keep a user-started job running in the background, but this is documented and there is no privilege escalation or hidden persistence.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The Telegram section references a local media file and chat identifier, but artifact inspection shows no Telegram API call or automatic transmission; it prepares a compressed local file and should be treated as a confirmation/privacy note rather than a policy hold.\n[VirusTotal-code_insight] expected: The reported shell-injection claim is not supported by the inspected script: user-controlled paths are quoted in shell commands and yt-dlp is invoked through an argument array. Custom output paths are still local write authority, which is expected for this skill.\n[staticScan] expected: Static scan metadata reported no suspicious patterns, consistent with the artifact review.",
+          "guidance": "Install only if you want a shell-based downloader that uses local yt-dlp and ffmpeg. Use it on URLs you intend to download, choose non-sensitive output folders, and run the background compression command only when you are comfortable with a CPU-intensive job continuing until it finishes.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed local video downloader and compressor, with expected network download and file-writing behavior and no evidence of hidden sending or destructive actions.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968906651,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: video-dl\nVersion: 1.1.0\n\nThe skill bundle is classified as suspicious due to a critical shell injection vulnerability in `scripts/download.sh`. The script directly uses user-provided input for the `--output` argument in a `mkdir -p \"$OUTPUT_DIR\"` command without sanitization, allowing for arbitrary command execution. The `SKILL.md` further exposes this by instructing the agent to pass user-controlled options directly to the script. There is no evidence of intentional malicious behavior such as data exfiltration or backdoors.",
+          "checkedAt": 1779163077662,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "be760877e54b398e9004928bdadead9afccc644336349810759b9e8601f16c32",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/be760877e54b398e9004928bdadead9afccc644336349810759b9e8601f16c32"
+    },
+    "slug": "video-dl",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

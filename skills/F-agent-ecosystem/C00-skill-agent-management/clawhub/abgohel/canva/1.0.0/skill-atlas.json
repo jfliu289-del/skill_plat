@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C05:token:design",
+      "category:C06:token:api",
+      "category:C13:token:operations",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05",
+      "C06",
+      "C13"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "864b2eeba726875c08be35b83ecc026ca7b2ad614203cffc79763c00bc31273a",
+    "content_hash": "6742b475b08af99730f2197b51696b3b786f1269dc10e70c9348187aa9b9b718",
+    "precanonical_content_hash": "705ce7ef45aa5714703bb51677787b29af763594495eb961bd7c7c7d97107d89",
+    "skill_md_hash": "e4a0cd21b196a2321d7e95236e32505f4316668208976f03d45ef3ec6e3e3ba0",
+    "version_metadata_sha256": "a73faba5ab5036859d5a2d490f254a2b00635f0b8b8b1ce8fcc1d364d0d86fce"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/abgohel/skills/canva",
+    "claim_id": "311563282c612f98e19549d35ca651a519055fbdb6d5d57f4fb1d74c4e842b89",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "canva",
+        "url": "https://clawskills.sh/skills/abgohel-canva"
+      },
+      {
+        "index_path": "categories/data-and-analytics.md",
+        "label": "canva",
+        "url": "https://clawskills.sh/skills/abgohel-canva"
+      }
+    ],
+    "owner_handle": "abgohel",
+    "owner_id": "s1764q6xqzxhgymzq1nn4nb8h9884ajm",
+    "published_at": 1769684214453,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783654263996,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783654263996,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill’s stated purpose is to create, export, upload, and manage Canva designs, and the artifacts implement those functions through Canva OAuth and official Canva API endpoints. This grants read/write access to Canva content, but it is purpose-aligned and disclosed.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are user-directed examples and helper commands for Canva operations. I found no prompt override, hidden role change, unrelated data collection, obfuscation, automatic background execution, or deceptive instruction flow.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation is documented as a normal ClawHub-style install or manual copy from the GitHub repository. package.json has no install scripts or dependency-driven execution hooks.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill requires Canva client credentials, stores OAuth tokens, reads user-specified files for upload, and talks to Canva endpoints. These are sensitive capabilities but proportionate to the advertised integration.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "OAuth tokens persist at ~/.canva/tokens.json for reuse and refresh. Initial authentication applies chmod 600; the refresh path rewrites the existing token file without reapplying chmod, which is a hardening gap but not hidden persistence or privilege escalation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Shell commands, local token reads, and network calls are expected for this shell-based Canva API helper. The manifest mainly declares required environment variables, so fuller capability disclosure would be useful, but the behavior is visible in SKILL.md and README.md.\n[SQP-2] expected: Uploading a local file to Canva is an advertised feature and the example sends data only to the Canva asset-upload endpoint. The docs could warn more explicitly that the selected file leaves the machine.\n[SQP-2] expected: OAuth token storage in ~/.canva/tokens.json is disclosed and necessary for refreshable Canva API access. Users should still treat the file and CANVA_CLIENT_SECRET as secrets.\n[PE3] expected: Writing refreshed tokens is expected for OAuth. The specific claim is partly mitigated because the refresh branch only runs when a token file already exists, but the script should still reapply restrictive permissions after refresh and ensure the ~/.canva directory is private.",
+          "guidance": "Install only if you are comfortable giving this skill read/write access to the connected Canva account. Use the minimum Canva scopes you need, protect CANVA_CLIENT_SECRET and ~/.canva/tokens.json, keep token file permissions restrictive, and confirm exact file paths before using upload commands because selected files are sent to Canva.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent Canva integration that uses expected OAuth tokens and Canva API calls, with sensitive permissions users should handle carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783654229409,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 49,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: canva\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle for Canva appears benign. It provides a legitimate integration with the Canva API, handling OAuth authentication and API calls. Sensitive data like `CANVA_CLIENT_ID`, `CANVA_CLIENT_SECRET`, and access tokens are handled via environment variables and a local file (`~/.canva/tokens.json`) with secure permissions (`chmod 600`). All network requests are directed to the official Canva API endpoint (`https://api.canva.com/rest/v1`). There is no evidence of data exfiltration to unauthorized endpoints, malicious execution, persistence mechanisms, or prompt injection attempts in `SKILL.md` or `README.md` designed to subvert the agent's behavior beyond its stated purpose.",
+          "checkedAt": 1779160283978,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "dbeac7a2d218faf7763555ae06c542c7c203adec1efe6f340b82752467dbf8f6",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/dbeac7a2d218faf7763555ae06c542c7c203adec1efe6f340b82752467dbf8f6"
+    },
+    "slug": "canva",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

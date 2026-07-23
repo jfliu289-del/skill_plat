@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8ed6491e2f7395dd3585b4062c065bc4542ea12b8d026829d4b60db72acd73f8",
+    "content_hash": "bb75bd91103fcb85972b0aa780bfe59f391d798c87961995fa0fa6904e48110f",
+    "precanonical_content_hash": "33b3f0d5f8fa72d4733ea13b8b57878b75d13a26c14281f57a7af5c63b15bdb9",
+    "skill_md_hash": "2d0cd9e215d3e1acbfc0146d196527a1a4f6d7177a28f539ae82e2f437af8cb7",
+    "version_metadata_sha256": "2bf3f0e6fc9b22cbffb29a706310d0f4c69e61817aa50c2fadb5b64e13292a71"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/kai-tw/skills/kai-tw-figma",
+    "claim_id": "dc59b51500ec4fb166546a4f7ce064599c3f30e9d2a98d85c8ebb44e2506312d",
+    "index_entries": [
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "kai-tw-figma",
+        "url": "https://clawskills.sh/skills/kai-tw-kai-tw-figma"
+      }
+    ],
+    "owner_handle": "kai-tw",
+    "owner_id": "s1722289wse2hf4xk8z9n59rp184h4y5",
+    "published_at": 1771077535180,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974688089,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974688089,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The implementation can get the authenticated Figma user, list team projects and project files, read file JSON, get comments, and export images; these are coherent with a Figma integration and are disclosed in README, though SKILL.md describes only the narrower file/comment/export workflows.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are ordinary user-directed CLI commands with no prompt override, hidden autonomy, or unrelated agent behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "No installer, dependency bootstrap, package download, or privileged setup is present; the Python script uses standard library modules.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Requiring FIGMA_TOKEN and outbound requests is proportionate for authenticated Figma access, and the token is declared in metadata and documented as sensitive.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no background persistence or privilege escalation; export writes files into the current working directory with predictable figma_export filenames, which README discloses.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill does require a sensitive environment token and network access, but FIGMA_TOKEN is declared in metadata and README documents authenticated Figma API use; this is a transparency note, not hidden behavior.\n[TP4] expected: The broader profile, team/project listing, and local export-write capabilities exist, but README discloses them and they fit the Figma navigation/export purpose; SKILL.md could be more complete.\n[SDI-1] expected: Account identity and workspace/project discovery endpoints are implemented, but they are explicit CLI actions and documented in README as identity verification and team navigation.\n[SDI-2] expected: Discovery features increase the scope of Figma data available to the agent, but they are user-invoked, confined to Figma API access granted by the token, and not evidence of exfiltration or deception.",
+          "guidance": "Install only if you are comfortable giving the agent a Figma personal access token. Use the least-privileged Figma token available, run exports from a directory where saved assets are expected, and review exported files before sharing them.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward Figma API helper that uses a Figma token for read-only design access and asset export, with the sensitive parts mostly disclosed.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974648177,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 71,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: kai-tw-figma\nVersion: 1.0.3\n\nThe OpenClaw AgentSkill for Figma is classified as benign. The skill's code (`scripts/figma_tool.py`) and documentation (`SKILL.md`, `README.md`) clearly outline its purpose: interacting with the Figma REST API to read file structures, retrieve comments, and export assets. It uses `argparse` for robust command-line argument parsing, mitigating direct shell injection vulnerabilities from user input. The `FIGMA_TOKEN` is handled securely via environment variables, and all network communication is directed to the official Figma API. The `README.md` explicitly addresses security concerns and clarifies that the skill only performs read-only operations on Figma files and does not interact with unrelated system files or arbitrary endpoints. There is no evidence of intentional data exfiltration, persistence mechanisms, or malicious prompt injection attempts against the agent.",
+          "checkedAt": 1779163938464,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "d4bb1ae78c9a12c950b775bf738b37f34e3a4efd6a02dd03d0b1e42704b6ba6f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d4bb1ae78c9a12c950b775bf738b37f34e3a4efd6a02dd03d0b1e42704b6ba6f"
+    },
+    "slug": "kai-tw-figma",
+    "source_type": "clawhub",
+    "version": "1.0.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

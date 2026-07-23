@@ -1,0 +1,119 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C10:token:model"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d1558ca81c901dd6fd0d34acab3003c0ab46efe2daf2465a6572ef9af25e2932",
+    "content_hash": "ce0e1719967def14e26327d6d9ddeea76efdc9d166f980afed6a47581561ea2d",
+    "precanonical_content_hash": "01f7b3192755af36c548db3c6a349f80b78d3335e580b1c0d5d362cdc7e982db",
+    "skill_md_hash": "c74cccea779d6795f34adde1d776df833f14b558152eefc247121cf086838dc5",
+    "version_metadata_sha256": "cdce9913f58124eb9dbeb866cbe0cbc4c63744e95f3df405ffe21dc3cd95b2aa"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/nextaltair/skills/subagent-spawn-command-builder",
+    "claim_id": "aeaa3eba1da98c6a82c5767a95805493e91c80256e327b5e9cd8833b000acb4c",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "subagent-spawn-command-builder",
+        "url": "https://clawskills.sh/skills/nextaltair-subagent-spawn-command-builder"
+      }
+    ],
+    "owner_handle": "nextaltair",
+    "owner_id": "s1769m2r7tj3d8eqerva8kpwkx83nn9e",
+    "published_at": 1775290961165,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972473058,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972473058,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is generating sessions_spawn payload JSON, and the script only parses explicit CLI arguments, validates a few enum/integer fields, prints JSON, and does not call sessions_spawn or run shell/network operations.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are narrow and user-directed; however, the CLI help does not explicitly warn that the full generated payload, including task text, is persisted.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No package install, remote dependency fetch, installer hook, or hidden setup behavior is present; the artifact contains markdown plus a small Node.js .mjs helper.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script does not read credentials, environment variables, broad local files, or network resources; cwd is copied into the output payload only when the user supplies it.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script creates a local state directory and appends generated payloads to state/build-log.jsonl. This is disclosed in SKILL.md and README.md as a builder log, but users should treat task text and cwd values as retained local data.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] expected: Confirmed local payload logging exists. It is limited to data the user supplied for payload generation, is disclosed as a builder log in the artifacts, and is not paired with exfiltration or automatic execution, so it is a guidance issue rather than a Review-level concern.\n[SQP-2] expected: Confirmed the log includes task/profile/payload data. The scanner's disclosure concern is partly valid because CLI help is not explicit, but artifact documentation names the log path and the behavior remains local and purpose-aligned.",
+          "guidance": "Install only if you want a helper that prepares sessions_spawn JSON. Review the generated payload before using it, and avoid putting secrets or sensitive internal details in task text unless you are comfortable with those values being stored in the skill's local build log.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill locally builds subagent spawn JSON as described and does not execute it, but it keeps a local log of generated payloads.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972438105,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: subagent-spawn-command-builder\nVersion: 0.1.4\n\nThe skill is a utility for generating JSON payloads for the 'sessions_spawn' command. The core logic in 'scripts/build_spawn_payload.mjs' is a straightforward CLI argument parser that outputs formatted JSON and logs the activity locally to 'state/build-log.jsonl'. No evidence of data exfiltration, remote execution, or malicious prompt injection was found.",
+          "checkedAt": 1779163461010,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "becd28014d2989b5ff6c2bbe0202cd5c7a8937cc16c96e7e55cc28947ee2c1ee",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/becd28014d2989b5ff6c2bbe0202cd5c7a8937cc16c96e7e55cc28947ee2c1ee"
+    },
+    "slug": "subagent-spawn-command-builder",
+    "source_type": "clawhub",
+    "version": "0.1.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

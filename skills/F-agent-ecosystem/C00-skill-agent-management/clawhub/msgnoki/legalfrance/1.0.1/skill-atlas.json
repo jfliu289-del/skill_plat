@@ -1,0 +1,137 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "paper"
+    ],
+    "audiences": [
+      "developer",
+      "researcher"
+    ],
+    "confidence": 0.0,
+    "domains": [
+      "science",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "cross-tag:academic-research",
+      "cross-tag:software-development",
+      "fallback:C00"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ff59d5d46a79d879153a5aa0e03e2fcfa3fc952cd60f803cb094fa24b7a45cde",
+    "content_hash": "93f1d7d68802220c550d8a8a0bf6438e4db7f71bec26bec9326e7f8cb595ed4f",
+    "precanonical_content_hash": "0a85a5e090b39643dfd886e4472579056976dfb68506a4391868659ae24883cf",
+    "skill_md_hash": "3f5c7d8941cbf3f060ad9c0d620a2afa74c3205e2c1e3d7fe32b29814722127d",
+    "version_metadata_sha256": "f54c10a62e7a56af19466cb695d67a95748f18e3f92df8e1c30e6ddabf48b943"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/msgnoki/skills/legalfrance",
+    "claim_id": "d5fd409d2b28a124b91c78b7133134267c23896777dda7e167433e75037931af",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "legalfrance",
+        "url": "https://clawskills.sh/skills/msgnoki-legalfrance"
+      }
+    ],
+    "owner_handle": "msgnoki",
+    "owner_id": "s17ewdgez13zw2a9s3bgden3mn884m2h",
+    "published_at": 1770965060085,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779973008453,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779973008453,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill description, instructions, and scripts consistently implement a French legal RAG workflow over LEGI/DILA-style sources with citations and legal-disclaimer guidance.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The scripts generate system/user prompts for legal-answering constraints, but those instructions are scoped to the RAG workflow and do not attempt to override unrelated agent or platform policy.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Initialization and use require local Python execution plus dependencies such as datasets, chromadb, and sentence-transformers; dependency setup is not fully pinned in the artifact, but this is coherent with the stated tool purpose.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The ingest path downloads a large public legal corpus and writes local SQLite/Chroma indexes under the skill directory; SKILL.md asks for confirmation before the large ingest. The embedding model may also be fetched during vector search, which users should expect for this RAG tool.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to local data/index files under the skill directory. ingest.py recreates the local Chroma collection, which can erase the skill's prior index, but it does not touch unrelated files, credentials, services, or privileged system state.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The reported collection deletion is real: ingest.py deletes and recreates the local Chroma collection before indexing. In context, this affects the skill's own rebuildable legal index and is aligned with ingestion, so it is a usability/data-loss note rather than evidence of malicious or Review-level behavior.\n[VirusTotal clean telemetry] expected: The supplied telemetry reports no detections and describes network and disk activity as tied to the disclosed legal corpus/model workflow; this supports but does not determine the benign verdict.\n[static scan clean] expected: Metadata indicates no static scan findings, and artifact inspection found no credential access, exfiltration, background persistence, destructive system commands, or unrelated network behavior.",
+          "guidance": "Install only if you are comfortable running local Python code, downloading a large public legal corpus/model, and storing local search indexes. Re-running ingestion may rebuild and replace the skill's existing local index, so avoid using the same data directory for anything you cannot recreate. Treat answers as general legal information, not personalized legal advice.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "LegalFrance is a disclosed local French legal-search assistant; its main risk is resource use and rebuilding its own local index, not hidden or unrelated behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972970257,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: legalfrance\nVersion: 1.0.1\n\nThe OpenClaw skill 'legalfrance' is designed as a RAG-based legal assistant. All code and instructions align with this stated purpose. The `SKILL.md` explicitly instructs the AI agent to ask for user confirmation before executing the `scripts/ingest.py` command, which downloads approximately 2GB of legal corpus and embedding models from HuggingFace. This is a critical safeguard against unauthorized resource consumption. The Python scripts use standard practices, including parameterized queries for SQLite, mitigating common injection vulnerabilities. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts designed to subvert the agent's intended behavior or compromise the system. All network and disk operations are directly tied to the skill's legitimate functionality.",
+          "checkedAt": 1779163614207,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "bd5b8c05ad0091d19bb40b30134dd4c89614ad838a12bd72af870b46b97797f6",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/bd5b8c05ad0091d19bb40b30134dd4c89614ad838a12bd72af870b46b97797f6"
+    },
+    "slug": "legalfrance",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

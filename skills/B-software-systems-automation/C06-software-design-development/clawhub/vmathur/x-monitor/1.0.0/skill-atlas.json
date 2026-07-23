@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C17:token:schedule",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "69ff905c10254d7362e0b496611b7f00a4d43cad275fdb397cdcb9a9ef97d3b7",
+    "content_hash": "701164462b68c9f79bb021ecd5711c34398b8d2ecb63797cd3819594243456c9",
+    "precanonical_content_hash": "2fe0d3d037b01f47b1e2dedb9bace54c044a8f401705d8411629a38f836e1089",
+    "skill_md_hash": "30a8525d74e0c94159b2c787223aede182befee196072f59ab377ee864bbb43a",
+    "version_metadata_sha256": "a823cfab3bce032de9960266d9e34293a799d856d418692ce2359102ee5032c8"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/vmathur/skills/x-monitor",
+    "claim_id": "5c12b71d597470847a9b613bef76e4445d2646593273d78c28ce8a0a1c3c72c9",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "x-monitor",
+        "url": "https://clawskills.sh/skills/vmathur-x-monitor"
+      }
+    ],
+    "owner_handle": "vmathur",
+    "owner_id": "s173c0t9n52nn25kskp5cns8k18844h8",
+    "published_at": 1770769995089,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968600416,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968600416,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts align with the stated monitoring purpose: configured handles are queried through the X API and results are returned for reporting. The script fetches raw recent tweets; any higher-level noteworthy filtering appears to be expected from the agent workflow rather than fully implemented in the script itself.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are limited to setup, handle management, manual checks, schedule updates, criteria editing, and reports. I found no hidden role changes, prompt overrides, deceptive instructions, or unrelated commands.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no remote installer or package-install behavior. The shell helper reads the schedule file and prints cron expressions for the agent/user to set up.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to api.x.com, a local bearer-token file, and workspace configuration files are proportionate for an X monitor. Credential handling is minimally documented and should include file-permission and no-commit guidance.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Scheduled agentTurn cron jobs are disclosed and user-directed. The script also stores tweet_history.json for up to 50 checks, which is bounded and purpose-related but not clearly listed in the storage documentation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Network calls and local state files are expected for scheduled X monitoring; the lack of an explicit permissions section is a transparency improvement, not evidence of hidden behavior.\n[SDI-1] expected: Local tweet-history retention is real and should be disclosed more clearly, but it is bounded to 50 checks, stays under the skill workspace, and fits a monitoring/reporting use case.\n[SQP-2] expected: A bearer token is expected for X API access, and the code sends it only to the X API endpoint. The main issue is missing user guidance for protecting the local credentials file.\n[SQP-2] expected: Tweet text and metadata are written locally without explicit runtime notice; this is a documentation and control gap, not a malicious data flow.\n[PE3] expected: The credentials path is documented so the user can configure the skill. This normalizes a readable local secret file, but the artifact does not show credential theft, unrelated access, or exfiltration.",
+          "guidance": "Install only if you are comfortable providing an X API bearer token, allowing scheduled X API polling, and keeping recent fetched tweet text in a local history file. Use a limited token where possible, restrict permissions on credentials.json, keep it out of version control and backups, and delete tweet_history.json periodically if you do not want a retained local archive.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill coherently monitors selected X/Twitter accounts, but users should protect the API token and understand that fetched tweet history is stored locally.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968572594,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 78,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: x-monitor\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills bundle 'x-monitor' is classified as benign. All files (SKILL.md, scripts/setup-crons.sh, scripts/fetch-tweets.py, config/schedule.json, _meta.json) align with the stated purpose of monitoring X/Twitter accounts. The `SKILL.md` instructions for setting up cron jobs specify using an `agentTurn` payload, which is a message for the agent to interpret, rather than a direct shell command, mitigating prompt injection risks. The Python script (`fetch-tweets.py`) correctly uses the X API, reads credentials from a designated workspace file, and stores data within the skill's workspace, showing no signs of unauthorized data exfiltration, malicious execution, or persistence mechanisms.",
+          "checkedAt": 1779163049941,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "5b4f58ebf7ec0cd8f1f78869a1aa1949c4075761a689c8b3ed1cf1c9348f81cb",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/5b4f58ebf7ec0cd8f1f78869a1aa1949c4075761a689c8b3ed1cf1c9348f81cb"
+    },
+    "slug": "x-monitor",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

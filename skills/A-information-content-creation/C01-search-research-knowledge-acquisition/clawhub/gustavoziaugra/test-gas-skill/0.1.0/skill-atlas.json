@@ -1,0 +1,147 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:find",
+      "category:C01:token:search",
+      "category:C06:token:code",
+      "category:C07:token:test",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:software-development",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C06",
+      "C07"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "2dc5b7ef38b7ca84ab00fcac6543823ebdb8e1f4b42c95808ee1441dbcf73bdb",
+    "content_hash": "cc007330044f660ae134e03abda542ff7622efa98b4ea0920d6b415e1b7c018f",
+    "precanonical_content_hash": "d3508b225651047b431fec4c88cae3c3342d3c95fa40388cf164655f35926250",
+    "skill_md_hash": "f9c3049feec4aaa61477debb0cbe652e80c32facad2c90dc83d6dafae987cbc6",
+    "version_metadata_sha256": "2bfff03dae60c2f0e7ea77f1b253fcb4ec18ff778334a51a878dfb4bc0a6af2a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/gustavoziaugra/skills/test-gas-skill",
+    "claim_id": "3252514c5c8ffbc7e9c9b938649e8717c138fafab506d757ceff3fafd01f3fd7",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "test-gas-skill",
+        "url": "https://clawskills.sh/skills/gustavoziaugra-test-gas-skill"
+      }
+    ],
+    "owner_handle": "gustavoziaugra",
+    "owner_id": "s17279hbnd6py4ddnjyknrjnc9884f9y",
+    "published_at": 1771049682535,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974690401,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974690401,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently implement gas station lookup, Costco-focused price estimates, optional GasBuddy scraping, JSON output, and summaries. The main caveat is reliability: parts of the code remain Columbus-centered despite broader “any US location” claims, and most prices are estimates rather than live data.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are mostly user-directed commands and user-configured cron examples. One README cron example uses command-like systemEvent text, but it is scoped to the skill script and is not evidence of hidden automatic command execution.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is manual: clone/import the skill and install requests/geopy, with optional Playwright installation for GasBuddy rendering. There is no install hook, package script, or concealed setup behavior in the artifacts reviewed.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill sends user-provided ZIP codes or coordinates to external mapping/gas-price services and can save local JSON results. This is proportionate for a location-based gas search tool, though users should understand the location privacy implications; the Overpass request uses plain HTTP.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to user-configured OpenClaw cron scheduling and optional local output files. No hidden daemon, privilege escalation, credential harvesting, broad filesystem access, destructive action, or exfiltration path was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Network access and local output are expected for a gas lookup tool and are described in the docs, although a clearer permissions/privacy notice would improve transparency.\n[TP4] unexpected: The scanner’s concern about mismatch is partially supported as a product-quality issue: the code has Columbus-specific defaults and Costco entries despite broader support claims. The external services and estimation approach are disclosed, so this does not show deceptive or malicious behavior.\n[SDI-1] expected: Costco prices are generated from a hard-coded discount estimate, but the skill repeatedly labels them as estimates and tells users to check GasBuddy or station apps for exact prices.\n[SDI-1] unexpected: Hard-coded Columbus Costco data and defaults can make results inaccurate outside that area, despite the “any US location” framing. This warrants user caution but is not a security-policy reason to hold the skill by itself.\n[SDI-4] unexpected: The OSM station distance calculation uses a Columbus reference in one path, so non-Columbus filtering can be wrong. This is a correctness bug rather than evidence of hidden access or abuse.\n[SQP-2] expected: Daily location-based alerts are an advertised feature, but the docs should more clearly warn that scheduled runs repeatedly send location queries to third-party services and may create output files.\n[SQP-2] expected: Telegram delivery is described in the skill instructions and fits the notification purpose, but users should explicitly opt in and understand that notification content may reveal location preferences.\n[VirusTotal/code_insight] expected: The optional Playwright path is disclosed as a GasBuddy integration for JavaScript-rendered pages. The README systemEvent example is a cautionary pattern, but the command itself is limited to the gas lookup script and is not malicious artifact behavior.",
+          "guidance": "Install only if you are comfortable sharing ZIP code or coordinate-based searches with external services such as OpenStreetMap/Nominatim/Overpass and, optionally, GasBuddy or Telegram. Treat prices as estimates unless you verify them elsewhere, especially outside Columbus, Ohio, and enable daily cron alerts only intentionally.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This gas-price lookup skill has privacy and accuracy caveats, but its network use, file output, optional browser scraping, and daily alerts are disclosed and aligned with its purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974631527,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: test-gas-skill\nVersion: 0.1.0\n\nThe skill is classified as suspicious due to two main factors: the use of Playwright for web scraping in `scripts/gasbuddy_search.py`, which involves launching a headless browser and introduces a significant attack surface and resource consumption, and a potential prompt injection vulnerability in the `README.md`'s cron job example. The `README.md` suggests a cron payload with `\"kind\": \"systemEvent\"` and a `\"text\"` field containing a direct `Run: python3 ...` command. While the command itself is benign and part of the skill's intended function, this pattern could be exploited if the OpenClaw agent executes arbitrary commands from `systemEvent` text without proper sanitization or validation, representing a vulnerability rather than direct malicious intent.",
+          "checkedAt": 1779163913150,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "687af7760b051b866389627b51788fdb83e428b8c08d8ce0af43eaf293bd90b2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/687af7760b051b866389627b51788fdb83e428b8c08d8ce0af43eaf293bd90b2"
+    },
+    "slug": "test-gas-skill",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,148 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:analytics",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C07:token:review",
+      "category:C12:token:management",
+      "category:C17:token:notes",
+      "cross-tag:data-analysis",
+      "cross-tag:review",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C07",
+      "C12",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "review"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "2407ac7da072994d2d7502f2fb28cef28c9de906a988ec0d7514b0641073b368",
+    "content_hash": "d083e2b7ad9cef019755a4ff9e969d703a3c1810fac0814167d9146c35e2b0d4",
+    "precanonical_content_hash": "6f03368240675f1b444ec208734670a3b1a7ac68f3180e2b789ebc0b8cfd5d93",
+    "skill_md_hash": "eb6f17c3d065930d1bb66600b28be3fb1c1ac3ba7866dc7cd4675b2b5a239c6e",
+    "version_metadata_sha256": "33b6f65214e10cb7742f667e82f3958c98768018c2380e4c2d8bd044101b2144"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/plgonzalezrx8/skills/openrouter-analytics",
+    "claim_id": "4e46ed1d6bd8d1f874a9292e948d63ed0948245c4b0f74a6597a5d98246869f6",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "openrouter-analytics",
+        "url": "https://clawskills.sh/skills/plgonzalezrx8-openrouter-analytics"
+      }
+    ],
+    "owner_handle": "plgonzalezrx8",
+    "owner_id": "s173vecwjc09yssmz81twxs1qh884hns",
+    "published_at": 1771435088538,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779922443336,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779922443336,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The described behavior fits the stated purpose: it uses OpenRouter API credentials, calls only OpenRouter API endpoints, retrieves usage/activity analytics, and optionally exports reports.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The artifacts reportedly disclose .env credential loading and CSV export, but they could be clearer about secret sensitivity, safe output paths, and when local credential files are read.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No evidence was provided of deceptive install steps, background installation, obfuscation, unrelated package execution, or privilege escalation.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Reading OpenRouter API or management keys from environment variables and .env files is proportionate for account analytics, but these are sensitive credentials and should be scoped and protected.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence or elevated privilege behavior is indicated. The CSV export can write to a user-supplied path, which is normal for a CLI export feature but can overwrite accessible files if used carelessly.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Env access, file reads, network calls, and CSV writes are expected for this analytics tool; the missing permission declaration is a transparency gap rather than evidence of malicious behavior.\n[SDI-2] expected: Auto-loading OpenRouter credentials from local .env files is purpose-aligned convenience, but users should understand which credential source is being used.\n[SQP-2] expected: The documentation reportedly mentions .env loading but lacks strong warnings about secret handling; this is guidance-worthy, not a purpose mismatch.\n[SQP-2] expected: CSV export of activity analytics is expected, but users should choose a safe output location and avoid overwriting existing or sensitive files.\n[SQP-2] expected: Startup credential discovery broadens local credential access, but the behavior is related to the OpenRouter analytics purpose and was not shown to exfiltrate secrets elsewhere.\n[VirusTotal] expected: The arbitrary-file-write concern is based on a user-supplied CSV path; no unauthorized endpoint, shell injection, obfuscation, or destructive intent was reported.",
+          "guidance": "Install only if you are comfortable letting the skill use your OpenRouter API or management key. Prefer a least-privilege key, keep .env files private, verify which credential source is being loaded, and export CSV reports only to a deliberate non-sensitive path.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to be a legitimate OpenRouter analytics helper, but it handles OpenRouter credentials and can export sensitive usage data to local CSV files.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779922387329,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: openrouter-analytics\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to a potential arbitrary file write vulnerability in `scripts/openrouter_analytics.py`. The `cmd_activity` function allows writing activity data to a CSV file specified by the `--csv` argument. While the script itself does not construct a malicious path, a compromised or malicious AI agent could be prompted to provide a sensitive file path (e.g., `/etc/passwd`, `~/.ssh/authorized_keys`) to this argument, leading to unauthorized file modification or data corruption. All network communication is confined to `https://openrouter.ai/api/v1`, and there are no other signs of malicious intent like data exfiltration to unauthorized endpoints, obfuscation, or direct shell command injection within the script's logic or `SKILL.md`.",
+          "checkedAt": 1779165244332,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "f569f06cab8a5bfbc19a372ed8f68062717310ae2938fe35873ccbe5317ab03d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/f569f06cab8a5bfbc19a372ed8f68062717310ae2938fe35873ccbe5317ab03d"
+    },
+    "slug": "openrouter-analytics",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

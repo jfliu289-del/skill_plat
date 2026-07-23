@@ -1,0 +1,137 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C02:token:language",
+      "category:C05:token:audio",
+      "category:C10:token:model",
+      "category:C17:token:notes",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "2d9677fc3205f18cf48e6655fd6b1e04bc6d5297200033273e2417105be67c89",
+    "content_hash": "b2cfdb8d1f96480de258d99c7ae7092d1ccc5e70374d4f1920a93d9163907208",
+    "precanonical_content_hash": "5500d8e4725914a76c1a97e5bc36ef9727e1cf2669482ecf136c0971d88774f1",
+    "skill_md_hash": "cfa3ed4274dc5f3090c9e4070346dbc01631513267c111a4ba9c8fa678017448",
+    "version_metadata_sha256": "bd8cb3035cb6e8deb32cb19dcd2c86da063d3ecfafba41580a5ca39369dea90e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sfkiwi/skills/local-vosk",
+    "claim_id": "339d434f0a9cea075e5dcfbf2bfb77361185448f4a5bffd149619f4f7259b7ad",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "local-vosk",
+        "url": "https://clawskills.sh/skills/sfkiwi-local-vosk"
+      }
+    ],
+    "owner_handle": "sfkiwi",
+    "owner_id": "s176e89j34kgxs2j74804eag6n884bsr",
+    "published_at": 1770729136246,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779965531967,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779965531967,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is offline Vosk-based speech-to-text for user-supplied audio, which matches the documented dependency and model download. The Markdown references a transcribe helper script, but this submitted artifact only contains SKILL.md, so functionality depends on files not present in this package.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are user-directed examples and setup commands; there is no prompt override, hidden execution, background task, credential handling, or automatic data access shown.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Setup asks the user to run pip3 install vosk --user --break-system-packages and wget a Vosk model from alphacephei.com. These are disclosed and purpose-aligned, but they carry ordinary supply-chain and Python-environment risk.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Local audio processing, ffmpeg-compatible inputs, a Vosk Python package, and a local model directory are proportionate for offline transcription.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The only persistent change shown is a user-created ~/vosk-models directory and user-level Python package installation; there is no sudo, daemon, scheduler, credential store access, deletion, or exfiltration behavior.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight suspicious] expected: The cited wget model download and pip install command are real, but they are disclosed setup steps for local Vosk transcription rather than hidden or unrelated behavior; this telemetry alone does not justify Review.\n[SkillSpector clean] expected: SkillSpector reported no issues, consistent with the single Markdown artifact showing no executable scripts, persistence, credential access, or data exfiltration.\n[staticScan clean] expected: Static scan reported no findings, which matches the reviewed artifact content.",
+          "guidance": "Install only if you are comfortable adding a local Python package and downloading a speech model. Prefer using a virtual environment instead of --break-system-packages when possible, verify the model source, and confirm the referenced transcribe script exists before relying on the skill.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward local speech-to-text helper with disclosed setup steps, though users should install its Python dependency carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779965513467,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: local-vosk\nVersion: 1.0.1\n\nThe skill is classified as suspicious due to the use of `wget` to download external content from `https://alphacephei.com/vosk/models` and `pip3 install vosk --user --break-system-packages` for system modification, both found in SKILL.md. While the stated purpose is benign (local speech-to-text) and the sources appear legitimate, these actions involve external network calls and system-level package management with a flag (`--break-system-packages`) that allows potentially disruptive modifications. These capabilities, if exploited or if the external source were compromised, could pose a supply chain risk or system integrity issues, thus exceeding the 'benign' threshold for a security review.",
+          "checkedAt": 1779162795510,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "af2cc5a67efcdbe069904cc7ef2eeb8d320850641d09ba172f04099391c70297",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/af2cc5a67efcdbe069904cc7ef2eeb8d320850641d09ba172f04099391c70297"
+    },
+    "slug": "local-vosk",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

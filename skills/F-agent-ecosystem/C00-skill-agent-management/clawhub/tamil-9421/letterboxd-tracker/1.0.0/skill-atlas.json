@@ -1,0 +1,127 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C17:token:personal",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a939790eb702911cce220d06b90738d13d4b876fc74414b06d6232d8b14bb3e7",
+    "content_hash": "b4aaba8335e9e66462b81abfff4b372bb0eb82ceeaa0a82b65d505ab44ac1fd8",
+    "precanonical_content_hash": "cd77a2f5fce5467d8f3f38ea28c8dc1112da2a260b3ef948480cb70e17e8ce50",
+    "skill_md_hash": "86ef0f99eb5a1595f82269fa4e0113e07e9d1bdff9bc71be672a0e86cea32147",
+    "version_metadata_sha256": "c659e3eb43028db5170e7bd6d0930f78b9ec384a31556dd849134fc067d863e6"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tamil-9421/skills/letterboxd-tracker",
+    "claim_id": "ee04890466ecb97f470ef4bb672a832e2b65ee7395151bfed7f1053f62633da5",
+    "index_entries": [
+      {
+        "index_path": "categories/media-and-streaming.md",
+        "label": "letterboxd-tracker",
+        "url": "https://clawskills.sh/skills/tamil-9421-letterboxd-tracker"
+      }
+    ],
+    "owner_handle": "tamil-9421",
+    "owner_id": "s17czqh9ax18k91n7j9jqd8vxd884vpr",
+    "published_at": 1771425254568,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779921978014,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779921978014,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the code: it retrieves Letterboxd user stats, diary entries, watchlists, and movie details via letterboxdpy. No account mutation, credential access, destructive behavior, or unrelated capability is present.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The usage guidance is mostly Letterboxd-specific, but examples assume a particular username and the commands accept usernames or movie slugs supplied by the agent/user. Agents should confirm the intended Letterboxd account before fetching profile activity.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation requires Python and pip install letterboxdpy. The dependency is unpinned, so users should install it in a trusted environment and consider pinning or reviewing the package version.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to Letterboxd-facing tooling is proportionate to the skill purpose. Retrieved data appears to be public Letterboxd profile/movie information, with no local private-file access evidenced.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The artifacts show no persistence, background workers, credential/session use, privilege escalation, local auth store access, or write/delete operations.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SDI-4] unexpected: The hardcoded diary year is a data-quality bug that can misstate watch dates, but it is not evidence of deception, exfiltration, persistence, or high-impact authority.\n[SQP-1] expected: Fetching Letterboxd profile activity is core functionality, but the agent should use it only when the user clearly asks for Letterboxd data or after confirming the intended username.\n[SQP-2] expected: The README discloses that the skill retrieves public profiles, diaries, and watchlists; additional user-facing caution would improve privacy clarity, but the behavior is purpose-aligned.\n[VirusTotal-code_insight] expected: The command templates pass user-controlled parameters to a Python CLI. This is expected for the skill, and the Python code itself does not execute shell commands; users should still rely on a runtime that safely escapes command parameters.",
+          "guidance": "Reasonable to install for read-only Letterboxd lookups. Before using it, be aware it can display public activity for any supplied Letterboxd username, verify the username/account context, install the unpinned Python dependency carefully, and treat diary dates cautiously because the script hardcodes the year in recent diary output.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a narrow, read-only Letterboxd helper; its main cautions are public profile lookup, an unpinned Python dependency, and imperfect input/date handling rather than malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779921941356,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: letterboxd-tracker\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to a potential shell injection vulnerability identified in `SKILL.md`. The command definitions, such as `python lb_tool.py user \"{{username}}\"`, directly embed user-controlled parameters into a shell command string. If the OpenClaw agent does not properly sanitize or escape the `{{username}}` (or `{{slug}}`, `[limit]`) input before execution, an attacker could inject arbitrary shell commands, leading to potential Remote Code Execution (RCE). The Python script `lb_tool.py` itself appears benign and performs its stated purpose.",
+          "checkedAt": 1779165206038,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "cd14a50b2b1cd6e4f1d4af2adb6b30e3d5f25accb73e7ad7b952cebbe5a7e53e",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/cd14a50b2b1cd6e4f1d4af2adb6b30e3d5f25accb73e7ad7b952cebbe5a7e53e"
+    },
+    "slug": "letterboxd-tracker",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

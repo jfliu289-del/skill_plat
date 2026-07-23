@@ -1,0 +1,152 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.65,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:phrase:agent skill",
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C11:token:project",
+      "category:C12:token:management",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:planning",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "plan",
+      "secure",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1bcdde87c7b889366dec8677e078fa1502882307331b9947af91b6189199c4bb",
+    "content_hash": "5e3ec84db7bb6a4b6d5ceae3fd492f8b9aa44b9d313e2ccb869ae9b2f1540287",
+    "precanonical_content_hash": "1aff7f4dd5445ea4a52c773ed669f23618ae12420ee8bfa3c7409cf62913fcfe",
+    "skill_md_hash": "30cfa2fc4200ff2789639d8d141997c0fd468d1c0827cc491d641841f05f7e36",
+    "version_metadata_sha256": "31ed0a5ab3e4d664a0ae737dd2c82ac80cb538a2f57dd7424f0e3d3d31c8ebc7"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sm0ls/skills/taskflow",
+    "claim_id": "eb8001cbf317f32a55a70c6444f329ec373afb2b4d7eb4185c2a46a1a9be8c91",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "taskflow",
+        "url": "https://clawskills.sh/skills/sm0ls-taskflow"
+      }
+    ],
+    "owner_handle": "sm0ls",
+    "owner_id": "s171qvjqgbqz3sz4msh1rs1tj5885j0c",
+    "published_at": 1771801350988,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1780085600316,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943870547,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts match the stated purpose: markdown-first project/task management backed by a local SQLite index, CLI commands, JSON export, and optional Apple Notes status export. I did not find hidden network calls, credential harvesting, destructive behavior, or unrelated capabilities.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill explicitly instructs agents to read and edit files under OPENCLAW_WORKSPACE and to sync them with SQLite. Some example documentation is optimistic about dashboard safety and could better warn about public exports and direct DB writes, but those examples are purpose-related and not hidden runtime behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No external package downloads or dependencies are required. Installation is local: users link the CLI and may optionally install a LaunchAgent or systemd user timer. The Linux timer templates are referenced but not present in this artifact, which is a functionality/documentation gap rather than a security issue.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The required environment is proportionate: Node.js and OPENCLAW_WORKSPACE. The skill documents that OPENCLAW_WORKSPACE is a high-trust local path and all major reads/writes are scoped under it, aside from optional user-level daemon files and Apple Notes automation.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill can create persistent local state, including taskflow.sqlite, taskflow.config.json, logs, and an optional user-level background sync daemon that runs every 60 seconds. This is disclosed and user-directed, but users should only enable it for a dedicated workspace they control.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-4] expected: The dashboard guide's 'zero attack surface' wording is overbroad because the same guide later discusses dashboard-driven DB updates. The shipped core behavior is still a local export/sync tool, and the direct-write pattern is documented as an optional integration example, so this is guidance-worthy but not enough for Review by itself.\n[SQP-2] expected: The 60-second background sync is expected for this skill and is disclosed in the README, SKILL.md, CLI help, and LaunchAgent template. The docs could emphasize overwrite/race risks more clearly, especially for db-to-files mode, but the daemon install is optional and user-controlled.\n[SQP-2] expected: Apple Notes export is an advertised optional feature and the script only runs on macOS. The README could more plainly state that project/task summaries may sync through the user's Apple account, but the behavior is not hidden or unrelated.\n[SQP-2] expected: Exporting JSON for dashboards is purpose-aligned, and publishing to S3/CDN is only an example rather than automatic behavior. The example should warn users to avoid exposing sensitive task data publicly.\n[SQP-2] expected: Direct SQLite writes in the dashboard integration section are related to the task-management purpose but are risky for production if copied without validation, authorization, locking, and audit controls. The core skill itself mainly uses local CLI/sync scripts and includes SQL safety guidance.",
+          "guidance": "Install this only for a dedicated OPENCLAW_WORKSPACE you control. Decline the LaunchAgent/systemd timer unless you want continuous background sync, avoid running db-to-files while manually editing tasks, and do not publish exported JSON or Apple Notes summaries if project names, task titles, notes, or activity history are sensitive.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "TaskFlow is a coherent local task-management skill with disclosed workspace writes, SQLite sync, and optional Apple Notes/background-sync features, but users should review privacy and automation settings before enabling them.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943796813,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 50,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": null,
+          "checkedAt": 1780085600316,
+          "normalizedStatus": "clean",
+          "source": "engines",
+          "status": "clean",
+          "verdict": null
+        }
+      },
+      "sha256hash": "1bcdde87c7b889366dec8677e078fa1502882307331b9947af91b6189199c4bb",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1bcdde87c7b889366dec8677e078fa1502882307331b9947af91b6189199c4bb"
+    },
+    "slug": "taskflow",
+    "source_type": "clawhub",
+    "version": "1.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

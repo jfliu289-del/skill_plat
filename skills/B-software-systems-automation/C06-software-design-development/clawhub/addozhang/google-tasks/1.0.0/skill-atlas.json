@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C06:token:implementation",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d7dea649953998d92f919459ac40401c5d3fad80d60ed8a321f1062199078dc9",
+    "content_hash": "2a5d6dc465b2127ae1367c329fef693e06230c5cb77d3f51a90386dee0f56087",
+    "precanonical_content_hash": "6b58c5ddf8672c485cf2400df2d2bc78a2a696f746eaa90a9601c9239c37d7d8",
+    "skill_md_hash": "c653dcc8b06529aa9f609fa4072474f615c63cc2909570cce57169212601ffcc",
+    "version_metadata_sha256": "043cb109df5ab12615e29c4c6ce6674eb910ff077e6d1e6c7a0abefc753e45d9"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/addozhang/skills/google-tasks",
+    "claim_id": "fc6abb86af23761de4353cd3fc0e72ec6bf648706a9e316963a54ad9421c1c8b",
+    "index_entries": [
+      {
+        "index_path": "categories/security-and-passwords.md",
+        "label": "google-tasks",
+        "url": "https://clawskills.sh/skills/addozhang-google-tasks"
+      }
+    ],
+    "owner_handle": "addozhang",
+    "owner_id": "s17292626ewt0mmj5fmj13cegh84eqke",
+    "published_at": 1770348659366,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658737982,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658737982,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to view, create, delete, and authenticate with Google Tasks, and the scripts only interact with Google Tasks, Google OAuth endpoints, local configuration, and local token/credential files for that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill clearly documents create and delete commands, but deletion runs immediately after resolving a list position or title and the trigger wording is broad for task-related requests.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There are no install hooks or hidden setup actions; setup relies on npm/Python dependencies and user-provided OAuth credentials. The artifact references a .gitignore protecting tokens, but no .gitignore file is present in the inspected files.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The Google Tasks read/write OAuth scope and network access to Google API/OAuth domains are proportionate to listing, creating, deleting, and refreshing tasks.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill persists OAuth access and refresh tokens in token.json for reuse, which is expected and disclosed, but the files are plain JSON without explicit permission hardening or keychain storage.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Shell execution, network calls, and token files are disclosed in the documentation and align with the Google Tasks integration; the lack of formal permission declarations is a documentation/packaging gap, not evidence of hidden capability.\n[SQP-1] expected: The broad trigger language is scoped to Google Tasks and to-do items; it creates some over-invocation risk because write/delete actions exist, but it is not purpose-mismatched.\n[SQP-2] expected: Task deletion is an advertised feature and is user-invoked, but the script has no confirmation, dry run, or reversibility warning, so users should preview the exact task before deleting.\n[SQP-2] expected: Persisting token.json is normal for OAuth reuse and is disclosed, but the token contains sensitive credential material and the artifact does not enforce restrictive file permissions.\n[SQP-2] expected: Opening a browser for OAuth is consistent with the authentication flow, and the script also prints the authorization URL; it is not hidden background behavior.\n[SC1] unexpected: Caret-version npm dependencies are a supply-chain hygiene issue, but the listed packages are ordinary Google API libraries and the artifact does not show malicious dependency behavior.\n[suspicious.dangerous_exec] expected: The child_process exec call is used to launch the Google OAuth authorization URL in the user's browser; no unrelated command execution was found.\n[suspicious.exposed_secret_literal] expected: The flagged token assignment writes an OAuth token received from Google into token.json; no hardcoded secret was present in the source.",
+          "guidance": "Install only if you are comfortable granting read/write access to your Google Tasks. Keep credentials.json and token.json private, avoid shared or committed workspaces, and ask the agent to list or confirm the exact task before running deletion commands.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent Google Tasks integration, but it can change live tasks and stores OAuth tokens locally, so users should handle it carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658678131,
+          "issueCount": 9,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 50,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: google-tasks\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle for Google Tasks is classified as benign. All scripts (bash, Node.js, Python) transparently interact with legitimate Google Tasks and OAuth API endpoints (tasks.googleapis.com, oauth2.googleapis.com) to manage tasks and handle authentication. Sensitive files like `token.json` and `credentials.json` are handled locally and explicitly git-ignored, as confirmed by `CLAWHUB_CHECKLIST.md`. There is no evidence of data exfiltration to unauthorized endpoints, malicious execution beyond the stated purpose, persistence mechanisms, or prompt injection attempts against the agent in `SKILL.md` or `README.md`.",
+          "checkedAt": 1779161771459,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a3ea7a3f1fcd13ff0631784191992f8f7810976a51fa8e4024821eb37ed0e7c3",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a3ea7a3f1fcd13ff0631784191992f8f7810976a51fa8e4024821eb37ed0e7c3"
+    },
+    "slug": "google-tasks",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

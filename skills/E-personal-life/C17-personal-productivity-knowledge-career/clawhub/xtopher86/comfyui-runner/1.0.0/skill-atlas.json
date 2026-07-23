@@ -1,0 +1,119 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C17",
+    "reasons": [
+      "category:C17:token:notes"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "91535434ccf631eb250b0f762f2299d497f05a27122c0cc9b938234f9d54e62b",
+    "content_hash": "156280f8cde6d061a48fd1592a6b023a1ff39631eea919a0a021c7938091a6d6",
+    "precanonical_content_hash": "9c7ae30de5f85ad40e12331a5b4edd013192e58a2bb01bbe1621df275ab912dc",
+    "skill_md_hash": "7ff615f292c747421905b520e1e4496e89c8d7939e5cd4fa8a04e6c8ed6acdd4",
+    "version_metadata_sha256": "2f28ef9d9b3d61f481b5620b5d208f36a07c7eb87923bf863b91fdf119aeb2bc"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/xtopher86/skills/comfyui-runner",
+    "claim_id": "0a57bae5576249f4264a4b1978e4b25ce7e0cd4f4986847e3c43bfde9b31e3cd",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "comfyui-runner",
+        "url": "https://clawskills.sh/skills/xtopher86-comfyui-runner"
+      }
+    ],
+    "owner_handle": "xtopher86",
+    "owner_id": "s17fs41c510q3jv5w62mfbsyt58845cd",
+    "published_at": 1769419595835,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783650155625,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783650155625,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose says start, stop, and status, but bin/cli.js rejects every action except status and only checks http://<COMFYUI_HOST>:<COMFYUI_PORT>/health.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill accepts a small action input, contains no prompt overrides or hidden instructions, and does not create autonomous workflows.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "package.json exposes a Node CLI only; there are no install scripts, dependencies, postinstall hooks, or remote bootstrap steps.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The CLI reads COMFYUI_HOST and COMFYUI_PORT and makes one HTTP GET to a disclosed configurable endpoint, which is proportionate for a status checker; the default private LAN IP should be configured intentionally.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, privilege escalation, background worker, file mutation, credential use, or service stop behavior was found. The docs mention COMFYUI_USER, COMFYUI_PASS, and .env, but the code does not use them.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: Partly valid as a metadata clarity issue: the skill uses environment configuration and network access, but these are disclosed in SKILL.md and are purpose-aligned with checking a ComfyUI endpoint.\n[SQP-2] unexpected: The disruptive stop behavior is documented, but artifact code rejects stop and run with only_status_supported_in_container, so the scanner concern is not supported by runtime behavior.\n[suspicious.env_credential_access] expected: Downgraded: the code reads only COMFYUI_HOST and COMFYUI_PORT, not credentials or a .env file; the resulting health-check request fits the skill purpose.",
+          "guidance": "Install only if you want a status-only ComfyUI health checker. Set COMFYUI_HOST and COMFYUI_PORT to your own trusted instance, and do not rely on run, stop, or basic-auth behavior unless a future reviewed version actually implements them.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a simple ComfyUI health-check CLI; its documentation overstates run/stop and auth support, but the code only performs a configurable status request.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783650113447,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 22,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: comfyui-runner\nVersion: 1.0.0\n\nThe skill is designed to check the status of a ComfyUI instance. While the `SKILL.md` documentation mentions 'run' and 'stop' actions, the `bin/cli.js` code explicitly restricts execution to only the 'status' action, returning an error for any other input. The 'status' action performs a simple HTTP GET request to a configurable host and port (defaulting to a private IP) on the '/health' endpoint. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, prompt injection attempts, or obfuscation. The code's actual behavior is more limited and less risky than the documentation suggests.",
+          "checkedAt": 1779160014459,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "30fa2b5e1395da7cb23444e90ed9e5f4405e996e99e5da27b71e7536cc5b5ebe",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/30fa2b5e1395da7cb23444e90ed9e5f4405e996e99e5da27b71e7536cc5b5ebe"
+    },
+    "slug": "comfyui-runner",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

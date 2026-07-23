@@ -1,0 +1,201 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [],
+    "confidence": 0.125,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C01:token:find",
+      "category:C02:token:write",
+      "category:C03:token:document",
+      "category:C07:token:quality",
+      "category:C10:token:ai",
+      "category:C12:token:management",
+      "category:C18:token:health",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C02",
+      "C03",
+      "C07",
+      "C10",
+      "C12",
+      "C18"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "research",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "5cce0986e21d90779022b0214dc40ce95638ee3fe8524d073d07a098567b8b7e",
+    "content_hash": "166d17d16eed3dc39df8cf88b4b07f359ba910464c028736d8ce8dc3b817a4ed",
+    "precanonical_content_hash": "62993dfda43fc00161dfb5e7c942ea21f9e28430903cfb03bf066899caedd467",
+    "skill_md_hash": "066f46dd8c2f406ad8cb28b1241bf96cb8e5dc5876934aecd8cbc33aa70e384e",
+    "version_metadata_sha256": "cd2e13278b0a1814021c140a8702b80d2bfd258d46d8e80e5a8980f398848d3c"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/marcus-daemon/skills/context-management",
+    "claim_id": "01a272f3351524c8cdf56671bcf2902ad0437573590d764861edcd5881e0373c",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "context-management",
+        "url": "https://clawskills.sh/skills/marcus-daemon-context-management"
+      }
+    ],
+    "owner_handle": "marcus-daemon",
+    "owner_id": "s174w8x5397q2m297x1gb5cgch885095",
+    "published_at": 1771516821429,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779165478177,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": [
+            {
+              "categoryId": "ASI06",
+              "categoryLabel": "Memory and Context Poisoning",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The skill creates and later trusts a persistent workspace file containing task state, decisions, changed files, and next steps.",
+                "path": "SKILL.md",
+                "snippet": "write `.context-checkpoint.md` in the workspace root ... check for it and use it to restore context. Delete after consuming."
+              },
+              "recommendation": "Review unexpected checkpoint files, avoid putting secrets in them, and treat checkpoint contents as state to verify rather than unquestioned instructions.",
+              "riskBucket": "sensitive_data_protection",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "The checkpoint can contain sensitive project context, and if it is stale or tampered with it could mislead the agent after compaction."
+            },
+            {
+              "categoryId": "ASI07",
+              "categoryLabel": "Insecure Inter-Agent Communication",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The skill intentionally delegates work to sub-agents and passes task descriptions across an agent boundary.",
+                "path": "SKILL.md",
+                "snippet": "spawn sub-agents for remaining tool-heavy work ... Sub-agents have no conversation context — they only know what the task field tells them."
+              },
+              "recommendation": "Use sub-agents for bounded tool-heavy tasks, and require normal user approval before delegated work performs destructive, publishing, deployment, or account-changing actions.",
+              "riskBucket": "sensitive_data_protection",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "Delegated work may happen outside the main conversation context, so task descriptions should be scoped and should not include unnecessary sensitive details."
+            },
+            {
+              "categoryId": "ASI02",
+              "categoryLabel": "Tool Misuse and Exploitation",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The skill provides instructions for changing OpenClaw configuration and restarting the gateway, which can persistently alter agent compaction and pruning behavior.",
+                "path": "references/config-guide.md",
+                "snippet": "use the `gateway` tool: `gateway config.patch` ... `openclaw gateway restart`"
+              },
+              "recommendation": "Review the exact config patch before applying it, keep a backup and rollback plan, and prefer conservative settings unless you intentionally want more aggressive pruning.",
+              "riskBucket": "abnormal_behavior_control",
+              "severity": "medium",
+              "status": "note",
+              "userImpact": "Applying these changes could affect future sessions, including earlier compaction or more aggressive pruning that may require re-reading files or re-running tools."
+            }
+          ],
+          "checkedAt": 1777614746616,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifacts: context pressure checks, checkpointing, sub-agent delegation, and config tuning are all related to context-window management.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are explicit and purpose-aligned, but they encourage automatic sub-agent use at certain context levels and reuse of checkpoint files after compaction.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no install spec or dependency installation. The included shell helper is small, documented, and limited to checkpoint read/write/clear operations.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill touches workspace-local state such as .context-checkpoint.md and daily logs, and references OpenClaw gateway configuration; these are relevant to its purpose but affect local agent state.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No credentials, network endpoints, or background services are shown. Persistence is limited to a workspace checkpoint file and optional OpenClaw config changes.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": null,
+          "guidance": "This appears safe for its stated purpose. Before installing, be aware that it may create a .context-checkpoint.md file in your workspace, ask the agent to delegate tool-heavy work to sub-agents, and recommend OpenClaw config changes; review those files and patches before relying on them or applying persistent changes.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": {
+            "abnormal_behavior_control": {
+              "highestSeverity": "medium",
+              "status": "note",
+              "summary": "The skill can guide sub-agent delegation and persistent OpenClaw config changes, but these are disclosed and aligned with context management."
+            },
+            "permission_boundary": {
+              "highestSeverity": "none",
+              "status": "none",
+              "summary": "No credentials, tokens, account access, or privilege escalation requirements are shown in the artifacts."
+            },
+            "sensitive_data_protection": {
+              "highestSeverity": "low",
+              "status": "note",
+              "summary": "Workspace checkpoint files, daily logs, and sub-agent task descriptions may carry sensitive task context, but use is local and purpose-aligned."
+            }
+          },
+          "status": "clean",
+          "summary": "The skill coherently manages agent context, but it can write local checkpoint state, delegate work to sub-agents, and guide persistent OpenClaw config changes that users should review.",
+          "verdict": "benign"
+        },
+        "skillspector": null,
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: context-management\nVersion: 1.0.0\n\nThe skill bundle is designed for context management, which inherently requires powerful capabilities like executing shell commands (`cp`, `rm`, `date`), modifying OpenClaw gateway configuration (`gateway config.patch`), and writing files outside the immediate workspace (e.g., `/tmp/` for rollback docs). While these actions are explicitly instructed in `SKILL.md` with detailed procedures for transparency, user consent, and safety (backups, rollback docs), the inherent power of these operations makes the skill suspicious. There is no evidence of malicious intent such as data exfiltration, unauthorized remote control, or obfuscation; rather, the instructions emphasize user awareness and control. The `scripts/context-checkpoint.sh` also performs file write/read/delete operations within the workspace. The classification is 'suspicious' because these high-privilege actions, if misused (e.g., via prompt injection against the agent or a compromised agent environment), could lead to significant system impact, even though the skill itself is designed as a legitimate utility.",
+          "checkedAt": 1779165478177,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "5cce0986e21d90779022b0214dc40ce95638ee3fe8524d073d07a098567b8b7e",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/5cce0986e21d90779022b0214dc40ce95638ee3fe8524d073d07a098567b8b7e"
+    },
+    "slug": "context-management",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

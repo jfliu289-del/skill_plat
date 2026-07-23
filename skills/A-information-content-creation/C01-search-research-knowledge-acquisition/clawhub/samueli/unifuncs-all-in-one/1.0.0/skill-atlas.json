@@ -1,0 +1,131 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.75,
+    "domains": [],
+    "needs_review": false,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:phrase:web search",
+      "category:C01:token:research",
+      "category:C01:token:search",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "829257230f972c27653ce2607d0b9d1c570af1562e56103e313e5d6c26c93cff",
+    "content_hash": "fa806098fa441723e420c978a3f3ff0351554edd813edab79a846baa501e4889",
+    "precanonical_content_hash": "7b1c209e7bd1239e1e71ca1834f5950f93b8d7d17bf524c7b85b8a3cdfd63099",
+    "skill_md_hash": "aa99bbad6d40fca1e827f2987d65ca4ced0e8fff9c0efbbdc30e676351e11aa5",
+    "version_metadata_sha256": "2582460f09797d42076ea3395b1cae00e71260c8563d3e0f3e928269f0e106f4"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/samueli/skills/unifuncs-all-in-one",
+    "claim_id": "a66674440548c175342f0c1cd2071fbc618d3b6ec1d1b2be14e6a24f31a5fc9d",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "unifuncs-all-in-one",
+        "url": "https://clawskills.sh/skills/samueli-unifuncs-all-in-one"
+      }
+    ],
+    "owner_handle": "samueli",
+    "owner_id": "s17a0z5q8pat275am714gnv9ah83gw9f",
+    "published_at": 1770788865068,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968945175,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968945175,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts implement the advertised web reader, AI search, and deep research functions by POSTing user-provided inputs to hardcoded api.unifuncs.com endpoints; no unrelated file access, shell execution, destructive action, or hidden behavior was found.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The documentation broadly positions the skill as the default for all web-related tasks and recommends disabling built-in web tools, which is disclosed but expands how much browsing/search activity may be routed through UniFuncs.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains a SKILL.md and three small Node scripts; there is no package installer, background service, dependency install hook, or automatic system modification.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Reading UNIFUNCS_API_KEY and making outbound HTTPS requests is proportionate for a provider-backed web/search integration, but search terms, research prompts, URLs, and options leave the local environment.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistence is limited to user-directed API key configuration in OpenClaw config or shell startup files; the code itself shows no privilege escalation, credential harvesting, or automatic persistence.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad default-tool language is real and increases third-party routing, but it is visible in the documentation and requires user-directed configuration rather than hidden takeover.\n[SQP-2] expected: The scripts transmit web searches, URLs, and research prompts to UniFuncs, which is expected for this remote API wrapper; the main issue is disclosure clarity for sensitive inputs, not evidence of malicious exfiltration.\n[suspicious.env_credential_access] expected: The static finding is supported by the code reading UNIFUNCS_API_KEY and sending it as a Bearer token to api.unifuncs.com, matching the documented integration and limited to the stated provider endpoint.",
+          "guidance": "Install this only if you want UniFuncs to handle web reading, search, and research. Use a dedicated UniFuncs API key, avoid private/internal URLs or confidential prompts, and only disable built-in web tools if you intentionally want this provider to become your default web path.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent UniFuncs web/search/research wrapper, but users should know it routes their queries and URLs through a third-party API.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968910714,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 65,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: unifuncs-all-in-one\nVersion: 1.0.0\n\nThe skill bundle provides web reading, AI search, and deep research functionalities by acting as a client to the `api.unifuncs.com` service. All scripts (`deepsearch.js`, `web-reader.js`, `web-search.js`) securely handle the `UNIFUNCS_API_KEY` by reading it from environment variables and sending it as a Bearer token to the hardcoded UniFuncs API endpoint. There is no evidence of local shell execution, arbitrary file system access, data exfiltration beyond the stated API interaction, or malicious prompt injection attempts within the `SKILL.md` instructions. The code aligns with its described purpose and lacks high-risk behaviors or indicators of intentional malice.",
+          "checkedAt": 1779163108969,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "e08ac33513802b614d063ad81481b7296d6dabdbae14dcbad88ed476b2ce292d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e08ac33513802b614d063ad81481b7296d6dabdbae14dcbad88ed476b2ce292d"
+    },
+    "slug": "unifuncs-all-in-one",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

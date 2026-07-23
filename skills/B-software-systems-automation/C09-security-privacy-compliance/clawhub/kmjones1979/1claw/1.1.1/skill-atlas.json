@@ -1,0 +1,166 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "business",
+      "developer",
+      "marketer",
+      "security-professional"
+    ],
+    "confidence": 0.3341,
+    "domains": [
+      "business",
+      "marketing",
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C09:token:audit",
+      "category:C09:token:security",
+      "category:C09:token:threat",
+      "category:C10:token:ai",
+      "category:C10:token:llm",
+      "category:C10:token:model",
+      "category:C12:token:management",
+      "category:C14:token:customer",
+      "cross-tag:agent-management",
+      "cross-tag:marketing-sales",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C06",
+      "C10",
+      "C12",
+      "C14"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "market",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "b5ed3793bb890341eb21b7ca10c832684205715f614f839ed3ff387632192a40",
+    "content_hash": "bc2d662988ff2d89e019fd0e3e18fb43488cca8f9cbf44035fc0394f6d74030b",
+    "precanonical_content_hash": "95e1a8ecadb8dce89fa2c4ca0673267592355cc442ce430479ffbd59e06292c8",
+    "skill_md_hash": "7441727b6dc5b6d1a9c7bcf3b48cd61c7c26493f5103535f9341ec5a6a98a492",
+    "version_metadata_sha256": "6da428c6fa4ca172a5ccf9c0098a5b51e153203d2c5569036f58db6fe15b3239"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/kmjones1979/skills/1claw",
+    "claim_id": "c6a4bbc86f361ee299af3b57614ebeb05427e2c4204aa124ef5f5f294cb4872c",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "1claw",
+        "url": "https://clawskills.sh/skills/kmjones1979-1claw"
+      },
+      {
+        "index_path": "categories/security-and-passwords.md",
+        "label": "1claw",
+        "url": "https://clawskills.sh/skills/kmjones1979-1claw"
+      }
+    ],
+    "owner_handle": "kmjones1979",
+    "owner_id": "s17bg81zrascgw353bdy99fxk183qq5w",
+    "published_at": 1773180301239,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779936044567,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779936044567,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe HSM-backed secret management and explicitly disclose secret read/write/delete, sharing, policy creation, and EVM simulate/sign capabilities; these are high-impact but aligned with the stated vault and signing purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Most examples are user-directed, list metadata rather than raw secret values, and show simulation plus confirmation before transaction broadcast; stronger explicit confirmation guidance for broad inventory, sharing, policy grants, deletion, and signing would be useful.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses the external npm MCP package @1claw/mcp and requires 1Claw agent credentials; this is coherent for an MCP integration, but the package implementation was not included in the reviewed artifacts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Required environment variables are proportional for a vault integration, but they grant access to sensitive secrets and should use agent-scoped credentials, explicit vault binding, short token TTLs where feasible, and least-privilege policies.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill stores secrets persistently in the 1Claw vault and can create shares, access policies, and signed transactions when enabled; the artifacts disclose server-side policy controls, guardrails, expirations, access counts, audit logs, and deny-by-default behavior.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] expected: The transaction simulation/signing examples are high-impact, but the skill explicitly lists EVM signing as a supported use case and permission, requires Intents API enablement, and demonstrates simulation before broadcast.\n[SDI-2] expected: The transaction broadcast example includes user confirmation after simulation, so it is not hidden or automatic; users should still require per-transaction review of recipient, value, chain, and calldata.\n[SDI-1] expected: The broad vault, secret, policy, share, and signing permissions are disclosed in the manifest and tool reference; they are powerful but coherent for a managed secrets and HSM-backed signing service.\n[SDI-2] expected: Shroud is disclosed in the top-level skill text as a human-enabled TEE LLM proxy for redaction and policy enforcement, not an undisclosed default behavior.\n[SDI-2] expected: Billing and org endpoints appear as platform API reference material, not as hidden install-time behavior or primary MCP tool actions.\n[SQP-2] expected: Listing accessible secret metadata is core vault functionality and the example responds to an explicit user question without printing secret values, though broad inventories should be avoided in shared or untrusted sessions.\n[SQP-2] expected: Environment-variable credential setup is expected for an MCP server; the artifacts say humans configure credentials and should be supplemented with secure local handling and rotation guidance.\n[suspicious.exposed_secret_literal] expected: The static finding points to illustrative fake API keys in examples rather than evidence of a real exposed credential; placeholders would reduce scanner noise.",
+          "guidance": "Install this only if you want an agent to manage 1Claw vault secrets or HSM-backed transaction signing. Use a dedicated agent API key, bind it to the intended vault, grant only needed paths and actions, require explicit approval for sharing, deletion, policy changes, and transaction broadcasts, and review or pin the external @1claw/mcp package before giving it access to important secrets.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "1Claw is a disclosed secret-vault integration with powerful but purpose-aligned vault, sharing, and transaction-signing features that should be installed with tightly scoped access.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779935972124,
+          "issueCount": 8,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: 1claw\nVersion: 1.1.1\n\nThe '1claw' skill bundle provides a legitimate HSM-backed secret management service for AI agents, enabling secure storage, retrieval, and rotation of credentials, as well as EVM transaction signing. The instructions in SKILL.md and EXAMPLES.md emphasize security best practices, explicitly directing the agent to fetch secrets just-in-time and never echo raw values in conversation contexts. While the skill handles highly sensitive data and provides transaction-signing capabilities, these are aligned with its stated purpose and are protected by human-configured policies and server-side guardrails.",
+          "checkedAt": 1779165557312,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "6327ceef4bfe85795733d97e22ab74f2538e1da850e3124c3a385878660faedd",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6327ceef4bfe85795733d97e22ab74f2538e1da850e3124c3a385878660faedd"
+    },
+    "slug": "1claw",
+    "source_type": "clawhub",
+    "version": "1.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

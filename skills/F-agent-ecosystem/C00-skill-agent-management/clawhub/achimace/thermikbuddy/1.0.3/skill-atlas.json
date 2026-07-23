@@ -1,0 +1,124 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "36acd24d84bbec3404de28a78e1aa65ac6f1154dc78699993a6f3efc61b4ca43",
+    "content_hash": "8f9fb65718db04bb63fe010ec7df516a6b4dfe16638a6276ca31e0a1cc9bb7bd",
+    "precanonical_content_hash": "8392d3dda8207f8b6b42cd7471674d5f060e3da4605d929a077705f2e80e9775",
+    "skill_md_hash": "bd760d0887e73335cc85e306c017c0b81bd63525563724d58e3d82deb8b63515",
+    "version_metadata_sha256": "cbba564fc039e7a30a78a938d17acbe926efaf100391cc2579288293b9969ba5"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/achimace/skills/thermikbuddy",
+    "claim_id": "2abd2d17d074d79cb7bc9fabe2bbfa913dbabcfd2b8d2a0aa1db3de3bb27807b",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "thermikbuddy",
+        "url": "https://clawskills.sh/skills/achimace-thermikbuddy"
+      }
+    ],
+    "owner_handle": "achimace",
+    "owner_id": "s170b6q571x3242wzp9x6xvna5884pxw",
+    "published_at": 1771972067373,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943612896,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943612896,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently implement thermic and soaring weather forecasting: the main workflow lists supported regions, accepts a selected region or coordinates, fetches Open-Meteo weather data, scores flying conditions, and returns JSON for the agent to format.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill tells the agent to run bundled Python scripts with user-selected region IDs or coordinate/name arguments; that local execution is central to the skill, but agents should quote user-provided values when invoking the command.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no separate installer or package-install step, and files are installed as ordinary artifacts, but version metadata is inconsistent across registry context, SKILL.md, _meta.json, and origin.json.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Outbound network use is proportionate to weather forecasting. The main script sends latitude, longitude, forecast range, and weather-variable requests to Open-Meteo; bundled diagnostic/DHV utilities also contain weather-site fetch logic.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, privilege escalation, credential/session/profile access, broad local indexing, file mutation, background worker, or destructive behavior was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The network-backed forecast behavior is real, but weather API retrieval is disclosed and purpose-aligned; the missing explicit permission declaration is a transparency note rather than a Review-level concern here.\n[TP4] expected: Region listing and custom coordinates are disclosed in SKILL.md, while GFS fallback and the DHV parser expand implementation detail but remain weather-related and are not evidence of hidden unrelated capability.\n[VirusTotal code_insight] expected: The reported shell-injection risk is not supported as intentional unsafe behavior by the artifacts: the Python scripts use argparse, typed numeric coordinates, fixed region IDs, and no subprocess or shell execution internally.",
+          "guidance": "Install only if you are comfortable letting the agent run the bundled Python forecast code and make outbound weather requests for selected regions or custom coordinates. Avoid entering unnecessarily precise private locations, and confirm the intended version because the package metadata is inconsistent.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill runs local weather-forecast scripts and contacts weather services for selected locations, which fits its stated soaring-weather purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943578857,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 45,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: thermikbuddy\nVersion: 1.0.3\n\nThe skill is classified as suspicious due to a potential shell injection vulnerability. The `SKILL.md` file instructs the OpenClaw agent to execute local Python scripts with user-provided arguments (e.g., `--name <user_input>`). If the agent's runtime environment does not properly sanitize or quote these user inputs before passing them to the shell, an attacker could inject arbitrary shell commands. While the Python scripts themselves use `argparse` safely, the instruction template in `SKILL.md` exposes this critical vulnerability in the agent's execution model. There is no evidence of intentional malicious behavior like data exfiltration or persistence within the skill's code, which otherwise performs legitimate weather forecasting by fetching data from `api.open-meteo.com` and `dhv.de`.",
+          "checkedAt": 1779165792629,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "118e78c3383cd7710278f081dfe118a7e4216612f359962fda780460912f488d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/118e78c3383cd7710278f081dfe118a7e4216612f359962fda780460912f488d"
+    },
+    "slug": "thermikbuddy",
+    "source_type": "clawhub",
+    "version": "1.0.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

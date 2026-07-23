@@ -1,0 +1,151 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "configuration",
+      "website"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "infrastructure",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C19",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C08:token:deploy",
+      "category:C18:token:health",
+      "category:C19:token:browser",
+      "category:C19:token:device",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:debugging",
+      "cross-tag:deployment",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C00",
+      "C08",
+      "C18"
+    ],
+    "stages": [
+      "deliver",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "debug",
+      "deploy",
+      "manage",
+      "operate"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "61c9af9fcf060fc71fb33c853fb3014d50ef13c0646b451038ab4fc5cd82cec6",
+    "content_hash": "6050b7d723f325a496b74db5eecb5d4a46c85083fd54b48927ad5315e296f6e5",
+    "precanonical_content_hash": "035931b643cf46d0731330f8f648ba9a32918ea820cb15b290a9cfa33f62ea22",
+    "skill_md_hash": "722e4a419f4dd9efbdc5c3de9ee4ae42faa97e6276615c0f44806f42c5ca7c0d",
+    "version_metadata_sha256": "c7c1a47de51f3fe9fbe7daef91f78de5a257921dc9decd58c4861cdd70781353"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/toxicpine/skills/ambit-cli",
+    "claim_id": "7ddfd5372a8b84ac38cbf320e48d39e9f4be5ba5b837cea5005e0c014928cf93",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "ambit-cli",
+        "url": "https://clawskills.sh/skills/toxicpine-ambit-cli"
+      }
+    ],
+    "owner_handle": "toxicpine",
+    "owner_id": "s170sge0993b2ekmbqgzcs0y2h884bk7",
+    "published_at": 1771807479325,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779950840787,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779950840787,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the documented capabilities: creating, deploying to, inspecting, and destroying Ambit private networks. These actions are high-impact because they affect cloud apps, Tailscale routing, split DNS, and network reachability.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill documents sensitive options such as `--self-approve` and `--yes`, but presents them openly as CLI flags rather than hidden or mandatory behavior. Users should still require explicit approval before route approval, deployment, or destruction actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains only `SKILL.md` and no executable code, but it instructs agents to run an external npm package and optionally deploy GitHub templates, so runtime behavior depends on those external sources.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Fly.io authentication, Tailscale CLI state, `sudo tailscale set --accept-routes`, and Tailscale API token use are sensitive but proportionate to the private-network management purpose.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill intentionally creates persistent Fly.io router infrastructure, Tailscale devices, split DNS, routes, secrets, and deployed apps; this persistence is disclosed and expected for the workflow.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code_insight] expected: The supply-chain, token-handling, and sudo concerns align with the artifact, but they are disclosed and purpose-aligned; VirusTotal engine stats showed no malicious or suspicious detections.\n[SkillSpector] expected: The supplied SkillSpector report found no issues, consistent with the artifact being documentation for an external CLI rather than bundled executable behavior.\n[staticScan] expected: The local artifact set contains only a markdown skill file and no executable scripts, supporting a benign classification with operational cautions.",
+          "guidance": "Install this only if you want an agent to help manage Ambit, Fly.io, and Tailscale infrastructure. Review the external npm package and any GitHub templates before use, prefer pinned template refs or commits, protect and scope the Tailscale API token, avoid putting secrets in command history or logs, and require explicit user approval before using `--yes`, `--self-approve`, `deploy`, or `destroy`.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill transparently documents a high-privilege Ambit workflow for managing Fly.io and Tailscale private networks, with no artifact-backed deception or hidden behavior found.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779950805819,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ambit-cli\nVersion: 0.1.0\n\nThe skill bundle is classified as suspicious due to several high-risk behaviors and supply chain vulnerabilities, despite lacking explicit malicious intent. The `SKILL.md` instructs the agent to execute an external `npx` package (`npx @cardelli/ambit`) and to download and deploy remote templates from GitHub (`ToxicPine/ambit-templates`), both of which introduce significant supply chain risks. Furthermore, the skill requires the agent to handle sensitive `TAILSCALE_API_TOKEN`s and perform privileged operations (`sudo tailscale set --accept-routes`), increasing the potential attack surface if any of the external dependencies were compromised or if the agent were to be prompted maliciously.",
+          "checkedAt": 1779166364973,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "e4c69002da30e98ad55fef3d667dc190973b37510c501ee3c4e596a43dc3b63b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e4c69002da30e98ad55fef3d667dc190973b37510c501ee3c4e596a43dc3b63b"
+    },
+    "slug": "ambit-cli",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

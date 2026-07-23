@@ -1,0 +1,142 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "06d8ac685a6cf7d496f957dd556a01fbbd2556d847bdd7f0ccb800021d34b843",
+    "content_hash": "6a884522d53ccd7db80e3643af8134c4205b18ef57e205cff511c2b6f1f7cc56",
+    "precanonical_content_hash": "f6c11c6e10783f9182d128201f3e3632f51754dd38ddbb3f889e2aac9275aa04",
+    "skill_md_hash": "8b89b2f022984b32e4445330266d8d90429e05e1fd73d565a78aff2bf6781aae",
+    "version_metadata_sha256": "480748cb952b69eb015f8d451da8e53d1a25fbee08ea4d2ab29c6b0afd0c98fb"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/qiantao1001/skills/flomo-via-app",
+    "claim_id": "6a1c3df5ce77ed036cd26fd4125268d20c91049489e6abe8ca3c01ada08dd38a",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "flomo-via-app",
+        "url": "https://clawskills.sh/skills/qiantao1001-flomo-via-app"
+      }
+    ],
+    "owner_handle": "qiantao1001",
+    "owner_id": "s171z7r297mpm9wdrn42c6vqw18857be",
+    "published_at": 1770535265822,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783657009846,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783657009846,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The implemented capability is Flomo note capture via webhook, which fits the stated integration purpose. However, SKILL.md still claims URL-scheme-first delivery with automatic webhook fallback while the actual send script is webhook-only.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are limited to configuring a Flomo webhook and sending user-provided notes, tags, stdin, or clipboard content on explicit command; no autonomous agent control, bulk mutation, or destructive workflow is present.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Configuration is interactive and skips in non-interactive mode. It defaults to a local .env file with chmod 600, but also offers to append a plaintext webhook token export to shell startup files.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network POSTs and a Flomo webhook credential are proportionate for a webhook-based note integration. Users should understand that submitted note text is sent to Flomo, and FLOMO_WEBHOOK_URL can direct content to whatever endpoint the local environment sets.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists only the webhook credential and does not install services, scheduled jobs, or broad local indexing. The send script sources the local .env file, which is common but can execute unexpected shell content if that file is modified.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[TP4] unexpected: The documentation mismatch is real: SKILL.md advertises URL-scheme primary delivery, but the script only sends by webhook. This is a user-consent/documentation issue, not evidence of unrelated exfiltration or deception because webhook use is also repeatedly disclosed.\n[SQP-2] expected: A tokenized Flomo webhook URL is necessary for this integration, but the artifacts should more clearly warn that the URL or token is a secret that should not be shared, logged, or committed.\n[E1] expected: External transmission of note content via curl is the core webhook behavior and is disclosed. The risk is mainly user awareness and endpoint hygiene, especially when using FLOMO_WEBHOOK_URL from the environment.\n[PE3] unexpected: Sourcing .env can execute shell code if the file is tampered with. In context, the skill creates a simple local credential file with restricted permissions and does not show an artifact-backed attempt to exploit this behavior.\n[VirusTotal code_insight] expected: The telemetry flags shell-profile modification and network requests as risky capabilities, but both are interactive, disclosed, and aligned with configuring and using a Flomo webhook.",
+          "guidance": "Install only if you are comfortable sending selected notes to Flomo over the network and storing a Flomo webhook token locally. Prefer the default local .env option over shell startup files, treat the webhook URL/token as a secret, and rely on the current script as webhook-based despite older URL-scheme wording in SKILL.md.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill sends user-selected notes to Flomo and has some documentation and credential-storage caveats, but the reviewed artifacts do not show hidden, destructive, or unrelated behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783656968286,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 79,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: flomo-via-app\nVersion: 1.0.8\n\nThe skill is classified as suspicious due to its use of high-risk capabilities, specifically modifying user shell configuration files and performing network requests. The `scripts/configure.sh` script interactively prompts the user to save a webhook token either to a local `.env` file (with restricted permissions) or by appending an `export` statement to their `~/.zshrc`, `~/.bashrc`, or `~/.bash_profile` file. While this is user-consented and for the stated purpose of persisting configuration, modifying shell dotfiles is a sensitive action. Additionally, `scripts/flomo_send.sh` uses `curl` to make HTTP POST requests to an external endpoint (`https://flomoapp.com/iwh/`) to send notes. Although these actions are plausibly needed for the skill's stated purpose of sending notes to Flomo and show no clear malicious intent or exfiltration to unauthorized domains, they represent risky capabilities without being strictly benign.",
+          "checkedAt": 1779162159977,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "5996591cab1399fd29df0fe2f57da07c2f85c134b63172ef2947df04b9ebc355",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/5996591cab1399fd29df0fe2f57da07c2f85c134b63172ef2947df04b9ebc355"
+    },
+    "slug": "flomo-via-app",
+    "source_type": "clawhub",
+    "version": "1.0.8"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

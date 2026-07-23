@@ -1,0 +1,127 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C17:token:schedule",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [
+      "discover"
+    ],
+    "tasks": [
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "486a3e5d76ffcf83cfce57a81c06aa65d1b6bc2c7ca34ca7807e055f53cc57ec",
+    "content_hash": "cd20223da29dbedee767a8c4bae7842efd94f6f0f28a2608b7ad1a3c0b33f1cc",
+    "precanonical_content_hash": "4aeb6f623058d73102a5ac29bcd8b2f65188030c8eb0f1b946e6336dc7269759",
+    "skill_md_hash": "31a2f49da28714c14540343d6b85c1c98b025037a12120a6ac19ea0022bc40fe",
+    "version_metadata_sha256": "3b3e42afe140df43afbd8a84f76a3a064584cba49d16b0525b2bbf0b800da0fb"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/borahm/skills/charger",
+    "claim_id": "0180706065542b4ee355ad9198b8e8e0315975b8ae651e0a03ccb97eb8a430fe",
+    "index_entries": [
+      {
+        "index_path": "categories/transportation.md",
+        "label": "charger",
+        "url": "https://clawskills.sh/skills/borahm-charger"
+      }
+    ],
+    "owner_handle": "borahm",
+    "owner_id": "s178h6tnctyzdm2zjbrcq3fdpd83fnyk",
+    "published_at": 1769031640103,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783651094944,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783651094944,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, metadata, and helper script align with checking EV charger availability and notifying on availability changes, but SKILL.md says the bundle includes a bin/charger CLI that is not present in the artifact files.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are user-directed: add a favorite, run charger commands, and optionally wire the notification helper into cron for Telegram-style pings.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Install guidance suggests symlinking bin/charger, but only SKILL.md and scripts/charger-notify.sh are included, so users should verify the actual CLI source before placing it on PATH.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Use of GOOGLE_PLACES_API_KEY is proportionate for Google Places EV charger lookups, and the helper processes only the requested charger target and CLI output.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The helper creates a scoped cache directory under ~/.cache/charger-notify and stores last YES/NO/UNKNOWN state; optional cron scheduling is disclosed and purpose-aligned.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal telemetry] expected: Telemetry reported no malicious or suspicious detections and described the shell helper behavior as aligned with EV charger notifications.\n[SkillSpector] expected: SkillSpector reported no issues; artifact review likewise found no hidden commands, obfuscation, exfiltration, or destructive behavior.\n[Static scan] expected: Metadata shows a clean static scan with no findings.\n[Artifact review: missing documented CLI] unexpected: The documentation claims a bundled bin/charger CLI, but the reviewed artifact contains only SKILL.md and the notification shell script; this is a packaging/provenance note rather than evidence of malicious behavior.",
+          "guidance": "Before installing, confirm where the charger CLI comes from and review it separately, use a restricted Google Places API key with quotas, and only enable cron or notification forwarding for charger targets you are comfortable sending through Google Places and your notification channel.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill is a disclosed EV charger availability notifier, with a minor packaging/provenance caveat because the documented charger CLI is not present in the reviewed bundle.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783651079285,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: charger\nVersion: 1.0.1\n\nThe OpenClaw skill bundle 'charger' is designed to check EV charger availability and provide notifications. The `SKILL.md` clearly outlines its purpose, required environment variables (`GOOGLE_PLACES_API_KEY`), and how to set up notifications, including instructions for the agent to integrate with Gateway cron, which is a legitimate use of prompt instructions. The `scripts/charger-notify.sh` script implements the notification logic, using standard shell commands to execute the `charger` CLI, manage state in `~/.cache`, and print output only when availability changes. There is no evidence of data exfiltration, malicious execution, persistence, or obfuscation. All actions are aligned with the stated purpose.",
+          "checkedAt": 1779159823147,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "d88aa0826cd1d7442efa2449b48138c4ae142313a073e2b10921cd0720ae6a79",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d88aa0826cd1d7442efa2449b48138c4ae142313a073e2b10921cd0720ae6a79"
+    },
+    "slug": "charger",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

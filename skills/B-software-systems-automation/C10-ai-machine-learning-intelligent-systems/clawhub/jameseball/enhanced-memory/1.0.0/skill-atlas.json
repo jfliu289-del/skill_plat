@@ -1,0 +1,130 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.35,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C10:token:embedding",
+      "category:C10:token:model",
+      "category:C17:token:knowledge",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C17"
+    ],
+    "stages": [
+      "discover"
+    ],
+    "tasks": [
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "6cbacb320358d7613df3ed02c636139341010ac8aee7a54bcc79fabc18821f68",
+    "content_hash": "10d516e57e45d48421db99a8f0e8b3b215ef398be95375a3dc82bd0c44895577",
+    "precanonical_content_hash": "0d9521b23c5bb0cee64988d30c27eb316164e014bff50ca0b35117dbb92ed53e",
+    "skill_md_hash": "952a33e4133db1b1e5d14b6be4368368342f6466f4c9d08c8e94e490481aa12e",
+    "version_metadata_sha256": "b519a844fc1e2f85810c6b4acb2e2f58b09b6f79d04d310a8c9dd61af928e992"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jameseball/skills/enhanced-memory",
+    "claim_id": "aaa54467bd356790e1cdc0350f60e4f9367dc207d46d887ea9e3b9eb9d14ce5d",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "enhanced-memory",
+        "url": "https://clawskills.sh/skills/jameseball-enhanced-memory"
+      }
+    ],
+    "owner_handle": "jameseball",
+    "owner_id": "s17ddpmhbpep1pbreeg9qjmvws885k85",
+    "published_at": 1770693884415,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779964129572,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779964129572,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts match the stated purpose: indexing markdown memory content, searching it with embeddings and keyword scoring, scoring salience, and building cross-reference data.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime behavior is user-directed through documented command-line scripts; the artifacts do not show hidden autorun, destructive actions, prompt-injection behavior, or unrelated capabilities.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill is script-based and documents its expected setup, but its frontmatter does not declare granular file/network permissions and SKILL.md references one JSON-compatible search script that is not present in the provided files.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading memory markdown and selected core workspace markdown files is proportionate for a memory skill and is disclosed, but users should understand that indexed text and search queries go to the configured Ollama URL.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill writes persistent local index files such as memory/vectors.json and memory/crossrefs.json, but shows no OS-level persistence, privilege escalation, credential harvesting, or background service installation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[TT3] expected: The search script sends query text to OLLAMA_URL for embeddings. This is expected for vector search; the risk is misconfiguration or intentional redirection to an untrusted endpoint, not hidden exfiltration in the artifact.\n[LP3] expected: The file and local network capabilities are real and should be easier to declare, but they are consistent with the documented memory indexing and Ollama workflow.\n[SDI-1] expected: Indexing MEMORY.md, AGENTS.md, USER.md, SOUL.md, and research.md is implemented outside memory/, but SKILL.md explicitly says core workspace files are included, so this is disclosed scope rather than silent purpose expansion.\n[SQP-2] expected: The indexer sends markdown chunks to the embedding backend. This is central to the feature; users should keep the endpoint local or otherwise trusted.\n[SQP-2] expected: The search script sends raw query text to the embedding backend. That is expected for semantic search, but sensitive queries should not be sent to an untrusted or remote OLLAMA_URL.",
+          "guidance": "Install only if you are comfortable with the skill reading your memory directory plus named core markdown files, storing local searchable indexes, and sending indexed content and queries to Ollama. Keep OLLAMA_URL on a trusted local endpoint unless you intentionally want remote processing, and review or delete generated index files if they may contain sensitive or stale data.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent memory-search skill that reads local memory files, stores local indexes, and sends text to a configured Ollama embedding endpoint, with no artifact-backed evidence of deception or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779964100744,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: enhanced-memory\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle is classified as benign. All scripts are written in Python using only standard library modules, with no external dependencies, reducing supply chain risk. File access is confined to the designated 'memory/' directory and specific core workspace markdown files, which is appropriate for a memory management skill. Network communication is limited to a local Ollama instance (http://localhost:11434/api/embed) for generating embeddings. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts in SKILL.md that would instruct the agent to perform unauthorized actions.",
+          "checkedAt": 1779162665409,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "79d42e7f738b0067c0968e99be7d22cddf12965c877c5f62cdb284616016b029",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/79d42e7f738b0067c0968e99be7d22cddf12965c877c5f62cdb284616016b029"
+    },
+    "slug": "enhanced-memory",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

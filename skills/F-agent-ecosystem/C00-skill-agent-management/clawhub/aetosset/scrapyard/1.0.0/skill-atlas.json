@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C06",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "7e862ecd52608ad57213bd7ce15df224ec5eef4fd401b6060350c4b5dabb9812",
+    "content_hash": "bcbe72e385a26eec04e50e00dc9f4fa736dbebcc26887d063c0e0a79b485c1a5",
+    "precanonical_content_hash": "3aea59f1f5cfe22085bfd79f3da5992ac7cf3f504b15a1bc20c3fe881586b88d",
+    "skill_md_hash": "3c34c8daea1461eff7da9122c5c5af8f097994e8bdd131b4ed227fb39ee59bce",
+    "version_metadata_sha256": "cce4a0204d770906071a3bddef52ee16fb8b0a2121f0bc978565e5ed6b68ebc2"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/aetosset/skills/scrapyard",
+    "claim_id": "63352023453d632ba57b2d8970621acaf73bd874603d43a125042f463cb81bf0",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "scrapyard",
+        "url": "https://clawskills.sh/skills/aetosset-scrapyard"
+      }
+    ],
+    "owner_handle": "aetosset",
+    "owner_id": "s17cs9d42ra90zb6dmq61kfcmn885wr3",
+    "published_at": 1770758203727,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968101831,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968101831,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose, workflows, and scripts align around registering a SCRAPYARD bot, checking game status, and joining or leaving the game queue; no unrelated data access, exfiltration, destructive behavior, or hidden capability was found.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill includes authenticated state-changing actions and broad trigger examples such as \"compete\" and \"join the game,\" so users should invoke registration and queue actions intentionally.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact consists of a SKILL.md and readable helper shell scripts; there is no installer, dependency bootstrap, package mutation, or background setup behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Outbound HTTPS calls to the documented SCRAPYARD endpoints and reading a scoped credentials file under ~/.scrapyard are proportionate to the stated game purpose, though they should remain user-directed.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists a SCRAPYARD bot API key in plaintext at ~/.scrapyard/credentials.json. This is disclosed and purpose-aligned, but the file is a credential and should be protected.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The use of curl, outbound API calls, and local credential-file handling is clearly documented in the skill and matches the game-integration purpose; no hidden network destination or unrelated local access was found.\n[SQP-1] unexpected: The broad trigger phrases could cause accidental activation in edge cases, but the workflows still describe user-directed registration and queue actions rather than automatic execution.\n[SQP-2] expected: Plaintext storage of the issued bot API key is explicitly documented and used only for SCRAPYARD bot actions; this is a security hygiene risk, not evidence of malicious behavior.\n[PE3] expected: Reading and saving ~/.scrapyard/credentials.json is necessary for authenticated bot registration, joining, and leaving; the artifacts do not show broader credential harvesting.\n[VirusTotal code_insight] unexpected: The reported arbitrary shell-injection concern is not supported by the inspected scripts because interpolated variables are inside quoted curl arguments; malformed JSON or tampered credential data could still break requests, but that is not evidence of command execution or malicious intent.",
+          "guidance": "Install this only if you intend to play SCRAPYARD. Treat ~/.scrapyard/credentials.json as a secret, avoid sharing it or committing it, remove or rotate the bot credentials when no longer needed, and only run register, join, or leave actions when you mean to manage the game queue.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "SCRAPYARD is a coherent game-integration skill that uses disclosed network calls and a local bot API key to register and queue a game bot.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968079693,
+          "issueCount": 8,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: scrapyard\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to potential shell injection vulnerabilities in the `scripts/register.sh`, `scripts/join.sh`, and `scripts/leave.sh` files. User-controlled input (`$NAME`, `$AVATAR`) in `register.sh` and locally stored credentials (`$BOT_ID`, `$API_KEY`) in all three scripts are directly interpolated into `curl` commands without proper sanitization or quoting, which could allow arbitrary command execution if malicious input or tampered credentials are provided. While there is no clear evidence of intentional malicious behavior like data exfiltration or persistence, these vulnerabilities pose a significant risk.",
+          "checkedAt": 1779162972478,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "2233db2a4f38d8599127e2d8940b1185be7d7afe5e2f544fa8c945358902aa73",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/2233db2a4f38d8599127e2d8940b1185be7d7afe5e2f544fa8c945358902aa73"
+    },
+    "slug": "scrapyard",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

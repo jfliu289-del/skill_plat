@@ -1,0 +1,132 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.7,
+    "domains": [],
+    "needs_review": false,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:analytics",
+      "category:C04:token:analyze",
+      "category:C04:token:data",
+      "category:C04:token:metrics",
+      "cross-tag:data-analysis"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "validate"
+    ],
+    "tasks": [
+      "analyze"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "3ecbba2f485db5e39f71f4f50868c2bdd915bf4471ed858fe29b96d825bd9c11",
+    "content_hash": "db2d9d0b1dd9f7e9099c408c9700cb765e8e348f76e4db6c1989a52ec882e55b",
+    "skill_md_hash": "1a4a665659461fb13d9fbdeadce2203b4af4e31d2bec3f31911af6da17528ce4",
+    "version_metadata_sha256": "5bcdef7451217f79763afdf181a9ef3ac6d4fea009b74a4a423084c6a3746abb"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tevfikgulep/skills/instagram-analyzer",
+    "claim_id": "459d6e944eeb8d63686e746a2b3080598da478960dc80df62878c893da4a39fc",
+    "index_entries": [
+      {
+        "index_path": "categories/cli-utilities.md",
+        "label": "instagram-analyzer",
+        "url": "https://clawskills.sh/skills/tevfikgulep-instagram-analyzer"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "tevfikgulep",
+    "owner_id": "s17fxmtqh44s3323yqtrnngw1h884x17",
+    "published_at": 1770843342933,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971366532,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971366532,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is Instagram profile and post analytics, and the code aligns by using Playwright to visit Instagram pages, collect profile/post metrics and links, and save analysis results.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The documentation discloses browser automation, bulk profile analysis, Reels-focused scraping, and local JSON/TXT outputs, but it gives weak privacy, retention, platform-policy, and credential-safety guidance.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses ordinary Python dependencies with no hidden install scripts, but requirements are open-ended rather than pinned, reducing reproducibility and dependency-review confidence.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network and browser access are proportionate for Instagram analysis; however, the single-post command accepts a raw URL without enforcing that it is an Instagram URL.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill writes analysis artifacts under documented data directories and shows no background persistence or privilege escalation, but username-derived output paths are not sanitized and could write outside the intended layout if invoked with crafted input.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: Local storage of scraped Instagram analytics and bulk profile scraping are core advertised behavior; the privacy and credential-handling warnings are underdeveloped but not hidden or purpose-mismatched.\n[SC1] unexpected: The unpinned dependencies are valid packaging hygiene issues, but they do not indicate malicious behavior or hidden capability in the skill artifacts.\n[SC4] unexpected: The dependency advisory concern is relevant because the skill parses remote HTML, but the requirement lower bounds do not by themselves prove that a vulnerable version will be installed.\n[VirusTotal/code_insight] unexpected: The path traversal and arbitrary URL observations are real input-validation hardening issues; credential fields are present but not used for login or transmitted, and no exfiltration or destructive behavior was found.",
+          "guidance": "Install only if you are comfortable with browser automation against Instagram and local retention of scraped results. Use normal Instagram usernames and intended Instagram post/Reel URLs, avoid storing real account credentials in this skill unless the implementation is improved, keep generated data out of shared folders or source control, and prefer pinned dependency versions before production use.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Instagram scraping and analytics skill with some hardening and privacy issues, but the artifacts do not show hidden, destructive, or deceptive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971332906,
+          "issueCount": 8,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: instagram-analyzer\nVersion: 1.0.0\n\nThe skill bundle is classified as suspicious due to multiple vulnerabilities. The `scripts/instagram_analyzer.py` script is vulnerable to path traversal, as user-supplied usernames are directly used in constructing output file paths (e.g., `data/profiles/{username}_{timestamp}.json`), allowing arbitrary file writes. Additionally, Instagram credentials configured in `config/analyzer_config.json` are loaded into memory but never used for login, exposing sensitive data unnecessarily. The script also navigates to user-supplied URLs via Playwright, which could be exploited for browser-based attacks or internal network scanning.",
+          "checkedAt": 1779163291465,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "30cb720ec8656bf27e19ea7b4580ff2431b6c39a3a0a0a00538e14126d0fffcd",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/30cb720ec8656bf27e19ea7b4580ff2431b6c39a3a0a0a00538e14126d0fffcd"
+    },
+    "slug": "instagram-analyzer",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,132 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C10:token:ai",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1962d4e0b0536cbcc22082aaafdc6f8c399313043e835603c1004ffcaf01aad6",
+    "content_hash": "cbf2d42f0d30fb9293da309cd9ea0416a4134fa9aaaeadc529898f510579b84f",
+    "precanonical_content_hash": "ef304727c9951a853a69533b2e05ecce9358d184421c34570e7e558dbeae1166",
+    "skill_md_hash": "cc9a98b312f30651bed8a0ac5104cd03a9bfc54add279630cd40b043e0d4564f",
+    "version_metadata_sha256": "c45356003acdb51d9c5c554e6ef95cae74ede592038df17a928b49ddb4c577c2"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/voidcooks/skills/clawd-presence",
+    "claim_id": "8e04f1eb016e721fd21c4b2a3e46e6760b1622849f4798858298aaceca646976",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "clawd-presence",
+        "url": "https://clawskills.sh/skills/voidcooks-clawd-presence"
+      },
+      {
+        "index_path": "categories/clawdbot-tools.md",
+        "label": "clawd-presence",
+        "url": "https://clawskills.sh/skills/voidcooks-clawd-presence"
+      }
+    ],
+    "owner_handle": "voidcooks",
+    "owner_id": "s17dse757argwyqsc9zvtpkp9x8852j9",
+    "published_at": 1769729015501,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783652874799,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783652874799,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently implement a presence display: configure settings, update a local status file, render a curses terminal display, and store/read monogram text assets.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The runtime instruction asks an agent to call a local status script when work starts, which is purpose-aligned; status messages are stored locally and shown on screen, so users should avoid sensitive task details.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Setup is manual Python script execution with no install hook, remote execution, automatic package installation, or startup registration in the artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Optional auto-detection reads only specific Clawd/Clawdbot YAML config paths under the user's home directory to derive an agent name, using safe YAML loading; this is limited and aligned with setup.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The display is intended to run continuously when started and persists config.json and state.json in the skill directory, with no elevated privileges, autostart, deletion, credential harvesting, subprocess execution, or network behavior found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: An older metadata scanner concern about file read/write transparency is supported only in the narrow sense that the scripts use local files; artifact review downgrades it because the paths and behavior are limited, local, disclosed by usage, and necessary for the display.\n[staticScan] expected: Static scan was clean, and manual review found no hidden network calls, shell execution, destructive operations, broad filesystem indexing, or credential/session access.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with the local artifact review, but it was used only as supporting signal.\n[SkillSpector-current] expected: The current SkillSpector report supplied for this run has no active issues; manual review found the remaining file I/O proportionate to the skill's purpose.",
+          "guidance": "Install only if you are comfortable running local Python scripts that create and update config.json and state.json in the skill directory. Use manual configuration instead of --auto if you do not want it to inspect Clawd/Clawdbot config files, and keep presence messages non-sensitive because they are displayed and stored locally.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a local terminal status display whose narrow file access matches its stated purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783652840967,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: clawd-presence\nVersion: 1.0.1\n\nThe OpenClaw AgentSkills bundle 'clawd-presence' is designed for displaying agent status. Its scripts primarily perform local file I/O to manage configuration and state (config.json, state.json) and display ASCII art monograms. The `scripts/configure.py` script reads `config.yaml` files from common `clawd` or `clawdbot` configuration paths in the user's home directory to auto-detect the agent's name. This file access is limited to specific, non-sensitive data (agent name) for a stated purpose and uses `yaml.safe_load`. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or harmful prompt injection attempts against the agent. All operations are local and align with the skill's described functionality.",
+          "checkedAt": 1779160340367,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a813d2bc8042f4741b7f9736fbcfad28e35db5dab919e2c914891d65a6fcc3a4",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a813d2bc8042f4741b7f9736fbcfad28e35db5dab919e2c914891d65a6fcc3a4"
+    },
+    "slug": "clawd-presence",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

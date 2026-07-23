@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C06:token:code",
+      "category:C17:token:notes",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover"
+    ],
+    "tasks": [
+      "build",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1a95699194b1fbec8a80225475354d859e977f1039358c1a7475b85dbd41c6fc",
+    "content_hash": "f6e041b95adaf8573544eb4183ff15948df1671356697880c3ffe4cb3e9de9f7",
+    "precanonical_content_hash": "45ad7a71e786d5ffe867054e356196ee428a03e910e4b47729e6c516ae89fbbd",
+    "skill_md_hash": "bc5efb64b48f5470392c2dd785894c35dfcf8eac3a8127992bff7d13637e6c20",
+    "version_metadata_sha256": "9820311c908c5142fe8a4218275ce2f6fefb69248779120cdef2937ecb5d74ac"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/alexpolonsky/skills/maccabi-pharm-search",
+    "claim_id": "a796ee64e896865b3f782072156cf6b09a7e121ad567b7889617c15b98645488",
+    "index_entries": [
+      {
+        "index_path": "categories/health-and-fitness.md",
+        "label": "maccabi-pharm-search",
+        "url": "https://clawskills.sh/skills/alexpolonsky-maccabi-pharm-search"
+      }
+    ],
+    "owner_handle": "alexpolonsky",
+    "owner_id": "s173640fctyey3preabp6s0j55884f3k",
+    "published_at": 1771625719001,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943563298,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943563298,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently implement medication search, pharmacy branch lookup, city-code listing, and stock checks against Maccabi pharmacy endpoints; the health-related data involved is sensitive but directly tied to the stated purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are scoped to user-invoked Node CLI commands. The README suggests optional recurring checks, so users should only schedule those with clear consent and minimal logging, but the skill itself does not create persistence.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses standard skill-client or git clone flows; package.json declares no external dependencies and no install-time scripts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Outbound HTTPS requests to serguide.maccabi4u.co.il are necessary for real-time results and disclosed in the documentation, though network egress is not explicitly declared as a permission in the metadata.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No artifact-backed credential access, local file indexing, privilege escalation, background worker, destructive behavior, obfuscation, or hidden automatic execution was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The network use is real and not declared as a formal permission, but the docs and code make live Maccabi API querying central to the advertised feature and limit requests to that domain.\n[SQP-2] expected: Medication search terms are sent to Maccabi because remote catalog search is the core function; this is a privacy consideration rather than evidence of unrelated exfiltration.\n[SQP-2] expected: Stock checks send a medication identifier and city code to Maccabi, which can reveal health interest and approximate location, but this data flow is necessary for the user-requested availability lookup.",
+          "guidance": "Install only if you are comfortable sending medication names, drug identifiers, and selected city codes to Maccabi's service API. Avoid using shared logs or public notifications for sensitive medicines, and set up recurring checks only when the user clearly asks for them and can easily stop them.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it claims: it searches Maccabi pharmacy medication stock, but users should treat medication and city searches as sensitive health information.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943530663,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: maccabi-pharm-search\nVersion: 2.0.0\n\nThe skill is designed to search for medications and check stock at Maccabi pharmacies in Israel. The `pharmacy-search.js` script correctly sanitizes user input by using `encodeURIComponent` for URL parameters and passing other arguments as JSON body parameters, preventing shell or URL injection vulnerabilities. All network requests are directed to the legitimate Maccabi Healthcare Services API (`https://serguide.maccabi4u.co.il`). The `SKILL.md` and `README.md` files contain only instructions relevant to the skill's stated purpose and do not exhibit any prompt injection attempts against the agent or other malicious behaviors. No evidence of data exfiltration, persistence, or obfuscation was found.",
+          "checkedAt": 1779165786973,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "1e701e4913972ec052b6694bf67a46737682aba103bf06e3f733f6f67a171db4",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1e701e4913972ec052b6694bf67a46737682aba103bf06e3f733f6f67a171db4"
+    },
+    "slug": "maccabi-pharm-search",
+    "source_type": "clawhub",
+    "version": "2.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

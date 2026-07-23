@@ -1,0 +1,153 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "website"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.1417,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C01:token:find",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "category:C12:token:strategy",
+      "category:C19:token:browser",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:planning",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C06",
+      "C10",
+      "C12",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "plan"
+    ],
+    "tasks": [
+      "automate",
+      "build",
+      "manage",
+      "plan",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "603210ba12126371efa2a88b41c9ee0112985ae9656c721853110e7107f3c0c4",
+    "content_hash": "a713ebfa697aa52650b2b9813264973c520dc20ed5e2d503c565e537b8bfba79",
+    "skill_md_hash": "d1fc648125cf77ca18f0bb02ed12dc2163dc25cdc2059718e8f5fbe0352f605b",
+    "version_metadata_sha256": "7c14f265ed0a23f3d6ffc26841e7c3951ed58af1c098df7b6707def9a1819035"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/clementsutjiatma/skills/poker-agent",
+    "claim_id": "406855ccd5286910dd31afde58db910b14119b133e033dd3f36d460c8eae8e2e",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "poker-agent",
+        "url": "https://clawskills.sh/skills/clementsutjiatma-poker-agent"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "clementsutjiatma",
+    "owner_id": "s172rs42j853wm2p3ssbh1mmk9884xq4",
+    "published_at": 1771188431605,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968673908,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968673908,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill's capabilities match its stated purpose: registering for Poker Arena, claiming testnet aUSD, joining poker tables, polling game state, and submitting poker actions. It clearly states that sitting at a table deposits aUSD into on-chain escrow and that gameplay can use the stack, including all-in actions.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are scoped to one poker service and its API, but they allow state-changing gameplay actions. The artifact does not add an explicit confirmation checkpoint before sit, buy-in, bet, raise, or all-in actions, so users should set limits before use.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains only SKILL.md and metadata. There are no executable scripts, package installs, startup hooks, or local code execution paths.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill uses browser access to read a Privy user ID and sends it to the Poker Arena registration endpoint, then uses a generated bearer API key for future requests. This is sensitive but coherent with account registration for the stated service.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill tells the agent to store the service API key and agentId and to poll while seated. No hidden background worker, durable local indexing, privilege escalation, or unrelated persistence is present.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The example prompts are broad natural-language requests, but they are explicitly about Poker Arena actions and there is no artifact evidence of hidden auto-activation. This is a user-control guidance issue rather than a basis for Review by itself.\n[SQP-2] expected: Joining a table deposits testnet aUSD into escrow and can lead to loss through gameplay. The artifact discloses this, but users should confirm table, seat, and buy-in amount before asking the agent to sit.\n[E1] expected: The Privy user ID is read from the service's connect page and sent to the same Poker Arena API for registration. This is sensitive identity-linked data handling, but it is disclosed and directly tied to the registration purpose.",
+          "guidance": "Install only if you are comfortable letting the agent act on Poker Arena with your Privy-linked identity and a service API key. Keep the API key private, use testnet funds only, and give explicit limits for buy-in size, table choice, betting behavior, all-in actions, and when to leave the table.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This instruction-only poker skill is disclosed and purpose-aligned, but users should treat its API key and testnet poker funds carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968646745,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 25,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: poker-agent\nVersion: 1.1.1\n\nThe skill instructs the AI agent to perform browser automation (open a URL, wait, and read specific HTML attributes) to obtain a Privy user ID for registration, as detailed in `SKILL.md`. While this is for a stated purpose, it represents a powerful and risky capability that could be exploited if the agent's browser environment is not securely sandboxed or if the target page were compromised. Additionally, the skill involves handling an API key and interacting with an 'on-chain escrow contract' for 'testnet aUSD', which, despite being testnet, implies financial operations and secure credential management, adding to the overall risk profile.",
+          "checkedAt": 1779164358138,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "8ae4535c4ca1b4bc0f65e0926aea350c571d57cd94d72c22900d8b27106df676",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8ae4535c4ca1b4bc0f65e0926aea350c571d57cd94d72c22900d8b27106df676"
+    },
+    "slug": "poker-agent",
+    "source_type": "clawhub",
+    "version": "1.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

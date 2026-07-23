@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C02:token:language",
+      "category:C06:token:api",
+      "category:C19:token:device",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C19"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "17b4a2d3bbbead2ad1452a7a390a24952d56494cdbfcfae59bded199dc1bd0f8",
+    "content_hash": "bbc87b84c7a7b74a4817202eee7a29801c8dd9fc2fc84b3166daadda3cb55961",
+    "skill_md_hash": "5919324f3cb58a9fc5cd7e8baf8052f85e09df0a31b4850d39badcea91dc7be7",
+    "version_metadata_sha256": "c28d565411bd9023e45721addf0b1d3832e1af432800717475a7d1b31219e290"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/joeynyc/skills/govee-lights",
+    "claim_id": "1fd75416ac8f47963e5a9e7b680fec2e372d0d98c53c0324d5b007275989b5d0",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "govee-lights",
+        "url": "https://clawskills.sh/skills/joeynyc-govee-lights"
+      },
+      {
+        "index_path": "categories/smart-home-and-iot.md",
+        "label": "govee-lights",
+        "url": "https://clawskills.sh/skills/joeynyc-govee-lights"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "joeynyc",
+    "owner_id": "s17a1tgvjwy683ntj43f9608h9884gcd",
+    "published_at": 1769262109545,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783651569043,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783651569043,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, documentation, and Python script align around listing and controlling Govee smart lights; commands can immediately change real device state, which is expected for this purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime actions are user-invoked through documented commands, but partial name matching may affect the first matching device if the user gives an imprecise name.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Setup asks the user to install the common Python requests dependency and set GOVEE_API_KEY; there is no hidden installer, alternate package source, or automatic environment mutation.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The script reads only GOVEE_API_KEY and sends it as the Govee API authorization header to openapi.api.govee.com, which is proportionate to the disclosed integration behavior.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts show no background service, startup registration, file writes, privilege escalation, broad local access, or credential-store harvesting.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[TT3] expected: The GET request sends the Govee API key to the Govee API to list the user’s registered devices; this is normal authentication for the advertised integration, not evidence of unrelated credential exfiltration.\n[TT3] expected: The POST request sends the same API key and a device-control payload to the Govee control endpoint; this is the core function of the skill.\n[E1] expected: External transmission is limited to the disclosed Govee API host and contains device identifiers and control settings needed to operate the lights.\n[E2] expected: The only environment variable accessed is GOVEE_API_KEY, which the setup instructions explicitly require for Govee API authentication.",
+          "guidance": "Install only if you are comfortable giving the agent a Govee API key that can control devices on that account. Use exact device names or list devices first, keep the API key private and revocable, and consider using a virtual environment for the Python dependency.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to do what it advertises: control Govee lights through Govee’s API using a user-provided API key.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783651537830,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: govee-lights\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle for Govee lights is benign. The `scripts/govee.py` script correctly implements the stated purpose of controlling Govee smart lights by interacting with the official Govee API (`openapi.api.govee.com`). It securely retrieves the API key from the `GOVEE_API_KEY` environment variable and does not attempt to access other sensitive data, exfiltrate information, or establish persistence. The `SKILL.md` and `TROUBLESHOOTING.md` files provide clear, legitimate instructions for setup and usage, without any evidence of prompt injection attempts or malicious commands.",
+          "checkedAt": 1779159884989,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "4de520f109ba6e261176a4e255e1a0512f4a116a84c570e6dd5276946b6846df",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4de520f109ba6e261176a4e255e1a0512f4a116a84c570e6dd5276946b6846df"
+    },
+    "slug": "govee-lights",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

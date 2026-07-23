@@ -1,0 +1,128 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.475,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:image",
+      "cross-tag:design"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "9f69cc02b73d4afb9442fae918becf11f467636dc12771baf2c9bd8a545d55bb",
+    "content_hash": "0373f71ad54ed0591f10b81e513c0825121b059ec2efbc6f3b1a6d294a21d276",
+    "precanonical_content_hash": "258d334f3af91ea624a11a0c0f0c03c8aa915efcbb049c1f448443192ecc301a",
+    "skill_md_hash": "a1cf4a69c0e957eaab88cdd14c089a4d5673b43c4f659ebe9e6254a0c46c20ce",
+    "version_metadata_sha256": "7e8e4196f844efef46ea80c76d562294cb80e4a73a57114bd89199d90ffb88f1"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/qrost/skills/svg-to-image",
+    "claim_id": "7bd06c381ca3efa367eda3d742e43cba4c1f527c78daab086a5fd3905cbab68c",
+    "index_entries": [
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "svg-to-image",
+        "url": "https://clawskills.sh/skills/qrost-svg-to-image"
+      }
+    ],
+    "owner_handle": "qrost",
+    "owner_id": "s178f7h4jz91qjvzt9q84pekv5885hjd",
+    "published_at": 1771638013177,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943644428,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943644428,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, metadata, and script align: it reads a user-selected SVG and writes a PNG or JPG output.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill tells the agent to run the converter and send the generated image without a second confirmation, but this is scoped to explicit SVG conversion or image-sending requests.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation requires manual Python dependencies, and requirements.txt leaves CairoSVG and Pillow unpinned; current PyPI pages list CairoSVG 2.9.0 and Pillow 12.2.0, but pinning would improve reproducibility. ([pypi.org](https://pypi.org/project/CairoSVG/))",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The shell execution permission and output writes are proportionate for a local file conversion utility, though users should avoid converting untrusted or unexpectedly large SVGs.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, credential access, background workers, privilege escalation, deletion logic, or explicit data exfiltration was found in the artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: Creating a raster output and sending it to the user is the advertised workflow; the no-extra-confirmation instruction is a usability choice, not hidden behavior, but users should ensure the input path is intended.\n[SC1] unexpected: Unpinned dependencies are a real supply-chain and reproducibility weakness, but not evidence of malicious behavior.\n[SC4] expected: CairoSVG and Pillow are standard for this purpose and the artifact does not pin known-vulnerable versions; vulnerability risk is still relevant because SVG/image parsing is the core attack surface, with CairoSVG CVE-2026-31899 fixed by upgrading to 2.9.0 or higher and Pillow CVE-2023-50447 patched in 10.2.0. ([security.snyk.io](https://security.snyk.io/vuln/SNYK-PYTHON-CAIROSVG-15610289))",
+          "guidance": "Install only if you are comfortable with the agent running a local Python converter after you ask for SVG conversion. Use trusted SVG files, keep dependency versions current or pinned in sensitive environments, and avoid ambiguous input paths or files from untrusted sources.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward SVG-to-PNG/JPG converter with normal local execution and dependency hygiene cautions, not evidence of hidden or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943572951,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: svg-to-image\nVersion: 1.1.1\n\nThe skill is classified as suspicious due to its use of the high-risk `shell:exec` permission and instructions in `SKILL.md` that constitute a prompt injection against the agent, telling it to 'run the script directly' and 'Do not ask for confirmation'. While the script `scripts/convert_svg.py` itself appears to perform its stated function without explicit malicious code (e.g., no data exfiltration, network calls, or persistence mechanisms), processing user-supplied file paths and SVG content carries inherent vulnerabilities like potential path traversal or resource exhaustion. The prompt injection aims to streamline the intended (benign) operation, not to hide malicious activity, but it bypasses agent safeguards.",
+          "checkedAt": 1779165805059,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "a01f126fd4f2a978a928ae12271dac174a742b2bfe35ece56c618921978f9b32",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a01f126fd4f2a978a928ae12271dac174a742b2bfe35ece56c618921978f9b32"
+    },
+    "slug": "svg-to-image",
+    "source_type": "clawhub",
+    "version": "1.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,152 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.375,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C05:token:creative",
+      "category:C05:token:image",
+      "category:C05:token:video",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "category:C10:token:model",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C06",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "manage",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "55e1e3cd895b508031f8b242104f6fb8e0980f8cc68514273b06567853079197",
+    "content_hash": "634e642e686769fd1111b800a8958a09f1af7c1d16cf215f842e14845f4c494d",
+    "precanonical_content_hash": "169be1c9d9a6f8e05bd6d34b217de92e622c23d2479976a409655ecd44b75c43",
+    "skill_md_hash": "4ea71140724f949052d16e7b6adbf8cac5490c143c7fba93b91240815dd83379",
+    "version_metadata_sha256": "2d8d28314747b0df1c65af9de6712e36db974234153587401861b65f498871dd"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/blovett80/skills/pixeldojo",
+    "claim_id": "6a5748793e38ac5781ddb65e0ab014414f9324a5fd9afa9b4923dd048a3dc56c",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "pixeldojo",
+        "url": "https://clawskills.sh/skills/blovett80-pixeldojo"
+      }
+    ],
+    "owner_handle": "blovett80",
+    "owner_id": "s176tm9wd6cx4g9f9q011vrj6h83pc9z",
+    "published_at": 1773072683265,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779953367555,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779953367555,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts list models, submit generation prompts, poll job status, and download returned media, which matches the stated PixelDojo image/video generation purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Instructions are limited to setup and generation workflows, but users should understand that prompts, image URLs, and job metadata are sent to PixelDojo's external API.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains visible markdown, JSON, shell, and Python helpers; no install-time bootstrapper, hidden package fetch, or automatic execution was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "PIXELDOJO_API_KEY, curl, jq, python3, and outbound network access are proportionate and disclosed for this API integration; PIXELDOJO_API_BASE is overrideable and should stay pointed at a trusted endpoint.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Generated assets are written to disclosed folders under ~/Pictures/AI Generated or to a user-specified output path; no background persistence, privilege escalation, or broad local data access was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The third-party data-flow concern is valid user guidance, but the artifact repeatedly identifies PixelDojo's API, API base, API key, prompts, image URLs, and downloads, so it is not evidence of hidden or purpose-mismatched behavior.\n[TT3] expected: The helpers download output URLs returned by the configured API; stricter host validation would be useful hardening, but downloading generated media is core functionality and no exfiltration behavior was found.\n[LP3] expected: The skill uses shell helpers, network access, and an API key, and the reviewed SKILL.md/api.json disclose the required environment variable and binaries; the remaining issue is transparency granularity, not a Review-level concern.",
+          "guidance": "Install only if you intend to use PixelDojo and are comfortable sending prompts, input image URLs, and generation requests to that service under your API key. Avoid submitting secrets or sensitive personal content, keep PIXELDOJO_API_BASE at the default unless you trust another endpoint, and choose output paths carefully because results are saved locally.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "PixelDojo is a disclosed helper for using PixelDojo's image and video generation API, with expected API key use, network calls, and local media downloads.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779953324091,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 6,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: pixeldojo\nVersion: 1.3.3\n\nThe PixelDojo skill bundle provides a legitimate integration for an AI image and video generation service. It includes shell and Python scripts (generate.sh, models.sh, scripts/generate-nano-banana.py) that interact with the https://pixeldojo.ai API to list models, submit generation tasks, and download the resulting media files. The implementation follows standard practices, such as using environment variables for API keys and sanitizing user input for filenames, with no evidence of malicious intent or data exfiltration.",
+          "checkedAt": 1779166548750,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "9d87848dc97c489aab4f0cd6013a1716a9f490f4bdb660e89dd5988bb6ab8f55",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/9d87848dc97c489aab4f0cd6013a1716a9f490f4bdb660e89dd5988bb6ab8f55"
+    },
+    "slug": "pixeldojo",
+    "source_type": "clawhub",
+    "version": "1.3.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

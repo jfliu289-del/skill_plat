@@ -1,0 +1,133 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:lookup",
+      "category:C06:token:api",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "9820d2f6e1e654a9fe132024a25e968e17efe3cacb2727ace2becaac959dfd79",
+    "content_hash": "8dc085cd7e88147147e980ddc32e7b5edbb5c978bf686997e8476ff1411346b3",
+    "precanonical_content_hash": "215795c153c545faa9dac1493e353ae2c9ca399079d13a3d421fabb0ad0a6299",
+    "skill_md_hash": "d8a137f982c17cf0d9f7fabcdb2cfbe673a0ff3d73e3826e61903ea1d6535b3b",
+    "version_metadata_sha256": "d9fbd1c40a496f7527cc575756cab2a8bbef7c8ce5387075651d0a1fd34152a9"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/setdemos/skills/filehost",
+    "claim_id": "91b1a24f2aaa01bc72c9cbfe3b9b085ab52cc37f01435167a793ecc84c00f7d8",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "filehost",
+        "url": "https://clawskills.sh/skills/setdemos-filehost"
+      }
+    ],
+    "owner_handle": "setdemos",
+    "owner_id": "s1774yr46eyp06hexnd3zyd55x83rzhj",
+    "published_at": 1771858879923,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779953348761,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779953348761,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is file hosting, account registration, listing, metadata lookup, and deletion for lmfiles.com, and the artifacts only implement those lmfiles.com API operations.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions disclose the external service, API key and bootstrap token roles, public download links, size limits, and pre-upload safety checks; one helper permits passing the bootstrap token as an argument, so using the environment variable is safer.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains SKILL.md and small bash helper scripts only, with no install-time execution, package hooks, dependency installation, or hidden setup behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Sending a bootstrap token and selected local files to lmfiles.com is expected for this integration, but it is sensitive and should be limited to files the user explicitly wants to publish.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background workers, persistence mechanisms, privilege escalation, credential-store scraping, broad local indexing, or unrelated local file access were found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[E1] expected: The external transmission finding is supported by the artifact, but it is the core advertised function of a file-hosting skill and is paired with disclosed credential use, lmfiles.com-only endpoints, and public-upload warnings, so it does not justify Review by itself.\n[staticScan] expected: Static scan reported no findings, and direct artifact inspection found only scoped curl calls to lmfiles.com.\n[VirusTotal] expected: VirusTotal telemetry was clean; this was treated as supporting signal rather than the basis for the verdict.",
+          "guidance": "Install only if you trust lmfiles.com with the files you choose to upload. Keep LMFILES_API_KEY and LMFILES_BOOTSTRAP_TOKEN secret, prefer environment variables over command-line token arguments, and do not upload credentials, private documents, or anything you would not want accessible through a public link.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward lmfiles.com file-hosting helper; the main risk is that uploaded files become publicly reachable by link.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779953304847,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: filehost\nVersion: 1.0.2\n\nThe skill bundle is designed to integrate with lmfiles.com for file hosting. All `curl` commands target the specified `lmfiles.com` domain, and API keys are handled via environment variables. The shell scripts (`scripts/*.sh`) employ good security practices such as `set -euo pipefail` and proper quoting of user-provided arguments (e.g., filenames, file IDs, usernames) to prevent shell injection. Crucially, the `SKILL.md` explicitly includes 'Safety checks before upload' instructions, guiding the AI agent to confirm file safety, avoid uploading secrets, and ask the user if uncertain, which acts as a defense against prompt injection leading to accidental data exposure. There is no evidence of data exfiltration, persistence mechanisms, or execution of arbitrary remote code.",
+          "checkedAt": 1779166521612,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "dfccd152bcdb986d5fd44262295c5d5650fa2ff1f8d4ab4ab7d6fbbfe23f87ff",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/dfccd152bcdb986d5fd44262295c5d5650fa2ff1f8d4ab4ab7d6fbbfe23f87ff"
+    },
+    "slug": "filehost",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

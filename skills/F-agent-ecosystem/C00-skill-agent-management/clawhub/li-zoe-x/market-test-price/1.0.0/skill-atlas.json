@@ -1,0 +1,157 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.1417,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C07:token:test",
+      "category:C09:token:security",
+      "category:C12:token:market",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "cross-tag:testing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C07",
+      "C09",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "secure",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "85d4e1cd73dd159fcd3dd61831889f1f6973305a7b0b1d38831fada14a95fe70",
+    "content_hash": "5a1bf97d565bd6a7d4c38f3bc1ca1b98425fd3d0ebaf0e18d505bcbee7e52f8f",
+    "precanonical_content_hash": "ba278a9e8f1a22bbb484d1f17629674c0d9178e445fb3a3f91f146a892edcc1b",
+    "skill_md_hash": "2943f2881a3977f54cdc1e209d7e074e785d7b963deb4384ed9f3de3205fee3d",
+    "version_metadata_sha256": "9ebe1ca1448fb2aedbd0ef077c5724ae202258a15149a20a2ba2f9fa9b68dc96"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/li-zoe-x/skills/market-test-price",
+    "claim_id": "08d54476ce015a5fe9ab837f76116fe40fa53ea9ff4e171f5f9d8871009f2740",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "market-test-price",
+        "url": "https://clawskills.sh/skills/li-zoe-x-market-test-price"
+      }
+    ],
+    "owner_handle": "li-zoe-x",
+    "owner_id": "s1772xnyeexb2g85pjf9drw2ps885d5e",
+    "published_at": 1771647931918,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943805890,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943805890,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe and implement fetching token prices from the OKX DEX Market Price API using authenticated POST requests to the documented OKX endpoint.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The runtime instructions focus on validating token inputs, signing the request, sending it to OKX, and parsing the response; no hidden control, unrelated workflow, or destructive action is present.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no automatic installer; the Python script requires the third-party requests package and tells the user to install it manually if missing.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill reads OKX_ACCESS_KEY, OKX_SECRET_KEY, and OKX_PASSPHRASE and sends signed requests to OKX; this is sensitive but clearly aligned with the stated API-integration purpose.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The declared allowed_tools include bash_tool and file-editing tools, which are broader than the narrow API call itself, but the artifacts do not instruct hidden shell use, persistence, privilege escalation, or broad file modification.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The scanner concern about environment credentials and outbound network access is valid context, but the specific OKX variables and OKX API endpoint are disclosed and necessary for signed OKX requests.\n[VirusTotal code_insight] expected: The concern about broad allowed_tools is worth user awareness, but artifact review found no instructions that use those tools for hidden, unrelated, automatic, or destructive behavior.",
+          "guidance": "Use this only with an OKX API key you are comfortable using for market-data requests, keep the secret and passphrase out of chats and logs, and remember that queried token addresses are sent to OKX.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed OKX token-price helper that uses OKX credentials only to sign the expected price API request.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943763189,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: market-test-price\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to requesting overly broad permissions for its stated purpose. The `SKILL.md` file lists `bash_tool` and `create_file` in `allowed_tools`. While the core Python script `scripts/market_test_price.py` does not directly utilize these high-privilege tools (it uses standard Python libraries for HTTP requests), granting an AI agent arbitrary shell execution (`bash_tool`) and file creation (`create_file`) capabilities for a simple 'fetch token prices' skill introduces a significant attack surface for prompt injection or agent misuse, potentially leading to remote code execution or unauthorized file system modifications.",
+          "checkedAt": 1779165834461,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "85d4e1cd73dd159fcd3dd61831889f1f6973305a7b0b1d38831fada14a95fe70",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/85d4e1cd73dd159fcd3dd61831889f1f6973305a7b0b1d38831fada14a95fe70"
+    },
+    "slug": "market-test-price",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

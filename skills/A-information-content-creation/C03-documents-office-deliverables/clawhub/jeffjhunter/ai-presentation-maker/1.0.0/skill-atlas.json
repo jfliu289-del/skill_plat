@@ -1,0 +1,169 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "document",
+      "report",
+      "website"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional",
+      "security-professional"
+    ],
+    "confidence": 0.3341,
+    "domains": [
+      "creative",
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C03",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C02:token:edit",
+      "category:C03:token:pdf",
+      "category:C03:token:presentation",
+      "category:C03:token:slides",
+      "category:C04:token:data",
+      "category:C07:token:quality",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:data-analysis",
+      "cross-tag:design",
+      "cross-tag:planning",
+      "cross-tag:security",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C02",
+      "C04",
+      "C07",
+      "C09",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "automate",
+      "design",
+      "manage",
+      "plan",
+      "secure",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "5d2e7b073dfff4683eefc4c1d6e21d22dd8d7ef7fa72042e1bf6236db309d0eb",
+    "content_hash": "4c680e4a0d778c1fcc0c79149be135959bf4e38fd6aea5ad6d4550b057e59780",
+    "precanonical_content_hash": "c9cd9dc91868ab5b1144af56d73248b1122f1d1df1d0c90e8430cb739daad84f",
+    "skill_md_hash": "42fecc0a6659aa3cceb9f0145555e804ae5194aedb8ec142bff59b794d240cf4",
+    "version_metadata_sha256": "f4d75eb139ddd02e88934dafb43bc5efec8f4d3c7dc598901566095f23795b6c"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jeffjhunter/skills/ai-presentation-maker",
+    "claim_id": "ddabf69195df7f4d2ec11075a0cdd7949a78299d7e7751bd2ba4b9eff33b7497",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "ai-presentation-maker",
+        "url": "https://clawskills.sh/skills/jeffjhunter-ai-presentation-maker"
+      }
+    ],
+    "owner_handle": "jeffjhunter",
+    "owner_id": "s17fhgfbdhz4g6yqeha2egykyx83grhe",
+    "published_at": 1771653850272,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943849478,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943849478,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts match the stated purpose: interviewing for deck content, saving presentations locally, and exporting to Markdown, HTML, PPTX, PDF, or Gamma markdown. The main caveat is that HTML export may preserve user-provided HTML-like content rather than treating all slide text as plain text.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill tells the agent to run local commands itself, but generally scopes file operations to ~/workspace/presentations/ through the helper script. Natural-language command handling is broad, but destructive deletion is documented as requiring confirmation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "First-run setup creates local presentation folders, copies the bundled helper script, and marks it executable. No remote installer, credential setup, or privileged installation mechanism is shown.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Local file access is mostly proportionate for a deck generator. Optional AI Persona OS integration may read SOUL.md or AGENTS.md for speaker info, and generated HTML can load remote fonts despite offline/self-contained messaging.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Presentation metadata, deck markdown, archives, and exports persist under ~/workspace/presentations/. No elevated privileges, background workers, credential stores, or exfiltration behavior appear in the artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] unexpected: The Google Fonts dependency is confirmed in generated HTML. It is not malicious, but it weakens the no-network/offline expectation and should be disclosed clearly.\n[SDI-4] expected: Checking for SOUL.md and AGENTS.md and optionally using speaker info is consistent with the advertised AI Persona OS integration, but users should approve reading those profile files before use.\n[SDI-2] expected: Persona-file ingestion is purpose-aligned for pre-filling speaker identity, yet it can expose broader local profile context than a presentation tool strictly needs.\n[SDI-4] expected: Saving raw JSON and Markdown is core functionality. The stronger issue is downstream handling: HTML export does not consistently escape slide body content, so untrusted pasted material should not be exported blindly.\n[SQP-1] expected: Broad creation triggers are normal for a chat-driven presentation tool; the artifacts still require an interview and confirmation before proceeding.\n[SQP-1] expected: Flexible command mapping is expected for in-chat editing. File-changing operations should remain explicitly user-directed, especially delete, archive, overwrite, and export.\n[SQP-2] unexpected: The remote stylesheet import is confirmed. It is a privacy and offline-use caveat, not evidence of exfiltration or malicious intent.\n[staticScan] expected: The static scan reported no suspicious patterns, which is consistent with the artifact review.\n[VirusTotal-code_insight] expected: VirusTotal telemetry was clean and aligns with the observed absence of credential theft, remote control, or destructive behavior, but it was not used as the sole basis for the verdict.",
+          "guidance": "Install only if you are comfortable with local presentation files being created under ~/workspace/presentations/. For sensitive environments, avoid or modify HTML exports because they may contact Google Fonts and may preserve untrusted HTML-like slide content. Review any use of SOUL.md or AGENTS.md before allowing the skill to prefill speaker details.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent local presentation-making skill, with some privacy and HTML-export caveats users should understand.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943782237,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 78,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ai-presentation-maker\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill 'ai-presentation-maker' is classified as benign. The `SKILL.md` explicitly instructs the AI agent to route all file operations through `assets/presentation-helper.sh` and to never construct raw shell commands with user input, confining all operations to `~/workspace/presentations/`. The `presentation-helper.sh` script implements robust security measures, including `sanitize_string()` to remove shell metacharacters, `sanitize_filename()` to strictly whitelist characters for file names, and `validate_path()` using `realpath -m` to prevent path traversal. All file operations and external script calls are performed with sanitized inputs, demonstrating a strong commitment to security and preventing common vulnerabilities like shell injection. There is no evidence of intentional malicious behavior such as data exfiltration, unauthorized remote control, or persistence mechanisms.",
+          "checkedAt": 1779165844635,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "2aaa22b03073606dd77a92cc785d4eec76f33a8e1f62f02b2646d0e9a2ce1db8",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/2aaa22b03073606dd77a92cc785d4eec76f33a8e1f62f02b2646d0e9a2ce1db8"
+    },
+    "slug": "ai-presentation-maker",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

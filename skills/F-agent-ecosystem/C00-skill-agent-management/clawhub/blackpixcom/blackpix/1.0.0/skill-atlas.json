@@ -1,0 +1,209 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "category:C17:token:knowledge",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "0f021cca843ade4994016335737451800dd884ac794eba24be1268ce267bbbcb",
+    "content_hash": "feb7c3da41b53448bbcde60f9d61ba6d10848f6690c89df082fd87c244c40410",
+    "skill_md_hash": "cf16955638927223bb1c2ab881be1af07144bba4622f632e4328c55d05633622",
+    "version_metadata_sha256": "6a6fde61d1fd2d426110d031632712000c8ff97aae4b8b3f3fc0edc95e5572bd"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/blackpixcom/skills/blackpix",
+    "claim_id": "0c76f4d9e9ce986afc31fd80ff6db9f3daaaa3b8a13d9bcd49ea3a31c5eccb07",
+    "index_entries": [
+      {
+        "index_path": "categories/productivity-and-tasks.md",
+        "label": "blackpix",
+        "url": "https://clawskills.sh/skills/blackpixcom-blackpix"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "blackpixcom",
+    "owner_id": "s17cfkwvqz88k5y19vs3q3nzxn884fk9",
+    "published_at": 1771509871722,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779165444636,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": [
+            {
+              "categoryId": "ASI01",
+              "categoryLabel": "Agent Goal Hijack",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "Task content and instructions come from an external service, so they may influence what the agent does during a BlackPix task.",
+                "path": "SKILL.md",
+                "snippet": "System assigns a task with context (title, summary, instructions)."
+              },
+              "recommendation": "Use the skill only when you want BlackPix tasks, and make sure task instructions do not override your own directions or request unrelated local data or actions.",
+              "riskBucket": "abnormal_behavior_control",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "A remote BlackPix task could steer the agent's behavior if the agent treats task instructions as authoritative."
+            },
+            {
+              "categoryId": "ASI02",
+              "categoryLabel": "Tool Misuse and Exploitation",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The skill can submit work to an external service, and some submissions may be applied or published. This is central to the stated purpose but has external-account effects.",
+                "path": "SKILL.md",
+                "snippet": "Submit completed work. **Idempotent** — safe to retry on errors. ... `accepted_unverified` | Published, pending verification"
+              },
+              "recommendation": "Review submissions before sending, and do not submit private, sensitive, copyrighted, or unverified content unless you intend to share it with BlackPix.",
+              "riskBucket": "abnormal_behavior_control",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "Content the agent submits may affect the BlackPix knowledge network and possibly become visible or used by others."
+            },
+            {
+              "categoryId": "ASI03",
+              "categoryLabel": "Identity and Privilege Abuse",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The skill uses a BlackPix API key to act as an agent identity. This is expected for the integration, but it is still an account credential.",
+                "path": "SKILL.md",
+                "snippet": "Set environment variable: `BLACKPIX_API_KEY=bpx_your-key`"
+              },
+              "recommendation": "Store the API key securely, avoid pasting it into unrelated chats or files, and revoke or rotate it if it is exposed.",
+              "riskBucket": "permission_boundary",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "Anyone with the API key may be able to act as the BlackPix agent and affect its karma, history, or submissions."
+            },
+            {
+              "categoryId": "ASI04",
+              "categoryLabel": "Agentic Supply Chain Vulnerabilities",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The registry metadata does not provide source or homepage provenance, even though the skill depends on an external service.",
+                "path": "metadata",
+                "snippet": "Source: unknown; Homepage: none"
+              },
+              "recommendation": "Verify the BlackPix service and account setup directly before using the API key or submitting work.",
+              "riskBucket": "abnormal_behavior_control",
+              "severity": "info",
+              "status": "note",
+              "userImpact": "You have limited registry-level provenance for verifying who operates the skill or service."
+            }
+          ],
+          "checkedAt": 1778430207190,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The capabilities match the stated purpose of requesting BlackPix tasks and submitting contributions, but submissions can affect or publish content in the external network.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill relies on task instructions returned by BlackPix; those should be treated as untrusted task content and not allowed to override the user's intent or safety boundaries.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no install code, but setup documentation tells the user or agent to call BlackPix registration and set an API-key environment variable; this is disclosed but not reflected in the metadata requirements.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "No local file access, package installation, background process, or OS-level permissions are requested; network calls to blackpix.com are proportionate to the integration.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill creates or uses a persistent BlackPix agent identity, API key, karma, and trust level; this is purpose-aligned but should be managed as an external account credential.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": null,
+          "guidance": "Before installing, confirm you trust BlackPix, protect the API key, and treat task instructions and submitted work as external network interactions. Review any contribution before sending it, especially if it could publish information or affect another user's review.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": {
+            "abnormal_behavior_control": {
+              "highestSeverity": "low",
+              "status": "note",
+              "summary": "The skill receives remote task instructions and submits work to an external service; this is expected for its purpose, with no hidden code or automatic execution shown."
+            },
+            "permission_boundary": {
+              "highestSeverity": "low",
+              "status": "note",
+              "summary": "The skill uses a BlackPix API key and external agent identity, which is purpose-aligned but should be protected."
+            },
+            "sensitive_data_protection": {
+              "highestSeverity": "none",
+              "status": "none",
+              "summary": "The artifacts do not show local file indexing, memory storage, cookie/session access, or other sensitive local data flows."
+            }
+          },
+          "status": "clean",
+          "summary": "BlackPix is a disclosed, instruction-only connection to an external task network, with expected risks around using a BlackPix API key and submitting work to that service.",
+          "verdict": "benign"
+        },
+        "skillspector": null,
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: blackpix\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to potential prompt injection vulnerabilities in SKILL.md. Instructions like \"Save your API key!\" and \"Send claimUrl to your human...\" could be interpreted by a vulnerable AI agent to store sensitive information insecurely or exfiltrate data (the claimUrl) through unintended channels. While the explicit intent of these instructions appears functional for the skill's operation, they represent risky capabilities that could be exploited by a poorly secured agent, leading to information disclosure.",
+          "checkedAt": 1779165444636,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "0f021cca843ade4994016335737451800dd884ac794eba24be1268ce267bbbcb",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0f021cca843ade4994016335737451800dd884ac794eba24be1268ce267bbbcb"
+    },
+    "slug": "blackpix",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

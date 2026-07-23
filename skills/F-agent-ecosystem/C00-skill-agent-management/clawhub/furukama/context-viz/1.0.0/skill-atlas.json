@@ -1,0 +1,122 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C17:token:notes"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "607dabe85bf1d638ffcc48e3d4b6645acb509b53706e4598d85fdcd55eb82fe9",
+    "content_hash": "b9544f17fd65ad0fad4e57badf832225bd6953652159720dcc358c9c79434a12",
+    "precanonical_content_hash": "8152ea6bad6aff9a4dde964d3e4975bbff96914bc2d6ffab19312454fc32003c",
+    "skill_md_hash": "7ec701e83bdfdfcc5b9163fd77dfee3a46f6fe73ea10d4e411610171eb9bb563",
+    "version_metadata_sha256": "5ec2cc36213067f26e56906a435dd655d571495453ccbcf0ed84f2211a8b5cb2"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/furukama/skills/context-viz",
+    "claim_id": "1c2212e082272183f75867015581c56f080ee3048eaa2ce1d96d09142ceea52d",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "context-viz",
+        "url": "https://clawskills.sh/skills/furukama-context-viz"
+      }
+    ],
+    "owner_handle": "furukama",
+    "owner_id": "s173zrqxja3p5fvf7pqdm8zm0984am63",
+    "published_at": 1771316872289,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972254498,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972254498,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The core behavior matches the stated purpose: it estimates token usage for known workspace files and displays a context breakdown. It also includes a disclosed Memory on Disk section that summarizes workspace/memory categories, counts, token estimates, and sizes.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are limited to context-size questions, running session_status, executing the bundled estimator, and formatting a report; they do not override user control or request unrelated actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "No package install, external download, or setup persistence is present. The only executable artifact is a bundled Python script.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The helper reads selected top-level workspace files and recursively reads text files under workspace/memory to compute estimates. That local file access is disclosed and proportionate for the visualization, but users should expect private workspace metadata to be summarized.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill does not write files, create background tasks, request credentials, or persist data. It only reads local files and prints JSON output.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The file reads are real, but the skill text explicitly tells the agent to run a workspace-token estimator. The missing formal permission declaration is a transparency note, not a standalone Review concern here.\n[TP4] expected: The memory inventory is not hidden: SKILL.md has a dedicated Memory Inventory section and the version changelog also describes it. It summarizes categories rather than exporting contents.\n[SDI-1] expected: The script recursively scans workspace/memory and reads text files to estimate totals, but outputs aggregate category counts, token estimates, and byte sizes, with no network transmission or file contents.\n[SDI-1] expected: The output includes both context components and a clearly labeled Memory on Disk section. This is extra metadata beyond current context, but it is disclosed as not in context and does not materially change the benign assessment.",
+          "guidance": "Install only if you are comfortable with a local script reading the chosen workspace's standard context files and memory/ directory to produce size and category summaries. Avoid pointing it at unrelated or highly sensitive directories.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill transparently runs a local helper to estimate context usage and memory size, without network transfer, persistence, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972218376,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 71,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: context-viz\nVersion: 1.0.0\n\nThe skill 'context-viz' and its associated script `scripts/estimate_tokens.py` are designed to visualize the OpenClaw agent's context window usage and memory inventory. The `SKILL.md` provides clear, non-malicious instructions for the agent to run the local Python script and process its output. The Python script reads files from the specified workspace path and its 'memory' subdirectory to estimate token counts and file sizes, outputting this data as JSON to stdout. There is no evidence of data exfiltration, unauthorized network communication, persistence mechanisms, or execution of arbitrary commands. The file access is directly aligned with the stated purpose of analyzing workspace and memory files for token estimation, and there are no prompt injection attempts against the agent in `SKILL.md`.",
+          "checkedAt": 1779164774507,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a93e3999300616054b6b3a836bd983e10447b5954c64a0c5f534f3db28351cf6",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a93e3999300616054b6b3a836bd983e10447b5954c64a0c5f534f3db28351cf6"
+    },
+    "slug": "context-viz",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

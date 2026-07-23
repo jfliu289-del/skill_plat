@@ -1,0 +1,125 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "cross-tag:agent-management",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d4555e0f15146f8078ac649af51aa1eb4dd4459edd09d475e2f0547af51b83b6",
+    "content_hash": "c00c9ea8a70ddc21f343f3790dd1d5f380ce11eefc870056633dada4645cad74",
+    "precanonical_content_hash": "16e560cf4535c7e830d14ef1582f72e799f11512c62b9171a8a7dbf23b5da9d0",
+    "skill_md_hash": "9aabfd59761065b1fc6e38b074eb1075328860f86c3448944cd88dd1ef4fddd6",
+    "version_metadata_sha256": "557bf85d889f3811086d6d4060984eaa693dd68cdd3a879b46738b685a18d2e1"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/roasbeef/skills/lnd-macaroon-bakery",
+    "claim_id": "19407fdbfe92853c8a09d9cb0437b70c1bfc5b48e77a495480913e721525f2fe",
+    "index_entries": [
+      {
+        "index_path": "categories/transportation.md",
+        "label": "lnd-macaroon-bakery",
+        "url": "https://clawskills.sh/skills/roasbeef-lnd-macaroon-bakery"
+      }
+    ],
+    "owner_handle": "roasbeef",
+    "owner_id": "s17ct3pzdm5xvjjh7x3qs5z3kn884ax4",
+    "published_at": 1770777646123,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968923579,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968923579,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to bake, inspect, and manage least-privilege LND macaroons, and the artifacts implement that purpose with preset roles, custom permissions, inspection, and rotation guidance. Some roles can authorize payments, channel management, or signing, so the capability is sensitive but expected.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are explicit user-run examples for local, Docker, and remote LND nodes. The remote-node example references an admin-capable macaroon, which is sensitive, but the broader documentation warns against production admin.macaroon use and describes macaroons as bearer tokens.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains SKILL.md and an executable shell script. The script invokes lncli, jq, and optionally docker exec/docker cp; this is disclosed and necessary for interacting with LND nodes and containers.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Access to LND directories, TLS certs, macaroon files, remote RPC endpoints, and Docker containers is proportionate to the skill's purpose, but these are high-value resources that require careful user control.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The script creates persistent macaroon files at user-specified or documented default paths and sets mode 0600. Temporary container files are removed, and there is no evidence of background persistence or privilege escalation beyond user-invoked commands.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The concern about remote TLS certs and admin-capable macaroons is valid as user guidance because those are sensitive bearer credentials, but the behavior is part of the disclosed remote-baking workflow and is not hidden or purpose-mismatched.\n[staticScan] expected: Static scan reported no findings, and artifact review did not identify hidden exfiltration, destructive behavior, or unrelated command execution.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with the reviewed artifacts; it was treated as supporting signal rather than the basis for the verdict.",
+          "guidance": "Install only if you intend to manage LND macaroons. Use the narrowest role possible, avoid copying or using admin.macaroon except for tightly controlled setup, protect TLS certs and macaroon files like passwords, verify generated permissions before deployment, and run the script only with trusted lncli, jq, and Docker environments.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed LND credential-management helper that handles sensitive macaroons but does not show hidden or unrelated behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968901898,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: lnd-macaroon-bakery\nVersion: 1.0.0\n\nThis skill bundle provides tools to bake, inspect, and manage LND macaroons, which is a security-focused task aimed at implementing least-privilege access. The `SKILL.md` documentation clearly outlines the purpose and usage, with no evidence of prompt injection or instructions for malicious actions. The `scripts/bake.sh` script correctly uses `lncli` to perform macaroon operations, handles arguments with proper quoting, and includes security best practices like setting restrictive file permissions (chmod 600). While it utilizes powerful commands like `docker exec` and `docker cp`, these are used for their intended purpose of interacting with LND nodes running in containers or remotely, without any indication of malicious intent such as data exfiltration, persistence, or unauthorized command execution.",
+          "checkedAt": 1779163073598,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "2c0e35894d7cce3909415840e3922c29619a7e3f87d25b419b0d1133f24567de",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/2c0e35894d7cce3909415840e3922c29619a7e3f87d25b419b0d1133f24567de"
+    },
+    "slug": "lnd-macaroon-bakery",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

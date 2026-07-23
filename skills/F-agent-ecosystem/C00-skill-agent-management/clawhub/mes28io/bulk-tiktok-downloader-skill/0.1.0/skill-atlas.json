@@ -1,0 +1,131 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.475,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "cross-tag:agent-management",
+      "cross-tag:design"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "design",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a9ea6c53aba1f868cfc340abf9d2373493def5efded742158e35f33a74fcbf59",
+    "content_hash": "7c9850c32e24e5f29564c5c077894a41fd538cc930d8f670d2bedabe329a92c8",
+    "precanonical_content_hash": "7566485e7d1bbffd23ad7dba5a560efbdf28fa01de47f73e5322925820ff4275",
+    "skill_md_hash": "2d91bd0db769fe4753245067c11946ac7b4a1a2e1c8c8b5cabf418901066a533",
+    "version_metadata_sha256": "10c452cc7a13df6e24756144e82f9837c9bbe50a78c5e346c6b2d858bde5c005"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/mes28io/skills/bulk-tiktok-downloader-skill",
+    "claim_id": "b5a8cd47010ba62aeae581b68fc017047cddfc181b177d3ac28d57f93173e6eb",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "bulk-tiktok-downloader-skill",
+        "url": "https://clawskills.sh/skills/mes28io-bulk-tiktok-downloader-skill"
+      }
+    ],
+    "owner_handle": "mes28io",
+    "owner_id": "s17f4asmmbk384vzwe6z88t6hn885rb9",
+    "published_at": 1771805391625,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779950827990,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779950827990,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifacts: it reads a user-provided URL list, uses yt-dlp to download videos, and saves them to a user-selected folder. It does not enforce TikTok-only domains, so the URL list controls what yt-dlp processes.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions cover setup, running the downloader, troubleshooting, and legal/safety guidance. No prompt overrides, hidden role changes, automatic execution, or unrelated actions were found.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation uses pip to install yt-dlp with a minimum version constraint rather than a fully pinned reviewed dependency. This is common for this use case but carries normal package-resolution and supply-chain considerations.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading a local input file, making network requests through yt-dlp, creating an output directory, and writing media files are proportionate for a bulk video downloader and are controlled by command-line arguments.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No credentials, browser session stores, elevated privileges, scheduled jobs, background services, or long-running persistence are requested. Persistence is limited to downloaded files and created output folders.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight path-handling concern] expected: The reported direct use of urls_file and output_folder reflects user-supplied CLI inputs for a local downloader. Artifact review did not show hidden file harvesting, exfiltration, destructive writes, or privilege escalation, so this is guidance-level risk rather than a Review verdict driver.\n[SkillSpector clean result] expected: SkillSpector reported no issues, and direct inspection was consistent with that result.\n[Static scan clean result] expected: Static scan reported no suspicious patterns; inspection found no obfuscation, credential handling, shell execution, persistence setup, or unrelated data access.",
+          "guidance": "Install only if you are comfortable running yt-dlp locally. Review the URL list before use, choose a dedicated downloads folder, avoid running it with elevated privileges, and only download content you are authorized to save.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward local TikTok bulk downloader with user-directed file and network access, not hidden or deceptive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779950794121,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: bulk-tiktok-downloader-skill\nVersion: 0.1.0\n\nThe skill is classified as suspicious due to a lack of input sanitization for command-line arguments in `scripts/downloader.py`. Specifically, the `urls_file` argument is used directly in `open(urls_file, 'r')`, creating an arbitrary file read vulnerability. The `output_folder` argument is used directly in `Path(output_folder).mkdir` and within the `yt-dlp` `outtmpl` string, which could lead to path traversal and arbitrary file write vulnerabilities if an attacker provides malicious input. While these are significant vulnerabilities, there is no clear evidence of intentional malicious behavior like data exfiltration or backdoor installation.",
+          "checkedAt": 1779166362552,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "442a9185e1f80882adbe6e7aa23fef80d556e1e4b97799888faecb88b20f2de2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/442a9185e1f80882adbe6e7aa23fef80d556e1e4b97799888faecb88b20f2de2"
+    },
+    "slug": "bulk-tiktok-downloader-skill",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

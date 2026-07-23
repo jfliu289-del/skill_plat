@@ -1,0 +1,124 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.0,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "fallback:C00"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "77374ce8878cba2e663f1135f39236bf4ea4970ac483f82f58a6aebc57574039",
+    "content_hash": "cc77d78c43c6e27be72e367c9c06120fe598cdb309d6880cc2cd8d0c1ba989b6",
+    "precanonical_content_hash": "760387c4d760cee240be0df26441597a498ac8bf06408b69618c92ea13283a4b",
+    "skill_md_hash": "fa1a688fd2df902aad1170463945920c392527692a73ef8dc33febace9721ca5",
+    "version_metadata_sha256": "8cd9d86a2ea457b6adac0486e6c02a75631bc1cf4ed15c0e2e56d25a862baf6d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/noahseeger/skills/dht11-temp",
+    "claim_id": "2d00f0dac6f10bb251e4320edb7941e3bb790cb38fe2c75177861afd25169850",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "dht11-temp",
+        "url": "https://clawskills.sh/skills/noahseeger-dht11-temp"
+      },
+      {
+        "index_path": "categories/smart-home-and-iot.md",
+        "label": "dht11-temp",
+        "url": "https://clawskills.sh/skills/noahseeger-dht11-temp"
+      }
+    ],
+    "owner_handle": "noahseeger",
+    "owner_id": "s171jak86q7p327fkxd6p5tmfx885fcd",
+    "published_at": 1771322999943,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972560865,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972560865,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The code is limited to reading a DHT11 sensor through RPi.GPIO and printing two readings, matching the stated purpose, but the script appears to print humidity before temperature despite the documentation saying the opposite.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are scoped to hardware setup, dependency installation, running the script, and an optional cron example; the documented path uses scripts/dht/main.py while the bundle contains scripts/main.py.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill asks users to install the external RPi.GPIO package with pip, which is expected for Raspberry Pi GPIO access but is not pinned to a version.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The sudo requirement is disclosed and proportionate for GPIO hardware access, but it still means the script runs with elevated local privileges.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence is installed automatically; the only persistence is a user-directed example crontab entry that would periodically run the script with sudo and append to a log.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-4] unexpected: Verified: read_dht11() returns temperature then humidity, but the main block assigns those values as h, t and prints t then h, reversing the documented output order. This is a correctness and data-integrity issue, not evidence of hidden execution, exfiltration, or malicious behavior.",
+          "guidance": "Install only on the intended Raspberry Pi, understand that it uses sudo for GPIO access, and verify or fix the output order before relying on readings for automation. Only add the cron entry if you intentionally want scheduled background sensor logging.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This Raspberry Pi sensor skill is purpose-aligned and disclosed, but users should notice the elevated GPIO access and a verified output-order bug.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972521924,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: dht11-temp\nVersion: 1.0.0\n\nThe OpenClaw skill bundle is designed to read temperature and humidity from a DHT11 sensor. It requires `sudo` privileges to access GPIO pins, which is a necessary and explicitly stated requirement for hardware interaction on Raspberry Pi. The `SKILL.md` instructions are clear and do not contain any prompt injection attempts. The `scripts/main.py` code correctly implements the DHT11 protocol, safely parses input arguments, and does not exhibit any malicious behaviors such as data exfiltration, unauthorized execution, or persistence mechanisms beyond the stated purpose of logging sensor data.",
+          "checkedAt": 1779164793048,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "630dcbf776423204ec958ad679fa3117620a5c0db49336e63514fc74cc943855",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/630dcbf776423204ec958ad679fa3117620a5c0db49336e63514fc74cc943855"
+    },
+    "slug": "dht11-temp",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

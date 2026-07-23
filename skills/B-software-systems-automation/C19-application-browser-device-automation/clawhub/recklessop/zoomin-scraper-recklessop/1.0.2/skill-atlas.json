@@ -1,0 +1,131 @@
+{
+  "classification": {
+    "artifacts": [
+      "website"
+    ],
+    "audiences": [],
+    "confidence": 0.7929,
+    "domains": [],
+    "needs_review": false,
+    "primary_category": "C19",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C19:phrase:browser automation",
+      "category:C19:token:automation",
+      "category:C19:token:browser",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "automate",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ce37aef9b3ffdae765b13b8255c3c1018e8e092e1b6577e0e9607d2434c8b1eb",
+    "content_hash": "1561eac9de8f73d0ab8ad144202860de4b8aeed5f88715b7ecf091a00c2cd896",
+    "precanonical_content_hash": "5d7b1ce33f1e6cc9ac88a52120d441129e7f08a09512d732558c4a5a655c6871",
+    "skill_md_hash": "202b80cf1e939dc3f0e531710197c9829825b9bfaec3cc6b0d60cec7840ddbd8",
+    "version_metadata_sha256": "70791de7ed36d125e076efce26f72c39748c4e27e9cf942154344577d0fd3a27"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/recklessop/skills/zoomin-scraper-recklessop",
+    "claim_id": "a57b9600bbb9e792c19fe6f86efe2f9dd25784da67179a319ac53f396e6d9d8a",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "zoomin-scraper-recklessop",
+        "url": "https://clawskills.sh/skills/recklessop-zoomin-scraper-recklessop"
+      }
+    ],
+    "owner_handle": "recklessop",
+    "owner_id": "s177ye0ytbnfwfszcg9wfq8ygh885cgs",
+    "published_at": 1771289349323,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971763280,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971763280,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently implement the stated purpose: read a user-provided URL list, launch headless Chromium with Playwright, extract Zoomin article text, and write text files locally.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The scraper will visit every URL in the supplied file and does not enforce a Zoomin-only allowlist, so the user must provide only intended and authorized documentation URLs.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Setup requires manually installing Playwright and Chromium in a user-chosen Python virtual environment; this is disclosed and purpose-aligned but unpinned.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Local file reads, local output writes, and outbound browser requests are expected for this scraper, but they are broad because paths and URLs are user-supplied.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background worker, credential access, privilege escalation, autostart persistence, or hidden account/session use was found; persistence is limited to scraped output files.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The missing explicit permission declaration is a transparency gap, but the SKILL.md clearly describes reading a URL file, writing an output directory, and using browser network access.\n[VirusTotal code_insight] expected: The reported path and virtualenv concerns are user-directed operation rather than hidden behavior: shell arguments are quoted, the virtualenv activation is disclosed, and arbitrary input/output paths are part of the documented CLI workflow.",
+          "guidance": "Install and run this only in a dedicated virtual environment, review the URL file before scraping, choose a non-sensitive output directory, and do not pass private files to the batch analyzer because it prints file summaries to stdout.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Playwright-based documentation scraper with ordinary file and network effects for that purpose, but users should control the URL list, virtual environment, and output paths.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971728930,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: zoomin-scraper-recklessop\nVersion: 1.0.2\n\nThe skill bundle is classified as suspicious due to several critical vulnerabilities that could lead to arbitrary code execution, local file read/write, and data exfiltration. Specifically, `scripts/run_scraper.sh` is vulnerable to shell injection by directly sourcing a user-provided `VENV_PATH` without validation. Additionally, `scripts/scrape_zoomin.py` and `scripts/analyze_docs_batch.py` accept file paths and output directories directly from command-line arguments without sanitization, enabling an attacker to read arbitrary local files (e.g., via `urls_file_path`) or write scraped content to arbitrary locations (e.g., via `output_dir`). While the skill's stated purpose is legitimate web scraping, these vulnerabilities present significant attack surfaces.",
+          "checkedAt": 1779164706264,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "03c0a4f3878e078a25345ff99164af6981a796b6f30ac2649fa408ab8177a841",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/03c0a4f3878e078a25345ff99164af6981a796b6f30ac2649fa408ab8177a841"
+    },
+    "slug": "zoomin-scraper-recklessop",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

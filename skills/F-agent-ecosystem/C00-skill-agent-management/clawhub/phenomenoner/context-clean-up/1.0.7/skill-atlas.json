@@ -1,0 +1,136 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [],
+    "confidence": 0.175,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C09:token:audit",
+      "category:C10:token:model",
+      "category:C17:token:notes",
+      "cross-tag:planning",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "plan"
+    ],
+    "tasks": [
+      "plan",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "f31c7c9f21523693279a522000bc7d63d036f1de34d5d16575e7109b5a734d36",
+    "content_hash": "a424b009f13328631812c312b8249ee3a66b1f00b899e8e221c45fdfe9955beb",
+    "precanonical_content_hash": "54b73d2fbbec7abec9019fb1cf5924966981774c845de8200bab617cb007bcbc",
+    "skill_md_hash": "1efdf5065198be891dd29fd382aa301074e17eac690f7257e46962b74198c150",
+    "version_metadata_sha256": "2601bff33beec407a0fb7f0fb470ff0152cd9aea2c9aced39b08fc68823e19c0"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/phenomenoner/skills/context-clean-up",
+    "claim_id": "bc2859aac1039ca8bd2d8b75d16bfa5bf7767384be5c2ff6ef34e19ac7ffe9c5",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "context-clean-up",
+        "url": "https://clawskills.sh/skills/phenomenoner-context-clean-up"
+      }
+    ],
+    "owner_handle": "phenomenoner",
+    "owner_id": "s17f9m8t6mza1fag5yvx1y2njn83gdfg",
+    "published_at": 1772997174081,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783657719334,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783657719334,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The purpose is coherent: find prompt-context bloat and propose reversible fixes. Local session inspection and optional audit reporting are sensitive but directly tied to that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "SKILL.md repeatedly says audit-only, no automatic deletions, no unattended config edits, and explicit approval for changes. The out-of-band cron notification reference broadens the advice and should be handled carefully, but it is disclosed guidance rather than hidden runtime behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No install hook, package manager action, background setup, or network dependency is present. The declared requirement is only python3.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The bundled Python script uses standard libraries to read workspace bootstrap files and OpenClaw session JSONL transcripts. That is proportionate for context-bloat auditing, but generated reports may include private session snippets.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill does not request credentials, elevated privileges, persistent workers, or automatic mutation authority. The script writes a local JSON report only when the user supplies an --out path; reference docs also suggest local detail files for cron reports.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-2] expected: The Telegram/Discord/Slack example is real artifact text, but it appears as explicit cron-notification guidance for reducing transcript bloat, not as code or a hidden outbound capability of this skill.\n[SDI-1] expected: Writing details to a file and sending a path is disclosed operational guidance; the bundled script's own file write is user-directed via --out. The residual risk is local persistence of sensitive summaries.\n[SQP-2] unexpected: The scanner is correct that the reference lacks strong warnings about third-party messaging channels. This is a documentation quality issue, not enough by itself to make the skill Review-worthy because the behavior is explicit and not automatic.\n[P3] expected: The NO_REPLY plus out-of-band delivery pattern can reduce transcript visibility, but here it is described openly for user notifications and there is no evidence the skill itself sends messages, suppresses audit trails, or exfiltrates data.",
+          "guidance": "Install only if you are comfortable with a skill inspecting OpenClaw session history for context-bloat analysis. Treat generated JSON reports as private, review them before sharing, and use the out-of-band notification advice only with channels you control and with sensitive details redacted.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is an audit-only context cleanup helper; it inspects local OpenClaw session/context data and gives guidance, with no evidence of hidden network transfer or automatic changes.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783657684478,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 56,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: context-clean-up\nVersion: 1.0.7\n\nThe context-clean-up skill is a legitimate utility designed to audit and manage prompt context bloat within OpenClaw sessions. It includes a Python script (scripts/context_cleanup_audit.py) that analyzes local session transcripts and workspace files to identify large content items, using only standard libraries without any network activity or unauthorized file modifications. The instructions in SKILL.md emphasize an audit-only approach and require explicit user approval for any proposed changes, showing no signs of malicious intent or data exfiltration.",
+          "checkedAt": 1779162035719,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a4e10d8b958e77cb8b3d6348a2ee620bfe2b3704eba35ca233284ffce48e1b9f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a4e10d8b958e77cb8b3d6348a2ee620bfe2b3704eba35ca233284ffce48e1b9f"
+    },
+    "slug": "context-clean-up",
+    "source_type": "clawhub",
+    "version": "1.0.7"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

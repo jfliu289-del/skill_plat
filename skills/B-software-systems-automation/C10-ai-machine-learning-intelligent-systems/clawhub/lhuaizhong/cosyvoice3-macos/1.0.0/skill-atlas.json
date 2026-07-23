@@ -1,0 +1,127 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.31,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C05:token:audio",
+      "category:C07:token:quality",
+      "category:C10:token:inference",
+      "category:C10:token:model",
+      "category:C17:token:notes"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05",
+      "C07",
+      "C17"
+    ],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a9d06e80f109169d50848e71557bb8e8ab2a2f000eafeb41760b8a980180fed0",
+    "content_hash": "3b5881c40b5326a937d0e79aa2487ba76ba41aa3742d8e6e4af07af61daca1a7",
+    "precanonical_content_hash": "14dd84772e29bfcf21840be264cf05ba0d4baf00249927da61645034178964d3",
+    "skill_md_hash": "449be7f18e4669a14d99e84e18192a3b59fde1f931da870fe0cacea11782ea5b",
+    "version_metadata_sha256": "b48772d83b8245abbfbd8e39afe41b0e5dd8d2c92d96fff0c92eeafe700dad2f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/lhuaizhong/skills/cosyvoice3-macos",
+    "claim_id": "c68e4e884848401ecf92d1465d89e821d79722df13b154c0cd725586dd8e1cb4",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "cosyvoice3-macos",
+        "url": "https://clawskills.sh/skills/lhuaizhong-cosyvoice3-macos"
+      }
+    ],
+    "owner_handle": "lhuaizhong",
+    "owner_id": "s1733ygcye5pderxw6xx86wx0584bhsc",
+    "published_at": 1771330204589,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972572877,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972572877,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently support local CosyVoice text-to-speech, including disclosed voice cloning and cross-lingual synthesis; voice cloning is sensitive and needs consent-based use.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are user-directed install and usage examples; there is no evidence of prompt override, hidden autonomous behavior, credential harvesting, or data exfiltration.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The installer downloads and runs Miniconda if conda is missing, clones the CosyVoice GitHub repository with submodules, installs Python packages, and downloads a ModelScope model; this is purpose-aligned for local ML setup but carries normal supply-chain risk.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The macOS Apple Silicon and local ML requirements fit the stated purpose, but the scripts hard-code /Users/lhz/.openclaw/workspace paths, which is brittle and may surprise users on other machines.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill creates a conda environment, local repository, dependencies, and model files, but shows no elevated privilege request, background service, scheduled task, credential use, or ongoing persistence beyond installed local files.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: Shell commands and Python scripts are expected for this local ML skill and are shown in the documentation; the lack of richer permission metadata is a transparency note, not evidence of unsafe hidden behavior.\n[TP4] expected: Network downloads, repository cloning, dependency installation, and model retrieval are coherent with setting up CosyVoice locally, though users should understand this is not a no-install offline-only skill.\n[SDI-2] expected: Running a downloaded Miniconda installer is a real supply-chain risk, but it is part of a user-run setup path from a recognizable source and is not paired with deception or unrelated behavior.\n[SQP-2] expected: Voice cloning is a disclosed core feature, but the artifact should ideally warn users to clone only voices they have permission to use and to label synthetic audio when appropriate.\n[SQP-2] expected: The installer automatically fetches Miniconda if conda is absent; this should be reviewed before execution, but it is still related to the documented setup flow.\n[SQP-2] unexpected: The hard-coded /Users/lhz workspace path is not well-scoped for general installation and may fail or write to an unexpected location, but it does not indicate malicious intent.",
+          "guidance": "Before installing, read scripts/install.sh and be comfortable with it downloading Miniconda, cloning CosyVoice, installing Python packages, and downloading large model files. Run it only in an environment where you are willing to trust those upstream sources. For voice cloning, use only reference audio you are authorized to use and avoid impersonation or deceptive sharing.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed local text-to-speech setup, but it installs a sizeable external ML stack and should be reviewed before running.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972538879,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 97,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: cosyvoice3-macos\nVersion: 1.0.0\n\nThe skill is designed for local text-to-speech using Alibaba's CosyVoice3. Its installation script (`scripts/install.sh`) performs extensive setup, including downloading and installing Miniconda from `repo.anaconda.com`, cloning the official CosyVoice GitHub repository, installing numerous Python dependencies, and downloading large ML models from Alibaba's ModelScope. While these actions involve downloading and executing remote code, they are standard and necessary for setting up a complex ML environment and are sourced from legitimate, well-known providers. The `SKILL.md` instructions and other Python scripts (`scripts/download_models.py`, `scripts/tts.py`) align with the stated purpose and do not exhibit any signs of malicious intent, such as data exfiltration, unauthorized persistence, or prompt injection attempts to subvert the agent's core function.",
+          "checkedAt": 1779164807052,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a5cc1e7555189d6f950ad35bbfa9f74bf2a1ed8d6ac4798c15903c0adbf76dfd",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a5cc1e7555189d6f950ad35bbfa9f74bf2a1ed8d6ac4798c15903c0adbf76dfd"
+    },
+    "slug": "cosyvoice3-macos",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

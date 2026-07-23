@@ -1,0 +1,129 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C13:token:operations",
+      "category:C17:token:notes",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C13",
+      "C17"
+    ],
+    "stages": [
+      "discover"
+    ],
+    "tasks": [
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "046f5b58628aa029776b73b53e3117d4192b7065371226680e48cd341d82ac96",
+    "content_hash": "a55ae75f8a6c0c997720b4b3d698b476e8af7c6fa9069a521ccb0e530b218c7b",
+    "precanonical_content_hash": "28b23658bb87ccadcb2de924c1c4e44f014418c5073819026e22403188b4bf1f",
+    "skill_md_hash": "f759b59fc69a3922a4087fb1acfba14b977dc7beabb40f34f7f5fe1f41c09376",
+    "version_metadata_sha256": "8338048dabd87e4e1b9563a691df7009b4a42933a88ba0f556b9a2e5e859aef3"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/pdpaer/skills/qqmail",
+    "claim_id": "6c8a1363c756e47c3f7ebff788ab48f1e5a6e49e4a450862108f1ecd9d51e5b6",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "qqmail",
+        "url": "https://clawskills.sh/skills/pdpaer-qqmail"
+      }
+    ],
+    "owner_handle": "pdpaer",
+    "owner_id": "s1764ydr9j5js1zjsjnzagph95885fz7",
+    "published_at": 1771078664695,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779966775578,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779966775578,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose and script behavior align: IMAP inbox reading, message reading, folder listing, searching, and SMTP sending with optional attachments. These are sensitive mailbox capabilities but are expected for an email-management skill.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions show explicit commands and required arguments, with no hidden prompt overrides or autonomous background behavior. It does not prominently require confirmation before sending mail or attachments, so users should enforce that workflow themselves.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No package installer, dependency download, self-update step, or remote bootstrap is present; the skill requires only python3 and uses the Python standard library.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use of QQMAIL_USER and QQMAIL_AUTH_CODE is proportionate to IMAP/SMTP access, and the documentation states the authorization code is not the QQ password. The credential grants mailbox read/send authority while configured.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, scheduled task, background worker, privilege escalation, destructive mailbox mutation, or local write behavior was found in the artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: Sending email content and attachments to QQ Mail servers is expected for this skill, but the warning could be clearer; this supports user guidance rather than a Review verdict.\n[VirusTotal:code_insight] expected: The arbitrary attachment path is a disclosed send-with-attachment feature. It can expose local files if misused, but there is no hardcoded recipient, exfiltration domain, obfuscation, or automatic sending behavior.\n[VirusTotal:code_insight] expected: The IMAP search string is built from command-line search inputs and could be better escaped, but it affects user-directed mailbox searching rather than showing hidden or malicious behavior.\n[staticScan] expected: The static scan reported no suspicious patterns, which is consistent with the inspected artifacts.",
+          "guidance": "Install only if you want an agent to access your QQ mailbox. Keep QQMAIL_AUTH_CODE private, revoke it when no longer needed, and require explicit confirmation of recipient, subject, body, and every attachment path before sending email.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward QQ Mail helper that reads and sends mail using disclosed QQ credentials, with normal email-attachment risks users should control.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779966748943,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: qqmail\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to two primary reasons. First, the `send` command in `scripts/qqmail.py` allows attaching arbitrary files from the local filesystem via the `--attachment PATH` argument. While a legitimate feature, this capability could be exploited by a malicious agent prompt to exfiltrate sensitive user files (e.g., credentials, private keys). Second, the `search` command in `scripts/qqmail.py` constructs IMAP search queries by directly concatenating user-provided arguments (e.g., `--subject`, `--from`) into the search string, which presents a potential IMAP injection vulnerability if a malicious user provides specially crafted input. There is no evidence of intentional malicious behavior such as hardcoded exfiltration domains, backdoors, or obfuscation; the issues are vulnerabilities or risky capabilities rather than explicit malware.",
+          "checkedAt": 1779164000946,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "a4f4db85845853053f4969c42913f4c97f2515783d77f52a7e5d723661e48d89",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a4f4db85845853053f4969c42913f4c97f2515783d77f52a7e5d723661e48d89"
+    },
+    "slug": "qqmail",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,159 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.25,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:find",
+      "category:C06:token:api",
+      "category:C09:token:privacy",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "category:C17:token:resume",
+      "category:C17:token:schedule",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C01",
+      "C06",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "dc587d563db2260f269b101ef9f5d2598bdc95c9ba0e863e3a8f01d7f9dc8c90",
+    "content_hash": "d2d012d10c4bca37fa4c049dec93fb1071771ef284cc54e01e6541fb0915d98e",
+    "skill_md_hash": "fe24616ace0535239b89ae9101be7e7d8c1fe594e213e2ff996ea62fd7ad3831",
+    "version_metadata_sha256": "223652bb04220565f8dd115a357eceed01ea4e7deaacd5bb2e58d97a824c4ef2"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/dheerg/skills/ai-meeting-scheduling",
+    "claim_id": "a036cce8b6f5bc8ccc7d7b0dca6b0670335062596d1e6fd5953e1a7c88aa586d",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "ai-meeting-scheduling",
+        "url": "https://clawskills.sh/skills/dheerg-ai-meeting-scheduling"
+      },
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "ai-meeting-scheduling",
+        "url": "https://clawskills.sh/skills/dheerg-ai-meeting-scheduling"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "dheerg",
+    "owner_id": "s17dzqbfnr5d59d68800q2jtbh884xbh",
+    "published_at": 1771381981932,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779919442249,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779919442249,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The capabilities fit the stated scheduling purpose: create, list, get, pause, resume, and cancel meeting requests through the SkipUp API, including participant email coordination.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The invocation language is broad for a tool that can trigger external scheduling actions, so agents using it should confirm with the user before creating, cancelling, pausing, or resuming requests.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Supplied telemetry describes a normal skill package using TypeScript fetch calls and documentation, with no filesystem access, shell execution, or browser automation.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Using SKIPUP_API_KEY from the environment is proportionate for an authenticated third-party scheduling API integration.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No local persistence or privilege escalation is indicated, but the external service maintains meeting-request state and may contact participants by email as part of the core workflow.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: Outbound participant emails, pause/resume behavior, and external meeting workflow changes are real side effects, but they are aligned with a meeting-scheduling service rather than hidden or unrelated behavior.\n[SQP-1] unexpected: Broad trigger phrases increase the chance of accidental invocation; this is a usability and consent concern, not evidence of malicious intent.\n[E1] expected: Transmitting organizer, participant, meeting, and workspace-member data to api.skipup.ai is sensitive, but it is the documented core function of the integration and uses an expected API-key model.",
+          "guidance": "Install only if you trust SkipUp with meeting metadata, participant email addresses, and workspace-member information. Agents should ask for explicit confirmation before creating, cancelling, pausing, or resuming meeting requests, because those actions can change live coordination or contact other people.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to be a straightforward SkipUp meeting-scheduling integration, but users should understand that it sends meeting and participant data to SkipUp and can affect real email coordination workflows.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779919402044,
+          "issueCount": 9,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ai-meeting-scheduling\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle for 'ai-meeting-scheduling' is benign. All code and documentation consistently point to `https://api.skipup.ai` for API interactions and retrieve the `SKIPUP_API_KEY` from environment variables, which is standard practice. The `src/index.ts` file uses `fetch` for network requests and does not contain any file system access, shell command execution, or other risky operations. The `SKILL.md` and `README.md` files provide clear, non-malicious instructions and explicitly state 'No filesystem access, no shell commands, no browser automation'. There is no evidence of data exfiltration, malicious execution, persistence, or prompt injection attempts.",
+          "checkedAt": 1779165010159,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "dce05410b2181a8de9b513344866a854f1eb9f67694649628678fce6a99dc255",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/dce05410b2181a8de9b513344866a854f1eb9f67694649628678fce6a99dc255"
+    },
+    "slug": "ai-meeting-scheduling",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

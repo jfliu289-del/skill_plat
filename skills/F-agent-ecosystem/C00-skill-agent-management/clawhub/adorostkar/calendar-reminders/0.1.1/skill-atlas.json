@@ -1,0 +1,146 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C02:token:edit",
+      "category:C09:token:security",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:planning",
+      "cross-tag:security",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C09",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "plan",
+      "secure",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "e82c978f272b7ca995749f384ce29e367cfde5ba790a72c25d34b0d3215c0221",
+    "content_hash": "e78e87e7322f9c370a8c641e625cec7d22937cabe8f8b682edd8d38658e38d69",
+    "skill_md_hash": "8580d9533af92bef70b81dac2b802a59c5b42222c87ec9185096bf985d424246",
+    "version_metadata_sha256": "f3ced5953fdb7858d60500b6802632a194ffc6e4f5338fd24cfa8eae49a24336"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/adorostkar/skills/calendar-reminders",
+    "claim_id": "e3291f5269b08c07dc415da80d8b00619ff0929109090eafc2e53c610439fffd",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "calendar-reminders",
+        "url": "https://clawskills.sh/skills/adorostkar-calendar-reminders"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "adorostkar",
+    "owner_id": "s17ct4qpe58p6bh93k220ks15h885na8",
+    "published_at": 1771538649857,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971352664,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971352664,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts match the stated purpose: they read Google Calendar via gcalcli and optional CalDAV data via khal, then output JSON reminder entries containing calendar labels, event IDs, titles, and reminder times. This necessarily handles private calendar data, but the behavior is purpose-aligned and disclosed.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are user-directed: the included planner does not create reminders itself, and the optional daily cron or agent wiring is described as something the user must set up separately.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no automatic installer or dependency bootstrap. Users must install python3, gcalcli, and optional vdirsyncer/khal themselves. The documentation mentions a scripts/calendar wrapper that is not present in the package, which is a packaging/documentation mismatch rather than a security issue.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Executing local calendar binaries is proportionate for this skill, and the Python script invokes them with subprocess argument lists rather than shell strings. The configured binary paths still need to be trusted because they run locally and may access calendar accounts.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill itself only reads a config and optional state file and prints a plan. Suggested cron scheduling and duplicate-state tracking are disclosed but would create recurring local automation if the user chooses to wire them up.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code_insight configurable external binaries] expected: Manual review confirmed that gcalcliPath and khalBin are config-controlled and executed with shell=False. The risk is real if a user points them at untrusted binaries or an attacker can edit the config, but the behavior is disclosed, purpose-aligned, and mitigated against shell injection.\n[SkillSpector: no issues] expected: The supplied SkillSpector report found no issues; independent artifact review likewise found no hidden execution, exfiltration, destructive actions, or prompt-injection behavior.\n[Static scan: clean] expected: The metadata reports no static findings, and local inspection found straightforward Python code with no obfuscation, network library use, credential harvesting, or automatic persistence.",
+          "guidance": "Install this only if you are comfortable letting trusted local calendar tools read the calendars you configure. Keep the calendar config private, prefer absolute paths to trusted gcalcli/khal/vdirsyncer binaries, and review any cron or agent wiring before enabling automatic reminder creation.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed calendar reminder helper that reads configured calendars through trusted local tools and outputs a reminder plan, with no evidence of hidden or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971327628,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: calendar-reminders\nVersion: 0.1.1\n\nThe skill is classified as suspicious due to its reliance on executing external binaries (`gcalcli`, `khal`, and potentially `vdirsyncer`) whose paths are configurable in `~/.config/openclaw/calendar.json`. This introduces a Remote Code Execution (RCE) vulnerability if an attacker can modify the configuration file to point to arbitrary executables. While the `SKILL.md` documentation explicitly warns the agent/user about this risk and advises on secure practices (e.g., 'Only point `gcalcliPath` / `khalBin` to **trusted binaries**'), the inherent capability to execute user-defined binary paths makes it a significant security concern. The Python script `scripts/calendar_reminder_plan.py` does correctly use `subprocess.check_output` with argument lists (defaulting to `shell=False`), mitigating shell injection from event data, and the example config provides `vdirsyncerSyncCommand` as a safe argument list.",
+          "checkedAt": 1779163331955,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "92b09a55f7cf6d71f8112eb21b5e6f6736f86b04645ccb2f6293067317b5c6fa",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/92b09a55f7cf6d71f8112eb21b5e6f6736f86b04645ccb2f6293067317b5c6fa"
+    },
+    "slug": "calendar-reminders",
+    "source_type": "clawhub",
+    "version": "0.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

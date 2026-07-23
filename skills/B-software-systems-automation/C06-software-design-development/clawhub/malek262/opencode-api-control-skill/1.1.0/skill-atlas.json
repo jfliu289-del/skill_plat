@@ -1,0 +1,161 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "website"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.6806,
+    "domains": [
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C04:token:dashboard",
+      "category:C06:phrase:code generation",
+      "category:C06:token:api",
+      "category:C06:token:code",
+      "category:C06:token:implementation",
+      "category:C07:token:review",
+      "category:C10:token:model",
+      "category:C11:token:project",
+      "category:C12:token:management",
+      "category:C13:token:operations",
+      "category:C17:token:notes",
+      "category:C18:token:health",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:planning",
+      "cross-tag:review",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "build",
+      "manage",
+      "plan",
+      "research",
+      "review"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8835eaf823e4ce21afd1e66233096314617b4cd879fee55e76c57206350bc273",
+    "content_hash": "e25a4aaa08faadaf4102ac0c0a583a51d8d09ba64ca2cd8641112114e61caed0",
+    "precanonical_content_hash": "f55ced7c87ae35bbc7b77c90e8228b2fccf03fdd14cd6c230caec6238c6eee43",
+    "skill_md_hash": "332c8ce5940099c3d759d462cb28f9391164b01d3c54f177c1f13c3246d5bae4",
+    "version_metadata_sha256": "c8de86ca74cf7c30d7704e06577ce6d61cd70df818682417789714b27b04f25b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/malek262/skills/opencode-api-control-skill",
+    "claim_id": "70101f22a9da79ebe797c57399788c558f59d67a52a6e611c60a68858c3219a3",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "opencode-api-control-skill",
+        "url": "https://clawskills.sh/skills/malek262-opencode-api-control-skill"
+      }
+    ],
+    "owner_handle": "malek262",
+    "owner_id": "s17dw7sdcv3209ma0ndgjmk1nh885nng",
+    "published_at": 1771307456655,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971831109,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971831109,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to orchestrate OpenCode through its local API, and the scripts create sessions, send prompts, monitor status, fetch diffs, and manage provider/session state consistent with that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill gives broad orchestration instructions and includes raw API examples for file content and directory listing, but it also tells the agent to prefer status/diff summaries and only read specific files when explicitly requested or debugging.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Install behavior is limited to making bundled shell scripts executable and warning if jq is missing; no package installation, remote installer, or privileged setup was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Default configuration targets http://127.0.0.1:4099, but the documentation supports trusted local-network use and no password authentication by default, so users should keep the server bound to localhost unless they understand the exposure.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The start script can run the OpenCode server in the background and the skill stores local session state under ./state/, including project paths and session IDs, but it does not persist credentials or install privileged services.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-4] expected: The file-content and directory API examples are real, but they are disclosed as OpenCode API operations and bounded by guidance to avoid direct source inspection except when requested or troubleshooting.\n[SQP-2] expected: Creating directories and sending coding prompts can modify project files; this is core to the skill's OpenCode automation purpose, though users should run it only in intended project directories.\n[SQP-2] expected: Event monitoring can display prompts, generated text, paths, file-change summaries, token counts, and costs; this is expected monitoring data, but logs should be treated as potentially sensitive.\n[SQP-2] expected: Provider API-key examples are for configuring OpenCode rather than this skill storing secrets; the guidance would benefit from clearer secret-handling warnings, but no credential theft behavior was found.\n[SQP-1] expected: The activation criteria are broad for OpenCode-based coding workflows, but the skill explicitly frames use around OpenCode and includes a provider/monitoring prompt before starting tasks.\n[E1] expected: The curl requests transmit prompts and project paths to the configured OpenCode API. With the default localhost URL this is purpose-aligned local control, not artifact-backed exfiltration; risk increases if BASE_URL is changed to an untrusted host.",
+          "guidance": "Install only if you intend to let an agent drive OpenCode on your projects. Keep the OpenCode server on 127.0.0.1 when possible, avoid exposing it on shared networks without authentication, review the configured BASE_URL before use, and treat saved state, event logs, prompts, paths, and diffs as sensitive project data.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "The skill coherently controls a local OpenCode server for coding automation, with expected file-changing authority and no evidence of hidden exfiltration or malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971762036,
+          "issueCount": 13,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: opencode-api-control-skill\nVersion: 1.1.0\n\nThe OpenClaw AgentSkills skill bundle is classified as benign. All network communications are strictly local, targeting `http://127.0.0.1:4099` as configured in `config.json` and demonstrated in all `scripts/*.sh` and `Reference/*.md` files. File system operations are confined to managing project directories, skill state files (`./state/`), and a local log file (`opencode_server.log`). The `SKILL.md` actively guides the agent to use the provided API and scripts, and explicitly prohibits direct file manipulation for development tasks, indicating a defensive posture against prompt injection. The use of `nohup` in `scripts/start_server.sh` is for legitimate background persistence of the local OpenCode server. There is no evidence of data exfiltration, unauthorized remote control, obfuscation, or other malicious intent.",
+          "checkedAt": 1779164713394,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "b00ceecd9f2d10839618741c7886c785e478a985c4f19686c83326bb56f9c778",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b00ceecd9f2d10839618741c7886c785e478a985c4f19686c83326bb56f9c778"
+    },
+    "slug": "opencode-api-control-skill",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

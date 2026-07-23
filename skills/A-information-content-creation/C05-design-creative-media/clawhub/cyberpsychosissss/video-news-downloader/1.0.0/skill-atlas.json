@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [
+      "website"
+    ],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:video",
+      "category:C10:token:ai",
+      "category:C12:token:management",
+      "category:C17:token:schedule",
+      "cross-tag:browser-automation",
+      "cross-tag:design"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10",
+      "C12",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "automate",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "351341204bf8c7565ec9bd4a521b3d7edd068927454bc684643252eb124bae2e",
+    "content_hash": "6319e8367d2b473fb24d23fd700a78bceffbd2e93411089478e5008c1e379cb1",
+    "precanonical_content_hash": "3ac6622c1ee464ac92b81447399db204c51e1e82be0ea98bce4d012f32a6f408",
+    "skill_md_hash": "763094fc89ddd130bb186a6eeabfb39f4f662adac0d33ff8712957ca79a52bf2",
+    "version_metadata_sha256": "a801d17ddf96517d863fe6557f5ecf08a3bc95eee9eba367652b14f3a62b3ff9"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/cyberpsychosissss/skills/video-news-downloader",
+    "claim_id": "3bb0f218593f5d1d86fd42021295b0af0fb69212516e7035d393a665f5888b6b",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "video-news-downloader",
+        "url": "https://clawskills.sh/skills/cyberpsychosissss-video-news-downloader"
+      }
+    ],
+    "owner_handle": "cyberpsychosissss",
+    "owner_id": "s17acy0j0aa358n092w1ddndcn884015",
+    "published_at": 1771777808413,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779949709753,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779949709753,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts and documentation match the stated purpose: download public CBS/BBC videos, extract subtitles, prepare DeepSeek proofreading prompts, serve media, and optionally schedule daily updates.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The sensitive actions are documented and user-invoked, though network exposure and persistence warnings could be clearer.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden installer, privilege escalation, obfuscation, or automatic execution on install was found; setup scripts require explicit commands.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "File writes are mostly scoped to /root/.openclaw/workspace media, subtitle, temp, and log paths; downloads use yt-dlp against YouTube sources. The server binds to 0.0.0.0, which is broader than a localhost-only streaming setup.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Cron jobs and nohup HTTP servers are persistent or long-running, but they are part of the stated workflow and include status, stop, and removal commands.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Shell execution and file read/write are expected for downloading videos, generating subtitles, starting servers, and managing cron; the lack of formal permission metadata is a disclosure gap, not evidence of hidden behavior.\n[TP4] expected: Cron setup, HTTP serving, and media cleanup are substantially aligned with the description; the DeepSeek script prepares a task file rather than secretly sending data to an API.\n[SQP-2] expected: The 0.0.0.0 HTTP binding and fixed ports are real exposure risks, but serving videos over HTTP is explicitly part of the skill and requires the user to run the server script.\n[SQP-2] expected: Cron persistence is real, but scheduled daily downloads are disclosed and the script provides status and remove modes.\n[VirusTotal/code_insight] expected: The telemetry concern about cron persistence and network services is artifact-supported, but no exfiltration, deception, destructive intent, or unauthorized remote control was found.",
+          "guidance": "Install only if you want automated news downloads and local streaming. Before running the server, make sure ports 8093 and 8095 are not reachable from untrusted networks; before installing cron, confirm you want recurring daily downloads and know how to remove the jobs. Treat subtitle text as shareable with DeepSeek only if you manually submit the generated prompt.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is coherent and user-directed, but it can create persistent cron jobs and network-accessible video servers that users should understand before running.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779949675716,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 97,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: video-news-downloader\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to its use of high-risk capabilities that modify the system and expose network services. Specifically, `scripts/setup_cron.sh` installs persistent cron jobs, and `scripts/setup_server.sh` starts HTTP servers binding to `0.0.0.0` on ports 8093 and 8095, making them network-accessible. While these actions are explicitly part of the skill's stated purpose (automated downloads and local video streaming) and there is no evidence of intentional malicious behavior like data exfiltration or unauthorized remote control, these capabilities represent a significant security risk if the environment were compromised or if the skill's scripts were altered.",
+          "checkedAt": 1779166253534,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "0ccd719913d28037f9e386834697cc62d67bfa5a8d08e2fec82bbd4e479d8eb2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0ccd719913d28037f9e386834697cc62d67bfa5a8d08e2fec82bbd4e479d8eb2"
+    },
+    "slug": "video-news-downloader",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

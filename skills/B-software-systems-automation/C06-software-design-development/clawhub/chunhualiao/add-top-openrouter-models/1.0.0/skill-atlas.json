@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "website"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C10:token:model",
+      "category:C19:token:browser",
+      "cross-tag:browser-automation",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "automate",
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "909deb7f7aa264915b18de30f57c3c27672b5aac3bd31f028b0a1164d86f0269",
+    "content_hash": "d5075cb056df02617ed22569c8c97217567b4ea4e6adc6a7e1f6c02910b4b96c",
+    "precanonical_content_hash": "101cf2eeb1f2d7373cd72f56be949de7f1d20f795ca20d7bd1d6fb6b3d82b5e8",
+    "skill_md_hash": "a0e936aa25d82ebde4bf7e049fcd5fe67eb1e35a5963e3c7bd8a61180542a7e5",
+    "version_metadata_sha256": "f03734cc43be188959c847ab41adf5dc1e8998378e053ad6640401d62ae24946"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/chunhualiao/skills/add-top-openrouter-models",
+    "claim_id": "5b8c684c47606587e6eb688e360ba8c522f55630b1370d9e3f280e335628aa11",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "add-top-openrouter-models",
+        "url": "https://clawskills.sh/skills/chunhualiao-add-top-openrouter-models"
+      },
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "add-top-openrouter-models",
+        "url": "https://clawskills.sh/skills/chunhualiao-add-top-openrouter-models"
+      }
+    ],
+    "owner_handle": "chunhualiao",
+    "owner_id": "s17czb50cec363y7yz4cchy9p9848424",
+    "published_at": 1771695068340,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779947335405,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779947335405,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The described capabilities fit the stated purpose of syncing OpenRouter models into an OpenClaw installation: collecting model IDs, querying OpenRouter, and updating OpenClaw model configuration.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The workflow involves sensitive but purpose-aligned actions, including reading OpenClaw/OpenRouter configuration, using an API key, modifying model config files, and restarting the gateway; these should be made prominent to users before execution.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The reported trigger phrase 'add missing models' is broader than ideal and could invoke the skill for generic model-management requests, though this is not evidence of deception or malicious behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to OpenRouter and writes under the OpenClaw configuration directories are proportionate to the sync task, and the reported script uses backups and atomic writes.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill changes persistent OpenClaw configuration and restarts the gateway, but those effects are coherent with installing or updating provider models and no hidden persistence or privilege escalation is evident.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The network access, config reads, credential use, and file writes are expected for an OpenRouter model sync skill; this is best treated as a disclosure and consent note rather than a blocking issue.\n[TP4] expected: The side effects described by the scanner support the stated sync function, and there is no artifact-backed evidence that they are unrelated or hidden.\n[SQP-2] expected: Restarting the gateway is operationally disruptive but is a plausible step after changing OpenClaw configuration; users should be warned and asked before restart.\n[SQP-1] unexpected: The generic trigger phrase is broader than necessary and should be narrowed, but by itself it does not make the skill suspicious.",
+          "guidance": "Install only if you want this skill to modify your OpenClaw model configuration. Before running it, review the generated changes, confirm that it will only use your OpenRouter key for OpenRouter API calls, keep the backups it creates, and restart the gateway only when a brief interruption is acceptable.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to do what it claims: update local OpenClaw/OpenRouter model configuration, with backups, but users should expect local config edits and a gateway restart.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779947310501,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 71,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: add-top-openrouter-models\nVersion: 1.0.0\n\nThe skill 'add-top-openrouter-models' is designed to sync OpenRouter models into an OpenClaw installation's configuration. The `SKILL.md` provides clear instructions for the AI agent to interact with a browser to scrape model IDs from `openrouter.ai`, execute a local Python script (`scripts/sync-openrouter-models.py`) with these IDs, and then restart the OpenClaw gateway. The Python script legitimately reads OpenClaw configuration files (including `OPENROUTER_API_KEY` for its intended use), makes authenticated API calls to `openrouter.ai/api/v1/models`, and updates local OpenClaw configuration files (`~/.openclaw/agents/<agent>/agent/models.json`, `~/.openclaw/openclaw.json`). It includes robust practices like creating timestamped backups and using atomic writes before modifying configuration files. There is no evidence of data exfiltration, unauthorized command execution, persistence mechanisms, or prompt injection attempts to mislead the agent into malicious actions. All operations are directly aligned with the stated purpose.",
+          "checkedAt": 1779165996412,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "909deb7f7aa264915b18de30f57c3c27672b5aac3bd31f028b0a1164d86f0269",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/909deb7f7aa264915b18de30f57c3c27672b5aac3bd31f028b0a1164d86f0269"
+    },
+    "slug": "add-top-openrouter-models",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

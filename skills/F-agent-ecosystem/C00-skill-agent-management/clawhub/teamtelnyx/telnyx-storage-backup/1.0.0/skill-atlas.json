@@ -1,0 +1,119 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.0,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "fallback:C00"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "5590a14ff65a4f83fd71371778a3061e48966bb9c5f5a436b1d4bd7125415c9d",
+    "content_hash": "d1fe58d0c4410b9cd91b910754233bbd96dd6759b304d43fd82f0826ec621207",
+    "precanonical_content_hash": "f1d4b51c6283afb7550ca648e1b1d43d432e114d9b49f0173675b75e16e9235c",
+    "skill_md_hash": "ac0d3fa788a745aaa24f435e1a3e357e6198dcd42805a14002770db88d905013",
+    "version_metadata_sha256": "4adcc251532da7d056b4bb7cf54264c035acddc3795409f7c4ba5b15e69582e6"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/teamtelnyx/skills/telnyx-storage-backup",
+    "claim_id": "5f30b5009350d669e4ed2e3ec56f31067936d1e74b41fbfdbd9425ea08207fa2",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "telnyx-storage-backup",
+        "url": "https://clawskills.sh/skills/teamtelnyx-telnyx-storage-backup"
+      }
+    ],
+    "owner_handle": "teamtelnyx",
+    "owner_id": "s170draq1trsnzq53cd20af77s85vr4p",
+    "published_at": 1770739849412,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779966078191,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779966078191,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "Backup, list, restore, bucket creation, and retention pruning all fit the stated Telnyx Storage backup purpose. The backed-up files can contain sensitive agent memory, knowledge, guardrails, integrations, and scripts.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The operations are user-run and scoped to a provided bucket and workspace path. Restore includes an interactive overwrite prompt; backup upload and retention pruning run as part of the backup command without a separate preflight confirmation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Setup requires installing the Telnyx CLI globally, and the legacy Python path optionally requires boto3. No install-time autorun or hidden installer behavior was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Telnyx authentication is expected for this integration. The documentation is inconsistent about environment variables because the CLI path uses stored Telnyx auth while metadata and the legacy Python script refer to TELNYX_API_KEY; the Python script can also read that key from local .env files.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no self-installed persistence. The only recurring behavior is an optional cron entry the user must add manually, and remote deletion is limited to retention pruning of older backup objects.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[TP4] expected: The dependency and side-effect disclosure could be clearer, but Telnyx tooling, listing, bucket creation, and retention pruning are visible in the docs or scripts and are coherent with a cloud backup tool.\n[SQP-2] expected: Restore can overwrite workspace files, which is inherent to restore functionality; the script does warn and asks for confirmation before extraction, though the documentation should repeat that warning.\n[SQP-2] expected: The upload of selected workspace files to Telnyx Storage is the central purpose of the skill, not an unrelated transfer. Users still need to review the selected files for secrets before running it.\n[SQP-2] expected: Retention pruning deletes older remote backups after upload. This is purpose-aligned and shown in the script, but it deserves more prominent documentation and deliberate MAX_BACKUPS selection.\n[PE3] expected: Credential loading for Telnyx is expected, and the .env fallback is documented in the legacy Python script. It is a security hygiene concern rather than evidence of credential theft or unrelated access.\n[staticScan] expected: The static scan was clean, and local review found no obfuscation, unrelated endpoints, destructive local actions beyond temporary cleanup, or hidden autorun behavior.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with the artifact review; it was treated only as supporting signal.",
+          "guidance": "Install this only if you intentionally want OpenClaw workspace files backed up to Telnyx Storage. Use a private bucket and least-privileged Telnyx credentials, review the backed-up files for secrets, choose MAX_BACKUPS carefully because old backups may be deleted, enable cron only if recurring uploads are desired, and restore only from backups you trust.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward Telnyx cloud backup skill, but it should be treated as sensitive because it uploads and restores OpenClaw workspace data.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779966023346,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: telnyx-storage-backup\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills bundle 'telnyx-storage-backup' is designed for backing up and restoring OpenClaw workspace data to Telnyx Storage. The `SKILL.md` provides clear instructions without any prompt injection attempts. The `backup.sh`, `list.sh`, `restore.sh`, and `backup.py` scripts perform standard file archiving, upload, download, and deletion operations using either the Telnyx CLI or boto3. All network activity is directed to Telnyx Storage, and file system access is confined to the user's workspace and temporary directories. While shell scripts inherently carry some risk with user-provided arguments, the scripts use quoted variables and include a user confirmation for restore operations, indicating a focus on safe operation rather than malicious intent. No evidence of data exfiltration to unauthorized endpoints, persistence mechanisms, or other malicious behaviors was found.",
+          "checkedAt": 1779162853801,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "1c0fc623f1c95eaf346c67bf630a7d1d59e38152192596c6244d8bb5e222a96a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/1c0fc623f1c95eaf346c67bf630a7d1d59e38152192596c6244d8bb5e222a96a"
+    },
+    "slug": "telnyx-storage-backup",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

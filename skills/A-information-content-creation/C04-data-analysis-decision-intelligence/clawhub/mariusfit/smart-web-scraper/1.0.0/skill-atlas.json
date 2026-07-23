@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:data",
+      "category:C11:token:product",
+      "category:C17:token:notes",
+      "cross-tag:data-analysis"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C11",
+      "C17"
+    ],
+    "stages": [
+      "validate"
+    ],
+    "tasks": [
+      "analyze"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a69c4f1a4ca8f2872709af6c957f84f96d17f138122e0aa68319a61fc259787e",
+    "content_hash": "a07f1c24ab9fdcf69e433d6876bcba0603696249a9866aacee225c37bf32a09f",
+    "precanonical_content_hash": "a3372ded2ed8081be42d7ad24ad9df2e9e6b2e291e43e1730415669e00f5f801",
+    "skill_md_hash": "beb84d4cd0dd72232a15d1cc76b89544c91ddb907df346b01b2ff82b544dbc83",
+    "version_metadata_sha256": "93be4ab018db9323d06f7f9c5ffc4b6b48ac33a214229c1affbaafff9d6274d2"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/mariusfit/skills/smart-web-scraper",
+    "claim_id": "e5098421837e42e249e37107ec740d712b352812cb6220abaec27288e2e886b9",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "smart-web-scraper",
+        "url": "https://clawskills.sh/skills/mariusfit-smart-web-scraper"
+      }
+    ],
+    "owner_handle": "mariusfit",
+    "owner_id": "s17en27tt4m76ranka73sgtdfd884sb7",
+    "published_at": 1771877309570,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779953382022,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779953382022,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The README, SKILL.md, and Python script consistently describe fetching user-specified URLs, parsing HTML, extracting selectors/tables/links/structure, crawling pagination, and producing text/JSON/CSV/Markdown output.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The scope is broad because it supports arbitrary URLs, contact/listing extraction, multi-page crawling, and an off-by-default robots.txt override, but these capabilities are documented and user-invoked rather than hidden or automatic.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses standard Python dependencies via uv or pip with beautifulsoup4 and lxml; no pinned versions or explicit permission metadata are present, but no unusual installer or post-install behavior appears in the artifacts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Outbound web requests and optional writes to a user-provided output path are proportionate for a scraper. The script does not read credentials, browser profiles, local private data, or unrelated files.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No startup hooks, background workers, privilege escalation, account mutation, destructive commands, or persistence beyond optional user-requested output files were found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: Network access and optional file output are core scraper behavior and are shown in examples, though explicit permission metadata and clearer file-write cautions would improve transparency.\n[TP4] expected: Crawling, link extraction, structure analysis, and output modes are documented in the skill instructions and README, so this is broader than a minimal extractor but not purpose-mismatched.\n[SDI-2] expected: The --ignore-robots flag is a real misuse risk, but it is disclosed, disabled by default, and only used when the caller explicitly passes it.\n[SQP-2] expected: The artifacts promote contact extraction and lead generation without strong privacy, consent, or terms-of-service warnings; this is a user guidance gap rather than evidence of hidden or malicious behavior.\n[SQP-2] expected: The user-controlled output path can overwrite files if directed to do so, but file output is documented and explicitly selected with -o rather than automatic.",
+          "guidance": "Install only if you need a general-purpose scraper. Use it only on sites you are authorized to scrape, keep robots.txt enforcement enabled unless you have a clear lawful reason, avoid collecting personal or sensitive data without consent or another valid basis, and choose output paths carefully because existing files may be overwritten.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward web scraping skill whose network access, crawling, and optional file output are disclosed and aligned with its purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779953350378,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: smart-web-scraper\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills bundle 'smart-web-scraper' is a web scraping tool that uses standard Python libraries (`urllib`, `BeautifulSoup`, `lxml`) to extract data from user-specified URLs. The `SKILL.md` and `README.md` clearly describe its functionality, and the `scripts/scraper.py` code implements this as described, including features like CSS selectors, table extraction, link analysis, and multi-page crawling. While the script performs network requests to arbitrary URLs and writes output to user-specified file paths, these are core functionalities of a web scraper and do not show evidence of intentional malicious behavior such as data exfiltration to unauthorized endpoints, persistence mechanisms, or arbitrary code execution beyond the skill's stated purpose. The instructions in the markdown files are straightforward and do not contain any prompt injection attempts.",
+          "checkedAt": 1779166579868,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "11893231606b50b49809c9c3b67439b66216001d67220947fdbc6acea3d8967a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/11893231606b50b49809c9c3b67439b66216001d67220947fdbc6acea3d8967a"
+    },
+    "slug": "smart-web-scraper",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

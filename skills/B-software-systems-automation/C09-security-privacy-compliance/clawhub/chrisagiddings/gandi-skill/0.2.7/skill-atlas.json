@@ -1,0 +1,178 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "website"
+    ],
+    "audiences": [
+      "business",
+      "developer",
+      "marketer",
+      "security-professional"
+    ],
+    "confidence": 0.3,
+    "domains": [
+      "business",
+      "marketing",
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C07:token:test",
+      "category:C07:token:testing",
+      "category:C08:token:cd",
+      "category:C08:token:ci",
+      "category:C09:token:privacy",
+      "category:C09:token:secure",
+      "category:C09:token:security",
+      "category:C11:token:roadmap",
+      "category:C11:token:team",
+      "category:C12:token:management",
+      "category:C13:token:operations",
+      "category:C14:token:sales",
+      "category:C17:token:personal",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:marketing-sales",
+      "cross-tag:planning",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "cross-tag:testing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C06",
+      "C07",
+      "C08",
+      "C11",
+      "C12",
+      "C13",
+      "C14",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "build",
+      "manage",
+      "market",
+      "plan",
+      "secure",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "86be18e4ac9a94c95d3688bcfe8cc260894929dd8c7a86c357f64ffcfa629203",
+    "content_hash": "efbe7d93b18cca2bca7c42eaf8102cf6c3aab6c97fda384e791e66bd2fb33546",
+    "precanonical_content_hash": "1498c975e5676ea778448821116366a2d7dfc1f205fbf2ee1c0b13ba52fcc146",
+    "skill_md_hash": "100082ea444ca28ec36f1a4b58e97277881fb366a6abe8fc64bfc0e749b55fa0",
+    "version_metadata_sha256": "2ca54f6c183625eb31098376f0e42a5dc7d0ca8a2ae01a96c6d91005951222d3"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/chrisagiddings/skills/gandi-skill",
+    "claim_id": "20a3e026e1b17f82411e4d2baa657762baa3b3dd48357bead64b467587a02117",
+    "index_entries": [
+      {
+        "index_path": "categories/security-and-passwords.md",
+        "label": "gandi-skill",
+        "url": "https://clawskills.sh/skills/chrisagiddings-gandi-skill"
+      }
+    ],
+    "owner_handle": "chrisagiddings",
+    "owner_id": "s171wq5qncmat5w06jrkva6fgs884kr5",
+    "published_at": 1772319287154,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783656209045,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783656209045,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently implement the stated Gandi registrar, DNS, email-forwarding, certificate, DNSSEC, and domain-management purpose, including high-impact account changes.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Destructive capabilities are prominently disclosed and model invocation is disabled, though some documentation is inconsistent about current versus future write capabilities and some commands support explicit force flags.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is manual/documentation-driven; the npm package has no dependencies and no lifecycle install hooks.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Filesystem access is mostly scoped to Gandi configuration under ~/.config/gandi plus expected Gateway/Moltbot config lookup, and network activity is directed to the configured Gandi API or user-owned domains for SSL checks.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill stores API tokens, profile tokens, and contact details locally with restrictive permissions, but users should avoid the optional shell-profile token persistence guidance and avoid printing tokens.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-4] expected: The update-DNS wrapper can create a missing record because the Gandi PUT endpoint is upsert-like; this is a usability hazard, but the script also states that both add and update work the same way.\n[SDI-4] unexpected: The scope documentation has outdated current/future wording, but the manifest, opening security warning, and script reference clearly disclose DNS, email, registration, and destructive operations.\n[SDI-1] expected: DNSSEC and related LiveDNS documentation fit a Gandi DNS-management skill; the advanced DNS security capabilities should be clearer in the short description but are not hidden or unrelated.\n[SQP-2] unexpected: The setup guide's token-verification step that prints the full token is poor secret-handling guidance; it is not evidence of exfiltration, but users should use non-revealing checks instead.\n[SQP-2] expected: Domain registration, renewal, contact storage, bulk DNS replacement, snapshot restore, and email-routing changes are high impact but purpose-aligned and generally documented with warnings, confirmations, or rollback guidance.\n[EA2] expected: The --force option is a disclosed automation escape hatch for user-run commands, not hidden autonomous behavior; model invocation is explicitly disabled.\n[TM1] expected: Parameterized DNS and email delete commands are expected for this management tool and are documented as destructive, with confirmation prompts unless the user supplies --force.\n[YR1] expected: The bashrc line is optional credential persistence guidance, not backdoor persistence; it is still risky because it leaves a live registrar token in a shell startup file.\n[suspicious.insecure_tls_verification] expected: The disabled TLS verification is used by an SSL diagnostic script to inspect expired or self-signed certificates on domains, not to send credentials to arbitrary hosts.",
+          "guidance": "Install only if you intend to manage Gandi domains from this skill. Prefer separate read-only and write tokens, grant the minimum scopes needed, do not print or store tokens in shell profiles, create DNS snapshots before changes, and carefully review any --force, bulk DNS, DNSSEC, registration, renewal, certificate, or email-forward command before running it.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a powerful but clearly disclosed Gandi domain-management skill, with risks that mainly come from using write-capable registrar tokens and destructive commands.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783656128478,
+          "issueCount": 15,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: gandi-skill\nVersion: 0.2.7\n\nThe OpenClaw Gandi skill is classified as benign. It is transparent about its destructive capabilities, explicitly declares `disable-model-invocation: true` in `SKILL.md` to prevent autonomous agent execution, and implements robust input sanitization and validation across all scripts (e.g., `sanitizeDomain`, `sanitizeRecordName` in `gandi-api.js`). Sensitive data (API tokens, contact info) is stored locally in `~/.config/gandi/` with secure permissions (0o600). Destructive operations are guarded by explicit user confirmation prompts. All network communication is directed solely to the official Gandi API endpoints. The use of `rejectUnauthorized: false` in `check-ssl.js` is for diagnostic purposes (probing any SSL certificate, valid or not) and does not indicate malicious intent or data exfiltration. No evidence of backdoors, unauthorized data exfiltration, or prompt injection designed to bypass security controls was found.",
+          "checkedAt": 1779161022592,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "fd1c5230f9fbd05ad640859ff4ceb49d4dbe2fc27a51cbec28bd56f33b5380ef",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/fd1c5230f9fbd05ad640859ff4ceb49d4dbe2fc27a51cbec28bd56f33b5380ef"
+    },
+    "slug": "gandi-skill",
+    "source_type": "clawhub",
+    "version": "0.2.7"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,119 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.0,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "fallback:C00"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e8b617bcf767fbffdf52d822615dc317cc1403a0e66a46ee5f4d7bff1dc4389b",
+    "content_hash": "80122491911565ed9334b8a4848d9d4657e4847f345258db7dfcc84226dd0994",
+    "precanonical_content_hash": "9fd4d7fe10d98aac1a66549f8402b5c6ed0871a82ca96290f5f17286b382b964",
+    "skill_md_hash": "ab111b71675cf9fe3644765d375c65ed21a9d3840867e5b5def6f493896c9ac2",
+    "version_metadata_sha256": "34c77e73a490431d21e11328092cddc52615044250912624a7f5a137900f9247"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/guoqiao/skills/mlx-stt",
+    "claim_id": "dc22e98a79df6dde01cb4687aea7e5163cbc3521e52ba38ee92e47c2c17cb2f2",
+    "index_entries": [
+      {
+        "index_path": "categories/apple-apps-and-services.md",
+        "label": "mlx-stt",
+        "url": "https://clawskills.sh/skills/guoqiao-mlx-stt"
+      }
+    ],
+    "owner_handle": "guoqiao",
+    "owner_id": "s17ffveb731pj7ry6ezhyn9hts88598a",
+    "published_at": 1770686109778,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783652034064,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783652034064,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is local STT/ASR, and the runtime script only converts a supplied audio file with ffmpeg, runs mlx_audio.stt.generate using an MLX model, prints transcript text, and removes its temporary directory.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill includes broad natural-language triggers and an always-enabled metadata flag, which could make activation less explicit, but the behavior they activate is still aligned with transcription.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "install.sh uses Homebrew and uv to install ffmpeg, uv, and mlx-audio, including a forced prerelease-allowed mlx-audio install; this is disclosed and purpose-aligned but changes the local tool environment and relies on package supply-chain trust.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "macOS Apple Silicon, brew, ffmpeg, uv, and MLX audio tooling are proportionate for local speech-to-text, and the artifacts do not request credentials, accounts, or unrelated local data.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installed tools persist locally, but the artifacts show no background service, launch agent, credential persistence, privilege escalation, data exfiltration, or destructive behavior beyond deleting their own temporary directory.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad transcription triggers are real and worth user awareness, but they map directly to the skill's stated STT purpose and do not show hidden or purpose-mismatched behavior.\n[SQP-2] expected: The install script modifies the local environment through brew and uv, but the dependency list and purpose are disclosed in SKILL.md; this is a normal install-risk caveat rather than evidence of malicious behavior.",
+          "guidance": "Install only if you are comfortable letting Homebrew and uv add or update local audio and ML tooling. Prefer invoking it explicitly with /mlx-stt <audio>, and remember that audio transcripts will be printed into the agent session.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to be a straightforward local speech-to-text helper for Apple Silicon Macs, with ordinary dependency-installation and trigger-scope caveats.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783652012607,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 11,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: mlx-stt\nVersion: 1.0.7\n\nThe skill bundle is designed for local Speech-To-Text on Apple Silicon. It uses `brew` and `uv` to install necessary dependencies like `ffmpeg` and `mlx-audio`, which are standard tools for audio processing and MLX-based operations. The `mlx-stt.sh` script converts audio to a suitable format using `ffmpeg` and then processes it with `mlx_audio.stt.generate`, printing the transcript to stdout. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts against the agent. All actions are directly aligned with the stated purpose of providing local STT functionality.",
+          "checkedAt": 1779160614659,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "f217ba3c604ff9abead4b0f1e102ee0b5f4a27588b4a7f488b67cced34c0de19",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/f217ba3c604ff9abead4b0f1e102ee0b5f4a27588b4a7f488b67cced34c0de19"
+    },
+    "slug": "mlx-stt",
+    "source_type": "clawhub",
+    "version": "1.0.7"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

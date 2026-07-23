@@ -1,0 +1,148 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.9077,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C02:token:edit",
+      "category:C02:token:language",
+      "category:C05:phrase:image generation",
+      "category:C05:phrase:video editing",
+      "category:C05:token:image",
+      "category:C05:token:video",
+      "category:C06:token:api",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "manage",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "148e4b7648c2d576f1cfafc80f08a551e3e761056782ea31b7aa5e9f8b45c453",
+    "content_hash": "1b26f668bf294fcbd1c0d527716a1612fdfb4c0f9ea16055452209567f1b6bae",
+    "precanonical_content_hash": "b3c4d2ef7352e86ae37a34480107ba6a319f5ce06d52a71bcde7887a4020153e",
+    "skill_md_hash": "c5d62a55662eec7e799bfae7990d15cced934674cc9fc9f6df41b130fecedbf7",
+    "version_metadata_sha256": "02528c41b48662e696036319dc4c8eff8cce39047a2853d01405b8f3ca3fd0f5"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/devvgwardo/skills/grok-imagine-video",
+    "claim_id": "20d4a24f8f4bea21cd9b70262b0811dda5f8e665c29a4a091303524a3ad267ce",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "grok-imagine-video",
+        "url": "https://clawskills.sh/skills/devvgwardo-grok-imagine-video"
+      }
+    ],
+    "owner_handle": "devvgwardo",
+    "owner_id": "s173by3gfz0gwd99y3qkfn65s5844tct",
+    "published_at": 1770911599741,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971393768,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971393768,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The code and docs consistently implement image/video generation and editing through xAI endpoints; external processing of prompts, image URLs, video URLs, and generated media is inherent to that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The invocation text is broad for image/video generation and editing, but it remains tied to the named Grok/xAI integration and does not contain hidden role changes, prompt overrides, or unrelated agent instructions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is manual and metadata declares the required XAI_API_KEY; the artifacts disclose API use, though they do not fully machine-declare outbound network and local download behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading XAI_API_KEY and making outbound requests to https://api.x.ai/v1 are proportionate for this integration, but users should expect API quota/cost impact and third-party processing.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no daemon, credential-store access, or autonomous persistence; helper functions can write downloaded media to caller-provided paths, so outputs should be kept workspace-scoped.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[TT3] expected: Downloading media URLs returned by the generation API is expected for delivery of generated videos; lack of URL allowlisting, timeout, content-type, and size checks is a hardening gap, not evidence of hidden exfiltration or purpose-mismatched network use.\n[LP3] expected: The skill requires an API key and outbound network access, which are disclosed in docs and coherent with the purpose; metadata could be more explicit about network and file-write capabilities.\n[SQP-1] expected: The activation description covers many image/video generation requests, but it is not deceptive and remains scoped to Grok/xAI media generation and editing.\n[SQP-2] expected: The README and examples show xAI API use and media URL submission, but a clearer privacy notice would help users understand that prompts and supplied media references may be sent to a third party.",
+          "guidance": "Install only if you intend to use xAI for media generation. Use your own preferably dedicated xAI API key, avoid submitting private or sensitive prompts/media without consent, monitor usage costs, and save downloads only to an intended workspace output directory.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent xAI media-generation skill that uses an API key, sends prompts and media URLs to xAI, and downloads generated files as part of its stated purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971366734,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: grok-imagine-video\nVersion: 1.0.4\n\nThe skill bundle provides a Python client for the xAI Grok Imagine API, enabling image and video generation/editing. All code and documentation align with the stated purpose, making legitimate API calls to `https://api.x.ai/v1` and handling file downloads to the local workspace. The `SKILL.md` does not contain any prompt injection attempts against the OpenClaw agent, nor does the Python code exhibit malicious behaviors like data exfiltration, unauthorized execution, or persistence. The `CHANGELOG.md` even notes the removal of unrelated and overly broad Bash permissions from a previous version, indicating good security hygiene.",
+          "checkedAt": 1779163329986,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "54fda06d8008d9776cbb7c0677fcce977df07f9a2d794b855b0673e857fa2808",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/54fda06d8008d9776cbb7c0677fcce977df07f9a2d794b855b0673e857fa2808"
+    },
+    "slug": "grok-imagine-video",
+    "source_type": "clawhub",
+    "version": "1.0.4"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

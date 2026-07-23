@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.6607,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:phrase:web search",
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C09"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "44a7a1665942921d2b543321df6d797b9731e4d693a7f7d7e12163bd3cd8b5cd",
+    "content_hash": "11c25395671722b311879627f7523974c49c0d27137519cf778ea0570c91aad5",
+    "precanonical_content_hash": "414ba569f8d48b248089923c558339ecb037b821e4dfd0dcbe7aeadcff1931c8",
+    "skill_md_hash": "4ab64cc9e1af5d0bce34ceaf48e4be9e0641b0a1ea6eca9628e3cd2ab10515cf",
+    "version_metadata_sha256": "404dee7c98ee38c815fc8fc5ee0fb74432977e4946a11fa27ba07bed4627ad52"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/honestqiao/skills/zhipu-search",
+    "claim_id": "8dcbe0bc4c6fafef0a14698717d57af84b159db9b957a6a8d87dbd2224ea62f9",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "zhipu-search",
+        "url": "https://clawskills.sh/skills/honestqiao-zhipu-search"
+      }
+    ],
+    "owner_handle": "honestqiao",
+    "owner_id": "s17eq3bskgcnq6br09q9b93bpx885hds",
+    "published_at": 1771693207571,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779947075853,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779947075853,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, metadata, documentation, and shell script all align around web search through the Zhipu API. The only declared tools are curl and jq, and the only declared secret is ZHIPU_API_KEY.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The use guidance is somewhat broad for generic phrases like \"look up\" or \"find information about,\" so agents should avoid invoking it for sensitive or locally answerable requests unless web search is clearly intended.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains documentation, package metadata, and a short shell script. There is no install script, downloader, package mutation, or obfuscated setup behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Sending the query and API key to the Zhipu HTTPS endpoint is expected for this search skill and is disclosed, but users should not search for secrets, private data, or regulated information through it.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background worker, autostart mechanism, credential-store access, local indexing, privilege escalation, or durable persistence was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad trigger wording is a valid usage caution, but it is visible in the documentation and consistent with a web-search skill rather than evidence of hidden or purpose-mismatched behavior.\n[E1] expected: External transmission is real because searches are sent to open.bigmodel.cn, but that is the core disclosed function of the skill and is bounded to the declared API endpoint.",
+          "guidance": "Install only if you trust Zhipu with the search terms you submit. Use a limited-scope API key, avoid shared machines or shell startup files for long-lived secrets, and do not send confidential prompts, credentials, personal data, or internal business content as search queries.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it claims: it sends user search queries to Zhipu's web search API using a declared API key, with no hidden persistence or unrelated access found.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779947036940,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: zhipu-search\nVersion: 1.5.0\n\nThis skill bundle is benign. The `SKILL.md` documentation clearly outlines its purpose and explicitly addresses security best practices, such as not sourcing shell configuration files and using environment variables for API keys. The core script `skill/scripts/search.sh` implements robust security measures, including proper input validation (query length limit) and critical JSON escaping using `jq -n --arg` to prevent injection vulnerabilities. It exclusively interacts with the official Zhipu API endpoint (`https://open.bigmodel.cn`) over HTTPS with TLS 1.2, and there is no evidence of data exfiltration, persistence mechanisms, or other malicious behaviors.",
+          "checkedAt": 1779165918856,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "44a7a1665942921d2b543321df6d797b9731e4d693a7f7d7e12163bd3cd8b5cd",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/44a7a1665942921d2b543321df6d797b9731e4d693a7f7d7e12163bd3cd8b5cd"
+    },
+    "slug": "zhipu-search",
+    "source_type": "clawhub",
+    "version": "1.5.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:coding",
+      "category:C06:token:implementation",
+      "category:C07:token:review",
+      "category:C11:token:project",
+      "cross-tag:debugging",
+      "cross-tag:review",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C07",
+      "C11"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "debug",
+      "review"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "f9832a61d12bfd19630a24d37669a295341e09a4fd526e4ba34cbf437202d4ad",
+    "content_hash": "03af10d57c25b6858fae4d588b7be4dbe3cd09b76752e9f0ee9178e099e878d4",
+    "precanonical_content_hash": "0ec7431dff704e819c1489b74219519c4fa04826356cb63deab974f21899173b",
+    "skill_md_hash": "39961af549c03a61252243a1f5acab03219b685814460d3b56705d4fe49c4283",
+    "version_metadata_sha256": "1548dc4220eb62966fcab5c2ef12708129defd914574e4dfe1d3c98abb07ce79"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/cecwxf/skills/openai-codex-operator",
+    "claim_id": "c86b45fdf1dc1f40a4ee48689388e208103588879a33e94bc692ddf554392578",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "openai-codex-operator",
+        "url": "https://clawskills.sh/skills/cecwxf-openai-codex-operator"
+      }
+    ],
+    "owner_handle": "cecwxf",
+    "owner_id": "s17bnch4s0gmge7dne72k5p74183grr7",
+    "published_at": 1771303840016,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972256917,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972256917,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to operate OpenAI Codex for implementation, debugging, refactoring, and scripted coding workflows; running `codex exec` against a target repository is coherent with that purpose and not evidence of hidden behavior.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions and example script delegate broad coding authority to Codex. That is expected for this skill, but users should understand that Codex may edit files or run project commands in the selected directory.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No artifact-backed evidence shows automatic installation hooks, background execution, or unexpected setup behavior; the cited shell script appears to be an explicit example invocation.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Access to a local project directory and the Codex CLI is proportionate for a Codex operator skill, but the chosen working directory should be deliberate because repository contents may be read or modified.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No evidence was provided of persistence, privilege escalation, credential harvesting, or use of local auth/session stores beyond invoking the user’s existing Codex CLI.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight] expected: The reported shell-injection concern is not supported by the cited script form `codex exec \"$TASK\"`, which quotes the task as a single shell argument. The broader risk is agentic execution of the task by Codex, which is the skill’s disclosed purpose.\n[SQP-2] expected: The scanner concern about repository modifications is valid as a user-facing caution, but file mutation is expected for a skill whose purpose is to run Codex on coding tasks. The issue does not show deception, exfiltration, persistence, or purpose mismatch.\n[SQP-2] expected: The example script’s direct execution lacks a confirmation prompt, but it is still an explicit user-run helper taking a project directory and task. This is better handled as install/use guidance rather than a Review verdict absent hidden or automatic execution.",
+          "guidance": "Install only if you want OpenClaw to delegate coding tasks to Codex. Run it from the intended repository, prefer a version-controlled branch, review diffs afterward, and avoid passing untrusted text through hand-built shell command strings; use proper argument passing or quoting.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This appears to be a disclosed Codex wrapper for user-directed coding work, but it should be used only in repositories where file changes and command execution are expected.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972210290,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: openai-codex-operator\nVersion: 1.0.1\n\nThe skill bundle is classified as suspicious due to a clear shell injection vulnerability pattern. The `scripts/run-codex-example.sh` file directly uses unsanitized user input (`$TASK`) in a shell command (`codex exec \"$TASK\"`), which is a critical remote code execution risk. Furthermore, the `SKILL.md` instructions for the OpenClaw agent describe constructing commands like `exec.command: \"codex exec \\\"<task>\\\"\"`. If the agent naively inserts user-provided task descriptions into this template without proper escaping, it would also lead to shell injection. While there is no evidence of malicious intent (e.g., data exfiltration, backdoors), these are significant vulnerabilities that allow for arbitrary command execution.",
+          "checkedAt": 1779164747649,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "37a4b920a7d77978808a460631bc007baafc1862a37cf35539b7abec7721a81f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/37a4b920a7d77978808a460631bc007baafc1862a37cf35539b7abec7721a81f"
+    },
+    "slug": "openai-codex-operator",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

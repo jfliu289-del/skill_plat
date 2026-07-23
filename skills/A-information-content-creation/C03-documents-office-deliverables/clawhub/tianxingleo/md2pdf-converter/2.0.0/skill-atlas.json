@@ -1,0 +1,119 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C03",
+    "reasons": [
+      "category:C03:token:pdf"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "07d9c72b60f7471f012710b6741bdfc68c55f3e56cee8784804891d4a3b1a61a",
+    "content_hash": "f0e3e8c3753820d6d8dfd5f6f43ec18cffcd23385b6b153f26131f92de7d0ef1",
+    "precanonical_content_hash": "50079a3a6492496cc2f2cecbbf1fe18f1475b55af8b2870c1b05c8ca84fd74fb",
+    "skill_md_hash": "efc11a5d47f1135d8c4ada3b1ab761b229480f6b3cd7766ef5124550897ff918",
+    "version_metadata_sha256": "a444eb7bcb9ca3232edbb78f32f1c2776d06d906e3d3dfe464f3b8dccbf32762"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tianxingleo/skills/md2pdf-converter",
+    "claim_id": "25ebe65b37ec734c5cca34af1d324bb494536fa799dd442de1f79923bc2e205b",
+    "index_entries": [
+      {
+        "index_path": "categories/git-and-github.md",
+        "label": "md2pdf-converter",
+        "url": "https://clawskills.sh/skills/tianxingleo-md2pdf-converter"
+      }
+    ],
+    "owner_handle": "tianxingleo",
+    "owner_id": "s17362bbxgzt0s8r2ynqgp2nsh8852hg",
+    "published_at": 1771124542046,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779973801297,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779973801297,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The shell script converts a user-supplied Markdown file to a user-supplied PDF using Pandoc, a generated Lua filter, CSS, and WeasyPrint, which matches the stated Markdown-to-PDF purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use is user-directed through an explicit command with input and output paths; I found no prompt injection, background worker, credential access, data exfiltration, or unrelated automation instructions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill depends on pandoc, weasyprint, python3, wget, and fonts. It also contains a hardcoded absolute path for generate_emoji_mapping.py, which is a portability flaw rather than evidence of malicious behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "First run downloads a hardcoded Twemoji 14.0.0 archive from GitHub into ~/.cache/md2pdf. This is disclosed and purpose-aligned for emoji rendering, but it is not checksum-verified.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The only persistent state found is a scoped emoji cache and mapping file under ~/.cache/md2pdf, plus documented cache-clearing commands. No privilege escalation, credential use, or long-running persistence was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Shell execution plus file read/write are inherent to local document conversion; the artifacts visibly document the conversion command, cache path, and output behavior, though explicit permission metadata would improve clarity.\n[SDI-1] expected: The first-run GitHub download is real, but SKILL.md repeatedly discloses that internet access is needed initially and that later runs work offline.\n[SDI-2] expected: Network access is limited to a hardcoded Twemoji release archive used for emoji assets; I found no arbitrary endpoint, credential transmission, or document upload.\n[SQP-1] expected: The trigger language is centered on Markdown-to-PDF conversion and related PDF generation needs, which matches the script's behavior.\n[SQP-2] expected: The cache deletion guidance uses rm -rf, but the path is narrowly scoped to ~/.cache/md2pdf and is presented as troubleshooting for this skill's generated cache.\n[RA2] expected: The persistent cache is intentional, documented, and limited to emoji PNG assets and a mapping file for offline reuse.\n[TM1] expected: The force-delete examples are a usability and safety hardening issue, but they target only the skill cache and do not show hidden or destructive behavior beyond documented cache reset.\n[VirusTotal] expected: External command execution with quoted user filenames is expected for a converter; the hardcoded helper path is a reliability issue, and VirusTotal itself reported no exfiltration, persistence, or prompt-injection evidence.",
+          "guidance": "Install only if you are comfortable with a shell-based converter that downloads about 150MB of Twemoji assets from GitHub on first run and stores them under ~/.cache/md2pdf. In stricter environments, pre-verify or vendor the Twemoji archive, fix the hardcoded helper script path, and use care with the documented cache cleanup command.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to do what it says: convert Markdown files to PDFs, with a disclosed first-run emoji download and local cache but no hidden or abusive behavior found.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779973775342,
+          "issueCount": 9,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: md2pdf-converter\nVersion: 2.0.0\n\nThe skill is designed to convert Markdown to PDF with emoji support, using Pandoc, WeasyPrint, and local Twemoji assets. It is classified as 'suspicious' due to the `scripts/md2pdf-local.sh` script executing external commands (`pandoc`, `weasyprint`) with user-provided input filenames. While the filenames are quoted, this pattern is a common vulnerability vector for shell injection or arbitrary code execution if the underlying tools have flaws. Additionally, the script uses a hardcoded absolute path (`/home/ltx/.openclaw/workspace/skills/md2pdf-converter/scripts/generate_emoji_mapping.py`) to invoke a Python script, which is a robustness vulnerability. There is no evidence of intentional malicious behavior like data exfiltration, persistence, or prompt injection against the agent.",
+          "checkedAt": 1779163816913,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "20e20a637d7242bec90e73cbd20924229db193004ca5c67368fe30c46923e39f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/20e20a637d7242bec90e73cbd20924229db193004ca5c67368fe30c46923e39f"
+    },
+    "slug": "md2pdf-converter",
+    "source_type": "clawhub",
+    "version": "2.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

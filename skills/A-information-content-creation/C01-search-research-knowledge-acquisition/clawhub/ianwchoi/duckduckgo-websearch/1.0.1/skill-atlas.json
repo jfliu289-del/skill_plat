@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.8667,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:phrase:web search",
+      "category:C01:token:find",
+      "category:C01:token:lookup",
+      "category:C01:token:search",
+      "category:C01:token:sources",
+      "category:C06:token:api",
+      "category:C07:token:quality",
+      "category:C09:token:privacy",
+      "cross-tag:agent-management",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "fef266edd2a6930ca1ea7492fb05d913b77da28386fba607f8cc27defe0e7317",
+    "content_hash": "2a2c49412b53f247d231ba54cae7a5445ab8f7ca90ce8a03653faff604482a24",
+    "skill_md_hash": "b60e06bfdb8b1fbb2f5e43427bf7746a15dd0eccbd6c20b746d43ac1f67ef2e2",
+    "version_metadata_sha256": "1df930c4f989111559147fe3ece11e77403b5d00d2738786d11c84ca4038508c"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/ianwchoi/skills/duckduckgo-websearch",
+    "claim_id": "072c61d2e0c8286b9ac0fc4c50a5ec2fd458848fef70816fcd3dc75478dfb4d1",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "duckduckgo-websearch",
+        "url": "https://clawskills.sh/skills/ianwchoi-duckduckgo-websearch"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "ianwchoi",
+    "owner_id": "s177c5ed8d12xgc10sqhkxpq2n8859fn",
+    "published_at": 1771900763434,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779953982488,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779953982488,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is web search, and the executable script only queries DuckDuckGo Instant Answer and DuckDuckGo HTML search, parses result titles/snippets/URLs, and prints JSON.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The trigger language is broad for general web lookup requests, but it is disclosed, user-directed, and coherent for a general search skill rather than hidden or purpose-mismatched behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is manual under the OpenClaw skills directory and includes an npm dependency lockfile; there are no postinstall hooks or automatic startup behavior, though the documentation understates the external node-html-parser dependency.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to DuckDuckGo is expected for the skill purpose. I found no credential reads, local file scanning, unrelated outbound endpoints, or local mutation beyond normal dependency installation.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No persistence mechanism, background worker, scheduled execution, privilege escalation, credential storage, or destructive behavior appears in the artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-1] expected: SkillSpector's concern about broad activation is supported as a usage-scope note, but the broad web-search trigger is disclosed and purpose-aligned, so it does not create a material Review concern by itself.\n[SQP-1] expected: The 'quick web lookup' wording could invoke network search for more requests than necessary, but artifact behavior remains limited to DuckDuckGo search requests initiated for web lookup tasks.\n[StaticScan] expected: Static scan reported no findings, consistent with the inspected files.\n[VirusTotal] expected: VirusTotal telemetry was clean and aligns with the artifact review; it was treated as supporting signal only.",
+          "guidance": "Install this if you want a DuckDuckGo-based search helper. Avoid including sensitive private data in search queries because queries are sent to DuckDuckGo, and treat snippets and links as untrusted web content. Be aware that Node and npm dependency installation may be needed.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward DuckDuckGo web search helper that sends user search terms to DuckDuckGo and returns parsed results.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779953946923,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: duckduckgo-websearch\nVersion: 1.0.1\n\nThe skill bundle provides a DuckDuckGo web search functionality, using its Instant Answer API and a lightweight SERP scraping fallback. The `SKILL.md` instructions are clear, align with the stated purpose, and include safety guidelines (e.g., avoiding raw HTML, respecting robots.txt). The `scripts/ddg_search.js` script uses standard Node.js modules (`https`, `http`, `querystring`) and the `node-html-parser` library to perform requests exclusively to DuckDuckGo's domains and parse the results. There is no evidence of data exfiltration, unauthorized command execution, persistence mechanisms, or prompt injection attempts designed for malicious actions. The input query is properly encoded for URL parameters, mitigating injection risks. All components are consistent with a benign web search utility.",
+          "checkedAt": 1779166601193,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "9bbe3d3bd46393b26695f8a1cca18c21eb6e91739122364a915cefab08561af7",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/9bbe3d3bd46393b26695f8a1cca18c21eb6e91739122364a915cefab08561af7"
+    },
+    "slug": "duckduckgo-websearch",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

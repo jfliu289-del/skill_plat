@@ -1,0 +1,157 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "security-professional"
+    ],
+    "confidence": 0.61,
+    "domains": [
+      "security"
+    ],
+    "needs_review": false,
+    "primary_category": "C17",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:research",
+      "category:C01:token:search",
+      "category:C04:token:data",
+      "category:C09:token:security",
+      "category:C12:token:management",
+      "category:C12:token:market",
+      "category:C15:token:experiment",
+      "category:C17:phrase:knowledge management",
+      "category:C17:token:knowledge",
+      "category:C17:token:notes",
+      "category:C18:token:home",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:planning",
+      "cross-tag:search",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C12"
+    ],
+    "stages": [
+      "discover",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "plan",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "681bc8354d5a15edcd6066223003751df49b791f5cbc6a96ed2f682904d33606",
+    "content_hash": "9caf20e28d61e8866dabb0189c41693d5f06a216f1c5948dcdced1921461a004",
+    "skill_md_hash": "8ed2f898e8f9adb0fd348f29c4a9f0e7bc57af583b1ff241d193dece269e7e1d",
+    "version_metadata_sha256": "053a4c218ca2b0ef17277e28cb151fe294756e9c8f0d4d9fceaa2089b1b68a71"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/johstracke/skills/research-assistant",
+    "claim_id": "6f763189e6ab58969a0aafdcf7c5adc528161e5fc746344984352020dd2c8f0d",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "research-assistant",
+        "url": "https://clawskills.sh/skills/johstracke-research-assistant"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "johstracke",
+    "owner_id": "s173d5fsnxa2pq9qbfax6fcewd8847r5",
+    "published_at": 1770493007742,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658940102,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658940102,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill adds, lists, shows, searches, and exports research notes, matching its stated knowledge-management purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime instructions are user-directed CLI examples and do not ask the agent to override user intent, auto-run hidden actions, or contact external services.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The package contains a SKILL.md file and one Python helper script using standard-library functionality; no installer, dependency fetch, privileged setup, or background worker is present.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script persistently writes a local JSON database under ~/.openclaw/workspace and can export markdown to user-supplied local paths; this is purpose-aligned but can overwrite files if the user chooses an existing export path.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Local persistence is disclosed and expected for cross-session notes. No credential access, network exfiltration, privilege escalation, command execution, or long-running persistence was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SkillSpector] expected: SkillSpector reported no issues; artifact review found only disclosed local note storage and export behavior.\n[VirusTotal] expected: VirusTotal telemetry was clean; the observed file-write capability is local, documented, and aligned with note storage and markdown export.\n[staticScan] expected: Static scan metadata was clean, and manual review found no hidden networking, credential handling, destructive logic, or unrelated mutation authority.",
+          "guidance": "Reasonable to install for organizing local research notes. Avoid storing passwords, API keys, private keys, or highly sensitive instructions in notes because they persist across sessions and may later be searched or exported; review export paths before running the export command.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a local research-note organizer whose disclosed storage and export behavior fit its stated purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658927664,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: research-assistant\nVersion: 1.0.1\n\nThe skill provides research organization functionality, including adding, listing, searching, and exporting notes. The `SKILL.md` clearly outlines the purpose and explicitly details security measures for file exports. The `research_organizer.py` script implements robust path validation in the `is_safe_path` function, restricting file exports to safe directories (`~/.openclaw/workspace/`, `~`, `/tmp`) and explicitly blocking system paths (`/etc`, `/usr`, `/var`, `/root`) and sensitive dotfiles (`.ssh`, `.bashrc`). There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts against the agent. The file write capability, while inherently risky, is appropriately constrained by the implemented security controls.",
+          "checkedAt": 1779162094393,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "db65b00ab703822c61a87659e12acbdcaa71667a85c9f292d227c11732714ec8",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/db65b00ab703822c61a87659e12acbdcaa71667a85c9f292d227c11732714ec8"
+    },
+    "slug": "research-assistant",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

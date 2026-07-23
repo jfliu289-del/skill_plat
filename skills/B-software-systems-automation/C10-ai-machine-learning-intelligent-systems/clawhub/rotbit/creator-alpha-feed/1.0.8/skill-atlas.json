@@ -1,0 +1,130 @@
+{
+  "classification": {
+    "artifacts": [
+      "website"
+    ],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C10:token:ai",
+      "category:C17:token:obsidian",
+      "cross-tag:browser-automation",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "automate"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "f29228119b50272d623afb08c71af1344eeae3d7e824e284042e67029218c8aa",
+    "content_hash": "4f85115cd6cd360668e61cdeb9a9c1d57bac8aa7ed421bfc47dd026481e8abdf",
+    "precanonical_content_hash": "5680302eae8710c0ac8beb14a2bb92baff859ab65c3767c57e5384c3ae86a5aa",
+    "skill_md_hash": "6d922cef6391a58c37cc1c5086ebce4cc1de6984f8ce01b5d84fa400fd23b439",
+    "version_metadata_sha256": "fdfbd167b25520dee7c53ed7b073504d77f496bab3c811b118fe1f1e24b6d7f5"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/rotbit/skills/creator-alpha-feed",
+    "claim_id": "f2314bb0d4b30559fe0e700e9794a35c6defcf5729af5525819597ec4749fad7",
+    "index_entries": [
+      {
+        "index_path": "categories/cli-utilities.md",
+        "label": "creator-alpha-feed",
+        "url": "https://clawskills.sh/skills/rotbit-creator-alpha-feed"
+      }
+    ],
+    "owner_handle": "rotbit",
+    "owner_id": "s179d0w3vv0nbt1v43832n7wn9885dgv",
+    "published_at": 1770708985051,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779964154327,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779964154327,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The network fetching, ranking, browser-assisted X/Twitter collection, Obsidian report writing, and Feishu briefing behavior match the stated purpose of daily creator-focused AI content scouting.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill discloses report writing and group-channel pushes, but the instructions are automation-oriented and do not consistently require a preview or confirmation before external posting.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No automatic installer, privilege escalation, remote script download, cron installation, or credential harvesting behavior was found; bundled shell scripts use ordinary local tools such as curl, jq, and file writes.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use of public APIs and browser collection is proportionate, but X/Twitter collection may involve a logged-in browser session or personalized home feed depending on configuration.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts include cron-oriented templates and write reports/logs under workspace or Obsidian paths, but they do not install persistence themselves; recurring execution requires user setup.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Bundled shell scripts and local report paths are disclosed and fit the collection workflow; this is a permissions-awareness issue rather than evidence of hidden or mismatched behavior.\n[SDI-4] unexpected: The daily task script can create placeholder analysis output and later summarize Feishu as pushed even though no actual send call is implemented; this is a reliability and operator-clarity concern, not evidence of malicious activity.\n[SQP-1] expected: The invocation scope is broad, but it remains centered on AI content scouting, KOL tracking, and briefing workflows rather than unrelated access or actions.\n[SQP-2] expected: Obsidian writes and Feishu/group pushes are real side effects, but they are disclosed in the skill purpose and runtime instructions; users should still configure destinations carefully.\n[SQP-2] expected: The cron prompt template describes automatic file writes and group posting as part of scheduled briefing operation; this should be treated as user-enabled automation rather than hidden persistence.\n[SQP-2] expected: The analysis script packages titles, URLs, authors, and source metadata for OpenClaw analysis; the data appears to be collected public-content metadata and is aligned with the ranking workflow.\n[VirusTotal code_insight] expected: Network access and browser instructions are expected for a multi-source content collection skill, and the supplied telemetry showed no engine detections.",
+          "guidance": "Before installing, verify the Feishu chat ID, Obsidian vault path, and whether you plan to run it from cron. Use a dedicated browser session for X/Twitter if possible, avoid collecting private pages or notifications, and review generated reports before enabling group posting.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed AI-content collection and briefing workflow, but users should review sharing destinations and automation settings before use.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779964112273,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 91,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: creator-alpha-feed\nVersion: 1.0.8\n\nThe skill is classified as suspicious due to its extensive use of high-risk capabilities, specifically network access via `curl` to various external domains (e.g., `hn.algolia.com`, `www.reddit.com`, `api.rss2json.com`, `nitter.net`, `rsshub.app`, `x.com`) and explicit instructions for the OpenClaw agent to use its `browser` tool (`browser open`, `browser snapshot`). While these actions are plausibly needed for the stated purpose of collecting AI content, browser automation inherently carries risks. However, the skill includes explicit instructions in `scripts/twitter-browser-tasks.sh` and `references/data-collection-rules.md` to limit browser access to public pages only and prohibit collecting private information, indicating an intent to mitigate these risks rather than exploit them.",
+          "checkedAt": 1779162685178,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "27a19eb5378ec91bccb278fecedc2cf3c53bab31119fa96c4e4557e5d61f7cb3",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/27a19eb5378ec91bccb278fecedc2cf3c53bab31119fa96c4e4557e5d61f7cb3"
+    },
+    "slug": "creator-alpha-feed",
+    "source_type": "clawhub",
+    "version": "1.0.8"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

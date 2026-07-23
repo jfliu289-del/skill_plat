@@ -1,0 +1,154 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.2389,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:search",
+      "category:C01:token:sources",
+      "category:C03:token:presentation",
+      "category:C06:token:api",
+      "category:C06:token:developer",
+      "category:C10:token:ai",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C03",
+      "C06",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "5e1be993bc304537d742a2f7bfc54b1efab8dc9dd4a5f5d116aad90fd7a37ddc",
+    "content_hash": "615e5a00680860b31c7e9c98f0fcd272700e84cb227f1c4b12d872321676c4ee",
+    "precanonical_content_hash": "487cff558d261f0fcd9be27c88b2faf823022c24842f185b314b76245f55e37e",
+    "skill_md_hash": "cedce2ec8bf249bcd635a7f15f9772655fba1db57738f3a78f8f5b6847ade72c",
+    "version_metadata_sha256": "765d58112bb017ab15d919efe75640848881e706d084bd474efe0475ef6c5717"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/atl4so/skills/kaspa-news",
+    "claim_id": "873c36e28cccde80a38a14b02b8905c34a40f7481308e2e4221c419aafbd3f14",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "kaspa-news",
+        "url": "https://clawskills.sh/skills/atl4so-kaspa-news"
+      }
+    ],
+    "owner_handle": "atl4so",
+    "owner_id": "s178cybervd9zeg3cd0yzahze1884fbc",
+    "published_at": 1771449823689,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779921927979,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779921927979,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is Kaspa news aggregation, and the artifacts support that by querying fixed public kaspa.news API endpoints for tweets, videos, Reddit posts, and pulse reports.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill uses strong formatting instructions and broad trigger phrases such as Kaspa news/update/tweets and any mention of kaspa.news; this can cause network retrieval on broad Kaspa-related prompts, but the behavior is disclosed and aligned with the news purpose.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains markdown instructions plus one executable shell script; there is no postinstall hook, package manager install step, or hidden setup mechanism in the artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Requirements are proportionate: python3 with requests, jq, and internet access to a fixed public API. The skill states that no API keys, tokens, auth, or runtime environment variables are required.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "Local inspection found no credential access, background worker, scheduled persistence, file mutation beyond user-directed example temp JSON output, privilege escalation, or destructive commands.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad trigger concern is supported by the trigger list, but the only resulting action is fetching public Kaspa-related data from the disclosed API, so it is guidance-level rather than a Review-bucket concern.\n[VirusTotal] expected: Clean telemetry is consistent with artifact review: the script uses fixed GET requests, jq parsing, and argv-based Python snippets without evidence of exfiltration or persistence.",
+          "guidance": "Install only if you are comfortable with the agent contacting kaspa.news when you ask for current Kaspa-related updates. For generic Kaspa discussion where you do not want live retrieval, ask the agent not to use this skill.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill fetches public Kaspa news and social updates from kaspa.news without credentials or persistence, with only a minor invocation-scope caution.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779921851134,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: kaspa-news\nVersion: 1.1.0\n\nThe OpenClaw AgentSkills bundle for 'kaspa-news' is classified as benign. The `scripts/kaspa-news.sh` script fetches public data from `https://kaspa.news/api` using standard tools (`python3` with `requests`, `jq`). It handles user input for filtering safely by explicitly using `jq --arg` and `sys.argv` in Python snippets, which prevents shell or `jq` injection. The `SKILL.md` and `FORMAT_LOCK.md` files contain extensive instructions for the AI agent, but these are focused on precise output formatting and data presentation, including an explicit 'Security note: never interpolate raw user input directly into jq programs. Always pass user values via `--arg` / `--argjson`.' There is no evidence of data exfiltration, malicious execution, persistence, or prompt injection designed to subvert the agent's core directives or perform unauthorized actions.",
+          "checkedAt": 1779165169448,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "f08f3f6163b590e4ed64ea0618430406f5135c2ee31ec85ac5b55c8ee8ace93b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/f08f3f6163b590e4ed64ea0618430406f5135c2ee31ec85ac5b55c8ee8ace93b"
+    },
+    "slug": "kaspa-news",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

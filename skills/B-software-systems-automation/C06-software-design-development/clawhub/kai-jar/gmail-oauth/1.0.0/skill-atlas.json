@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C01:token:find",
+      "category:C06:token:api",
+      "category:C06:token:code",
+      "category:C11:token:project",
+      "cross-tag:search",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C01",
+      "C11"
+    ],
+    "stages": [
+      "create",
+      "discover"
+    ],
+    "tasks": [
+      "build",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ef8a7ffa188ec34f4773c6e4913d398019e7093b7be65d44294fab4d625beaad",
+    "content_hash": "37f2718c7043d756bfc869ff619dcdedf2c43564571bcd44d318355aabc0805a",
+    "precanonical_content_hash": "d4abeba338b8f1530ecf55d1d046224a780ec83091ecf463b07176ae687a42c9",
+    "skill_md_hash": "39b9a02d84e06ed60cc5f304086da67788cc2b8738ff62b1753856bda2cbfd82",
+    "version_metadata_sha256": "b87d977a4c1b6ac2cb46f22723d48649f81429821017bf43b87e84d6e7a10ec3"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/kai-jar/skills/gmail-oauth",
+    "claim_id": "4ec6967395aa729c098e29f6c3b51b6acc8a254376f7641376d8ac195a801c45",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "gmail-oauth",
+        "url": "https://clawskills.sh/skills/kai-jar-gmail-oauth"
+      }
+    ],
+    "owner_handle": "kai-jar",
+    "owner_id": "s17aphjdpqq0rk1cghrr7s1b6h884266",
+    "published_at": 1770338436440,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658156597,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658156597,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The Gmail OAuth purpose, documentation, and script behavior are coherent. The default gmail.modify scope is broad mailbox access, but the skill discloses the scope and lists narrower alternatives.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are user-directed setup steps for Google Cloud, gog, and a manual OAuth code exchange. I found no hidden agent instructions, prompt injection, or unrelated behavior.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill depends on an external gog CLI installed via Homebrew and a local helper script. This is disclosed and aligned with the purpose, but users must trust gog separately.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The script reads gog's local OAuth client credentials and posts the user-provided authorization code to Google's official OAuth token endpoint. No unrelated local file access or alternate network destination was evident.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "Long-lived delegated Gmail access is expected for this OAuth flow. The main cautions are the recommendation to store GOG_KEYRING_PASSWORD in .bashrc and the temporary plaintext refresh-token file used before importing into gog.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill uses shell commands and Google network access, which is expected for a headless OAuth setup. The capability is visible in the documentation and script rather than hidden.\n[SQP-2] expected: The broad gmail.modify scope is real and high-impact, but it is disclosed in the scope table and directly related to Gmail integration. Users should choose a narrower scope when possible.\n[SQP-2] expected: Persisting GOG_KEYRING_PASSWORD in .bashrc is a credential-handling risk. It is not deceptive or unrelated, but it deserves user caution.\n[SQP-2] expected: The helper writes the refresh token to a mktemp file before importing it and then removes it. That local exposure risk is purpose-aligned but could be hardened with cleanup traps or stdin import support.\n[StaticScan] expected: Static scan reported no suspicious patterns, which matches the artifact review.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with the inspected artifacts; it was not used as the sole basis for the verdict.",
+          "guidance": "Install only if you intentionally want gog to access Gmail. Use the narrowest Gmail scope that meets your needs, avoid storing keyring passwords in shell startup files when possible, protect your OAuth client secret and refresh token, and revoke the Google app if you no longer need access.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it helps set up Gmail OAuth for the gog CLI, but it handles powerful email credentials that users should protect carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658123551,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 30,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: gmail-oauth\nVersion: 1.0.0\n\nThe skill bundle is designed to set up Gmail API access using the `gog` CLI and a manual OAuth flow. The `SKILL.md` provides clear, legitimate instructions for configuring a Google Cloud project and the `gog` CLI, with no evidence of prompt injection attempts. The `scripts/gmail-auth.sh` script reads `client_id` and `client_secret` from `~/.config/gogcli/credentials.json` and uses `curl` to exchange an authorization code for a refresh token with Google's official OAuth endpoint (`https://oauth2.googleapis.com/token`). The obtained refresh token is then imported into the `gog` CLI's keyring. All actions are directly aligned with the stated purpose and do not exhibit any malicious or high-risk behaviors such as unauthorized data exfiltration, persistence mechanisms, or arbitrary code execution.",
+          "checkedAt": 1779161684461,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "15fb82f15730fd0f4267aa6d80a6a06495939fa8e0ef57554e8529ab38205856",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/15fb82f15730fd0f4267aa6d80a6a06495939fa8e0ef57554e8529ab38205856"
+    },
+    "slug": "gmail-oauth",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

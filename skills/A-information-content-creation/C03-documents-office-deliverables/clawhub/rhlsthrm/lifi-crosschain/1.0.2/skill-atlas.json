@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C03",
+    "reasons": [
+      "category:C03:token:presentation",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C13:token:operations",
+      "cross-tag:data-analysis",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C13"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "0c5e13889d95d35bfe9e0a071cd5b45f83322f043a8a2447f45cb8c31f36475b",
+    "content_hash": "53dc1db02c4078da0cd0e323b8c9e56f893dd3da4d13eecf6d5cdacb19355982",
+    "precanonical_content_hash": "da79b77dff5de0a67d6259956e67653093a0edd2eb33fff5f169a449bcde06c7",
+    "skill_md_hash": "1ef56cfeafde6cd275dab70d7f2fc9d5603270119557be90d71af9c6527a02a7",
+    "version_metadata_sha256": "e7807b584ce43820d5bf023ab964ef2fdd4da965720d01d0f2fadaa8027bc704"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/rhlsthrm/skills/lifi-crosschain",
+    "claim_id": "42ef999e67f9bfcf80f98a3c63609355887e73d6312470246be7b1474f6575f2",
+    "index_entries": [
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "lifi-crosschain",
+        "url": "https://clawskills.sh/skills/rhlsthrm-lifi-crosschain"
+      }
+    ],
+    "owner_handle": "rhlsthrm",
+    "owner_id": "s174drpac9wrf84rycv196cqcn83kzey",
+    "published_at": 1771258302071,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971160001,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971160001,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The skill's stated purpose is LI.FI cross-chain swaps, bridges, route comparison, tracking, and DeFi zaps, and its high-impact transactionRequest capability is directly related to that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The SKILL.md allows natural-language requests and returns signable transactionRequest objects, but it also requires address, amount, slippage, allowance checks, and a human-readable summary before returning transaction data.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package is instruction-only with README.md, SKILL.md, and package.json; it declares only curl as a binary dependency and shows no install scripts or executable persistence.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Calling https://li.quest/v1 with curl and an optional LIFI_API_KEY is proportionate to the LI.FI integration, though wallet addresses, amounts, routes, and transaction hashes are expectedly shared with LI.FI.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No persistence or privilege escalation is shown, but users should treat any returned transactionRequest as high-privilege wallet-signing material that can move funds or grant approvals.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The README under-emphasizes irreversible fund-moving risk, but the skill plainly advertises swaps, bridges, zaps, and wallet-ready transaction requests; this is a documentation caution, not evidence of hidden behavior.\n[SQP-1] expected: Natural-language invocation broadens scope, but it occurs within the explicit /lifi skill context and the workflows require parameter gathering and transaction summaries before signable data is returned.\n[SQP-2] expected: Returning transactionRequest objects is central to the stated LI.FI purpose. The artifact would be stronger with an explicit final confirmation requirement, but it already mandates human-readable transaction presentation and avoids raw unexplained transaction data.",
+          "guidance": "Install only if you are comfortable with an agent preparing wallet-signable DeFi transactions. Before signing anything, manually verify the chain, token, amount, destination, spender or approval amount, contract-call details, route, slippage, fees, and bridge timing; prefer wallets that require explicit per-transaction approval and avoid unlimited token approvals.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill can prepare real blockchain swap, bridge, and zap transactions, but the artifacts disclose that purpose and include proportionate safety instructions rather than hidden or unrelated behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971107939,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 45,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: lifi-crosschain\nVersion: 1.0.2\n\nThe OpenClaw skill is designed for legitimate cross-chain DeFi operations using the LI.FI protocol. The `SKILL.md` file, which serves as instructions for the AI agent, includes comprehensive 'Safety Protocol' rules. These rules explicitly mandate address, amount, and slippage validation, ERC20 allowance checks (avoiding unlimited approvals), and most importantly, require the agent to ALWAYS present a human-readable summary of any transaction to the user BEFORE returning `transactionRequest` data for signing. This critical safeguard significantly mitigates prompt injection risks by preventing the agent from silently executing unauthorized or malicious transactions. All `curl` commands target the legitimate LI.FI API (`https://li.quest/v1`), and there is no evidence of data exfiltration, persistence mechanisms, or arbitrary command execution.",
+          "checkedAt": 1779164589267,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "e8f18c8cfc3c32647b78a288f2b3317b5762f4671e588b6c73f78f7addb7dec5",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e8f18c8cfc3c32647b78a288f2b3317b5762f4671e588b6c73f78f7addb7dec5"
+    },
+    "slug": "lifi-crosschain",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,148 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:sources",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C12:token:decision",
+      "category:C17:token:personal",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C12",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8456708be8d37131bf63e29103c7e1884339cb0bd61dbad3336ebc60acab1939",
+    "content_hash": "b4796a4c277f6b2206e0c2ef208de81439b4552a6b11fcf8a3048c34ed9d618c",
+    "precanonical_content_hash": "1837c306217605b8fb0763bf2e6e5a9e172cc19a5a190ab0e44924d14a82fd6e",
+    "skill_md_hash": "0a7c826d2fb0833944f26b4c9e9365a75b538a85429223988143d6657d7e3927",
+    "version_metadata_sha256": "17074bbf1b87d0b3f0015fc35f933e4b73e46349dddcb033cdb0fb473fea1f77"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/rosasalberto/skills/didit-database-validation",
+    "claim_id": "5d6cff89aa69d943cc6181a0fb65f8ce3851a70a76bf40fdb51d1171fb266a65",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "didit-database-validation",
+        "url": "https://clawskills.sh/skills/rosasalberto-didit-database-validation"
+      }
+    ],
+    "owner_handle": "rosasalberto",
+    "owner_id": "s17fenh76mn5y28mwva6bcmn0h8858fw",
+    "published_at": 1772514921166,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974671317,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974671317,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, documentation, and helper script all align around validating personal identity data against Didit-supported databases; the sensitive PII handling is expected for that purpose and is visibly documented.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill includes visible account registration and billing top-up API references, which are adjacent setup actions but should require explicit user approval before any agent performs them.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains a markdown skill and one small Python CLI helper; there is no installer, auto-run setup, background worker, or package mutation path.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Requiring DIDIT_API_KEY and sending user-provided ID details to Didit's validation endpoint is proportionate for this integration, but users need consent, legal basis, and API-key hygiene.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No local persistence, privilege escalation, broad file access, or hidden credential access is present; the documented optional save_api_request field may store request data in Didit's Business Console if used.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The concern about transmitting national IDs, names, and DOB is artifact-supported, but that data flow is the disclosed core function rather than hidden or unrelated behavior.\n[SQP-2] expected: The examples show placeholder API-key usage and sample identity fields; the documentation would benefit from stronger warnings about secrets, logs, and test data, but no real credential or covert collection is present.\n[SQP-2] expected: The Python helper posts only user-supplied CLI fields to the documented Didit validation endpoint when invoked and does not run automatically or persist data locally.\n[VirusTotal code_insight] expected: The account registration and billing top-up references are visible setup documentation, not auto-executed code; they create a user-control caution but do not show deceptive or malicious behavior.",
+          "guidance": "Install only if you intend to use Didit for identity checks. Confirm consent and legal authority before submitting anyone's ID data, review Didit's privacy and retention terms, keep DIDIT_API_KEY in secure environment storage, redact logs, and require explicit approval for account registration, credit top-ups, or paid validation calls.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed Didit identity-database validation integration, but users should treat it as sensitive because it sends government ID data to a third-party API and may involve paid requests.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974628595,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: didit-database-validation\nVersion: 1.1.0\n\nThe `SKILL.md` file contains instructions for programmatic account registration and billing top-up (e.g., `POST https://apx.didit.me/auth/v2/programmatic/register/`, `POST /v3/billing/top-up/`). If interpreted by an AI agent, these instructions could lead to unauthorized account creation or financial transactions, representing a significant prompt injection vulnerability. While the Python script `scripts/validate_database.py` is benign and performs its stated function securely, the instructions in the markdown pose a risk of unintended agent actions beyond the skill's core purpose of database validation.",
+          "checkedAt": 1779163916195,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "de44574149413d049341d6e6685a4e04662f1658a8679ed6d64618acba67e990",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/de44574149413d049341d6e6685a4e04662f1658a8679ed6d64618acba67e990"
+    },
+    "slug": "didit-database-validation",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

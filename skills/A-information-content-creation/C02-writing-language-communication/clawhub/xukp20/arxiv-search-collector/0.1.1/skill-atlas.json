@@ -1,0 +1,168 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document",
+      "paper"
+    ],
+    "audiences": [
+      "creator",
+      "developer",
+      "researcher"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "creative",
+      "science",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C02:token:language",
+      "category:C02:token:writing",
+      "category:C06:token:api",
+      "category:C10:token:model",
+      "category:C15:token:paper",
+      "category:C17:token:notes",
+      "cross-tag:academic-research",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:planning",
+      "cross-tag:search",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C06",
+      "C10",
+      "C15",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "manage",
+      "plan",
+      "research",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "cf2035f172c103a03e430f4e64ede4faaf9ae35c219f6bd53466e96167840a54",
+    "content_hash": "db8c23b8a0d0b2dbf1238a0983bf182d59038351235e9420897fe1f55ca94075",
+    "precanonical_content_hash": "37b3af680d2a2bfa40144304f30e90e4bbbfd241d4c33deaaebfd6e27e094692",
+    "skill_md_hash": "8b921d29de9fdddb9348ff84a2a01ba176d822751907b180daea6e47ad67e982",
+    "version_metadata_sha256": "7efeb039abe5d7b2cc8cda3c966196521c50420ebf042315fe0db4943b18cf2d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/xukp20/skills/arxiv-search-collector",
+    "claim_id": "84696550c3183fbd54da7394367c01e5c69c01a61074847718f9b4d74a5d34e2",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "arxiv-search-collector",
+        "url": "https://clawskills.sh/skills/xukp20-arxiv-search-collector"
+      },
+      {
+        "index_path": "categories/git-and-github.md",
+        "label": "arxiv-search-collector",
+        "url": "https://clawskills.sh/skills/xukp20-arxiv-search-collector"
+      }
+    ],
+    "owner_handle": "xukp20",
+    "owner_id": "s17d0z1j1dfyak54h374wncavs843hep",
+    "published_at": 1771071167907,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779966788797,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779966788797,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts match the stated arXiv collection workflow: initialize a run, fetch arXiv API metadata, let the model select relevant results, and merge/deduplicate paper metadata.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The model is expected to read fetched titles, abstracts, and comments to choose keep indexes; that external text should be treated as data, not instructions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no hidden installer or persistence mechanism; users run included Python scripts manually. The batch script supports optional python-bin and fetch-script overrides, so those should only point to trusted local paths.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access is limited by the code to the arXiv API endpoint, with rate limiting and retries, and file operations are for JSON/Markdown outputs in user-specified collection directories.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The workflow persists run metadata, query results, selection manifests, throttle state, and per-paper folders; merge can remove stale generated paper directories listed in the run index, with a run-directory containment check.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The concern about undeclared file, shell, and network capabilities is partly valid as documentation guidance, but the artifacts visibly disclose the Python commands, arXiv API use, output files, run-local state, and merge behavior; this is not enough to require Review.",
+          "guidance": "Install only if you are comfortable running local Python helper scripts. Use a dedicated output/run directory, keep the default arXiv rate-limit settings, avoid untrusted python-bin or fetch-script overrides, and treat fetched arXiv text as untrusted content used only for relevance filtering.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill coherently collects public arXiv metadata using disclosed local Python scripts and writes results to user-selected run directories.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779966755448,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: arxiv-search-collector\nVersion: 0.1.1\n\nThe OpenClaw AgentSkills bundle is classified as benign. All scripts and documentation align with the stated purpose of collecting arXiv paper metadata. The Python scripts (`init_collection_run.py`, `fetch_queries_batch.py`, `fetch_query_metadata.py`, `merge_selected_papers.py`) perform expected file system operations (creating/deleting directories, writing/reading JSON/Markdown files within a designated run directory) and network requests (to the official arXiv API). Input sanitization (e.g., `slugify` for paths, `urlencode` for API queries, `subprocess.run` with a list of arguments) and file system safeguards (e.g., `is_relative_to` check before `shutil.rmtree`) are appropriately implemented. There is no evidence of data exfiltration, unauthorized command execution, persistence mechanisms, obfuscation, or prompt injection attempts in the `SKILL.md` or other documentation.",
+          "checkedAt": 1779163966954,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "03fcc15daa4a1ff4cd41cec2a5cc3f072748f53c3a873cbbb21ba8f9914ea119",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/03fcc15daa4a1ff4cd41cec2a5cc3f072748f53c3a873cbbb21ba8f9914ea119"
+    },
+    "slug": "arxiv-search-collector",
+    "source_type": "clawhub",
+    "version": "0.1.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

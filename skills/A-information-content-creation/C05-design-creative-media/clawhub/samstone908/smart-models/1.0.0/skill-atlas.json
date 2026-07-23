@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer"
+    ],
+    "confidence": 0.7795,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:phrase:image generation",
+      "category:C05:token:audio",
+      "category:C05:token:image",
+      "category:C05:token:video",
+      "category:C06:token:api",
+      "category:C06:token:code",
+      "category:C10:token:ai",
+      "category:C10:token:model",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C10"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "1398bec151902b05fbc48be4a42ff0ed9d72a4cc43cde178c7da2491e1708bab",
+    "content_hash": "7ef1d9ecc4411e3cb9081aaa6a8d78bd46b628f9e7dc20a5a4f1a66263b490a9",
+    "precanonical_content_hash": "4108f3271b506544bc78ed8e4543c7b84dcda2055441bdab8818579b99ddee16",
+    "skill_md_hash": "20431a5ed6c1f6ada6cebbfd6177d8a19f7d1a4ed066b2fddc04b6fafbd987ff",
+    "version_metadata_sha256": "248a226f370ce7f5ff8134a829d5a043774a1b37f52eb015ab10029f6499d729"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/samstone908/skills/smart-models",
+    "claim_id": "bfe0cd18b6766a5cf967ae80a2435315142a9c8c84ae550a8ef46bba055f2b81",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "smart-models",
+        "url": "https://clawskills.sh/skills/samstone908-smart-models"
+      }
+    ],
+    "owner_handle": "samstone908",
+    "owner_id": "s173mn9zf3rtrjf21884p6fj758857vk",
+    "published_at": 1772001498291,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779958421394,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779958421394,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is routing requests to OpenAI-compatible models, and the reported scripts, environment variables, model configuration, and outbound API calls fit that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill grants broad Bash access for its own smart-router commands, but the supplied evidence describes scoped scripts using jq-based JSON construction rather than shell-interpolated user input.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden installer, package mutation, credential harvesting, or persistence mechanism is supported by the supplied artifact evidence.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "External API use and provider model synchronization are proportionate for a router, but users should treat all routed prompts, images, and metadata as leaving the local environment.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No privilege escalation or background persistence is evident; predictable /tmp writes for generated images or model metadata are a local privacy and hygiene issue rather than malicious behavior.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[TP4] expected: Model enumeration and local artifact output are coherent with a model-routing skill; the claimed documentation mismatch is best treated as a clarity issue, not evidence of hidden or unrelated behavior.\n[SQP-2] expected: Forwarding prompts or images to a configured OpenAI-compatible provider is core functionality, though the skill should be clearer that sensitive data may be transmitted externally.\n[SQP-2] unexpected: Predictable /tmp output paths for generated images and model metadata are not ideal on multi-user systems, but the impact is local and limited in the supplied evidence.\n[E1] expected: External transmission to the configured API endpoint is expected for this skill and is not exfiltration by itself absent deception, unrelated destinations, or unauthorized collection.",
+          "guidance": "Install only if you trust the configured API endpoint and its data-retention policy. Avoid routing secrets, regulated data, private code, screenshots, or documents unless that provider is approved, and be aware that temporary outputs may be written under /tmp on the local machine.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to be a normal AI model router, but users should understand that their prompts and generated media may go to the configured external provider.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779958381521,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 84,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: smart-models\nVersion: 1.0.0\n\nThe OpenClaw Smart Router skill is designed to route user requests to various AI models via an OpenAI-compatible API. The `SKILL.md` grants `Bash(smart-router:*)` permissions, which is broad but necessary for the skill's functionality. The `scripts/call-model.sh` and `scripts/sync-models.sh` scripts handle user input (e.g., prompt, model ID) by constructing JSON payloads using `jq --arg` and `jq --argjson`, which correctly escapes strings and prevents shell injection vulnerabilities. API keys and base URLs are securely retrieved from environment variables, which is standard practice. There is no evidence of intentional malicious behavior such as data exfiltration, persistence, or unauthorized remote control, and the code appears to mitigate common injection risks.",
+          "checkedAt": 1779167005975,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "dde76a659a184c554df9d9c9302c81f676b7016194d712740af6a0b49e0558c6",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/dde76a659a184c554df9d9c9302c81f676b7016194d712740af6a0b49e0558c6"
+    },
+    "slug": "smart-models",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

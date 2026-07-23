@@ -1,0 +1,153 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C02:token:write",
+      "category:C06:token:api",
+      "category:C06:token:code",
+      "category:C09:token:security",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "cross-tag:writing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C02",
+      "C06",
+      "C09",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "secure",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "eac34f05625b4c92e21dd6c3993f1039ddcf5b7352239212d1796908fbf9433d",
+    "content_hash": "bb08d5083b9fdab8f0bdba7c9ea30d4ae5169863c57d5e27e8fa79a03d59e93c",
+    "skill_md_hash": "ef720a3a79f7fae59f1480ecc274371abae5a97c6b802f775c2f378686fd6442",
+    "version_metadata_sha256": "b0042f8ca57e7aa6f298659849340a9ae226b932a25032f25de6be28b037fed4"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/bzsega/skills/sergei-mikhailov-tg-channel-reader",
+    "claim_id": "ba9ba1ca354abe5b17bf530f3f8a8edc9dfbaac17a6f4809724ead34b07615c7",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "sergei-mikhailov-tg-channel-reader",
+        "url": "https://clawskills.sh/skills/bzsega-sergei-mikhailov-tg-channel-reader"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "bzsega",
+    "owner_id": "s17bgn6b0kyw7qyvtb4ctj4xa586vhag",
+    "published_at": 1783085418192,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783092106716,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783088788968,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The ability to authenticate a Telegram account, read public/private subscribed channels, fetch comments, and produce digests matches the stated Telegram channel reader purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill documents user-driven exec approval, human-supplied authentication, private-channel access, session safety rules, and warns not to run auth or restore from background tasks.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation uses a Python package with console scripts and Telegram client dependencies; the docs reference setup-tg-reader.sh and debug_auth.py, but those files are not present in this artifact, so users may need the manual pip install path.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to Telegram, local config/session files, optional SOCKS proxy, output files, and cron usage are proportionate for the purpose, but saved fetched content can include private channel data and should be handled as sensitive.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists API credentials, session files, session backups, and unread state locally; this is disclosed and mostly permission-hardened, though the optional TG_AUTH_PROGRESS path is an under-scoped append target controlled by environment variable.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[TT2] unexpected: Confirmed an optional environment-controlled progress file append during auth. It is not hidden and does not write login codes or passwords, but the path is not constrained, so users should only set it to a trusted private location.\n[SDI-2] expected: Account onboarding, 2FA handling, session backup, and restore are high-impact but are central to using MTProto for private-channel reading and are explicitly documented as interactive/user-driven.\n[SDI-2] expected: Phone persistence is opt-in via --remember-phone and saved to the local config with chmod 600 attempted; this is credential-adjacent but disclosed and not default.\n[SQP-2] expected: Saving fetched Telegram output to files is a documented user command for large results; privacy warnings could be stronger, but the behavior is visible and purpose-aligned.\n[SQP-2] expected: Saving summaries or tracked channel lists is an optional workflow recommendation, not automatic indexing or hidden retention.\n[RA2] expected: Local output persistence increases exposure of private Telegram content, but it is triggered by explicit --output usage and not by undisclosed background collection.\n[RA2] expected: Credential and session persistence are expected for this integration, repeatedly disclosed, and the docs recommend 0600 permissions and not sharing or committing the files.",
+          "guidance": "Install only if you want an agent on this machine to read Telegram channels accessible to your account. Treat ~/.tg-reader.json, *.session, session backups, saved outputs, and unread-state files as sensitive; avoid syncing or committing them, use 0600 permissions, and do not enable cron or TG_AUTH_PROGRESS unless you choose private paths and understand what will be stored.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Telegram reader that needs a powerful local Telegram session, so the main risk is normal account/session exposure rather than hidden malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783088719330,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 49,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": null,
+          "checkedAt": 1783092106716,
+          "normalizedStatus": "clean",
+          "source": "engines",
+          "status": "clean",
+          "verdict": null
+        }
+      },
+      "sha256hash": "2e90439e55ee0fff43d4c11db05ce8969ce4a27f7957111db6591ddb36708cc5",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/2e90439e55ee0fff43d4c11db05ce8969ce4a27f7957111db6591ddb36708cc5"
+    },
+    "slug": "sergei-mikhailov-tg-channel-reader",
+    "source_type": "clawhub",
+    "version": "0.11.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

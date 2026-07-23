@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.175,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:analyze",
+      "category:C07:token:review",
+      "category:C13:token:finance",
+      "category:C17:token:personal",
+      "cross-tag:data-analysis",
+      "cross-tag:review"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C07",
+      "C13",
+      "C17"
+    ],
+    "stages": [
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "review"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "43909151125fe2ee85ef136a03c86159d83aa8b6e5d0f1b3b2a2e14f066487b8",
+    "content_hash": "8f090a6581f577bdce8b76d6fa16a4ca6089aa7671e2a8be1c1819b00039d8d4",
+    "precanonical_content_hash": "11cae7e6da8eb053bffc26aff02e78e95e3fa98b1219a065f42f598cec61de10",
+    "skill_md_hash": "5d82faec0046c7a7a7976cb2a125200e33b03b3f3527d7860e5ad61289e7f4da",
+    "version_metadata_sha256": "9c4a1273cb237dc78ff5452a91cbadbe74a0f543ee7fa5adb8af150e26a19575"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/aholake/skills/aholake-expense-tracker",
+    "claim_id": "516222636ee10ea98f47a6f687e552fb3f661c6512239391cb4cdb45de157300",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "aholake-expense-tracker",
+        "url": "https://clawskills.sh/skills/aholake-aholake-expense-tracker"
+      },
+      {
+        "index_path": "categories/cli-utilities.md",
+        "label": "aholake-expense-tracker",
+        "url": "https://clawskills.sh/skills/aholake-aholake-expense-tracker"
+      }
+    ],
+    "owner_handle": "aholake",
+    "owner_id": "s17ce19fkr2d5g4zzdm7mnm785885c8s",
+    "published_at": 1771285560987,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971773349,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971773349,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, instructions, and script all align around logging and summarizing expenses in monthly markdown files.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The workflow says to log expenses when the user mentions spending money, which is broad; agents should treat ambiguous spending comments as needing user intent before writing records.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No package installation, background service, network setup, credentials, or privileged installer is present; the script uses Python standard libraries.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Local file reads and writes are proportionate for an expense tracker and are disclosed, though the script accepts a custom workspace path and does not validate date/month path components.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Expense amount, category, description, and tags persist in local markdown files; no credential use, elevated privilege, hidden persistence, or exfiltration is evident.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill does read and write expense markdown files; this is central to its purpose and disclosed in SKILL.md, though a more explicit permission declaration would improve transparency.\n[SQP-1] expected: Summary and spending-analysis activation terms match the expense-tracking purpose, but users should expect file reads for summaries and analysis.\n[SQP-1] unexpected: The phrase 'When the user mentions spending money' is broader than an explicit logging request and could cause premature local recording if an agent applies it too aggressively.\n[VirusTotal code_insight] unexpected: The path-handling concern is real as a robustness issue: custom workspace and unvalidated date/month values can steer reads or writes outside the intended expenses directory. The artifacts do not instruct exploitation, and there is no exfiltration, deletion, or hidden behavior.\n[staticScan] expected: Static scan reported no suspicious patterns, which is consistent with the simple local-file helper script and markdown documentation.",
+          "guidance": "Install only if you want an agent to maintain a local expense log. Keep entries free of sensitive details you do not want stored, review the generated files for accuracy, and use explicit requests like 'log this expense' rather than casual spending comments. Avoid supplying unusual --workspace, --date, or month values unless you trust the path being used.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent local expense tracker, but users should know it writes personal spending records to local markdown files and has broad logging examples.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971724794,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: aholake-expense-tracker\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to a significant path traversal vulnerability in `scripts/log_expense.py`. The `--workspace` argument allows an attacker or a manipulated agent to specify an arbitrary directory for storing expense files, potentially leading to arbitrary file writes (e.g., `../../../etc/passwd.md`). While the `SKILL.md` does not explicitly instruct the agent to exploit this, the capability exists within the script. Additionally, user-provided `description` and `tags` are directly inserted into markdown files, posing a minor markdown injection risk. There is no evidence of intentional malicious behavior like data exfiltration, remote execution, or persistence mechanisms.",
+          "checkedAt": 1779164696546,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "5f7c2b2c53b5fec645343fb5b8768d9f293487e6a7265abd1aa93dc946242145",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/5f7c2b2c53b5fec645343fb5b8768d9f293487e6a7265abd1aa93dc946242145"
+    },
+    "slug": "aholake-expense-tracker",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

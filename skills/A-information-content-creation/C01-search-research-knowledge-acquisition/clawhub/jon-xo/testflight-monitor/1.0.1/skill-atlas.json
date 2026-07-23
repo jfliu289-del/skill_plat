@@ -1,0 +1,146 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report",
+      "website"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:sources",
+      "category:C04:token:data",
+      "cross-tag:browser-automation",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "automate",
+      "build",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "6de29f540b0b4d143867d788fbe1f2406fa990b741611967a5288f0cb96ac497",
+    "content_hash": "2571f743daebcd18bea47bb88f7ea5386ecbba0bf74173e98d87e421de9cb5b9",
+    "precanonical_content_hash": "ca113800ea8db4193177c65c00acc0a0d8a4afe416a57e4b2c056160083c0ba4",
+    "skill_md_hash": "7b6a9160071ee02117e45c6810fc471fb36f1e2cf12c26b2ca3da687269d38b6",
+    "version_metadata_sha256": "af5eeebcdbfcdbc627158bc452839c2f49d29c520f1f6b82fa512ee87359a50a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jon-xo/skills/testflight-monitor",
+    "claim_id": "ee5875f9d12e7d452ba3595b1a942f08777cfdd9fa3ca502c8f353270f677d67",
+    "index_entries": [
+      {
+        "index_path": "categories/apple-apps-and-services.md",
+        "label": "testflight-monitor",
+        "url": "https://clawskills.sh/skills/jon-xo-testflight-monitor"
+      }
+    ],
+    "owner_handle": "jon-xo",
+    "owner_id": "s17f57z08q10v3ggxjydg0evs9884cdr",
+    "published_at": 1771414633653,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779921888134,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779921888134,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts, documentation, and metadata consistently support TestFlight availability monitoring, app-name lookup, batch checks, and notifications; the only mismatch is that docs say batch-config.json is not shipped with defaults while the artifact includes one Reddit TestFlight link.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The optional cron instructions create recurring hourly monitoring, which is purpose-aligned and user-directed, but users should understand it will keep making checks until removed.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a normal ClawHub install or Git clone; there are no hidden install hooks, privilege escalation steps, or obfuscated setup actions.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access is expected for checking TestFlight pages and refreshing a public GitHub lookup table; URL validation is broad, so the tool can fetch any user-provided URL ending in an 8-character code.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill writes local config and state files and can be scheduled through OpenClaw cron, but it does not request credentials, sudo, browser profiles, or broad local-file access.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The repeated outbound requests are real and should be clearer in the docs, especially when cron is enabled, but they directly match the monitor's stated purpose and are not hidden or unrelated.\n[static-scan] expected: Static scan reported no findings, and local inspection did not identify destructive commands, credential access, exfiltration logic, or privilege escalation.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with the artifact review, but it was treated only as supporting telemetry.",
+          "guidance": "Before installing, review config/batch-config.json and remove the included Reddit example if you do not want it checked. Only add TestFlight URLs you intend to monitor, because checks make outbound network requests and store those links locally. If you enable the cron example, remember it creates ongoing scheduled checks until you remove or disable the cron job.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to do what it claims: monitor TestFlight links and alert when beta seats open.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779921848678,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 6,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Package: TestFlight Seat Monitor (xpi)\nVersion: 1.0.1\nDescription: Monitor TestFlight beta availability with smart app lookups and silent batch checking\n\nThe TestFlight Seat Monitor package is a collection of bash scripts designed to monitor TestFlight beta availability. It fetches TestFlight pages from Apple's servers, parses them for availability indicators, and tracks the status of configured beta links. It also includes functionality to update a lookup table of app names from a public GitHub repository. The package uses standard Unix utilities like `curl`, `jq`, `grep`, `sed`, and `awk` for its operations. All external network requests are for its stated purpose (fetching TestFlight pages and a public lookup list). Data parsing from external sources is limited to text extraction and does not involve execution of untrusted code. Configuration and state are managed in local JSON files using `jq` for safe manipulation. There is no evidence of malicious intent, arbitrary code execution, data exfiltration, or privilege escalation. The code logic is transparent and directly supports the advertised functionality.",
+          "checkedAt": 1779165158016,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "ba46693f7c418d7c1f8e2401fe4e35d2185db1647a3ff35baebcfb7d131d649e",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ba46693f7c418d7c1f8e2401fe4e35d2185db1647a3ff35baebcfb7d131d649e"
+    },
+    "slug": "testflight-monitor",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

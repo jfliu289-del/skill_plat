@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.175,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C01:token:search",
+      "category:C10:token:model",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C10",
+      "C17"
+    ],
+    "stages": [
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4958db7dc3349017f8ffd563e93369453b31711004fbd0e5f77eb655d4d07f9e",
+    "content_hash": "b1c80f39fc843453dbec04d9e993686ccc238654d69fd9b7d011341af4847b28",
+    "precanonical_content_hash": "8b8f25ce3afb124beb4d886fd53691225e6cd3a88e13eeb7d4b520fd2c491ce5",
+    "skill_md_hash": "0271844c3058c477b380116745e1244cb48a1d19639bf4fd9d64944010a9c99e",
+    "version_metadata_sha256": "9ff8588896a35859ab30d4eebfe83f7c936c03f8dbc1fed25272af75db2ecd39"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/swancho/skills/mac-notes-agent",
+    "claim_id": "5d40e2560c40296aebd4b9a3c7c13c80923a27951fc3ccb845abadd44655e23f",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "mac-notes-agent",
+        "url": "https://clawskills.sh/skills/swancho-mac-notes-agent"
+      },
+      {
+        "index_path": "categories/apple-apps-and-services.md",
+        "label": "mac-notes-agent",
+        "url": "https://clawskills.sh/skills/swancho-mac-notes-agent"
+      }
+    ],
+    "owner_handle": "swancho",
+    "owner_id": "s17ehwbkyq7vpcv787jt0q8f2d83pjry",
+    "published_at": 1770597530247,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779961452973,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779961452973,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose and implementation align: a Node.js CLI uses AppleScript through osascript to create, list, read, update, append, delete, and search Apple Notes. These are sensitive note-management capabilities, but they are the advertised function.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The docs disclose the available read and mutation commands, default Notes account use, optional folder scoping, and the title/folder or synthetic-id targeting model. Delete and update do not add a confirmation or dry-run safeguard, so agent use should be supervised.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No install script, setup-time execution, package manager hook, or external dependency was found; the artifact is markdown plus one CLI using Node built-ins.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Controlling the macOS Notes app via osascript is proportionate to this purpose. Listing and searching can span folders in the default Notes account when no folder is supplied, which is broad but documented.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background persistence, daemon, credential access, network exfiltration, or privilege escalation was found. The skill can mutate persistent Notes data and deletes a matched note immediately when invoked.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The scanner concern about deletion and lack of confirmation is supported by the CLI and documentation, but deletion is an explicit core command scoped to Apple Notes and requires a delete invocation with note-identifying arguments. This warrants user guidance rather than a Review verdict.\n[SQP-2] expected: The documentation could warn more prominently that update and delete are state-changing, but it does disclose those commands and there is no artifact evidence of hidden, automatic, unrelated, or deceptive destructive behavior.",
+          "guidance": "Install only if you want an agent to read and change your Apple Notes. Use folder-scoped commands where possible, avoid broad searches over sensitive notes, and require explicit approval before update, append, or delete actions, especially when note titles may be duplicated.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill transparently lets an agent manage Apple Notes on macOS, including editing and deleting notes, with no evidence of hidden data sharing or unrelated behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779961421599,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 78,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: mac-notes-agent\nVersion: 1.1.0\n\nThe skill is designed to interact with the macOS Notes application using Node.js and AppleScript (`osascript`). While `osascript` is a powerful command, the `cli.js` code explicitly scopes all AppleScript commands to the 'Notes' application (`tell application \"Notes\"`) and includes a robust `esc` function to sanitize user-provided arguments (title, body, folder) by escaping double quotes and backslashes, preventing AppleScript injection. The `SKILL.md` file provides clear, benign instructions for the AI agent, without any evidence of prompt injection attempts or instructions to perform actions outside the stated purpose of managing notes. No data exfiltration, persistence mechanisms, or other malicious behaviors were identified.",
+          "checkedAt": 1779162320748,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "7737ba95ed86d09f3f82dbb068ed8414af9654a227ef6976308796203a1dbb33",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/7737ba95ed86d09f3f82dbb068ed8414af9654a227ef6976308796203a1dbb33"
+    },
+    "slug": "mac-notes-agent",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,136 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.7083,
+    "domains": [],
+    "needs_review": false,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:phrase:agent skill",
+      "category:C00:token:agent",
+      "category:C04:token:analytics",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "b52576accbca6e68dc8622458a56566a97ed77ee8f58fbfab92158c819629d79",
+    "content_hash": "dbb7347e300e4a7c863481298ebf30ecf6a1af21d3ffcdd3d8c008210de45974",
+    "precanonical_content_hash": "3ae55a60ce99a13b12091935cd00e14c52befbfb8a1576a4f5bd59ea02fc0f3b",
+    "skill_md_hash": "40335e5b3e099bd2b97f03e561a3c373b990386e1a55cca507171d72cc7f26d9",
+    "version_metadata_sha256": "0ccc099850337406b082ab4eb6891c6961e64ba4e8c92a99012e096f9fd0ddac"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/mastrophot/skills/near-agent-skills",
+    "claim_id": "307de216fd6419c241d5bd345f48c5a9c1b586dfcb0ceb8e3a5b859203e90721",
+    "index_entries": [
+      {
+        "index_path": "categories/marketing-and-sales.md",
+        "label": "near-agent-skills",
+        "url": "https://clawskills.sh/skills/mastrophot-near-agent-skills"
+      }
+    ],
+    "owner_handle": "mastrophot",
+    "owner_id": "s174gstwqkv04z5mzhnzmhdjz18849zs",
+    "published_at": 1771299026196,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972252903,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972252903,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The advertised NEAR gas optimization and on-chain analytics purpose matches the code: functions query NEAR RPC and NearBlocks for gas prices, account transaction history, network status, active contracts, and stats. I found no transaction signing, account mutation, file indexing, credential access, or unrelated capability.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "SKILL.md and README.md describe setup and exported tools only; they contain no hidden role changes, prompt overrides, automatic execution directives, or instructions to bypass user control.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation uses a normal Node package flow with npm install and npm run build. package.json contains only build and test scripts, and the lockfile did not show lifecycle install scripts; users still trust the listed npm dependencies.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Outbound requests to rpc.mainnet.near.org and api.nearblocks.io are proportionate for blockchain analytics, but the skill does not clearly list those endpoints in its manifest and account IDs queried for gas history are sent to NearBlocks.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence mechanism, background worker, privilege escalation, local wallet key use, credential store access, or local filesystem read/write behavior is evidenced in the skill code.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The network use is real and should be documented more explicitly, but it is core to the stated NEAR analytics purpose and limited to expected public blockchain endpoints, so it does not justify Review by itself.\n[SQP-2] expected: The account_id is sent to NearBlocks for the gas history feature. This is a privacy consideration because the provider can see queried accounts, but it is purpose-aligned, uses public blockchain identifiers, and is not paired with credential or wallet access.",
+          "guidance": "Install only if you are comfortable with this skill making outbound requests to NEAR RPC and NearBlocks, and avoid querying account IDs you consider sensitive. Keep the lockfile and review dependency changes on upgrade.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This appears to be a read-only NEAR blockchain analytics and gas helper that uses expected public APIs without wallet access, persistence, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972213005,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: near-agent-skills\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle is benign. All code and documentation are aligned with the stated purpose of providing NEAR Protocol analytics and gas optimization tools. Network requests are directed to legitimate NEAR RPC endpoints (`rpc.mainnet.near.org`) and public block explorer APIs (`api.nearblocks.io`). There is no evidence of data exfiltration, malicious execution, persistence mechanisms, obfuscation, or prompt injection attempts in SKILL.md or README.md. The direct interpolation of `account_id` into a URL in `src/gas-optimizer.ts` is a common pattern for API calls and, while a potential vulnerability if the API itself is flawed, does not indicate malicious intent from this skill bundle.",
+          "checkedAt": 1779164737583,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "5b4883a0b02a305f9a80ea8a45dfd11ec5ff1f03376dfdf7d520dbd9f01c6392",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/5b4883a0b02a305f9a80ea8a45dfd11ec5ff1f03376dfdf7d520dbd9f01c6392"
+    },
+    "slug": "near-agent-skills",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

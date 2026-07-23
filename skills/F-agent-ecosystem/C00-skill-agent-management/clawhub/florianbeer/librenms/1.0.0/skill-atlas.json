@@ -1,0 +1,161 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "configuration",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.1321,
+    "domains": [
+      "infrastructure",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:statistics",
+      "category:C06:token:api",
+      "category:C12:token:management",
+      "category:C17:token:notes",
+      "category:C18:token:health",
+      "category:C19:token:device",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:deployment",
+      "cross-tag:software-development",
+      "cross-tag:testing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C12",
+      "C17",
+      "C18",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "deploy",
+      "manage",
+      "operate",
+      "test"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "ff1f3575abf54950d5ed807741d0ec7d6652badbd9ab5b85f9797d9097e17866",
+    "content_hash": "873eb303bdd0981833b4240985ba6a284f92051c5f98a64741a8936be8072113",
+    "skill_md_hash": "adbb1ed12a97daaf9634119a16fdda25b1f21f4330027b75e4e999dc9e437d07",
+    "version_metadata_sha256": "ecb3638af0d4bca3996b70f79e5aba773f5fd51a75d1e88cdc73ab8cd74c0d53"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/florianbeer/skills/librenms",
+    "claim_id": "b451cbe7e6220b0a062e263e3352b5d14a9ecdb82f2fbcf637aabee6057089ab",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "librenms",
+        "url": "https://clawskills.sh/skills/florianbeer-librenms"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "florianbeer",
+    "owner_id": "s178qb3qnn3qkjvv09p3dn4v4583we9e",
+    "published_at": 1771088619329,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967051792,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967051792,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to query LibreNMS device, health, port, and alert data, and the script only performs documented GET-style API reads against those endpoints.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Commands are explicit and user-invoked; heartbeat snippets are examples for users to add themselves, not automatic background execution.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation asks users to copy or clone the skill, install common dependencies, and create a local config file; provenance is limited, but the included artifacts are readable and coherent.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "A LibreNMS URL and API token are necessary for the integration, but the default curl use of -k weakens TLS validation while sending the token.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill stores a local credential config under ~/.openclaw/credentials/librenms/config.json and recommends chmod 600; there is no evidence of cron jobs, startup persistence, destructive actions, or privilege escalation.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The skill necessarily sends requests and an API token to the configured LibreNMS server; the docs disclose token storage and TLS behavior, though users should still treat infrastructure metadata and the token as sensitive.\n[PE2] unexpected: The cited chmod 600 guidance is credential file hardening, not root execution or privilege escalation; sudo appears only in dependency installation examples.\n[RA2] unexpected: The config file is an explicitly documented credential file, not unauthorized session persistence, and no cron, startup script, or background worker is installed.\n[TM1] expected: The -k curl flag is real and security-relevant, but it is disclosed as self-signed certificate support rather than hidden tool abuse.\n[VirusTotal-curl-k] expected: VirusTotal's concern about disabled certificate validation is valid as a user caution, but it is documented and is the only negative telemetry signal; static scan found no suspicious patterns.",
+          "guidance": "Install only if you trust the source and need LibreNMS monitoring from OpenClaw. Use a least-privileged read-only LibreNMS API token, keep the config file permission-restricted, prefer a valid HTTPS certificate, and remove the curl -k behavior if strict TLS validation works in your environment.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent read-only LibreNMS monitoring skill, with the main caution that it uses an API token and disables TLS certificate verification by default.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967019288,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 91,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: librenms\nVersion: 1.0.0\n\nThe skill is classified as suspicious primarily due to the use of `curl -k` in `scripts/librenms.sh`, which disables SSL/TLS certificate validation. While this is explicitly documented in `SKILL.md` and `README.md` as a feature for self-signed certificates, it introduces a significant man-in-the-middle (MITM) vulnerability. Additionally, user-provided hostnames are directly incorporated into API call URLs (e.g., `/devices/$hostname`), which could pose a risk if the LibreNMS API backend is vulnerable to URL path injection, though the script itself does not maliciously craft these inputs. There is no evidence of intentional malicious behavior, data exfiltration, or prompt injection attempts against the agent.",
+          "checkedAt": 1779164047494,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "55dbcc4886776bd07c786570dc469ab416c482572c74608ca809d752b4ea3cbb",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/55dbcc4886776bd07c786570dc469ab416c482572c74608ca809d752b4ea3cbb"
+    },
+    "slug": "librenms",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

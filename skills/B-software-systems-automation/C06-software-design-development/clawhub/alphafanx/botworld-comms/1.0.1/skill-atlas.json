@@ -1,0 +1,137 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "6d2b45f2d90f317b7b25f090c6e5903e717c123bab8c367e61d01d3c0ef728db",
+    "content_hash": "30c9cd9796efaf430590a75acec61b7e20d580cb40f188033815eef2ca27c168",
+    "precanonical_content_hash": "53a784f847a44b52ffc70feb53942f7a5d866852e988e40c760b6b172fb930ca",
+    "skill_md_hash": "8f560aaecb1c76b402c283eabf1ceb69236941be80f2096512c84b777a9a0e26",
+    "version_metadata_sha256": "0cb6d520607e8ac6acd76bf5d91359a0090fa27181b0163f9a6ea5efef633aff"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/alphafanx/skills/botworld-comms",
+    "claim_id": "7f30c20d58badf828a8fd2bfab4e45d06d4becb97e0a335ab928de9687faab1a",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "botworld-comms",
+        "url": "https://clawskills.sh/skills/alphafanx-botworld-comms"
+      }
+    ],
+    "owner_handle": "alphafanx",
+    "owner_id": "s1727y55svbra640dts6ryj179885txs",
+    "published_at": 1771608022324,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943135150,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943135150,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The WebSocket, REST publish, channel history, and API-key examples fit the stated real-time event-bus purpose; public channel visibility and 7-day retention are disclosed.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Most instructions are user-directed examples. The optional subexec pattern deliberately pipes incoming messages to a local handler, so it should only be used with reviewed handler code and trusted channel choices.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains only SKILL.md and declares curl as a requirement; it references an external botworld_subexec.py helper without a pinned version or checksum.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to botworld.me and a BotWorld bearer key are proportionate for a pub/sub service, and no broad local filesystem access is requested by the packaged artifact.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No local persistence, background install, privilege escalation, or bundled executable code is present; service-side message retention and history replay are documented.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The subexec guidance is real and worth cautioning about, but it is disclosed, optional, purpose-aligned, and passes messages via stdin rather than showing hidden execution or automatic command construction from message fields.\n[VirusTotal code_insight suspicious] expected: The VT concern centers on the same optional subexec and external helper reference. Artifact evidence does not show bundled malicious code, deception, exfiltration, or automatic execution, so this is guidance-level risk rather than a Review verdict.\n[staticScan clean] expected: Static scan reported no findings, consistent with the artifact being documentation-only.",
+          "guidance": "Install only if you intend to use BotWorld as a shared agent messaging service. Treat public, agent-named, and replayable channel messages as non-secret; keep the BotWorld API key private and revocable. If using subexec, inspect the downloaded helper, pin its source where possible, subscribe narrowly, validate all incoming JSON, and avoid handlers that run shell commands from message contents.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a documentation-only BotWorld messaging integration with disclosed network and API-key use, but users should be careful with public messages and the optional subexec helper.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943109112,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 10,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: botworld-comms\nVersion: 1.0.1\n\nThe `SKILL.md` documentation describes a 'subexec pattern' feature that allows piping incoming messages from the BotWorld event bus to arbitrary shell commands (e.g., `python handler.py`). While this skill bundle does not directly implement the vulnerable code, it provides explicit instructions for an AI agent to set up a system that is highly susceptible to remote code execution (RCE) via crafted messages. This constitutes a significant vulnerability instruction, as it guides the agent to enable a high-risk capability, and relies on an external script (`botworld_subexec.py`) from `https://botworld.me`, introducing a supply chain risk.",
+          "checkedAt": 1779165721843,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "5a0c2a1e9b1c79cd9f3d61345374d083b069e4506b2b5894188b76332d12c2c5",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/5a0c2a1e9b1c79cd9f3d61345374d083b069e4506b2b5894188b76332d12c2c5"
+    },
+    "slug": "botworld-comms",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.3964,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C04:token:analytics",
+      "category:C04:token:chart",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C12:token:market",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C06",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "390d658532e27c272f7ef75e8e657bcf9fd805bf3069d4503893f648c085b799",
+    "content_hash": "4725e4d95aa3b24a682859f537e6e8c257a4f6f0f6bfed6a23f6c1ddfcc21e6a",
+    "precanonical_content_hash": "7d726c18c591c616dea0cc5a711467075990fcaad3354b9096347b305b701a8a",
+    "skill_md_hash": "fe224c4454d054d2b36cd87f816b18815240a74cba1b0456c632fea0b5ec36e3",
+    "version_metadata_sha256": "59e3a61ccabe97d704bf5cfe5480f58ebbd756b42ad800e25751075990aa18de"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/liam8/skills/crypto-market-data",
+    "claim_id": "2d6774cf0fd6ef8363bb32df2d3bcecee1f1ea419b2b5af670530348b873b419",
+    "index_entries": [
+      {
+        "index_path": "categories/marketing-and-sales.md",
+        "label": "crypto-market-data",
+        "url": "https://clawskills.sh/skills/liam8-crypto-market-data"
+      }
+    ],
+    "owner_handle": "liam8",
+    "owner_id": "s1799h7r1a9zkkxfgq8a9mnb8983heqm",
+    "published_at": 1770945803111,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658395039,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658395039,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The scripts retrieve cryptocurrency and stock market data through read-only GET requests, matching the stated purpose; no trading, account mutation, destructive behavior, broad local indexing, or unrelated data access was found.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The documentation provides normal usage guidance and describes automatic authentication; it does not contain prompt overrides, hidden role changes, autonomous background behavior, or instructions to access unrelated user data.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The package has no dependencies, no install scripts, and no npm lifecycle hooks; it consists of Node.js scripts using standard libraries.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Outbound requests to api.igent.net are expected for market data. The API_BASE_URL environment override can redirect traffic if deliberately set, and the client would also accept plain HTTP in that case, so users should avoid untrusted endpoint overrides.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The client stores a temporary provider token in scripts/.token and the SKILL.md discloses that behavior, but the file is written with default permissions and the documentation does not fully describe cleanup, lifetime, or local-security implications.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The code reads API_BASE_URL from the environment only to select the market-data endpoint; this is relevant to operation but should be documented more clearly.\n[SDI-1] expected: The 'no API key needed' claim means no user-supplied key is required; the documentation still discloses automatic session-token retrieval, so this is a clarity issue rather than hidden authentication.\n[SDI-4] expected: The 'zero external dependencies' claim is accurate for npm packages, but users should understand the skill still depends on an external network service for data and token issuance.\n[SQP-2] expected: The token cache is purpose-aligned and disclosed, but it would be better hardened with restrictive file permissions, clearer retention guidance, and an easy cleanup path.\n[E1] expected: External transmission of asset symbols, query terms, request parameters, and the provider token is expected for a market-data API integration; no unrelated exfiltration was found.\n[VirusTotal code_insight] expected: The API_BASE_URL override is a real configuration risk if a hostile environment controls it, but the default endpoint matches the documented provider and there is no artifact evidence of deceptive redirection.\n[staticScan] expected: The static scan reported no suspicious patterns, which is consistent with the reviewed artifacts.",
+          "guidance": "Install only if you are comfortable sending market queries to api.igent.net and caching a temporary provider token in the skill's scripts directory. Do not set API_BASE_URL unless you trust the replacement endpoint, keep the skill directory private, and delete scripts/.token if you want to clear the cached session.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent market-data skill, with disclosed network API use and a local token cache that users should understand.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658367684,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 47,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: crypto-market-data\nVersion: 1.0.2\n\nThe skill bundle is classified as suspicious due to a critical vulnerability in `scripts/api_client.js`. The `BASE_URL` for API calls can be overridden by the `API_BASE_URL` environment variable. If an attacker can control the environment where this skill runs, they could redirect all API traffic, including the session token stored in `.token`, to an arbitrary malicious server, leading to potential data exfiltration and session hijacking. While the default `BASE_URL` points to a legitimate domain (`https://api.igent.net/api`), the flexibility to override it without explicit sanitization or restriction constitutes a significant security risk, even if not intentionally malicious within the skill's design.",
+          "checkedAt": 1779162184502,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "fec37b4edaf05ad038a8e48bb8b6250269344f41c8ca345be76900abc35d68bb",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/fec37b4edaf05ad038a8e48bb8b6250269344f41c8ca345be76900abc35d68bb"
+    },
+    "slug": "crypto-market-data",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

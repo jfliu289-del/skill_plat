@@ -1,0 +1,132 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.31,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:metrics",
+      "category:C10:token:llm",
+      "category:C10:token:model",
+      "category:C18:token:health",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C04",
+      "C18"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "f2cb657306cee44b94c5661bc8903e570b1f3b736094c046dc2ac76bbc0543a8",
+    "content_hash": "27564841d7a310c1b1f2f37dc07fc7ddc5ad36e72502d0a6f1c7bfab3c4bf5bb",
+    "precanonical_content_hash": "924a08e13a0d37e6a5398abca9c8f5ec97e817620b2c671978dac42e45c38e7e",
+    "skill_md_hash": "dc4b679bde9d1b0b15adf4a6e281931ef3ac9d6f0b25b7ee5690466b8b850590",
+    "version_metadata_sha256": "bbccedd742e46d5b27ad388a38f53181ca8a6df5952879419c63fd530bcfebde"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/rosseyre/skills/openrouter-usage",
+    "claim_id": "d7533621862c7806f34361554fd5236d5791b6ef4a35d9e1b5dedfaf6229b71d",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "openrouter-usage",
+        "url": "https://clawskills.sh/skills/rosseyre-openrouter-usage"
+      }
+    ],
+    "owner_handle": "rosseyre",
+    "owner_id": "s17ct44j7ny43nfd8a03rgcnzd885rqs",
+    "published_at": 1770901818563,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972495744,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972495744,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is OpenRouter usage reporting, and the script calls only OpenRouter usage, credits, and activity endpoints before printing totals and model spend.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Instructions are limited to user-requested OpenRouter spend or usage checks, with Python as the primary path and curl as a documented fallback; no hidden prompt behavior or unrelated data access was found.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "No package installation or system modification is included; the script uses Python standard-library networking, with optional curl/jq examples in the documentation.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Internet access and an OpenRouter API key are proportionate for the stated purpose. The optional management key exposes model-level activity, which is expected for the advertised breakdown.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The only persistence-related behavior is an explicitly documented optional credentials.env file for local key storage; this is a credential-hygiene risk but not hidden or purpose-mismatched.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The documentation does suggest a local credentials.env fallback without permission or git-ignore guidance. That is a real handling caveat, but the file workflow is disclosed and secondary to environment variables.\n[PE3] expected: The script loads OpenRouter keys from environment variables or the documented credentials.env fallback, then uses them only for OpenRouter API endpoints needed for usage reporting.\n[staticScan] expected: Static scan reported no findings, consistent with local review of the two artifact files.\n[VirusTotal] expected: VirusTotal telemetry was clean and aligned with the artifact review, but was used only as supporting signal.",
+          "guidance": "Prefer environment variables over credentials.env. If you use credentials.env, keep it out of version control, restrict file permissions, and only provide OPENROUTER_MGMT_KEY when you want model-level activity reporting.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to only use OpenRouter keys to fetch and print usage and spending information.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972451262,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 78,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: openrouter-usage\nVersion: 1.1.3\n\nThe skill is designed to fetch OpenRouter usage data, which it does by making authenticated API calls to `openrouter.ai`. It loads API keys from environment variables (recommended) or a `credentials.env` file as a fallback. While using a `credentials.env` file is a less secure practice for handling secrets compared to environment variables, it is explicitly documented and not indicative of malicious intent. The `SKILL.md` instructions are clear and directly relate to the skill's stated purpose, without any prompt injection attempts to subvert the agent. The Python script performs its function transparently, without unauthorized file access, network communication to external domains, or system modifications.",
+          "checkedAt": 1779163466923,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "d94b0a24ba3855561029c5c91ef16735d55a0746c2397862768050487b57f78d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d94b0a24ba3855561029c5c91ef16735d55a0746c2397862768050487b57f78d"
+    },
+    "slug": "openrouter-usage",
+    "source_type": "clawhub",
+    "version": "1.1.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

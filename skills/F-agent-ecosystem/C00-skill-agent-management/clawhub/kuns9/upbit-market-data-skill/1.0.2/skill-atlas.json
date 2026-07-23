@@ -1,0 +1,150 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C12:token:market",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "design",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "85a94fa65586444cc786630ec356eadb23394fefa6f7be6d47bae5233efe1ed8",
+    "content_hash": "3117ddd7cd68c9742fe118f230c88154dd2b30c6da8dec6ff1a0a5c741c89a3a",
+    "skill_md_hash": "5383a4c606fb871717537d0dd76663e448d85dc37ebca60419ca7ca5ec430bcd",
+    "version_metadata_sha256": "3659521c63794f1bafdb72e6dc10b1ba3fa330fc1584caa61fe02eb00ddf210f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/kuns9/skills/upbit-market-data-skill",
+    "claim_id": "c89e72328f037d2eb45c254262a28dfa666081fe08cef40467a002011b668ad0",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "upbit-market-data-skill",
+        "url": "https://clawskills.sh/skills/kuns9-upbit-market-data-skill"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "kuns9",
+    "owner_id": "s17f6wa351hcng3hyeqmtnhs2988594q",
+    "published_at": 1771110156756,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967452621,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967452621,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The code and SKILL.md align with fetching public Upbit market data: pairs, candles, trades, tickers, orderbooks, and watchlist tickers. It includes an auth helper and config fields for Upbit API keys, but the exposed commands do not require private credentials.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are command-oriented, run-once, and disclose the config path override and strict mode. They do not ask the agent to perform autonomous, destructive, hidden, or account-mutating actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation is a normal npm install with two third-party dependencies using semver ranges. There are no install scripts or executable postinstall behavior in package.json.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading a user-specified JSON config and making network requests are proportionate for a market-data API client. The configurable baseUrl is disclosed but should remain pointed at the official Upbit API unless the user intentionally changes it.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background persistence, self-start behavior, broad filesystem indexing, or privilege escalation is present. The only persistent sensitive material would be a user-created config file if the user adds API keys.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal code_insight config path override] expected: The --config and UPBIT_SKILL_CONFIG behavior is disclosed and used to load a JSON configuration file. It can read an arbitrary user-selected JSON path, but the artifact does not show hidden file harvesting or raw file exfiltration.\n[VirusTotal code_insight configurable baseUrl] expected: The baseUrl is read from config and used for fetch requests, which could be misconfigured to contact non-Upbit hosts. This is a user-controlled configuration risk, not evidence of deceptive or malicious behavior.\n[SkillSpector clean result] expected: SkillSpector reported no issues; local artifact review was consistent with a coherent market-data CLI with only configuration and dependency hygiene notes.",
+          "guidance": "Install only if you are comfortable with npm dependencies and a CLI that can make network requests. Keep baseUrl set to https://api.upbit.com, leave accessKey and secretKey blank unless a future command truly needs them, and avoid pointing --config at unrelated local files.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward Upbit market-data CLI; the main risks are configurable endpoints and optional credential fields, not hidden malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967412202,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: upbit-market-data-skill\nVersion: 1.0.2\n\nThe skill exhibits significant vulnerabilities, specifically a Local File Inclusion (LFI) risk in `src/config.js` where the configuration file path can be overridden via `--config` or `UPBIT_SKILL_CONFIG` environment variable, allowing the skill to read arbitrary local files. Additionally, there is a Server-Side Request Forgery (SSRF) risk in `src/upbit/client.js` as the `baseUrl` is loaded from the config without validation and used directly in `fetch`, potentially allowing an attacker to make the skill send requests to internal network resources. While these are critical flaws, they are vulnerabilities that *allow* attacks rather than code *designed* for malicious actions like data exfiltration or persistence, thus classifying it as suspicious.",
+          "checkedAt": 1779164101060,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "66a733c441f3501905f6d004ed9136965b8a9b0771b6dca4054f3c35ecda5ea3",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/66a733c441f3501905f6d004ed9136965b8a9b0771b6dca4054f3c35ecda5ea3"
+    },
+    "slug": "upbit-market-data-skill",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

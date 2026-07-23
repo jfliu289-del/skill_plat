@@ -1,0 +1,147 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C03",
+    "reasons": [
+      "category:C03:token:document",
+      "category:C04:token:data",
+      "category:C05:token:image",
+      "category:C06:token:api",
+      "cross-tag:data-analysis",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C05",
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "39b5d03f7e12993926df70cf4dd2d7a238c10a1ed86e05783e763ab15fb1e9c0",
+    "content_hash": "e67f59b501e5349785bde03e17537b524e6379e696726b519d46bbb7cdf571e1",
+    "precanonical_content_hash": "a391d75451de3d5ddabbb9b7675622f06a7408adf0e2e16c84517066bab2e079",
+    "skill_md_hash": "f407a7e0f6c66e58cd716976546e874f4b9798bbd8f86aaedc8813b2f2341cdb",
+    "version_metadata_sha256": "5e33f6d3f6701724d2b12349a7219c78f691e4296707dbbba3cf188d453a0448"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/rosasalberto/skills/didit-face-match",
+    "claim_id": "aa3736bfa6597d4002cfc6ff260254331830ba40620e351f0fd91b4087298071",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "didit-face-match",
+        "url": "https://clawskills.sh/skills/rosasalberto-didit-face-match"
+      }
+    ],
+    "owner_handle": "rosasalberto",
+    "owner_id": "s17fenh76mn5y28mwva6bcmn0h8858fw",
+    "published_at": 1772514902348,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779974662341,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779974662341,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill compares two facial images and returns biometric/demographic outputs such as score, age, gender, and bounding boxes; those outputs are sensitive but disclosed and aligned with the face-match purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The main workflow is narrowly scoped to one documented face-match endpoint and a local helper script. The account registration and billing setup notes broaden the documentation, but they are presented as setup guidance and are not implemented as automatic actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The bundle contains only SKILL.md and one readable Python script. There is no installer, dependency bootstrapper, obfuscation, dynamic loading, or background execution.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill requires DIDIT_API_KEY and uploads two user-selected image files to https://verification.didit.me/v3/face-match/, which is proportionate for the stated integration but sensitive enough to require user consent and careful handling.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The script does not create local persistence or request elevated privileges. The documentation notes Didit's save_api_request parameter defaults to true, so users should check provider-side retention and console storage settings.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] expected: The account registration, email verification, and billing text is broader than pure face matching, but it is setup documentation rather than code that handles credentials, OTPs, or payments automatically.\n[SDI-1] expected: Age estimation and gender detection are sensitive biometric/demographic outputs, but they are explicitly listed as returned API fields from the face-match service and are not hidden behavior.\n[SQP-2] expected: Sending facial images to Didit is the core function of the skill and is shown in the endpoint, examples, and required API key metadata; the artifact would benefit from a more prominent privacy notice.\n[SQP-2] expected: The helper script uploads only the two provided image paths and optional vendor_data to the documented Didit endpoint. A runtime consent prompt would improve safety, but the transmission is not concealed.",
+          "guidance": "Install only if you intend to send face images to Didit for biometric comparison. Confirm you have consent from the people in the images, protect the DIDIT_API_KEY, avoid unnecessary vendor_data, review Didit's retention settings, and do not use the score alone for high-stakes identity decisions.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward Didit Face Match API helper, but it should only be used with clear consent because it sends face images to Didit.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779974627121,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: didit-face-match\nVersion: 1.3.0\n\nThe skill bundle is benign. The `SKILL.md` provides clear documentation for integrating with the Didit Face Match API, including instructions for obtaining an API key (which are examples for a human user, not agent instructions). The `scripts/match_faces.py` script correctly implements the API interaction, reading image files from local paths, using an environment variable for the API key, and communicating only with the documented `https://verification.didit.me` endpoint. There is no evidence of prompt injection, data exfiltration, unauthorized execution, or other malicious intent.",
+          "checkedAt": 1779163918771,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "b4676ba1f20b5e6635a4aa58a470e86b4dbe87f8a26ba7bdcd96446c0f01c01b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b4676ba1f20b5e6635a4aa58a470e86b4dbe87f8a26ba7bdcd96446c0f01c01b"
+    },
+    "slug": "didit-face-match",
+    "source_type": "clawhub",
+    "version": "1.3.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,133 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.35,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C12",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C12:token:market",
+      "category:C12:token:strategy",
+      "category:C13:token:finance",
+      "cross-tag:agent-management",
+      "cross-tag:planning"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C13"
+    ],
+    "stages": [
+      "operate",
+      "plan"
+    ],
+    "tasks": [
+      "manage",
+      "plan"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ec081ecbb457e2a9493c9594598bf7d93d42c4777fc16896636a8cae92d41541",
+    "content_hash": "30a1f249db4ee435b6e20025fddfbb79657d3e0e231a57dae2442f07272899d8",
+    "precanonical_content_hash": "55e5dab23a85a1fb79eb356346f762d5a4b17ab2a851993a0794f99de78eeab1",
+    "skill_md_hash": "42617a446a25787ec92ed34528e313b7f3a75f68c39a972a9b30067719c57917",
+    "version_metadata_sha256": "c1160182c097a104c56faa46a7feab9ba76bc841db85f6dc9e1b5f4bd30e4ae5"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/anton-roos/skills/finance",
+    "claim_id": "8f835e0413f151cf93f88aadd707273c0871b6208c47b7dab6c7e2c031a2b86c",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "finance",
+        "url": "https://clawskills.sh/skills/anton-roos-finance"
+      }
+    ],
+    "owner_handle": "anton-roos",
+    "owner_id": "s1783cr5xe5tcm1kb11mhenxp1885jmy",
+    "published_at": 1769983031560,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783652613837,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783652613837,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "Market quotes, historical stock series, FX quotes, caching, and watchlist management fit the stated finance tracking purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill tells agents to install Python dependencies and run local scripts; this is disclosed in SKILL.md and proportionate, though metadata could state shell, network, and file-write capabilities more explicitly.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Dependencies are installed from PyPI with lower-bound requirements rather than exact pins, which is a supply-chain hygiene risk but not evidence of malicious behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network use is limited to public market-data providers through yfinance and open.er-api.com; no credential harvesting or unrelated endpoints were found.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The scripts persist cache and watchlist files under .cache/market-tracker, while metadata lists .cache/finance; this path mismatch should be corrected, but the persisted data is limited to symbols and quote cache records.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Installing packages, running Python scripts, making market-data requests, and writing local cache files are expected for this skill; the remaining issue is clearer capability disclosure, not unsafe behavior.\n[TP4] expected: Watchlist add/remove/summary operations are disclosed in SKILL.md and are a natural part of market tracking; they do not appear hidden or unrelated.\n[SC1] expected: The lower-bound requirements for yfinance, pandas, and requests create reproducibility and dependency-review risk, but this is supply-chain hygiene rather than evidence of malicious intent.\n[SC4] expected: The requests lower bound can allow an older vulnerable version in constrained environments, so it should be raised and pinned; the artifact itself does not handle secrets or construct arbitrary attacker-controlled URLs beyond the validated FX base code.",
+          "guidance": "Install only if you are comfortable with a Python skill that contacts public finance APIs and writes a local cache/watchlist. Use a dedicated virtual environment, consider pinning patched dependency versions, and note that the actual local state path is .cache/market-tracker despite metadata listing .cache/finance.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to fetch public market data and keep a small local cache/watchlist, with no evidence of deception, exfiltration, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783652573509,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 64,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: finance\nVersion: 1.1.2\n\nThe OpenClaw skill bundle is designed to track market data using public APIs and local caching. It uses `yfinance` for stocks/ETFs/indices and ExchangeRate-API for FX rates. File system operations are limited to a designated `.cache/market-tracker` directory for caching and watchlist persistence. The `market_watchlist.py` script uses `subprocess.run` to call `market_quote.py` within the same skill, which is a safe modularity pattern. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts against the agent beyond standard operational instructions.",
+          "checkedAt": 1779160757389,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "96af86f3d71575627277bf78c2114919a9dba7dec39f7eae6dd321e0e525213f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/96af86f3d71575627277bf78c2114919a9dba7dec39f7eae6dd321e0e525213f"
+    },
+    "slug": "finance",
+    "source_type": "clawhub",
+    "version": "1.1.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

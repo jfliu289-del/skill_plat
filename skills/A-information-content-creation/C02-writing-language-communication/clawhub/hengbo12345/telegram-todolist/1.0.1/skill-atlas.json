@@ -1,0 +1,146 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "document",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C02:token:edit",
+      "category:C04:token:statistics",
+      "category:C06:token:implementation",
+      "category:C12:token:management",
+      "cross-tag:data-analysis",
+      "cross-tag:software-development",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "1145e75136cd633187bac20436262fc0c31c7c18ef168e61b798481cdc7c01ac",
+    "content_hash": "f3b2106833e828b5c51f933853a19f7e8d443e45f495ef8ce57adac658d4b632",
+    "skill_md_hash": "1f5d5449bf9601f643a8aeb0e6911a04a4d7da8317bdc99c8c36c38e958f9442",
+    "version_metadata_sha256": "aaba08dbde0177d0e6f8a941b61a4eb0dbf8e534966c618b902ae17d59d8ff24"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/hengbo12345/skills/telegram-todolist",
+    "claim_id": "af23f3d470ece7586d7d91c7fa1789831525405214881d067f0ba91690182732",
+    "index_entries": [
+      {
+        "index_path": "categories/productivity-and-tasks.md",
+        "label": "telegram-todolist",
+        "url": "https://clawskills.sh/skills/hengbo12345-telegram-todolist"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "hengbo12345",
+    "owner_id": "s17av9khewcfdaqebkrs4chy35884cfq",
+    "published_at": 1770887844215,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971699003,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971699003,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to query and modify a workspace todo list, and the code is limited to reading, parsing, creating, and rewriting /root/.openclaw/workspace/TODO.md.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The documented add, delete, and complete operations are purpose-aligned, but the task-number lookup and deletion logic are buggy and may fail or affect the wrong todo entry.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains a markdown skill file and a standard-library Python helper script; there is no installer, dependency download, startup hook, shell execution, or external service setup.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Access to a single hard-coded TODO.md file is proportionate to the skill purpose; users should still assume todo contents may be shown wherever the Telegram command workflow is used.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists changes by rewriting TODO.md and can create a default template when the file is missing, but it does not request elevated privileges, credentials, broad filesystem access, or background execution.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VT-code_insight] expected: The telemetry flags unsanitized task text being written to TODO.md as a possible prompt-injection path. Writing user-provided todo text into the todo file is the disclosed core behavior, and the artifacts do not show hidden instruction execution or exfiltration.\n[SDI-4] unexpected: The reported task-number lookup and delete defects are supported by the code and are real reliability and data-integrity concerns for TODO.md operations, but they remain scoped to the user's todo file and do not show covert or malicious behavior.\n[staticScan] expected: The static scan reported no suspicious patterns, consistent with artifact review: no network calls, shell execution, credential access, persistence hooks, or broad local indexing were found.",
+          "guidance": "Install only if you are comfortable letting the skill read and rewrite /root/.openclaw/workspace/TODO.md and display todo contents through the Telegram workflow. Keep backups of important todo content because complete/delete-by-number behavior appears unreliable, and treat TODO.md as data rather than trusted instructions.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a narrowly scoped TODO.md manager with some task-number bugs but no evidence of hidden access, credential use, exfiltration, or behavior beyond managing the todo file.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971659309,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: telegram-todolist\nVersion: 1.0.1\n\nThe skill is classified as suspicious due to a prompt injection vulnerability. The `add_task` function in `scripts/todolist.py` allows user-provided input (`main_task`, `subtasks`) to be written directly into the `TODO.md` file without sanitization. Since `TODO.md` is a markdown file located in the agent's workspace (`/root/.openclaw/workspace/TODO.md`), an attacker could inject malicious markdown instructions into the todo list. If the OpenClaw agent later re-reads and interprets the content of `TODO.md` as instructions, this could lead to prompt injection, allowing an attacker to manipulate the agent's behavior beyond the skill's intended purpose.",
+          "checkedAt": 1779163425405,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "e22baa4acc233fe9fb57cc70a182d43dfb7e49186277ba1c9d9c160bc9dfa9ad",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e22baa4acc233fe9fb57cc70a182d43dfb7e49186277ba1c9d9c160bc9dfa9ad"
+    },
+    "slug": "telegram-todolist",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

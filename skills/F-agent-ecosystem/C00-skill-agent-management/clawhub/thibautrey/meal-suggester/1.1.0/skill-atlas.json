@@ -1,0 +1,129 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.2083,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C16:token:learning",
+      "category:C17:token:schedule",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C16",
+      "C17"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e7fce8c5a3bd88fe456593c5ecff3d59b6bc4af800cd6bf51cd6cbcb3f85f677",
+    "content_hash": "0a2aa2b89ade36677c26fbff1313401ba41e9ff7a882699cf49e1b9cd08a78a2",
+    "precanonical_content_hash": "f89c75bac397b45cda0421d2624a989c12b0b1af30d6e68a4068b5fb58c0f7ce",
+    "skill_md_hash": "1f86bfbbef94bcbad269650d6a8e6920fa044e869171ed0a3ea87dffc24ee6e6",
+    "version_metadata_sha256": "ba10c05b37d6d853abb47989b6c06e40c185ed610b06a6a38e3af6ceb7dcbe13"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/thibautrey/skills/meal-suggester",
+    "claim_id": "3a6af43e3e90d39b61698ff3ba16f9d66967d32d2a3414c87e8ab4084dc17f84",
+    "index_entries": [
+      {
+        "index_path": "categories/cli-utilities.md",
+        "label": "meal-suggester",
+        "url": "https://clawskills.sh/skills/thibautrey-meal-suggester"
+      }
+    ],
+    "owner_handle": "thibautrey",
+    "owner_id": "s173ercmwqsgjtxtczg3cjq8w5885ag8",
+    "published_at": 1770802974689,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779962035213,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779962035213,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The local inventory, preferences, meal history, and shopping-list files directly match the stated purpose of suggesting meals and tracking household pantry state.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill tells the agent to update local markdown files from natural-language cooking feedback; this is broad enough to cause mistaken pantry updates, but the behavior is disclosed and limited to the skill's own food-tracking files.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The documentation mentions daily 19:00 cron suggestions, but the inspected artifact does not include a crontab installer or hidden setup command; users should still opt into any schedule deliberately.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The script uses local skill-relative markdown files and a fixed recipe list; no network calls, credentials, account access, broad filesystem indexing, or external APIs were found.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill persists meal suggestions, preferences, allergy notes, stock, and shopping-list state locally, which is expected for this purpose but should be reviewed because it can include household habits and dietary information.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: SkillSpector's concern about automatic persistent updates is supported by the README and SKILL.md, but those updates are purpose-aligned, plainly tied to inventory/history/shopping-list files, and not evidence of malicious behavior.\n[VirusTotal code_insight suspicious] expected: VirusTotal's concern is mainly prompt-injection risk from natural-language pantry updates and scheduled execution; the artifact evidence shows only local markdown state changes and a benign suggestion script, so this is user-guidance risk rather than a Review verdict.",
+          "guidance": "Install only if you are comfortable with a meal helper storing and updating local markdown notes about pantry contents, preferences, allergies, meal history, and shopping suggestions. Consider asking the agent to preview and confirm inventory changes before writing them, and review or disable any cron schedule unless you want daily suggestions.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a local meal-planning helper that keeps pantry and preference notes, with no evidence of hidden data theft, destructive behavior, or unrelated authority.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779962002705,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: meal-suggester\nVersion: 1.1.0\n\nThe skill is classified as suspicious primarily due to the inherent vulnerability risk associated with its core functionality: parsing natural language user input (e.g., \"on a utilisé X, Y, Z\") to modify local markdown files (`inventory/stock.md`). While the instructions in `SKILL.md` and `README.md` are benign and align with the skill's stated purpose, this mechanism presents a significant prompt injection surface against the AI agent. An attacker could potentially craft malicious input to manipulate files beyond the intended scope or trigger unintended commands if the agent's parsing and execution logic are not robust. Additionally, the skill sets up a daily cron job (`SKILL.md`) for scheduled execution, which, while stated as a feature, represents a persistent execution capability that could be abused if the underlying script were malicious (though in this case, `scripts/suggest-meal.sh` appears benign).",
+          "checkedAt": 1779162398443,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "d42774f94497c00137c5fc57020a197de6bc0382e7da5eb2a6772cb36f6e1e8e",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d42774f94497c00137c5fc57020a197de6bc0382e7da5eb2a6772cb36f6e1e8e"
+    },
+    "slug": "meal-suggester",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

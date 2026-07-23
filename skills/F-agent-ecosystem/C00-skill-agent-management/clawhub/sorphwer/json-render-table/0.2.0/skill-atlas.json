@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C04:token:data",
+      "category:C10:token:model",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:design"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "design",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "cfb2f5c58ff04c1f2489915523ed3e29228decd9df79b7372d6bf4a51215eaab",
+    "content_hash": "8491e7a9532ed6e5edc9b16f83b3fa7cba1c5c6b1fec288b18079ac1a4fb8f50",
+    "precanonical_content_hash": "422a0ff179001b0c41b7168eadee2321afb582b9383e25a389d0f2269babd1d6",
+    "skill_md_hash": "58c3b11a17beae2f4dfbcb7808812446254084f4cbdb15882a84757f97a32504",
+    "version_metadata_sha256": "a0282c258f2430916f7781f2a83f17fef60446c05c301a9a53f473e0e6104e89"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sorphwer/skills/json-render-table",
+    "claim_id": "fa93c6a4f94d4bb1e4339153820bcb9c5ba37cacaa73173b81ea3ae3921fbf76",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "json-render-table",
+        "url": "https://clawskills.sh/skills/sorphwer-json-render-table"
+      }
+    ],
+    "owner_handle": "sorphwer",
+    "owner_id": "s1779r2smt191tcdejp320cyjx872e8e",
+    "published_at": 1771249575502,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971117724,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971117724,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe rendering structured rows and columns into compact PNG table images using json-render-cli, and the template content matches that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Instructions stay focused on rendering, but they allow optional sub-agent or alternate-model routing for simple renders, which could move table data outside the main agent if used.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill may run npm i -g json-render-cli and npx playwright install chromium when dependencies are missing. This is disclosed and purpose-aligned, but it installs external software at runtime.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The template uses bash, Python, process substitution, json-render-cli, and /tmp PNG output. That local execution is proportionate to screenshot rendering and is not paired with unrelated system access.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No credentials, privileged account access, background service, broad local indexing, or durable persistence are requested. Output files are temporary PNGs with cleanup guidance after delivery.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code insight: global package installation] expected: The npm and Playwright install commands are real, but they are plainly documented as dependency setup for rendering and are not hidden or unrelated.\n[VirusTotal code insight: eval in shell template] expected: The eval consumes Python-generated export lines for integer layout values derived from environment variables; the pattern is worth caution, but the artifact does not show attacker-controlled command construction or exfiltration.\n[SkillSpector clean result] expected: SkillSpector reported no issues; this aligns with the artifact review, though the final verdict is based on the files themselves.\n[Static scan clean result] expected: The static scan reported no findings, and manual review found no hidden persistence, credential handling, destructive commands, or deceptive behavior.",
+          "guidance": "Install only if you are comfortable with the agent running local shell/Python commands and installing npm/Playwright dependencies when missing. Avoid using optional sub-agent or alternate-model routing for sensitive table data unless you are comfortable with that data flow.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent table-image renderer, with disclosed local command execution and tool installation requirements but no hidden data theft, persistence, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971095200,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: json-render-table\nVersion: 0.2.0\n\nThe skill is classified as suspicious due to its reliance on global package installations (`npm i -g json-render-cli`, `npx playwright install chromium`) which grant broad system modification capabilities to the agent. While necessary for the skill's stated purpose, these commands represent a significant attack surface if the agent were compromised or given malicious instructions. Additionally, the `references/compact-table-template.md` file uses an `eval` statement to process output from a Python script. Although the current Python logic appears to safely output only integer values, the `eval` pattern is inherently risky and a common vector for shell injection, making it a notable vulnerability if the Python script's output generation were to change or be influenced by unsanitized user input.",
+          "checkedAt": 1779164558579,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "66f4281730d008a732d8ba5f92ecc709f6c72456e1a0de7a383dfa1de2c343d8",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/66f4281730d008a732d8ba5f92ecc709f6c72456e1a0de7a383dfa1de2c343d8"
+    },
+    "slug": "json-render-table",
+    "source_type": "clawhub",
+    "version": "0.2.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

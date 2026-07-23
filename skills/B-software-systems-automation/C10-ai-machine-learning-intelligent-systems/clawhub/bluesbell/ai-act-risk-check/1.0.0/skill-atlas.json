@@ -1,0 +1,154 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "configuration"
+    ],
+    "audiences": [
+      "developer",
+      "educator",
+      "student"
+    ],
+    "confidence": 0.425,
+    "domains": [
+      "education",
+      "infrastructure",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:metrics",
+      "category:C10:token:ai",
+      "category:C10:token:inference",
+      "category:C10:token:llm",
+      "category:C16:token:education",
+      "cross-tag:agent-management",
+      "cross-tag:deployment",
+      "cross-tag:education",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C04",
+      "C16"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "learn",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "deploy",
+      "manage",
+      "operate",
+      "teach"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "35bd7cc061b0f81a361aaafb69e0d9a52bbfc49235b1af7354d7cfbe6484453e",
+    "content_hash": "3d267b952353de8a628c6ac8dc5405d5b4a49681adf789f896c1019814efeb4e",
+    "skill_md_hash": "da8af5322e184da030a45ecf3a1a2ff18c723a9dfc7dfa2734c00c3dd7c3def1",
+    "version_metadata_sha256": "1cc6c98dbe904243be47e8ab7b5be650f0aeb85aae8a4d244dc4acab2cb800ba"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/bluesbell/skills/ai-act-risk-check",
+    "claim_id": "61f03ab8d6d9775109d9fa7e633149ed5f92481038c012474549421cf39bd972",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "ai-act-risk-check",
+        "url": "https://clawskills.sh/skills/bluesbell-ai-act-risk-check"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "bluesbell",
+    "owner_id": "s1782xptyh203cks3mzxrtxgwh884n36",
+    "published_at": 1770560008863,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783657733284,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783657733284,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill purpose and implementation align: it classifies a user-provided AI-system description against EU AI Act Annex III categories and prints a preliminary result.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Runtime behavior is limited to accepting one command argument, embedding it in a classification prompt, calling an LLM CLI, and printing the output with a legal-advice disclaimer.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The package exposes a single exec script, which fits a command-line skill, but the documentation inconsistently says it uses oracle while the script calls gemini and also says there are no dependencies despite requiring that CLI.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Sending the supplied description to an external LLM is proportionate to the stated inference task and partly disclosed, but the provider boundary and privacy implications should be clearer.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No artifact evidence shows persistence, background execution, privilege escalation, credential harvesting, broad file access, local writes, destructive actions, or unrelated data handling.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The data-disclosure concern is valid as user input is sent to an LLM, but this is purpose-aligned and partly disclosed by the skill's LLM-inference description; it warrants user guidance rather than Review.\n[VirusTotal code_insight] expected: The external gemini command is real, but it is the core inference mechanism for the stated classifier and is not paired with hidden persistence, broad local access, or exfiltration beyond the submitted prompt.\n[staticScan] expected: The supplied static scan reported no findings, consistent with the small reviewed artifact set.",
+          "guidance": "Install only if you are comfortable with the Gemini CLI processing the AI-system description you provide. Do not submit confidential business details, personal data, or regulated information unless your organization approves that provider and its data-handling terms. Also note the documentation mismatch: it mentions oracle, but the script actually calls gemini.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a narrow AI Act risk checker that sends the description you enter to Gemini for classification, with no evidence of hidden collection, persistence, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783657712805,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 12,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ai-act-risk-check\nVersion: 1.0.0\n\nThe skill executes an external command (`gemini`) via `script.sh` to perform LLM inference. While this shell access is plausibly needed for the skill's stated purpose of AI Act risk classification, it represents a high-risk capability that prevents it from being classified as benign. There is no evidence of intentional malicious behavior such as data exfiltration, persistence, or prompt injection against the agent, but the direct execution of external binaries warrants a 'suspicious' classification.",
+          "checkedAt": 1779162242874,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "eb142994802c34761e1095aa53c2dce6d184e8a431761f9688616e07e1f0841e",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/eb142994802c34761e1095aa53c2dce6d184e8a431761f9688616e07e1f0841e"
+    },
+    "slug": "ai-act-risk-check",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

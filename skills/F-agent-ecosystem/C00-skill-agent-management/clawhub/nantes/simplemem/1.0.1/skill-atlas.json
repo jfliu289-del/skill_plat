@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C10:token:llm",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "140dac110ae815620b9c9d66cdf581c3c366bccd25ec316f29c7452229c44399",
+    "content_hash": "369bed322d6023704013148e6df84c6c7932b46e6cbc90c09da8f461e0221ac7",
+    "precanonical_content_hash": "53ff45301b9bc4b645373a2ab7579f83f02019d3e3b4caaa0838b06b3794edc8",
+    "skill_md_hash": "f4b0eebf3602edf55889837e491ea97c5c67d0ade14e6de0e5aa5b98a84d9579",
+    "version_metadata_sha256": "50ab4f51cc6062e935f89b9f96315a33e0f93a466fabcf0e71e070141a9648e0"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/nantes/skills/simplemem",
+    "claim_id": "f8fb884e8d7fddead467084f6fcb8efd3a5fee9b43e707177cac0a6a3e8d44ff",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "simplemem",
+        "url": "https://clawskills.sh/skills/nantes-simplemem"
+      }
+    ],
+    "owner_handle": "nantes",
+    "owner_id": "s170qwtzgq9bfexvxw8e5ws1ms83g6qn",
+    "published_at": 1771632310763,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943564365,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943564365,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The wrapper, documentation, local data directory, semantic retrieval, and OPENAI_API_KEY use all fit the stated purpose of cross-session semantic memory.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use is user-directed through add/search/retrieve/stats, but the documentation could be clearer about retention, deletion, sensitive content, and external processing of stored memory text.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation uses pip or cloning the upstream SimpleMem repository without pinned versions, and the documentation references a PowerShell script that is not included in the artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "OPENAI_API_KEY is declared in metadata and used for the full semantic-memory mode; without it, the code falls back to local JSON keyword search.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill writes memories under its own data directory and may create a LanceDB path there; there is no evidence of background execution, privilege escalation, protected-path writes, destructive behavior, or unrelated persistence.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The environment variable and local storage behavior are purpose-aligned and partly disclosed in metadata and docs, though explicit permission and file-handling details would improve transparency.\n[SQP-2] expected: Cross-session persistence is central to this skill and is disclosed, but users would benefit from clearer retention and deletion instructions.\n[SQP-2] expected: The JSON fallback stores user-supplied memory content and metadata in plaintext under the skill data directory; this is expected for a local memory fallback but should not be used for secrets.\n[SQP-2] expected: When an API key and the SimpleMem dependency are available, add and retrieve operations use the external SimpleMem/OpenAI-backed path; this matches the documented full-feature semantic mode but deserves clearer privacy disclosure.\n[SQP-2] expected: The concern about possible external transmission is valid as user guidance, but the artifact does not show hidden exfiltration, unrelated network behavior, or automatic collection outside user-directed memory operations.",
+          "guidance": "Install only if you want persistent agent memory. Avoid storing passwords, secrets, regulated personal data, or confidential business material as memories. Review or clear the skill's data directory when needed, use a dedicated OpenAI API key for full semantic features, and consider reviewing or pinning the upstream SimpleMem dependency before relying on it.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Simplemem is a coherent memory skill, but users should understand that saved memories persist locally and may be processed through OpenAI when full features are enabled.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943532515,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 65,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: simplemem\nVersion: 1.0.1\n\nThe skill bundle provides a wrapper for a semantic memory system, SimpleMem. The `SKILL.md` file contains standard installation and usage instructions, with no evidence of prompt injection attempts against the agent. The `simplemem.py` script handles local data storage within its own `data` directory and uses the `OPENAI_API_KEY` for its stated purpose of interacting with the OpenAI API for semantic features. There is no indication of malicious activities such as data exfiltration, unauthorized command execution, persistence mechanisms, or obfuscation. All observed behaviors are aligned with the skill's described functionality.",
+          "checkedAt": 1779165776146,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "0e6fe4aeafbc9fea7357017e6237c0113333a4c796ed52ba02588156b38dfdb2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/0e6fe4aeafbc9fea7357017e6237c0113333a4c796ed52ba02588156b38dfdb2"
+    },
+    "slug": "simplemem",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

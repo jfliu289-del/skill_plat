@@ -1,0 +1,155 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "creative",
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C07:token:debug",
+      "category:C09:token:privacy",
+      "category:C18:token:health",
+      "cross-tag:data-analysis",
+      "cross-tag:debugging",
+      "cross-tag:design",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C07",
+      "C09",
+      "C18"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "debug",
+      "design",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d3a102a154a3211edc012fbb5bb36725fdfca45e826e7dd0e8b069a351ea5edf",
+    "content_hash": "dfee12bbb1f0a117c34f87e185164ea58e1971da658bc1dad7483173d88afb8d",
+    "precanonical_content_hash": "08da1c035e1893ce5c46dbd5dd72af84d9cde2de6a6b85eb3dd5e772d7c6515e",
+    "skill_md_hash": "9d862b0c7506d65cba96dde320b1e07083c991859adec9de20cb845285a5a5b5",
+    "version_metadata_sha256": "4420d0299577b954ee190ad80483f97c3b928187e8ad74a40d8a53e5c41c9b3d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/officialpm/skills/my-tesla",
+    "claim_id": "6d710a51e816f8a4efc649971b391285215470d5746eec6ceb2642cb29368b13",
+    "index_entries": [
+      {
+        "index_path": "categories/apple-apps-and-services.md",
+        "label": "my-tesla",
+        "url": "https://clawskills.sh/skills/officialpm-my-tesla"
+      }
+    ],
+    "owner_handle": "officialpm",
+    "owner_id": "s1762tty69p53c7g53z60j7ten885qjz",
+    "published_at": 1769735093493,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783649260366,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783649260366,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill can read Tesla vehicle state and perform remote vehicle actions, including lock/unlock, charging, climate, location, windows, trunks, sentry, honk, flash, and charge-port controls; those capabilities are documented and match the stated Tesla-control purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are user-invoked CLI commands, with explicit --yes gates for many disruptive actions and approximate location output by default; raw JSON and precise location modes are disclosed.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "No hidden installer, startup hook, package manager script, or automatic persistence was found; dependency use is limited to the teslapy Python package declared in the script metadata.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Use of TESLA_EMAIL, local OAuth cache files, local defaults, Tesla API access, and command execution is sensitive but proportionate for a Tesla account integration.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Tokens and defaults are stored locally with best-effort 0600 permissions, and mileage history is stored locally in SQLite only when the user runs mileage commands; the optional launchd schedule is documented as a manual setup example, though the mileage DB itself is not explicitly chmod-hardened in code.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill does use environment variables, local files, and a CLI script, but SKILL.md and README disclose the main files and credential flow; this is not hidden behavior.\n[TP4] expected: The short description is broad, but the artifact documentation enumerates the vehicle controls, location behavior, mileage feature, and safety gates in detail.\n[SDI-1] expected: Mileage recording and export are persistent local data features, but they are explicitly documented and require user-invoked commands.\n[SDI-2] expected: The SQLite mileage DB stores vehicle identifiers, names, timestamps, odometer values, state, source, and notes; this creates local privacy risk but is disclosed and not exfiltrated.\n[EA2] unexpected: The cited changelog line reflects an older version; current docs and code make location approximate by default and require --yes for precise coordinates.",
+          "guidance": "Install only if you are comfortable giving this skill Tesla account access and the ability to send remote vehicle commands. Treat tokens, raw vehicle JSON, precise location output, and mileage exports as private data; consider tightening permissions on ~/.my_tesla/mileage.sqlite if the machine is shared.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed Tesla control CLI with sensitive but purpose-aligned account, vehicle, location, and local history handling.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783649212602,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 76,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: my-tesla\nVersion: 0.1.64\n\nThe OpenClaw skill 'my-tesla' is classified as benign. It demonstrates strong privacy and safety practices, including storing sensitive data (Tesla tokens, default car settings) in user-specific dotfiles with restricted `0600` permissions (`~/.tesla_cache.json`, `~/.my_tesla.json`). All disruptive actions require explicit `--yes` confirmation, and location data is approximated by default, requiring `--yes` for precise coordinates. JSON outputs are sanitized to prevent accidental leakage of raw vehicle data, including location. The mileage tracking feature stores data locally in a SQLite database (`~/.my_tesla/mileage.sqlite`) and includes a conservative auto-wake policy. There is no evidence of data exfiltration, malicious execution, persistence mechanisms installed by the skill, or prompt injection attempts in the documentation.",
+          "checkedAt": 1779160244270,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "d75429d8d64da867543fd6acdcb58793c1549b9317fd468de741b57452c5e527",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d75429d8d64da867543fd6acdcb58793c1549b9317fd468de741b57452c5e527"
+    },
+    "slug": "my-tesla",
+    "source_type": "clawhub",
+    "version": "0.1.64"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

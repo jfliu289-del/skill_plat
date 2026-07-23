@@ -1,0 +1,137 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C05:token:audio",
+      "category:C05:token:video",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:design"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "design",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ae9a435521255bd440fba2ba5c88d267a20ecade90ed48872d101f317333b90a",
+    "content_hash": "1fd8da944fe961ec180b6e2fe14da5134c89ff419de53053a1970cf744baa1b0",
+    "precanonical_content_hash": "e9a36d5be8fa91c00cca34168f87e1760440d2d57ab6881a07ca0aaab3f0eee5",
+    "skill_md_hash": "53246f4f26fd3a41eaebfc7bbee199785b4a5f857d0b78fbfc576830f9684792",
+    "version_metadata_sha256": "dbc5b2014ce50705eacd3c47057adf52aa92d366e7a46749ffbcb99111d87d18"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/antoinedc/skills/instagram-reels",
+    "claim_id": "12b817806acbe0af3625b4ce308af8a89753c0a6f2566c1bee74d8079fd633c6",
+    "index_entries": [
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "instagram-reels",
+        "url": "https://clawskills.sh/skills/antoinedc-instagram-reels"
+      }
+    ],
+    "owner_handle": "antoinedc",
+    "owner_id": "s172g4kpmn69vcj4j7yregcx91884nwr",
+    "published_at": 1770995490281,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779973779132,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779973779132,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented use of yt-dlp, ffmpeg, curl, python3, and Groq Whisper matches the stated purpose of downloading reel media, extracting captions, and producing transcripts.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The workflow is instruction-only shell usage that writes temporary files under /tmp, fetches media URLs, and sends extracted audio to Groq for transcription; users should understand that third-party processing is part of the workflow.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains only SKILL.md and asks users to install standard local tools and set GROQ_API_KEY; there are no bundled executables, self-install hooks, or automatic runtime behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "GROQ_API_KEY is proportionate for the transcription feature, and optional cookies for private reels are purpose-related, but cookies are sensitive session credentials and the skill does not warn strongly enough about that.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill uses temporary /tmp files and provides a cleanup command; it shows no background process, durable persistence, privilege escalation, credential harvesting, or automatic cookie collection.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The Groq upload concern is real but central to the advertised Groq Whisper transcription workflow and visible in the commands; it warrants user privacy guidance rather than Review by itself.\n[SQP-2] expected: The cookie-export note is sensitive and under-warned, but it is optional, user-directed, and used for the stated private-reel access case, with no evidence of storage or exfiltration.\n[VirusTotal/code_insight] expected: The shell-injection concern is a generic risk if an agent substitutes URLs unsafely; the artifact is instruction-only, quotes URL placeholders in examples, and includes no executable wrapper that automatically constructs commands.",
+          "guidance": "Install only if you are comfortable sending reel audio to Groq for transcription. Do not process private, copyrighted, or sensitive media unless you are authorized to share it with that service. Avoid using Instagram cookies unless necessary; if you do, treat the cookie file like a login token, keep it local, never share or commit it, and delete it after use.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward guide for downloading and transcribing reels, with real privacy and cookie-handling cautions but no hidden, destructive, or deceptive behavior found.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779973743350,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: instagram-reels\nVersion: 1.0.0\n\nThe skill is designed to download and transcribe Instagram Reels, using standard tools like yt-dlp, curl, ffmpeg, and python3. All operations are aligned with its stated purpose. However, the skill passes user-provided input (REEL_URL) directly into shell commands without explicit sanitization, creating a significant shell injection vulnerability (potential RCE) if the OpenClaw agent does not properly sanitize inputs before execution. This is a critical vulnerability, classifying the skill as 'suspicious' rather than 'benign' due to the high risk, even without evidence of intentional malicious behavior within the skill's instructions themselves. No data exfiltration, persistence, or prompt injection attempts were detected.",
+          "checkedAt": 1779163797007,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "b4c97993d1ca96940052a8dbffe36f6402411a35b6cc491037f71c6a4621a300",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b4c97993d1ca96940052a8dbffe36f6402411a35b6cc491037f71c6a4621a300"
+    },
+    "slug": "instagram-reels",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

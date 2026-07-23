@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:analyze",
+      "category:C05:token:video",
+      "cross-tag:data-analysis",
+      "cross-tag:design"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "cbbb9cde045d41710f760148c1c6943763322f40a258f2e00e86b94adf80ab63",
+    "content_hash": "3b12e82a447fcdc4fae106d52c6cc47b909748049b03e026fe51238aa401c9a7",
+    "precanonical_content_hash": "e77f0bd83ce1e69910cd033098d48d3fb2893534d0d188e5c1029f7090354957",
+    "skill_md_hash": "6d8f37f55b2c05a09be2f1820e299d8cb3a525253b988accd041290aeeaa20dd",
+    "version_metadata_sha256": "c8974f8855d48aabc2926cbd8d438525c83454b2621e2c02041ff58ca25bf077"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/zedit42/skills/videoanalyzer",
+    "claim_id": "6ac3d2d37fcb13c88717a789179f3632d44bcdba2a5f90575c9c4cd8a63bfe5d",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "videoanalyzer",
+        "url": "https://clawskills.sh/skills/zedit42-videoanalyzer"
+      }
+    ],
+    "owner_handle": "zedit42",
+    "owner_id": "s170m7v3rpycjvwkcq2rnpzbfs885e34",
+    "published_at": 1771891107274,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779954006666,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779954006666,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The README, SKILL.md, and scripts consistently match the stated purpose: yt-dlp downloads media, ffmpeg extracts audio and frames, Whisper creates transcripts, and summarize.sh formats transcript text for review.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "summarize.sh embeds up to 50,000 bytes of transcript content into a prompt and the docs suggest piping transcripts to clawdbot, so transcript text from untrusted videos should be treated as data, not as agent instructions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Dependencies are disclosed as yt-dlp, ffmpeg, and openai-whisper, with a user-run brew install command and no hidden installer, autostart, or package-install script in the artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Downloading videos and writing video, audio, subtitles, transcripts, and frame captures is expected for the skill, but can consume bandwidth, disk, CPU, and may retain sensitive or copyrighted material in the chosen output directory.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill creates persistent output files only under the user-selected output directory, uses no privilege escalation, reads no credential stores, and does not create background services or broad local indexes.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The local storage of downloaded media and derived artifacts is real and should be better warned about, but it is disclosed in the output layout and directly necessary for video analysis.\n[SQP-2] expected: The transcript-to-AI concern is valid as user guidance: transcripts may contain sensitive content, but the script prints a prompt and suggests a user-directed command rather than secretly sending data.\n[VirusTotal code_insight] expected: The prompt-injection concern is artifact-supported for optional AI summarization of untrusted transcripts, but the artifact does not show hidden execution, credential access, or automatic exfiltration.",
+          "guidance": "Use a dedicated output folder, expect media and transcript files to remain there until deleted, and avoid processing confidential videos unless local storage is acceptable. Do not paste or pipe sensitive transcripts into an external AI tool unless you intend to share that content, and ignore any instructions that appear inside a transcript.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill performs the advertised video download, transcription, frame extraction, and optional transcript summarization workflow, with privacy and prompt-handling cautions for generated transcripts.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779953952275,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: videoanalyzer\nVersion: 1.0.0\n\nThe skill bundle is designed for legitimate video analysis tasks, utilizing tools like yt-dlp, ffmpeg, and Whisper. However, it presents a significant prompt injection vulnerability in `scripts/summarize.sh` and the examples provided in `SKILL.md` and `README.md`. The content of the `transcript.txt` file, which is derived from user-provided video input, is directly embedded into a prompt for the AI agent without sanitization. This allows an attacker to craft a video whose transcript contains malicious instructions, potentially leading the AI agent to execute unauthorized commands or actions.",
+          "checkedAt": 1779166613769,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "7ca56bc46c6a192ce9cd6d13240dc09eb4358db16d9f99fc6c35f4c3f4de4b29",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/7ca56bc46c6a192ce9cd6d13240dc09eb4358db16d9f99fc6c35f4c3f4de4b29"
+    },
+    "slug": "videoanalyzer",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

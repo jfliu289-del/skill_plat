@@ -1,0 +1,135 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional"
+    ],
+    "confidence": 0.475,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:data",
+      "cross-tag:data-analysis",
+      "cross-tag:design"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "design"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "04e90f436f7192aef07b7c87f6460c65f889e7a35317292ab9747d29265874ab",
+    "content_hash": "530ff311e2a19e7483f7e5f31c85cb96f0eccf3488a7f8ca86799e1ce9481fce",
+    "precanonical_content_hash": "a31174206431c82ce1c0880b2304030f6919f2bf220eda9fb7ae31b7d23faad5",
+    "skill_md_hash": "d84267baafb7cce67d58002e6edd477b6b8a83b2114f28c8807dc07b6436297c",
+    "version_metadata_sha256": "2ed59398d1644bec28f1d7290b1be781f53c630a01d7b692efd4ebf7e3e8669d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/qrost/skills/map-grabber",
+    "claim_id": "5d1c69c4ffe17a35b7e0c73b17c593375a77a8ae6a2fc862305df00576b4e5ac",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "map-grabber",
+        "url": "https://clawskills.sh/skills/qrost-map-grabber"
+      }
+    ],
+    "owner_handle": "qrost",
+    "owner_id": "s178f7h4jz91qjvzt9q84pekv5885hjd",
+    "published_at": 1771637714062,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943588208,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943588208,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, metadata, documentation, and script are coherent: the skill geocodes an address, downloads OpenStreetMap street data and optional building footprints, then exports PNG, SVG, GeoPackage, or DXF files.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The runtime instructions tell the agent to execute the script without extra confirmation for site-map requests. That is purpose-aligned, but users should avoid using private addresses unless they are comfortable sending them to map data services.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation requires a manual pip install of requirements.txt, and the dependencies are unpinned. This is a normal Python setup pattern but less reproducible than pinned versions or a lockfile.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "shell:exec, network-backed OSM retrieval, and local file writes are proportionate to generating map exports. The manifest only declares shell execution, so the network side effect is clearer in the README than in the permission list.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background service, credential use, privilege escalation, hidden persistence, or unrelated local data access was found. Persistence is limited to user-requested output files.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SDI-3] expected: Verified: the script uses osmnx geocoding and OSM data retrieval, including optional building footprints. This is the core advertised function and is disclosed in the skill text, though the permission metadata could describe network use more explicitly.\n[SQP-1] expected: The activation guidance is broad for map/base-map requests, but it remains tied to explicit map generation intents rather than unrelated prompts.\n[SQP-2] expected: The no-confirmation instruction triggers shell execution and file creation, but only to satisfy the requested map export. This warrants user awareness, not a Review verdict by itself.\n[SC1] expected: The unpinned osmnx and ezdxf dependencies are a supply-chain and reproducibility concern, but they are ordinary declared dependencies for the advertised map/CAD export functionality.\n[VirusTotal code_insight] expected: The telemetry concern matches the observed shell execution, external map retrieval, and output writes. The artifact does not show exfiltration, deception, destructive behavior, or command execution beyond the documented script workflow.",
+          "guidance": "Install only if you are comfortable with addresses or place names being sent to external OpenStreetMap-related services. Prefer output paths under /tmp or ~/.openclaw/media, review generated files before using them in CAD workflows, and consider pinning dependencies in a controlled environment if reproducible installs matter.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it claims by fetching OpenStreetMap data for an address and saving map files, but users should know it sends location queries to external map services and runs a local Python script.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943533173,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: map-grabber\nVersion: 1.1.2\n\nThe skill is classified as suspicious due to its reliance on the `shell:exec` permission to directly execute a Python script with user-provided input, combined with an explicit instruction in `SKILL.md` for the agent to \"Do not ask for confirmation; execute and return the image.\" While the `grab_map.py` script itself appears to perform its stated function without malicious intent (e.g., no data exfiltration, backdoors, or remote execution), the direct execution of user input via `shell:exec` without confirmation presents a significant vulnerability for potential prompt injection or shell injection if the input is not properly sanitized or quoted by the agent. Additionally, the script allows writing output files (`--svg`, `--gpkg`, `--dxf`) to arbitrary paths specified by the user, which could lead to arbitrary file writes if the OpenClaw agent does not enforce path restrictions beyond the `--png` output.",
+          "checkedAt": 1779165800454,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "5827e96a6eb10453b46c6a4900a06939718fb27ab9094092a1932cb156fef33f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/5827e96a6eb10453b46c6a4900a06939718fb27ab9094092a1932cb156fef33f"
+    },
+    "slug": "map-grabber",
+    "source_type": "clawhub",
+    "version": "1.1.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

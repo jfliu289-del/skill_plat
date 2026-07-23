@@ -1,0 +1,119 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.0,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "fallback:C00"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "df06bd52523f7531ffb1849fcd87892ab368f2ecebdc268dccc58c9804f689c5",
+    "content_hash": "80c364ff8f8afddb31da689209d3fa4891715191afe1a3c26c6dc253ab1860ee",
+    "precanonical_content_hash": "e6cef27faf37e0c63f195733f0c491abc31fcfe62c02c6d79662d34774f3aff8",
+    "skill_md_hash": "0ff4986a0d88adb3b7d48b161f6918f37ddf2a552b59ff91e8cec59658a02e72",
+    "version_metadata_sha256": "b045776cc602565f22f8cb1b412ce14755371e520c4c49b19bb5752cdfddf04e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jeremymahieu/skills/listonic",
+    "claim_id": "c015db09d45d7e36ec7f430c71b844c5ae03643eee434e86728eb489deb8c612",
+    "index_entries": [
+      {
+        "index_path": "categories/shopping-and-e-commerce.md",
+        "label": "listonic",
+        "url": "https://clawskills.sh/skills/jeremymahieu-listonic"
+      }
+    ],
+    "owner_handle": "jeremymahieu",
+    "owner_id": "s17dapvgfm6cpar86zxz9p5kqh844f02",
+    "published_at": 1773607295763,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779965307422,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779965307422,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The capabilities match the stated purpose: authenticate to Listonic, list shopping lists/items, add or update items, and create, rename, or delete lists.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions disclose token and email/password setup and tell agents to confirm destructive delete operations, but they should more clearly warn that the config contains sensitive secrets.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill has a small shell wrapper that invokes a Python script and declares python3 as its runtime dependency; there are no package-install hooks or hidden install-time actions.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to Listonic API endpoints and local access to its own credential file are proportionate for an authenticated shopping-list integration.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script persists access and refresh tokens, and optionally supports password-based login, in ~/.openclaw/credentials/listonic/config.json without enforcing restrictive file permissions.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: SKILL.md tells users to create a local Listonic config with tokens or email/password and notes that refreshed tokens are persisted; this is sensitive, but it is disclosed and purpose-aligned.\n[SQP-2] expected: scripts/listonic.py writes refreshed auth material back to the documented config path without setting 0600-style permissions; this is a hardening gap, not evidence of hidden credential use or exfiltration.",
+          "guidance": "Install only if you are comfortable giving the skill access to your Listonic account. Prefer token mode over password mode, keep ~/.openclaw/credentials/listonic/config.json private with restrictive permissions, and rotate or revoke credentials if that file is exposed.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed Listonic shopping-list integration, but it stores Listonic credentials locally and users should protect that file.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779965270979,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: listonic\nVersion: 1.0.1\n\nThe skill is a functional integration for managing Listonic shopping lists using a reverse-engineered API. It handles authentication (OAuth tokens or email/password) and persists refreshed tokens to its own configuration file in `~/.openclaw/credentials/listonic/`. The implementation in `scripts/listonic.py` uses standard Python libraries, lacks suspicious execution or exfiltration logic, and includes safety instructions in `SKILL.md` for destructive operations.",
+          "checkedAt": 1779162724078,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "9fa319d7753ae5a68b504d3375646b42292c1fa9b05750ca303e0fc283f3cb4a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/9fa319d7753ae5a68b504d3375646b42292c1fa9b05750ca303e0fc283f3cb4a"
+    },
+    "slug": "listonic",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

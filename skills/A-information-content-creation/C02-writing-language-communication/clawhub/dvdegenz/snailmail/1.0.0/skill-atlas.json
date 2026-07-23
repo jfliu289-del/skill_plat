@@ -1,0 +1,130 @@
+{
+  "classification": {
+    "artifacts": [
+      "document"
+    ],
+    "audiences": [],
+    "confidence": 0.4167,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C02",
+    "reasons": [
+      "category:C02:token:write",
+      "category:C02:token:writing",
+      "category:C12:token:decision",
+      "cross-tag:writing"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C12"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d7f76c3cf79ed736803a326a6c46e37b72a5e5b67cfc717f07129f890c0b39f4",
+    "content_hash": "6dfea2171ed07944429a3b8dbf0347a4cd7298b6e7d5abf87429747c1fed631a",
+    "precanonical_content_hash": "c9d1bde3cbf5ea890fc0960c88b2a60b5d176e0115e9c03de78b9c2a8b52bb6f",
+    "skill_md_hash": "0e6b6a4f0968959943aeec0a576c1867a96357ab92dbd050a5b6fac9bed1603b",
+    "version_metadata_sha256": "3d1b385360d1ab46b700eb8e154c44d56f1da142ee57d90b3b6a4e544bec6c05"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/dvdegenz/skills/snailmail",
+    "claim_id": "27807c40e9e07e45a1d12678dcf7ec9956da95c43addc2164d0c8d4bd000fdad",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "snailmail",
+        "url": "https://clawskills.sh/skills/dvdegenz-snailmail"
+      }
+    ],
+    "owner_handle": "dvdegenz",
+    "owner_id": "s17b9pr3r58k3y51pm2ybcn5y585w6cj",
+    "published_at": 1770930294620,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972814970,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972814970,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, instructions, and script behavior all align around adding, listing, rendering, marking read, and archiving local inbox messages.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill discloses when to write and show inbox entries, but broad phrases such as \"inbox\" and \"messages\" could cause accidental invocation if an agent applies them too loosely.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no hidden installer or automatic setup beyond running a zero-dependency Node script that creates the inbox file on first use.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "File access is limited to an inbox/messages.json store, though the script falls back to HOME when OPENCLAW_WORKSPACE is unset, which may place the inbox outside the intended workspace.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill intentionally persists messages and mutates read/archive state; no network access, credential handling, privilege escalation, or unrelated file access is evidenced.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad-trigger concern is supported by the SKILL.md wording, but it mainly creates accidental display or local state-change risk rather than hidden or purpose-mismatched behavior.\n[VirusTotal code_insight] expected: The Markdown renderer does not escape stored message text, so rendered inbox content should be treated as untrusted; this is a robustness issue, not evidence of malicious intent.\n[staticScan] expected: Static scan reported no findings, consistent with the artifact showing local storage only and no network, credential, or destructive behavior.",
+          "guidance": "Install this only if you want your agent to keep a persistent local inbox. Avoid storing secrets in messages, set OPENCLAW_WORKSPACE if you need storage confined to a workspace, and require clear user intent before rendering all messages or running bulk actions like read-all or archive-read.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a local operator inbox that stores and renders messages, with some manageable ambiguity and rendering caveats but no evidence of hidden, destructive, credential-stealing, or exfiltrating behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972777506,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: snailmail\nVersion: 1.0.0\n\nThe `scripts/inbox.js` file contains a vulnerability where user-provided message content is not sanitized when rendered in Markdown format by the `renderMD` function. This could lead to Markdown injection (e.g., XSS in a vulnerable chat client or potential prompt injection if the agent re-interprets the Markdown output) if an attacker can control the input to the `add` command. While the `SKILL.md` instructions are generally benign and even advise the agent not to add commentary to the output, the lack of sanitization for Markdown output is a significant flaw, though not indicative of intentional malicious behavior like data exfiltration or persistence.",
+          "checkedAt": 1779163566570,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "bb7cad4ab3b4242aee1854b12579750e6e92767c7939fa0bbf28823d1e73fb69",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/bb7cad4ab3b4242aee1854b12579750e6e92767c7939fa0bbf28823d1e73fb69"
+    },
+    "slug": "snailmail",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

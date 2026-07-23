@@ -1,0 +1,156 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.25,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C00:token:skill",
+      "category:C04:token:analyze",
+      "category:C06:token:api",
+      "category:C06:token:code",
+      "category:C09:token:security",
+      "category:C12:token:decision",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C09",
+      "C12",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "5cb8312cf8d8611dcb3ff45fdb9fe55e5d9fc1d9afd6c21a1b3c92ac9ba76315",
+    "content_hash": "a3714f4eb30dcedbedb295b42faed4650a5efd91ddca46818bd036c96223cb4f",
+    "precanonical_content_hash": "4037e0d67967e455038803edd33f0946fe927f5e8ef29f33dd0afb2bf865a8c0",
+    "skill_md_hash": "73ff4738898e1140548fc0cd024e767d9d67aacb7958b4a1dad96b672ad24468",
+    "version_metadata_sha256": "e987eaddbaaaa3b0533066d745322fc5480131c7307fc00f9e32fd959ef201cf"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/zendenho7/skills/skill-install-guardian",
+    "claim_id": "565c13df059540e43d2a9a1fb42a97ba1565377cc0af107c6ab8bcc1f6113a2e",
+    "index_entries": [
+      {
+        "index_path": "categories/pdf-and-documents.md",
+        "label": "skill-install-guardian",
+        "url": "https://clawskills.sh/skills/zendenho7-skill-install-guardian"
+      }
+    ],
+    "owner_handle": "zendenho7",
+    "owner_id": "s172j8d5kvttg53rm902phbbt9884bfc",
+    "published_at": 1771681622219,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779947076901,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779947076901,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, documentation, and script align: it inspects external ClawHub skills, fetches their text files, scans for risky patterns, checks local skill conflicts, and reports before any install decision.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions repeatedly require owner confirmation before installation, and the script itself does not run `clawhub install` or mutate installed skills.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill depends on `npx clawhub` for inspection/search/list operations; this is disclosed and purpose-aligned, but users should rely on a trusted ClawHub CLI because the dependency is not pinned in the artifact.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Local subprocess use, network-backed ClawHub inspection, and reading `~/.openclaw/workspace/skills` are proportionate for a security/install review helper, though the local skill inventory should be understood as part of the check.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, credential access, background workers, file writes, deletion, or automatic privilege escalation were found in the artifact.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The artifact discloses `npx` use and file/content inspection in SKILL.md, and metadata declares the `npx` binary requirement. Missing richer permission declarations are a transparency limitation, not evidence of hidden or purpose-mismatched behavior.\n[SDI-4] unexpected: The basename-only fetch for script files is a real scanner quality weakness because nested or duplicate filenames may be analyzed incorrectly. This limits reliability but does not show malicious behavior by this skill.\n[SQP-2] expected: Reading the local OpenClaw skills directory supports the documented conflict/integration check and only reports installed skill names/counts. It should be disclosed to users, but it is coherent with the purpose.\n[static:suspicious.dynamic_code_execution] expected: The static scan matched the literal regex pattern used to detect `eval()` in other skills, not an actual executed `eval()` call in this skill.\n[VirusTotal] expected: VirusTotal telemetry was clean and consistent with the artifact review, but it was treated only as supporting signal.",
+          "guidance": "Reasonable to install as a manual due-diligence helper, but do not treat it as a complete security guarantee. Review its findings yourself, keep the separate owner approval step before installing any skill, and prefer a trusted or pinned ClawHub CLI when running the `npx clawhub` checks.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed pre-installation checker that runs ClawHub inspection commands and scans other skills, with no evidence of hidden installation, exfiltration, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779947040599,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 39,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: skill-install-guardian\nVersion: 1.3.0\n\nThe OpenClaw skill 'skill-install-guardian' is designed to perform security and due diligence checks on other skills before installation. Both its documentation (SKILL.md) and its Python script (scripts/check.py) consistently reflect this security-focused purpose. The script implements robust slug validation and uses safe, list-based `subprocess.run` calls to prevent shell injection when interacting with `npx clawhub`. It actively scans other skill files for dangerous patterns (like `eval()`, `exec()`, API keys, and obfuscation) and reports findings. There is no evidence of malicious intent, data exfiltration, unauthorized execution, or prompt injection attempts within this skill itself; rather, it aims to detect such issues in *other* skills.",
+          "checkedAt": 1779165911451,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a2623d5f1afa83582de4ecd0d8e304ea03c032e7992e70ad120dbfe8b4ffade7",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a2623d5f1afa83582de4ecd0d8e304ea03c032e7992e70ad120dbfe8b4ffade7"
+    },
+    "slug": "skill-install-guardian",
+    "source_type": "clawhub",
+    "version": "1.3.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

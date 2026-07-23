@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.4167,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "cross-tag:agent-management",
+      "cross-tag:review",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "review"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "3405b8ae0cb64dd4d368df5b8f9b93bab9a34d77f3e137eb536c82e88c98e3a1",
+    "content_hash": "1d455d75d8ee572ae75ea1a55eafd4d21f6c4db42c2a649ff084cfa59a3a31bc",
+    "skill_md_hash": "eb515038a415c4f794addac46e07be7d80f9054decdf05309eb62bb84d9f58cf",
+    "version_metadata_sha256": "dcb85340aac257cc667ed3eb6030f4e5e8aac411d1f8a9c4b289e63cb5bfd80a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jhotson/skills/cydew",
+    "claim_id": "deeabec9ef57c957baf8a8cf2bb3ce2cc9bb09741ba44647443171a419eb4eec",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "cydew",
+        "url": "https://clawskills.sh/skills/jhotson-cydew"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "jhotson",
+    "owner_id": "s17eb69e1gthyhxdn21kwxpbwn884xz5",
+    "published_at": 1770821689627,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968100507,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968100507,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill's purpose is to create and manage a discoverable marketplace agent listing, and its profile, pricing, availability, search, update, hire-request, and review instructions fit that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "It includes mutating remote API actions such as POST /agents, PUT /agents/:id, and POST /agents/:id/reviews, but those actions are explicit and directly tied to marketplace onboarding and operation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains only SKILL.md, no executable scripts or package files; the `npm run dev` line appears as a prerequisite for a Node service, not as bundled automatic execution.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Collecting name, email, bio, avatar, portfolio, pricing, and availability is proportionate for a discoverable marketplace listing, though the skill should more clearly warn users that this data may be public or searchable.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill uses Clerk M2M bearer tokens and creates persistent remote marketplace records; this is expected for the workflow, with no evidence of hidden local persistence, background workers, credential theft, or exfiltration.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-4] expected: Verification guidance is relevant to a marketplace listing, and the artifact only instructs setting `isVerified` to `false` when no verification flow exists; this should be clearer as server-controlled, but it does not show self-asserted verification or deception.\n[SQP-2] expected: Profile, email, avatar, proof-of-work, timezone, availability, pricing, and use-case fields are expected for public marketplace discovery, but users should be warned to avoid oversharing personal or sensitive business information.\n[SQP-2] expected: Clerk M2M tokens with `agentId` and `requesterId` claims are purpose-aligned for owner and requester API actions, but the skill should state that these tokens are secrets and claims must be issued and validated by trusted infrastructure.\n[VirusTotal code_insight] expected: The `npm run dev` concern is a general local-command risk, but the bundle has no executable payload or package script and presents the command only as a setup prerequisite.",
+          "guidance": "Before using this skill, decide what contact details, portfolio links, pricing, and availability you are comfortable making discoverable. Use business contact information where possible, review every POST or PUT body before sending it, and handle Clerk M2M tokens as secrets with least-privilege claims.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent API onboarding guide for creating a Cydew marketplace listing, with disclosed but real privacy and token-handling considerations.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968073912,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 30,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: cydew\nVersion: 1.0.2\n\nThe skill bundle is classified as suspicious due to the instruction `npm run dev` in SKILL.md. While presented as a prerequisite for a 'Node service running' and potentially benign in context, this is a direct instruction for local command execution by the agent. This capability, without further context on the `npm run dev` script itself or strong sandboxing, represents a potential vulnerability for arbitrary code execution, making it a high-risk behavior. There is no clear evidence of intentional malicious activity like data exfiltration or persistence, but the presence of this command execution instruction elevates it beyond benign.",
+          "checkedAt": 1779162984474,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "3405b8ae0cb64dd4d368df5b8f9b93bab9a34d77f3e137eb536c82e88c98e3a1",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/3405b8ae0cb64dd4d368df5b8f9b93bab9a34d77f3e137eb536c82e88c98e3a1"
+    },
+    "slug": "cydew",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

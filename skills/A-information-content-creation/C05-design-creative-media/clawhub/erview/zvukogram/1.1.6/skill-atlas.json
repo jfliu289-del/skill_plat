@@ -1,0 +1,202 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C05",
+    "reasons": [
+      "category:C05:token:audio",
+      "category:C06:token:api",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d6d735ceecd6bb424d0b4cb9fecbda3741ac9b2f175c1473bb48259a020aad32",
+    "content_hash": "ed23cd41501423d0253feed7713819064f2b436f6766daf10075bd239a2c90ea",
+    "precanonical_content_hash": "138d8f66c028a726ccdb971bdb28ff7eabe5d8db5e64adf76fe3744f88fda21f",
+    "skill_md_hash": "f652b5ee8cad14a0d8c2dce8834d1874211cf95199dacb9f7e5e6916980d9397",
+    "version_metadata_sha256": "496e6ba0aa9472baf5548642bab23ff611a3baa4bb27cad64815f915e85b4b21"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/erview/skills/zvukogram",
+    "claim_id": "1ac173df6341d766c4fdcded6b444be651b7f8d8917a786751886aa259d8de4d",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "zvukogram",
+        "url": "https://clawskills.sh/skills/erview-zvukogram"
+      }
+    ],
+    "owner_handle": "erview",
+    "owner_id": "s175h0jdx5g1z9bpzgdxrfjban83t7pq",
+    "published_at": 1774803582275,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779165479439,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": [
+            {
+              "categoryId": "ASI03",
+              "categoryLabel": "Identity and Privilege Abuse",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The skill explicitly requires a Zvukogram API token and account email, which is expected for the integration but gives the skill authority to use that account.",
+                "path": "SKILL.md",
+                "snippet": "requires:\\n      env: [ZVUKOGRAM_TOKEN, ZVUKOGRAM_EMAIL]\\n      credentials: [zvukogram_api]"
+              },
+              "recommendation": "Use a dedicated or revocable API token, avoid hardcoding real credentials in shared scripts, and monitor the account balance.",
+              "riskBucket": "permission_boundary",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "Using the skill can spend tokens or reveal account status through the Zvukogram account tied to the provided credentials."
+            },
+            {
+              "categoryId": "ASI07",
+              "categoryLabel": "Insecure Inter-Agent Communication",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The TTS script posts the user's text plus account credentials to the external Zvukogram API, which is central to the stated purpose but important for privacy.",
+                "path": "scripts/tts.py",
+                "snippet": "API_BASE = \"https://zvukogram.com/index.php?r=api\" ... data = {\"token\": token, \"email\": email, \"voice\": voice, \"text\": text, ...}"
+              },
+              "recommendation": "Do not send confidential or regulated text unless you are comfortable with Zvukogram processing it under your account.",
+              "riskBucket": "sensitive_data_protection",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "Any text or file content converted to speech is sent to Zvukogram for processing."
+            },
+            {
+              "categoryId": "ASI05",
+              "categoryLabel": "Unexpected Code Execution",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The merge helper invokes a local ffmpeg process and uses -y to overwrite the output file; this is purpose-aligned for audio merging but still local command execution.",
+                "path": "scripts/merge.py",
+                "snippet": "cmd = [\"ffmpeg\", \"-y\", \"-f\", \"concat\", \"-safe\", \"0\", \"-i\", str(list_file), \"-acodec\", \"copy\", output]"
+              },
+              "recommendation": "Run merging only on trusted audio paths, install ffmpeg from a trusted source, and confirm the output path before invoking the merge command.",
+              "riskBucket": "abnormal_behavior_control",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "Merging audio will run ffmpeg locally and can overwrite the chosen output file."
+            },
+            {
+              "categoryId": "ASI04",
+              "categoryLabel": "Agentic Supply Chain Vulnerabilities",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The registry metadata provides limited provenance and no install spec; this is not suspicious by itself because the helper scripts are included and user-invoked.",
+                "path": "metadata",
+                "snippet": "Source: unknown\\nHomepage: none\\nInstall specifications: No install spec — this is an instruction-only skill."
+              },
+              "recommendation": "Review the included scripts before use and prefer a registry entry with a clear homepage/source if provenance matters for your environment.",
+              "riskBucket": "abnormal_behavior_control",
+              "severity": "info",
+              "status": "note",
+              "userImpact": "Users have less upstream provenance information to verify the publisher or project history."
+            }
+          ],
+          "checkedAt": 1777614771334,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently implement Zvukogram text-to-speech and audio merging; users should notice that generation sends text to a third-party API and may consume account balance.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are user-directed examples and references; there is no evidence of prompt override, forced autonomous execution, or hidden stopping-condition changes.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "There is no auto-install or remote installer, and the Python scripts are included; however, source/homepage provenance is limited and optional merging depends on a local ffmpeg binary.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The required token and email are proportionate for a TTS API integration, but they grant access to a paid/service account and should be stored carefully.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background persistence is shown; the only persistent element is the optional local config file containing the Zvukogram token and email.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": null,
+          "guidance": "This appears safe to use for its stated TTS purpose if you are comfortable sending the selected text to Zvukogram. Store the API token/email securely, avoid converting sensitive documents unless permitted, monitor any paid balance usage, and use the merge helper only with trusted files and a confirmed output path.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": {
+            "abnormal_behavior_control": {
+              "highestSeverity": "low",
+              "status": "note",
+              "summary": "Only purpose-aligned local ffmpeg execution and limited provenance metadata were observed; there is no hidden installer or autonomous background behavior."
+            },
+            "permission_boundary": {
+              "highestSeverity": "low",
+              "status": "note",
+              "summary": "The skill needs Zvukogram token/email credentials as expected for the API integration."
+            },
+            "sensitive_data_protection": {
+              "highestSeverity": "low",
+              "status": "note",
+              "summary": "Requested text and credentials are sent to the Zvukogram API, which is disclosed and central to the TTS function."
+            }
+          },
+          "status": "clean",
+          "summary": "The skill matches its text-to-speech purpose, with expected cautions that it uses Zvukogram credentials, sends requested text to Zvukogram, and can run ffmpeg for audio merging.",
+          "verdict": "benign"
+        },
+        "skillspector": null,
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: zvukogram\nVersion: 1.1.6\n\nThe zvukogram skill bundle is a legitimate integration for the Zvukogram Text-to-Speech API. It contains functional Python scripts for checking account balances (balance.py), generating speech (tts.py), and merging audio files via ffmpeg (merge.py). The bundle includes extensive documentation and SSML references (SSML.md, API.md) designed to help an AI agent use the service correctly, with no evidence of malicious intent, data exfiltration, or prompt injection attacks.",
+          "checkedAt": 1779165479439,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "d6d735ceecd6bb424d0b4cb9fecbda3741ac9b2f175c1473bb48259a020aad32",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d6d735ceecd6bb424d0b4cb9fecbda3741ac9b2f175c1473bb48259a020aad32"
+    },
+    "slug": "zvukogram",
+    "source_type": "clawhub",
+    "version": "1.1.6"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C06:token:api",
+      "category:C12:token:management",
+      "category:C18:token:home",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C12",
+      "C18"
+    ],
+    "stages": [
+      "create",
+      "discover"
+    ],
+    "tasks": [
+      "build",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "72330eb16337e28781e44e5fa15a91162ddd16d6ab8bdd2e2ca9aa6df8a0af1d",
+    "content_hash": "82e79b46688203a790a343d04d41682947a01257ab315a3a52e92d395e60dced",
+    "precanonical_content_hash": "fa512880845ba6136dfb564b17f27a5fa1990a57f63322770aa57323656a8050",
+    "skill_md_hash": "2303a03fe57904f0113f4fa484b7079627abbd3b9a6b0d83cc7a38499431995e",
+    "version_metadata_sha256": "be2e880fb686832689169e83c9224380fec4b97439916bf799600f4c6687bea0"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/rodrigosiviero/skills/music-assistant",
+    "claim_id": "91bb2122b2d513f013545e982dee136b7f6fa034823eb93cee2a82efcf321222",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "music-assistant",
+        "url": "https://clawskills.sh/skills/rodrigosiviero-music-assistant"
+      }
+    ],
+    "owner_handle": "rodrigosiviero",
+    "owner_id": "s17ebzjwekw109mr7wjgp4jtp183k8v8",
+    "published_at": 1772736572474,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779947349050,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779947349050,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose matches the artifacts: the script reads MA_URL, MA_TOKEN, and optional MA_PLAYER, then sends Music Assistant JSON-RPC commands for playback, volume, queues, search, recently played items, player listing, and library sync.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill discloses both wrapper CLI commands and direct JSON-RPC access for uncovered operations. Queue clearing, playback changes, and sync are user-visible Music Assistant actions and fit the purpose, but direct API use should remain explicit and user-directed.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains SKILL.md and one Python helper script. There are no install hooks, dependency installers, remote downloaders, obfuscated payloads, or background setup steps in the inspected files.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Requiring a Music Assistant URL and bearer token is proportionate for controlling the user's server, but MA_TOKEN is sensitive. The examples default to plain HTTP for a local server and do not include strong credential-handling guidance.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The code shows no persistence, local writes, credential storage, privilege escalation, or unrelated file access. If MA_PLAYER is unset, it auto-selects the first available player, which users should be aware of.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: Verified: the setup asks users to export a long-lived MA_TOKEN without explicitly warning that it is a secret. This is a real guidance gap, but the token is disclosed, purpose-aligned, and used only for the configured Music Assistant API.\n[SQP-2] expected: Verified: the direct API example sends an Authorization bearer token to an http:// Music Assistant endpoint. This is common for local deployments but should be limited to trusted networks or replaced with HTTPS/reverse-proxy guidance; it does not show exfiltration or hidden behavior.",
+          "guidance": "Install only if you want the agent to control your Music Assistant server. Treat MA_TOKEN like a password: do not share it, commit it, paste it into screenshots/logs, or use it on untrusted networks; rotate it if exposed. Prefer HTTPS or a trusted local network for authenticated requests, and set MA_PLAYER when you want to avoid controlling the wrong device.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward Music Assistant controller; its main risk is careful handling of the required access token.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779947303406,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: music-assistant\nVersion: 1.0.3\n\nThe music-assistant skill is a legitimate tool for controlling a Music Assistant server. The core logic in `scripts/mactl.py` uses standard Python libraries to interact with the Music Assistant JSON-RPC API for playback, volume, and library management. No evidence of data exfiltration, malicious execution, or prompt injection was found in `SKILL.md` or the source code.",
+          "checkedAt": 1779165963916,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "4a439ea3c4da86714b70d309aea50330edef5cf1351fe136ef8657facdb82603",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4a439ea3c4da86714b70d309aea50330edef5cf1351fe136ef8657facdb82603"
+    },
+    "slug": "music-assistant",
+    "source_type": "clawhub",
+    "version": "1.0.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

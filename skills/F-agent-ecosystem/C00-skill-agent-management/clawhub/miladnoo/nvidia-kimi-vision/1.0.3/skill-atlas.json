@@ -1,0 +1,152 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "creator",
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "creative",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:analyze",
+      "category:C05:token:image",
+      "category:C06:token:api",
+      "category:C10:token:model",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:design",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C05",
+      "C06",
+      "C10"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "design",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "3b4728349c32643e09cf42f19300d410cfd8b7d76d4ce49b0b09254c52649bf9",
+    "content_hash": "24d992020b7232a9b79cb76cc68a17e05a976ca6809536782b299942f587b46a",
+    "precanonical_content_hash": "7cab203089ef406325910459e69c12f26798e3ad41c79f673643b74a4c900e21",
+    "skill_md_hash": "fdfbb8767e937389f555c7097113ebf7dc235ca1f5bf5298ae6fb3bec46cb6fc",
+    "version_metadata_sha256": "ff8ef0cf860f1cab0e4c009c9938af0b9078bd90ce6e2aac055b217fa1a32152"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/miladnoo/skills/nvidia-kimi-vision",
+    "claim_id": "82a616ab7c518e101d11d4af8e7144460735810ffbdb09a75b4195042d059f12",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "nvidia-kimi-vision",
+        "url": "https://clawskills.sh/skills/miladnoo-nvidia-kimi-vision"
+      }
+    ],
+    "owner_handle": "miladnoo",
+    "owner_id": "s174k8ssy9d054h30xphhrp3r18840cv",
+    "published_at": 1771381505989,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779919417456,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779919417456,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose and code align: the skill reads a supplied image path, combines it with a prompt, and sends both to NVIDIA's chat completions endpoint for vision analysis.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill depends on user-provided file paths and prompts; it does not automatically scan files, but a user or agent could upload the wrong local file if careless.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The metadata declares python3 and a system install entry for Python dependencies, but it does not explicitly declare network use even though the documentation and implementation make the remote NVIDIA API central to the skill.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Outbound transmission of the selected image and prompt is proportionate for a cloud vision API skill and is described in the artifacts, but sensitive screenshots or photos would leave the local environment.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill reads an NVIDIA API key from ~/.config/nvidia-kimi-api-key or accepts an inline command-line key. This is purpose-aligned, but plaintext key storage and inline secrets are weaker credential-handling patterns.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The scanner concern about remote API access is supported by the code, but this network use is the disclosed core function of the skill, not hidden behavior. The missing explicit metadata permission is a transparency note rather than a verdict-changing issue.\n[SQP-2] expected: The image and prompt are sent to NVIDIA as expected for a hosted vision model. The documentation could give a clearer privacy warning, but the external API dependency is disclosed in the name, description, setup, and runtime behavior.\n[SQP-2] expected: The artifacts do show inline API-key usage examples, which can expose credentials through shell history or process metadata. This is a real handling weakness, but it is user-directed and purpose-aligned.\n[RA2] expected: The recommended ~/.config API-key file is local plaintext persistence. It is not rogue-agent persistence or hidden privilege use, but users should restrict file permissions or prefer a safer secret store.\n[VirusTotal code_insight] unexpected: VirusTotal's stated arbitrary-file-as-API-key path issue is not supported by the normal script flow: main uses the third argument directly as the API key and only calls get_api_key() without arguments for the default config file. The script can upload any supplied image_path, but that is the intended user-controlled input.",
+          "guidance": "Install only if you are comfortable sending chosen images and prompts to NVIDIA's API. Avoid using it on private screenshots, confidential documents, or photos with personal data unless that external processing is acceptable. Store the API key with restrictive permissions and avoid passing it directly on the command line.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it claims: it sends a user-selected image and prompt to NVIDIA's hosted vision API, but users should handle images and API keys carefully.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779919381387,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: nvidia-kimi-vision\nVersion: 1.0.3\n\nThe `scripts/analyze_image.py` file contains an information disclosure vulnerability. The `get_api_key` function, when provided with a third command-line argument, attempts to read that argument as a file path if it exists. This allows an attacker to specify a path to an arbitrary sensitive file (e.g., `~/.ssh/id_rsa`, `/etc/passwd`). The content of this file is then used as the API key and sent in the `Authorization` header to NVIDIA's API endpoint (`https://integrate.api.nvidia.com`). While the data is sent to a legitimate third party (NVIDIA), this constitutes an unauthorized information disclosure risk.",
+          "checkedAt": 1779165006966,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "c542b04f429fb5ab41708195924ff1716997ea5a7e3dd514e76eafc72c4feb98",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/c542b04f429fb5ab41708195924ff1716997ea5a7e3dd514e76eafc72c4feb98"
+    },
+    "slug": "nvidia-kimi-vision",
+    "source_type": "clawhub",
+    "version": "1.0.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

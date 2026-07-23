@@ -1,0 +1,163 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "website"
+    ],
+    "audiences": [
+      "business",
+      "developer",
+      "marketer",
+      "security-professional"
+    ],
+    "confidence": 0.325,
+    "domains": [
+      "business",
+      "marketing",
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C04:token:dashboard",
+      "category:C06:token:code",
+      "category:C07:token:debug",
+      "category:C08:token:cd",
+      "category:C08:token:ci",
+      "category:C08:token:github",
+      "category:C09:token:security",
+      "category:C10:token:llm",
+      "category:C14:token:campaign",
+      "category:C19:token:automation",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:debugging",
+      "cross-tag:marketing-sales",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C04",
+      "C06",
+      "C07",
+      "C09",
+      "C10",
+      "C14",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "deliver",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "build",
+      "debug",
+      "manage",
+      "market",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a7fb17b645a4ebd5d8c87df68f668edc7549c406a524dd71f81353f72637140e",
+    "content_hash": "a7eb60c977422714941d8c1c03f87c136cf1a080c199a2fc6377cf2c94d74c05",
+    "precanonical_content_hash": "6360c1d6fdad679b6f81f8f77e20f17b4aa7585ee9095216ebd558efc77808b2",
+    "skill_md_hash": "8e45626f8e1cf8baf53b46fe819f2926c51ca49755f6aac03c8d9f4c121c68af",
+    "version_metadata_sha256": "e6bbc8333d5a8040ee07e6d843a22ae713f6c4609b5ac6f2029344c8f7429bc8"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/benlee2144/skills/skillshield",
+    "claim_id": "fd2dc1e831c27dfadb6a42679c1bd3f63af3ada9a7956bbd34f3820204689872",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "skillshield",
+        "url": "https://clawskills.sh/skills/benlee2144-skillshield"
+      }
+    ],
+    "owner_handle": "benlee2144",
+    "owner_id": "s177s7t16ermep3bgk6mtmv6ss884ntc",
+    "published_at": 1771392549411,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779920682564,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779920682564,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The main artifact is a Python stdlib scanner for OpenClaw skills; its detection logic, reports, SARIF output, CI hook generation, SBOM, baseline comparison, and quarantine features align with that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "Prompt-injection and exfiltration instructions appear inside deliberately fake test skills, not the top-level skill instructions. The top-level instructions describe scanner usage and administrative commands.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No package install hook, dependency installer, background worker, or automatic network execution was found. The main script is invoked manually through documented commands.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The scanner reads user-selected skill directories and ships intentionally malicious test fixtures under tests/fake-*; these are proportionate for a security scanner but should not be run as normal tools.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The scanner can persist baselines, append ignore entries, write reports, generate hook/CI text, and move installed skills into or out of quarantine. These actions are purpose-aligned and disclosed, but quarantine and ignore changes should be treated as administrative operations.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[AST4] expected: The subprocess findings are in tests/fake-* malicious fixtures, not in the scanner runtime path; the main scanner references subprocess patterns as text to detect.\n[TT4] expected: The local-file-to-network flows occur in fake crypto/weather/campaign fixtures intended as known-bad samples for scanner testing.\n[TT2] expected: The SSH-key-to-shell-command flow is in a fake timebomb fixture and is not invoked by the scanner itself.\n[SDI-1] expected: Quarantine, restore, baseline, report, hook, and fixture behaviors are consistent with a security scanner, though they create local filesystem side effects when explicitly used.\n[SDI-2] expected: Ignore-file creation can suppress future findings, but it is only reached through the interactive user choice to ignore a finding.\n[SDI-4] expected: Deceptive descriptions and prompt-injection text are present in fake malicious test skills; they are evidence samples rather than the skill’s own operating instructions.",
+          "guidance": "Install only if you want a local skill security scanner. Do not execute scripts inside tests/fake-* as normal tools. Treat quarantine, unquarantine, baseline reset, and interactive ignore actions as administrative changes because they can move installed skills or affect future scan results.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a security scanner that includes dangerous sample fixtures, but the reviewed risky behavior is either test data or user-invoked scanner administration.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779920584258,
+          "issueCount": 74,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": null
+      },
+      "sha256hash": "a7fb17b645a4ebd5d8c87df68f668edc7549c406a524dd71f81353f72637140e",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a7fb17b645a4ebd5d8c87df68f668edc7549c406a524dd71f81353f72637140e"
+    },
+    "slug": "skillshield",
+    "source_type": "clawhub",
+    "version": "4.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

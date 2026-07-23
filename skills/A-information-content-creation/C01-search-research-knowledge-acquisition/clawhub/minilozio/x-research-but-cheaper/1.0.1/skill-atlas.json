@@ -1,0 +1,215 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.4167,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:research",
+      "category:C01:token:search",
+      "cross-tag:agent-management",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00"
+    ],
+    "stages": [
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "879eaa9810d42322d78bdeec69eeccedc6b8c8a7997ce04f82efd9da2dea5ff6",
+    "content_hash": "fbe7d84c453cdc940ffc741b7c73c1ba9cc754df14fbadfa2c3fd658fc4d7be3",
+    "precanonical_content_hash": "8c8c4179ff026f182b664a8f45d37c23aee4d5f31181d93a424ca88bd98c9ce6",
+    "skill_md_hash": "e877d74dcfa42a47361157285448315e7f4ce3afe74056b042b9e7ed9d24297d",
+    "version_metadata_sha256": "a930a79ac4f0ba045e2053ff35cd464889783cfab2bc1fb3a70c86e8cb99b512"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/minilozio/skills/x-research-but-cheaper",
+    "claim_id": "acea1f1769abe8e6364df176d11dba70764083fb9af5f665f289293dc2980c9d",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "x-research-but-cheaper",
+        "url": "https://clawskills.sh/skills/minilozio-x-research-but-cheaper"
+      }
+    ],
+    "owner_handle": "minilozio",
+    "owner_id": "s17er2ndwepjpsehq96f8ngksd885aqa",
+    "published_at": 1771511794723,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779165442416,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": [
+            {
+              "categoryId": "ASI02",
+              "categoryLabel": "Tool Misuse and Exploitation",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "Searches can perform repeated provider API calls based on command flags. This is purpose-aligned, but it is a paid API workflow and users should keep generated page counts and deep-research commands scoped.",
+                "path": "scripts/x-search.ts",
+                "snippet": "const pages = quick ? 1 : nflag('pages', 3); ... for (let p = 0; p < effectivePages; p++) { const result = await searchTweets(q, cursor, queryType);"
+              },
+              "recommendation": "Review agent-generated commands before deep searches, set explicit `--pages` and `--limit` values, and consider adding a hard page cap in the code.",
+              "riskBucket": "abnormal_behavior_control",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "A broad or repeated research request could consume TwitterAPI.io credits or retrieve more public X data than the user intended."
+            },
+            {
+              "categoryId": "ASI04",
+              "categoryLabel": "Agentic Supply Chain Vulnerabilities",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The documented command uses `npx tsx` while the skill does not vendor or pin `tsx`; if it is not already installed, npx may run a package from npm at runtime.",
+                "path": "SKILL.md",
+                "snippet": "npx tsx x-search.ts search \"<query>\" [options] ... No `npm install` needed — zero dependencies."
+              },
+              "recommendation": "Install and pin a reviewed `tsx` version locally, or ship a compiled JavaScript entry point so the skill does not rely on dynamic npx resolution.",
+              "riskBucket": "abnormal_behavior_control",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "Running the skill may depend on an external, unpinned package runner, which adds normal npm supply-chain exposure."
+            },
+            {
+              "categoryId": "ASI03",
+              "categoryLabel": "Identity and Privilege Abuse",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The skill reads a provider API key from the environment and uses it in TwitterAPI.io requests. This is expected for the integration and no hardcoded or printed key is shown in the visible code.",
+                "path": "scripts/lib/api.ts",
+                "snippet": "const k = process.env.TWITTERAPI_KEY; ... return { 'X-API-Key': getKey(), 'Content-Type': 'application/json' };"
+              },
+              "recommendation": "Set the key as an environment variable rather than inline in commands, monitor provider usage, and avoid sharing agent logs that may include environment setup details.",
+              "riskBucket": "permission_boundary",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "The API key authorizes paid TwitterAPI.io usage, so misuse or logging of the environment could expose the account or consume credits."
+            },
+            {
+              "categoryId": "ASI07",
+              "categoryLabel": "Insecure Inter-Agent Communication",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "The tool sends search queries, usernames, tweet IDs, and other request parameters to the disclosed TwitterAPI.io provider. This is central to the skill's purpose.",
+                "path": "scripts/lib/api.ts",
+                "snippet": "const BASE = 'https://api.twitterapi.io'; ... const res = await fetch(url.toString(), { headers: headers() });"
+              },
+              "recommendation": "Do not put private or confidential information into search queries unless you are comfortable sending it to TwitterAPI.io.",
+              "riskBucket": "sensitive_data_protection",
+              "severity": "info",
+              "status": "note",
+              "userImpact": "Search terms and requested accounts or tweets are visible to the provider, even though the data being retrieved is generally public X/Twitter content."
+            },
+            {
+              "categoryId": "ASI06",
+              "categoryLabel": "Memory and Context Poisoning",
+              "confidence": "high",
+              "evidence": {
+                "explanation": "Fetched API results are stored in a local cache under the skill directory. This is disclosed and used to reduce repeat API charges, but it creates persistent local research artifacts.",
+                "path": "scripts/lib/cache.ts",
+                "snippet": "const CACHE_DIR = join(__dirname, '..', '..', 'data', 'cache'); ... writeFileSync(file, JSON.stringify(data));"
+              },
+              "recommendation": "Use the documented cache clear command when needed and avoid saving sensitive research outputs on shared machines.",
+              "riskBucket": "sensitive_data_protection",
+              "severity": "low",
+              "status": "note",
+              "userImpact": "Later sessions or local users with filesystem access may see cached research results or saved outputs, and stale cached results may influence future analysis until cleared."
+            }
+          ],
+          "checkedAt": 1778395134561,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is X/Twitter research via TwitterAPI.io, and the visible code implements read-only search, profile, tweet, thread, trend, community, follower/following, and watchlist workflows without evidence of posting, deleting, or account mutation.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The agentic research loop and CLI can make multiple paid API reads. The visible search code loops over the requested page count, so users should review broad or deep searches for cost and scope.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no install spec and the skill claims zero dependencies, but documented use relies on `npx tsx`, which may execute or fetch an unpinned runtime package if `tsx` is not already installed.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill requires a TwitterAPI.io API key and sends user queries/usernames to that provider, which is expected and disclosed for the stated purpose.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill persists cache files, saved markdown outputs, and a watchlist under its own `data` directory; no background service, privileged writes, or hidden persistence are evident in the provided artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": null,
+          "guidance": "This skill looks reasonable if you intend to use TwitterAPI.io for X/Twitter research. Before installing, make sure you are comfortable with paid API usage, provider visibility into your search queries, local cache/watchlist files, and the `npx tsx` runner; set the API key securely and review broad agent-generated searches.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": {
+            "abnormal_behavior_control": {
+              "highestSeverity": "low",
+              "status": "note",
+              "summary": "The CLI and agentic workflow are purpose-aligned, but deep searches can make repeated paid API calls and the runtime relies on an unpinned `npx tsx` runner."
+            },
+            "permission_boundary": {
+              "highestSeverity": "low",
+              "status": "note",
+              "summary": "The skill uses a TwitterAPI.io API key from the environment, which is expected for the service and visibly scoped to the disclosed provider."
+            },
+            "sensitive_data_protection": {
+              "highestSeverity": "low",
+              "status": "note",
+              "summary": "Queries and identifiers are sent to TwitterAPI.io, and fetched results are cached locally under the skill directory."
+            }
+          },
+          "status": "clean",
+          "summary": "This appears to be a coherent read-only X/Twitter research tool, with normal cautions around its API key, provider calls, local caching, and npx-based runner.",
+          "verdict": "benign"
+        },
+        "skillspector": null,
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: x-research-but-cheaper\nVersion: 1.0.1\n\nThe OpenClaw AgentSkills bundle 'x-research-but-cheaper' is designed for X/Twitter research via TwitterAPI.io. All network communication is directed to the legitimate `https://api.twitterapi.io` endpoint. API keys (`TWITTERAPI_KEY`) are read from environment variables, and the `README.md` provides explicit security warnings regarding potential logging by AI agents, recommending secure handling. File system operations for caching (`scripts/lib/cache.ts`) and saving output (`scripts/x-search.ts`) are confined to the skill's `data/` directory, and filenames are sanitized to prevent path traversal. There is no evidence of data exfiltration to unauthorized endpoints, persistence mechanisms, or prompt injection designed to subvert the AI agent for malicious purposes.",
+          "checkedAt": 1779165442416,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "879eaa9810d42322d78bdeec69eeccedc6b8c8a7997ce04f82efd9da2dea5ff6",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/879eaa9810d42322d78bdeec69eeccedc6b8c8a7997ce04f82efd9da2dea5ff6"
+    },
+    "slug": "x-research-but-cheaper",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

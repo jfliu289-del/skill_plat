@@ -1,0 +1,124 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.475,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "3b48caad7d0176928ef7a825e7e0561c83fe60ad6943d10d9bd8d483f45589e7",
+    "content_hash": "c0345eff67b88573de62dae2bbee584b9e2ac705147fc3132fa5dee950095e33",
+    "precanonical_content_hash": "1a0c46480b2a2559cf3aa46797ae35647cef444e8f16753d2b429265a0e26b6a",
+    "skill_md_hash": "655d80b67a12531c994c71a92c812dd63eea0e720e250518bb89ea3c641ace14",
+    "version_metadata_sha256": "4c4993da87bd1c5af15868dd181aaee294810f8c1f443a499d4d9c48742f2ad7"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jk-archivist/skills/jk-archivist-tiktok-packager",
+    "claim_id": "cddd59648fa87d8eb8caea5449732dca6f4c7297097bab9aacb4639d81764118",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "jk-archivist-tiktok-packager",
+        "url": "https://clawskills.sh/skills/jk-archivist-jk-archivist-tiktok-packager"
+      }
+    ],
+    "owner_handle": "jk-archivist",
+    "owner_id": "s178y35qr3hk2sd0ymjk6pt6m58858np",
+    "published_at": 1771304864318,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972347396,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972347396,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe generating 6 TikTok-style PNG slides, captions, validation/review outputs, and an optional Postiz draft upload path.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The Postiz path is optional and CLI-gated with --postiz, but users should notice that it uploads generated slides and captions to a third-party service when enabled.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is limited to a Pillow dependency plus Node/Python runtime requirements; package metadata shows no install hooks or automatic execution.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Environment credential use is limited to POSTIZ_API_KEY and POSTIZ_TIKTOK_INTEGRATION_ID for the documented Postiz feature, with POSTIZ_BASE_URL overridable by the user.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill writes generated artifacts, logs, upload state, and Postiz responses under outbox; it does not install persistence, escalate privileges, or run background workers.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: Node/Python execution and local file reads/writes are necessary for rendering and validation, and the skill documents required runtimes and output paths.\n[SDI-1] expected: The upload and draft creation behavior is real, but it is documented in SKILL.md and README.md, disabled by default, and requires the explicit --postiz flow.\n[SDI-2] expected: Postiz API credentials and network calls are tied to the documented optional upload feature, not an unrelated or hidden capability.\n[SQP-2] expected: Generated slides, captions, upload_state.json, and postiz_response.json can be stored locally or sent to Postiz when enabled; this should be understood by the user but is coherent with the feature.\n[suspicious.dangerous_exec] expected: The child_process usage invokes fixed local renderer/validator/release commands rather than arbitrary shell strings.\n[suspicious.env_credential_access] expected: Credential access is limited to documented Postiz environment variables used for authenticated optional uploads.",
+          "guidance": "Use it as local-only by omitting --postiz or adding --no-upload. Before enabling --postiz, review the slides and caption because they will be sent to the configured Postiz API using your account credentials and may create a private/draft social posting artifact.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed local slideshow generator with an optional Postiz upload/draft workflow, and I found no hidden exfiltration, persistence, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972291330,
+          "issueCount": 14,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: jk-archivist-tiktok-packager\nVersion: 1.6.0\n\nThe OpenClaw skill bundle is designed to generate TikTok-style slideshows and optionally upload them to the Postiz API. The code and documentation align with this stated purpose. Key indicators of benign intent include the explicit 'Safety / Never Do' section in `SKILL.md` and the `BANNED_PATTERNS` in `src/node/preflight-checks.mjs`, which actively prevent the generation of harmful or misleading content. Network calls to `api.postiz.com` are for the described optional upload feature, requiring API keys via environment variables, which is a secure practice. File system operations are confined to generating output in `outbox/` and reading specified font files. There is no evidence of intentional data exfiltration, unauthorized remote control, persistence, or obfuscation.",
+          "checkedAt": 1779164739626,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "2da3cd8b70e539e9027c13971f6fa5754427d68ef3b2362e76f2d749f2900089",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/2da3cd8b70e539e9027c13971f6fa5754427d68ef3b2362e76f2d749f2900089"
+    },
+    "slug": "jk-archivist-tiktok-packager",
+    "source_type": "clawhub",
+    "version": "1.6.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

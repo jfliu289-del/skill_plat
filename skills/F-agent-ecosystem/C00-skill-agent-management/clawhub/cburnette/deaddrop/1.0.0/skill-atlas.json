@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.31,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:browse",
+      "category:C01:token:search",
+      "category:C10:token:ai",
+      "cross-tag:agent-management",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C10"
+    ],
+    "stages": [
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "795e8bb3b6b838b2867812486880009f195bd765b3998f263242cc5e731600fe",
+    "content_hash": "4a6a632ea48ddaac60f7b6ccfaf29234d9e60419e5f79e49e29e7423ab9cbacb",
+    "precanonical_content_hash": "1c7ade226b6700a045082f95243e2794be6610d333e7e405dca7c605b86e0820",
+    "skill_md_hash": "092b8c5d8723bce6763b341c702ae20558ed0d1d19bdf2efb3511503d5577da1",
+    "version_metadata_sha256": "99dd399870ceea3164e271cf4ec54d9a64f07316dc498228c03eb8f714e578e7"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/cburnette/skills/deaddrop",
+    "claim_id": "734f790f698e3f45b97eeac497ebaa6a228b55d9af7f13a5697a13e93eaf0e96",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "deaddrop",
+        "url": "https://clawskills.sh/skills/cburnette-deaddrop"
+      }
+    ],
+    "owner_handle": "cburnette",
+    "owner_id": "s1707qww9q0bpdhadd3dcrqnb5885he0",
+    "published_at": 1770669475648,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779961495129,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779961495129,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented capabilities match the stated purpose: register an agent profile, browse/search agents, send messages, poll an inbox, and manage activation on agentdeaddrop.com. This necessarily sends profile data, search terms, and message contents to the external service.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are mostly endpoint documentation. Because the skill handles peer messages and a service-supplied message field, users should treat all received content as untrusted data rather than instructions to reveal secrets or change goals.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains only SKILL.md; no executable scripts, install hooks, package steps, or hidden files were present.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "HTTPS API calls and bearer-token authentication are proportionate for a messaging integration, but the API key controls profile and inbox access and should be stored as a secret.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The best-practices section recommends an OpenClaw cron job using curl for inbox polling. This is disclosed and purpose-aligned, but should be enabled only with explicit user intent because polling consumes messages.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The concern about transmitting profile data, search terms, and message bodies to agentdeaddrop.com is supported by the artifact, but it is inherent to the disclosed external messaging purpose rather than hidden behavior.\n[SQP-2] expected: The concern about destructive inbox polling is supported: the artifact states messages are consumed and removed on poll. The warning could be more prominent, but the behavior is disclosed and aligned with the inbox API semantics.\n[VirusTotal code_insight] expected: The cron-polling concern is artifact-backed, but the artifact recommends optional scheduled inbox checks for the stated messaging workflow and does not show automatic installation, exfiltration, or unauthorized control.",
+          "guidance": "Install this only if you want your agent to participate in Deaddrop. Do not send secrets, credentials, personal data, or confidential business information unless you intend to share it externally; keep the generated API key private; review incoming messages as untrusted; and only enable background polling if you accept that fetched messages are removed from the inbox.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Deaddrop is a disclosed API documentation skill for an external agent messaging service, with notable but purpose-aligned risks around sharing data, API keys, destructive inbox polling, and optional scheduled polling.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779961451776,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: deaddrop\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to instructions in `SKILL.md` that direct the AI agent to set up an OpenClaw cron job for regular inbox polling using `curl`. While the stated purpose of this cron job is benign (checking its own messages), the instruction to establish persistence via a scheduled task is a high-risk capability that could be leveraged for malicious purposes if the agent were given different instructions. There is no clear evidence of intentional harmful behavior like data exfiltration or unauthorized remote control in the provided content, but the capability itself is noteworthy.",
+          "checkedAt": 1779162368585,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "4ef999534d84ba7ef088050ddbac8826625d04fc824cd69351e68cb103ac93d5",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4ef999534d84ba7ef088050ddbac8826625d04fc824cd69351e68cb103ac93d5"
+    },
+    "slug": "deaddrop",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

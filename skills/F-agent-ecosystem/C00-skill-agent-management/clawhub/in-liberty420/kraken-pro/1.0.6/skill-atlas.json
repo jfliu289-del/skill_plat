@@ -1,0 +1,146 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C12:token:market",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "99f04c05426c6d6c553d789870fdef9441307d37aea5e59e6e26a0d1bd78a274",
+    "content_hash": "5e0c7e5bc35256db4097161e84d7eca868845ceb4ee33f2ec91d2555f0de6ea0",
+    "precanonical_content_hash": "a8f9b7e1bb37d0e17a40a234b81627afb80da897931e2767c2da184ef8d9601c",
+    "skill_md_hash": "2e4971248b58c765e68a621b9bce14b42b222ed656ab72d28c1fb8089c033786",
+    "version_metadata_sha256": "65686f7aa69857d5ce2af9fdb1ed9ad55674a5d9f81e3a32295e0e3b3766f120"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/in-liberty420/skills/kraken-pro",
+    "claim_id": "cb5799e9976050c59e9e4808e984c7838aa2e5eb1548c97a11e1716ce9bc0af2",
+    "index_entries": [
+      {
+        "index_path": "categories/image-and-video-generation.md",
+        "label": "kraken-pro",
+        "url": "https://clawskills.sh/skills/in-liberty420-kraken-pro"
+      }
+    ],
+    "owner_handle": "in-liberty420",
+    "owner_id": "s176n4kv0pw8vp90eq38vqqras8855ka",
+    "published_at": 1771098965043,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967073239,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967073239,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose matches the code: portfolio viewing, market data, order history, ledger export, staking/earn actions, deposits, withdrawals, and trading through python-kraken-sdk. Some capabilities can move or risk real funds, but they are disclosed and purpose-aligned.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands are documented and high-impact operations require explicit --confirm in the CLI; trades also support --validate dry runs. The phrase \"interact with Kraken in any way\" is broader than ideal, but the surrounding command list bounds the skill to Kraken account-management tasks.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Setup is a user-directed pip install from a one-line pinned dependency, python-kraken-sdk==3.2.7. No auto-install hook or hidden installer behavior was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "KRAKEN_API_KEY and KRAKEN_API_SECRET are proportionate for the stated integration and are declared in metadata. Users should limit the API key permissions because the skill supports trading, staking changes, and withdrawals.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background worker, persistence mechanism, credential harvesting, obfuscation, file writes, or data exfiltration path was found. Credentials are read from environment variables when authenticated commands run.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The skill lacks a separate permissions field, but its metadata declares the required binary and environment variables, and SKILL.md includes an API permissions table. This is a documentation improvement, not evidence of opaque or hidden authority.\n[SQP-1] unexpected: The catch-all activation wording is broader than necessary, but the artifact otherwise clearly describes specific Kraken account operations and the CLI implements those same bounded commands with confirmation gates for fund-moving actions.",
+          "guidance": "Install only if you intend to let an agent help manage a Kraken account. Use a dedicated least-privilege Kraken API key: start read-only for balances, ledgers, and market data, and add trading or withdrawal permissions only when needed. Review exact asset, pair, amount, price, and withdrawal key before allowing any command with --confirm.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a transparent Kraken account CLI, but it can perform real financial actions if the user gives it powerful Kraken API credentials.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967032090,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: kraken-pro\nVersion: 1.0.6\n\nThe OpenClaw Kraken skill is a well-structured and transparent CLI tool for managing Kraken exchange accounts. It uses the official `python-kraken-sdk` library, retrieves API keys from environment variables as expected, and implements critical safety measures like `--confirm` flags for all trading, withdrawal, and staking actions. The `SKILL.md` documentation clearly outlines its purpose, required permissions, and usage, without any evidence of prompt injection attempts or instructions for malicious behavior. No signs of data exfiltration, unauthorized execution, persistence mechanisms, or obfuscation were found.",
+          "checkedAt": 1779164071171,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "8a1b7ff9dabc35cd0eedb289cfea7831ad7300f0fb3d3700e50f99b5f31bc832",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/8a1b7ff9dabc35cd0eedb289cfea7831ad7300f0fb3d3700e50f99b5f31bc832"
+    },
+    "slug": "kraken-pro",
+    "source_type": "clawhub",
+    "version": "1.0.6"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

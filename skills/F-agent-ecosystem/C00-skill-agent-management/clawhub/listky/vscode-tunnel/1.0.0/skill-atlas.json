@@ -1,0 +1,135 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C06:token:code",
+      "category:C17:token:notes",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d7740daf90630cc088be6c599b2f36d6902fb09258a2ab5fd1df0e6b517fd50a",
+    "content_hash": "bcd9d7e95624c2a53d9985e9de141112ece48811346c84f238f9425a6dcc5d5c",
+    "precanonical_content_hash": "1fcc6485e682284f471a9582e12cd0e40f86bdeb4e237d06601b513ee6bb8b00",
+    "skill_md_hash": "d78d28a9e69bcc5c1ac8d58ef08c9a0688b9494c5986f5983540a6633bad0ef2",
+    "version_metadata_sha256": "a29abc91f70519472389e196eaeae176c0f3e7f4e5ab3f6583998bd53c0dd172"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/listky/skills/vscode-tunnel",
+    "claim_id": "fa6c0cc9d38c5dab55c607ca55a7acb10be6ec5bcd06d2cc8751f4aafcc293fb",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "vscode-tunnel",
+        "url": "https://clawskills.sh/skills/listky-vscode-tunnel"
+      }
+    ],
+    "owner_handle": "listky",
+    "owner_id": "s179x82ytsgjdpc6wrw24fvwhn885j2p",
+    "published_at": 1771656015760,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943806583,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943806583,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The capability is high-impact because it enables remote terminal access to the container, but that is the stated purpose in SKILL.md and the commands are limited to start, stop, status, and log.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The runtime instructions are coherent and do not contain prompt-injection or unrelated actions, though trigger phrases such as \"connect vscode\" and \"vscode remote\" are broad for a remote-access workflow.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The script downloads, extracts, chmods, and runs the VS Code CLI from code.visualstudio.com at runtime using curl and tar; this is expected for the tool but carries normal supply-chain trust in Microsoft's download endpoint and network path.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill writes under the configured VS Code CLI directory, defaulting to ~/.vscode-cli, and exposes the current container environment through the authorized VS Code tunnel; this is proportionate only when the user intentionally wants that access.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The tunnel is launched with nohup as a background process and records a PID file, but SKILL.md discloses that it runs in the background and provides stop/status/log commands.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The artifact explicitly tells the agent to run the tunnel.sh shell script; this is command execution, but it is visible in SKILL.md and central to managing the tunnel rather than hidden behavior.\n[SQP-1] unexpected: The broad trigger phrases could cause accidental activation of a sensitive remote-access feature; this is a documentation/scoping concern, not evidence of malicious behavior.\n[SQP-2] expected: SKILL.md states that the tunnel enables remote terminal access, requires Microsoft authorization, and runs in the background; the warning could be more prominent, but the core security impact is disclosed.\n[SQP-2] expected: tunnel.sh starts the VS Code tunnel, auto-accepts server license terms, and runs it in the background; this matches the skill's stated function, with no artifact-backed exfiltration, deception, or unrelated persistence.",
+          "guidance": "Install this only if you intentionally want VS Code Remote Tunnel access to the current container. Treat the authorization code and logs as sensitive, use the intended Microsoft account, and run the provided stop/status commands when finished. Higher-security environments should consider whether downloading and executing the VS Code CLI at runtime is acceptable.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it starts and manages a VS Code Remote Tunnel, which is powerful but disclosed and purpose-aligned.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943768627,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: vscode-tunnel\nVersion: 1.0.0\n\nThe skill downloads and executes a binary from a remote URL (code.visualstudio.com) using `curl` and `tar` in `tunnel.sh`. While the source is legitimate and the stated purpose (VS Code Remote Tunnel) is benign, the act of fetching and executing remote code is a high-privilege operation and introduces a supply chain risk. If the download source were compromised, this skill could be leveraged to execute arbitrary malicious code. The script correctly quotes user-provided arguments, preventing direct shell injection, and there are no signs of prompt injection against the agent in `SKILL.md` or other malicious behaviors like data exfiltration or unauthorized persistence mechanisms beyond the intended background tunnel process.",
+          "checkedAt": 1779165846632,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "3c65b5c24aa79166c66862b836b100ff917388bbac4698ad4984f7413b111f80",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/3c65b5c24aa79166c66862b836b100ff917388bbac4698ad4984f7413b111f80"
+    },
+    "slug": "vscode-tunnel",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

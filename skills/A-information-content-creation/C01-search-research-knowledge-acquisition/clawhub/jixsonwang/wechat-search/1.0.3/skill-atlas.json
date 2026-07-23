@@ -1,0 +1,160 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "creator",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.575,
+    "domains": [
+      "creative",
+      "security",
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:phrase:web search",
+      "category:C01:token:search",
+      "category:C05:token:design",
+      "category:C06:token:api",
+      "category:C09:token:compliance",
+      "category:C12:token:strategy",
+      "cross-tag:agent-management",
+      "cross-tag:design",
+      "cross-tag:planning",
+      "cross-tag:search",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C05",
+      "C06",
+      "C09",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "design",
+      "manage",
+      "plan",
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "4c965d580a6e94ea6dd9d5a9f100053bb6c8ba950ba5f38aa3aaa43c7627d10d",
+    "content_hash": "2c4160df8b30885189704ebe60f13398573c92987390ee41e8e2f3436db2393f",
+    "precanonical_content_hash": "ee3d5a1e3b85e3127cea9b32779f2b055b43fa053db4f61fd34124fc23bf19f6",
+    "skill_md_hash": "2d3afd2f56e5c6f830df4f96f2067726e42b98f31a8958e0e444cb314665e8ea",
+    "version_metadata_sha256": "def48996710a5e9312ed7f6c705db27233c1d3592d58cd0085b5625aa5705c5e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jixsonwang/skills/wechat-search",
+    "claim_id": "46c80557424afad2172f0c6a84f0f5cc8ccc629714c06c7f47c640a0e98d0655",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "wechat-search",
+        "url": "https://clawskills.sh/skills/jixsonwang-wechat-search"
+      }
+    ],
+    "owner_handle": "jixsonwang",
+    "owner_id": "s177fgbvr8jzz3wng4sra8gvws83hdt0",
+    "published_at": 1770644920257,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779962551584,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779962551584,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe public WeChat article search via OpenClaw web tools, Tavily, and direct web fetch, and the code implements search-only behavior. Documentation overstates some capabilities such as Brave-first behavior, date/output options, robots.txt checks, and rate limiting compared with the visible code.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Execution is user-invoked through command-line search queries with bounded result counts. I found no autonomous actions, account changes, posting, deletion, hidden instructions, destructive behavior, or prompt-injection content.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "No installer, persistence hook, or auto-start behavior is present. The implementation depends on local node, the OpenClaw CLI, and a hardcoded Tavily helper script path outside this package, which users must treat as trusted.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access and Tavily API-key use are proportionate for a search skill and are partly disclosed. However, the code forwards the full process environment to the Tavily subprocess and one variant reads a Tavily key from ~/.openclaw/tavily-config.json, which is broader than ideal but still aligned with the search function.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts show optional config reads only. I found no broad local indexing, background workers, privilege escalation, credential harvesting beyond the Tavily key lookup, file writes, or retained article-content storage.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The skill documentation could be clearer about required permissions, but the described network, tool, config, and API-key access are coherent with a multi-provider search skill rather than hidden or unrelated authority.\n[SDI-2] expected: Subprocess calls to the Tavily helper and OpenClaw web_fetch expand the trust boundary, but they are directly tied to the documented search strategy and use argument lists rather than shell command strings.\n[SQP-2] expected: Tavily credential use is expected for Tavily-backed search, but forwarding the full environment and reading a local Tavily config are scoping weaknesses that should be disclosed and tightened.",
+          "guidance": "Install only if you are comfortable with search terms being sent to external search/fetch providers and with a configured Tavily API key being used by a local helper process. Verify that the local Tavily helper skill and OpenClaw CLI are trusted, because this package delegates work to them and may pass inherited environment variables to the helper.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a WeChat article search skill whose network, API-key, and helper-tool use generally matches its stated purpose, though users should understand its external helper and credential handling.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779962514309,
+          "issueCount": 5,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 65,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: wechat-search\nVersion: 1.0.3\n\nThe skill uses `subprocess.run` in `wechat_search.py`, `wechat_search_fixed.py`, and `wechat_search_simple.py` to execute external scripts and OpenClaw tools. Specifically, it calls `node /root/.openclaw/workspace/skills/tavily-search/scripts/search.mjs` for Tavily search and `openclaw tool web_fetch` for direct web scraping. While these actions are plausibly aligned with the stated purpose of a multi-layer search strategy and arguments are passed as lists (reducing direct shell injection risk), the use of `subprocess.run` to execute arbitrary external scripts (even if internal to the OpenClaw ecosystem) represents a powerful capability that warrants a 'suspicious' classification due to its inherent risk, without clear evidence of intentional malicious behavior.",
+          "checkedAt": 1779162442553,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "c9040392f1486daee889ff02f2078efef2e0e8afb6a3d1a09417316b74f077d8",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/c9040392f1486daee889ff02f2078efef2e0e8afb6a3d1a09417316b74f077d8"
+    },
+    "slug": "wechat-search",
+    "source_type": "clawhub",
+    "version": "1.0.3"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

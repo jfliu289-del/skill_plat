@@ -1,0 +1,140 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C05:token:audio",
+      "category:C06:token:api",
+      "category:C07:token:quality",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C05",
+      "C06",
+      "C07"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "57872fb93155ee6f5ef0f4af7ef2848e1c4cda5f6b0e60a885df7b5d37dd25f9",
+    "content_hash": "39e09e4677f27eb0f362bc63d42c0374d4aa2e7fa2476bad2cbaccf1c560d3e6",
+    "precanonical_content_hash": "94d13cb2c2cae58554243b76db2376103e5805008dfa7cd7afaef0f7a1d93d2d",
+    "skill_md_hash": "566fc5c50fbf1506657b4743f41b703efafa7acb9802eb2208fb3818ff588a28",
+    "version_metadata_sha256": "54896c4df9a880351dde6fd748948a1539664ce706a1187e6eedf41e5275d57a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/vinhbui3004/skills/audio-upload-aioz-stream",
+    "claim_id": "6d1954669f1c086607973272905b99f0b6c3c63ac2bbc53ca5bb4eb0d4c3be89",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "audio-upload-aioz-stream",
+        "url": "https://clawskills.sh/skills/vinhbui3004-audio-upload-aioz-stream"
+      }
+    ],
+    "owner_handle": "vinhbui3004",
+    "owner_id": "s17e53366gcgyt48q03z82qmw98856z6",
+    "published_at": 1770626756136,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779961517229,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779961517229,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose, scripts, and reference material align around creating an audio object, uploading the selected audio file, completing processing, and returning a streaming link.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill asks for an audio path, title/configuration, and AIOZ public plus secret keys; this is expected for the upload flow, but secret-key handling guidance is thin.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no installer, persistence setup, or package execution at install time; the metadata declares use of curl, jq, and md5sum. Bundled metadata has a minor version mismatch, but not a security issue.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Reading the user-selected audio file, hashing it, and sending it with API headers to the disclosed remote endpoint is proportionate to the stated upload purpose.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No background execution, privilege escalation, broad file scanning, credential-store access, or local persistence is shown; the main risk is use of a secret API key to create/upload media in the user's account.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Shell command use is visible in the scripts and the skill metadata declares the required binaries, so this is not hidden behavior, though clearer network/file permission disclosure would be helpful.\n[SDI-1] expected: The /api/videos path is used consistently in the documentation and scripts with payload field type=audio, so the artifact evidence supports an API namespace ambiguity rather than deceptive resource creation.\n[SDI-4] expected: The comments say audio while the endpoint path says videos, but SKILL.md openly documents the same endpoint and audio payload; this does not show hidden or purpose-mismatched behavior.\n[SQP-2] expected: The credential concern is valid as user guidance: the secret key is required and disclosed as being sent in headers, but the skill should warn more clearly about avoiding logs, shell history, and long-lived key exposure.\n[E1] expected: External transmission of the selected audio file and API credentials is the advertised function of the skill and the destination is visible in the artifacts.",
+          "guidance": "Install only if you intend to upload audio to the disclosed AIOZ/W3Stream endpoint. Treat the stream-secret-key as sensitive, prefer scoped or revocable keys, avoid putting secrets in logs or shared transcripts, and confirm the exact audio file and account before running the upload.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to be a straightforward audio uploader that sends a chosen file and user-provided API keys to the disclosed AIOZ/W3Stream API.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779961451685,
+          "issueCount": 11,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: audio-upload-aioz-stream\nVersion: 1.0.1\n\nThe skill is designed to upload audio files to the AIOZ Stream API. It explicitly declares the use of `curl`, `jq`, and `md5sum` binaries, which are used in the provided shell scripts (`scripts/create_audio_custom.sh`, `scripts/create_audio_default.sh`, `scripts/get_audio_detail.sh`, `scripts/upload_audio_file.sh`) for network communication, JSON parsing, and file hashing/size calculation, respectively. File system access is limited to reading the user-specified audio file for upload. API keys are user-provided and sent only to the `api-w3stream.attoaioz.cyou` endpoint. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, obfuscation, or prompt injection attempts against the agent to perform actions outside the stated purpose.",
+          "checkedAt": 1779162351080,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "a5befba26e7f5ffaebe951ef89e829c17650f7b64d1bfbc43952575d7a32f54c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a5befba26e7f5ffaebe951ef89e829c17650f7b64d1bfbc43952575d7a32f54c"
+    },
+    "slug": "audio-upload-aioz-stream",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

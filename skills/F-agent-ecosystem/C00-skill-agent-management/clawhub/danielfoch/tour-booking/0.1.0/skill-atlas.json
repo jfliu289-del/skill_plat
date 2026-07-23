@@ -1,0 +1,127 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C03:token:office",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C03"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "204dbddae7db7d9d14ed0f0e408444b957cabd600caa2d0b91d9714a8b60f44a",
+    "content_hash": "180e485f1e5350c25f525765cd3bba8ba5e13a4277edce123736766b6c997d37",
+    "precanonical_content_hash": "50e1514d57fbe088b264c536e7cda216b93a24aea9599358fc2b70e20105d855",
+    "skill_md_hash": "334d1dfbfa362c64f0df451c496091872123233b36f2124033db9fa1d2226c4a",
+    "version_metadata_sha256": "995a5316d365d958b5abf9e0e25fd05cf348b9bf30bc4aae99e3a98e52808d3b"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/danielfoch/skills/tour-booking",
+    "claim_id": "eff92d62a3a41519d05e7c67115b9cff48b85f6e45dc2564659bd4ff5df6963d",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "tour-booking",
+        "url": "https://clawskills.sh/skills/danielfoch-tour-booking"
+      }
+    ],
+    "owner_handle": "danielfoch",
+    "owner_id": "s1709aqsm1ydr5bf0sfd19mwgn8841hg",
+    "published_at": 1771189089268,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968708653,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968708653,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The ability to place outbound calls through ElevenLabs is high impact, but it directly matches the stated tour-booking purpose and is documented in the runbook.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The prompt includes listing and client fields without sanitization, so job data could affect the downstream voice agent; dry-run review is documented and should be used before live calls.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "No hidden installer, postinstall hook, dependency bootstrap, or obfuscated setup behavior was found; the package contains visible markdown, YAML, and Python scripts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Live mode uses ElevenLabs credentials and an optional endpoint override, which is proportionate for outbound calls but should be scoped and reviewed by the operator.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, privilege escalation, or background worker behavior is present; scripts write caller-specified JSON outputs that may contain phone numbers, prompts, metadata, and provider responses.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The network, file, and environment-variable use is real, but it is disclosed and aligned with live ElevenLabs calling; the missing permission declaration is a documentation/scoping concern rather than evidence of hidden behavior.\n[SQP-2] expected: Writing request and response JSON is expected for dry-run and result parsing, but users should treat those outputs as sensitive because they can include call payloads and provider responses.\n[VirusTotal code_insight] expected: The reported arbitrary-phone-number and prompt-injection concerns reflect weak input validation in a live-call workflow, but the artifacts do not show deception or unrelated calling behavior.",
+          "guidance": "Install only if you intend to prepare or place property-showing calls. Run dry-run first, inspect the destination phone number and prompt contents, use a scoped ElevenLabs API key, and avoid storing generated result files in shared locations unless the call details are safe to expose.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill openly prepares and optionally places listing-office booking calls, with live calling disclosed and gated by an explicit flag.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968660791,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: tour-booking\nVersion: 0.1.0\n\nThe skill is classified as suspicious due to significant vulnerabilities related to input sanitization. The `scripts/prepare_call_payload.py` script directly uses `listing['office_phone']` from user-controlled input as the `to_number` for outbound calls, enabling potential arbitrary phone calls to untrusted destinations. Additionally, the `system_prompt` for the ElevenLabs AI agent is constructed using f-strings with user-controlled inputs (`client_name`, `address`, `preferred_windows_text`), creating a prompt injection vulnerability against the downstream AI agent. While the skill's core function of making outbound calls via ElevenLabs is legitimate, these vulnerabilities could be exploited for malicious purposes if the inputs are not properly sanitized by the calling workflow.",
+          "checkedAt": 1779164377659,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "6104689853ab959b9ee3e10a3dc192eab5934025a114704c059ab556e9ff7767",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/6104689853ab959b9ee3e10a3dc192eab5934025a114704c059ab556e9ff7767"
+    },
+    "slug": "tour-booking",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

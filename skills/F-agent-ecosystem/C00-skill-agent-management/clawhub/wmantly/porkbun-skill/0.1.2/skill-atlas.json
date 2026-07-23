@@ -1,0 +1,153 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "document"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.1321,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C02:token:edit",
+      "category:C06:token:api",
+      "category:C07:token:test",
+      "category:C12:token:management",
+      "category:C13:token:operations",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:software-development",
+      "cross-tag:testing",
+      "cross-tag:writing",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C02",
+      "C06",
+      "C07",
+      "C12",
+      "C13",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "test",
+      "write"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "050292411b0b3257f79c54ccdf919401c71eb026a208c7ae98572d6c5f694fee",
+    "content_hash": "3318bb677135bfc9b1ff49b8698eea663d89df0b894e259b3036f94220362e8e",
+    "precanonical_content_hash": "69829a5d0e83101941ea5d10acc0fbc3c60b8a986eb18e579ce3b277eb568233",
+    "skill_md_hash": "f981dd7c8eba786e0d7a93792b6469c0759c0bd296e569e894b07a0261a76df0",
+    "version_metadata_sha256": "7aba101093294de417ef2185df0560a5ab2600547179caf187eb10c2e1b36ec6"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/wmantly/skills/porkbun-skill",
+    "claim_id": "9078b60153f36bd3212e04ffac70573bca9bd0461bf89e5db7b8e6caa51a20c1",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "porkbun-skill",
+        "url": "https://clawskills.sh/skills/wmantly-porkbun-skill"
+      }
+    ],
+    "owner_handle": "wmantly",
+    "owner_id": "s1799acy8a391927skb4d19q3h885hmb",
+    "published_at": 1770829132493,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779966062686,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779966062686,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifact purpose is Porkbun DNS/domain management, and the script implements matching Porkbun API operations for ping, domain listing, record retrieval, create, edit, and delete.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions clearly disclose create, edit, delete, edit-by, and delete-by DNS commands, but they would benefit from stronger reminders to list records and get explicit confirmation before destructive or broad changes.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is documentation-only, with no hidden installer, dependency fetch, postinstall hook, obfuscation, or automatic execution; package metadata declares execute capability.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Porkbun API keys are necessary for this integration and are disclosed via environment variables or ~/.config/porkbun/config.json, but the docs do not give strong secret-handling or file-permission guidance.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no background worker, autorun persistence, privilege escalation, or unrelated local file access; the only persistence is the optional plaintext credential config file.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The edit/delete DNS concern is valid user-risk guidance, but these operations are central to the disclosed DNS-management purpose and are not hidden or automatic.\n[SQP-2] expected: The credential-storage concern is valid hardening guidance; however, API credentials are disclosed and proportionate for a Porkbun DNS integration.\n[RA2] expected: The optional config file is local credential storage, not agent session persistence or stealthy persistence; lack of permission checks is a documentation/hardening gap rather than evidence of malicious behavior.\n[staticScan.clean] expected: Static scan reported no suspicious patterns, which matches direct inspection of the small artifact set.\n[VirusTotal.clean] expected: VirusTotal telemetry was clean and consistent with artifact review, but was not used as the sole basis for the verdict.",
+          "guidance": "Install only if you want an agent to manage Porkbun DNS. Treat the API keys as sensitive, restrict access to any config file, and prefer revocable keys. Before edit-by or delete-by commands, list the affected records and confirm the exact domain, record type, and name because DNS mistakes can disrupt websites, email, and domain verification.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it says: it lets an agent manage Porkbun DNS records, including high-impact edits and deletions, using disclosed Porkbun API credentials.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779966016686,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 52,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: porkbun-skill\nVersion: 0.1.2\n\nThe OpenClaw skill 'porkbun-skill' is designed for managing Porkbun DNS records via their API. The `scripts/porkbun-dns.js` script correctly implements API interactions, loads credentials from environment variables or a standard config file (`~/.config/porkbun/config.json`), and performs only the stated DNS operations. There is no evidence of intentional harmful behavior such as data exfiltration to unauthorized endpoints, persistence mechanisms, or obfuscation. The `SKILL.md` instructions are clear and directly relate to DNS management, and the `curl -s ifconfig.me` example is a common, non-malicious pattern for dynamic DNS updates.",
+          "checkedAt": 1779162845113,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "dab829779f2b6deeeafe4c4ad861ffc5c9377e89018c3533f2030be62de8272d",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/dab829779f2b6deeeafe4c4ad861ffc5c9377e89018c3533f2030be62de8272d"
+    },
+    "slug": "porkbun-skill",
+    "source_type": "clawhub",
+    "version": "0.1.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

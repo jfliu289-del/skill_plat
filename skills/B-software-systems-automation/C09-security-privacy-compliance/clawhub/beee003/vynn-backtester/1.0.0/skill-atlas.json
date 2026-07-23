@@ -1,0 +1,148 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C09",
+    "reasons": [
+      "category:C02:token:language",
+      "category:C06:token:api",
+      "category:C09:token:privacy",
+      "category:C09:token:security",
+      "category:C10:token:model",
+      "category:C12:token:strategy",
+      "cross-tag:planning",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C06",
+      "C10",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "plan",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "plan",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "44543e43019c15b8e9a046e2de558f5c6a1e2e5454069cc026b7b2b30bb1f52d",
+    "content_hash": "54e06eaa1449387d0be70a77ec41931ce05bf09b677ab1fff412bc6328dc4049",
+    "precanonical_content_hash": "e58b83d87036972bd8e03189b5825ee17e6925e1da8da0fc7ed8424fbb88357d",
+    "skill_md_hash": "45293967cb1772cf94e20162caed27a7d5699a5602075ea345fcd8cd50ae79dc",
+    "version_metadata_sha256": "ee4dc6aac620ca1c84d7e76921014eaf8977ae9463885a99ac3d33b4a14a8274"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/beee003/skills/vynn-backtester",
+    "claim_id": "653943ce8cd4dceeb503fbb0e961928e8f69ef20219280761b3c0ffe1329975d",
+    "index_entries": [
+      {
+        "index_path": "categories/health-and-fitness.md",
+        "label": "vynn-backtester",
+        "url": "https://clawskills.sh/skills/beee003-vynn-backtester"
+      }
+    ],
+    "owner_handle": "beee003",
+    "owner_id": "s179m5j58p1k2n21t3qh7vk085885k65",
+    "published_at": 1771217947368,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968979737,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968979737,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose is to run trading strategy backtests, and the code only posts strategy text, tickers, and lookback years to a backtest endpoint and returns metrics; it does not trade, alter accounts, or mutate local data.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions and examples stay within setup and use of the backtesting service, with no prompt overrides, unrelated agent directions, or hidden automation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Artifacts consist of SKILL.md, plugin.py, and an example TOML config; there is no install-time script, package download, shell execution, or dependency bootstrap.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill reads VYNN_API_KEY and optionally VYNN_BASE_URL, and makes external HTTPS requests. This is proportionate to the integration and is disclosed in the docs, including endpoint and data-sent tables.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The plugin stores only an in-memory run counter, reads the API key from environment variables, and shows no credential storage, background worker, privilege escalation, file writes, or persistence mechanism.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The concern is mitigated by artifact evidence: SKILL.md declares VYNN_API_KEY in metadata, documents VYNN_BASE_URL, and lists the Vynn endpoints and submitted data. A separate permission manifest could improve governance, but the behavior is disclosed and purpose-aligned.\n[SQP-2] expected: The plugin does send strategy text and tickers to Vynn, but this is the core function of a remote backtesting client and SKILL.md explicitly tells users that those fields are sent to the Vynn API. Lack of a per-call consent prompt is a usability/privacy consideration, not evidence of hidden exfiltration.",
+          "guidance": "Install this only if you are comfortable sending strategy descriptions, ticker lists, and lookback settings to Vynn. Use a dedicated VYNN_API_KEY, avoid including sensitive portfolio/account details in prompts, and verify any VYNN_BASE_URL override before use.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed Vynn backtesting client that sends strategy inputs to Vynn using a user-provided API key, with no hidden local persistence or destructive behavior found.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968956438,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: vynn-backtester\nVersion: 1.0.0\n\nThe OpenClaw skill 'vynn-backtester' is a legitimate client for the Vynn backtesting service. It clearly documents its purpose, required environment variables (`VYNN_API_KEY`), and external network interactions with `https://the-vynn.com` for backtesting and signup. The `plugin.py` code correctly handles API key authentication and sends only strategy descriptions and ticker lists, without attempting to exfiltrate sensitive data or execute arbitrary commands locally. The `SKILL.md` contains no prompt injection attempts against the agent; all instructions and examples are for legitimate usage.",
+          "checkedAt": 1779164459045,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "b14767518a18279449aaaf0555821e530b43062b388e7191621751294c0dc1da",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/b14767518a18279449aaaf0555821e530b43062b388e7191621751294c0dc1da"
+    },
+    "slug": "vynn-backtester",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

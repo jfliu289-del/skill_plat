@@ -1,0 +1,132 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C10:token:llm",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "e68c90421bbd53ee79f2c22be12225a4ec04174065c34e9a47cd7ac812d53eb9",
+    "content_hash": "0fef5c30f04d216171e81b0b4b259ebdd1ec83e570ecac2b8fbb8e0a43f8c039",
+    "precanonical_content_hash": "48b238057eec187264d4dbd95211b51e49039f3b755850579c45e3b00023a508",
+    "skill_md_hash": "3facea6a3dc50be722e8bf30168d9a3789ecb535c4cda187bf1f2e88b03e605a",
+    "version_metadata_sha256": "90c0ff6a9de2e3c0c597e8e349696c4b5ac8346b6caf4a3f43d0cd4bb77c6748"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/aimlapihello/skills/aiml-llm-reasoning",
+    "claim_id": "99c13cbd77c37b97068cc75e861fd07ce7e2bdc0eef20362ca38c566704dc182",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "aiml-llm-reasoning",
+        "url": "https://clawskills.sh/skills/aimlapihello-aiml-llm-reasoning"
+      },
+      {
+        "index_path": "categories/productivity-and-tasks.md",
+        "label": "aiml-llm-reasoning",
+        "url": "https://clawskills.sh/skills/aimlapihello-aiml-llm-reasoning"
+      }
+    ],
+    "owner_handle": "aimlapihello",
+    "owner_id": "s17drvcvgge2x0ywnxqd5n3v8n884z0t",
+    "published_at": 1770821519502,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971061812,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971061812,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented purpose, SKILL.md examples, and run_chat.py implementation all align around making AIMLAPI chat completion requests with optional reasoning and structured-output parameters.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions are example-driven and user-directed; they do not ask the agent to override user intent, run hidden background tasks, index local data, or perform unrelated actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "No automatic installer or dependency hook is present. The embedded _meta.json slug/version differ from the registry metadata, so publisher/version identity should be verified, but this is not paired with unsafe runtime behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "AIMLAPI_API_KEY and outbound requests to AIMLAPI are expected for this integration. The optional --apikey-file can read any user-supplied path, so users should prefer the environment variable and avoid arbitrary file paths.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, privilege escalation, destructive action, or background worker is present. The only file write is the explicit --output argument for saving the API response.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The skill does use an environment API key, network access, and explicit file read/write options, but these are disclosed and coherent with an API helper; tighter permission metadata and path scoping would improve clarity.\n[VirusTotal code_insight] expected: The --apikey-file read and --output write capabilities are real, but they are explicit command-line options rather than hidden or automatic behavior, and there is no evidence of persistence, obfuscation, or unrelated exfiltration.",
+          "guidance": "Install only if you intend to send prompts to AIMLAPI with your own API key. Prefer AIMLAPI_API_KEY over --apikey-file, use --output only for intended response files, avoid sending sensitive prompt content unless AIMLAPI handling is acceptable, and verify the publisher/version metadata before relying on it.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a straightforward AIMLAPI chat helper that uses an API key, sends prompts to AIMLAPI, and can optionally save responses to a chosen file.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779970994262,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 13,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: aiml-llm-reasoning\nVersion: 1.0.1\n\nThe skill is classified as suspicious due to potential local file read/write vulnerabilities in `scripts/run_chat.py`. The `--apikey-file` and `--output` arguments allow the script to read from and write to arbitrary file paths on the system, which could be exploited via prompt injection against the OpenClaw agent to achieve local file inclusion (LFI) or local file write (LFW). While the `README.md` file explicitly warns about the `--apikey-file` flag, the capability itself presents a significant risk. There is no evidence of intentional malicious behavior (e.g., data exfiltration, persistence, or obfuscation) within the script, making it a vulnerability rather than outright malware.",
+          "checkedAt": 1779163202269,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "80107ad30c6d2015643affafe6c684af761ff820cb7afa4ad38b0be658baf831",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/80107ad30c6d2015643affafe6c684af761ff820cb7afa4ad38b0be658baf831"
+    },
+    "slug": "aiml-llm-reasoning",
+    "source_type": "clawhub",
+    "version": "1.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

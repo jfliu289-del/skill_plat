@@ -1,0 +1,146 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.465,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:analytics",
+      "category:C04:token:analyze",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a9291a0c215ac1199766217e77be555856499f3f37036560f9e2be2bb08b27a7",
+    "content_hash": "3fb3174be7cb5863e4945233d1eabcc6da7a54454f3142478d315030cb869a46",
+    "precanonical_content_hash": "6a0333f3ff133b044cb067c78287109980cb162c86926045f174409c473904f6",
+    "skill_md_hash": "644151688e4529209a64041eaad0d9c78fe92292d3eb57fc0a26c5eeb197d5b9",
+    "version_metadata_sha256": "a0e76e8d119ef0cabf7f0743628bea3bdd6a3258183b22e1447ef29deedeae76"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/lxcong/skills/web3-data",
+    "claim_id": "6fa03abb225258adc41482c2ed3a68e86c639f9cf7894d0e39dc4126a6c1097b",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "web3-data",
+        "url": "https://clawskills.sh/skills/lxcong-web3-data"
+      }
+    ],
+    "owner_handle": "lxcong",
+    "owner_id": "s17bkxrwh6jgec7y6pkyfjcn9x85mqv6",
+    "published_at": 1771915736882,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779954901278,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779954901278,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The README, SKILL.md, reference docs, and shell wrapper consistently describe read-only Web3/on-chain data queries through Chainbase APIs, including token, wallet, NFT, ENS, and SQL analytics.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The routing text is broad and allows SQL fallback plus raw script/API use, so agents should keep execution user-directed and avoid unnecessary custom queries for vague blockchain questions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is manual via Claude skill installation commands; there is no install-time script, package manager hook, or hidden setup step.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network calls to Chainbase and use of CHAINBASE_API_KEY are expected for the stated purpose; wallet addresses, token identifiers, endpoints, and SQL text may be sent to Chainbase.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No artifact shows background workers, local indexing, credential harvesting, privilege escalation, destructive file operations, or durable local state; SQL polling is bounded by fixed retry settings.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The skill does invoke a disclosed local shell wrapper, but that wrapper is the advertised Chainbase API client. The absence of explicit permission metadata is a documentation/scoping weakness, not evidence of hidden or incompatible behavior.\n[SQP-1] expected: The trigger language is broad for blockchain questions and can lead to shell-backed API calls or SQL generation, but this matches the skill's stated on-chain analytics purpose. It should be used with clear user intent.\n[VirusTotal code_insight] expected: The shell and SQL paths are expected for this integration. Direct inspection did not support the claimed arbitrary shell execution because curl arguments and variable expansions are quoted and there is no eval; however SQL JSON construction is fragile and may produce malformed or unintended Chainbase queries if used carelessly.",
+          "guidance": "Install this if you want an agent to query public blockchain data through Chainbase. Use a scoped Chainbase API key if you set CHAINBASE_API_KEY, and review broad custom SQL or raw endpoint requests before running them, especially if wallet addresses or query logic are sensitive.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent Chainbase Web3 data lookup helper with expected external API use and no evidence of hidden persistence, destructive behavior, or off-purpose data access.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779954868882,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 26,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: web3-data\nVersion: 1.0.0\n\nThe skill is classified as suspicious due to critical shell injection vulnerabilities in `scripts/chainbase.sh` and prompt injection risks in `SKILL.md`. The `scripts/chainbase.sh` script constructs `curl` commands by directly concatenating unquoted shell variables (`$call_url`, `$call_header`, `$API_KEY`, `$call_body`), making it vulnerable to arbitrary command execution if an attacker can inject shell metacharacters into the endpoint or parameter arguments. Furthermore, `SKILL.md` explicitly instructs the AI agent to construct SQL queries from user input and pass them via `--sql=\"...\"` to this vulnerable script, which also embeds the SQL string into a JSON body without proper escaping, creating a potential SQL injection against the Chainbase API and exacerbating the shell injection risk.",
+          "checkedAt": 1779166680730,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "10a62dd30b6941b21a2c600608cea8e8dcd5b85680c1261a72bfbf2f1183861a",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/10a62dd30b6941b21a2c600608cea8e8dcd5b85680c1261a72bfbf2f1183861a"
+    },
+    "slug": "web3-data",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

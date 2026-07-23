@@ -1,0 +1,135 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:data",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "992a4f12cdd15befd81fb61f830097bc62b5568d478a9c622399a2037fb99707",
+    "content_hash": "4a478ee789d894f3af670b51ad8d92c437a80cb1cdde543ece86b0ac01346965",
+    "precanonical_content_hash": "463178a6f02553b914b76001905b7834d92a683f48eddd51bb163e6050147c68",
+    "skill_md_hash": "d14caa869ec6678cd3d313772995361ac99475470a427c309e6e5780f8409eda",
+    "version_metadata_sha256": "520001b8e9e9fc3ffde4cbbb0a09b9b944aa5df3ee5bbc9cfbed184681589742"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/hjw21century/skills/trending-skills",
+    "claim_id": "a1cd8ae95e58496c7476af7ccb2a999e48296831c13884df1779277da10af476",
+    "index_entries": [
+      {
+        "index_path": "categories/browser-and-automation.md",
+        "label": "trending-skills",
+        "url": "https://clawskills.sh/skills/hjw21century-trending-skills"
+      }
+    ],
+    "owner_handle": "hjw21century",
+    "owner_id": "s17fcfxg7qnvhcm4560ha42sy9885zc5",
+    "published_at": 1770998272706,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779973799804,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779973799804,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The main implementation matches the stated purpose: fetching skills.sh trending rankings and optional skill details. The stale src/__init__.py text refers to an unrelated AI Daily project, which is a maintenance/provenance issue but not supported by executable behavior elsewhere.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "SKILL.md discloses ranking and detail queries, Python fetchers, network use, and dependencies. Fetched skill descriptions/rules are remote web content and should be treated as data, not as instructions for the agent.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The install guidance asks for unpinned pip packages and Playwright Chromium with system dependencies. This is expected for a Playwright scraper but should be installed in a contained Python environment.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access and a headless browser are proportionate for a dynamic rankings page. SKILLS_BASE_URL is environment-overridable and Chromium is launched with no-sandbox flags, which are containment cautions but not evidence of hidden or unrelated behavior.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts show no credential access, local private-data indexing, file writes, background persistence, account mutation, or exfiltration behavior.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[LP3] expected: The scanner concern about undeclared permissions is partly valid as documentation guidance, but the network/browser behavior is disclosed in SKILL.md and is necessary for fetching skills.sh rankings.\n[TP4] expected: Detail-page fetching is broader than rankings alone, but it is disclosed in SKILL.md and metadata. Returning raw HTML in memory is unnecessary and should be minimized, but it is not persisted or sent to an unrelated destination.\n[SDI-4] unexpected: The unrelated AI Daily docstring is a real artifact mismatch and should be fixed, but the reviewed code paths still implement skills.sh ranking/detail fetching.",
+          "guidance": "Install only in a virtual environment or container, expect Playwright/Chromium dependencies, and avoid setting SKILLS_BASE_URL away from skills.sh unless you intentionally want to test another endpoint. Treat fetched skill detail text as untrusted web content.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill fetches public skills.sh ranking and detail pages, with ordinary scraping cautions but no evidence of hidden, destructive, credential-seeking, or persistent behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779973757663,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 58,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: trending-skills\nVersion: 0.1.0\n\nThe skill is classified as suspicious due to several significant vulnerabilities, despite its stated benign purpose of fetching trending skills. The primary concerns are a potential shell injection vulnerability in SKILL.md where user input for `<skill-name>` is directly passed to `python src/detail_fetcher.py`, and a Server-Side Request Forgery (SSRF) risk. The `SKILLS_BASE_URL` in `src/config.py` is configurable via environment variables, allowing `src/detail_fetcher.py` and `src/skills_fetcher.py` to fetch data from arbitrary domains if the agent's environment is compromised. Furthermore, `src/skills_fetcher.py` launches a Chromium browser with `--no-sandbox` and `--with-deps` for Playwright, which, while sometimes necessary in containerized environments, significantly reduces the browser's security posture and amplifies the impact of an SSRF or browser exploit. There is no clear evidence of intentional malicious behavior such as data exfiltration to an attacker-controlled endpoint or backdoor installation.",
+          "checkedAt": 1779163812012,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "5054a4aac68cd1da1fa91def723f4ca66591b6ce7a40b0fb6881acd5e1167105",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/5054a4aac68cd1da1fa91def723f4ca66591b6ce7a40b0fb6881acd5e1167105"
+    },
+    "slug": "trending-skills",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

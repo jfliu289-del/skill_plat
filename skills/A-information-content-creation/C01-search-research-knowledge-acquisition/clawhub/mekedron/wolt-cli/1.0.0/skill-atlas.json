@@ -1,0 +1,147 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "website"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:browse",
+      "category:C01:token:find",
+      "category:C07:token:debug",
+      "category:C12:token:startup",
+      "category:C18:token:food",
+      "category:C19:token:automate",
+      "cross-tag:browser-automation",
+      "cross-tag:debugging",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C07",
+      "C12",
+      "C18",
+      "C19"
+    ],
+    "stages": [
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "automate",
+      "debug",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "824fea2bcff76f1064047f97730f78343b12e62638f14512d19a1eb58715afbf",
+    "content_hash": "563d74cf8c78009cdc63a392bba1bbb60ce7efe51b6d2bca23cc82c93a948229",
+    "precanonical_content_hash": "48d682ac8fa58205246250d4b47e4f6be684e564f209b0570691fabb0b892370",
+    "skill_md_hash": "54302e03165573ac35ee98514d8baa242ef3741cacb762242e973c22653494dc",
+    "version_metadata_sha256": "4ad2a14700cf1c33b6d76cc2edd29b0d92d55bb9de3bc45a3fd91941445b4ba5"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/mekedron/skills/wolt-cli",
+    "claim_id": "e94da0d960d3df5298dace74c3d8174efca61a24cbc202811e898ebd7c3e7d76",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "wolt-cli",
+        "url": "https://clawskills.sh/skills/mekedron-wolt-cli"
+      }
+    ],
+    "owner_handle": "mekedron",
+    "owner_id": "s179sxss26zcn1mer9kws14a8h86x541",
+    "published_at": 1771764319872,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779943554036,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779943554036,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "Browsing venues, inspecting menus, managing cart/profile data, and previewing checkout all fit the Wolt CLI purpose. These capabilities can touch order history, payments metadata, addresses, favorites, and cart state, so they are sensitive but expected.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The main skill instructions say to start read-only, request explicit confirmation before cart/profile/address/favorites/configuration mutations, and clarify that checkout preview does not place orders.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The artifact is documentation only and has no executable scripts, but it depends on a separately installed local `wolt` binary from an external repository that users should evaluate independently.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Token, cookie, profile, location, and account access are proportionate to authenticated Wolt automation. I found no hidden unrelated file access, background agent behavior, destructive local commands, or exfiltration instructions in the skill files.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill discloses that `configure` writes local profile credentials and that refreshed tokens can be persisted back to local config. It could better warn about shell history, process-list exposure, local file permissions, and verbose log sensitivity.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The trigger text is Wolt-specific and matches the skill purpose. It is somewhat broad for food and account workflows, but the runtime instructions constrain account-changing actions with confirmation.\n[SQP-2] expected: Credential flags and local auth persistence are expected for an authenticated Wolt CLI, but the documentation should add clearer warnings about handling tokens, refresh tokens, cookies, shell history, and process listings.\n[SQP-2] expected: Cart, address, and favorites mutation commands are expected account operations for this skill. Although the command reference itself is terse, the main skill and workflows require user confirmation before these mutations.\n[PE3] expected: Access token handling and refresh persistence are sensitive but directly related to the stated authenticated CLI use and are disclosed rather than hidden.",
+          "guidance": "Install only if you trust the separate `wolt` CLI and are comfortable letting an agent use your Wolt account. Avoid pasting tokens or cookies where they may be saved in shell history or logs, keep verbose diagnostics private, use masked payment output, and confirm every cart, address, favorite, or credential change before it runs.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a coherent helper for a local Wolt CLI; it handles sensitive Wolt account data, but that access is disclosed and tied to its stated purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779943519769,
+          "issueCount": 4,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 55,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: wolt-cli\nVersion: 1.0.0\n\nThe skill is designed to wrap a local Wolt CLI, providing instructions for an AI agent to interact with it. It explicitly includes safety rules in `SKILL.md` and `references/workflows.md`, instructing the agent to request user confirmation before performing mutating actions (e.g., `cart add`, `profile addresses add`, `configure`). While it handles sensitive Wolt API tokens for authentication via the `wolt configure` command, this is for the stated purpose of configuring the *local* CLI and there is no evidence of intentional data exfiltration, arbitrary code execution, persistence mechanisms, or malicious prompt injection attempts. All instructions are aligned with the skill's stated purpose and safe operation.",
+          "checkedAt": 1779165769118,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "d1710ba5cd30020c6ff70369bdb8d11173635b1cc55f13d33ec3ec42a007da17",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d1710ba5cd30020c6ff70369bdb8d11173635b1cc55f13d33ec3ec42a007da17"
+    },
+    "slug": "wolt-cli",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

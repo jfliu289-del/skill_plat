@@ -1,0 +1,133 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.275,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C05:token:audio",
+      "cross-tag:agent-management",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C05"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "22d1ae20295be1ff072cf36693577f9fe3f74b8984cce0bdad2f61956d998230",
+    "content_hash": "c939112e1c99ae697f976cadbde0b8ba0a715e5f784523e4b690485118df4c45",
+    "precanonical_content_hash": "de065e520df7bc7428085c1581f59ad186a9303f193f40d7e6a47aa4a2c2151b",
+    "skill_md_hash": "3909989da759e9573f1203a363db3415834503422c3d5b211015826c98970dfd",
+    "version_metadata_sha256": "677caa64c63b783d501db84a744d919483f3a5d708456a44362f5215950ee03a"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/yuval-deepdub/skills/deepdub-tts",
+    "claim_id": "3c485976b69001ed85511b778c853bdad0dda1d22bd2b8777f001ffc2896abb6",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "deepdub-tts",
+        "url": "https://clawskills.sh/skills/yuval-deepdub-deepdub-tts"
+      },
+      {
+        "index_path": "categories/speech-and-transcription.md",
+        "label": "deepdub-tts",
+        "url": "https://clawskills.sh/skills/yuval-deepdub-deepdub-tts"
+      }
+    ],
+    "owner_handle": "yuval-deepdub",
+    "owner_id": "s176bjvhyb71w6q5g8qvwz7q6x884zya",
+    "published_at": 1770886292645,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783655084340,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783655084340,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The script accepts text, uses the Deepdub SDK for text-to-speech, writes an MP3, and prints a MEDIA path; the main user impact is that submitted text is sent to Deepdub.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are limited to installing the Deepdub SDK, setting relevant environment variables, and running the bundled script; no prompt overrides, broad automation, or unrelated agent behavior were found.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Installation uses the external Deepdub Python package, and requirements.txt lists it without a version pin; this is supply-chain hygiene risk but not evidence of malicious behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The requested API key, voice prompt ID, locale/model options, and media directory are relevant to TTS. The documentation includes shared trial credentials, disclosed as evaluation-only, which users should avoid for sensitive or production text.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The script creates the configured media output directory and writes generated MP3 files there; no autostart, background worker, privilege escalation, deletion, or broad filesystem access was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SC1] expected: The Deepdub dependency is expected for this integration, but it is unpinned, so managed deployments should pin or lock the reviewed SDK version.\n[SQP-2] expected: The shared trial credentials are disclosed and purpose-related, but users should prefer their own credentials because shared accounts can create privacy, quota, and ownership ambiguity.",
+          "guidance": "Install only if you are comfortable sending synthesized text to Deepdub. Use your own Deepdub API key and voice prompt ID for private or production use, avoid sensitive text with the shared trial credentials, and consider pinning the Deepdub SDK version in controlled environments.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to do what it claims: it sends text to Deepdub to generate an audio file, with no hidden persistence or unrelated access found.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783655052104,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 6,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: deepdub-tts\nVersion: 0.1.5\n\nThe skill is designed to convert text to speech using the Deepdub API. All accessed environment variables (`DEEPDUB_API_KEY`, `DEEPDUB_VOICE_PROMPT_ID`, `OPENCLAW_MEDIA_DIR`) are directly relevant to its stated purpose. The `deepdub_tts.py` script writes audio files only to the `OPENCLAW_MEDIA_DIR` (controlled by environment variable, not user input), preventing arbitrary file writes. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts in `SKILL.md`. The code is clear, straightforward, and aligns perfectly with its described functionality.",
+          "checkedAt": 1779161588779,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "83b2b248ffbcea1bdab9da98c766d70de0550e21b58bd475e4c74550ed3fda72",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/83b2b248ffbcea1bdab9da98c766d70de0550e21b58bd475e4c74550ed3fda72"
+    },
+    "slug": "deepdub-tts",
+    "source_type": "clawhub",
+    "version": "0.1.5"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

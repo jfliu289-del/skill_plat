@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.2833,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C14",
+    "reasons": [
+      "category:C10:token:ai",
+      "category:C14:token:crm",
+      "category:C14:token:lead",
+      "category:C16:token:learning",
+      "category:C17:token:personal",
+      "category:C19:token:crm",
+      "cross-tag:agent-management"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C10",
+      "C16",
+      "C17",
+      "C19"
+    ],
+    "stages": [
+      "operate"
+    ],
+    "tasks": [
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "b682af3becd702c68555c288dc114bed426167e0fd280d5e63df32cf901fec07",
+    "content_hash": "4e7a2aff0b22eb7f79bd712aeb351220c1e152c91654ea00ef8b2ddd76db91cf",
+    "skill_md_hash": "389a2391a6212c10094393474c7faa3e03e7a2d0e186ec6dc79418fd3c5f5dc4",
+    "version_metadata_sha256": "304272b4af4674a53d2fe2014ebe076e0f19f56b8412533e8d1662ef8db880b1"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/odinbot33/skills/oee-crm-intelligence",
+    "claim_id": "e29d902e9d9c2e339a617517f51c655fd0702e1232d16cbd319fc703b4c7664e",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "oee-crm-intelligence",
+        "url": "https://clawskills.sh/skills/odinbot33-oee-crm-intelligence"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "odinbot33",
+    "owner_id": "s170a9m7bzj0smseet05c49qn18849mc",
+    "published_at": 1771081030976,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779967057088,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779967057088,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently implement two-stage CRM contact filtering and scoring using local rules plus optional Claude classification. The sensitive behavior fits the purpose, but it handles CRM contact data.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are scoped to running the local Python filter, though trigger phrases are broad and the LLM prompt includes user/contact fields that could influence classification results.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no automatic installer or hidden setup. The README documents a manual, unpinned `pip install anthropic`, which is expected for the Claude integration but should be installed from a trusted source.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill uses `ANTHROPIC_API_KEY` only for Stage 2 scoring and sends selected contact fields such as email, name, subjects, reply status, and interaction metadata to Anthropic when that stage runs. No broad local indexing or unrelated system access is evident.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Rejected contacts can be persisted to `learning.json` through `save_config` or the batch CLI path. This is local and disclosed in the README, but users should review it because it affects future filtering.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The external Claude scoring concern is artifact-supported: `crm_filter.py` sends CRM fields to Anthropic when the SDK and API key are present. This is expected for AI classification and partly disclosed by the Claude/API-key requirement, so it is a privacy note rather than evidence of malicious behavior.\n[SQP-1] expected: The broad CRM-related trigger phrases are present and could cause over-invocation in an agent environment, but the artifacts do not show automatic background execution or hidden data collection.\n[SQP-2] expected: Persistent learning is artifact-supported: rejected contacts are stored in `learning.json`. The README discloses `rejected_contacts` as auto-populated and persisted, so this is expected local state rather than hidden persistence.\n[SSD-3] expected: Untrusted contact fields are interpolated into the LLM prompt, which can affect model classification. This is a real robustness risk for an LLM-based filter, but it remains within the stated contact-scoring function and does not show exfiltration beyond the disclosed provider workflow.",
+          "guidance": "Install only if you are comfortable using Anthropic for CRM scoring. Use a dedicated API key, avoid processing highly sensitive contacts or subject lines unless you have permission to send them to a third-party model provider, and periodically inspect or reset `learning.json` so rejected contacts are not permanently filtered by mistake.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This CRM filtering skill is purpose-aligned, but users should understand that AI scoring can send contact details to Anthropic and rejected contacts may be stored locally.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779967023254,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 78,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: oee-crm-intelligence\nVersion: 1.0.0\n\nThe `crm_filter.py` script constructs a prompt for the Anthropic Claude LLM using user-provided contact data (e.g., name, subjects). This creates a prompt injection vulnerability against the LLM, where a malicious input contact could manipulate the LLM's classification or reasoning. While this is a significant vulnerability, there is no evidence of intentional malicious behavior by the skill itself, such as data exfiltration, unauthorized command execution, or persistence mechanisms beyond its stated purpose of CRM contact filtering.",
+          "checkedAt": 1779164011004,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "74239310651ac65fc398f67dca188460776c538344c32f20cbc759d74068d6a6",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/74239310651ac65fc398f67dca188460776c538344c32f20cbc759d74068d6a6"
+    },
+    "slug": "oee-crm-intelligence",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

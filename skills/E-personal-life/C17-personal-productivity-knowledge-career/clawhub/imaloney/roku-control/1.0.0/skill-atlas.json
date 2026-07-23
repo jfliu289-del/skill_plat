@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "website"
+    ],
+    "audiences": [],
+    "confidence": 0.25,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C17",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C02:token:language",
+      "category:C13:token:operations",
+      "category:C17:token:notes",
+      "category:C17:token:resume",
+      "category:C18:token:home",
+      "category:C19:token:device",
+      "category:C19:token:navigate",
+      "cross-tag:agent-management",
+      "cross-tag:browser-automation",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C02",
+      "C13",
+      "C18",
+      "C19"
+    ],
+    "stages": [
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "automate",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "af1d06160d991ee7f0b55feba0b67cd64896da8f96de41bf9cf1c1efc255ed43",
+    "content_hash": "e162fa2cb94518a73b2d0b51ef5cc5b1745184fbb6dcb103df34b36a13eee211",
+    "precanonical_content_hash": "47bc57a5b12f6d94779b16d0c9765825944d937b99bc2a57ee87c277c6ed2972",
+    "skill_md_hash": "2002d594620b2817b3510081c21c1e3c5d9de8629ebc1ec82483d284d7492a76",
+    "version_metadata_sha256": "022d1183564a6d35b48e34b3f7e8f3d9020624d6becda44402f753cd990bde28"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/imaloney/skills/roku-control",
+    "claim_id": "e8c9265e5bc281f53ff823c908c5e69fd1154ed2e9b00aa62b77743bf2214f2a",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "roku-control",
+        "url": "https://clawskills.sh/skills/imaloney-roku-control"
+      }
+    ],
+    "owner_handle": "imaloney",
+    "owner_id": "s1757q0cfqqw6rj3cas03vynf984e3tz",
+    "published_at": 1770609726959,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779961500214,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779961500214,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The advertised purpose matches the artifacts: SSDP discovery, Roku device info, app listing, app launch, navigation, playback, volume, power, and text input over Roku ECP. These are impactful physical-device controls, but they are central to the skill and plainly described.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The runtime instructions map user requests to explicit commands and do not include prompt overrides, hidden tasks, external reporting, or unrelated automation. The documentation should be clearer about confirming the target device before disruptive actions such as power, app launch, or text entry.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is limited to a Python script plus the common requests dependency; there is no privileged installer, shell persistence, or automatic setup behavior in the artifacts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Local SSDP broadcast and HTTP calls to port 8060 are proportionate for Roku ECP control, and no external endpoints are used. Users should still treat it as LAN device control because Roku ECP has no device authentication.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifacts show no credential access, session/profile use, elevated privileges, background workers, startup hooks, or durable agent memory. The optional roku.json file is only a local friendly-name/IP mapping template.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-2] expected: The README does promote unauthenticated Roku control, including power, app launch, playback, and text input. That is expected for this remote-control skill and is disclosed, though stronger safety wording would help users avoid accidental control.\n[SQP-2] expected: The SKILL.md states that control works over LAN with no authentication and documents the relevant commands. The missing up-front caution is a documentation gap, not evidence of hidden or purpose-mismatched behavior.\n[SQP-2] expected: The discovery code broadcasts on the local network and returns Roku metadata such as name, model, and serial number. Discovery is purpose-aligned, but users should run it only on trusted networks and verify the device before controlling it.",
+          "guidance": "Install only if you are comfortable letting an agent send remote-control commands to Roku devices on your trusted local network. Confirm the target IP/name before power, app launch, volume, navigation, or text-entry actions, and install the Python dependency from a trusted package source.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a local Roku remote-control skill whose main risk is that its unauthenticated LAN commands can immediately affect real Roku devices.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779961453911,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 32,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: roku-control\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills skill bundle for Roku control is benign. The `SKILL.md` and `README.md` provide clear, well-documented instructions for controlling Roku devices via the local network, without any evidence of prompt injection attempts to subvert the agent's behavior or exfiltrate data. The `scripts/roku_control.py` script uses standard Python libraries (`requests`, `socket`) to implement the Roku External Control Protocol (ECP), performing network communication exclusively with local Roku devices for discovery and control. There are no indications of malicious execution, data exfiltration to external endpoints, persistence mechanisms, or obfuscation.",
+          "checkedAt": 1779162360807,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "be2eb59a3917534217a8c7ca14855690e27606b15f5026eeaa4896e6a471d839",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/be2eb59a3917534217a8c7ca14855690e27606b15f5026eeaa4896e6a471d839"
+    },
+    "slug": "roku-control",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

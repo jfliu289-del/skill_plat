@@ -1,0 +1,147 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "security-professional"
+    ],
+    "confidence": 0.2643,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C04:token:data",
+      "category:C04:token:metrics",
+      "category:C09:token:privacy",
+      "category:C09:token:security",
+      "category:C18:token:health",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C04",
+      "C09",
+      "C18"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "d4e1f32de0d7cb78c15548d127307b7d27ab65766ac25865a6af8d1356d97a9b",
+    "content_hash": "06a356ff2fee4f3b83274b0268df956f67bd65a4ad7db7330c13b7f2e1a38b15",
+    "skill_md_hash": "acd88e41f043aa56b3f3351f887b238d62902dc35dfd080e58fd42bf3941682b",
+    "version_metadata_sha256": "7da9e037e0facbc33f6ae4d77f7381f406af420cad50f60b7709eac36bbd3a98"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/mrnsmh/skills/nexus-safe",
+    "claim_id": "0d852f901cd1be168aa1c077671f7d73340b7012f3c04551db75c411e898ec08",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "nexus-safe",
+        "url": "https://clawskills.sh/skills/mrnsmh-nexus-safe"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "mrnsmh",
+    "owner_id": "s174xcybha6182ecw5xrk9jfrh87rjs6",
+    "published_at": 1771900158550,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779953986042,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779953986042,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is local system reliability through status checks, log retrieval, and policy-controlled service restarts; subprocess use is coherent with that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The supplied evidence describes service validation, explicit Docker/PM2 allowlists, logs-first behavior, and restart rate limiting, which keeps the risky actions bounded.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "No suspicious install-time behavior or auto-start mechanism was supplied; the review mainly covers the runtime script and skill instructions.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Restarting local services is high-impact, but it is proportionate for a reliability skill when constrained by allowlists and user-directed policy.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No evidence shows credential harvesting, data exfiltration, hidden persistence, privilege escalation, or background workers beyond the stated monitoring/restart workflow.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[AST4] expected: The subprocess call is expected for local status/log/restart operations, and the supplied evidence says it uses an argument list plus service validation rather than shell-string execution.\n[OH1] unexpected: The finding appears unsupported by the shown snippet: captured command output is not evidence that model output is being injected into SQL, shell, HTML, or another downstream execution context.",
+          "guidance": "Install only if you want an agent to inspect and potentially restart local services. Review and set the allowed Docker or PM2 service lists narrowly, keep restart rate limits enabled, and avoid granting broader system privileges than needed.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to be a disclosed local service-monitoring helper with controlled restart capability, not an exfiltration or persistence tool.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779953950829,
+          "issueCount": 2,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 45,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: nexus-safe\nVersion: 0.1.6\n\nThe OpenClaw skill 'nexus-safe' is designed for local system reliability, offering status checks, log retrieval, and policy-controlled service restarts. The `monitor.py` script uses `subprocess.run` with a list of arguments, which is safe against shell injection. Service names are validated against live system processes and explicit allowlists (`NEXUS_SAFE_ALLOWED_DOCKER`/`PM2`), significantly mitigating command injection risks. The skill enforces policies like logs-first and rate limiting. The `SKILL.md` and `AGENT_BRAIN.md` files provide clear, non-malicious instructions for the agent, focusing on safe and reasoned system management. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts against the agent.",
+          "checkedAt": 1779166631358,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "eba0cc92b155ee92960323df814c6ab8a3b8a82aa33c8942f39e004db58a4e63",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/eba0cc92b155ee92960323df814c6ab8a3b8a82aa33c8942f39e004db58a4e63"
+    },
+    "slug": "nexus-safe",
+    "source_type": "clawhub",
+    "version": "0.1.6"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

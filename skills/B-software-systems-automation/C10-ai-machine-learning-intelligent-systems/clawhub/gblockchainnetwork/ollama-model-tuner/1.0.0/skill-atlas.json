@@ -1,0 +1,125 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.35,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C10",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C04:token:metrics",
+      "category:C10:token:llm",
+      "category:C10:token:model"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C04"
+    ],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "ccbafa6a3750124cbc396b5b27f2b4c04f3724ca6e115aa87876e8c61ce9bd8e",
+    "content_hash": "a3ddcb48df82a4c32f183fddd75f2fc9d247f121fb4abd364262cbb90489b63e",
+    "skill_md_hash": "699ed92f5ef0d13dce1ff0ad180a8019ae7a639c8257a1e5ea5e32c77a6ba686",
+    "version_metadata_sha256": "33ccdceb45741f1fbc3f0fcccd2d9611902cde92d96f577bdf437103d8ad9b86"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/gblockchainnetwork/skills/ollama-model-tuner",
+    "claim_id": "8fa6d273961bb4a2029b3bf774f327b62ad55ceb47336b8ac737f999d475181f",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "ollama-model-tuner",
+        "url": "https://clawskills.sh/skills/gblockchainnetwork-ollama-model-tuner"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "gblockchainnetwork",
+    "owner_id": "s172s98nsjj5arzt21xd8z84b5884a56",
+    "published_at": 1771598495700,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779942959671,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779942959671,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is local Ollama tuning, but the included code only reads a user-provided JSONL dataset and sends up to 10 prompts to Ollama chat; claims about LoRA/model fine-tuning and a prompts/system.md file are not supported by the artifacts.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The runtime behavior is user-invoked and does not instruct the agent to bypass approvals, run automatically, hide actions, or perform unrelated system changes.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "SKILL.md advertises an ollama-model-tuner command, but the artifact only includes scripts/tune.py and no packaging or entry-point definition, so users should verify how it is installed and how the Python ollama dependency is supplied.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading a user-selected local dataset and sending prompt text to a local Ollama client is proportionate to the advertised local model evaluation purpose.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "No persistence, privilege escalation, credential access, background service, destructive action, or account mutation is present in the artifacts.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[VirusTotal code_insight] expected: The reported arbitrary dataset path is expected for a local CLI that evaluates a user-chosen dataset; artifact evidence does not show attacker-controlled file access or exfiltration.\n[SkillSpector] expected: SkillSpector reported no issues, which is consistent with the absence of hidden execution, credential handling, persistence, or destructive behavior in the artifact text.\n[staticScan] expected: Static scan was clean; manual review found only packaging and capability-description gaps rather than security-impacting hidden behavior.",
+          "guidance": "Before installing, confirm the source of the runnable command and the Python ollama package. Treat this as a lightweight local prompt-testing helper, not a full LoRA or model fine-tuning tool, and only point it at datasets you are comfortable sending to your Ollama service.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to run a small local Ollama prompt-evaluation script, with some overstated tuning claims but no evidence of hidden data theft, persistence, or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779942923445,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: ollama-model-tuner\nVersion: 1.0.0\n\nThe skill bundle contains a Python script (`scripts/tune.py`) that is vulnerable to Local File Inclusion (LFI). The script directly uses `sys.argv[2]` as a file path for `dataset_file` without sanitization, allowing an attacker to read arbitrary files on the system by providing a malicious path. This critical vulnerability allows unauthorized data access, classifying the skill as suspicious.",
+          "checkedAt": 1778387038955,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "a6c346854baf3b27a29670f236de6e215ed31933bdf4b16d44d53375222eb16c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a6c346854baf3b27a29670f236de6e215ed31933bdf4b16d44d53375222eb16c"
+    },
+    "slug": "ollama-model-tuner",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

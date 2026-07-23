@@ -1,0 +1,157 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.1194,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C01:token:find",
+      "category:C03:token:document",
+      "category:C06:token:code",
+      "category:C07:token:review",
+      "category:C08:token:terraform",
+      "category:C10:token:ai",
+      "category:C13:token:operations",
+      "category:C19:token:desktop",
+      "cross-tag:agent-management",
+      "cross-tag:review",
+      "cross-tag:search",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C01",
+      "C03",
+      "C06",
+      "C07",
+      "C08",
+      "C10",
+      "C13",
+      "C19"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "research",
+      "review"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8e3bb19712de2bdb9e21027dd0f0e62874db31d645c1fab43297d023d03e55c7",
+    "content_hash": "a3d6e234925715ee89c9fd24e66df42d3723bf84e279807aa6dc6b210fd31a99",
+    "precanonical_content_hash": "2c5041d95b33e0b33b90fa2635c1e18bc6d17c21e04ce7eb8093c642e76ca35d",
+    "skill_md_hash": "3b61caa428283c0a45787b9ca008202b9cd76e0adbbedf2f32a130b7af9e2d48",
+    "version_metadata_sha256": "9b6a21d810a5f4adf435a60efc0f067073ed5c074aadcdec13b775c6046a5998"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/frmoretto/skills/hs",
+    "claim_id": "707f6507f03e3be6475ad637ee65bd7284141b16128ff4ea23db553e0e8dd677",
+    "index_entries": [
+      {
+        "index_path": "categories/devops-and-cloud.md",
+        "label": "hs",
+        "url": "https://clawskills.sh/skills/frmoretto-hs"
+      }
+    ],
+    "owner_handle": "frmoretto",
+    "owner_id": "s17a8cyqjzv952qpwcq9xnj0y5885tzh",
+    "published_at": 1772455811512,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779950320090,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779950320090,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to block or warn on dangerous shell commands and sensitive file reads, and the artifact content is consistently focused on that safety role.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The activation language is broad and may attach to ordinary command or file-read workflows, but that breadth is disclosed and aligned with a conservative pre-execution safety layer.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains only SKILL.md and no executable bundled scripts; it references a separate local Hardstop plugin script under ~/.claude/plugins/hs/commands/hs_cmd.py, which should be reviewed separately if installed.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Credential paths are listed as block targets, and the artifact explicitly says it blocks reads rather than accessing credential contents; no network transmission or broad local indexing is shown.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill describes user-invoked controls such as /hs skip, /hs off, status, and log, plus a ~/.hardstop/skip_next state file used by the external plugin; these controls are disclosed and framed as explicit user actions.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: The broad manifest activation for shell commands and file reads is intrusive, but it fits the skill's stated role as a command and sensitive-read safety gate.\n[SQP-1] expected: The trigger phrases are generic enough to activate in normal safety discussions, but the artifact does not use that activation to hide unrelated authority or access data.",
+          "guidance": "Install this only if you want conservative guardrails that may interrupt normal command and file-read workflows. Review the separate Hardstop plugin before relying on hook behavior, and treat /hs skip or /hs off as sensitive actions because they temporarily reduce or disable the protection.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "HardStop is a disclosed safety-check skill that broadly reviews commands and sensitive file reads, with no evidence of hidden data access, exfiltration, or destructive behavior in the reviewed artifact.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779950292533,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: hs\nVersion: 1.4.8\n\nThe OpenClaw AgentSkills skill bundle is designed to act as a 'Hardstop' safety mechanism, instructing the AI agent to detect and block dangerous shell commands, file reads, and potential prompt injection attempts. The `SKILL.md` explicitly lists common malicious patterns (e.g., reverse shells, data exfiltration, system destruction, encoded payloads) and instructs the agent to block them or seek explicit user confirmation for risky actions. The only external execution instructed is `python ~/.claude/plugins/hs/commands/hs_cmd.py`, which is explicitly stated to be a local script of an installed plugin, not remote code. There is no evidence of intentional harmful behavior; rather, the skill's purpose is to prevent such actions.",
+          "checkedAt": 1779166306895,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "e923a9b2f5247929c425fd026d48cc606e0320fec5713590d2f4cb18b36b1a69",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/e923a9b2f5247929c425fd026d48cc606e0320fec5713590d2f4cb18b36b1a69"
+    },
+    "slug": "hs",
+    "source_type": "clawhub",
+    "version": "1.4.8"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

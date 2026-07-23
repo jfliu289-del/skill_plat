@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2833,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C02:token:communication",
+      "category:C06:token:api",
+      "category:C10:token:ai",
+      "category:C13:token:operations",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C06",
+      "C10",
+      "C13"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8e9dc50698c73773af4d3d7dad0f40309c91451a55ef17111ffa2567ad7d78ff",
+    "content_hash": "583df73dadda33011469305bdcd7c5ee8b740091366c938855bd39ab6c503be4",
+    "precanonical_content_hash": "9971e966ffe401353e64ddc8cf8a9738a6bc413a65de78e7a88949829c3c1193",
+    "skill_md_hash": "7fbb3544371004b4265a27bccc10c6e8037f6860bad61a57f25b762f5bd8af8c",
+    "version_metadata_sha256": "56024d0f0461fdec52582cbd387be1ac114126bf7075ab466903b4856feead81"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jpaulgrayson/skills/quack",
+    "claim_id": "fa79d23cabecc84261f976e6c29c9543a4452d1d4030ff812c3f5b899bfbadfe",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "quack",
+        "url": "https://clawskills.sh/skills/jpaulgrayson-quack"
+      }
+    ],
+    "owner_handle": "jpaulgrayson",
+    "owner_id": "s17djecmzs2tthh4vnwkcrnv65885gpm",
+    "published_at": 1771971262389,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779957067091,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779957067091,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The credential creation, authenticated requests, inbox checks, and message sending are coherent with an agent-to-agent messaging network.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill instructs the agent to read its Quack credential file and process remote inbox messages; this is expected for the purpose, but users should treat inbox content as untrusted.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The described setup stores Quack-specific credentials under ~/.openclaw/credentials/quack.json with restrictive permissions and does not show unrelated install hooks or obfuscated behavior.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network activity appears limited to the Quack service domain and local file access appears limited to the skill's own credential file.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "It stores persistent credentials and may configure periodic inbox checks through HEARTBEAT.md; this is purpose-aligned but should be an explicit user choice.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: Reading an API key from the Quack credential file is part of authenticated messaging, but the user should know that Quack actions use that stored secret.\n[SSD-3] expected: Fetching and processing inbox messages is central to the skill's messaging purpose, though remote messages may contain sensitive or adversarial content.\n[SSD-3] expected: Recurring heartbeat polling supports the inbox workflow, but users should opt into it only if they want ongoing background checks.",
+          "guidance": "Install only if you want this agent connected to quack.us.com for agent-to-agent messaging. Keep the generated credential file private, avoid exposing the API key in logs or prompts, and enable heartbeat polling only if you are comfortable with periodic inbox checks and handling messages from other agents.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "Quack appears to be a disclosed agent-messaging skill that uses credentials and network access in ways that fit its stated purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779957038304,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 30,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: quack\nVersion: 1.0.0\n\nThe skill is designed for agent-to-agent messaging and coordination via the 'Quack Network'. It generates an RSA keypair, registers with `quack.us.com`, and stores its own `agentId`, `apiKey`, `publicKey`, and `privateKey` in `~/.openclaw/credentials/quack.json` with appropriate permissions (`0o600`). All network communications are directed to `https://quack.us.com` as part of its core functionality (e.g., checking inbox, sending messages). While it performs sensitive operations like key generation, credential storage, and network calls, these are transparently declared and directly align with the skill's stated purpose. The prompt injection instructions in `SKILL.md` to modify `HEARTBEAT.md` are for configuring periodic inbox checks, a legitimate functional requirement, not for malicious subversion or data exfiltration. No evidence of intentional harmful behavior was found.",
+          "checkedAt": 1779166898857,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "42ae26d45162597ac9046ca0f4b4597bc852ea22276bf3a3ab1cb0dc3f4bc2d2",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/42ae26d45162597ac9046ca0f4b4597bc852ea22276bf3a3ab1cb0dc3f4bc2d2"
+    },
+    "slug": "quack",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

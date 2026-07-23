@@ -1,0 +1,146 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.35,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:dashboard",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "cross-tag:data-analysis",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C09"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "e0d4c4a12c79c93deabccb2491573e56b79a7b4783049f0487dceed6c66662dd",
+    "content_hash": "e23e0e7d5751f29bc05d8ea7fc7d9024fe05a1f0503c0f068d82788255d324b8",
+    "skill_md_hash": "c1367d36f62586a3478a6ecf83295891b7011b8fe93b24b9d76eb0f8124df9b3",
+    "version_metadata_sha256": "b0cf762620dba41ffc79c149504be9fa77f2bf77ae32f29914652353bdd61328"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/johnmcgucki/skills/picqer-fulfillment",
+    "claim_id": "9e69e1edd79c8c576f07984149ba2e20a7bf936e7ebdd8bd0c89f3eb8f8b5334",
+    "index_entries": [
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "picqer-fulfillment",
+        "url": "https://clawskills.sh/skills/johnmcgucki-picqer-fulfillment"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "johnmcgucki",
+    "owner_id": "s17932hp9ge15bcfj5shj64p4s885r5t",
+    "published_at": 1770854375104,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971372530,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971372530,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill’s commands, entrypoint, and API wrapper consistently support JSON dashboard, picklist, stock, and revenue reads from Picqer. The data may be sensitive business information, but that access is expected for the stated purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions are narrow and JSON-focused. I found no role-change instructions, hidden prompt manipulation, unrelated local file access, destructive actions, or behavior-hiding requirements.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The package uses normal TypeScript build/test scripts with @openclaw/sdk and dotenv dependencies, and no install hooks or remote installer. Dependency versions are semver ranges rather than pinned versions.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill reads PICQER_SUBDOMAIN and PICQER_API_KEY from the local environment and sends authenticated requests to the configured Picqer API host. This is proportionate and disclosed, though users should use a least-privilege API key.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The main skill is on-demand. A standalone cron.ts helper contains a five-minute polling loop, but it is not wired into package install/start scripts and should only run if the user intentionally starts it.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SkillSpector] expected: SkillSpector reported clean with zero issues; manual artifact review found no contradictory high-risk behavior.\n[VirusTotal] expected: VirusTotal telemetry was clean and aligned with the artifacts: dotenv credential loading and Picqer API access are expected for this integration.\n[staticScan] expected: Static scan reported clean. Local review found no shell execution, filesystem mutation, unauthorized endpoint, or destructive command.\n[localPicqerCredentials] expected: The local API key is necessary for Picqer access, but it can expose whatever business data the key is allowed to read.\n[optionalCronHelper] expected: The recurring refresh helper fits dashboard synchronization, but it is not automatic persistence and should only be run when continuous polling is desired.",
+          "guidance": "Install only in a trusted workspace, configure a least-privilege Picqer API key, and treat returned dashboard data as sensitive business information. Verify any Tailscale-only access claim in your own network setup, since the skill code itself does not enforce that boundary.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent Picqer dashboard connector that reads fulfillment and revenue data using a local API key, with no evidence of hidden exfiltration or destructive behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971330493,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: picqer-fulfillment\nVersion: 1.0.0\n\nThe OpenClaw skill 'picqer-fulfillment' is designed for fetching and processing Picqer dashboard data. It securely handles API keys by loading them from environment variables via `dotenv` (`env.ts`) and uses them for authenticated requests to the Picqer API (`picqer-api.ts`). Input filters are safely incorporated into URL query parameters, preventing injection vulnerabilities. The `SKILL.md` explicitly instructs the agent to provide JSON-only responses, mitigating prompt injection risks against the agent itself. While `cron.ts` sets up a recurring task, its purpose is benign data synchronization, and no evidence of malicious execution, data exfiltration to unauthorized endpoints, or persistence mechanisms beyond its stated function was found. The markdown rendering functions in `dashboard-renderer.ts` are not intended for the agent's output, as per `SKILL.md`.",
+          "checkedAt": 1779163339274,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "092fa947d205e5d99fca60086823023b19a3dddde432cf36939bbe0582836339",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/092fa947d205e5d99fca60086823023b19a3dddde432cf36939bbe0582836339"
+    },
+    "slug": "picqer-fulfillment",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

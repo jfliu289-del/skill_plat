@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C06:token:api",
+      "category:C12:token:management",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C12"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d4c42d2ea7162cf8d2df709b2bc4b2f723ece6f6f8565149f99814eb47cad650",
+    "content_hash": "7d15790204d61dbdd46cc86ac3a4fa7d58bd03d24d33d21384ce900877c38020",
+    "precanonical_content_hash": "b5b6d90bbbe993c90a0df449ebcc2e48eb1894d5300c49c3fbde06adfc333f24",
+    "skill_md_hash": "fe25c6b79dd46f5faba925591a0669d5f382e60d23704df13af5107041356125",
+    "version_metadata_sha256": "4ad26f9345a1375c7c92a6afdb0615e7da511d5e38c2cb2e6f9a33afdfd42ad9"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/angusthefuzz/skills/cozi",
+    "claim_id": "6c12f199cb6f05d98eb6727dbed4511da6ba31a7e5007ebb61fe685a0fd32ffb",
+    "index_entries": [
+      {
+        "index_path": "categories/productivity-and-tasks.md",
+        "label": "cozi",
+        "url": "https://clawskills.sh/skills/angusthefuzz-cozi"
+      }
+    ],
+    "owner_handle": "angusthefuzz",
+    "owner_id": "s174z8dkzqyr3xc14wvkpart7n8815fk",
+    "published_at": 1771165746051,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779968183487,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779968183487,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The frontmatter summary emphasizes shopping and todo lists, but the body and CLI clearly document calendar viewing, creation, and removal; these capabilities fit a Cozi Family Organizer integration.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Commands are explicit CLI operations with user-supplied IDs and values, including delete/remove actions; there is no hidden automatic execution, though destructive commands would benefit from confirmations.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains only SKILL.md and a Node script with no package install hook or shell execution; it uses an unofficial reverse-engineered Cozi API, which is disclosed.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill requires COZI_EMAIL and COZI_PASSWORD, declares them in metadata, documents .env use, filters for only those variables, and sends them to rest.cozi.com for account authentication as expected for the integration.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "It caches a bearer session token in .session.json and deletes it on auth failure; this is disclosed and not a background persistence mechanism, but the token file should be treated as sensitive.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal] expected: VirusTotal telemetry was clean and consistent with the reviewed artifacts, but was not used as the sole basis for the verdict.\n[staticScan] expected: The static scan reported no findings; manual review also found no shell execution, obfuscation, unrelated network targets, or destructive local filesystem behavior.\n[LP3] expected: The artifact metadata declares required env vars COZI_EMAIL and COZI_PASSWORD, and SKILL.md documents how they are used.\n[TP4] expected: Calendar commands are documented in SKILL.md and in the script help text; the short description could mention calendar explicitly, but this is not hidden behavior.\n[SDI-1] expected: Calendar read/write/delete functions are present in code and user-facing command documentation, and they are coherent with a family organizer client.\n[SDI-2] expected: The script reads a skill-level .env and an agent-level .env as documented, and only consumes COZI_EMAIL and COZI_PASSWORD; this is sensitive but scoped.\n[SQP-2] expected: Plaintext .env credential storage and session caching are disclosed; the artifact should provide stronger file-permission guidance, but this does not show deception or unrelated access.\n[SQP-2] expected: Remove/delete operations are documented and require explicit command invocation; lack of confirmation is a usability and safety note rather than evidence of malicious behavior.\n[SQP-2] expected: Username/password authentication to Cozi is expected for this unofficial API client and the API details state bearer-token login.\n[RA2] expected: Local credential persistence is user-directed through documented .env files and does not create an autonomous background process or broader agent persistence.",
+          "guidance": "Install only if you are comfortable giving this skill access to your Cozi account. Protect the .env and .session.json files, avoid shared machines for this setup, and ask your agent to confirm before running delete-list, remove, or remove-appt commands.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This Cozi skill is purpose-aligned and disclosed, but it can modify family organizer data and stores Cozi credentials or session tokens locally.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779968140725,
+          "issueCount": 9,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: cozi\nVersion: 1.0.2\n\nThe OpenClaw skill 'cozi' is designed to interact with the Cozi Family Organizer API. The `SKILL.md` provides clear instructions and does not contain any prompt injection attempts or malicious directives. The `scripts/cozi.js` file securely handles `COZI_EMAIL` and `COZI_PASSWORD` by explicitly reading only these variables from `.env` files and uses them to authenticate with the legitimate `rest.cozi.com` API. Session tokens are cached locally within the skill's directory. The script makes standard HTTPS requests and does not contain any code for data exfiltration, unauthorized command execution, persistence, or obfuscation. Its functionality is entirely aligned with its stated purpose.",
+          "checkedAt": 1779164267348,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "67839815224d380dd5f7c15be651990a6967fe35cd4de37697f07894d7659b99",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/67839815224d380dd5f7c15be651990a6967fe35cd4de37697f07894d7659b99"
+    },
+    "slug": "cozi",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

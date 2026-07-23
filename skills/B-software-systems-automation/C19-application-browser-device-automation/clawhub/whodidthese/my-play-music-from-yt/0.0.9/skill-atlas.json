@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "artifacts": [
+      "website"
+    ],
+    "audiences": [
+      "creator"
+    ],
+    "confidence": 0.6682,
+    "domains": [
+      "creative"
+    ],
+    "needs_review": false,
+    "primary_category": "C19",
+    "reasons": [
+      "category:C01:token:find",
+      "category:C01:token:search",
+      "category:C05:token:video",
+      "category:C12:token:management",
+      "category:C17:token:resume",
+      "category:C19:phrase:browser automation",
+      "category:C19:token:automation",
+      "category:C19:token:browser",
+      "cross-tag:browser-automation",
+      "cross-tag:design",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "automate",
+      "design",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "ad0f10de4d7b58a945f2ed63f281fe6d234f40f057a6dda44971f71157b5f80d",
+    "content_hash": "b73598e4f4dd7a4af94904be64c54b9f988256dbe7879417dd6d0803395d4037",
+    "precanonical_content_hash": "ece925bdd7d0f7ff626f598f7460190aecadeb2df7ad1f8b79f87905d4b752b4",
+    "skill_md_hash": "2c26d319f43e9429ef02ad40e51d3acbce0b0ede8fa46da4d70469ed1498d562",
+    "version_metadata_sha256": "f6c0f7bd3c7cbb4bf48037b4eb2571bdce6bd3205e3ad990e34e03e59a71d185"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/whodidthese/skills/my-play-music-from-yt",
+    "claim_id": "76ed5dc3356fa994948124f328b830f8dfae404a1bbb971f62ae75d35af05b01",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "my-play-music-from-yt",
+        "url": "https://clawskills.sh/skills/whodidthese-my-play-music-from-yt"
+      }
+    ],
+    "owner_handle": "whodidthese",
+    "owner_id": "s177t23rbvhjbcp4kjrasp8ath884w5a",
+    "published_at": 1770510872884,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783657676121,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783657676121,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts consistently describe YouTube music search, playback, ad handling, and playback controls through playwright-cli; the capabilities match that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The allowed Bash scope covers all playwright-cli commands, including eval, screenshots, and state commands, but the skill instructions constrain normal use to a named music_player session, ref-based interaction, YouTube workflows, and limited snapshot locations.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The package contains Markdown skill/reference files only and declares an existing playwright-cli binary requirement; there is no bundled executable or install script.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The macOS Screen Recording, Automation, and Accessibility permissions are broad, but they are disclosed as troubleshooting requirements for visible browser automation and snapshot generation.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill mandates --persistent and keeps playback sessions in the background, which stores cookies, localStorage, IndexedDB, cache, and login state; this is explicitly disclosed and a delete-data reset path is documented.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-2] expected: The persistent profile is privacy-sensitive and not strictly required for simple playback, but it is disclosed and purpose-aligned for preserving YouTube login state across restarts.\n[SQP-2] expected: Local retention of browser data is real, but the artifact explicitly states what is saved and includes cleanup instructions; no artifact evidence shows hidden credential use or exfiltration.\n[VirusTotal code_insight] expected: The flagged playwright-cli capabilities, JavaScript eval, screenshots, storage-state commands, and macOS permissions are powerful browser automation features, but the instructions use them for visible YouTube playback and no VT engines detected malware.",
+          "guidance": "Install only if you are comfortable letting playwright-cli control a visible browser and keep a YouTube/Google session on disk. Prefer a dedicated browser profile, avoid sensitive browsing in that session, grant macOS permissions only to a trusted local playwright-cli installation, and use the documented close/delete-data cleanup when you no longer want login state retained.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill visibly automates YouTube music playback and discloses its browser-session persistence, but users should understand that login state can remain on disk.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783657638985,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 18,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: my-play-music-from-yt\nVersion: 0.0.9\n\nThis skill is classified as suspicious due to the use of `playwright-cli` with several high-risk capabilities, even though they are plausibly needed for browser automation. Specifically, the skill instructs the agent to use a `--persistent` browser profile (SKILL.md) which saves sensitive login state (cookies, localStorage, IndexedDB) to disk, and allows arbitrary JavaScript execution via `playwright-cli eval` (SKILL.md, references/playwright-ref.md). The `playwright-cli` tool also has capabilities to save/load browser state to/from files (`state-save`/`state-load`) and take screenshots (`screenshot`), which could be leveraged for data exfiltration, although the current instructions do not explicitly direct such malicious use. Additionally, the skill requires the user to grant broad macOS system permissions (Screen Recording, Automation, Accessibility) for `playwright-cli` to function.",
+          "checkedAt": 1779162017863,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "97d45fa948e3fafecf712df02dd6483fd2dadef38c19fd236e67bee98c076cb4",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/97d45fa948e3fafecf712df02dd6483fd2dadef38c19fd236e67bee98c076cb4"
+    },
+    "slug": "my-play-music-from-yt",
+    "source_type": "clawhub",
+    "version": "0.0.9"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

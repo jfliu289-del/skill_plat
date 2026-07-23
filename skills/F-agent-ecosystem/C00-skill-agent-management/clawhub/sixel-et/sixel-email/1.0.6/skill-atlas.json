@@ -1,0 +1,139 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C09:token:security",
+      "category:C13:token:operations",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C09",
+      "C13",
+      "C17"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "674166910861234e83f7ceb8d39015ab0295106ec22fa2b0720757521f4eff33",
+    "content_hash": "3ad4a2c2d7929d2c10c3b552132f184c45390e03a82dce4ec0029408384ce8fc",
+    "precanonical_content_hash": "7b17fc8999adc8d4646f525afffdd2056e1a3a53f1575d321f880e937f55d533",
+    "skill_md_hash": "89340c00feda65887360df7678421b4e1ffe0bd67f24b24c037b1d70720a8ba3",
+    "version_metadata_sha256": "5edb020357c72e5fe3c43a1f171c82383c222e9ba7aaf9b87d17315bd746ea16"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/sixel-et/skills/sixel-email",
+    "claim_id": "2d685468c0eda5e70e587601ca069393470f60916fc08d4ae632ae9f6928994d",
+    "index_entries": [
+      {
+        "index_path": "categories/communication.md",
+        "label": "sixel-email",
+        "url": "https://clawskills.sh/skills/sixel-et-sixel-email"
+      }
+    ],
+    "owner_handle": "sixel-et",
+    "owner_id": "s177faz7mm9r01q181q965wpbs884q5t",
+    "published_at": 1772006902892,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779957644920,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779957644920,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is a 1:1 agent-to-operator email channel, and the documented capabilities are limited to sending mail, polling an inbox, reading messages, and downloading attachments through the Sixel API.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions use curl against sixel.email endpoints and include defensive guidance about secrets, attachment filenames, rate limits, and ambiguous email instructions; the optional background poller is disclosed but its agent-notification mechanism should be configured carefully.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill is instruction-only with no executable package or installer behavior beyond normal skill installation and environment configuration for SIXEL_API_URL and SIXEL_API_TOKEN.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Network access to sixel.email and an API token are expected for the purpose; file access is limited to user-chosen attachment reads and temporary inbox/download writes, which is proportionate when operator-controlled.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill recommends an optional long-running poller for heartbeat and replies, but it does not request elevated privileges, autostart installation, broad local indexing, or mutation authority outside the email channel.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[VirusTotal:clean] expected: The supplied VirusTotal telemetry reports no detections and describes the network and file operations as aligned with the email-channel purpose.\n[SkillSpector:no-issues] expected: SkillSpector reported no issues, which is consistent with the reviewed instruction-only behavior and disclosed security guidance.\n[WorkerContext:no-non-VT-malicious-signal] expected: No non-VirusTotal malicious signal or pre-scan prompt-injection signal was supplied for this version.",
+          "guidance": "Before installing, confirm the SIXEL_API_TOKEN is scoped only to the intended agent/operator channel, do not send secrets over plaintext email, treat inbound messages and attachments as untrusted, and run any background poller in a constrained environment with a dedicated download directory.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This instruction-only skill appears to do what it claims: let an agent email and receive replies from one configured human operator through sixel.email.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779957593950,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: sixel-email\nVersion: 1.0.6\n\nThe OpenClaw AgentSkills bundle for 'sixel-email' is designed for agent-to-operator email communication. It primarily uses `curl` commands to interact with the sixel.email API for sending and receiving messages and attachments. The `SKILL.md` documentation includes explicit security warnings, such as never sending secrets in email bodies and treating attachment filenames as untrusted input, which are defensive prompts for the agent. While the skill involves network access and file system operations (reading files for attachments, writing to `/tmp` for inbox storage), these are directly aligned with its stated purpose and are implemented with security best practices in mind. There is no evidence of intentional malicious behavior, data exfiltration, or prompt injection attempts to subvert the agent's core directives.",
+          "checkedAt": 1779166931085,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "7a1d962edf3299496c279b29561a6d2129bf301efab40ad42361f222d241f94c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/7a1d962edf3299496c279b29561a6d2129bf301efab40ad42361f222d241f94c"
+    },
+    "slug": "sixel-email",
+    "source_type": "clawhub",
+    "version": "1.0.6"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.31,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:prompt",
+      "category:C00:token:skill",
+      "category:C06:token:code",
+      "category:C07:token:debug",
+      "category:C11:token:project",
+      "cross-tag:agent-management",
+      "cross-tag:debugging",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C07",
+      "C11"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "debug",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "aab167a5c7a0b760f4d22ab6798f7183bd929dde4d2ae740e81480934249abe7",
+    "content_hash": "04d4455ac04f4c3668b19b07e1c8b7e940bef7dd4437614f630a0cca516175d1",
+    "precanonical_content_hash": "ac1e596e03d5484bafc7fc06cbcc9e3451f82282db6a8a26c3b5a252306f95bb",
+    "skill_md_hash": "82e51cb31bfd23099e92517de1ce073e8de39b0475bc5627e93ed2b8c1599060",
+    "version_metadata_sha256": "c33e80fcadee409762cc9a3dd423afab95d73b2b1736c0c7cf62160e1d357489"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/paulrahul/skills/claude-tmux",
+    "claim_id": "ae0157cf15b51083fb20d3e567bdc09eb28d92e636dcb0281016ded4afbb707a",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "claude-tmux",
+        "url": "https://clawskills.sh/skills/paulrahul-claude-tmux"
+      }
+    ],
+    "owner_handle": "paulrahul",
+    "owner_id": "s171359c99whx39xfz5tdm90nd885wfh",
+    "published_at": 1770813196410,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779970208662,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779970208662,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose and capability align: locate a Claude Code pane in tmux, capture recent output, send prompts, run /compact, and optionally dump scrollback.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The workflow is scoped to a named tmux session and a pane titled claude, but it could be safer about ambiguous matches, shell-escaping placeholders, and explicit confirmation before sending keystrokes.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains only SKILL.md instructions; there are no scripts, package installs, downloads, or install-time commands.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "Reading tmux scrollback and writing keystrokes are proportionate for managing Claude in tmux, but terminal buffers may contain sensitive project data or active workflows.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No persistence, privilege escalation, credential collection, background workers, or external network behavior is requested.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "ok"
+            }
+          ],
+          "findings": "[SQP-1] expected: The concern about broad invocation is partly valid, but the artifact describes a named-session workflow and does not instruct autonomous discovery across unrelated sessions.\n[SQP-2] expected: Sending text with tmux send-keys is the core function and is disclosed; the main risk is operational, especially if the pane is shared, ambiguous, or attached to a sensitive environment.\n[VirusTotal-code_insight] unexpected: The shell-injection concern is a hardening gap in the placeholder command examples if values are interpolated unsafely, but the artifact shows no deception, exfiltration, or malicious behavior.",
+          "guidance": "Install only if you want an agent to interact with Claude Code through tmux. Use clear unique session and pane names, verify the target pane before any send action, avoid shared or production tmux sessions, and treat captured scrollback as potentially sensitive.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is an instruction-only tmux helper that does what it advertises, though users should be careful because it can read from and type into live terminal panes.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779970191857,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 20,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: claude-tmux\nVersion: 1.0.0\n\nThe skill is suspicious due to multiple potential shell injection vulnerabilities in `SKILL.md`. User-provided inputs such as `<session_name>`, `<target>`, and `/path/to/socket` are directly interpolated into `tmux` shell commands without explicit sanitization instructions, which could allow an attacker to execute arbitrary commands if the OpenClaw agent does not perform robust input validation and escaping. There is no evidence of intentional malicious behavior by the skill itself, but it presents a significant risk if exploited.",
+          "checkedAt": 1779163175247,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "af456ea2bd2a92d1df886594d4e7114417e146fffce50c06414b870acf8028a4",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/af456ea2bd2a92d1df886594d4e7114417e146fffce50c06414b870acf8028a4"
+    },
+    "slug": "claude-tmux",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

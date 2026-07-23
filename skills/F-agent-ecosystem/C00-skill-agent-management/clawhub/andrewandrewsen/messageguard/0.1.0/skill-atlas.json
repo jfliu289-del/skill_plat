@@ -1,0 +1,153 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C09:token:compliance",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:debugging",
+      "cross-tag:security",
+      "cross-tag:software-development",
+      "risk:R3"
+    ],
+    "risk_level": "R3",
+    "secondary_categories": [
+      "C04",
+      "C06",
+      "C09"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "debug",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "072b44f92d7e467445d89024fe0898bf1ae8be82f0b9f1f0f4017626b6b73792",
+    "content_hash": "f97592c12d8f0d9b7fe1c335d1433d157cff7f6562b8dfaf3d63a9d54f2332b6",
+    "skill_md_hash": "ac0f9f1c77bb0760fd4f8871935ca0e259f11106506b6eadeae72c48d3705a67",
+    "version_metadata_sha256": "626dbf1435eac481c2701cb61a6d145091a18d4e87c2cb2ce1bf16f7a7930136"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/andrewandrewsen/skills/messageguard",
+    "claim_id": "93f2dc83fb8070394e26dd1bb2063520b65278a28f704e9c693d9af6cc95b57d",
+    "index_entries": [
+      {
+        "index_path": "categories/cli-utilities.md",
+        "label": "messageguard",
+        "url": "https://clawskills.sh/skills/andrewandrewsen-messageguard"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "andrewandrewsen",
+    "owner_id": "s172b0jf3dftjmhh1b9zkvgeqx83hjtz",
+    "published_at": 1771940807754,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779956576285,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779956576285,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill states it filters outgoing text for secrets and sensitive data, and the Python script implements local regex-based mask, block, and warn actions for that purpose.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The integration contract requires callers to honor exit code 1 or blocked=true and not send the returned message; blocked results currently still include the original text, so integrations must treat the block flag as authoritative.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is a manual GitHub clone with no dependency install or automatic execution in the artifacts; users should verify they install the reviewed repository and commit.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The script processes the provided message, stdin, and optional local config only; inspection found no network calls, subprocess execution, environment harvesting, or credential-store access.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "Persistence is limited to optional local JSONL detection logging, disabled by default; logs include channel IDs and detection snippets, so they should be protected if enabled.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SkillSpector-current] expected: The current supplied and local SkillSpector report is clean with no issues.\n[VirusTotal-code_insight] expected: VirusTotal telemetry is clean and aligns with artifact inspection: the code uses standard-library regex filtering with no malicious behavior evident.\n[staticScan] expected: Metadata reports the static scan as clean with no findings.\n[SDI-4] unexpected: Historical metadata flagged that blocked output retains the original message. This is a real integration footgun, but the docs clearly instruct callers to stop on blocked=true or exit code 1, so it does not indicate malicious intent.\n[E2] expected: The cited password/API-key text is part of regex patterns for detecting secrets in outgoing messages, not environment-variable harvesting.\n[PE3] expected: The cited .env reference is a regex pattern for detecting .env-style lines in message text, not credential-file access.",
+          "guidance": "Install only from the reviewed source. When integrating it, never send result.message if blocked=true or the script exits with code 1, and keep logging disabled unless you need audit records and can protect the log file.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "MessageGuard is a local outgoing-message safety filter that matches its stated purpose and shows no evidence of exfiltration or hidden behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779956528924,
+          "issueCount": 0,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 0,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: messageguard\nVersion: 0.1.0\n\nThe OpenClaw AgentSkills 'MessageGuard' skill is designed to filter outgoing messages for sensitive information, acting as a security control. The Python script `scripts/filter_message.py` implements this by using a comprehensive set of regex patterns to detect and then mask, block, or warn about sensitive data like API keys, private keys, and PII. All dependencies are from the Python standard library, and the code is clear and well-documented. While there are theoretical configuration-based vulnerabilities (e.g., ReDoS if a malicious regex is supplied in config, or arbitrary file write if `log_path` is maliciously controlled), these are not indicative of intentional malice within the skill's design. The skill's explicit purpose and implementation are to enhance security, not to compromise it.",
+          "checkedAt": 1779166778064,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "932354fe60690ea06ce6504dab5e28ebe8c0f4091d2e314704eb1626c8761701",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/932354fe60690ea06ce6504dab5e28ebe8c0f4091d2e314704eb1626c8761701"
+    },
+    "slug": "messageguard",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

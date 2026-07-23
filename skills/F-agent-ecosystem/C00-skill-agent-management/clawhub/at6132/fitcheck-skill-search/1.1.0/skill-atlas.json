@@ -1,0 +1,137 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.2643,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C00:token:skill",
+      "category:C01:token:find",
+      "category:C01:token:search",
+      "category:C02:token:language",
+      "category:C10:token:ai",
+      "category:C10:token:llm",
+      "cross-tag:agent-management",
+      "cross-tag:search"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C01",
+      "C02",
+      "C10"
+    ],
+    "stages": [
+      "discover",
+      "operate"
+    ],
+    "tasks": [
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "637aaa0990f48d9448a0da1d4753b9e3be4a6186cdef2b9590bcf34b7dc7572a",
+    "content_hash": "bf9c971bcfbbfaa166d793f47886c4b1d429c50fcfaa4979b488a4f94ef8990f",
+    "precanonical_content_hash": "50b4e18b777ad1ed6420dea3b8876cd17d4c5e72bfbfea05e3917f9e88f89bfd",
+    "skill_md_hash": "7652b51616ece0155303e3a0a29aa4b5b5e88404b8d0b4127fd26ef00b9ed731",
+    "version_metadata_sha256": "91d981a0a88f65392fbfd7f845acbe16a60e8d0de8ac4644efa514e315348c4c"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/at6132/skills/fitcheck-skill-search",
+    "claim_id": "5d1f796fb56336e121cc6dbe6321f997d8476dccd6651b058c56da4efd7af216",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "fitcheck-skill-search",
+        "url": "https://clawskills.sh/skills/at6132-fitcheck-skill-search"
+      }
+    ],
+    "owner_handle": "at6132",
+    "owner_id": "s1767jf6hsqax5va3xk8j32b0d8843ec",
+    "published_at": 1771599274921,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779940186517,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779940186517,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The purpose and code are coherent: the skill searches installed skill metadata using keyword and local embedding-style matching. The documentation overstates the suggest mode as LLM/AI-powered, while the implementation appears to use local hybrid scoring.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are scoped to searching, previewing, and loading matching skills; they do not ask the agent to bypass review, use credentials, or perform unrelated high-impact actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The artifact includes runnable Python helper scripts despite being primarily a skill instruction bundle, but those scripts are disclosed and purpose-aligned.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The scripts read the system and user OpenClaw skill directories to parse SKILL.md files, which is proportionate for a skill-discovery tool. No broad filesystem crawl or network transmission is evidenced.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill can create or refresh a local JSON index containing skill names, descriptions, paths, triggers, search text, and numeric embeddings. This persistence is local and expected for semantic search.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The artifacts do not declare a formal permissions field, but the actual behavior is visible in the files and limited to local skill-directory reads and local index writes.\n[SQP-1] expected: The broad triggers in SKILL.md are consistent with a skill-discovery helper. They may cause frequent invocation, but the resulting behavior is low-impact search rather than account or data mutation.\n[SQP-1] unexpected: The empty trigger arrays inside index/skills_index.json are entries for other discovered skills, not this skill's activation manifest, so they do not establish an independent activation-scope problem for this artifact.\n[MP2] expected: The large JSON file is a precomputed local search index with numeric embedding vectors. It may be bulky, but it is expected data for semantic search and does not contain prompt-injection instructions or hidden behavior.",
+          "guidance": "Install only if you want a local helper that reads your installed OpenClaw skill folders and maintains a searchable index. Treat recommendations and confidence labels as discovery hints, then inspect the matched skill before using it.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill locally searches installed OpenClaw skills and stores a local search index, with no evidence of exfiltration, destructive actions, or hidden privilege use.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779940136311,
+          "issueCount": 58,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: fitcheck-skill-search\nVersion: 1.1.0\n\nThe OpenClaw AgentSkills skill bundle 'fitcheck-skill-search' is classified as benign. The skill's purpose is to locally search and retrieve other available skills. It operates entirely on local file system paths (`/usr/local/lib/node_modules/openclaw/skills`, `~/.openclaw/workspace/skills`) to read `SKILL.md` files and build a local search index (`index/skills_index.json`). The `scripts/embeddings.py` explicitly uses a simple, local `fallback_embedding` function, avoiding external API calls or complex ML model loading, which is a positive security practice. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts against the agent in any of the analyzed files.",
+          "checkedAt": 1779165604693,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "c40193f88b96da69495783e2dde54dcf3e498259aa76dc87f1845994ec5dbb35",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/c40193f88b96da69495783e2dde54dcf3e498259aa76dc87f1845994ec5dbb35"
+    },
+    "slug": "fitcheck-skill-search",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

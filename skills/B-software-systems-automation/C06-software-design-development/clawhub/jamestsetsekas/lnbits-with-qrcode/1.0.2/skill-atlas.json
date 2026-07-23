@@ -1,0 +1,130 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.475,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:code",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "34362597bbce3b14a6bdec09baee5f6b91d8a5a6678fc5f845abf62fdb70a7f3",
+    "content_hash": "a39b498d02482b51e534c382c13c2b3188005a0485a465f588b344b7b3c34c5a",
+    "precanonical_content_hash": "7667e77c52fac9741d8b80f589eebc4169d5f689e95660251c83fabfc3972b05",
+    "skill_md_hash": "e37ed69dac02adf7f3b5c155b8cf8bd80eba371033a704567567845289a948c8",
+    "version_metadata_sha256": "95c181a0febd5fd83c15e89f7a5b6688d98bf0e018588879f35035a3547b2c0f"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/jamestsetsekas/skills/lnbits-with-qrcode",
+    "claim_id": "cedfafbd83ca5525ad93da0864ff2fe1b8ff5a43492c3a87c5c2df92ff42f274",
+    "index_entries": [
+      {
+        "index_path": "categories/speech-and-transcription.md",
+        "label": "lnbits-with-qrcode",
+        "url": "https://clawskills.sh/skills/jamestsetsekas-lnbits-with-qrcode"
+      }
+    ],
+    "owner_handle": "jamestsetsekas",
+    "owner_id": "s1721gnthgrtm0nvhdqsnrk9kn84nv7h",
+    "published_at": 1770509935863,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658023711,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658023711,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill can check balances, create invoices, decode invoices, generate QR codes, create wallets, and pay Lightning invoices. These are sensitive financial capabilities, but they are documented in SKILL.md and README.md and fit an LNbits wallet manager.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Runtime instructions explicitly require secret handling safeguards, balance checks, invoice decoding, and yes/no confirmation before payment. The CLI pay command itself executes when called, so safe use depends on the agent following those instructions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "Install metadata discloses python3, qrcode[pil], and LNBITS_API_KEY/LNBITS_BASE_URL requirements. No hidden install-time behavior or persistence mechanism was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Use of an LNbits API key and network calls to the configured LNbits server is sensitive but proportionate for wallet operations. If LNBITS_BASE_URL is unset, the script defaults to the public LNbits demo server.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Local file persistence is limited to QR PNG files under .lnbits_qr by default, with cleanup of older PNGs. The qr command also supports a user-supplied output path, but there is no evidence of hidden credential storage, background execution, privilege escalation, or unrelated file access.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: Shell invocation, environment variables, network access, and QR file writing are disclosed or implied by the documented LNbits CLI workflow and are proportionate to the stated purpose.\n[TP4] expected: The short frontmatter summary is narrower than the complete feature list, but SKILL.md and README.md disclose wallet creation, invoice decoding, QR generation, and local QR files.\n[SDI-1] expected: Wallet/account creation is explicitly documented as setup behavior for users who do not already have an LNbits wallet, so it is not hidden in the artifacts reviewed.\n[SDI-1] expected: QR generation and default local QR output are documented. The optional arbitrary output path exists in the CLI but is not part of the main agent instructions, so this is a user-control caution rather than a purpose mismatch.\n[SQP-2] expected: The pay command performs a real Lightning payment when invoked, but the skill instructions require decode, balance check, and explicit user confirmation before invoking it. This remains a financial-risk note, not evidence of deception or malicious behavior.\n[SQP-2] expected: Wallet creation is a real remote state-changing action, but it is documented in both SKILL.md and README.md and is framed as user-directed setup.",
+          "guidance": "Install only if you are comfortable giving the assistant access to an LNbits admin key. Use a dedicated low-balance wallet, verify decoded invoice details before confirming payment, keep the adminkey out of chat and shared logs, and set LNBITS_BASE_URL to the LNbits server you intend to use.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a disclosed LNbits wallet helper with real financial authority, but its behavior matches its stated wallet-management purpose and includes payment-confirmation instructions.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783657995264,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 84,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: lnbits-with-qrcode\nVersion: 1.0.2\n\nThe skill is designed to manage an LNbits Lightning Wallet and includes robust, explicit instructions in SKILL.md for the AI agent to follow critical safety protocols, such as never exposing secrets, requiring explicit user confirmation before making payments, and checking the balance first. The `scripts/lnbits_cli.py` script uses environment variables for API keys, communicates only with the specified LNbits API, and limits file system access to temporary QR code generation within the skill's working directory. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts against the agent; instead, the instructions actively guide the agent toward secure and responsible behavior.",
+          "checkedAt": 1779161968340,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "4b9a43304835706b09b125ca611fc646fb463c6bb9071ceb206fa695dcaeaf2b",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/4b9a43304835706b09b125ca611fc646fb463c6bb9071ceb206fa695dcaeaf2b"
+    },
+    "slug": "lnbits-with-qrcode",
+    "source_type": "clawhub",
+    "version": "1.0.2"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

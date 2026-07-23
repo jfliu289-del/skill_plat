@@ -1,0 +1,147 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer",
+      "security-professional"
+    ],
+    "confidence": 0.155,
+    "domains": [
+      "security",
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C00",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C02:token:language",
+      "category:C05:token:audio",
+      "category:C06:token:api",
+      "category:C09:token:security",
+      "cross-tag:agent-management",
+      "cross-tag:security",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C05",
+      "C06",
+      "C09"
+    ],
+    "stages": [
+      "create",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "build",
+      "manage",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "44365e706628c7a269b004151293e517551bba1ce80424001f466e87b6374d16",
+    "content_hash": "34798e132986a7784c185e331e1d05bfc802145330ce0d024a0a81df41a49657",
+    "precanonical_content_hash": "f81aa810545fb85819869e9a3447d280e939fdee77dc2cd6af85cff1186c6ee2",
+    "skill_md_hash": "effd6ed9a2c8dc60c244a15db0099fdebe37f575d9c95c6916947d4f5a538cf9",
+    "version_metadata_sha256": "14b6477ac258c319790bf75cac3623e0a5368a6cea897c0984535cab14f77e14"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/bzsega/skills/sergei-mikhailov-stt",
+    "claim_id": "b080e1cb99812839eb5baffeca397269a2635caa733f46f085fcf500f513b094",
+    "index_entries": [
+      {
+        "index_path": "categories/communication.md",
+        "label": "sergei-mikhailov-stt",
+        "url": "https://clawskills.sh/skills/bzsega-sergei-mikhailov-stt"
+      }
+    ],
+    "owner_handle": "bzsega",
+    "owner_id": "s17bgn6b0kyw7qyvtb4ctj4xa586vhag",
+    "published_at": 1772907627534,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779952183221,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779952183221,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose, documentation, and code align around transcribing OpenClaw voice/audio files through Yandex SpeechKit. The main user impact is expected third-party processing of audio content.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Activation is broad for voice messages and transcription requests, but it is limited to the skill's stated STT purpose and is disclosed in the docs.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Setup is manual and creates a Python virtual environment, installs Python dependencies, and copies config templates. No hidden installer persistence or unrelated mutation was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "The requested python3, ffmpeg, YANDEX_API_KEY, and YANDEX_FOLDER_ID requirements are proportionate to cloud speech recognition, though they involve billing-capable credentials and outbound network use.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill creates local runtime/config artifacts such as .venv, .env, config.json, and temporary audio files. No background worker, self-propagation, destructive action, or credential display was found.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-1] expected: A configurable temp directory can create directories outside the skill folder if the owner sets it that way. This is a hardening issue, but it is user-controlled configuration and not evidence of hidden persistence.\n[SQP-2] expected: The docs repeatedly identify Yandex SpeechKit and require a Yandex Cloud account/API key. A more explicit privacy notice would help, but third-party STT processing is not hidden.\n[SQP-1] expected: Automatic activation for voice messages is broad, but it is disclosed and matches a voice-message transcription skill. Users should still consider whether automatic transcription is appropriate for all connected messengers.\n[SC1] expected: The dependency ranges are lower-bound only, which is a reproducibility and supply-chain caveat, but ordinary Python dependencies are expected for this implementation.\n[SC4] expected: The dependency scanner flagged possible vulnerable versions allowed by the ranges. The artifact does not pin known-bad versions, and no risky redirect or disabled TLS behavior was found in the code; users should install current patched versions.",
+          "guidance": "Install only if you are comfortable sending voice messages or audio files selected for transcription to Yandex SpeechKit. Use a least-privilege Yandex service account key, prefer storing it in OpenClaw config rather than chat or logs, keep Python dependencies and FFmpeg current, and treat the configurable temp directory as owner-controlled.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a coherent speech-to-text skill, but users should know that audio sent for transcription is processed by Yandex SpeechKit.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779952122023,
+          "issueCount": 9,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: sergei-mikhailov-stt\nVersion: 1.1.8\n\nThe skill provides legitimate Speech-to-Text functionality using Yandex SpeechKit and follows OpenClaw best practices. It includes well-structured scripts for setup (setup.sh), diagnostics (check.sh), and audio processing (audio_processor.py) using FFmpeg. Security instructions in SKILL.md are defensive, explicitly directing the AI agent to protect API keys and avoid unauthorized file modifications. No evidence of data exfiltration, malicious command execution, or prompt injection attacks was found; all network activity is directed to official Yandex Cloud endpoints.",
+          "checkedAt": 1779166437415,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "853d6f27e4579d9990be505225f6629494f0f7b5f5a8483df410591ccf0a7c0f",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/853d6f27e4579d9990be505225f6629494f0f7b5f5a8483df410591ccf0a7c0f"
+    },
+    "slug": "sergei-mikhailov-stt",
+    "source_type": "clawhub",
+    "version": "1.1.8"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

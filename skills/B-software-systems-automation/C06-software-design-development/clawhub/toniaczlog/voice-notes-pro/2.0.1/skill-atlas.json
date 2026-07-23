@@ -1,0 +1,133 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C17:token:notes",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0-fallback-metadata",
+  "integrity": {
+    "archive_sha256": "547273870fe47db879bdb26c674cf27b649bf362dec68adefd05d61f2ea8b7ae",
+    "content_hash": "b23e25ca6d8eee23e2d4d173aab3949b2775ec83739f85f5d3a146cd0dac6d55",
+    "skill_md_hash": "9c0bb18687322b953ddeae5b616a89dbfe9b877d5aa0461d6bf2b40ac94aaf57",
+    "version_metadata_sha256": "675fbc342e3f598029d6d93a6a0f9652da257cc229f7f7e376af002183245f9d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/toniaczlog/skills/voice-notes-pro",
+    "claim_id": "3cf1d3f7aded4f0892f9ee46a27b3790703d5be62a74b06ed7d40711d6fd78cb",
+    "index_entries": [
+      {
+        "index_path": "categories/notes-and-pkm.md",
+        "label": "voice-notes-pro",
+        "url": "https://clawskills.sh/skills/toniaczlog-voice-notes-pro"
+      }
+    ],
+    "metadata_recovery": "derived-from-body-because-upstream-frontmatter-invalid",
+    "owner_handle": "toniaczlog",
+    "owner_id": "s173safy2a8zbgt8pqgy1smvfh885rdv",
+    "published_at": 1770501770667,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658986742,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658986742,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The code and documentation consistently implement voice-note transcription, keyword categorization, and local Markdown note storage for songs, tasks, shopping, ideas, people, and watchlist entries.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The trigger descriptions are broad, but the runtime handler only proceeds when the message has an audio or voice attachment; there is no separate confirmation step before transcription or storage.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Installation is user-directed with npm install and an OpenClaw gateway restart. No install scripts or postinstall execution are present, though the OpenAI dependency uses a caret range and no lockfile is included.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Use of an OpenAI API key and Whisper transcription is proportionate to the stated purpose and documented. The hard-coded /root/notes paths are disclosed but may need adjustment to a user-owned notes directory outside root/container environments.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "Persistent Markdown storage is central to the skill and documented, including the people database. The skill also logs full transcriptions to console, so local log retention should be considered.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-1] expected: Broad documented triggers are mitigated by runtime checks requiring an audio or voice message, but users may still want explicit confirmation before processing voice notes.\n[SQP-2] expected: Sending audio to OpenAI Whisper is expected for this transcription skill and OpenAI Whisper is named in the documentation, though a clearer privacy notice would improve informed consent.\n[SQP-2] expected: Saving transcriptions to local Markdown files is the advertised behavior and file locations are documented; users should treat saved tasks, contacts, and notes as persistent sensitive data.\n[SQP-3] expected: The Polish language setting is disclosed in configuration and aligns with the Polish-oriented skill, but it may reduce accuracy for other languages.\n[SC1] unexpected: The caret dependency range is a supply-chain hygiene issue, not evidence of malicious behavior; pinning dependencies would improve reproducibility.\n[VirusTotal code_insight] expected: The /root/notes write paths are real and disclosed in both documentation and code, but they are scoped to note storage and do not show destructive behavior or unrelated privilege use.",
+          "guidance": "Install only if you are comfortable sending WhatsApp voice audio to OpenAI for transcription and keeping the resulting text in local Markdown files. Change /root/notes to an appropriate user-owned notes directory if needed, protect the OPENAI_API_KEY, and avoid storing sensitive personal details without consent.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to do what it claims: transcribe WhatsApp voice notes with OpenAI and save categorized Markdown notes locally, with privacy settings users should review.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658952501,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 46,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: voice-notes-pro\nVersion: 2.0.1\n\nThe skill is suspicious due to its explicit configuration to write user-generated notes into the `/root/notes/` directory, as specified in both `SKILL.md` and `voice-notes-pro.js`. While the stated purpose is benign note-taking, targeting the `/root/` directory is a high-risk capability that implies an attempt to write to a highly privileged location, which is not aligned with typical user-level note management and could lead to unauthorized file modification if the agent runs with elevated privileges. There is no clear evidence of data exfiltration or malicious code execution.",
+          "checkedAt": 1779162101017,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "a572f705c8d031266cf1b55b02456240ee87e2d286b0601b2191cfdfe890a6a9",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/a572f705c8d031266cf1b55b02456240ee87e2d286b0601b2191cfdfe890a6a9"
+    },
+    "slug": "voice-notes-pro",
+    "source_type": "clawhub",
+    "version": "2.0.1"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,146 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.2083,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "category:C17:token:notes",
+      "cross-tag:data-analysis",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C06",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "9b1f4845ae3cebd9530927f3481dcc2db32659ac8f1c0bf241d27b5c521098cd",
+    "content_hash": "dcf9d79e89496c9c78cf68ef23ebd5333e2272dbb0eef36efc6befed80988189",
+    "precanonical_content_hash": "784d542c35c9bdb39446da1a8d20adf14aa15da1f58810d1309d19800aea0e1c",
+    "skill_md_hash": "f9f61f83c8e71b148674b76910ff678769fcf7f29c0c1d2103ebd79e409f09be",
+    "version_metadata_sha256": "a0b04416c2feded1b5c742ccd9207a8ef292aa90928ae77d6c88ccb55bfc045d"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/copey02/skills/aviationstack-flight-tracker",
+    "claim_id": "593402e197c7f5ad3c37aabde182d36a735f7fb9ab0b39cfa76e9c208bca0807",
+    "index_entries": [
+      {
+        "index_path": "README.md",
+        "label": "aviationstack-flight-tracker",
+        "url": "https://clawskills.sh/skills/copey02-aviationstack-flight-tracker"
+      },
+      {
+        "index_path": "categories/transportation.md",
+        "label": "aviationstack-flight-tracker",
+        "url": "https://clawskills.sh/skills/copey02-aviationstack-flight-tracker"
+      }
+    ],
+    "owner_handle": "copey02",
+    "owner_id": "s17ftv5c94c1m2djzpcs9ka80h884xhq",
+    "published_at": 1769364033237,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783649529263,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783649529263,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The artifacts coherently implement flight lookup by flight number using the documented AviationStack API and format flight status, airport, gate, delay, aircraft, and live-position data.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The runtime workflow is user-directed: extract a flight number and run the local script, with optional raw JSON output. It sends the flight number and API-key-authenticated request to AviationStack.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "Setup requires a user-supplied AviationStack API key and manual installation of the Python requests package. No hidden installer, obfuscated code, or unrelated dependency mutation was found.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Reading AVIATIONSTACK_API_KEY and contacting AviationStack are proportionate for the skill, but the script hardcodes an HTTP endpoint and passes the key as a query parameter, creating real interception risk.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The setup guide suggests optional shell-profile persistence for the API key. This is disclosed and user-controlled, but it stores the key locally in plaintext.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[TT3] expected: Confirmed: the script reads AVIATIONSTACK_API_KEY and sends it to the intended AviationStack endpoint. This is purpose-aligned, but the HTTP transport makes credential exposure possible on untrusted networks.\n[LP3] expected: The skill uses environment-variable credentials and network access for an API integration. The behavior is documented in setup and usage instructions, though an explicit permissions block would improve transparency.\n[SQP-2] expected: Confirmed concerns include HTTP-only free-tier use, third-party flight lookup, query-string API key use, and optional shell-profile key persistence. These are disclosed enough to avoid a Review verdict, but users should treat them as meaningful operational risks.\n[E1] expected: External transmission to AviationStack is required for the advertised flight-tracking function. The issue is insecure transport, not hidden or unrelated exfiltration.\n[VirusTotal code_insight] expected: VirusTotal's concern matches the artifact-backed HTTP API-key risk, but its engine statistics show no malicious detections and this telemetry is not the sole basis for the verdict.",
+          "guidance": "Install only if you are comfortable sending your AviationStack API key and flight numbers to AviationStack over HTTP on the free tier. Prefer an HTTPS-capable paid plan or another provider for sensitive travel use, use a limited-purpose key, avoid public or untrusted networks, and avoid storing the key permanently in shell profiles on shared or synced machines.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This flight-tracking skill does what it claims, but its default AviationStack setup sends the API key and flight lookup over unencrypted HTTP.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783649488548,
+          "issueCount": 7,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: aviationstack-flight-tracker\nVersion: 1.0.0\n\nThe skill is classified as suspicious primarily due to the unencrypted transmission of the user's `AVIATIONSTACK_API_KEY` over HTTP, as observed in `scripts/track_flight.py`. While the `SKILL.md` and `references/api-setup.md` documentation explicitly disclose that the free tier of the AviationStack API does not support HTTPS, sending an API key in plaintext over the network is a significant security risk. This constitutes a risky capability that could lead to credential compromise if network traffic is intercepted, even if the intent is to use a legitimate API endpoint.",
+          "checkedAt": 1779159955710,
+          "normalizedStatus": "suspicious",
+          "source": "palm",
+          "status": "suspicious",
+          "verdict": "suspicious"
+        }
+      },
+      "sha256hash": "68ee841120ffe06348b854d7664acaf70ba047ce998bfad31acad5d19cc4dbce",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/68ee841120ffe06348b854d7664acaf70ba047ce998bfad31acad5d19cc4dbce"
+    },
+    "slug": "aviationstack-flight-tracker",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

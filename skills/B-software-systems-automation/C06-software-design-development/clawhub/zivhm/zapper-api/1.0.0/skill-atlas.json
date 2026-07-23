@@ -1,0 +1,133 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.275,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C06",
+    "reasons": [
+      "category:C06:token:api",
+      "category:C17:token:notes",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [
+      "create"
+    ],
+    "tasks": [
+      "build"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "8fcd97efb9c88dbe0af8594afbb98a442788757996c029f2291b68b43c923567",
+    "content_hash": "c39c05176bf515a43325d453616fb59873382eb0e6e22fa1b4628bec97912ec2",
+    "precanonical_content_hash": "ba48fcba66616a146407b5b5b99abad98de685ef0189dbd0a701d626f5100f32",
+    "skill_md_hash": "cbda34d57f7ad70dee7c903e21d3473394150695ab665f1bd2393d789b5bc8e3",
+    "version_metadata_sha256": "506cb5fd836e6bc0f664ad6c37db33e4a99c4053d141e3897c059f42330f3bf5"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/zivhm/skills/zapper-api",
+    "claim_id": "84ab3521aa68eadfe3fb13e454b140f35cdda7226bcabc61a9d721a095d997c3",
+    "index_entries": [
+      {
+        "index_path": "categories/ai-and-llms.md",
+        "label": "zapper-api",
+        "url": "https://clawskills.sh/skills/zivhm-zapper-api"
+      }
+    ],
+    "owner_handle": "zivhm",
+    "owner_id": "s17fdne81mxpewsvq1hj1rv4sh8849he",
+    "published_at": 1770327192542,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783658109805,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783658109805,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The skill, API reference, and Python script consistently implement portfolio, token, DeFi, NFT, transaction, claimable reward, and token price lookups through Zapper's GraphQL API.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The activation wording is fairly broad for wallet and portfolio questions, but the available commands are user-invoked read-only lookups and do not instruct automatic execution, account mutation, or destructive actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "There is no install script or package installation behavior; metadata requires only python3 and identifies ZAPPER_API_KEY as the primary environment variable.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script reads ZAPPER_API_KEY or an apiKey from ~/.config/zapper/addresses.json and sends query variables to the fixed endpoint https://public.zapper.xyz/graphql, which is proportionate to the stated API integration but privacy-relevant.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill does not write files, create background persistence, or elevate privileges. It can read local wallet labels and addresses from the optional config file, and the config command prints labels with truncated addresses while not printing the API key.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The API key and outbound Zapper API access are disclosed in the setup instructions, metadata primaryEnv, and API reference. This is an integration transparency note rather than a Review-level concern.\n[SDI-2] expected: The config command does expose wallet labels and truncated addresses from local config, but only when explicitly invoked and without revealing the API key. Users should still treat that output as sensitive financial metadata.\n[SQP-1] expected: The activation description is broad, but it matches the skill's stated wallet, DeFi, NFT, price, and transaction lookup purpose and does not add hidden or unrelated behavior.\n[SQP-2] expected: Wallet addresses and related portfolio, NFT, and transaction queries are sent to Zapper, which is inherent to this remote lookup skill. The documentation would benefit from a clearer privacy notice, but the behavior is not hidden or purpose-mismatched.",
+          "guidance": "Install only if you are comfortable using a Zapper API key and sending queried wallet addresses, portfolio requests, NFT requests, and transaction-history requests to Zapper. Keep ~/.config/zapper/addresses.json private, use wallet labels carefully, and avoid querying addresses you do not want associated with your Zapper API usage or local agent session.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a read-only Zapper lookup skill that uses a Zapper API key and sends wallet queries to Zapper as expected for its purpose.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783658086540,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 54,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: \nDeveloper: \nVersion: \nDescription: OpenClaw Agent Skill\nSuspicious High-Entropy/Eval files: 1\n\nThe OpenClaw AgentSkills skill bundle for Zapper API is benign. The `scripts/zapper.py` script correctly uses `urllib.request` to interact solely with the official Zapper GraphQL API endpoint (`https://public.zapper.xyz/graphql`). It retrieves the API key from the `ZAPPER_API_KEY` environment variable or a standard user configuration file (`~/.config/zapper/addresses.json`). There is no evidence of data exfiltration, malicious execution, persistence mechanisms, or obfuscation. The `SKILL.md` instructions are clear, align with the stated purpose, and do not contain any prompt injection attempts against the agent.",
+          "checkedAt": 1779161666979,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "42fd3cb89bd518a8e1e92a4fcc55b1c079496ca0b663e8688ccacb7b7ef31a09",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/42fd3cb89bd518a8e1e92a4fcc55b1c079496ca0b663e8688ccacb7b7ef31a09"
+    },
+    "slug": "zapper-api",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

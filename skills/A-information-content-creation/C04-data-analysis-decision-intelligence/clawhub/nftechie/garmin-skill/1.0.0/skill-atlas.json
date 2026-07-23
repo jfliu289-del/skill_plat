@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "artifacts": [
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional"
+    ],
+    "confidence": 0.2643,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C04",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C04:token:chart",
+      "category:C04:token:data",
+      "category:C10:token:ai",
+      "category:C10:token:training",
+      "category:C12:token:management",
+      "category:C16:token:training",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C10",
+      "C12",
+      "C16"
+    ],
+    "stages": [
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "d67a96367f3ceb9aca2456f2762a1f13bba57efb2f11d7fda7f8b58f6c9d9ccd",
+    "content_hash": "24ec648f0754bba4ffaf29def6b6f2c00f6a25df1d6593ee9d6136bf88343ce3",
+    "precanonical_content_hash": "263e860d41c4a567adaff6484a38d6e866e6575aff9eeacb0ffe253624e1997e",
+    "skill_md_hash": "93ecc20a170d69898816f1970c0d3ff5c57f5e75289e80ad89b2040931a78fa6",
+    "version_metadata_sha256": "a9f7a59e9812743a4e7ef4739aba4125612cd2fb48bcaf028c98316fb5614b87"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/nftechie/skills/garmin-skill",
+    "claim_id": "65eb44c4bcc744f897ce8776a0d5c0b32fd01fd007a86ac63cd5a2583a11cc8d",
+    "index_entries": [
+      {
+        "index_path": "categories/transportation.md",
+        "label": "garmin-skill",
+        "url": "https://clawskills.sh/skills/nftechie-garmin-skill"
+      }
+    ],
+    "owner_handle": "nftechie",
+    "owner_id": "s17c1httswb678enm5n4x6j4z1885dj4",
+    "published_at": 1770672840496,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779963139549,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779963139549,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The documented capabilities match the stated purpose: querying Garmin-backed workouts, profile, performance metrics, AI coaching, chat history, and pushing scheduled workouts through Transition.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The instructions are direct curl/API examples with no prompt override, hidden behavior, obfuscation, or unrelated access; the state-changing Garmin push endpoint is documented but should be confirmed by the user before use.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact contains only Markdown documentation and a user-directed git clone/env-var setup; there is no installer script, automatic execution, package install, or background process.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "HTTPS calls to api.transition.fun and TRANSITION_API_KEY use are proportionate to the skill's purpose, but authenticated requests expose Garmin-derived fitness and health-adjacent data to Transition.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "No local persistence, privilege escalation, or long-running worker is present; the chat history endpoint implies provider-side storage or retrieval of coaching conversations.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The privacy and data-sharing concern is valid user guidance, but the artifact plainly says Transition powers the integration and syncs with Garmin Connect, so external processing is disclosed and purpose-aligned rather than hidden.\n[SQP-2] expected: The API key setup is expected for authenticated account access; the docs would benefit from stronger secret-handling guidance, but they do not instruct users to share the key with unrelated services.\n[SQP-2] expected: The push-to-Garmin endpoint is a documented state-changing action related to workout delivery; it is not hidden, but agents should require explicit user confirmation before invoking it.\n[E1] expected: External transmission to api.transition.fun is the core integration behavior for AI coaching and Garmin metrics, not evidence of unrelated exfiltration.",
+          "guidance": "Install only if you trust Transition with Garmin-derived fitness data and coaching prompts. Keep TRANSITION_API_KEY private, avoid putting it in shared logs or repositories, review Transition's privacy and deletion practices, and require explicit confirmation before any agent pushes a workout to Garmin.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill is a straightforward Garmin-to-Transition API helper, but it involves personal fitness data and an API key that users should treat as sensitive.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779963112745,
+          "issueCount": 6,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 60,
+          "severity": "HIGH",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: garmin-skill\nVersion: 1.0.0\n\nThe skill bundle is benign. All network calls are directed to the legitimate `api.transition.fun` domain, consistent with the stated purpose of interacting with Garmin data via the Transition API. The `TRANSITION_API_KEY` is used appropriately for authentication and there are no instructions for data exfiltration, malicious execution (e.g., `curl|bash`), persistence, or obfuscation. The instructions in `SKILL.md` for the AI agent are functional and guide the agent on how to use the API effectively, without any evidence of prompt injection attempting to subvert the agent's behavior or access unrelated sensitive data.",
+          "checkedAt": 1779162547185,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "d2b08a9588853079c2dc08f645d3d20aa082719e3399e1c50888b45c7f36e29c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/d2b08a9588853079c2dc08f645d3d20aa082719e3399e1c50888b45c7f36e29c"
+    },
+    "slug": "garmin-skill",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,151 @@
+{
+  "classification": {
+    "artifacts": [
+      "code",
+      "data",
+      "report"
+    ],
+    "audiences": [
+      "data-professional",
+      "developer"
+    ],
+    "confidence": 0.425,
+    "domains": [
+      "software"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C00:token:agent",
+      "category:C01:token:lookup",
+      "category:C01:token:search",
+      "category:C01:token:sources",
+      "category:C04:token:data",
+      "category:C06:token:api",
+      "cross-tag:agent-management",
+      "cross-tag:data-analysis",
+      "cross-tag:search",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C04",
+      "C06"
+    ],
+    "stages": [
+      "create",
+      "discover",
+      "operate",
+      "validate"
+    ],
+    "tasks": [
+      "analyze",
+      "build",
+      "manage",
+      "research"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "b507f2505325e6befa9a733d3acf41d2c02b915305f6a3151afc53b63930651a",
+    "content_hash": "7711d8cf0390c4608d5f76609ffa6d92211987d7f41b4b35a343f6139fc79aa5",
+    "precanonical_content_hash": "84c6e2cb04cd9a0dcb520b4de6d640ee165367b55ee9acda1eb8ccbdbdbf73aa",
+    "skill_md_hash": "406fd154627f9728121f57b81442ec0c1daa4416c34a3e4a5744b729a13c2361",
+    "version_metadata_sha256": "5843d564524c75cb35a34516a3108129bd0e47a0915a2def6f195630f5f868ba"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/tag-assistant/skills/wow",
+    "claim_id": "fb7dfaebd2cc242023df44c42312a59ec2b976bb7fa378afbbb065aabd5659f0",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "wow",
+        "url": "https://clawskills.sh/skills/tag-assistant-wow"
+      }
+    ],
+    "owner_handle": "tag-assistant",
+    "owner_id": "s17bnqhgmzxahjkwfj9rs88zgd8847d4",
+    "published_at": 1771341182549,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972733049,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972733049,
+          "confidence": "medium",
+          "dimensions": [
+            {
+              "detail": "The stated purpose and instructions consistently focus on WoW character, Mythic+, raid, affix, armory, and parse lookups through Raider.io plus optional Blizzard and Warcraft Logs APIs.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The agent is instructed to run user-directed local `wow` CLI commands and optional `jq` parsing; this fits the purpose, but the reviewed artifact only includes SKILL.md, not the CLI implementation.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The metadata declares a shell install step that symlinks `$(pwd)/wow` into `/usr/local/bin/wow`; this is disclosed, but the referenced executable is not present in the reviewed files and the global path write should be user-approved.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "Network access to Raider.io, Blizzard, and Warcraft Logs is proportionate to the lookup purpose, and optional API client credentials are named explicitly, though the documentation could be clearer about exactly what query and credential data is sent to each provider.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The skill documents optional persistent storage of API client secrets in `~/.config/wow/config.env` and a possible global CLI symlink; both are disclosed but should be handled with restrictive file permissions and trusted provenance.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: Network-backed lookups and optional OAuth credential use are expected for this WoW data utility; the transparency concern is valid as guidance, but it does not show hidden or purpose-mismatched data handling.\n[RA2] expected: A persistent config file for optional Blizzard and Warcraft Logs credentials is disclosed and purpose-aligned, but plaintext secret storage is a security hygiene risk rather than evidence of rogue persistence.",
+          "guidance": "Install only if you trust the separate `wow` CLI that will be symlinked, since the executable was not included in the reviewed artifact. Prefer environment variables or a protected config file with restrictive permissions for Blizzard and Warcraft Logs secrets, and expect character names, realms, regions, and optional API credentials to be used with the relevant third-party services.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This is a disclosed World of Warcraft lookup helper that uses expected game-data APIs, with some credential-handling and install-scope cautions but no artifact-backed malicious behavior.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972694027,
+          "issueCount": 2,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 15,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: wow\nVersion: 1.0.0\n\nThe OpenClaw AgentSkills bundle 'wow' is classified as benign. Its purpose is to look up World of Warcraft character data using external APIs (Raider.io, Blizzard, Warcraft Logs). The `SKILL.md` clearly documents its functionality, required binaries (`curl`, `jq`), and optional API integrations. The installation command (`ln -sf $(pwd)/wow /usr/local/bin/wow`) is a standard symlink creation for a CLI tool. There is no evidence of malicious prompt injection, data exfiltration, unauthorized execution, persistence mechanisms, or obfuscation. All described actions are consistent with a legitimate utility.",
+          "checkedAt": 1779164851885,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "11d86d2ac74c27f878daeaea41492c23808d921abc57c43bbdaea5b3405337bc",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/11d86d2ac74c27f878daeaea41492c23808d921abc57c43bbdaea5b3405337bc"
+    },
+    "slug": "wow",
+    "source_type": "clawhub",
+    "version": "1.0.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

@@ -1,0 +1,123 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [],
+    "confidence": 0.4167,
+    "domains": [],
+    "needs_review": true,
+    "primary_category": "C08",
+    "reasons": [
+      "category:C08:token:git",
+      "category:C08:token:repository",
+      "category:C17:token:notes"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C17"
+    ],
+    "stages": [],
+    "tasks": []
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "81c0eb3f97d5c2263a17c48312f4838785b4c43a2442ad3c059ba82523a4cbb5",
+    "content_hash": "f727b6d1b413c656142790847818d8ca94cc870d32f0fae403916c1dec83df60",
+    "precanonical_content_hash": "75a530d7515da22b20046550771107967a12bb826f36a71dbf926bd3f2d8af1d",
+    "skill_md_hash": "fdc2937d4226cb8375cb8320cc2fd78639feaf1964d6c6ad4fbf3dc3b02e4e22",
+    "version_metadata_sha256": "ce3d7788adda5bc16a29da649360a592d853ec0ed7ff09ef5e5e883616ca0ebc"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/trumppo/skills/gitbackup",
+    "claim_id": "94ae3388b426da427aeddd4ac6860d341a0dc82cdc78f8417063d74924a90855",
+    "index_entries": [
+      {
+        "index_path": "categories/web-and-frontend-development.md",
+        "label": "gitbackup",
+        "url": "https://clawskills.sh/skills/trumppo-gitbackup"
+      }
+    ],
+    "owner_handle": "trumppo",
+    "owner_id": "s173m7nt4zhwqt0p0znfn6pap1885k6g",
+    "published_at": 1770573475569,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1783657817530,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1783657817530,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated purpose is to create a local Git bundle backup of the OpenClaw workspace repository, and the script does exactly that using `git bundle create --all`; the resulting bundle can include full history, refs, branches, and committed sensitive data, which is expected for this backup function.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "Instructions are narrow: use the skill when `/gitbackup` is run or when the user asks to back up Git history/refs, run the bundled script, and report the output path and size.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The package contains a small `SKILL.md`, an OpenAI agent metadata file, and one shell script; there are no hidden installers, dependency downloads, or setup hooks in the reviewed artifacts.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "The script reads only the fixed workspace path `/root/.openclaw/workspace`, writes to the fixed local directory `/root/.openclaw/backups`, and contains no network calls or broad filesystem scanning.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill intentionally creates persistent `.bundle` files and explicitly says older bundles are not deleted; this is purpose-aligned but users need to manage retention and access.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SQP-2] expected: The persistence concern is supported by the artifacts, but it is disclosed in the skill instructions and is necessary for a local backup feature, so it does not justify Review by itself.\n[VirusTotal:clean] expected: VirusTotal telemetry reported no malicious or suspicious detections and aligns with the local-only artifact behavior.\n[StaticScan:clean] expected: Static scan metadata reported no findings; the observed bash, Git, and filesystem writes are consistent with the stated backup purpose.",
+          "guidance": "Install this only if you want local backups of the OpenClaw workspace Git repository. Treat each generated bundle like a full copy of the repo, including history and committed secrets; keep `/root/.openclaw/backups` protected and delete old bundles when they are no longer needed.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill creates a local Git backup as advertised, but the backup file may contain full repository history and any committed secrets until the user deletes it.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1783657778145,
+          "issueCount": 1,
+          "normalizedStatus": "clean",
+          "recommendation": "SAFE",
+          "score": 6,
+          "severity": "LOW",
+          "status": "clean"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: gitbackup\nVersion: 0.1.0\n\nThe skill is designed to create a local Git bundle backup of the OpenClaw workspace repository. The `SKILL.md` clearly defines this purpose and instructs the agent to run the `scripts/git-backup.sh` script. The script uses standard `git bundle create` commands to archive the workspace repository into a local file within the `/root/.openclaw/backups` directory. There is no evidence of data exfiltration, malicious execution, persistence mechanisms, prompt injection attempts against the agent, or obfuscation. All actions are aligned with the stated purpose of creating a local Git backup.",
+          "checkedAt": 1779162272007,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "c0bfa9514a41997e5601b222c47158213aa685399c770ee3cd4aedf8c6bd4b9c",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/c0bfa9514a41997e5601b222c47158213aa685399c770ee3cd4aedf8c6bd4b9c"
+    },
+    "slug": "gitbackup",
+    "source_type": "clawhub",
+    "version": "0.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

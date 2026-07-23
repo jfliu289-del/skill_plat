@@ -1,0 +1,141 @@
+{
+  "classification": {
+    "artifacts": [
+      "code"
+    ],
+    "audiences": [
+      "developer"
+    ],
+    "confidence": 0.625,
+    "domains": [
+      "software"
+    ],
+    "needs_review": false,
+    "primary_category": "C03",
+    "reasons": [
+      "category:C00:token:skill",
+      "category:C03:phrase:pdf document",
+      "category:C03:token:pdf",
+      "category:C06:token:api",
+      "category:C17:token:notes",
+      "cross-tag:agent-management",
+      "cross-tag:software-development"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C00",
+      "C06",
+      "C17"
+    ],
+    "stages": [
+      "create",
+      "operate"
+    ],
+    "tasks": [
+      "build",
+      "manage"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "db36ccb5468a422ff0ddca2971b0c4b692b3a06c33a24778a6a01d37b0ae6067",
+    "content_hash": "dfe115379ae58b623c15cd62ea3d1e1c0fa1c8df45299ec54d5dcf582958e1f8",
+    "precanonical_content_hash": "0bedd26b57c292ae4e3e24898996957746099b883afc197c9412b37fac09d182",
+    "skill_md_hash": "c36c1e7d6ab5a64b89ec31fa94c41d7ab968fac29120d04cb54649f099b246e6",
+    "version_metadata_sha256": "54d59b56911443c724a49e1432f0963772d4c690ec80960932bf6220fc4a594e"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/a-i-r/skills/mineru-pdf-extractor",
+    "claim_id": "89f77815afeeaa2b12350eae7f3b1fc72c95e829444a52c465c379581db200a5",
+    "index_entries": [
+      {
+        "index_path": "categories/coding-agents-and-ides.md",
+        "label": "mineru-pdf-extractor",
+        "url": "https://clawskills.sh/skills/a-i-r-mineru-pdf-extractor"
+      }
+    ],
+    "owner_handle": "a-i-r",
+    "owner_id": "s1708xzyx4dcqntkkt0bry41yx8848xd",
+    "published_at": 1771418740678,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779972956905,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779972956905,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The API token use, local PDF upload, URL submission, polling, result ZIP download, and extraction all align with the stated PDF-to-Markdown MinerU workflow.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "note"
+            },
+            {
+              "detail": "The instructions are user-directed shell workflows with no hidden role changes, autonomous background behavior, unrelated tool use, or prompt-injection content found in the artifacts.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill has no privileged install hook; it requires shell scripts plus curl and unzip, with jq optional, and asks users to provide a MinerU token via environment variables.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "note"
+            },
+            {
+              "detail": "External network access and selected document transfer are proportionate for a third-party PDF extraction API, but users should understand that local PDFs and submitted URLs leave their environment.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The scripts write result ZIPs and extracted files into user-selected relative directories and do not request elevated privileges or create persistence; archive extraction could be better hardened by validating ZIP entry paths before unzip.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[SDI-4] unexpected: The artifacts do include several claimed controls, including filename and directory validation, JSON escaping, CDN URL checks, and zip integrity testing; however, the ZIP extraction does not validate individual archive paths, so the security wording is somewhat stronger than the implementation.\n[SQP-2] expected: Submitting local PDFs or online PDF URLs to MinerU is core functionality and is disclosed through the API/upload workflow, though the documentation should more prominently warn against confidential, internal, regulated, or pre-signed documents.\n[SQP-3] expected: The default language is documented as Chinese and users can pass en or auto, so this is a usability/default-quality issue rather than suspicious behavior.\n[E1] expected: The curl API requests, bearer-token authentication, remote result download, and local extraction are expected for the MinerU integration; the download host is constrained for result ZIPs, but users should still treat downloaded archives as untrusted.",
+          "guidance": "Install only if you are comfortable sending selected PDFs, PDF URLs, and a MinerU API token to MinerU-controlled services. Use it from a dedicated working folder, avoid confidential or regulated documents unless approved, keep the default MinerU endpoint unless you trust an alternative, and inspect extracted files before using them.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill does what it claims: it sends chosen PDFs or PDF URLs to MinerU for conversion and downloads the extracted results back locally.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779972901661,
+          "issueCount": 16,
+          "normalizedStatus": "suspicious",
+          "recommendation": "DO_NOT_INSTALL",
+          "score": 100,
+          "severity": "CRITICAL",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: mineru-pdf-extractor\nVersion: 1.0.5\n\nThe skill bundle is classified as benign. It demonstrates strong security practices, including explicit input sanitization (`validate_filename`, `validate_dirname`, `escape_json`), URL validation (whitelisting `cdn-mineru.openxlab.org.cn` for downloads in `scripts/local_file_step4_download.sh` and `scripts/online_file_step2_poll_result.sh`), and ZIP file integrity checks (`unzip -t`). The documentation (`SKILL.md`, `docs/*.md`) clearly outlines these security measures and their purpose, indicating a deliberate effort to prevent common vulnerabilities like directory traversal and injection attacks. No evidence of data exfiltration, malicious execution, persistence mechanisms, or prompt injection attempts against the AI agent was found.",
+          "checkedAt": 1779164954993,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "89f8912dade1a446a4424809761c1b74cd177564e495bcc41f30135c7a7eda04",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/89f8912dade1a446a4424809761c1b74cd177564e495bcc41f30135c7a7eda04"
+    },
+    "slug": "mineru-pdf-extractor",
+    "source_type": "clawhub",
+    "version": "1.0.5"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}

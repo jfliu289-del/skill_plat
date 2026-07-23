@@ -1,0 +1,138 @@
+{
+  "classification": {
+    "artifacts": [],
+    "audiences": [
+      "security-professional"
+    ],
+    "confidence": 0.175,
+    "domains": [
+      "security"
+    ],
+    "needs_review": true,
+    "primary_category": "C01",
+    "reasons": [
+      "category:C01:token:search",
+      "category:C02:token:language",
+      "category:C09:token:security",
+      "category:C17:token:notes",
+      "cross-tag:search",
+      "cross-tag:security"
+    ],
+    "risk_level": "R0",
+    "secondary_categories": [
+      "C02",
+      "C09",
+      "C17"
+    ],
+    "stages": [
+      "discover",
+      "validate"
+    ],
+    "tasks": [
+      "research",
+      "secure"
+    ]
+  },
+  "classifier_version": "1.0",
+  "integrity": {
+    "archive_sha256": "a83d458596eea01d47a618203d5be35a1b1c969cf3c7ff7c9916c3aef4b34e81",
+    "content_hash": "b40037eec3c0cbd5c7eecc96e263178a9e6c8addc31e8e57eb29aebd3264a952",
+    "precanonical_content_hash": "a6edac6bda1b5d65b76a9c1cae9f88a521468a5f7366c5b1160a8f80b125a3c0",
+    "skill_md_hash": "2328318a483e075de697344ddabb947477970242e0e8cea75b8d61b2a53b3fa7",
+    "version_metadata_sha256": "74f74acee974bfdc8ed1806113ef86dc51df5bd19bd7527bb32b1366a3ff5017"
+  },
+  "provenance": {
+    "artifact_kind": "hosted-zip",
+    "canonical_url": "https://clawhub.ai/maxdraki/skills/rtm",
+    "claim_id": "784a8c34a46c106fa18fb82974681642cca485fe0df56cc19c459c639b975aa0",
+    "index_entries": [
+      {
+        "index_path": "categories/search-and-research.md",
+        "label": "rtm",
+        "url": "https://clawskills.sh/skills/maxdraki-rtm"
+      }
+    ],
+    "owner_handle": "maxdraki",
+    "owner_id": "s17f6d2p4zq3jvbz02rapseaj5885ej5",
+    "published_at": 1770883220993,
+    "registry": "https://clawhub.ai",
+    "security": {
+      "checkedAt": 1779971676485,
+      "hasScanResult": true,
+      "hasWarnings": true,
+      "model": "gpt-5.5",
+      "scanners": {
+        "llm": {
+          "agenticRiskFindings": null,
+          "checkedAt": 1779971676485,
+          "confidence": "high",
+          "dimensions": [
+            {
+              "detail": "The stated task-management purpose matches the bundled CLI commands for listing, adding, completing, deleting, moving, tagging, searching, and annotating RTM tasks.",
+              "label": "Purpose & Capability",
+              "name": "purpose_capability",
+              "rating": "ok"
+            },
+            {
+              "detail": "The skill can trigger on generic task/todo/reminder requests, which is broad but still aligned with the RTM task-management purpose; account-changing commands are explicit CLI actions.",
+              "label": "Instruction Scope",
+              "name": "instruction_scope",
+              "rating": "note"
+            },
+            {
+              "detail": "The artifact is a markdown skill plus a stdlib Python script; no package installation, startup hook, background worker, or unrelated install-time behavior is present.",
+              "label": "Install Mechanism",
+              "name": "install_mechanism",
+              "rating": "ok"
+            },
+            {
+              "detail": "RTM API key and shared secret environment variables, RTM-only network calls, and local token use are sensitive but expected and disclosed for this integration.",
+              "label": "Credentials",
+              "name": "environment_proportionality",
+              "rating": "note"
+            },
+            {
+              "detail": "The plaintext ~/.rtm_token and RTM delete permission create real account-impact risk, but they are documented and support the advertised full task-management functions.",
+              "label": "Persistence & Privilege",
+              "name": "persistence_privilege",
+              "rating": "note"
+            }
+          ],
+          "findings": "[LP3] expected: The skill does access env credentials, a persistent token file, and RTM network endpoints, but the artifact declares RTM env vars and credential file metadata and documents the network and token behavior; this is guidance rather than a Review-level mismatch.\n[EA1] expected: Credential use, local token storage, and network operations are necessary for an RTM account CLI; the code is limited to RTM API/auth endpoints and task operations.\n[PE1] expected: Delete-level RTM permission is high impact and broader than read-only use, but it is clearly disclosed and directly supports the advertised delete command.\n[VirusTotal] expected: VirusTotal reported no detections and its behavioral summary matches the inspected artifacts; it was used only as supporting telemetry.",
+          "guidance": "Install this only if you want an agent to manage your Remember The Milk account. Keep RTM_API_KEY and RTM_SHARED_SECRET in skill configuration, protect or remove ~/.rtm_token when not needed, and review delete or note-deletion actions before running them.",
+          "model": "gpt-5.5",
+          "normalizedStatus": "clean",
+          "riskSummary": null,
+          "status": "clean",
+          "summary": "This skill appears to do what it claims: manage Remember The Milk tasks, with sensitive account access and delete capability disclosed.",
+          "verdict": "benign"
+        },
+        "skillspector": {
+          "checkedAt": 1779971656270,
+          "issueCount": 3,
+          "normalizedStatus": "suspicious",
+          "recommendation": "CAUTION",
+          "score": 32,
+          "severity": "MEDIUM",
+          "status": "suspicious"
+        },
+        "vt": {
+          "analysis": "Type: OpenClaw Skill\nName: rtm\nVersion: 1.1.0\n\nThe OpenClaw skill for Remember The Milk is benign. It provides a CLI tool to manage RTM tasks, requiring API keys and storing an auth token locally at `~/.rtm_token`. All network communication is exclusively with `api.rememberthemilk.com` and `www.rememberthemilk.com`, as confirmed by the `api_call` function in `scripts/rtm.py`. The `SKILL.md` transparently discloses the storage of the auth token and the 'delete' permission scope, advising users on security best practices. There is no evidence of data exfiltration to unauthorized endpoints, malicious execution, persistence mechanisms, or prompt injection attempts against the AI agent.",
+          "checkedAt": 1779163407585,
+          "normalizedStatus": "clean",
+          "source": "palm",
+          "status": "clean",
+          "verdict": "benign"
+        }
+      },
+      "sha256hash": "ca89ba268d6ddb61181c385b79d72d41263f0de7705f4316cb9d8cd2ca2faa62",
+      "status": "clean",
+      "virustotalUrl": "https://www.virustotal.com/gui/file/ca89ba268d6ddb61181c385b79d72d41263f0de7705f4316cb9d8cd2ca2faa62"
+    },
+    "slug": "rtm",
+    "source_type": "clawhub",
+    "version": "1.1.0"
+  },
+  "schema_version": "2.0",
+  "taxonomy_version": "2026-07-21"
+}
